@@ -735,9 +735,9 @@ static void Agd_PutIconToShowQR (void)
    char URL[WWW_MAX_BYTES_WWW + 1];
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
-   snprintf (URL,sizeof (URL),"%s/%s?agd=@%s",
-             Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
-             Gbl.Usrs.Me.UsrDat.Nickname);
+   WWW_BuildURL (URL,"%s/%s?agd=@%s",
+                 Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language],
+                 Gbl.Usrs.Me.UsrDat.Nickname);
    QR_PutLinkToPrintQRCode (ActPrnAgdQR,
                             QR_PutParQRString,URL);
   }

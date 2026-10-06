@@ -29,6 +29,7 @@
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
+#include <stdarg.h>		// For va_start, va_end
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For FILE,fprintf
 #include <stdlib.h>		// For exit, system, free, etc.
@@ -665,6 +666,62 @@ void Fil_WriteFileSizeFull (double SizeInBytes,
    else
       snprintf (FileSizeStr,Fil_MAX_BYTES_FILE_SIZE_STRING + 1,"%.1f&nbsp;TiB",
 		SizeInBytes / Ti);
+  }
+
+/*****************************************************************************/
+/*************************** Build path using format *************************/
+/*****************************************************************************/
+
+void Fil_BuildName (char Name[NAME_MAX + 1],const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Ptr;
+
+   Name[0] = '\0';
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Ptr,fmt,ap);	// Number of bytes printed (excluding the null byte)
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 if (NumBytesPrinted > NAME_MAX)
+            Err_FilenameTooLongExit ();
+
+	 strcpy (Name,Ptr);
+
+	 free (Ptr);
+	}
+  }
+
+void Fil_BuildPath (char Path[PATH_MAX + 1],const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Ptr;
+
+   Path[0] = '\0';
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Ptr,fmt,ap);	// Number of bytes printed (excluding the null byte)
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 if (NumBytesPrinted > PATH_MAX)
+            Err_PathTooLongExit ();
+
+	 strcpy (Path,Ptr);
+
+	 free (Ptr);
+	}
   }
 
 /*****************************************************************************/

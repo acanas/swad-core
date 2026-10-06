@@ -1384,7 +1384,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 					    Inf_Type_t InfoType,
 					    char **HTMLBuffer)
   {
-   char FileNameHTMLTmp[PATH_MAX + 1];
+   char PathHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
 
@@ -1396,11 +1396,11 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
    if (Tre_GetNumNodes ())
      {
       /***** Create a unique name for the file *****/
-      snprintf (FileNameHTMLTmp,sizeof (FileNameHTMLTmp),"%s/%s_tree.html",
-	        Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
+      Fil_BuildPath (PathHTMLTmp,"%s/%s_tree.html",
+	             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
       /***** Create a new temporary file for writing and reading *****/
-      if ((FileHTMLTmp = fopen (FileNameHTMLTmp,"w+b")) == NULL)
+      if ((FileHTMLTmp = fopen (PathHTMLTmp,"w+b")) == NULL)
 	{
 	 Tre_FreeListNodes ();
          return soap_receiver_fault (soap,
@@ -1419,7 +1419,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
       if ((*HTMLBuffer = malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTMLTmp);
-	 unlink (FileNameHTMLTmp);
+	 unlink (PathHTMLTmp);
 	 Tre_FreeListNodes ();
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
@@ -1431,7 +1431,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
       if (fread (*HTMLBuffer,sizeof (char),Length,FileHTMLTmp) != Length)
 	{
 	 fclose (FileHTMLTmp);
-	 unlink (FileNameHTMLTmp);
+	 unlink (PathHTMLTmp);
 	 Tre_FreeListNodes ();
          return soap_receiver_fault (soap,
                                      "Syllabus can not be copied into buffer",
@@ -1441,7 +1441,7 @@ static int API_WriteSyllabusIntoHTMLBuffer (struct soap *soap,
 
       /***** Close and remove temporary file *****/
       fclose (FileHTMLTmp);
-      unlink (FileNameHTMLTmp);
+      unlink (PathHTMLTmp);
      }
 
    /***** Free list of tree nodes *****/
@@ -1557,16 +1557,12 @@ static int API_WritePageIntoHTMLBuffer (struct soap *soap,
 
    /***** Open file with web page *****/
    /* 1. Check if index.html exists */
-   if (strlen (PathRelDirHTML) + 1 + strlen ("index.html") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.html",
-	     PathRelDirHTML);
+   Fil_BuildPath (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
    FileExists = Fil_CheckIfPathExists (PathRelFileHTML);	// TODO: Check if not empty?
    if (FileExists == Exi_DOES_NOT_EXIST)
      {
       /* 2. If index.html not exists, try index.htm */
-      snprintf (PathRelFileHTML,sizeof (PathRelFileHTML),"%s/index.htm",
-		PathRelDirHTML);
+      Fil_BuildPath (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
       FileExists = Fil_CheckIfPathExists (PathRelFileHTML);	// TODO: Check if not empty?
      }
 
@@ -4709,7 +4705,7 @@ int swad__getDirectoryTree (struct soap *soap,
   {
    extern const char *Brw_RootFolderInternalNames[Brw_NUM_ZONES];
    int ReturnCode;
-   char XMLFileName[PATH_MAX + 1];
+   char PathXML[PATH_MAX + 1];
    FILE *XML;
    struct Brw_FileBrowser FileBrowser;
    unsigned long FileSize;
@@ -4804,9 +4800,9 @@ int swad__getDirectoryTree (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /* Initialize path to private directory */
-   snprintf (Gbl.Crs.Path.AbsPriv,sizeof (Gbl.Crs.Path.AbsPriv),"%s/%lu",
-             Cfg_PATH_CRS_PRIVATE,
-             (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   Fil_BuildPath (Gbl.Crs.Path.AbsPriv,"%s/%lu",
+                  Cfg_PATH_CRS_PRIVATE,
+                  (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser (&FileBrowser);
    Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Path,Brw_RootFolderInternalNames[FileBrowser.Zone],
@@ -4819,11 +4815,11 @@ int swad__getDirectoryTree (struct soap *soap,
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /* Create a unique name for the file */
-   snprintf (XMLFileName,sizeof (XMLFileName),"%s/%s.xml",
-             Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
+   Fil_BuildPath (PathXML,"%s/%s.xml",
+                  Cfg_PATH_OUT_PRIVATE,Cry_GetUniqueNameEncrypted ());
 
    /* Open file for writing and reading */
-   if ((XML = fopen (XMLFileName,"w+t")) == NULL)
+   if ((XML = fopen (PathXML,"w+t")) == NULL)
       return soap_receiver_fault (soap,
 	                          "Can not get tree",
 	                          "Can not create temporary XML file");
@@ -4850,7 +4846,7 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Close and remove XML file */
    fclose (XML);
-   unlink (XMLFileName);
+   unlink (PathXML);
 
    return SOAP_OK;
   }
@@ -4868,7 +4864,6 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   size_t Length;
    char PathFileRel[PATH_MAX + 1];
    char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
@@ -4885,15 +4880,10 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    Length = strlen (FileList[NumFile]->d_name);
-	    if (strlen (Path      ) + 1 + Length > PATH_MAX ||
-	        strlen (PathInTree) + 1 + Length > PATH_MAX)
-	       Err_PathTooLongExit ();
-
-	    snprintf (PathFileRel       ,sizeof (PathFileRel)       ,"%s/%s",
-		      Path      ,FileList[NumFile]->d_name);
-	    snprintf (PathFileInExplTree,sizeof (PathFileInExplTree),"%s/%s",
-		      PathInTree,FileList[NumFile]->d_name);
+	    Fil_BuildPath (PathFileRel,"%s/%s",
+		           Path,FileList[NumFile]->d_name);
+	    Fil_BuildPath (PathFileInExplTree,"%s/%s",
+		           PathInTree,FileList[NumFile]->d_name);
 
 	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
 	 	      sizeof (FileBrowser->FileMetadata.FilFolLnk.Path) - 1);

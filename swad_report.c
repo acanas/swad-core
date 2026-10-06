@@ -357,52 +357,36 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 
    /***** Unique directory for the file with the report *****/
    /* 1. Create a directory using the leftmost 2 chars of a unique name */
-   snprintf (PathUniqueDirL,sizeof (PathUniqueDirL),"%s/%c%c",
-             Cfg_PATH_REP_PUBLIC,
-             UniqueNameEncrypted[0],
-             UniqueNameEncrypted[1]);
+   Fil_BuildPath (PathUniqueDirL,"%s/%c%c",
+		  Cfg_PATH_REP_PUBLIC,
+		  UniqueNameEncrypted[0],
+		  UniqueNameEncrypted[1]);
    Fil_CreateDirIfNotExists (PathUniqueDirL);
 
    /* 2. Create a directory using the rightmost 41 chars of a unique name */
-   if (strlen (PathUniqueDirL) + 1 + 2 > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathUniqueDirR,sizeof (PathUniqueDirR),"%s/%s",
-             PathUniqueDirL,
-             &UniqueNameEncrypted[2]);
+   Fil_BuildPath (PathUniqueDirR,"%s/%s",
+		  PathUniqueDirL,
+		  &UniqueNameEncrypted[2]);
    if (mkdir (PathUniqueDirR,(mode_t) 0777))
       Err_ShowErrorAndExit ("Can not create directory for report.");
 
    /***** Path of the public file with the report */
-   if (strlen (Rep_FILENAME_ROOT) + 1 +
-       6 + 1 +
-       6 + 1 +
-       strlen ("html") > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (Report->FilenameReport,sizeof (Report->FilenameReport),
-	     "%s_%06u_%06u.html",
-             Rep_FILENAME_ROOT,
-             Report->CurrentTimeUTC.Date,
-             Report->CurrentTimeUTC.Time);
-   if (strlen (PathUniqueDirR) + 1 +
-       strlen (Report->FilenameReport) > PATH_MAX)
-      Err_PathTooLongExit ();
-   snprintf (PathFileReport,sizeof (PathFileReport),"%s/%s",
-             PathUniqueDirR,Report->FilenameReport);
+   Fil_BuildName (Report->FilenameReport,"%s_%06u_%06u.html",
+		  Rep_FILENAME_ROOT,
+		  Report->CurrentTimeUTC.Date,
+		  Report->CurrentTimeUTC.Time);
+   Fil_BuildPath (PathFileReport,"%s/%s",
+                  PathUniqueDirR,Report->FilenameReport);
    if ((Rep_File = fopen (PathFileReport,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not create report file.");
 
    /***** Permalink *****/
-   if (strlen (Cfg_URL_REP_PUBLIC) + 1 +
-       2 + 1 +
-       strlen (&UniqueNameEncrypted[2]) + 1 +
-       strlen (Report->FilenameReport) > WWW_MAX_BYTES_WWW)
-      Err_PathTooLongExit ();
-   snprintf (Report->Permalink,sizeof (Report->Permalink),"%s/%c%c/%s/%s",
-             Cfg_URL_REP_PUBLIC,
-             UniqueNameEncrypted[0],
-             UniqueNameEncrypted[1],
-             &UniqueNameEncrypted[2],
-             Report->FilenameReport);
+   WWW_BuildURL (Report->Permalink,"%s/%c%c/%s/%s", !!!
+		 Cfg_URL_REP_PUBLIC,
+		 UniqueNameEncrypted[0],
+		 UniqueNameEncrypted[1],
+		 &UniqueNameEncrypted[2],
+		 Report->FilenameReport);
   }
 
 /*****************************************************************************/
@@ -1305,8 +1289,8 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
       row = mysql_fetch_row (mysql_res);
 
       /* Remove report directory and file */
-      snprintf (PathUniqueDirReport,sizeof (PathUniqueDirReport),"%s/%s/%s",
-	        Cfg_PATH_REP_PUBLIC,row[0],row[1]);
+      Fil_BuildPath (PathUniqueDirReport,"%s/%s/%s",
+	             Cfg_PATH_REP_PUBLIC,row[0],row[1]);
       Fil_RemoveTree (PathUniqueDirReport);
      }
 

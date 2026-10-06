@@ -3759,12 +3759,12 @@ void Prj_RemoveProject (void)
    Brw_DB_RemovePrjFiles (Projects.Prj.PrjCod);
 
    /***** Remove directory of the project *****/
-   snprintf (PathRelPrj,sizeof (PathRelPrj),"%s/%lu/%s/%02u/%lu",
-	     Cfg_PATH_CRS_PRIVATE,
-	     (unsigned long) Projects.Prj.HieCod,
-	     Cfg_FOLDER_PRJ,
-	     (unsigned) ((unsigned long) Projects.Prj.PrjCod % 100),
-	     (unsigned long) Projects.Prj.PrjCod);
+   Fil_BuildPath (PathRelPrj,"%s/%lu/%s/%02u/%lu",
+		  Cfg_PATH_CRS_PRIVATE,
+		  (unsigned long) Projects.Prj.HieCod,
+		  Cfg_FOLDER_PRJ,
+		  (unsigned) ((unsigned long) Projects.Prj.PrjCod % 100),
+		  (unsigned long) Projects.Prj.PrjCod);
    Fil_RemoveTree (PathRelPrj);
 
    /***** Write message to show the change made *****/

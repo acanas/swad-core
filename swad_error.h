@@ -44,7 +44,9 @@ typedef enum
 /*****************************************************************************/
 
 void Err_NotEnoughMemoryExit (void);
+void Err_FilenameTooLongExit (void);
 void Err_PathTooLongExit (void);
+void Err_URLTooLongExit (void);
 void Err_QuerySizeExceededExit (void);
 
 void Err_WrongActionExit (void);

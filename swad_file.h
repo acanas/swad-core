@@ -91,6 +91,10 @@ void Fil_WriteFileSizeBrief (double SizeInBytes,
 void Fil_WriteFileSizeFull (double SizeInBytes,
                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1]);
 
+//-----------------------------------------------------------------------------
+void Fil_BuildName (char Name[NAME_MAX + 1],const char *fmt,...);
+void Fil_BuildPath (char Path[PATH_MAX + 1],const char *fmt,...);
+
 //------------------------------- File caches ---------------------------------
 
 void Fil_AddPublicDirToCache (const char FullPathPriv[PATH_MAX + 1],

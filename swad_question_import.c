@@ -177,10 +177,10 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
    Brw_CreateDirDownloadTmp (&TmpPubDir);
 
    /***** Create public XML file with the questions *****/
-   snprintf (PathPubFile,sizeof (PathPubFile),"%s/%s/%s/test.xml",
-             Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
-             TmpPubDir.Left,
-             TmpPubDir.Right);
+   Fil_BuildPath (PathPubFile,"%s/%s/%s/test.xml",
+		  Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
+		  TmpPubDir.Left,
+		  TmpPubDir.Right);
    if ((FileXML = fopen (PathPubFile,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open target file.");
 
@@ -388,8 +388,8 @@ void QstImp_ImpQstsFromXML (void)
   {
    extern const char *Txt_The_file_is_not_X;
    struct Par_Param *Par;
-   char FileNameXMLSrc[PATH_MAX + 1];
-   char FileNameXMLTmp[PATH_MAX + 1];	// Full name (including path and .xml) of the destination temporary file
+   char PathXMLSrc[PATH_MAX + 1];
+   char PathXMLTmp[PATH_MAX + 1];	// Full name (including path and .xml) of the destination temporary file
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    Err_SuccessOrError_t SuccessOrError;
 
@@ -398,7 +398,7 @@ void QstImp_ImpQstsFromXML (void)
 
    /***** First of all, copy in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
-                                   FileNameXMLSrc,MIMEType);
+                                   PathXMLSrc,MIMEType);
 
    /* Check if the file type is XML */
    SuccessOrError = Err_SUCCESS;
@@ -413,13 +413,13 @@ void QstImp_ImpQstsFromXML (void)
      {
       case Err_SUCCESS:
 	 /* End the reception of XML in a temporary file */
-	 snprintf (FileNameXMLTmp,sizeof (FileNameXMLTmp),"%s/%s.xml",
-		   Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
-	 switch (Fil_EndReceptionOfFile (FileNameXMLTmp,Par))
+	 Fil_BuildPath (PathXMLTmp,"%s/%s.xml",
+		        Cfg_PATH_TEST_PRIVATE,Cry_GetUniqueNameEncrypted ());
+	 switch (Fil_EndReceptionOfFile (PathXMLTmp,Par))
 	   {
 	    case Err_SUCCESS:
 	       /***** Get questions from XML file and store them in database *****/
-	       QstImp_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
+	       QstImp_ReadQuestionsFromXMLFileAndStoreInDB (PathXMLTmp);
 	       break;
 	    case Err_ERROR:
 	    default:

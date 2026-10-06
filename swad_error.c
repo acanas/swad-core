@@ -51,12 +51,30 @@ void Err_NotEnoughMemoryExit (void)
   }
 
 /*****************************************************************************/
+/******* Write error message and exit when a file name is too long ***********/
+/*****************************************************************************/
+
+void Err_FilenameTooLongExit (void)
+  {
+   Err_ShowErrorAndExit ("File name too long.");
+  }
+
+/*****************************************************************************/
 /********** Write error message and exit when a path is too long *************/
 /*****************************************************************************/
 
 void Err_PathTooLongExit (void)
   {
    Err_ShowErrorAndExit ("Path too long.");
+  }
+
+/*****************************************************************************/
+/********** Write error message and exit when a URL is too long **************/
+/*****************************************************************************/
+
+void Err_URLTooLongExit (void)
+  {
+   Err_ShowErrorAndExit ("URL too long.");
   }
 
 /*****************************************************************************/

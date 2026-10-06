@@ -2025,23 +2025,16 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all institutions which codes end in
 	    institution-code mod 100 */
-	 if (strlen (Cfg_PATH_INS_PRIVATE) + 1 + 2 > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (Path,sizeof (Path),"%s/%02u",
-		   Cfg_PATH_INS_PRIVATE,
-		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100));
+	 Fil_BuildPath (Path,"%s/%02u",
+		        Cfg_PATH_INS_PRIVATE,
+		        (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current institution */
-	 if (strlen (Cfg_PATH_INS_PRIVATE) + 1 + 2 + 1 +
-	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (FileBrowser->Path.AboveRootFolder,
-	           sizeof (FileBrowser->Path.AboveRootFolder),
-	           "%s/%02u/%lu",
-		   Cfg_PATH_INS_PRIVATE,
-		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
-		   (unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	 Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%02u/%lu",
+			Cfg_PATH_INS_PRIVATE,
+			(unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod % 100),
+			(unsigned long) Gbl.Hierarchy.Node[Hie_INS].HieCod);
          break;
       case Brw_SHOW_DOC_CTR:
       case Brw_ADMI_DOC_CTR:
@@ -2051,23 +2044,16 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all centers which codes end in
 	    center-code mod 100 */
-	 if (strlen (Cfg_PATH_CTR_PRIVATE) + 1 + 2 > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (Path,sizeof (Path),"%s/%02u",
-		   Cfg_PATH_CTR_PRIVATE,
-		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
+	 Fil_BuildPath (Path,"%s/%02u",
+		        Cfg_PATH_CTR_PRIVATE,
+		        (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
 	 /* Create path to the current center */
-	 if (strlen (Cfg_PATH_CTR_PRIVATE) + 1 + 2 + 1 +
-	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (FileBrowser->Path.AboveRootFolder,
-	           sizeof (FileBrowser->Path.AboveRootFolder),
-	           "%s/%02u/%lu",
-		   Cfg_PATH_CTR_PRIVATE,
-		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		   (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+	 Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%02u/%lu",
+			Cfg_PATH_CTR_PRIVATE,
+			(unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
+			(unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
 	 break;
       case Brw_SHOW_DOC_DEG:
       case Brw_ADMI_DOC_DEG:
@@ -2077,23 +2063,16 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create a directory for all degrees which codes end in
 	    degree-code mod 100 */
-	 if (strlen (Cfg_PATH_DEG_PRIVATE) + 1 + 2 > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (Path,sizeof (Path),"%s/%02u",
-		   Cfg_PATH_DEG_PRIVATE,
-		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100));
+	 Fil_BuildPath (Path,"%s/%02u",
+		        Cfg_PATH_DEG_PRIVATE,
+		        (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current degree */
-	 if (strlen (Cfg_PATH_DEG_PRIVATE) + 1 + 2 + 1 +
-	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (FileBrowser->Path.AboveRootFolder,
-	           sizeof (FileBrowser->Path.AboveRootFolder),
-	           "%s/%02u/%lu",
-		   Cfg_PATH_DEG_PRIVATE,
-		   (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
-		   (unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+	 Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%02u/%lu",
+		        Cfg_PATH_DEG_PRIVATE,
+		        (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod % 100),
+		        (unsigned long) Gbl.Hierarchy.Node[Hie_DEG].HieCod);
 	 break;
       case Brw_SHOW_DOC_CRS:
       case Brw_ADMI_DOC_CRS:
@@ -2112,86 +2091,54 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
       case Brw_SHOW_MRK_GRP:
       case Brw_ADMI_MRK_GRP:
 	 /* Create a directory for groups inside the current course */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_GRP) > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (Path,sizeof (Path),"%s/%s",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP);
+         Fil_BuildPath (Path,"%s/%s",Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP);
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to this group */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_GRP) + 1 +
-	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (FileBrowser->Path.AboveRootFolder,
-		   sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%lu",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,
-                   (unsigned long) Brw_GetGrpCod ());
+         Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%s/%lu",
+                        Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_GRP,
+                        (unsigned long) Brw_GetGrpCod ());
 	 break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
 	 /* Create a directory for me inside the current course */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_USR) > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (Path,sizeof (Path),"%s/%s",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
+         Fil_BuildPath (Path,"%s/%s",Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all users whose codes end in
 	    my-user-code mod 100 */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_USR) + 1 + 2 > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (Path,sizeof (Path),"%s/%s/%02u",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                   (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100));
+         Fil_BuildPath (Path,"%s/%s/%02u",
+                        Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+                        (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100));
          Fil_CreateDirIfNotExists (Path);
 
          /* Create path to me */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_USR) + 1 + 2 +
-	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (FileBrowser->Path.AboveRootFolder,
-		   sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%02u/%lu",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                   (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100),
-                   (unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod);
+         Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%s/%02u/%lu",
+                        Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+                        (unsigned) ((unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod % 100),
+                        (unsigned long) Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Brw_ADMI_ASG_CRS:
       case Brw_ADMI_WRK_CRS:
          if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
            {
 	    /* Create a directory for this user inside the current course */
-	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	        strlen (Cfg_FOLDER_USR) > PATH_MAX)
-	       Err_PathTooLongExit ();
-            snprintf (Path,sizeof (Path),"%s/%s",
-        	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
+            Fil_BuildPath (Path,"%s/%s",
+        	           Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR);
             Fil_CreateDirIfNotExists (Path);
 
 	    /* Create a directory for all users whose codes end in
 	       user-code mod 100 */
-	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-		strlen (Cfg_FOLDER_USR) + 1 + 2 > PATH_MAX)
-	       Err_PathTooLongExit ();
-	    snprintf (Path,sizeof (Path),"%s/%s/%02u",
-		      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-		      (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100));
+	    Fil_BuildPath (Path,"%s/%s/%02u",
+		           Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+		           (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100));
 	    Fil_CreateDirIfNotExists (Path);
 
             /* Create path to user */
-	    if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-		strlen (Cfg_FOLDER_USR) + 1 + 2 +
-		Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	       Err_PathTooLongExit ();
-            snprintf (FileBrowser->Path.AboveRootFolder,
-        	      sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%02u/%lu",
-        	      Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                      (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100),
-        	      (unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod);
+            Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%s/%02u/%lu",
+        	            Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+                           (unsigned) ((unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod % 100),
+        	           (unsigned long) Gbl.Usrs.Other.UsrDat.UsrCod);
            }
          break;
       case Brw_ADMI_DOC_PRJ:
@@ -2199,33 +2146,21 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	 PrjCod = Prj_GetPrjCod ();
 
 	 /* Create a directory for projects inside the current course */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_PRJ) > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (Path,sizeof (Path),"%s/%s",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ);
+         Fil_BuildPath (Path,"%s/%s",Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ);
          Fil_CreateDirIfNotExists (Path);
 
 	 /* Create a directory for all projects which codes end in
 	    project-code mod 100 */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_PRJ) + 1 + 2 > PATH_MAX)
-	    Err_PathTooLongExit ();
-	 snprintf (Path,sizeof (Path),"%s/%s/%02u",
-		   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
-                   (unsigned) ((unsigned long) PrjCod % 100));
+	 Fil_BuildPath (Path,"%s/%s/%02u",
+		        Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
+                        (unsigned) ((unsigned long) PrjCod % 100));
 	 Fil_CreateDirIfNotExists (Path);
 
          /* Create path to the current project */
-	 if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-	     strlen (Cfg_FOLDER_PRJ) + 1 + 2 +
-	     Cns_MAX_DIGITS_ULONG > PATH_MAX)
-	    Err_PathTooLongExit ();
-         snprintf (FileBrowser->Path.AboveRootFolder,
-		   sizeof (FileBrowser->Path.AboveRootFolder),"%s/%s/%02u/%lu",
-                   Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
-                   (unsigned) ((unsigned long) PrjCod % 100),
-                   (unsigned long) PrjCod);
+         Fil_BuildPath (FileBrowser->Path.AboveRootFolder,"%s/%s/%02u/%lu",
+			Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_PRJ,
+			(unsigned) ((unsigned long) PrjCod % 100),
+			(unsigned long) PrjCod);
 	 break;
       case Brw_ADMI_BRF_USR:
          Str_Copy (FileBrowser->Path.AboveRootFolder,Gbl.Usrs.Me.PathDir,
@@ -2239,12 +2174,9 @@ static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser)
    if (FileBrowser->Path.AboveRootFolder[0])
      {
       Fil_CreateDirIfNotExists (FileBrowser->Path.AboveRootFolder);
-      if (strlen (FileBrowser->Path.AboveRootFolder) + 1 +
-          strlen (Brw_RootFolderInternalNames[FileBrowser->Zone]) > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (Path,sizeof (Path),"%s/%s",
-                FileBrowser->Path.AboveRootFolder,
-                Brw_RootFolderInternalNames[FileBrowser->Zone]);
+      Fil_BuildPath (Path,"%s/%s",
+                     FileBrowser->Path.AboveRootFolder,
+                     Brw_RootFolderInternalNames[FileBrowser->Zone]);
       Str_Copy (FileBrowser->Path.RootFolder,Path,
                 sizeof (FileBrowser->Path.RootFolder) - 1);
       Fil_CreateDirIfNotExists (FileBrowser->Path.RootFolder);
@@ -2286,19 +2218,12 @@ Exi_Exist_t Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char FolderName[NAM
       UsrCod = DB_GetNextCode (mysql_res);
 
       /* Check if folder exists */
-      if (strlen (Gbl.Crs.Path.AbsPriv) + 1 +
-          strlen (Cfg_FOLDER_USR) + 1 +
-          2 + 1 +
-          Cns_MAX_DIGITS_ULONG + 1 +
-          strlen (Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS) + 1 +
-          strlen (FolderName) > PATH_MAX)
-	 Err_PathTooLongExit ();
-      snprintf (PathFolder,sizeof (PathFolder),"%s/%s/%02u/%lu/%s/%s",
-                Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
-                (unsigned) ((unsigned long) UsrCod % 100),
-                (unsigned long) UsrCod,	// User's code
-                Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                FolderName);
+      Fil_BuildPath (PathFolder,"%s/%s/%02u/%lu/%s/%s",
+		     Gbl.Crs.Path.AbsPriv,Cfg_FOLDER_USR,
+		     (unsigned) ((unsigned long) UsrCod % 100),
+		     (unsigned long) UsrCod,	// User's code
+		     Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		     FolderName);
       FolderExists = Fil_CheckIfPathExists (PathFolder);
      }
 

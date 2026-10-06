@@ -338,11 +338,7 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
 	       Size->NumLevls++;
 
 	    /* Update counters depending on whether it's a directory or a regular file */
-	    if (strlen (Path) + 1 +
-	        strlen (FileList[NumFile]->d_name) > PATH_MAX)
-	       Err_PathTooLongExit ();
-	    snprintf (PathFileRel,sizeof (PathFileRel),"%s/%s",
-		      Path,FileList[NumFile]->d_name);
+	    Fil_BuildPath (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
 	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory

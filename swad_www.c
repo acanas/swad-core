@@ -1,7 +1,5 @@
-// swad_www.h: constants related to URLs
+// swad_www.c: URLs
 
-#ifndef _SWAD_WWW
-#define _SWAD_WWW
 /*
     SWAD (Shared Workspace At a Distance),
     is a web platform developed at the University of Granada (Spain),
@@ -23,18 +21,44 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 /*****************************************************************************/
-/***************************** Public constants ******************************/
-/*****************************************************************************/
-
-#define WWW_MAX_CHARS_WWW	(256 - 1)		// 255: max. number of chars of a URL
-#define WWW_MAX_BYTES_WWW	WWW_MAX_CHARS_WWW	// 255
-
-/*****************************************************************************/
-/***************************** Public prototypes *****************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-void WWW_BuildURL (char WWW[WWW_MAX_BYTES_WWW + 1],const char *fmt,...);
+#include <stdarg.h>		// For va_start, va_end
+#include <stdio.h>		// For FILE,fprintf
+#include <stdlib.h>		// For exit, system, free, etc.
+#include <string.h>		// For string functions
 
-#endif
+#include "swad_error.h"
+#include "swad_www.h"
+
+/*****************************************************************************/
+/*************************** Build path using format *************************/
+/*****************************************************************************/
+
+void WWW_BuildURL (char WWW[WWW_MAX_BYTES_WWW + 1],const char *fmt,...)
+  {
+   va_list ap;
+   int NumBytesPrinted;
+   char *Ptr;
+
+   WWW[0] = '\0';
+   if (fmt)
+      if (fmt[0])
+	{
+	 va_start (ap,fmt);
+	 NumBytesPrinted = vasprintf (&Ptr,fmt,ap);	// Number of bytes printed (excluding the null byte)
+	 va_end (ap);
+	 if (NumBytesPrinted < 0)	// -1 if no memory or any other error
+	    Err_NotEnoughMemoryExit ();
+
+	 /***** Print attributes *****/
+	 if (NumBytesPrinted > WWW_MAX_BYTES_WWW)
+            Err_URLTooLongExit ();
+
+	 strcpy (WWW,Ptr);
+
+	 free (Ptr);
+	}
+  }
