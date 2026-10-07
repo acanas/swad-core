@@ -50,11 +50,11 @@ long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,
 			     const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic);
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 					  Brw_Zone_t Zone,
-					  const char FullPath[PATH_MAX + 1]);
+					  const char PathInZone[PATH_MAX + 1]);
 Exi_Exist_t Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod);
 void Brw_DB_GetPathByCod (long FilCod,char *Title,size_t TitleSize);
 long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
-				   const char FullPath[PATH_MAX + 1]);
+				   const char PathInZone[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long HieCod);
 unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod);
@@ -111,7 +111,7 @@ void Brw_DB_HideOrUnhideFileOrFolder (const struct Brw_FileBrowser *FileBrowser,
 				      HidVis_HiddenOrVisible_t HiddenOrVisible);
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
 									       Brw_Zone_t Zone,
-									       const char FullPath[PATH_MAX + 1]);
+									       const char PathInZone[PATH_MAX + 1]);
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata);
 
 //---------------------------- Expanded folders -------------------------------

@@ -2846,24 +2846,24 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 		 {
 		  /* Write selector to choice this answer */
 		  HTM_TD_Begin ("class=\"LT\"");
-		     snprintf (StrAns,sizeof (StrAns),"Ans%010u",
-			       (unsigned) SvyQst->QstCod);
+		     snprintf (StrAns,sizeof (StrAns),"Ans%010lu",
+			       (unsigned long) SvyQst->QstCod);
 		     switch (SvyQst->AnswerType)
 		       {
 			case Svy_ANS_UNIQUE_CHOICE:
 			   HTM_INPUT_RADIO (StrAns,
 					    HTM_NO_ATTR,
-					    "id=\"Ans%010u_%u\" value=\"%u\""
-					    " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010u,%u)\"",
-					    (unsigned) SvyQst->QstCod,NumAns,
+					    "id=\"Ans%010lu_%u\" value=\"%u\""
+					    " onclick=\"selectUnselectRadio(this,false,this.form.Ans%010lu,%u)\"",
+					    (unsigned long) SvyQst->QstCod,NumAns,
 					    NumAns,
-					    (unsigned) SvyQst->QstCod,NumAnswers);
+					    (unsigned long) SvyQst->QstCod,NumAnswers);
 			   break;
 			case Svy_ANS_MULTIPLE_CHOICE:
 			   HTM_INPUT_CHECKBOX (StrAns,
 					       HTM_NO_ATTR,
-					       "id=\"Ans%010u_%u\" value=\"%u\"",
-					       (unsigned) SvyQst->QstCod,NumAns,
+					       "id=\"Ans%010lu_%u\" value=\"%u\"",
+					       (unsigned long) SvyQst->QstCod,NumAns,
 					       NumAns);
 			   break;
 			default:
@@ -2874,8 +2874,8 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 	       /* Write the number of option */
 	       HTM_TD_Begin ("class=\"SVY_OPT LT\"");
-		  HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"DAT_%s\"",
-				   (unsigned) SvyQst->QstCod,NumAns,
+		  HTM_LABEL_Begin ("for=\"Ans%010lu_%u\" class=\"DAT_%s\"",
+				   (unsigned long) SvyQst->QstCod,NumAns,
 				   The_GetSuffix ());
 		     HTM_Unsigned (NumAns + 1); HTM_CloseParenthesis ();
 		  HTM_LABEL_End ();
@@ -2883,8 +2883,8 @@ static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
 
 	       /* Write the text of the answer */
 	       HTM_TD_Begin ("class=\"LT\"");
-		  HTM_LABEL_Begin ("for=\"Ans%010u_%u\" class=\"DAT_%s\"",
-				   (unsigned) SvyQst->QstCod,NumAns,
+		  HTM_LABEL_Begin ("for=\"Ans%010lu_%u\" class=\"DAT_%s\"",
+				   (unsigned long) SvyQst->QstCod,NumAns,
 				   The_GetSuffix ());
 		     HTM_Txt (SvyQst->AnsChoice[NumAns].Text);
 		  HTM_LABEL_End ();
@@ -2969,10 +2969,10 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
 	 break;
       case Frm_PUT_FORM:
 	 HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-			     "name=\"Com%010u\""
+			     "name=\"Com%010lu\""
 			     " cols=\"60\" rows=\"4\""
 			     " class=\"INPUT_%s\" placeholder=\"%s&hellip;\"",
-			     (unsigned) SvyQst->QstCod,The_GetSuffix (),
+			     (unsigned long) SvyQst->QstCod,The_GetSuffix (),
 			     Txt_Comments);
 	 HTM_TEXTAREA_End ();
 	 break;
@@ -3204,7 +3204,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
             Err_WrongQuestionExit ();
 
          /* Get possible parameter with the user's answer */
-         snprintf (ParName,sizeof (ParName),"Ans%010u",(unsigned) QstCod);
+         snprintf (ParName,sizeof (ParName),"Ans%010lu",(unsigned long) QstCod);
          Par_GetParMultiToText (ParName,StrAnswersIndexes,
                                 Svy_MAX_ANSWERS_PER_QUESTION *
                                 (Cns_MAX_DIGITS_UINT + 1));
@@ -3221,7 +3221,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
            }
 
          /* Get possible parameter with the user's comment */
-         snprintf (ParName,sizeof (ParName),"Com%010u",(unsigned) QstCod);
+         snprintf (ParName,sizeof (ParName),"Com%010lu",(unsigned long) QstCod);
          Par_GetParAndChangeFormat (ParName,Comments,Cns_MAX_BYTES_TEXT,
                                     Str_TO_RIGOROUS_HTML,Str_REMOVE_SPACES);
          if (Comments[0])

@@ -301,8 +301,8 @@ static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 			 FILE *XML,unsigned Level,
-                         const char Path[PATH_MAX + 1],
-                         const char *PathInTree);
+                         const char PathInServ[PATH_MAX + 1],
+                         const char PathInZone[PATH_MAX + 1]);
 static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser *FileBrowser,
 							 FILE *XML,unsigned Level);
 static void API_IndentXMLLine (FILE *XML,unsigned Level);
@@ -4707,6 +4707,7 @@ int swad__getDirectoryTree (struct soap *soap,
    int ReturnCode;
    char PathXML[PATH_MAX + 1];
    FILE *XML;
+   char PathRootFolderInZone[PATH_MAX + 1];
    struct Brw_FileBrowser FileBrowser;
    unsigned long FileSize;
    unsigned long NumBytesRead;
@@ -4809,7 +4810,9 @@ int swad__getDirectoryTree (struct soap *soap,
 	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
    Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Name,".",
 	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
-   Brw_SetFullPathInTree (&FileBrowser.FileMetadata.FilFolLnk);
+   Str_BuildFullPathFromPathAndName (FileBrowser.FileMetadata.FilFolLnk.Full,
+				     FileBrowser.FileMetadata.FilFolLnk.Path,
+				     FileBrowser.FileMetadata.FilFolLnk.Name);
 
    /* Check if exists the directory for HTML output. If not exists, create it */
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
@@ -4829,9 +4832,13 @@ int swad__getDirectoryTree (struct soap *soap,
    FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
    if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
 					&FileBrowser.FileMetadata) == HidVis_VISIBLE)
+     {
+      Str_Copy (PathRootFolderInZone,Brw_RootFolderInternalNames[FileBrowser.Zone],
+	        sizeof (PathRootFolderInZone) - 1);
       API_ListDir (&FileBrowser,XML,1,
                    FileBrowser.Path.RootFolder,
-                   Brw_RootFolderInternalNames[FileBrowser.Zone]);
+                   PathRootFolderInZone);
+     }
    XML_WriteEndFile (XML,"tree");
 
    /* Compute file size */
@@ -4857,20 +4864,20 @@ int swad__getDirectoryTree (struct soap *soap,
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 			 FILE *XML,unsigned Level,
-                         const char Path[PATH_MAX + 1],
-                         const char *PathInTree)
+                         const char PathInServ[PATH_MAX + 1],
+                         const char PathInZone[PATH_MAX + 1])
   {
    extern const char *Txt_NEW_LINE;
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX + 1];
-   char PathFileInExplTree[PATH_MAX + 1];
+   char PathInServIncludingFile[PATH_MAX + 1];
+   char PathInZoneIncludingFile[PATH_MAX + 1];
    struct stat FileStatus;
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Scan directory *****/
-   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+   if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** List files *****/
       for (NumFile = 0;
@@ -4880,20 +4887,22 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    Fil_BuildPath (PathFileRel,"%s/%s",
-		           Path,FileList[NumFile]->d_name);
-	    Fil_BuildPath (PathFileInExplTree,"%s/%s",
-		           PathInTree,FileList[NumFile]->d_name);
+	    Fil_BuildPath (PathInServIncludingFile,"%s/%s",
+		           PathInServ,FileList[NumFile]->d_name);
+	    Fil_BuildPath (PathInZoneIncludingFile,"%s/%s",
+		           PathInZone,FileList[NumFile]->d_name);
 
-	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInTree,
+	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Path,PathInZone,
 	 	      sizeof (FileBrowser->FileMetadata.FilFolLnk.Path) - 1);
 	    Str_Copy (FileBrowser->FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
 	 	      sizeof (FileBrowser->FileMetadata.FilFolLnk.Name) - 1);
 
-	    if (!lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
+	    if (!lstat (PathInServIncludingFile,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Brw_SetFullPathInTree (&FileBrowser->FileMetadata.FilFolLnk);
+	       Str_BuildFullPathFromPathAndName (FileBrowser->FileMetadata.FilFolLnk.Full,
+						 FileBrowser->FileMetadata.FilFolLnk.Path,
+						 FileBrowser->FileMetadata.FilFolLnk.Name);
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
@@ -4903,7 +4912,8 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 		    {
 		     /* List subtree starting at this this directory */
 		     API_ListDir (FileBrowser,XML,Level + 1,
-		                  PathFileRel,PathFileInExplTree);
+		                  PathInServIncludingFile,
+		                  PathInZoneIncludingFile);
 
 		     /* Indent and end dir */
 		     API_IndentXMLLine (XML,Level);
@@ -5145,7 +5155,9 @@ int swad__getFile (struct soap *soap,
 	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
    Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Name,FileBrowser.FileMetadata.FilFolLnk.Name,
 	     sizeof (FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
-   Brw_SetFullPathInTree (&FileBrowser.FileMetadata.FilFolLnk);
+   Str_BuildFullPathFromPathAndName (FileBrowser.FileMetadata.FilFolLnk.Full,
+				     FileBrowser.FileMetadata.FilFolLnk.Path,
+				     FileBrowser.FileMetadata.FilFolLnk.Name);
 
    /***** Get file size and date *****/
    FileExists = Brw_GetFileTypeSizeAndDate (&FileBrowser);

@@ -81,9 +81,9 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
 static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser);
 static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
-				        const char Path[PATH_MAX + 1],
-				        const char PathClone[PATH_MAX + 1],
-				        const char PathInTree[PATH_MAX + 1]);
+				        const char PathInServ[PATH_MAX + 1],
+				        const char PathInServClone[PATH_MAX + 1],
+				        const char PathInZone[PATH_MAX + 1]);
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize);
 
@@ -440,21 +440,21 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
  *
  * Example starting directory with document files: /var/www/swad/crs/1000/descarga/lectures/lecture_1
  * We want to compress all files inside lecture_1 into a ZIP file
- * Path = /var/www/swad/crs/1000/descarga/lectures/lecture_1
- * PathClone = /var/www/swad/zip/<unique_dir>
- * PathInTree = "descarga/lectures/lecture_1"
+ * PathInServ = /var/www/swad/crs/1000/descarga/lectures/lecture_1
+ * PathInServClone = /var/www/swad/zip/<unique_dir>
+ * PathInZone = "descarga/lectures/lecture_1"
 
  * Example directory inside starting directory with document files: /var/www/swad/crs/1000/descarga/lectures/lecture_1/slides
- * Path = /var/www/swad/crs/1000/descarga/lectures/lecture_1/slides
- * PathClone: /var/www/swad/zip/<unique_dir>/slides
- * PathInTree = "descarga/lectures/lecture_1/slides
+ * PathInServ = /var/www/swad/crs/1000/descarga/lectures/lecture_1/slides
+ * PathInServClone: /var/www/swad/zip/<unique_dir>/slides
+ * PathInZone = "descarga/lectures/lecture_1/slides
  */
 // Return: full size of directory contents
 
 static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
-				        const char Path[PATH_MAX + 1],
-				        const char PathClone[PATH_MAX + 1],
-				        const char PathInTree[PATH_MAX + 1])
+				        const char PathInServ[PATH_MAX + 1],
+				        const char PathInServClone[PATH_MAX + 1],
+				        const char PathInZone[PATH_MAX + 1])
   {
    extern unsigned Brw_ZoneType[Brw_NUM_ZONES];
    struct dirent **FileList;
@@ -469,7 +469,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 
    /***** Scan directory *****/
    FileMetadata.Zone = FileBrowser->Zone;
-   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+   if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** List files *****/
       for (NumFile = 0;
@@ -478,15 +478,17 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    Str_Copy (FileMetadata.FilFolLnk.Path,PathInTree,
+	    Str_Copy (FileMetadata.FilFolLnk.Path,PathInZone,
 		      sizeof (FileMetadata.FilFolLnk.Path) - 1);
 	    Str_Copy (FileMetadata.FilFolLnk.Name,FileList[NumFile]->d_name,
 	              sizeof (FileMetadata.FilFolLnk.Name) - 1);
-            Brw_SetFullPathInTree (&FileMetadata.FilFolLnk);
+            Str_BuildFullPathFromPathAndName (FileMetadata.FilFolLnk.Full,
+				              FileMetadata.FilFolLnk.Path,
+				              FileMetadata.FilFolLnk.Name);
 	    Fil_BuildPath (PathFile,"%s/%s",
-		           Path,FileMetadata.FilFolLnk.Name);
+		           PathInServ,FileMetadata.FilFolLnk.Name);
 	    Fil_BuildPath (PathFileClone,"%s/%s",
-		           PathClone,FileMetadata.FilFolLnk.Name);
+		           PathInServClone,FileMetadata.FilFolLnk.Name);
 
 	    FileMetadata.FilFolLnk.Type = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned

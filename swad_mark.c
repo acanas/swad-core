@@ -690,11 +690,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    struct Mrk_Properties Marks;
-   char FullPathInTreeFromDBMarksTable[PATH_MAX + 1];
-   char PathUntilFileName[PATH_MAX + 1];
+   char PathInZoneFromDBMarksTable[PATH_MAX + 1];
+   char PathInZoneWithoutFileName[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
-   char PathMarks[PATH_MAX + 1];
-   char PathUsrMarks[PATH_MAX + 1];
+   char PathInServMarks[PATH_MAX + 1];
+   char PathInServUsrMarksTmp[PATH_MAX + 1];
    FILE *FileUsrMarks;
    size_t SizeOfMyMarks;
    size_t Length;
@@ -727,10 +727,10 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       Brw_GetCrsGrpFromFileMetadata (Zone,Cod,HieCods,&GrpCod);
 
       /* Path (row[2]) */
-      Str_Copy (FullPathInTreeFromDBMarksTable,row[2],
-		sizeof (FullPathInTreeFromDBMarksTable) - 1);
-      Str_SplitFullPathIntoPathAndName (FullPathInTreeFromDBMarksTable,
-					PathUntilFileName,
+      Str_Copy (PathInZoneFromDBMarksTable,row[2],
+		sizeof (PathInZoneFromDBMarksTable) - 1);
+      Str_SplitFullPathIntoPathAndName (PathInZoneFromDBMarksTable,
+					PathInZoneWithoutFileName,
 					FileName);
       Str_Copy (SummaryStr,FileName,Cns_MAX_BYTES_TEXT);
 
@@ -747,29 +747,29 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	 if (UsrDat.IDs.Num)
 	   {
 	    if (GrpCod > 0)
-	       Fil_BuildPath (PathMarks,"%s/%lu/%s/%lu/%s",
+	       Fil_BuildPath (PathInServMarks,"%s/%lu/%s/%lu/%s",
 			      Cfg_PATH_CRS_PRIVATE,
 			      (unsigned long) HieCods[Hie_CRS],
 			      Cfg_FOLDER_GRP,
 			      (unsigned long) GrpCod,
-			      FullPathInTreeFromDBMarksTable);
+			      PathInZoneFromDBMarksTable);
 	    else
-	       Fil_BuildPath (PathMarks,"%s/%lu/%s",
+	       Fil_BuildPath (PathInServMarks,"%s/%lu/%s",
 			      Cfg_PATH_CRS_PRIVATE,
 			      (unsigned long) HieCods[Hie_CRS],
-			      FullPathInTreeFromDBMarksTable);
+			      PathInZoneFromDBMarksTable);
 
 	    /***** Create temporal file to store my marks (in HTML) *****/
 	    /* If the private directory does not exist, create it */
 	    Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	    /* Create a new temporary file *****/
-	    Fil_BuildPath (PathUsrMarks,"%s/%s.html",
+	    Fil_BuildPath (PathInServUsrMarksTmp,"%s/%s.html",
 		           Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
-	    if ((FileUsrMarks = fopen (PathUsrMarks,"wb")))
+	    if ((FileUsrMarks = fopen (PathInServUsrMarksTmp,"wb")))
 	      {
 	       /***** Get user's marks *****/
-	       if (Mrk_GetUsrMarks (FileUsrMarks,&UsrDat,PathMarks,&Marks))
+	       if (Mrk_GetUsrMarks (FileUsrMarks,&UsrDat,PathInServMarks,&Marks))
 		 {
 		  SizeOfMyMarks = (size_t) ftell (FileUsrMarks);
 		  fclose (FileUsrMarks);
@@ -782,7 +782,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 		     /* Content */
 		     Ptr = (*ContentStr) + 9;
-		     if ((FileUsrMarks = fopen (PathUsrMarks,"rb")))
+		     if ((FileUsrMarks = fopen (PathInServUsrMarksTmp,"rb")))
 		       {
 			for (i = 0;
 			     i < SizeOfMyMarks;
@@ -810,7 +810,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 			     "Can not open file of marks.") < 0)
 		  Err_NotEnoughMemoryExit ();
 	      }
-	    unlink (PathUsrMarks);	// File with marks is no longer necessary
+	    unlink (PathInServUsrMarksTmp);	// File with marks is no longer necessary
 	   }
 	 else
 	   {

@@ -342,7 +342,7 @@ void Brw_DB_GetPathByCod (long FilCod,char *Title,size_t TitleSize)
 /*****************************************************************************/
 
 long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
-				   const char FullPath[PATH_MAX + 1])
+				   const char PathInZone[PATH_MAX + 1])
   {
    /***** Get all common files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
@@ -359,8 +359,8 @@ long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
 			      (unsigned) Brw_DB_ZoneForDB_files[Zone],
 			      Brw_GetCodForFileBrowser (Zone),
 			      Brw_GetZoneUsrCodForFileBrowser (Zone),
-			      FullPath,
-			      FullPath);
+			      PathInZone,
+			      PathInZone);
   }
 
 /*****************************************************************************/

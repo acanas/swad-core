@@ -2166,6 +2166,25 @@ size_t Str_GetLengthRootFileName (const char *FileName)
   }
 
 /*****************************************************************************/
+/*************** Construct full path in tree of file browser *****************/
+/*****************************************************************************/
+// If, for example, PathWithoutFileName is "descarga/teoria" and FileName is "tema1.pdf"
+// then FullPath will be "descarga/teoria/tema1.pdf"
+// If FileName is ".", then FullPath will be equal to PathWithoutFileName
+
+void Str_BuildFullPathFromPathAndName (char FullPath[PATH_MAX + 1],
+                                       const char PathWithoutFileName[PATH_MAX + 1],
+                                       const char FileName[NAME_MAX + 1])
+  {
+   if (!PathWithoutFileName[0])	// It's the root folder
+      Str_Copy (FullPath,FileName,PATH_MAX);
+   else if (strcmp (FileName,"."))
+      Fil_BuildPath (FullPath,"%s/%s",PathWithoutFileName,FileName);
+   else				// It's the root folder
+      Str_Copy (FullPath,PathWithoutFileName,PATH_MAX);
+  }
+
+/*****************************************************************************/
 /************** Get the name of a file from a complete path ******************/
 /*****************************************************************************/
 // Split a full path in path (without ending '/' ) and a file name

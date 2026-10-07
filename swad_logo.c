@@ -166,7 +166,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 				Cfg_URL_SWAD_PUBLIC,Folder,
 				(unsigned) ((unsigned long) HieCod % 100),
 				(unsigned long) HieCod);
-		  if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
+		  if (asprintf (&Icon,"%lu.png",(unsigned long) HieCod) < 0)
 		     Err_NotEnoughMemoryExit ();
 
 		  HTM_IMG (URL,Icon,Node->FullName,"class=\"%s\"",IconClass);

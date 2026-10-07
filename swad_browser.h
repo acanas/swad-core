@@ -105,8 +105,6 @@ Usr_Can_t Brw_CheckIfFileBrowserIsEditable (Brw_Zone_t Zone);
 
 long Brw_GetCodForFileBrowser (Brw_Zone_t Zone);
 
-void Brw_SetFullPathInTree (struct Brw_FilFolLnk *FilFolLnk);
-
 void Brw_PutIconFile (const char *FileName,
 		      const char *Class,Frm_PutForm_t PutFormToGo);
 
