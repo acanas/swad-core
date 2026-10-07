@@ -25,10 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
-#include <stdio.h>		// For asprintf
-#include <stdlib.h>		// For free
-
 #include "swad_action.h"
 #include "swad_action_list.h"
 #include "swad_alert.h"
@@ -39,6 +35,7 @@
 #include "swad_ID.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
+#include "swad_www.h"
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
@@ -128,18 +125,17 @@ void QR_PrintUsrQRCode (void)
 
 void QR_ImageQRCode (const char *QRString)
   {
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    HTM_DIV_Begin ("class=\"CM\" style=\"margin:0 auto; width:%upx;\"",
 		  QR_CODE_SIZE);
 
-      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s",
-		    QR_CODE_SIZE,QR_CODE_SIZE,QRString) < 0)
-	 Err_NotEnoughMemoryExit ();
+      WWW_BuildURL (URL,"https://api.qrserver.com/v1/create-qr-code/"
+	                "?size=%ux%u&amp;data=%s",
+		    QR_CODE_SIZE,QR_CODE_SIZE,QRString);
       HTM_IMG (URL,NULL,QRString,
 	       "style=\"width:%upx;height:%upx;border:1px dashed silver;\"",
 	       QR_CODE_SIZE,QR_CODE_SIZE);
-      free (URL);
 
    HTM_DIV_End ();
   }
@@ -152,24 +148,19 @@ void QR_LinkTo (unsigned Size,ParCod_Param_t ParCode,long Cod)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Shortcut;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Show QR code with link *****/
    if (ParCode == ParCod_None)
-     {
-      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s/",
-		    Size,Size,Cfg_URL_SWAD_CGI) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
+      WWW_BuildURL (URL,"https://api.qrserver.com/v1/create-qr-code/"
+	                "?size=%ux%u&amp;data=%s/",
+		    Size,Size,Cfg_URL_SWAD_CGI);
    else
-     {
-      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s/?%s=%ld",
-		    Size,Size,Cfg_URL_SWAD_CGI,Par_CodeStr[ParCode],Cod) < 0)
-	 Err_NotEnoughMemoryExit ();
-     }
+      WWW_BuildURL (URL,"https://api.qrserver.com/v1/create-qr-code/"
+			"?size=%ux%u&amp;data=%s/?%s=%ld",
+		    Size,Size,Cfg_URL_SWAD_CGI,Par_CodeStr[ParCode],Cod);
 
    HTM_IMG (URL,NULL,Txt_Shortcut,"style=\"width:%upx;height:%upx;\"",Size,Size);
-   free (URL);
   }
 
 /*****************************************************************************/
@@ -179,19 +170,18 @@ void QR_LinkTo (unsigned Size,ParCod_Param_t ParCode,long Cod)
 void QR_ExamAnnnouncement (void)
   {
    extern const char *Txt_Link_to_call_for_exam;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Show QR code with direct link to the exam announcement *****/
    HTM_DIV_Begin ("class=\"CM\"");
 
-      if (asprintf (&URL,"https://api.qrserver.com/v1/create-qr-code/?size=%ux%u&amp;data=%s/?crs=%ld%%26act=%ld",
+      WWW_BuildURL (URL,"https://api.qrserver.com/v1/create-qr-code/"
+			"?size=%ux%u&amp;data=%s/?crs=%ld%%26act=%ld",
 		    300,300,
 		    Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		    Act_GetActCod (ActSeeAllCfe)) < 0)
-	 Err_NotEnoughMemoryExit ();
+		    Act_GetActCod (ActSeeAllCfe));
       HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,
 	       "style=\"width:250px;height:250px;\"");
-      free (URL);
 
    HTM_DIV_End ();
   }

@@ -649,8 +649,9 @@ TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una ses
       snprintf (Path,sizeof (Path),"%s/%s",
 	        FileBrowser.Path.AboveRootFolder,
 	        FileBrowser.FileMetadata.FilFolLnk.Full);
-   TODO: Repasar asprintf comprobando archivos, cambiando por Fil_BuildPath
+   TODO: Buscar los (unsigned) antes de HieCod cambiándolos por (unsigned long) e imprimiéndolos con %lu
 
+	Version 26.10.1:  Oct 07, 2026	Code refactoring in URLs and paths. (347610 lines)
 	Version 26.10:    Oct 07, 2026	Code refactoring in paths. (347655 lines)
 	Version 26.9.5:   Oct 06, 2026	Code refactoring in paths. (348193 lines)
 	Version 26.9.4:   Oct 06, 2026	Code refactoring in paths. (348179 lines)

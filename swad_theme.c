@@ -267,7 +267,7 @@ void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
    extern const char *Txt_PERCENT_of_users;
    The_Theme_t Theme;
    char *SubQuery;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    unsigned NumUsrs[The_NUM_THEMES];
    unsigned NumUsrsTotal = 0;
 
@@ -305,12 +305,10 @@ void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"CM\"");
-	       if (asprintf (&URL,"%s/%s",
-			     Cfg_URL_ICON_THEMES_PUBLIC,The_Themes[Theme].Id) < 0)
-		  Err_NotEnoughMemoryExit ();
+	       WWW_BuildURL (URL,"%s/%s",
+			     Cfg_URL_ICON_THEMES_PUBLIC,The_Themes[Theme].Id);
 	       HTM_IMG (URL,"theme_32x20.gif",The_Themes[Theme].Name,
 			"style=\"width:40px; height:25px;\"");
-	       free (URL);
 	    HTM_TD_End ();
 
 	    HTM_TD_Unsigned (NumUsrs[Theme]);

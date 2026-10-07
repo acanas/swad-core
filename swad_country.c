@@ -490,20 +490,18 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 
 void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class)
   {
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char *Icon;
 
    /***** Draw country map *****/
    switch (Cty_CheckIfCountryPhotoExists (Cty))
      {
       case Exi_EXISTS:
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 WWW_BuildURL (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName);
 	 if (asprintf (&Icon,"%s.png",Cty->ShrtName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_IMG (URL,Icon,Cty->FullName,"class=\"%s\"",Class);
 	 free (Icon);
-	 free (URL);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:

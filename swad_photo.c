@@ -1744,8 +1744,8 @@ static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    unsigned NumUsr;
    char PathPrivRelPhoto[PATH_MAX + 1];	// Relative path to private photo, to calculate average face
-   char *PathRelAvgPhoto;
-   char *FileNamePhotoNames;
+   char PathRelAvgPhoto[PATH_MAX + 1];
+   char PathFilePhotoNames[PATH_MAX + 1];
    FILE *FilePhotoNames = NULL;	// Initialized to avoid warning
    char StrCallToProgram[3 * (PATH_MAX + 1)];	// Call to photo processing program
    int ReturnCode;
@@ -1761,22 +1761,20 @@ static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
    *NumStds = *NumStdsWithPhoto = 0;
 
    /***** Build name for file with average photo *****/
-   if (asprintf (&PathRelAvgPhoto,"%s/%lu_%s.jpg",
-                 DirAvgPhotosRelPath,
-                 (unsigned long) HieCod,
-                 Usr_StringsSexDB[Sex]) < 0)
-      Err_NotEnoughMemoryExit ();
+   Fil_BuildPath (PathRelAvgPhoto,"%s/%lu_%s.jpg",
+                  DirAvgPhotosRelPath,
+                  (unsigned long) HieCod,
+                  Usr_StringsSexDB[Sex]);
 
    /***** Remove old file if exists *****/
    if (Fil_CheckIfPathExists (PathRelAvgPhoto) == Exi_EXISTS)  // If file exists
       unlink (PathRelAvgPhoto);
 
    /***** Build names for text file with photo paths *****/
-   if (asprintf (&FileNamePhotoNames,"%s/%lu.txt",
-	         Cfg_PATH_PHOTO_TMP_PRIVATE,
-	         (unsigned long) HieCod) < 0)
-      Err_NotEnoughMemoryExit ();
-   if ((FilePhotoNames = fopen (FileNamePhotoNames,"wb")) == NULL)
+   Fil_BuildPath (PathFilePhotoNames,"%s/%lu.txt",
+	          Cfg_PATH_PHOTO_TMP_PRIVATE,
+	          (unsigned long) HieCod);
+   if ((FilePhotoNames = fopen (PathFilePhotoNames,"wb")) == NULL)
       Err_ShowErrorAndExit ("Can not open file to compute average photo.");
 
    /***** Loop writing file names in text file *****/
@@ -1806,7 +1804,7 @@ static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
      {
       snprintf (StrCallToProgram,sizeof (StrCallToProgram),"%s %s %s",
 	        Pho_StrAvgPhotoPrograms[TypeOfAverage],
-	        FileNamePhotoNames,PathRelAvgPhoto);
+	        PathFilePhotoNames,PathRelAvgPhoto);
       ReturnCode = system (StrCallToProgram);
       if (ReturnCode == -1)
 	 Err_ShowErrorAndExit ("Error when running program that computes the average photo.");
@@ -1815,9 +1813,6 @@ static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
       if (WEXITSTATUS(ReturnCode))
 	 Err_ShowErrorAndExit ("The average photo has not been computed successfully.");
      }
-
-   free (PathRelAvgPhoto);
-   free (FileNamePhotoNames);
 
    /***** Time used to compute the stats of this degree *****/
    if (gettimeofday (&tvEndComputingStat, &tz))

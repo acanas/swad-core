@@ -424,7 +424,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 			  const char PathPhoto[PATH_MAX + 1])
   {
    char *PhotoAttribution = NULL;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char *Icon;
 
    /***** Trivial checks *****/
@@ -441,19 +441,17 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
 		      Gbl.Hierarchy.Node[Hie_CTR].WWW);
-      if (asprintf (&URL,"%s/%02u/%u",
+      WWW_BuildURL (URL,"%s/%02u/%lu",
 		    Cfg_URL_CTR_PUBLIC,
 		    (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		    (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod) < 0)
-	 Err_NotEnoughMemoryExit ();
-      if (asprintf (&Icon,"%u.jpg",
-		    (unsigned) Gbl.Hierarchy.Node[Hie_CTR].HieCod) < 0)
+		    (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+      if (asprintf (&Icon,"%lu.jpg",
+		    (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_IMG (URL,Icon,Gbl.Hierarchy.Node[Hie_CTR].FullName,
 	       "class=\"%s\"",ViewType == Vie_VIEW ? "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH" :
 						     "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH");
       free (Icon);
-      free (URL);
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
    HTM_DIV_End ();

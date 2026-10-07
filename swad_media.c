@@ -1529,7 +1529,7 @@ static void Med_ShowJPG (const struct Med_Media *Media,
    char FileNameJPG[NAME_MAX + 1];
    char TmpPubDirFull[PATH_MAX + 1];
    char FullPathJPGPriv[PATH_MAX + 1];
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Build private path to JPG *****/
    Fil_BuildName (FileNameJPG,"%s.%s",Media->Name,Med_Extensions[Med_JPG]);
@@ -1558,11 +1558,10 @@ static void Med_ShowJPG (const struct Med_Media *Media,
 	   }
 
 	 /***** Show media *****/
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 WWW_BuildURL (URL,"%s/%s",
+		       Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull);
 	 HTM_IMG (URL,FileNameJPG,Media->Title,
 		  "class=\"%s\" loading=\"lazy\"",ClassMedia);	// Lazy load of the media
-	 free (URL);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
@@ -1586,9 +1585,9 @@ static void Med_ShowGIF (const struct Med_Media *Media,
    char TmpPubDirFull[PATH_MAX + 1];
    char FullPathGIFPriv[PATH_MAX + 1];
    char FullPathPNGPriv[PATH_MAX + 1];
-   char *URL;
-   char *URL_GIF;
-   char *URL_PNG;
+   char URL[WWW_MAX_BYTES_WWW + 1];
+   char URL_GIF[WWW_MAX_BYTES_WWW + 1];
+   char URL_PNG[WWW_MAX_BYTES_WWW + 1];
 
    /***** Build private path to animated GIF image *****/
    Fil_BuildName (FileNameGIF,"%s.%s",Media->Name,Med_Extensions[Med_GIF]);
@@ -1620,12 +1619,9 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	   }
 
 	 /***** Create URLs pointing to symbolic links *****/
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 if (asprintf (&URL_GIF,"%s/%s",URL,FileNameGIF) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 if (asprintf (&URL_PNG,"%s/%s",URL,FileNamePNG) < 0)	// The static PNG image
-	    Err_NotEnoughMemoryExit ();
+	 WWW_BuildURL (URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull);
+	 WWW_BuildURL (URL_GIF,"%s/%s",URL,FileNameGIF);
+	 WWW_BuildURL (URL_PNG,"%s/%s",URL,FileNamePNG);	// The static PNG image
 
 	 /***** Check if private media file exists *****/
 	 if (Fil_CheckIfPathExists (FullPathPNGPriv))		// The static PNG image
@@ -1652,11 +1648,6 @@ static void Med_ShowGIF (const struct Med_Media *Media,
 	   }
 	 else
 	    HTM_Txt (Txt_File_not_found);
-
-	 /***** Free URLs *****/
-	 free (URL_PNG);
-	 free (URL_GIF);
-	 free (URL);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
@@ -1678,7 +1669,7 @@ static void Med_ShowVideo (const struct Med_Media *Media,
    char FileNameVideo[NAME_MAX + 1];
    char TmpPubDirFull[PATH_MAX + 1];
    char FullPathVideoPriv[PATH_MAX + 1];
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Build private path to video *****/
    Fil_BuildName (FileNameVideo,"%s.%s",Media->Name,Med_Extensions[Media->Type]);
@@ -1704,8 +1695,8 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	   }
 
 	 /***** Create URL pointing to symbolic link *****/
-	 if (asprintf (&URL,"%s/%s",Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull) < 0)
-	    Err_NotEnoughMemoryExit ();
+	 WWW_BuildURL (URL,"%s/%s",
+		       Cfg_URL_FILE_BROWSER_TMP_PUBLIC,TmpPubDirFull);
 
 	 /***** Show media *****/
 	 HTM_TxtF ("<video src=\"%s/%s\""
@@ -1718,7 +1709,6 @@ static void Med_ShowVideo (const struct Med_Media *Media,
 	 HTM_Txt (" loading=\"lazy\">"	// Lazy load of the media
 		  "Your browser does not support HTML5 video."
 		  "</video>");
-	 free (URL);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
@@ -1985,7 +1975,7 @@ void Med_RemoveMediaFromAllRows (unsigned NumMedia,MYSQL_RES *mysql_res)
 void Med_RemoveMedia (long MedCod)
   {
    char PathPriv[PATH_MAX + 1];
-   char *FullPathPriv;
+   char FullPathPriv[PATH_MAX + 1];
    struct Med_Media Media;
 
    /***** Trivial case *****/
@@ -2020,36 +2010,28 @@ void Med_RemoveMedia (long MedCod)
 	      {
 	       case Med_JPG:
 		  /***** Remove private JPG file *****/
-		  if (asprintf (&FullPathPriv,"%s/%s.%s",
-			        PathPriv,Media.Name,Med_Extensions[Med_JPG]) < 0)
-		     Err_NotEnoughMemoryExit ();
+		  Fil_BuildPath (FullPathPriv,"%s/%s.%s",
+			         PathPriv,Media.Name,Med_Extensions[Med_JPG]);
 		  unlink (FullPathPriv);
-                  free (FullPathPriv);
 		  break;
 	       case Med_GIF:
 		  /***** Remove private GIF file *****/
-		  if (asprintf (&FullPathPriv,"%s/%s.%s",
-			        PathPriv,Media.Name,Med_Extensions[Med_GIF]) < 0)
-		     Err_NotEnoughMemoryExit ();
+		  Fil_BuildPath (FullPathPriv,"%s/%s.%s",
+			         PathPriv,Media.Name,Med_Extensions[Med_GIF]);
 		  unlink (FullPathPriv);
-                  free (FullPathPriv);
 
 		  /***** Remove private PNG file *****/
-		  if (asprintf (&FullPathPriv,"%s/%s.png",PathPriv,Media.Name) < 0)
-		     Err_NotEnoughMemoryExit ();
+		  Fil_BuildPath (FullPathPriv,"%s/%s.png",PathPriv,Media.Name);
 		  unlink (FullPathPriv);
-                  free (FullPathPriv);
 
 		  break;
 	       case Med_MP4:
 	       case Med_WEBM:
 	       case Med_OGG:
 		  /***** Remove private video file *****/
-		  if (asprintf (&FullPathPriv,"%s/%s.%s",
-			        PathPriv,Media.Name,Med_Extensions[Media.Type]) < 0)
-		     Err_NotEnoughMemoryExit ();
+		  Fil_BuildPath (FullPathPriv,"%s/%s.%s",
+			         PathPriv,Media.Name,Med_Extensions[Media.Type]);
 		  unlink (FullPathPriv);
-		  free (FullPathPriv);
 
 		  break;
 	       default:

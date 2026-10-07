@@ -83,7 +83,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
    Exi_Exist_t LogoExists = Exi_DOES_NOT_EXIST;
    long HieCods[Hie_NUM_LEVELS];
    long HieCod;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char *Icon;
 
    switch (HieLvl)
@@ -162,17 +162,15 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	    switch (LogoExists)
 	      {
 	       case Exi_EXISTS:
-		  if (asprintf (&URL,"%s/%s/%02u/%lu/logo",
+		  WWW_BuildURL (URL,"%s/%s/%02u/%lu/logo",
 				Cfg_URL_SWAD_PUBLIC,Folder,
 				(unsigned) ((unsigned long) HieCod % 100),
-				(unsigned long) HieCod) < 0)
-		     Err_NotEnoughMemoryExit ();
+				(unsigned long) HieCod);
 		  if (asprintf (&Icon,"%u.png",(unsigned) HieCod) < 0)
 		     Err_NotEnoughMemoryExit ();
 
 		  HTM_IMG (URL,Icon,Node->FullName,"class=\"%s\"",IconClass);
 		  free (Icon);
-		  free (URL);
 		  break;
 	       case Exi_DOES_NOT_EXIST:
 	       default:

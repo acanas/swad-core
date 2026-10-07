@@ -583,7 +583,7 @@ void Ico_GetAndShowNumUsrsPerIconSet (Hie_Level_t HieLvl)
      };
    Ico_IconSet_t IconSet;
    char *SubQuery;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    unsigned NumUsrs[Ico_NUM_ICON_SETS];
    unsigned NumUsrsTotal = 0;
 
@@ -621,13 +621,11 @@ void Ico_GetAndShowNumUsrsPerIconSet (Hie_Level_t HieLvl)
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"LM\"");
-	       if (asprintf (&URL,"%s/%s",
-			     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]) < 0)
-		  Err_NotEnoughMemoryExit ();
+	       WWW_BuildURL (URL,"%s/%s",
+			     Cfg_URL_ICON_SETS_PUBLIC,Ico_IconSetId[IconSet]);
 	       HTM_IMG (URL,"cog.svg",Ico_IconSetNames[IconSet],
 			"class=\"ICO20x20 ICO_%s_%s\"",
 			Ico_GetPreffix (Color[IconSet]),The_GetSuffix ());
-	       free (URL);
 	    HTM_TD_End ();
 
 	    HTM_TD_Unsigned (NumUsrs[IconSet]);

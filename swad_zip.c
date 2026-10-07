@@ -25,11 +25,9 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#define _GNU_SOURCE 		// For asprintf
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
-#include <stdio.h>		// For asprintf
 #include <stdlib.h>		// For system...
 #include <string.h>		// For string functions...
 #include <sys/stat.h>		// For mkdir...
@@ -350,11 +348,11 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
    char Path[PATH_MAX + 1];
    char PathCompression[PATH_MAX + 1];
    int Result;
-   char *FileNameZIP;
+   char FileNameZIP[NAME_MAX + 1];
    char PathFileZIP[PATH_MAX + 1];
    struct stat FileStatus;
    char URLWithSpaces[WWW_MAX_BYTES_WWW + 1];
-   char URL[PATH_MAX + 1];
+   char URL[WWW_MAX_BYTES_WWW + 1];
 
    /***** Create temporary private directory
           for the compression of folder *****/
@@ -388,10 +386,9 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
 	 Err_ShowErrorAndExit ("Can not change to temporary folder for compression.");
 
       /***** Create public zip file with the assignment and works *****/
-      if (asprintf (&FileNameZIP,"%s.zip",
-	            strcmp (FileBrowser->FileMetadata.FilFolLnk.Name,".") ? FileBrowser->FileMetadata.FilFolLnk.Name :
-									    Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Zone]) < 0)
-         Err_NotEnoughMemoryExit ();
+      Fil_BuildName (FileNameZIP,"%s.zip",
+	             strcmp (FileBrowser->FileMetadata.FilFolLnk.Name,".") ? FileBrowser->FileMetadata.FilFolLnk.Name :
+									     Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Zone]);
       Fil_BuildPath (PathFileZIP,"%s/%s/%s/%s",
 		     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
 		     TmpPubDir.Left,
@@ -426,8 +423,6 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser)
 	 /** Link to download file */
 	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);
 	}
-
-      free (FileNameZIP);
      }
 
    /***** Remove the directory of compression *****/

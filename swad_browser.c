@@ -4496,14 +4496,14 @@ void Brw_PutIconFile (const char *FileName,
   {
    extern const char *Ext_FileExtAllowed[Ext_NUM_FILE_EXT_ALLOWED];
    extern const char *Txt_X_file;
-   char *URL;
+   char URL[WWW_MAX_BYTES_WWW + 1];
    char *Icon;
    char *Title;
    unsigned DocType;
    Exi_Exist_t TypeExists;
 
-   if (asprintf (&URL,"%s32x32",CfG_URL_ICON_FILEXT_PUBLIC) < 0)
-      Err_NotEnoughMemoryExit ();
+   WWW_BuildURL (URL,"%s32x32",CfG_URL_ICON_FILEXT_PUBLIC);
+
    for (DocType = 0, TypeExists = Exi_DOES_NOT_EXIST;
 	DocType < Ext_NUM_FILE_EXT_ALLOWED && TypeExists == Exi_DOES_NOT_EXIST;
 	DocType++)
@@ -4534,7 +4534,6 @@ void Brw_PutIconFile (const char *FileName,
      }
    free (Title);
    free (Icon);
-   free (URL);
   }
 
 /*****************************************************************************/
