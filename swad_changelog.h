@@ -641,15 +641,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.10.2 (2026-10-07)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.11 (2026-10-08)"
 #define Chl_CSS_FILE		"swad26.6.3.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
- * TODO: ¿Construir en FilFolLnk otro full path que incluya también AboveRootFolder?
-      snprintf (Path,sizeof (Path),"%s/%s",
-	        FileBrowser.Path.AboveRootFolder,
-	        FileBrowser.FileMetadata.FilFolLnk.Full);
-
+	Version 26.11:    Oct 08, 2026	Code refactoring in file browser. (347751 lines)
 	Version 26.10.2:  Oct 07, 2026	Code refactoring in paths. (347631 lines)
 	Version 26.10.1:  Oct 07, 2026	Code refactoring in URLs and paths. (347610 lines)
 	Version 26.10:    Oct 07, 2026	Code refactoring in paths. (347655 lines)

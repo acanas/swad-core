@@ -497,7 +497,7 @@ void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class)
    switch (Cty_CheckIfCountryPhotoExists (Cty))
      {
       case Exi_EXISTS:
-	 WWW_BuildURL (&URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName);
+	 WWW_BuildURL (URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName);
 	 if (asprintf (&Icon,"%s.png",Cty->ShrtName) < 0)
 	    Err_NotEnoughMemoryExit ();
 	 HTM_IMG (URL,Icon,Cty->FullName,"class=\"%s\"",Class);

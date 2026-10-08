@@ -41,13 +41,13 @@
 //---------------------------------- Files ------------------------------------
 long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata);
 void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
-			     const char OldPath[PATH_MAX + 1],
-                             const char NewPath[PATH_MAX + 1]);
+			     const char OldPathInZone[PATH_MAX + 1],
+                             const char NewPathInZone[PATH_MAX + 1]);
 void Brw_DB_RenameChildrenFilesOrFolders (Brw_Zone_t Zone,
-					  const char OldPath[PATH_MAX + 1],
-                                          const char NewPath[PATH_MAX + 1]);
-long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,
-			     const char *Path,Brw_OnlyPublicFiles_t OnlyIfPublic);
+					  const char OldPathInZone[PATH_MAX + 1],
+                                          const char NewPathInZone[PATH_MAX + 1]);
+long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,const char *PathInZone,
+			     Brw_OnlyPublicFiles_t OnlyIfPublic);
 Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 					  Brw_Zone_t Zone,
 					  const char PathInZone[PATH_MAX + 1]);
@@ -61,8 +61,9 @@ unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod);
 unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long HieCod);
 unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long HieCod);
 void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
-				   const char Path[PATH_MAX + 1]);
-void Brw_DB_RemoveChildrenOfFolder (const struct Brw_FileBrowser *FileBrowser);
+				   const char PathInZone[PATH_MAX + 1]);
+void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
+				    const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_RemoveInsFiles (long HieCod);
 void Brw_DB_RemoveCtrFiles (long HieCod);
 void Brw_DB_RemoveDegFiles (long HieCod);
@@ -74,9 +75,13 @@ void Brw_DB_RemoveWrkFiles (long HieCod,long UsrCod);
 void Brw_DB_RemoveUsrFiles (long UsrCod);
 
 //------------------------------ Public files ---------------------------------
-void Brw_DB_ChangeFilePublic (const struct Brw_FileBrowser *FileBrowser,
-                              PriPub_PrivateOrPublic_t PrivateOrPublic,Brw_License_t License);
-PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (const struct Brw_FileBrowser *FileBrowser);
+void Brw_DB_ChangeFilePublic (Brw_Zone_t Zone,
+			      long FilCod,
+			      const char PathInZone[PATH_MAX + 1],
+                              PriPub_PrivateOrPublic_t PrivateOrPublic,
+                              Brw_License_t License);
+PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (Brw_Zone_t Zone,
+							   const char PathInZone[PATH_MAX + 1]);
 unsigned Brw_DB_GetNumPublicFilesUsr (long UsrCod);
 unsigned Brw_DB_GetNumberOfPublicFiles (MYSQL_RES **mysql_res,
 				        Hie_Level_t HieLvl,Brw_License_t License);
@@ -107,7 +112,8 @@ unsigned Brw_DB_GetFileViewsFromNonLoggedUsrs (long FilCod);
 unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 
 //------------------------------- Hidden files --------------------------------
-void Brw_DB_HideOrUnhideFileOrFolder (const struct Brw_FileBrowser *FileBrowser,
+void Brw_DB_HideOrUnhideFileOrFolder (Brw_Zone_t Zone,
+				      const char PathInZone[PATH_MAX + 1],
 				      HidVis_HiddenOrVisible_t HiddenOrVisible);
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
 									       Brw_Zone_t Zone,
@@ -116,22 +122,25 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
 
 //---------------------------- Expanded folders -------------------------------
 void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
-					   const char Path[PATH_MAX + 1]);
+					   const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone);
 ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t Zone,
-								      const char Path[PATH_MAX + 1]);
+								      const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
-					     const char Path[PATH_MAX + 1]);
+					     const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
-					   const char Path[PATH_MAX + 1]);
+					   const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
                                            long MyUsrCod,long WorksUsrCod,
-                                           const char *OldPath,const char *NewPath);
+                                           const char OldPathInZone[PATH_MAX + 1],
+                                           const char NewPathInZone[PATH_MAX + 1]);
 void Brw_DB_RemoveExpiredExpandedFolders (void);
 
 //------------------------------- Cliboards -----------------------------------
-void Brw_DB_AddPathToClipboards (const struct Brw_FileBrowser *FileBrowser);
-void Brw_DB_UpdatePathInClipboard (const struct Brw_FileBrowser *FileBrowser);
+void Brw_DB_AddPathToClipboards (Brw_Zone_t Zone,Brw_FileType_t FileType,
+				 const char PathInZone[PATH_MAX + 1]);
+void Brw_DB_UpdatePathInClipboard (Brw_Zone_t Zone,Brw_FileType_t FileType,
+				   const char PathInZone[PATH_MAX + 1]);
 unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res);
 void Brw_DB_RemoveExpiredClipboards (void);
 void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,

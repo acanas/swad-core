@@ -943,7 +943,7 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
 /****************** Mark notes of one file as unavailable ********************/
 /*****************************************************************************/
 
-void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *Path)
+void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *PathInZone)
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
    Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
@@ -951,7 +951,7 @@ void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *Path)
 
    if (TmlNot_NoteType[ZoneForDB])
       /***** Get file code *****/
-      if ((FilCod = Brw_DB_GetFilCodByPath (Zone,Path,
+      if ((FilCod = Brw_DB_GetFilCodByPath (Zone,PathInZone,
                                             Brw_ONLY_PUBLIC_FILES)) > 0)	// Only public files
 	 /***** Mark possible note as unavailable *****/
 	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[ZoneForDB],FilCod);
@@ -961,15 +961,16 @@ void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *Path)
 /***** Mark possible notes involving children of a folder as unavailable *****/
 /*****************************************************************************/
 
-void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (const struct Brw_FileBrowser *FileBrowser)
+void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (Brw_Zone_t Zone,
+						    const char PathInZone[PATH_MAX + 1])
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[FileBrowser->Zone];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
 
    if (TmlNot_NoteType[ZoneForDB])
       Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[ZoneForDB],ZoneForDB,
-						     Brw_GetCodForFileBrowser (FileBrowser->Zone),
-						     FileBrowser->FileMetadata.FilFolLnk.Full);
+						     Brw_GetCodForZone (Zone),
+						     PathInZone);
   }
 
 /*****************************************************************************/

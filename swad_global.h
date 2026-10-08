@@ -150,9 +150,9 @@ struct Globals
      {
       struct
         {
-	 char AbsPriv[PATH_MAX + 1];	// Absolute path to the private directory of the course
-	 char RelPubl[PATH_MAX + 1];	// Relative path to the public directory of the course
-	 char URLPubl[PATH_MAX + 1];	// Abolute URL to the public part of the course
+	 char Prv[PATH_MAX + 1];	// Path to the private directory of the course
+	 char Pub[PATH_MAX + 1];	// Path to the public directory of the course
+	 char URL[PATH_MAX + 1];	// URL to the public part of the course
         } Path;
       struct Grp_Groups Grps;
       struct

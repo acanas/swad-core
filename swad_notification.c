@@ -1065,7 +1065,8 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 /*********** Mark possible notifications of one file as removed **************/
 /*****************************************************************************/
 
-void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,const char *Path)
+void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,
+				    const char PathInZone[PATH_MAX + 1])
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
    static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_ZONES] =
@@ -1085,7 +1086,7 @@ void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,const char *Path)
    if (NotifyEvent[ZoneForDB])
      {
       /***** Get file code *****/
-      FilCod = Brw_DB_GetFilCodByPath (Zone,Path,Brw_ANY_FILE);	// Any file, public or not
+      FilCod = Brw_DB_GetFilCodByPath (Zone,PathInZone,Brw_ANY_FILE);	// Any file, public or not
       if (FilCod > 0)
 	 /***** Set notification as removed *****/
 	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[ZoneForDB],FilCod);
@@ -1096,7 +1097,8 @@ void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,const char *Path)
 /*** Mark possible notifications involving children of a folder as removed ***/
 /*****************************************************************************/
 
-void Ntf_MarkNotifChildrenOfFolderAsRemoved (const struct Brw_FileBrowser *FileBrowser)
+void Ntf_MarkNotifChildrenOfFolderAsRemoved (Brw_Zone_t Zone,
+					     const char PathInZone[PATH_MAX + 1])
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
    static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_ZONES] =
@@ -1110,13 +1112,13 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const struct Brw_FileBrowser *FileB
       [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
       [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
      };
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[FileBrowser->Zone];
+   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
 
    if (NotifyEvent[ZoneForDB])
       /***** Set notification as removed *****/
       Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[ZoneForDB],ZoneForDB,
-						 Brw_GetCodForFileBrowser (FileBrowser->Zone),
-						 FileBrowser->FileMetadata.FilFolLnk.Full);
+						 Brw_GetCodForZone (Zone),
+						 PathInZone);
   }
 
 /*****************************************************************************/

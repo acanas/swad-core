@@ -46,24 +46,25 @@ void BrwRsc_GetLinkToDocFil (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Documents;
    struct Brw_FileBrowser FileBrowser;
+   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Get file code *****/
-   FileBrowser.FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
+   FileMetadata.FilCod = FileBrowser.FilCod = ParCod_GetPar (ParCod_Fil);
 
    /***** Get file metadata *****/
-   if (FileBrowser.FileMetadata.FilCod > 0)
-      Brw_GetFileMetadataByCod (&FileBrowser.FileMetadata);
+   if (FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&FileMetadata);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileBrowser.FileMetadata.FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileMetadata.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileBrowser.FileMetadata.FilCod > 0 ? FileBrowser.FileMetadata.FilFolLnk.Name :
-                					Txt_Documents);
+                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.FileName :
+                		            Txt_Documents);
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -74,24 +75,25 @@ void BrwRsc_GetLinkToMrkFil (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Marks_area;
    struct Brw_FileBrowser FileBrowser;
+   struct Brw_FileMetadata FileMetadata;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Get file code *****/
-   FileBrowser.FileMetadata.FilCod = ParCod_GetPar (ParCod_Fil);
+   FileMetadata.FilCod = FileBrowser.FilCod = ParCod_GetPar (ParCod_Fil);
 
    /***** Get file metadata *****/
-   if (FileBrowser.FileMetadata.FilCod > 0)
-      Brw_GetFileMetadataByCod (&FileBrowser.FileMetadata);
+   if (FileMetadata.FilCod > 0)
+      Brw_GetFileMetadataByCod (&FileMetadata);
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_MARKS,FileBrowser.FileMetadata.FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_MARKS,FileMetadata.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileBrowser.FileMetadata.FilCod > 0 ? FileBrowser.FileMetadata.FilFolLnk.Name :
-                					Txt_Marks_area);
+                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.FileName :
+                			    Txt_Marks_area);
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -109,16 +111,16 @@ void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize)
    /***** Get file name *****/
    FileMetadata.FilCod = FilCod;
    Brw_DB_GetPathByCod (FileMetadata.FilCod,
-                        FileMetadata.FilFolLnk.Full,
-                        sizeof (FileMetadata.FilFolLnk.Full) - 1);
-   Str_SplitFullPathIntoPathAndName (FileMetadata.FilFolLnk.Full,
-				     FileMetadata.FilFolLnk.Path,
-				     FileMetadata.FilFolLnk.Name);
+                        FileMetadata.FilFolLnk.PathInZone,
+                        sizeof (FileMetadata.FilFolLnk.PathInZone) - 1);
+   Str_SplitFullPathIntoPathAndName (FileMetadata.FilFolLnk.PathInZone,
+				     FileMetadata.FilFolLnk.PathInZoneWithoutFileName,
+				     FileMetadata.FilFolLnk.FileName);
 
    /***** Remove .url if it's a link *****/
-   if (Str_FileIs (FileMetadata.FilFolLnk.Name,"url"))
-      FileMetadata.FilFolLnk.Name[strlen (FileMetadata.FilFolLnk.Name) - 4] = '\0';
+   if (Str_FileIs (FileMetadata.FilFolLnk.FileName,"url"))
+      FileMetadata.FilFolLnk.FileName[strlen (FileMetadata.FilFolLnk.FileName) - 4] = '\0';
 
    /***** Copy file name into title *****/
-   Str_Copy (Title,FileMetadata.FilFolLnk.Name,TitleSize);
+   Str_Copy (Title,FileMetadata.FilFolLnk.FileName,TitleSize);
   }

@@ -69,7 +69,7 @@ void Brw_PutLegalNotice (void);
 
 void Brw_ReqRemFile (void);
 void Brw_RemFile (void);
-void Brw_RemFolder (void);
+void Brw_TryRemFolder (void);
 void Brw_ExpandFileTree (void);
 void Brw_ContractFileTree (void);
 void Brw_Copy (void);
@@ -88,22 +88,25 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
 							  struct Brw_FileMetadata *FileMetadata);
 void Brw_ShowFileMetadata (void);
 
-void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,char *URL);
+void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,
+				const struct Brw_FileMetadata *FileMetadata,
+				char *URL);
 void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata,Brw_Zone_t Zone);
 void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata);
-Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileBrowser *FileBrowser);
+Exi_Exist_t Brw_GetFileTypeSizeAndDate (const struct Brw_FileBrowser *FileBrowser,
+				        struct Brw_FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
 
-long Brw_GetZoneUsrCodForFileBrowser (Brw_Zone_t Zone);
+long Brw_GetZoneUsrCodForZone (Brw_Zone_t Zone);
 void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long Cod,
                                     long HieCods[Hie_NUM_LEVELS],long *GrpCod);
 
 Usr_Can_t Brw_CheckIfFileBrowserIsEditable (Brw_Zone_t Zone);
 
-long Brw_GetCodForFileBrowser (Brw_Zone_t Zone);
+long Brw_GetCodForZone (Brw_Zone_t Zone);
 
 void Brw_PutIconFile (const char *FileName,
 		      const char *Class,Frm_PutForm_t PutFormToGo);
@@ -114,8 +117,9 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir
                                            const char FileName[NAME_MAX + 1]);
 
 void Brw_PutImplicitParsFileBrowser (void *Zone);
-void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser,long FilCod);
-void Brw_GetParFilCod (struct Brw_FileBrowser *FileBrowser);
+void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser);
+void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
+					 struct Brw_FileMetadata *FileMetadata);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);

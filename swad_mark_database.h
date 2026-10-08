@@ -34,11 +34,13 @@
 /*****************************************************************************/
 
 void Mrk_DB_AddMarks (long FilCod,const struct Mrk_Properties *Marks);
-void Mrk_DB_ChangeNumRowsHeaderOrFooter (const struct Brw_FileBrowser *FileBrowser,
+void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_Zone_t Zone,
+					 const char PathInZone[PATH_MAX + 1],
 					 Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows);
 
 Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod);
 Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
-					      const struct Brw_FileBrowser *FileBrowser);
+					      Brw_Zone_t Zone,
+					      const char PathInZone[PATH_MAX + 1]);
 
 #endif

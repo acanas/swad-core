@@ -707,6 +707,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
       [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
      };
    struct Brw_FileBrowser FileBrowser;
+   struct Brw_FileMetadata FileMetadata;
    Act_Action_t NextAction;
    Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
 			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
@@ -742,11 +743,13 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Path,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		   sizeof (FileBrowser.FileMetadata.FilFolLnk.Path) - 1);
-	 Str_Copy (FileBrowser.FileMetadata.FilFolLnk.Name,Asg->Folder,
-		   sizeof (FileBrowser.FileMetadata.FilFolLnk.Name) - 1);
-	 FileBrowser.FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+	 Str_Copy (FileMetadata.FilFolLnk.PathInZoneWithoutFileName,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   sizeof (FileMetadata.FilFolLnk.PathInZoneWithoutFileName) - 1);
+	 Str_Copy (FileMetadata.FilFolLnk.FileName,Asg->Folder,
+		   sizeof (FileMetadata.FilFolLnk.FileName) - 1);
+	 FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+	 Brw_GetFileMetadataByPath (&FileMetadata,FileBrowser.Zone);
+	 FileBrowser.FilCod = FileMetadata.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
@@ -1852,11 +1855,11 @@ void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
 
    if (Level == 1)
       // We are in this case: assignments/assignment-folder
-      Str_Copy (Folder,FilFolLnk->Name,NAME_MAX);
+      Str_Copy (Folder,FilFolLnk->FileName,NAME_MAX);
    else
      {
       // We are in this case: assignments/assignment-folder/rest-of-path
-      for (Ptr = FilFolLnk->Path;
+      for (Ptr = FilFolLnk->PathInZoneWithoutFileName;
 	   *Ptr && *Ptr != '/';
 	   Ptr++);	// Go to first '/'
       if (*Ptr == '/')

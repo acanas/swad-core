@@ -296,8 +296,8 @@ void Ntf_DB_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 /*****************************************************************************/
 
 void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
-                                                Brw_Zone_t Zone,
-                                                long Cod,const char *Path)
+                                                Brw_Zone_t Zone,long Cod,
+                                                const char *PathInZone)
   {
    DB_QueryUPDATE ("can not set notification(s) as removed",
 		   "UPDATE ntf_notifications"
@@ -313,7 +313,7 @@ void Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (Ntf_NotifyEvent_t NotifyEvent,
 		   (unsigned) NotifyEvent,
 		   (unsigned) Zone,
 		   Cod,
-		   Path);
+		   PathInZone);
   }
 
 /*****************************************************************************/

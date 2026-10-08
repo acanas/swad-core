@@ -674,21 +674,21 @@ void Hie_InitHierarchy (void)
    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
      {
       /***** Paths of course directories *****/
-      Fil_BuildPath (Gbl.Crs.Path.AbsPriv,"%s/%lu",
+      Fil_BuildPath (Gbl.Crs.Path.Prv,"%s/%lu",
 	             Cfg_PATH_CRS_PRIVATE,
 	             (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-      Fil_BuildPath (Gbl.Crs.Path.RelPubl,"%s/%lu",
+      Fil_BuildPath (Gbl.Crs.Path.Pub,"%s/%lu",
 	             Cfg_PATH_CRS_PUBLIC,
 	             (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-      Fil_BuildPath (Gbl.Crs.Path.URLPubl,"%s/%lu",
+      Fil_BuildPath (Gbl.Crs.Path.URL,"%s/%lu",
 	             Cfg_URL_CRS_PUBLIC,
 	             (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
       /***** If any of the course directories does not exist, create it *****/
-      if (Fil_CheckIfPathExists (Gbl.Crs.Path.AbsPriv) == Exi_DOES_NOT_EXIST)
-	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.AbsPriv);
-      if (Fil_CheckIfPathExists (Gbl.Crs.Path.RelPubl) == Exi_DOES_NOT_EXIST)
-	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.RelPubl);
+      if (Fil_CheckIfPathExists (Gbl.Crs.Path.Prv) == Exi_DOES_NOT_EXIST)
+	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.Prv);
+      if (Fil_CheckIfPathExists (Gbl.Crs.Path.Pub) == Exi_DOES_NOT_EXIST)
+	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.Pub);
 
       /***** Count number of groups in current course
              (used in some actions) *****/

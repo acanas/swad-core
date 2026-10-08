@@ -151,7 +151,7 @@ void BrwSiz_SetAndCheckQuota (struct Brw_FileBrowser *FileBrowser)
 
    /***** Check the quota *****/
    BrwSiz_SetMaxQuota (FileBrowser->Zone,&FileBrowser->Size);
-   BrwSiz_CalcSizeOfDir (&FileBrowser->Size,FileBrowser->Path.RootFolder);
+   BrwSiz_CalcSizeOfDir (&FileBrowser->Size,FileBrowser->PathRootFolderInServ.IncludingRootFolder);
    if (BrwSiz_CheckQuota (&FileBrowser->Size) == Err_ERROR)
       Ale_ShowAlert (Ale_WARNING,Txt_Quota_exceeded);
   }
@@ -319,7 +319,7 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX + 1];
+   char PathIncludingThisFile[PATH_MAX + 1];
    struct stat FileStatus;
 
    /***** Scan the directory *****/
@@ -338,14 +338,15 @@ static void BrwSiz_CalcSizeOfDirRecursive (struct Brw_Size *Size,
 	       Size->NumLevls++;
 
 	    /* Update counters depending on whether it's a directory or a regular file */
-	    Fil_BuildPath (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
-	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
+	    Fil_BuildPath (PathIncludingThisFile,"%s/%s",
+			   Path,FileList[NumFile]->d_name);
+	    if (lstat (PathIncludingThisFile,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	      {
 	       Size->NumFolds++;
 	       Size->TotalSiz += (unsigned long long) FileStatus.st_size;
-	       BrwSiz_CalcSizeOfDirRecursive (Size,Level + 1,PathFileRel);
+	       BrwSiz_CalcSizeOfDirRecursive (Size,Level + 1,PathIncludingThisFile);
 	      }
 	    else if (S_ISREG (FileStatus.st_mode))		// It's a regular file
 	      {

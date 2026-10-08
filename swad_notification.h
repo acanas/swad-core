@@ -45,8 +45,10 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     long Cod,long HieCod,long UsrCod,
                                     Ntf_GetContent_t GetContent);
 
-void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,const char *Path);
-void Ntf_MarkNotifChildrenOfFolderAsRemoved (const struct Brw_FileBrowser *FileBrowser);
+void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,
+				    const char PathInZone[PATH_MAX + 1]);
+void Ntf_MarkNotifChildrenOfFolderAsRemoved (Brw_Zone_t Zone,
+					     const char PathInZone[PATH_MAX + 1]);
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_SendPendingNotifByEMailToAllUsrs (void);
 Ntf_NotifyEvent_t Ntf_GetNotifyEventFromStr (const char *Str);

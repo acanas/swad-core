@@ -45,7 +45,8 @@ struct Mrk_Properties
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser);
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
+					    const struct Brw_FileMetadata *FileMetadata);
 void Mrk_ChangeNumRowsHeader (void);
 void Mrk_ChangeNumRowsFooter (void);
 

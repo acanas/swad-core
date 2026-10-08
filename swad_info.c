@@ -2318,7 +2318,7 @@ void Inf_ReceivePagInfo (void)
 	    Fil_CreateDirIfNotExists (PathRelDirHTML);
 
 	    Fil_BuildPath (PathRelFileZIP,"%s/%s.zip",
-			   Gbl.Crs.Path.AbsPriv,
+			   Gbl.Crs.Path.Prv,
 			   Inf_FileNamesForInfoType[InfoType]);
 
 	    switch (Fil_EndReceptionOfFile (PathRelFileZIP,Par))

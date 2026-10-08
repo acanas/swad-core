@@ -75,7 +75,8 @@ static const char *Mrk_HeadOrFootStr[Brw_NUM_HEAD_FOOT] =	// Names of fields in 
 /*****************************************************************************/
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
-					   const struct Brw_FileBrowser *FileBrowser);
+					   Brw_Zone_t Zone,
+					   const char PathInZone[PATH_MAX + 1]);
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
 static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
@@ -87,7 +88,8 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 /********* Write number of header and footer rows of a file of marks *********/
 /*****************************************************************************/
 
-void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser)
+void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
+					    const struct Brw_FileMetadata *FileMetadata)
   {
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
@@ -95,14 +97,15 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser)
    struct Mrk_Properties Marks;
    char StrHeadOrFoot[Cns_MAX_DIGITS_UINT + 1];
 
-   if (FileBrowser->FileMetadata.FilFolLnk.Type == Brw_IS_FOLDER)
+   if (FileMetadata->FilFolLnk.Type == Brw_IS_FOLDER)
       HTM_TD_ColouredEmpty (2);
    else	// File or link
      {
       CurrentGrpCod = Brw_GetGrpCod ();
 
       /***** Get number of rows in header or footer *****/
-      Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser);
+      Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser->Zone,
+				     FileMetadata->FilFolLnk.PathInZone);
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
@@ -145,7 +148,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser)
 /*****************************************************************************/
 
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
-					   const struct Brw_FileBrowser *FileBrowser)
+					   Brw_Zone_t Zone,
+					   const char PathInZone[PATH_MAX + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -154,7 +158,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
       get the number of rows of the more recent file. */
-   switch (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res,FileBrowser))
+   switch (Mrk_DB_GetNumRowsHeaderAndFooter (&mysql_res,Zone,PathInZone))
      {
       case Exi_EXISTS:
 	 /***** Get number of header and footer rows *****/
@@ -204,18 +208,21 @@ void Mrk_ChangeNumRowsFooter (void)
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
    struct Brw_FileBrowser FileBrowser;
+   struct Brw_FileMetadata FileMetadata;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCod (&FileBrowser);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
       /***** Update properties of marks in the database *****/
-      Mrk_DB_ChangeNumRowsHeaderOrFooter (&FileBrowser,HeaderOrFooter,NumRows);
+      Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser.Zone,
+					  FileMetadata.FilFolLnk.PathInZone,
+					  HeaderOrFooter,NumRows);
    else
       Err_WrongNumberOfRowsExit ();
 
@@ -564,6 +571,7 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 void Mrk_ShowMyMarks (void)
   {
    struct Brw_FileBrowser FileBrowser;
+   struct Brw_FileMetadata FileMetadata;
    struct Mrk_Properties Marks;
    char PathUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
@@ -575,15 +583,16 @@ void Mrk_ShowMyMarks (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCod (&FileBrowser);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
 
    /***** Get the path of the file of marks *****/
    Fil_BuildPath (PathPrivate,"%s/%s",
-		  FileBrowser.Path.AboveRootFolder,
-		  FileBrowser.FileMetadata.FilFolLnk.Full);
+		  FileBrowser.PathRootFolderInServ.AboveRootFolder,
+		  FileMetadata.FilFolLnk.PathInZone);
 
    /***** Get number of rows of header or footer *****/
-   Mrk_GetNumRowsHeaderAndFooter (&Marks,&FileBrowser);
+   Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser.Zone,
+				  FileMetadata.FilFolLnk.PathInZone);
 
    /***** Set the student whose marks will be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...

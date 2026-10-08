@@ -68,7 +68,8 @@ void Mrk_DB_AddMarks (long FilCod,const struct Mrk_Properties *Marks)
 /***** Change the number of rows of header or footer of a file of marks ******/
 /*****************************************************************************/
 
-void Mrk_DB_ChangeNumRowsHeaderOrFooter (const struct Brw_FileBrowser *FileBrowser,
+void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_Zone_t Zone,
+					 const char PathInZone[PATH_MAX + 1],
 					 Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows)
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
@@ -82,9 +83,9 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (const struct Brw_FileBrowser *FileBrows
 		     " AND brw_files.Path='%s'"
 		     " AND brw_files.FilCod=mrk_marks.FilCod",
 		   Mrk_DB_HeadOrFootStr[HeaderOrFooter],NumRows,
-		   (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
-		   Brw_GetCodForFileBrowser (FileBrowser->Zone),
-		   FileBrowser->FileMetadata.FilFolLnk.Full);
+		   (unsigned) Brw_DB_ZoneForDB_files[Zone],
+		   Brw_GetCodForZone (Zone),
+		   PathInZone);
   }
 
 /*****************************************************************************/
@@ -113,7 +114,8 @@ Exi_Exist_t Mrk_DB_GetMarksDataByCod (MYSQL_RES **mysql_res,long MrkCod)
 /*****************************************************************************/
 
 Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
-					      const struct Brw_FileBrowser *FileBrowser)
+					      Brw_Zone_t Zone,
+					      const char PathInZone[PATH_MAX + 1])
   {
    extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
 
@@ -136,7 +138,7 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
 			 " LIMIT 1",	// On duplicate entries, get the more recent
 			 Mrk_DB_HeadOrFootStr[Brw_HEADER],
 			 Mrk_DB_HeadOrFootStr[Brw_FOOTER],
-			 (unsigned) Brw_DB_ZoneForDB_files[FileBrowser->Zone],
-			 Brw_GetCodForFileBrowser (FileBrowser->Zone),
-			 FileBrowser->FileMetadata.FilFolLnk.Full);
+			 (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			 Brw_GetCodForZone (Zone),
+			 PathInZone);
   }

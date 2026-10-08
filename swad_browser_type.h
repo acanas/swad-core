@@ -166,9 +166,9 @@ typedef enum
 
 struct Brw_FilFolLnk
   {
-   char Full[PATH_MAX + 1];	// Full path = Path/Name
-   char Path[PATH_MAX + 1];	// Path in tree, without ending '/', until file, folder or link name
-   char Name[NAME_MAX + 1];	// File, folder or link name
+   char PathInZone[PATH_MAX + 1];			// Full path in zone = Path/Name
+   char PathInZoneWithoutFileName[PATH_MAX + 1];	// Path in zone, without ending '/', until file, folder or link name
+   char FileName[NAME_MAX + 1];				// File, folder or link name
    Brw_FileType_t Type;
   };
 
@@ -179,6 +179,7 @@ struct Brw_FileMetadata
    long Cod;	// Code of institution, center, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
+   unsigned Lvl;
    struct Brw_FilFolLnk FilFolLnk;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    PriPub_PrivateOrPublic_t PrivateOrPublic;
@@ -228,11 +229,10 @@ struct Brw_FileBrowser
    struct
      {
       char AboveRootFolder[PATH_MAX + 1];
-      char RootFolder[PATH_MAX + 1];
-     } Path;
+      char IncludingRootFolder[PATH_MAX + 1];
+     } PathRootFolderInServ;
    char NewName[NAME_MAX + 1];	// New name when creating a folder, creating a link, or renaming a folder
-   unsigned Lvl;
-   struct Brw_FileMetadata FileMetadata;
+   long FilCod;
    struct Brw_Clipboard Clipboard;
    HidVis_HiddenOrVisible_t HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
    struct Brw_Size Size;
