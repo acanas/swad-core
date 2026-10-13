@@ -130,6 +130,6 @@ Exi_Exist_t Tml_DB_CheckIfSharedByUsr (long NotCod,long UsrCod);
 unsigned Tml_DB_GetNumSharers (long NotCod,long UsrCod);
 unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
                             MYSQL_RES **mysql_res);
-void Tml_DB_RemoveSharedPub (long NotCod);
+void Tml_DB_RemoveSharedPub (long NotCod,long PublisherCod);
 
 #endif

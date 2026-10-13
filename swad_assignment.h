@@ -111,7 +111,9 @@ void Asg_RemoveCrsAssignments (long HieCod);
 
 void Asg_WriteDatesAssignment (void);
 Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void);
-void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
+void Asg_SetFolder (const char PathInZoneWithoutFileName[PATH_MAX + 1],
+		    const char FileName[NAME_MAX + 1],
+		    unsigned Level,
 		    char Folder[NAME_MAX + 1]);
 
 unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif);

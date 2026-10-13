@@ -97,7 +97,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
    struct Mrk_Properties Marks;
    char StrHeadOrFoot[Cns_MAX_DIGITS_UINT + 1];
 
-   if (FileMetadata->FilFolLnk.Type == Brw_IS_FOLDER)
+   if (FileMetadata->Type == Brw_IS_FOLDER)
       HTM_TD_ColouredEmpty (2);
    else	// File or link
      {
@@ -105,7 +105,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
 
       /***** Get number of rows in header or footer *****/
       Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser->Zone,
-				     FileMetadata->FilFolLnk.PathInZone);
+				     FileMetadata->PathInZone);
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
@@ -221,7 +221,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
       /***** Update properties of marks in the database *****/
       Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser.Zone,
-					  FileMetadata.FilFolLnk.PathInZone,
+					  FileMetadata.PathInZone,
 					  HeaderOrFooter,NumRows);
    else
       Err_WrongNumberOfRowsExit ();
@@ -588,11 +588,11 @@ void Mrk_ShowMyMarks (void)
    /***** Get the path of the file of marks *****/
    Fil_BuildPath (PathPrivate,"%s/%s",
 		  FileBrowser.PathRootFolderInServ.AboveRootFolder,
-		  FileMetadata.FilFolLnk.PathInZone);
+		  FileMetadata.PathInZone);
 
    /***** Get number of rows of header or footer *****/
    Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser.Zone,
-				  FileMetadata.FilFolLnk.PathInZone);
+				  FileMetadata.PathInZone);
 
    /***** Set the student whose marks will be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...

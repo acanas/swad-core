@@ -164,23 +164,18 @@ typedef enum
    Brw_FOOTER = 1,
   } Brw_HeadOrFoot_t;
 
-struct Brw_FilFolLnk
-  {
-   char PathInZone[PATH_MAX + 1];			// Full path in zone = Path/Name
-   char PathInZoneWithoutFileName[PATH_MAX + 1];	// Path in zone, without ending '/', until file, folder or link name
-   char FileName[NAME_MAX + 1];				// File, folder or link name
-   Brw_FileType_t Type;
-  };
-
 struct Brw_FileMetadata
   {
    long FilCod;
    Brw_Zone_t Zone;
-   long Cod;	// Code of institution, center, degree, course or group
+   long Cod;						// Code of institution, center, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
-   unsigned Lvl;
-   struct Brw_FilFolLnk FilFolLnk;
+   unsigned Level;
+   char PathInZone[PATH_MAX + 1];			// Full path in zone = Path/Name
+   char PathInZoneWithoutFileName[PATH_MAX + 1];	// Path in zone, without ending '/', until file, folder or link name
+   char FileName[NAME_MAX + 1];				// File, folder or link name
+   Brw_FileType_t Type;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    PriPub_PrivateOrPublic_t PrivateOrPublic;
    Brw_License_t License;
@@ -193,20 +188,22 @@ struct Brw_FileMetadata
   };
 
 struct Brw_TmpPubDir
-     {
-      char Left[2 + 1];		// Left directory: 2 first chars
-      char Right[NAME_MAX + 1];	// Right directory: rest of chars
-     };
+  {
+   char Left[2 + 1];		// Left directory: 2 first chars
+   char Right[NAME_MAX + 1];	// Right directory: rest of chars
+  };
 
 struct Brw_Clipboard
   {
-   Brw_Zone_t Zone;		// Type of the file browser
+   Brw_Zone_t Zone;	// Type of the file browser
    long HieCod;		// Code of the institution/center/degree/course/group related to the file browser with the clipboard
-   long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
-   unsigned Level;
-   struct Brw_FilFolLnk FilFolLnk;
-   bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
-   bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
+   long WorksUsrCod;	// User code of the user related to the works file browser with the clipboard
+   unsigned Level;	// Level of the folder/file/link
+   char PathInZone[PATH_MAX + 1];			// Full path in zone = Path/Name
+   char FileName[NAME_MAX + 1];				// File, folder or link name
+   Brw_FileType_t Type;
+   bool IsThisTree;	// When showing a file browser, is it that corresponding to the clipboard?
+   bool IsThisFile;	// When showing a row of a file browser, are we in the path of the clipboard?
   };
 
 struct Brw_Size
@@ -232,7 +229,7 @@ struct Brw_FileBrowser
       char IncludingRootFolder[PATH_MAX + 1];
      } PathRootFolderInServ;
    char NewName[NAME_MAX + 1];	// New name when creating a folder, creating a link, or renaming a folder
-   long FilCod;
+   long FilCod;			// Used only as hidden parameter in forms
    struct Brw_Clipboard Clipboard;
    HidVis_HiddenOrVisible_t HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
    struct Brw_Size Size;

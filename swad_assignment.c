@@ -743,11 +743,11 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 Str_Copy (FileMetadata.FilFolLnk.PathInZoneWithoutFileName,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		   sizeof (FileMetadata.FilFolLnk.PathInZoneWithoutFileName) - 1);
-	 Str_Copy (FileMetadata.FilFolLnk.FileName,Asg->Folder,
-		   sizeof (FileMetadata.FilFolLnk.FileName) - 1);
-	 FileMetadata.FilFolLnk.Type = Brw_IS_FOLDER;
+	 Str_Copy (FileMetadata.PathInZoneWithoutFileName,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+		   sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
+	 Str_Copy (FileMetadata.FileName,Asg->Folder,
+		   sizeof (FileMetadata.FileName) - 1);
+	 FileMetadata.Type = Brw_IS_FOLDER;
 	 Brw_GetFileMetadataByPath (&FileMetadata,FileBrowser.Zone);
 	 FileBrowser.FilCod = FileMetadata.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
@@ -1847,7 +1847,9 @@ Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void)
 /*************************** Set assignment folder ***************************/
 /*****************************************************************************/
 
-void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
+void Asg_SetFolder (const char PathInZoneWithoutFileName[PATH_MAX + 1],
+		    const char FileName[NAME_MAX + 1],
+		    unsigned Level,
 		    char Folder[NAME_MAX + 1])
   {
    const char *Ptr;
@@ -1855,11 +1857,11 @@ void Asg_SetFolder (const struct Brw_FilFolLnk *FilFolLnk,unsigned Level,
 
    if (Level == 1)
       // We are in this case: assignments/assignment-folder
-      Str_Copy (Folder,FilFolLnk->FileName,NAME_MAX);
+      Str_Copy (Folder,FileName,NAME_MAX);
    else
      {
       // We are in this case: assignments/assignment-folder/rest-of-path
-      for (Ptr = FilFolLnk->PathInZoneWithoutFileName;
+      for (Ptr = PathInZoneWithoutFileName;
 	   *Ptr && *Ptr != '/';
 	   Ptr++);	// Go to first '/'
       if (*Ptr == '/')

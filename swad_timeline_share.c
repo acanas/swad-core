@@ -179,7 +179,7 @@ static void TmlSha_UnsNote (struct TmlNot_Note *Not)
       return;
 
    /***** Delete publication from database *****/
-   Tml_DB_RemoveSharedPub (Not->NotCod);
+   Tml_DB_RemoveSharedPub (Not->NotCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Update number of times this note is shared *****/
    Not->NumShared = Tml_DB_GetNumSharers (Not->NotCod,Not->UsrCod);

@@ -1324,12 +1324,14 @@ unsigned Tml_DB_GetSharers (long NotCod,long UsrCod,unsigned MaxUsrs,
 /****************** Remove shared publication from database ******************/
 /*****************************************************************************/
 
-void Tml_DB_RemoveSharedPub (long NotCod)
+void Tml_DB_RemoveSharedPub (long NotCod,long PublisherCod)
   {
    DB_QueryDELETE ("can not remove a publication",
 		   "DELETE FROM tml_pubs"
 		   " WHERE NotCod=%ld"
+		     " AND PublisherCod=%ld"
 		     " AND PubType=%u",	// Extra check: shared note
 		   NotCod,
+		   PublisherCod,
 		   (unsigned) TmlPub_SHARED_NOTE);
   }

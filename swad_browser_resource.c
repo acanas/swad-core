@@ -63,7 +63,7 @@ void BrwRsc_GetLinkToDocFil (void)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.FileName :
+                  FileMetadata.FilCod > 0 ? FileMetadata.FileName :
                 		            Txt_Documents);
 
    /***** Show again the file browser *****/
@@ -92,7 +92,7 @@ void BrwRsc_GetLinkToMrkFil (void)
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileMetadata.FilCod > 0 ? FileMetadata.FilFolLnk.FileName :
+                  FileMetadata.FilCod > 0 ? FileMetadata.FileName :
                 			    Txt_Marks_area);
 
    /***** Show again the file browser *****/
@@ -111,16 +111,16 @@ void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize)
    /***** Get file name *****/
    FileMetadata.FilCod = FilCod;
    Brw_DB_GetPathByCod (FileMetadata.FilCod,
-                        FileMetadata.FilFolLnk.PathInZone,
-                        sizeof (FileMetadata.FilFolLnk.PathInZone) - 1);
-   Str_SplitFullPathIntoPathAndName (FileMetadata.FilFolLnk.PathInZone,
-				     FileMetadata.FilFolLnk.PathInZoneWithoutFileName,
-				     FileMetadata.FilFolLnk.FileName);
+                        FileMetadata.PathInZone,
+                        sizeof (FileMetadata.PathInZone) - 1);
+   Str_SplitFullPathIntoPathAndName (FileMetadata.PathInZone,
+				     FileMetadata.PathInZoneWithoutFileName,
+				     FileMetadata.FileName);
 
    /***** Remove .url if it's a link *****/
-   if (Str_FileIs (FileMetadata.FilFolLnk.FileName,"url"))
-      FileMetadata.FilFolLnk.FileName[strlen (FileMetadata.FilFolLnk.FileName) - 4] = '\0';
+   if (Str_FileIs (FileMetadata.FileName,"url"))
+      FileMetadata.FileName[strlen (FileMetadata.FileName) - 4] = '\0';
 
    /***** Copy file name into title *****/
-   Str_Copy (Title,FileMetadata.FilFolLnk.FileName,TitleSize);
+   Str_Copy (Title,FileMetadata.FileName,TitleSize);
   }

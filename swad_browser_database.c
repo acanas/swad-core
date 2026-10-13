@@ -171,8 +171,8 @@ long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata)
 				Brw_GetCodForZone (FileMetadata->Zone),
 				Brw_GetZoneUsrCodForZone (FileMetadata->Zone),
 				FileMetadata->PublisherUsrCod,
-				(unsigned) FileMetadata->FilFolLnk.Type,
-				FileMetadata->FilFolLnk.PathInZone,
+				(unsigned) FileMetadata->Type,
+				FileMetadata->PathInZone,
 				PriPub_Public_YN[FileMetadata->PrivateOrPublic],
 				(unsigned) FileMetadata->License);
   }
@@ -2368,8 +2368,8 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
 			    FileMetadata->Zone,
 			    FileMetadata->Cod,
 			    FileMetadata->ZoneUsrCod,
-			    FileMetadata->FilFolLnk.PathInZone,
-			    FileMetadata->FilFolLnk.PathInZone);
+			    FileMetadata->PathInZone,
+			    FileMetadata->PathInZone);
    return Hidden[Exists];
   }
 
