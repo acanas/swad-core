@@ -195,13 +195,7 @@ struct Brw_TmpPubDir
 
 struct Brw_Clipboard
   {
-   Brw_Zone_t Zone;	// Type of the file browser
-   long HieCod;		// Code of the institution/center/degree/course/group related to the file browser with the clipboard
-   long WorksUsrCod;	// User code of the user related to the works file browser with the clipboard
-   unsigned Level;	// Level of the folder/file/link
-   char PathInZone[PATH_MAX + 1];			// Full path in zone = Path/Name
-   char FileName[NAME_MAX + 1];				// File, folder or link name
-   Brw_FileType_t Type;
+   struct Brw_FileMetadata FileMetadata;
    bool IsThisTree;	// When showing a file browser, is it that corresponding to the clipboard?
    bool IsThisFile;	// When showing a row of a file browser, are we in the path of the clipboard?
   };
