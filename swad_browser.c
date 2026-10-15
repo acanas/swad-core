@@ -223,40 +223,6 @@ static Brw_Zone_t Brw_ZoneForFoundDocs[Brw_NUM_ZONES] =
    [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
   };
 
-// Browsers types for database "clipboard" table
-static Brw_Zone_t Brw_ZoneForDB_clipboard[Brw_NUM_ZONES] =
-  {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
-
 static Act_Action_t Brw_ActSeeAdm[Brw_NUM_ZONES] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -3006,7 +2972,6 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
 	 /* Create root folder metadata */
          Brw_ResetFileMetadata (&RootFolderMetadata);
-         // RootFolderMetadata.Zone  = FileBrowser->Zone;
 	 RootFolderMetadata.Level = 0;	// Root folder
 	 RootFolderMetadata.Type  = Brw_IS_FOLDER;
 	 RootFolderMetadata.PathInZoneWithoutFileName[0] = '\0';
@@ -3709,7 +3674,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 			   free (SubdirFileList);
 			  }
 			else
-			   Err_ShowErrorAndExit ("Error while scanning directory 1.");
+			   Err_ErrorScanningDirExit ();
 			break;
 		    }
 
@@ -3750,7 +3715,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
       free (FileList);
      }
    else
-      Err_ShowErrorAndExit ("Error while scanning directory 2.");
+      Err_ErrorScanningDirExit ();
   }
 
 /*****************************************************************************/
@@ -3945,7 +3910,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	 // ...or is the start of complete path in tree...
          if (Str_Path1BeginsByPath2 (FileMetadata->PathInZone,
                                      FileBrowser->Clipboard.FileMetadata.PathInZone))
-            RowBelongToClipboard = Brw_DONT_BELONG_TO_CLIPBOARD;
+            RowBelongToClipboard = Brw_BELONG_TO_CLIPBOARD;
 
       /* Check if I can modify (remove, rename, etc.) this file or folder */
       Brw_SetIfICanEditFileOrFolder (Brw_CheckIfICanEditFileOrFolder (FileBrowser->Zone,
@@ -5469,7 +5434,7 @@ static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser)
 
 static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *FileBrowser)
   {
-   if (FileBrowser->Clipboard.ZoneDB == Brw_ZoneForDB_clipboard[FileBrowser->Zone])
+   if (FileBrowser->Clipboard.ZoneDB == Brw_DB_GetZoneDB_brw_clipboards (FileBrowser->Zone))
       switch (FileBrowser->Clipboard.ZoneDB)
         {
 	 case Brw_ADMI_DOC_INS:
@@ -6191,7 +6156,7 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 		  free (FileList);
 		 }
 	       else
-		  Err_ShowErrorAndExit ("Error while scanning directory 3.");
+		  Err_ErrorScanningDirExit ();
 
 	       if (CopyIsGoingSuccessful == Err_SUCCESS &&
 		   LevelOrg)	// When copying all files inside root folder,
@@ -9826,7 +9791,7 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 	       free (FileList);
 	      }
 	    else
-	       Err_ShowErrorAndExit ("Error while scanning directory 4.");
+	       Err_ErrorScanningDirExit ();
 	   }
 
 	 if (NumFiles <= 2 &&					// It's an empty folder
@@ -9842,7 +9807,7 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 	}
      }
    else
-      Err_ShowErrorAndExit ("Error while scanning directory 5.");
+      Err_ErrorScanningDirExit ();
   }
 
 /*****************************************************************************/
@@ -10084,7 +10049,7 @@ static void Brw_WriteRowStatsFileBrowsers1 (const char *NameOfZones,
    char StrNumUsrs[Cns_MAX_DIGITS_UINT + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    const char *Class = Zone == Brw_UNKNOWN ? "LINE_TOP DAT_STRONG" :
-	                                         "DAT";
+	                                     "DAT";
 
    Fil_WriteFileSizeFull ((double) SizeOfFileZone->Size,FileSizeStr);
 
@@ -10151,7 +10116,7 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfZones,
    char StrNumFilesPerCrs[Cns_MAX_DIGITS_UINT + 1];
    char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    const char *Class = Zone == Brw_UNKNOWN ? "LINE_TOP DAT_STRONG" :
-						 "DAT";
+					     "DAT";
 
    if (SizeOfFileZone->NumCrss == -1)	// Not applicable
      {
@@ -10204,7 +10169,7 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfZones,
    char StrNumFilesPerUsr[Cns_MAX_DIGITS_UINT + 1];
    char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    const char *Class = Zone == Brw_UNKNOWN ? "LINE_TOP DAT_STRONG" :
-						 "DAT";
+					     "DAT";
 
    if (SizeOfFileZone->NumUsrs == -1)	// Not applicable
      {

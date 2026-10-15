@@ -502,6 +502,15 @@ void Err_WrongFileCodeExit (void)
   }
 
 /*****************************************************************************/
+/********** Write error message and exit when scanning a directory ***********/
+/*****************************************************************************/
+
+void Err_ErrorScanningDirExit (void)
+  {
+   Err_ShowErrorAndExit ("Error while scanning directory.");
+  }
+
+/*****************************************************************************/
 /**************** Write error message and exit when wrong code ***************/
 /*****************************************************************************/
 

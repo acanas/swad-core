@@ -51,7 +51,7 @@ static Brw_Zone_t Brw_DB_GetZoneDB_brw_last (Brw_Zone_t Zone);
 static Brw_Zone_t Brw_DB_GetZoneDB_brw_expanded (Brw_Zone_t Zone);
 
 /*****************************************************************************/
-/***************************** Private constants *****************************/
+/****************************** Zones in database ****************************/
 /*****************************************************************************/
 
 Brw_Zone_t Brw_DB_GetZoneDB_brw_files (Brw_Zone_t Zone)
@@ -91,6 +91,45 @@ Brw_Zone_t Brw_DB_GetZoneDB_brw_files (Brw_Zone_t Zone)
      };
 
    return Brw_DB_ZoneDB_brw_files[Zone];
+  }
+
+Brw_Zone_t Brw_DB_GetZoneDB_brw_clipboards (Brw_Zone_t Zone)
+  {
+   // Browsers types for database "clipboard" table
+   static Brw_Zone_t Brw_ZoneDB_brw_clipboards[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+      [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+      [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+      [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
+      [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+      [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+      [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
+      [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+      [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+      [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+      [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+      [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+      [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+      [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
+     };
+
+   return Brw_ZoneDB_brw_clipboards[Zone];
   }
 
 static Brw_Zone_t Brw_DB_GetZoneDB_brw_last (Brw_Zone_t Zone)

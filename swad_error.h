@@ -103,6 +103,7 @@ void Err_WrongSurveyExit (void);
 void Err_WrongWhoExit (void);
 void Err_WrongFileZoneExit (void);
 void Err_WrongFileCodeExit (void);
+void Err_ErrorScanningDirExit (void);
 void Err_WrongCodeExit (void);
 void Err_WrongEventExit (void);
 void Err_WrongAnnouncementExit (void);

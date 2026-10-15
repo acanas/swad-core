@@ -539,7 +539,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	   }
      }
    else
-      Err_ShowErrorAndExit ("Error while scanning directory 9.");
+      Err_ErrorScanningDirExit ();
 
    return FullSize;
   }
