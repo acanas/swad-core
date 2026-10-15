@@ -1198,7 +1198,8 @@ static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBrowser,
 						  struct Brw_FileMetadata *ParentFolderMetadata,
 						  Brw_UploadType_t UploadType);
-static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBrowser *FileBrowser,
+static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
+							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType);
 
 static void Brw_PutIconToGetLinkToFile (void *FileBrowser);
@@ -6482,24 +6483,25 @@ void Brw_CreateFolder (void)
    struct Brw_FileMetadata NewFolderMetadata;
    char PathInServ[PATH_MAX + 1];
    char ParentFolderNameToShow[NAME_MAX + 1];
+   char NewFolderName[NAME_MAX + 1];	// Name of the new folder
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolderMetadata);	// Get parent folder in which to create the new folder
-   Brw_GetNewFolderLinkName (FileBrowser.NewName);
+   Brw_GetNewFolderLinkName (NewFolderName);
 
    /***** Check if creating a new folder is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser.Zone,
 					    &ParentFolderMetadata))
      {
       case Usr_CAN:
-	 switch (Str_ConvertFilFolLnkNameToValid (FileBrowser.NewName))
+	 switch (Str_ConvertFilFolLnkNameToValid (NewFolderName))
 	   {
 	    case Err_SUCCESS:	// New folder name is valid
-	       /* In FileBrowser.NewName is the name of the new folder */
+	       /* In NewFolderName is the name of the new folder */
 	       Fil_BuildPath (NewFolderMetadata.PathInZone,"%s/%s",
 			      ParentFolderMetadata.PathInZone,
-			      FileBrowser.NewName);
+			      NewFolderName);
 	       Fil_BuildPath (PathInServ,"%s/%s",
 			      FileBrowser.PathRootFolderInServ.AboveRootFolder,
 			      NewFolderMetadata.PathInZone);
@@ -6508,7 +6510,8 @@ void Brw_CreateFolder (void)
 	       if (mkdir (PathInServ,(mode_t) 0777) == 0)
 		 {
 		  /* Check if quota has been exceeded */
-		  BrwSiz_CalcSizeOfDir (&FileBrowser.Size,FileBrowser.PathRootFolderInServ.IncludingRootFolder);
+		  BrwSiz_CalcSizeOfDir (&FileBrowser.Size,
+					FileBrowser.PathRootFolderInServ.IncludingRootFolder);
 		  BrwSiz_SetMaxQuota (FileBrowser.Zone,&FileBrowser.Size);
 		  switch (BrwSiz_CheckQuota (&FileBrowser.Size))
 		    {
@@ -6536,13 +6539,13 @@ void Brw_CreateFolder (void)
 					       &ParentFolderMetadata,
 					       ParentFolderNameToShow);
 			Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
-				       FileBrowser.NewName,ParentFolderNameToShow);
+				       NewFolderName,ParentFolderNameToShow);
 			break;
 		     case Err_ERROR:	// Quota excedeed
 		     default:
 			Fil_RemoveTree (PathInServ);
 			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
-				       FileBrowser.NewName);
+				       NewFolderName);
 			break;
 		    }
 		 }
@@ -6552,7 +6555,7 @@ void Brw_CreateFolder (void)
 		    {
 		     case EEXIST:
 			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name,
-				       FileBrowser.NewName);
+				       NewFolderName);
 			break;
 		     case EACCES:
 			Err_ShowErrorAndExit ("Write forbidden.");
@@ -6595,21 +6598,22 @@ void Brw_RenFolder (void)
    char NewPathInZone[PATH_MAX + 1];
    char OldPathInServ[PATH_MAX + 1];
    char NewPathInServ[PATH_MAX + 1];
+   char FolderNewName[NAME_MAX + 1];	// New name of the folder
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FolderMetadata);	// Get folder to rename
-   Brw_GetNewFolderLinkName (FileBrowser.NewName);
+   Brw_GetNewFolderLinkName (FolderNewName);
 
    switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
 					    &FolderMetadata))		// Can I rename this folder?
      {
       case Usr_CAN:
-	 switch (Str_ConvertFilFolLnkNameToValid (FileBrowser.NewName))
+	 switch (Str_ConvertFilFolLnkNameToValid (FolderNewName))
 	   {
 	    case Err_SUCCESS:	// Folder name is valid
 	       if (strcmp (FolderMetadata.FileName,
-			   FileBrowser.NewName))	// The name has changed
+			   FolderNewName))	// The name has changed
 		 {
 		  /* FileBrowser.Name holds the new name of the folder */
 		  Fil_BuildPath (OldPathInZone,"%s/%s",
@@ -6622,7 +6626,7 @@ void Brw_RenFolder (void)
 		  /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
 		  Fil_BuildPath (NewPathInZone,"%s/%s",
 			         FolderMetadata.PathInZoneWithoutFileName,
-			         FileBrowser.NewName);
+			         FolderNewName);
 		  Fil_BuildPath (NewPathInServ,"%s/%s",
 			         FileBrowser.PathRootFolderInServ.AboveRootFolder,
 			         NewPathInZone);
@@ -6641,7 +6645,7 @@ void Brw_RenFolder (void)
 			   Ale_ShowAlert (Ale_WARNING,
 					  Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y,
 					  FolderMetadata.FileName,
-					  FileBrowser.NewName);
+					  FolderNewName);
 			   break;
 			case EACCES:
 			   Err_ShowErrorAndExit ("Write forbidden.");
@@ -6782,6 +6786,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
       [Brw_DROPZONE_UPLOAD] = &Txt_UPLOAD_FILE_Invalid_name_NO_HTML,
      };
    struct Brw_FileMetadata NewFileMetadata;
+   char NewFileName[NAME_MAX + 1];	// Name of the new file
    struct Par_Param *Par;
    char ClientFileName[PATH_MAX + 1];	// Path received from the client
    char PathInServWithoutFileName[PATH_MAX + 1];// Absolute path in server of file received not including file name
@@ -6806,18 +6811,19 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 	 // Spaces at start or end are allowed
 	 Brw_SplitFullPathIntoPathAndName (ClientFileName,
 					   PathInServWithoutFileName,
-					   FileBrowser->NewName);
-	 if (FileBrowser->NewName[0])
+					   NewFileName);
+	 if (NewFileName[0])
 	   {
 	    /***** Check if uploading this kind of file is allowed *****/
-	    if (Brw_CheckIfUploadIsAllowed (FileBrowser,MIMEType) == Err_SUCCESS)
-	       switch (Str_ConvertFilFolLnkNameToValid (FileBrowser->NewName))
+	    if (Brw_CheckIfUploadIsAllowed (FileBrowser->Zone,NewFileName,
+					    MIMEType) == Err_SUCCESS)
+	       switch (Str_ConvertFilFolLnkNameToValid (NewFileName))
 		 {
 		  case Err_SUCCESS:	// File name is valid
-		     /* FileBrowser->NewName holds the name of the new file */
+		     /* NewFileName holds the name of the new file */
 		     Fil_BuildPath (NewFileMetadata.PathInZone,"%s/%s",
 				    ParentFolderMetadata->PathInZone,
-				    FileBrowser->NewName);
+				    NewFileName);
 		     Fil_BuildPath (PathInServ,"%s/%s",
 				    FileBrowser->PathRootFolderInServ.AboveRootFolder,
 				    NewFileMetadata.PathInZone);
@@ -6828,7 +6834,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			case Exi_EXISTS:
 			   Ale_CreateAlert (Ale_WARNING,NULL,
 					    Txt_UPLOAD_FILE_X_file_already_exists_NO_HTML,
-					    FileBrowser->NewName);
+					    NewFileName);
 			   break;
 			case Exi_DOES_NOT_EXIST:
 			default:
@@ -6851,7 +6857,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 				    Fil_RemoveTree (PathInServTmp);
 				    Ale_CreateAlert (Ale_WARNING,NULL,
 						     Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
-						     FileBrowser->NewName);
+						     NewFileName);
 				   }
 				 else					// Success
 				   {
@@ -6892,7 +6898,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 								    ParentFolderNameToShow);	// Folder name
 					     Ale_CreateAlert (Ale_SUCCESS,NULL,
 							      Txt_The_file_X_has_been_placed_inside_the_folder_Y,
-							      FileBrowser->NewName,
+							      NewFileName,
 							      ParentFolderNameToShow);
 					    }
 					  UploadSucessful = Err_SUCCESS;
@@ -6931,7 +6937,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  Fil_RemoveTree (PathInServ);
 					  Ale_CreateAlert (Ale_WARNING,NULL,
 							   Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
-							   FileBrowser->NewName);
+							   NewFileName);
 					  break;
 				      }
 				   }
@@ -6979,6 +6985,7 @@ void Brw_CreateLink (void)
    struct Brw_FileBrowser FileBrowser;
    struct Brw_FileMetadata ParentFolderMetadata;// Create link (file ending in .url) inside this folder
    struct Brw_FileMetadata NewLinkMetadata;	// Link (file ending in .url) to create
+   char NewLinkName[NAME_MAX + 1];		// Name of the new link
    char URL[PATH_MAX + 1];
    char URLWithoutEndingSlash[PATH_MAX + 1];
    size_t LengthURL;
@@ -6991,7 +6998,7 @@ void Brw_CreateLink (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolderMetadata);	// Get the parent folder in which to create the link
-   Brw_GetNewFolderLinkName (FileBrowser.NewName);
+   Brw_GetNewFolderLinkName (NewLinkName);
 
    /***** Check if creating a new link is allowed *****/
    switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser.Zone,
@@ -7002,18 +7009,18 @@ void Brw_CreateLink (void)
 	 Par_GetParText ("NewLinkURL",URL,PATH_MAX);
 	 if ((LengthURL = strlen (URL)))
 	   {
-	    if (FileBrowser.NewName[0])
+	    if (NewLinkName[0])
 	       /*
-	       FileBrowser.NewFilFolLnkName holds the name given by me in the form
+	       NewLinkName holds the name given by me in the form
 	       Example:
 	       Name given by me: intel-architectures.pdf
 	       File in swad: intel-architectures.pdf.url
 	       */
-	       Str_Copy (URLWithoutEndingSlash,FileBrowser.NewName,
+	       Str_Copy (URLWithoutEndingSlash,NewLinkName,
 			 sizeof (URLWithoutEndingSlash) - 1);
 	    else
 	       /*
-	       FileBrowser.NewFilFolLnkName is empty
+	       NewLinkName is empty
 	       URL holds the URL given by me in the form
 	       Example:
 	       URL: http://www.intel.es/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
@@ -7035,13 +7042,12 @@ void Brw_CreateLink (void)
 	    switch (Str_ConvertFilFolLnkNameToValid (FileName))
 	      {
 	       case Err_SUCCESS:	// Link name is valid
-		  Str_Copy (FileBrowser.NewName,FileName,
-			    sizeof (FileBrowser.NewName) - 1);
+		  Str_Copy (NewLinkName,FileName,sizeof (NewLinkName) - 1);
 
 		  /* FileBrowser->NewName holds the name of the new file */
 		  Fil_BuildPath (NewLinkMetadata.PathInZone,"%s/%s.url",
 				 ParentFolderMetadata.PathInZone,
-				 FileBrowser.NewName);
+				 NewLinkName);
 		  Fil_BuildPath (PathInServ,"%s/%s",
 			         FileBrowser.PathRootFolderInServ.AboveRootFolder,
 			         NewLinkMetadata.PathInZone);
@@ -7167,23 +7173,24 @@ void Brw_CreateLink (void)
 // Returns Err_ERROR if MIME type or extension are not allowed
 // On error, delayed alerts will contain feedback text
 
-static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBrowser *FileBrowser,
+static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
+							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType)
   {
    extern const char *Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_X_not_HTML_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML;
 
-   switch (FileBrowser->Zone)
+   switch (Zone)
      {
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
 	 /* Check file extension */
-	 if (!Str_FileIsHTML (FileBrowser->NewName))
+	 if (!Str_FileIsHTML (NewFileName))
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 		             Txt_UPLOAD_FILE_X_not_HTML_NO_HTML,
-		             FileBrowser->NewName);
+		             NewFileName);
 	    return Err_ERROR;
 	   }
 
@@ -7196,17 +7203,17 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBro
 		       {	// MIME type forbidden
 			Ale_CreateAlert (Ale_WARNING,NULL,
 		                         Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-				         FileBrowser->NewName,MIMEType);
+				         NewFileName,MIMEType);
 			return Err_ERROR;
 		       }
 	 break;
       default:
 	 /* Check file extension */
-	 if (Ext_CheckIfFileExtensionIsAllowed (FileBrowser->NewName) == Err_ERROR)
+	 if (Ext_CheckIfFileExtensionIsAllowed (NewFileName) == Err_ERROR)
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_UPLOAD_FILE_X_extension_not_allowed_NO_HTML,
-		             FileBrowser->NewName);
+		             NewFileName);
 	    return Err_ERROR;
 	   }
 
@@ -7215,7 +7222,7 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (const struct Brw_FileBro
 	   {
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_UPLOAD_FILE_X_MIME_type_Y_not_allowed_NO_HTML,
-		             FileBrowser->NewName,MIMEType);
+		             NewFileName,MIMEType);
 	    return Err_ERROR;
 	   }
 	 break;

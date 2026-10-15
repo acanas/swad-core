@@ -215,7 +215,6 @@ struct Brw_FileBrowser
       char AboveRootFolder[PATH_MAX + 1];
       char IncludingRootFolder[PATH_MAX + 1];
      } PathRootFolderInServ;
-   char NewName[NAME_MAX + 1];	// New name when creating a folder, creating a link, or renaming a folder
    long FilCod;			// Used only as hidden parameter in forms
    struct
      {
