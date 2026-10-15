@@ -1,7 +1,7 @@
 // swad_hierarchy_type.h: hierarchy levels: system, institution, center, degree, course
 
-#ifndef _SWAD_HIE_LVL
-#define _SWAD_HIE_LVL
+#ifndef _SWAD_HIE_TYP
+#define _SWAD_HIE_TYP
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -28,9 +28,9 @@
 /*****************************************************************************/
 
 #include "swad_cache.h"
+#include "swad_constant.h"
 #include "swad_name.h"
 #include "swad_role_type.h"
-#include "swad_string.h"
 #include "swad_www.h"
 
 /*****************************************************************************/

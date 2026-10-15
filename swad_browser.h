@@ -56,6 +56,11 @@ void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser);
 
+void Brw_BuildFullPathFromPathAndName (struct Brw_FileMetadata *FileMetadata);
+void Brw_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
+                                       char PathWithoutFileName[PATH_MAX + 1],
+                                       char FileName[NAME_MAX + 1]);
+
 void Brw_PutParFullTreeIfSelected (void *ShowFullTree);
 
 void Brw_CreateDirDownloadTmp (struct Brw_TmpPubDir *TmpPubDir);
@@ -70,8 +75,8 @@ void Brw_PutLegalNotice (void);
 void Brw_ReqRemFile (void);
 void Brw_RemFile (void);
 void Brw_TryRemFolder (void);
-void Brw_ExpandFileTree (void);
-void Brw_ContractFileTree (void);
+void Brw_ExpandFolder (void);
+void Brw_ContractFolder (void);
 void Brw_Copy (void);
 void Brw_Paste (void);
 void Brw_RemSubtree (void);
@@ -93,8 +98,9 @@ void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,
 				char *URL);
 void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
-void Brw_GetFileMetadataByPath (struct Brw_FileMetadata *FileMetadata,Brw_Zone_t Zone);
-void Brw_GetFileMetadataByCod (struct Brw_FileMetadata *FileMetadata);
+void Brw_GetFileMetadataByPath (Brw_Zone_t Zone,
+				struct Brw_FileMetadata *FileMetadata);
+void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_FileMetadata *FileMetadata);
 Exi_Exist_t Brw_GetFileTypeSizeAndDate (const struct Brw_FileBrowser *FileBrowser,
 				        struct Brw_FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);

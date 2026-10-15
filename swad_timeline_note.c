@@ -945,16 +945,15 @@ void TmlNot_StoreAndPublishNoteInternal (TmlNot_Type_t NoteType,long Cod,
 
 void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *PathInZone)
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
    long FilCod;
 
-   if (TmlNot_NoteType[ZoneForDB])
+   if (TmlNot_NoteType[ZoneDB])
       /***** Get file code *****/
       if ((FilCod = Brw_DB_GetFilCodByPath (Zone,PathInZone,
                                             Brw_ONLY_PUBLIC_FILES)) > 0)	// Only public files
 	 /***** Mark possible note as unavailable *****/
-	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[ZoneForDB],FilCod);
+	 Tml_DB_MarkNoteAsUnavailable (TmlNot_NoteType[ZoneDB],FilCod);
   }
 
 /*****************************************************************************/
@@ -964,11 +963,10 @@ void TmlNot_MarkNoteOneFileAsUnavailable (Brw_Zone_t Zone,const char *PathInZone
 void TmlNot_MarkNotesChildrenOfFolderAsUnavailable (Brw_Zone_t Zone,
 						    const char PathInZone[PATH_MAX + 1])
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
 
-   if (TmlNot_NoteType[ZoneForDB])
-      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[ZoneForDB],ZoneForDB,
+   if (TmlNot_NoteType[ZoneDB])
+      Tml_DB_MarkNotesChildrenOfFolderAsUnavailable (TmlNot_NoteType[ZoneDB],ZoneDB,
 						     Brw_GetCodForZone (Zone),
 						     PathInZone);
   }

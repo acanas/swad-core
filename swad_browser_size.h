@@ -59,7 +59,6 @@ void BrwSiz_CalcSizeOfDir (struct Brw_Size *Size,const char *Path);
 void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_Zone_t Zone,
                                struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
 
-void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
-					   const struct Brw_Size *Size);
+void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 
 #endif

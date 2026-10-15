@@ -31,7 +31,7 @@
 #include "swad_date.h"
 #include "swad_hierarchy_type.h"
 #include "swad_layout.h"
-#include "swad_photo.h"
+#include "swad_photo_type.h"
 #include "swad_string.h"
 
 /*****************************************************************************/

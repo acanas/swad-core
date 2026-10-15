@@ -28,19 +28,19 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_cache.h"
+#include "swad_config.h"
+#include "swad_constant.h"
 #include "swad_cookie.h"
 #include "swad_cryptography.h"
 #include "swad_date.h"
-#include "swad_icon.h"
 #include "swad_language.h"
 #include "swad_mail_type.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
 #include "swad_password.h"
 #include "swad_photo_shape.h"
-#include "swad_photo_type.h"
 #include "swad_privacy_visibility_type.h"
-#include "swad_role_type.h"
 #include "swad_search.h"
 #include "swad_theme.h"
 

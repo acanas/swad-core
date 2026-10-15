@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include "swad_browser.h"
+#include "swad_browser_database.h"
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_mark_database.h"
@@ -72,8 +73,6 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_Zone_t Zone,
 					 const char PathInZone[PATH_MAX + 1],
 					 Brw_HeadOrFoot_t HeaderOrFooter,unsigned NumRows)
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-
    DB_QueryUPDATE ("can not update properties of marks",
 		   "UPDATE mrk_marks,"
 			  "brw_files"
@@ -83,7 +82,7 @@ void Mrk_DB_ChangeNumRowsHeaderOrFooter (Brw_Zone_t Zone,
 		     " AND brw_files.Path='%s'"
 		     " AND brw_files.FilCod=mrk_marks.FilCod",
 		   Mrk_DB_HeadOrFootStr[HeaderOrFooter],NumRows,
-		   (unsigned) Brw_DB_ZoneForDB_files[Zone],
+		   (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 		   Brw_GetCodForZone (Zone),
 		   PathInZone);
   }
@@ -117,8 +116,6 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
 					      Brw_Zone_t Zone,
 					      const char PathInZone[PATH_MAX + 1])
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-
    /***** Get number of rows of header and footer from database *****/
    /* There should be a single file in database.
       If, due to an error, there is more than one file,
@@ -138,7 +135,7 @@ Exi_Exist_t Mrk_DB_GetNumRowsHeaderAndFooter (MYSQL_RES **mysql_res,
 			 " LIMIT 1",	// On duplicate entries, get the more recent
 			 Mrk_DB_HeadOrFootStr[Brw_HEADER],
 			 Mrk_DB_HeadOrFootStr[Brw_FOOTER],
-			 (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			 (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			 Brw_GetCodForZone (Zone),
 			 PathInZone);
   }

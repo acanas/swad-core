@@ -36,6 +36,7 @@
 #include "swad_exam_result.h"
 #include "swad_exam_session.h"
 #include "swad_exam_sheet.h"
+#include "swad_photo.h"
 #include "swad_question_choice.h"
 #include "swad_question_float.h"
 #include "swad_question_int.h"

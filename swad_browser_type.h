@@ -33,6 +33,7 @@
 #include "swad_course.h"
 #include "swad_form.h"
 #include "swad_group.h"
+#include "swad_layout.h"
 #include "swad_private_public.h"
 
 /*****************************************************************************/
@@ -167,7 +168,6 @@ typedef enum
 struct Brw_FileMetadata
   {
    long FilCod;
-   Brw_Zone_t Zone;
    long Cod;						// Code of institution, center, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
@@ -191,13 +191,6 @@ struct Brw_TmpPubDir
   {
    char Left[2 + 1];		// Left directory: 2 first chars
    char Right[NAME_MAX + 1];	// Right directory: rest of chars
-  };
-
-struct Brw_Clipboard
-  {
-   struct Brw_FileMetadata FileMetadata;
-   bool IsThisTree;	// When showing a file browser, is it that corresponding to the clipboard?
-   bool IsThisFile;	// When showing a row of a file browser, are we in the path of the clipboard?
   };
 
 struct Brw_Size
@@ -224,7 +217,12 @@ struct Brw_FileBrowser
      } PathRootFolderInServ;
    char NewName[NAME_MAX + 1];	// New name when creating a folder, creating a link, or renaming a folder
    long FilCod;			// Used only as hidden parameter in forms
-   struct Brw_Clipboard Clipboard;
+   struct
+     {
+      struct Brw_FileMetadata FileMetadata;
+      Brw_Zone_t ZoneDB;
+      bool IsInCurrentZone;	// Is the clipboard in the current zone?
+     } Clipboard;
    HidVis_HiddenOrVisible_t HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
    struct Brw_Size Size;
   };

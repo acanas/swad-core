@@ -2166,59 +2166,6 @@ size_t Str_GetLengthRootFileName (const char *FileName)
   }
 
 /*****************************************************************************/
-/*************** Construct full path in tree of file browser *****************/
-/*****************************************************************************/
-// If, for example, PathWithoutFileName is "descarga/teoria" and FileName is "tema1.pdf"
-// then FullPath will be "descarga/teoria/tema1.pdf"
-// If FileName is ".", then FullPath will be equal to PathWithoutFileName
-
-void Str_BuildFullPathFromPathAndName (char FullPath[PATH_MAX + 1],
-                                       const char PathWithoutFileName[PATH_MAX + 1],
-                                       const char FileName[NAME_MAX + 1])
-  {
-   if (!PathWithoutFileName[0])	// It's the root folder
-      Str_Copy (FullPath,FileName,PATH_MAX);
-   else if (strcmp (FileName,"."))
-      Fil_BuildPath (FullPath,"%s/%s",PathWithoutFileName,FileName);
-   else				// It's the root folder
-      Str_Copy (FullPath,PathWithoutFileName,PATH_MAX);
-  }
-
-/*****************************************************************************/
-/************** Get the name of a file from a complete path ******************/
-/*****************************************************************************/
-// Split a full path in path (without ending '/' ) and a file name
-
-void Str_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
-                                       char PathWithoutFileName[PATH_MAX + 1],
-                                       char FileName[NAME_MAX + 1])
-  {
-   const char *PtrFileName;
-   size_t LengthUntilFileName;
-
-   /***** Find the start of filename *****/
-   if ((PtrFileName = strrchr (FullPath,(int) '/')) != NULL)
-      PtrFileName++;
-   else if ((PtrFileName = strrchr (FullPath,(int) '\\')) != NULL)
-      PtrFileName++;
-   else
-      PtrFileName = FullPath;
-
-   /***** Get PathWithoutFileName *****/
-   LengthUntilFileName = (size_t) (PtrFileName - FullPath);	// Last slash included
-   if (LengthUntilFileName > 1)
-     {
-      Str_Copy (PathWithoutFileName,FullPath,PATH_MAX);
-      PathWithoutFileName[LengthUntilFileName - 1] = '\0';	// Do not copy ending slash
-     }
-   else
-      PathWithoutFileName[0] = '\0';
-
-   /***** Get FileName *****/
-   Str_Copy (FileName,PtrFileName,NAME_MAX);
-  }
-
-/*****************************************************************************/
 /************** Check if the extension of a file is .Extension ***************/
 /*****************************************************************************/
 // Return true if FileName ends by .Extension

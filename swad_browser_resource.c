@@ -50,13 +50,7 @@ void BrwRsc_GetLinkToDocFil (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Get file code *****/
-   FileMetadata.FilCod = FileBrowser.FilCod = ParCod_GetPar (ParCod_Fil);
-
-   /***** Get file metadata *****/
-   if (FileMetadata.FilCod > 0)
-      Brw_GetFileMetadataByCod (&FileMetadata);
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
 
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileMetadata.FilCod);
@@ -79,13 +73,7 @@ void BrwRsc_GetLinkToMrkFil (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Get file code *****/
-   FileMetadata.FilCod = FileBrowser.FilCod = ParCod_GetPar (ParCod_Fil);
-
-   /***** Get file metadata *****/
-   if (FileMetadata.FilCod > 0)
-      Brw_GetFileMetadataByCod (&FileMetadata);
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
 
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_MARKS,FileMetadata.FilCod);
@@ -113,7 +101,7 @@ void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize)
    Brw_DB_GetPathByCod (FileMetadata.FilCod,
                         FileMetadata.PathInZone,
                         sizeof (FileMetadata.PathInZone) - 1);
-   Str_SplitFullPathIntoPathAndName (FileMetadata.PathInZone,
+   Brw_SplitFullPathIntoPathAndName (FileMetadata.PathInZone,
 				     FileMetadata.PathInZoneWithoutFileName,
 				     FileMetadata.FileName);
 

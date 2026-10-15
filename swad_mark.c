@@ -738,7 +738,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       /* Path (row[2]) */
       Str_Copy (PathInZoneFromDBMarksTable,row[2],
 		sizeof (PathInZoneFromDBMarksTable) - 1);
-      Str_SplitFullPathIntoPathAndName (PathInZoneFromDBMarksTable,
+      Brw_SplitFullPathIntoPathAndName (PathInZoneFromDBMarksTable,
 					PathInZoneWithoutFileName,
 					FileName);
       Str_Copy (SummaryStr,FileName,Cns_MAX_BYTES_TEXT);

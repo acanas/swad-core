@@ -32,6 +32,7 @@
 #include "swad_exam_database.h"
 #include "swad_exam_resource.h"
 #include "swad_parameter_code.h"
+#include "swad_photo_type.h"
 #include "swad_resource_database.h"
 
 /*****************************************************************************/

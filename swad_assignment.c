@@ -743,12 +743,15 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 Str_Copy (FileMetadata.PathInZoneWithoutFileName,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+	 // FileMetadata.Zone = FileBrowser.Zone;
+	 FileMetadata.Type = Brw_IS_FOLDER;
+	 Str_Copy (FileMetadata.PathInZoneWithoutFileName,
+		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
 		   sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
 	 Str_Copy (FileMetadata.FileName,Asg->Folder,
 		   sizeof (FileMetadata.FileName) - 1);
-	 FileMetadata.Type = Brw_IS_FOLDER;
-	 Brw_GetFileMetadataByPath (&FileMetadata,FileBrowser.Zone);
+	 Brw_BuildFullPathFromPathAndName (&FileMetadata);
+	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&FileMetadata);
 	 FileBrowser.FilCod = FileMetadata.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);

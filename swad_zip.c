@@ -471,7 +471,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
    unsigned long long FullSize = 0;
 
    /***** Scan directory *****/
-   FileMetadata.Zone = FileBrowser->Zone;
+   // FileMetadata.Zone = FileBrowser->Zone;
    if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** List files *****/
@@ -485,9 +485,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 		      sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
 	    Str_Copy (FileMetadata.FileName,FileList[NumFile]->d_name,
 	              sizeof (FileMetadata.FileName) - 1);
-            Str_BuildFullPathFromPathAndName (FileMetadata.PathInZone,
-				              FileMetadata.PathInZoneWithoutFileName,
-				              FileMetadata.FileName);
+            Brw_BuildFullPathFromPathAndName (&FileMetadata);
 	    Fil_BuildPath (PathFile,"%s/%s",
 		           PathInServ,FileMetadata.FileName);
 	    Fil_BuildPath (PathFileClone,"%s/%s",
@@ -500,7 +498,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	       FileMetadata.Type = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	       FileMetadata.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
-											    Brw_IS_FILE;	// It's a file
+										  Brw_IS_FILE;	// It's a file
 	    HiddenOrVisible = (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
 														      &FileMetadata) :

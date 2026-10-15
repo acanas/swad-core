@@ -430,8 +430,7 @@ void BrwSiz_GetSizeOfFileZone (Hie_Level_t HieLvl,Brw_Zone_t Zone,
 /************************* Show size of a file browser ***********************/
 /*****************************************************************************/
 
-void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
-					   const struct Brw_Size *Size)
+void BrwSiz_ShowAndStoreSizeOfFileBrowser (const struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_level;
    extern const char *Txt_levels;
@@ -444,27 +443,27 @@ void BrwSiz_ShowAndStoreSizeOfFileBrowser (Brw_Zone_t Zone,
 
    HTM_DIV_Begin ("class=\"CM DAT_%s\"",The_GetSuffix ());
 
-      if (Brw_CheckIfFileBrowserIsEditable (Zone) == Usr_CAN)
+      if (Brw_CheckIfFileBrowserIsEditable (FileBrowser->Zone) == Usr_CAN)
 	{
-	 Fil_WriteFileSizeFull ((double) Size->TotalSiz,FileSizeStr);
-	 HTM_UnsignedTxt (Size->NumLevls,Txt_level ,Txt_levels ); HTM_Semicolon (); HTM_SP ();
-	 HTM_UnsignedTxt (Size->NumFolds,Txt_folder,Txt_folders); HTM_Semicolon (); HTM_SP ();
-	 HTM_UnsignedTxt (Size->NumFiles,Txt_file  ,Txt_files  ); HTM_BR ();
+	 Fil_WriteFileSizeFull ((double) FileBrowser->Size.TotalSiz,FileSizeStr);
+	 HTM_UnsignedTxt (FileBrowser->Size.NumLevls,Txt_level ,Txt_levels ); HTM_Semicolon (); HTM_SP ();
+	 HTM_UnsignedTxt (FileBrowser->Size.NumFolds,Txt_folder,Txt_folders); HTM_Semicolon (); HTM_SP ();
+	 HTM_UnsignedTxt (FileBrowser->Size.NumFiles,Txt_file  ,Txt_files  ); HTM_BR ();
 	 HTM_Txt (FileSizeStr);
 
-	 if (Size->MaxQuota)
+	 if (FileBrowser->Size.MaxQuota)
 	   {
-	    Fil_WriteFileSizeBrief ((double) Size->MaxQuota,FileSizeStr);
+	    Fil_WriteFileSizeBrief ((double) FileBrowser->Size.MaxQuota,FileSizeStr);
 	    HTM_SP ();
 	    HTM_OpenParenthesis ();
-	       HTM_Double1Decimal (100.0 * ((double) Size->TotalSiz /
-					    (double) Size->MaxQuota));
+	       HTM_Double1Decimal (100.0 * ((double) FileBrowser->Size.TotalSiz /
+					    (double) FileBrowser->Size.MaxQuota));
 	       HTM_Percent (); HTM_SP ();
 	       HTM_Txt (Txt_of_PART_OF_A_TOTAL); HTM_SP (); HTM_Txt (FileSizeStr);
 	    HTM_CloseParenthesis ();
 	   }
 
-	 Brw_DB_StoreSizeOfFileBrowser (Zone,Size);
+	 Brw_DB_StoreSizeOfFileBrowser (FileBrowser);
 	}
 
    HTM_DIV_End ();

@@ -4809,13 +4809,12 @@ int swad__getDirectoryTree (struct soap *soap,
                   (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser (&FileBrowser);
+   // FileMetadata.Zone = FileBrowser.Zone;
    Str_Copy (FileMetadata.PathInZoneWithoutFileName,Brw_RootFolderInternalNames[FileBrowser.Zone],
 	     sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
    Str_Copy (FileMetadata.FileName,".",
 	     sizeof (FileMetadata.FileName) - 1);
-   Str_BuildFullPathFromPathAndName (FileMetadata.PathInZone,
-				     FileMetadata.PathInZoneWithoutFileName,
-				     FileMetadata.FileName);
+   Brw_BuildFullPathFromPathAndName (&FileMetadata);
 
    /* Check if exists the directory for HTML output. If not exists, create it */
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
@@ -4834,7 +4833,7 @@ int swad__getDirectoryTree (struct soap *soap,
    XML_WriteStartFile (XML,"tree");
    FileMetadata.Type = Brw_IS_FOLDER;
    if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-					&FileMetadata) == HidVis_VISIBLE)
+				        &FileMetadata) == HidVis_VISIBLE)
      {
       Str_Copy (PathRootFolderInZone,Brw_RootFolderInternalNames[FileBrowser.Zone],
 	        sizeof (PathRootFolderInZone) - 1);
@@ -4904,9 +4903,7 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	    if (!lstat (PathInServIncludingFile,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Str_BuildFullPathFromPathAndName (FileMetadata->PathInZone,
-						 FileMetadata->PathInZoneWithoutFileName,
-						 FileMetadata->FileName);
+	       Brw_BuildFullPathFromPathAndName (FileMetadata);
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
@@ -4975,7 +4972,7 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
    else	// File or link
      {
       /* Get file metadata */
-      Brw_GetFileMetadataByPath (FileMetadata,FileBrowser->Zone);
+      Brw_GetFileMetadataByPath (FileBrowser->Zone,FileMetadata);
       FileBrowser->FilCod = FileMetadata->FilCod;
       FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser,FileMetadata);
 
@@ -4985,7 +4982,8 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
 	 FileMetadata->PublisherUsrCod = -1L;
 	 FileMetadata->PrivateOrPublic = PriPub_PRIVATE;
 	 FileMetadata->License         = Brw_LICENSE_DEFAULT;
-	 FileMetadata->FilCod          = Brw_DB_AddPath (FileMetadata);
+	 FileMetadata->FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+							 FileMetadata);
 	}
 
       Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata->PublisherUsrCod;
@@ -5038,6 +5036,7 @@ int swad__getFile (struct soap *soap,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
    struct Brw_FileBrowser FileBrowser;
+   Brw_Zone_t ZoneDB;
    struct Brw_FileMetadata FileMetadata;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
@@ -5081,18 +5080,19 @@ int swad__getFile (struct soap *soap,
 	                        "Bad file code",
 	                        "File code must be a integer greater than 0");
 
-   Brw_GetFileMetadataByCod (&FileMetadata);
+   Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
    if (FileMetadata.FilCod <= 0)
       return soap_sender_fault (soap,
 	                        "File does not exist, please refresh",
 	                        "The file requested does not exists");
+   FileBrowser.Zone = ZoneDB;
 
    /***** Set course and group codes *****/
    HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod,
    HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
    HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
    HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-   Brw_GetCrsGrpFromFileMetadata (FileMetadata.Zone,
+   Brw_GetCrsGrpFromFileMetadata (FileBrowser.Zone,
 				  FileMetadata.Cod,
                                   HieCods,&GrpCod);
    Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
@@ -5132,7 +5132,6 @@ int swad__getFile (struct soap *soap,
 				     "Requester must belong to group");
 
    /***** Check if file is in a valid zone *****/
-   FileBrowser.Zone = FileMetadata.Zone;
    switch (FileBrowser.Zone)
      {
       case Brw_ADMI_DOC_CRS:
@@ -5161,9 +5160,7 @@ int swad__getFile (struct soap *soap,
 	     sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
    Str_Copy (FileMetadata.FileName,FileMetadata.FileName,
 	     sizeof (FileMetadata.FileName) - 1);
-   Str_BuildFullPathFromPathAndName (FileMetadata.PathInZone,
-				     FileMetadata.PathInZoneWithoutFileName,
-				     FileMetadata.FileName);
+   Brw_BuildFullPathFromPathAndName (&FileMetadata);
 
    /***** Get file size and date *****/
    FileExists = Brw_GetFileTypeSizeAndDate (&FileBrowser,&FileMetadata);
@@ -5208,6 +5205,7 @@ int swad__getMarks (struct soap *soap,
                     struct swad__getMarksOutput *getMarksOut)	// output
   {
    int ReturnCode;
+   Brw_Zone_t ZoneDB;
    struct Brw_FileMetadata FileMetadata;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
@@ -5230,12 +5228,12 @@ int swad__getMarks (struct soap *soap,
 
    /***** Get file metadata *****/
    FileMetadata.FilCod = (long) fileCode;
-   Brw_GetFileMetadataByCod (&FileMetadata);
+   Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
 
    if (FileMetadata.Type != Brw_IS_FILE ||
        FileMetadata.HiddenOrVisible == HidVis_HIDDEN ||
-       (FileMetadata.Zone != Brw_ADMI_MRK_CRS &&
-	FileMetadata.Zone != Brw_ADMI_MRK_GRP))
+       (ZoneDB != Brw_ADMI_MRK_CRS &&
+	ZoneDB != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (soap,
 	                          "Bad file code",
 	                          "You can not get marks from this file");
@@ -5245,7 +5243,7 @@ int swad__getMarks (struct soap *soap,
    HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
    HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
    HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-   Brw_GetCrsGrpFromFileMetadata (FileMetadata.Zone,FileMetadata.Cod,
+   Brw_GetCrsGrpFromFileMetadata (ZoneDB,FileMetadata.Cod,
                                   HieCods,&GrpCod);
    Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
    Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];

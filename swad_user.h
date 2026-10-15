@@ -30,6 +30,7 @@
 
 #include "swad_error.h"
 #include "swad_forum.h"
+#include "swad_photo_type.h"
 #include "swad_user_type.h"
 
 /*****************************************************************************/

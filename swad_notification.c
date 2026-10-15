@@ -804,6 +804,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
                                              const struct For_Forums *Forums)
   {
    extern Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
+   Brw_Zone_t ZoneDB;
    struct Brw_FileMetadata FileMetadata;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod = -1L;
@@ -836,39 +837,42 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_MARKS_FILE:
 	 if ((FileMetadata.FilCod = Cod) > 0)
 	   {
-            Brw_GetFileMetadataByCod (&FileMetadata);
-	    Brw_GetCrsGrpFromFileMetadata (FileMetadata.Zone,FileMetadata.Cod,
-					   HieCods,&GrpCod);
-	    switch (NotifyEvent)
-	      {
-	       case Ntf_EVENT_DOCUMENT_FILE:
-		  Action = GrpCod > 0 ? ActReqDatSeeDocGrp :
-			   (HieCods[Hie_CRS] > 0 ? ActReqDatSeeDocCrs :
-			   (HieCods[Hie_DEG] > 0 ? ActReqDatSeeDocDeg :
-			   (HieCods[Hie_CTR] > 0 ? ActReqDatSeeDocCtr :
-						   ActReqDatSeeDocIns)));
-		  break;
-	       case Ntf_EVENT_TEACHERS_FILE:
-		  Action = GrpCod > 0 ? ActReqDatTchGrp :
-					ActReqDatTchCrs;
-		  break;
-	       case Ntf_EVENT_SHARED_FILE:
-		  Action = GrpCod > 0 ? ActReqDatShaGrp :
-			   (HieCods[Hie_CRS] > 0 ? ActReqDatShaCrs :
-			   (HieCods[Hie_DEG] > 0 ? ActReqDatShaDeg :
-			   (HieCods[Hie_CTR] > 0 ? ActReqDatShaCtr :
-						   ActReqDatShaIns)));
-		  break;
-	       case Ntf_EVENT_MARKS_FILE:
-		  Action = GrpCod > 0 ? ActReqDatSeeMrkGrp :
-					ActReqDatSeeMrkCrs;
-		  break;
-	       default:	// Not aplicable here
-		  break;
+            Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
+            if (FileMetadata.FilCod > 0)
+              {
+	       Brw_GetCrsGrpFromFileMetadata (ZoneDB,FileMetadata.Cod,
+					      HieCods,&GrpCod);
+	       switch (NotifyEvent)
+		 {
+		  case Ntf_EVENT_DOCUMENT_FILE:
+		     Action = GrpCod > 0 ? ActReqDatSeeDocGrp :
+			      (HieCods[Hie_CRS] > 0 ? ActReqDatSeeDocCrs :
+			      (HieCods[Hie_DEG] > 0 ? ActReqDatSeeDocDeg :
+			      (HieCods[Hie_CTR] > 0 ? ActReqDatSeeDocCtr :
+						      ActReqDatSeeDocIns)));
+		     break;
+		  case Ntf_EVENT_TEACHERS_FILE:
+		     Action = GrpCod > 0 ? ActReqDatTchGrp :
+					   ActReqDatTchCrs;
+		     break;
+		  case Ntf_EVENT_SHARED_FILE:
+		     Action = GrpCod > 0 ? ActReqDatShaGrp :
+			      (HieCods[Hie_CRS] > 0 ? ActReqDatShaCrs :
+			      (HieCods[Hie_DEG] > 0 ? ActReqDatShaDeg :
+			      (HieCods[Hie_CTR] > 0 ? ActReqDatShaCtr :
+						      ActReqDatShaIns)));
+		     break;
+		  case Ntf_EVENT_MARKS_FILE:
+		     Action = GrpCod > 0 ? ActReqDatSeeMrkGrp :
+					   ActReqDatSeeMrkCrs;
+		     break;
+		  default:	// Not aplicable here
+		     break;
+		 }
+	       Frm_BeginForm (Action);
+		  ParCod_PutPar (ParCod_Grp,GrpCod);
+		  ParCod_PutPar (ParCod_Fil,FileMetadata.FilCod);
 	      }
-	    Frm_BeginForm (Action);
-	       ParCod_PutPar (ParCod_Grp,GrpCod);
-	       ParCod_PutPar (ParCod_Fil,FileMetadata.FilCod);
 	   }
 	 break;
       case Ntf_EVENT_TML_COMMENT:
@@ -1068,7 +1072,6 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,
 				    const char PathInZone[PATH_MAX + 1])
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
    static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_ZONES] =
      {
       [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
@@ -1080,16 +1083,16 @@ void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,
       [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
       [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
      };
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
    long FilCod;
 
-   if (NotifyEvent[ZoneForDB])
+   if (NotifyEvent[ZoneDB])
      {
       /***** Get file code *****/
       FilCod = Brw_DB_GetFilCodByPath (Zone,PathInZone,Brw_ANY_FILE);	// Any file, public or not
       if (FilCod > 0)
 	 /***** Set notification as removed *****/
-	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[ZoneForDB],FilCod);
+	 Ntf_DB_MarkNotifAsRemoved (NotifyEvent[ZoneDB],FilCod);
      }
   }
 
@@ -1100,7 +1103,6 @@ void Ntf_MarkNotifOneFileAsRemoved (Brw_Zone_t Zone,
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (Brw_Zone_t Zone,
 					     const char PathInZone[PATH_MAX + 1])
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
    static Ntf_NotifyEvent_t NotifyEvent[Brw_NUM_ZONES] =
      {
       [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
@@ -1112,11 +1114,11 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (Brw_Zone_t Zone,
       [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
       [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
      };
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
 
-   if (NotifyEvent[ZoneForDB])
+   if (NotifyEvent[ZoneDB])
       /***** Set notification as removed *****/
-      Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[ZoneForDB],ZoneForDB,
+      Ntf_DB_MarkNotifChildrenOfFolderAsRemoved (NotifyEvent[ZoneDB],ZoneDB,
 						 Brw_GetCodForZone (Zone),
 						 PathInZone);
   }

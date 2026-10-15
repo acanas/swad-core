@@ -43,118 +43,141 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+//------------------------------- File zones ----------------------------------
+static Brw_Zone_t Brw_DB_GetZoneDB_brw_last (Brw_Zone_t Zone);
+static Brw_Zone_t Brw_DB_GetZoneDB_brw_expanded (Brw_Zone_t Zone);
+
+/*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-// Browsers types for database "files" and "brw_sizes" tables
-const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES] =
+Brw_Zone_t Brw_DB_GetZoneDB_brw_files (Brw_Zone_t Zone)
   {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_USR,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
+   // Browsers types for database "brw_files" and "brw_sizes" tables
+   static const Brw_Zone_t Brw_DB_ZoneDB_brw_files[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+      [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+      [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+      [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_USR,
+      [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+      [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+      [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_USR,
+      [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+      [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+      [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+      [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+      [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+      [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+      [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
+     };
 
-// Browsers types for database "brw_last" table
-// Assignments and works are stored as one in brw_last...
-// ...because a user views them at the same time
-static Brw_Zone_t Brw_DB_ZoneForDB_file_browser_last[Brw_NUM_ZONES] =
-  {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
+   return Brw_DB_ZoneDB_brw_files[Zone];
+  }
 
-// Browsers types for database "expanded_folders" table
-static Brw_Zone_t Brw_DB_ZoneForDB_expanded_folders[Brw_NUM_ZONES] =
+static Brw_Zone_t Brw_DB_GetZoneDB_brw_last (Brw_Zone_t Zone)
   {
-   [Brw_UNKNOWN     ] = Brw_UNKNOWN,
-   [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
-   [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
-   [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
-   [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
-   [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
-   [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
-   [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
-   [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
-   [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
-   [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
-   [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
-   [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
-   [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
-   [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
-   [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
-   [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
-   [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
-   [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
-   [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
-   [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
-   [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
-  };
+   // Browsers types for database "brw_last" table
+   // Assignments and works are stored as one in brw_last...
+   // ...because a user views them at the same time
+   static const Brw_Zone_t Brw_DB_ZoneDB_brw_last[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+      [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+      [Brw_ADMI_WRK_USR] = Brw_ADMI_ASG_USR,
+      [Brw_ADMI_WRK_CRS] = Brw_ADMI_ASG_CRS,
+      [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+      [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+      [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
+      [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+      [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+      [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+      [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+      [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+      [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+      [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
+     };
+
+   return Brw_DB_ZoneDB_brw_last[Zone];
+  }
+
+static Brw_Zone_t Brw_DB_GetZoneDB_brw_expanded (Brw_Zone_t Zone)
+  {
+   // Browsers types for database "expanded_folders" table
+   static const Brw_Zone_t Brw_DB_ZoneDB_brw_expanded[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Brw_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_SHOW_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_DOC_CRS] = Brw_ADMI_DOC_CRS,
+      [Brw_ADMI_SHR_CRS] = Brw_ADMI_SHR_CRS,
+      [Brw_ADMI_SHR_GRP] = Brw_ADMI_SHR_GRP,
+      [Brw_ADMI_WRK_USR] = Brw_ADMI_WRK_USR,
+      [Brw_ADMI_WRK_CRS] = Brw_ADMI_WRK_CRS,
+      [Brw_ADMI_MRK_CRS] = Brw_ADMI_MRK_CRS,
+      [Brw_ADMI_BRF_USR] = Brw_ADMI_BRF_USR,
+      [Brw_SHOW_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_ADMI_DOC_GRP] = Brw_ADMI_DOC_GRP,
+      [Brw_SHOW_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_MRK_GRP] = Brw_ADMI_MRK_GRP,
+      [Brw_ADMI_ASG_USR] = Brw_ADMI_ASG_USR,
+      [Brw_ADMI_ASG_CRS] = Brw_ADMI_ASG_CRS,
+      [Brw_SHOW_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_ADMI_DOC_DEG] = Brw_ADMI_DOC_DEG,
+      [Brw_SHOW_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_ADMI_DOC_CTR] = Brw_ADMI_DOC_CTR,
+      [Brw_SHOW_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_DOC_INS] = Brw_ADMI_DOC_INS,
+      [Brw_ADMI_SHR_DEG] = Brw_ADMI_SHR_DEG,
+      [Brw_ADMI_SHR_CTR] = Brw_ADMI_SHR_CTR,
+      [Brw_ADMI_SHR_INS] = Brw_ADMI_SHR_INS,
+      [Brw_ADMI_TCH_CRS] = Brw_ADMI_TCH_CRS,
+      [Brw_ADMI_TCH_GRP] = Brw_ADMI_TCH_GRP,
+      [Brw_ADMI_DOC_PRJ] = Brw_ADMI_DOC_PRJ,
+      [Brw_ADMI_ASS_PRJ] = Brw_ADMI_ASS_PRJ,
+     };
+
+   return Brw_DB_ZoneDB_brw_expanded[Zone];
+  }
 
 /*****************************************************************************/
 /**************** Add a path of file/folder to the database ******************/
 /*****************************************************************************/
 
-long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata)
+long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_FileMetadata *FileMetadata)
   {
    extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
 
@@ -167,9 +190,9 @@ long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata)
 				" VALUES"
 				" (%u,%ld,%ld,%ld,"
 				  "%u,'%s','N','%c',%u)",
-				(unsigned) Brw_DB_ZoneForDB_files[FileMetadata->Zone],
-				Brw_GetCodForZone (FileMetadata->Zone),
-				Brw_GetZoneUsrCodForZone (FileMetadata->Zone),
+				(unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
+				Brw_GetCodForZone (Zone),
+				Brw_GetZoneUsrCodForZone (Zone),
 				FileMetadata->PublisherUsrCod,
 				(unsigned) FileMetadata->Type,
 				FileMetadata->PathInZone,
@@ -194,7 +217,7 @@ void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
 		   NewPathInZone,
-		   (unsigned) Brw_DB_ZoneForDB_files[Zone],
+		   (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 		   Brw_GetCodForZone (Zone),
 		   Brw_GetZoneUsrCodForZone (Zone),
 		   OldPathInZone);
@@ -208,7 +231,6 @@ void Brw_DB_RenameChildrenFilesOrFolders (Brw_Zone_t Zone,
 					  const char OldPathInZone[PATH_MAX + 1],
                                           const char NewPathInZone[PATH_MAX + 1])
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
    unsigned StartFinalSubpathNotChanged = strlen (OldPathInZone) + 2;
 
    /***** Update children of a folder in table of files *****/
@@ -220,7 +242,7 @@ void Brw_DB_RenameChildrenFilesOrFolders (Brw_Zone_t Zone,
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path LIKE '%s/%%'",
 	           NewPathInZone,StartFinalSubpathNotChanged,
-	           (unsigned) Brw_DB_ZoneForDB_files[Zone],
+	           (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 	           Brw_GetCodForZone (Zone),
 	           Brw_GetZoneUsrCodForZone (Zone),
 	           OldPathInZone);
@@ -251,7 +273,7 @@ long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,const char *PathInZone,
 			        "%s"
 			   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 			      " LIMIT 1",		// Select the most recent entry.
-			      (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			      (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			      Brw_GetCodForZone (Zone),
 			      Brw_GetZoneUsrCodForZone (Zone),
 			      PathInZone,
@@ -291,7 +313,7 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 			   " AND Path='%s'"
 		      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 			 " LIMIT 1",		// Select the most recent entry.
-			 (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			 (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			 Brw_GetCodForZone (Zone),
 			 Brw_GetZoneUsrCodForZone (Zone),
 			 FullPath);
@@ -356,7 +378,7 @@ long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
 			        " AND (Path='%s'"
 				     " OR"
 				     " Path LIKE '%s/%%')",
-			      (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			      (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			      Brw_GetCodForZone (Zone),
 			      Brw_GetZoneUsrCodForZone (Zone),
 			      PathInZone,
@@ -386,8 +408,6 @@ unsigned Brw_DB_GetNumFilesUsr (long UsrCod)
 
 unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long HieCod)
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
 				  "SELECT"
@@ -402,10 +422,10 @@ unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long HieCod)
 				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 				      " AND brw_sizes.FileBrowser=%u"
 				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
-				  (unsigned) Brw_DB_ZoneForDB_files[Brw_ADMI_DOC_CRS],
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Brw_ADMI_DOC_CRS),
 				  HieCod,
 				  HieCod,
-				  (unsigned) Brw_DB_ZoneForDB_files[Brw_ADMI_DOC_GRP]);
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Brw_ADMI_DOC_GRP));
   }
 
 /*****************************************************************************/
@@ -414,8 +434,6 @@ unsigned Brw_DB_GetNumFilesInDocumZonesOfCrs (long HieCod)
 
 unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod)
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
 				  "SELECT"
@@ -430,10 +448,10 @@ unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod)
 				      " AND grp_types.GrpTypCod=grp_groups.GrpTypCod"
 				      " AND brw_sizes.FileBrowser=%u"
 				      " AND brw_sizes.Cod=grp_groups.GrpCod)",
-				  (unsigned) Brw_DB_ZoneForDB_files[Brw_ADMI_SHR_CRS],
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Brw_ADMI_SHR_CRS),
 				  HieCod,
 				  HieCod,
-				  (unsigned) Brw_DB_ZoneForDB_files[Brw_ADMI_SHR_GRP]);
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Brw_ADMI_SHR_GRP));
   }
 
 /*****************************************************************************/
@@ -442,15 +460,13 @@ unsigned Brw_DB_GetNumFilesInShareZonesOfCrs (long HieCod)
 
 unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long HieCod)
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
 				  "SELECT COALESCE(SUM(NumFiles),0)"
 				   " FROM brw_sizes"
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld",
-				  (unsigned) Brw_DB_ZoneForDB_files[Brw_ADMI_ASG_USR],
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Brw_ADMI_ASG_USR),
 				  HieCod);
   }
 
@@ -460,15 +476,13 @@ unsigned Brw_DB_GetNumFilesInAssigZonesOfCrs (long HieCod)
 
 unsigned Brw_DB_GetNumFilesInWorksZonesOfCrs (long HieCod)
   {
-   extern const Brw_Zone_t Brw_DB_ZoneForDB_files[Brw_NUM_ZONES];
-
    /***** Get number of files in document zones of a course from database *****/
    return DB_QuerySELECTUnsigned ("can not get the number of files",
 				  "SELECT COALESCE(SUM(NumFiles),0)"
 				   " FROM brw_sizes"
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld",
-				  (unsigned) Brw_DB_ZoneForDB_files[Brw_ADMI_WRK_USR],
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Brw_ADMI_WRK_USR),
 				  HieCod);
   }
 
@@ -481,11 +495,11 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
   {
    long Cod = Brw_GetCodForZone (Zone);
    long ZoneUsrCod = Brw_GetZoneUsrCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
 
    /***** Remove from database the entries that store the marks properties *****/
-   if (ZoneForDB == Brw_ADMI_MRK_CRS ||
-       ZoneForDB == Brw_ADMI_MRK_GRP)
+   if (ZoneDB == Brw_ADMI_MRK_CRS ||
+       ZoneDB == Brw_ADMI_MRK_GRP)
       DB_QueryDELETE ("can not remove properties of marks from database",
 		      "DELETE FROM mrk_marks"
 		      " USING brw_files,"
@@ -494,7 +508,7 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
 		        " AND brw_files.Cod=%ld"
 		        " AND brw_files.Path='%s'"
 		        " AND brw_files.FilCod=mrk_marks.FilCod",
-	              (unsigned) ZoneForDB,
+	              (unsigned) ZoneDB,
 	              Cod,
 	              PathInZone);
 
@@ -508,7 +522,7 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
 		    " AND brw_files.ZoneUsrCod=%ld"
 		    " AND brw_files.Path='%s'"
 		    " AND brw_files.FilCod=brw_views.FilCod",
-	          (unsigned) ZoneForDB,
+	          (unsigned) ZoneDB,
 	          Cod,
 	          ZoneUsrCod,
 	          PathInZone);
@@ -520,7 +534,7 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
-	           (unsigned) ZoneForDB,
+	           (unsigned) ZoneDB,
 	           Cod,
 	           ZoneUsrCod,
 	           PathInZone);
@@ -535,11 +549,11 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
   {
    long Cod = Brw_GetCodForZone (Zone);
    long ZoneUsrCod = Brw_GetZoneUsrCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_files[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
 
    /***** Remove from database the entries that store the marks properties *****/
-   if (ZoneForDB == Brw_ADMI_MRK_CRS ||
-       ZoneForDB == Brw_ADMI_MRK_GRP)
+   if (ZoneDB == Brw_ADMI_MRK_CRS ||
+       ZoneDB == Brw_ADMI_MRK_GRP)
       DB_QueryDELETE ("can not remove properties of marks from database",
 		      "DELETE FROM mrk_marks"
 		      " USING brw_files,"
@@ -548,7 +562,7 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
 		        " AND brw_files.Cod=%ld"
 		        " AND brw_files.Path LIKE '%s/%%'"
 		        " AND brw_files.FilCod=mrk_marks.FilCod",
-	              (unsigned) ZoneForDB,
+	              (unsigned) ZoneDB,
 	              Cod,
 	              PathInZone);
 
@@ -562,7 +576,7 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
 		    " AND brw_files.ZoneUsrCod=%ld"
 		    " AND brw_files.Path LIKE '%s/%%'"
 		    " AND brw_files.FilCod=brw_views.FilCod",
-                  (unsigned) ZoneForDB,
+                  (unsigned) ZoneDB,
                   Cod,
                   ZoneUsrCod,
                   PathInZone);
@@ -574,7 +588,7 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
 		     " AND Cod=%ld"
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path LIKE '%s/%%'",
-                   (unsigned) ZoneForDB,
+                   (unsigned) ZoneDB,
                    Cod,
                    ZoneUsrCod,
                    PathInZone);
@@ -1425,7 +1439,7 @@ void Brw_DB_ChangeFilePublic (Brw_Zone_t Zone,
 		     " AND Path='%s'",
 	           PriPub_Public_YN[PrivateOrPublic],
 	           (unsigned) License,
-	           (unsigned) Brw_DB_ZoneForDB_files[Zone],
+	           (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 	           Brw_GetCodForZone (Zone),
 	           Brw_GetZoneUsrCodForZone (Zone),
 	           FilCod,
@@ -1455,7 +1469,7 @@ PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (Brw_Zone_t Zone,
 			       " AND ZoneUsrCod=%ld"
 			       " AND Path LIKE '%s/%%'"
 			       " AND Public='Y')",
-			    (unsigned) Brw_DB_ZoneForDB_files[Zone],
+			    (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			    Brw_GetCodForZone (Zone),
 			    Brw_GetZoneUsrCodForZone (Zone),
 			    PathInZone);
@@ -2148,7 +2162,7 @@ void Brw_DB_UpdateDateMyLastAccFileBrowser (Brw_Zone_t Zone)
 		    " VALUES"
 		    " (%ld,%u,%ld,NOW())",
 	            Gbl.Usrs.Me.UsrDat.UsrCod,
-	            (unsigned) Brw_DB_ZoneForDB_file_browser_last[Zone],
+	            (unsigned) Brw_DB_GetZoneDB_brw_last (Zone),
 	            Brw_GetCodForZone (Zone));
   }
 
@@ -2168,7 +2182,7 @@ unsigned Brw_DB_GetDateMyLastAccFileBrowser (MYSQL_RES **mysql_res,
 		     " AND FileBrowser=%u"
 		     " AND Cod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   (unsigned) Brw_DB_ZoneForDB_file_browser_last[Zone],
+		   (unsigned) Brw_DB_GetZoneDB_brw_last (Zone),
 		   Brw_GetCodForZone (Zone));
   }
 
@@ -2297,7 +2311,7 @@ void Brw_DB_HideOrUnhideFileOrFolder (Brw_Zone_t Zone,
 		     " AND ZoneUsrCod=%ld"
 		     " AND Path='%s'",
 		   HidVis_Hidden_YN[HiddenOrVisible],
-	           (unsigned) Brw_DB_ZoneForDB_files[Zone],
+	           (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 	           Brw_GetCodForZone (Zone),
 	           Brw_GetZoneUsrCodForZone (Zone),
 	           PathInZone);
@@ -2327,7 +2341,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 				    " AND Path='%s'"
 			       " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 				  " LIMIT 1",		// Select the most recent entry.
-				  (unsigned) Brw_DB_ZoneForDB_files[Zone],
+				  (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 				  Brw_GetCodForZone (Zone),
 				  Brw_GetZoneUsrCodForZone (Zone),
 				  PathInZone);
@@ -2338,7 +2352,8 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 /******** Check if a file / folder from the documents zone is hidden *********/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata)
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
+										   const struct Brw_FileMetadata *FileMetadata)
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {
@@ -2365,7 +2380,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
 			       " AND (Path='%s'"
 				    " OR"
 				    " LOCATE(CONCAT(Path,'/'),'%s')=1))",
-			    FileMetadata->Zone,
+			    (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			    FileMetadata->Cod,
 			    FileMetadata->ZoneUsrCod,
 			    FileMetadata->PathInZone,
@@ -2378,7 +2393,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
 /*****************************************************************************/
 
 void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
-					   const char PathInZone[PATH_MAX + 1])
+					   const char PathOfFolderInZone[PATH_MAX + 1])
   {
    // Path must be stored with final '/'
    DB_QueryINSERT ("can not expand the content of a folder",
@@ -2387,10 +2402,10 @@ void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
 		   " VALUES"
 		   " (%ld,%u,%ld,%ld,'%s/',NOW())",
 	           Gbl.Usrs.Me.UsrDat.UsrCod,
-	           (unsigned) Brw_DB_ZoneForDB_expanded_folders[Zone],
+	           (unsigned) Brw_DB_GetZoneDB_brw_expanded (Zone),
 	           Brw_GetCodForZone (Zone),
 	           Brw_GetZoneUsrCodForZone (Zone),
-	           PathInZone);
+	           PathOfFolderInZone);
   }
 
 /*****************************************************************************/
@@ -2401,7 +2416,7 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone)
   {
    long Cod = Brw_GetCodForZone (Zone);
    long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
 
    if (Cod > 0)
      {
@@ -2414,7 +2429,7 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone)
 			   " AND Cod=%ld"
 			   " AND WorksUsrCod=%ld",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) ZoneForDB,
+		         (unsigned) ZoneDB,
 		         Cod,
 		         WorksUsrCod);
       else
@@ -2425,7 +2440,7 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone)
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) ZoneForDB,
+		         (unsigned) ZoneDB,
 		         Cod);
      }
    else	// Briefcase
@@ -2435,7 +2450,7 @@ void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone)
 		      " WHERE UsrCod=%ld"
 		        " AND FileBrowser=%u",
 	              Gbl.Usrs.Me.UsrDat.UsrCod,
-	              (unsigned) ZoneForDB);
+	              (unsigned) ZoneDB);
   }
 
 /*****************************************************************************/
@@ -2452,7 +2467,7 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
      };
    long Cod = Brw_GetCodForZone (Zone);
    long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
    Exi_Exist_t Exists;
 
    if (Cod > 0)
@@ -2468,7 +2483,7 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
 				     " AND WorksUsrCod=%ld"
 				     " AND Path='%s/')",
 				  Gbl.Usrs.Me.UsrDat.UsrCod,
-				  (unsigned) ZoneForDB,
+				  (unsigned) ZoneDB,
 				  Cod,
 				  WorksUsrCod,
 				  PathInZone);
@@ -2482,7 +2497,7 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
 				     " AND Cod=%ld"
 				     " AND Path='%s/')",
 				  Gbl.Usrs.Me.UsrDat.UsrCod,
-				  (unsigned) ZoneForDB,
+				  (unsigned) ZoneDB,
 				  Cod,
 				  PathInZone);
      }
@@ -2495,7 +2510,7 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
 				  " AND FileBrowser=%u"
 				  " AND Path='%s/')",
 			       Gbl.Usrs.Me.UsrDat.UsrCod,
-			       (unsigned) ZoneForDB,
+			       (unsigned) ZoneDB,
 			       PathInZone);
 
    return ContractedOrExpanded[Exists];
@@ -2506,11 +2521,11 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
 /*****************************************************************************/
 
 void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
-					     const char PathInZone[PATH_MAX + 1])
+					     const char PathOfFolderInZone[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForZone (Zone);
    long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
 
    if (Cod > 0)
      {
@@ -2523,10 +2538,10 @@ void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
 			   " AND WorksUsrCod=%ld"
 			   " AND Path='%s/'",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) ZoneForDB,
+		         (unsigned) ZoneDB,
 		         Cod,
 		         WorksUsrCod,
-		         PathInZone);
+		         PathOfFolderInZone);
       else
 	 DB_QueryDELETE ("can not contract the content of a folder",
 		         "DELETE FROM brw_expanded"
@@ -2535,9 +2550,9 @@ void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
 			   " AND Cod=%ld"
 			   " AND Path='%s/'",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) ZoneForDB,
+		         (unsigned) ZoneDB,
 		         Cod,
-		         PathInZone);
+		         PathOfFolderInZone);
      }
    else	// Briefcase
       DB_QueryDELETE ("can not contract the content of a folder",
@@ -2546,8 +2561,8 @@ void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
 		        " AND FileBrowser=%u"
 		        " AND Path='%s/'",
 	              Gbl.Usrs.Me.UsrDat.UsrCod,
-	              (unsigned) ZoneForDB,
-	              PathInZone);
+	              (unsigned) ZoneDB,
+	              PathOfFolderInZone);
   }
 
 /*****************************************************************************/
@@ -2559,7 +2574,7 @@ void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
   {
    long Cod = Brw_GetCodForZone (Zone);
    long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
 
    if (Cod > 0)
      {
@@ -2572,7 +2587,7 @@ void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 			   " AND WorksUsrCod=%ld"
 			   " AND Path LIKE '%s/%%'",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) ZoneForDB,
+		         (unsigned) ZoneDB,
 		         Cod,
 		         WorksUsrCod,
 		         PathInZone);
@@ -2584,7 +2599,7 @@ void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 			   " AND Cod=%ld"
 			   " AND Path LIKE '%s/%%'",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
-		         (unsigned) ZoneForDB,
+		         (unsigned) ZoneDB,
 		         Cod,
 		         PathInZone);
      }
@@ -2595,7 +2610,7 @@ void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 		        " AND FileBrowser=%u"
 		        " AND Path LIKE '%s/%%'",
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      (unsigned) ZoneForDB,
+		      (unsigned) ZoneDB,
 		      PathInZone);
   }
 
@@ -2609,7 +2624,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
                                            const char NewPathInZone[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForZone (Zone);
-   Brw_Zone_t ZoneForDB = Brw_DB_ZoneForDB_expanded_folders[Zone];
+   Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
    unsigned StartFinalSubpathNotChanged = strlen (OldPathInZone) + 2;
 
    if (Cod > 0)
@@ -2627,7 +2642,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 			      " AND Path LIKE '%s/%%'",
 		            NewPathInZone,StartFinalSubpathNotChanged,
 		            MyUsrCod,
-		            (unsigned) ZoneForDB,
+		            (unsigned) ZoneDB,
 		            Cod,
 		            WorksUsrCod,
 		            OldPathInZone);
@@ -2641,7 +2656,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 			      " AND Path LIKE '%s/%%'",
 		            NewPathInZone,StartFinalSubpathNotChanged,
 		            MyUsrCod,
-		            (unsigned) ZoneForDB,
+		            (unsigned) ZoneDB,
 		            Cod,
 		            OldPathInZone);
 	}
@@ -2656,7 +2671,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 			      " AND WorksUsrCod=%ld"
 			      " AND Path LIKE '%s/%%'",
 		            NewPathInZone,StartFinalSubpathNotChanged,
-		            (unsigned) ZoneForDB,
+		            (unsigned) ZoneDB,
 		            Cod,
 		            WorksUsrCod,
 		            OldPathInZone);
@@ -2668,7 +2683,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 			      " AND Cod=%ld"
 			      " AND Path LIKE '%s/%%'",
 			    NewPathInZone,StartFinalSubpathNotChanged,
-			    (unsigned) ZoneForDB,
+			    (unsigned) ZoneDB,
 			    Cod,
 			    OldPathInZone);
 	}
@@ -2682,7 +2697,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 		        " AND Path LIKE '%s/%%'",
 	              NewPathInZone,StartFinalSubpathNotChanged,
 	              MyUsrCod,
-	              (unsigned) ZoneForDB,
+	              (unsigned) ZoneDB,
 	              OldPathInZone);
   }
 
@@ -2842,8 +2857,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,
 /*********************** Store size of a file zone ***************************/
 /*****************************************************************************/
 
-void Brw_DB_StoreSizeOfFileBrowser (Brw_Zone_t Zone,
-				    const struct Brw_Size *Size)
+void Brw_DB_StoreSizeOfFileBrowser (const struct Brw_FileBrowser *FileBrowser)
   {
    DB_QueryREPLACE ("can not store the size of a file zone",
 		    "REPLACE INTO brw_sizes"
@@ -2852,13 +2866,13 @@ void Brw_DB_StoreSizeOfFileBrowser (Brw_Zone_t Zone,
 		    " VALUES"
 		    " (%u,%ld,%ld,"
 		      "%u,'%lu','%lu','%llu')",
-	            (unsigned) Brw_DB_ZoneForDB_files[Zone],
-		    Brw_GetCodForZone (Zone),
-		    Brw_GetZoneUsrCodForZone (Zone),
-	            Size->NumLevls,
-	            Size->NumFolds,
-	            Size->NumFiles,
-	            Size->TotalSiz);
+	            (unsigned) Brw_DB_GetZoneDB_brw_files (FileBrowser->Zone),
+		    Brw_GetCodForZone (FileBrowser->Zone),
+		    Brw_GetZoneUsrCodForZone (FileBrowser->Zone),
+	            FileBrowser->Size.NumLevls,
+	            FileBrowser->Size.NumFolds,
+	            FileBrowser->Size.NumFiles,
+	            FileBrowser->Size.TotalSiz);
   }
 
 /*****************************************************************************/

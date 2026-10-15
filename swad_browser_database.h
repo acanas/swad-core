@@ -38,8 +38,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+//------------------------------- File zones ----------------------------------
+Brw_Zone_t Brw_DB_GetZoneDB_brw_files (Brw_Zone_t Zone);
+
 //---------------------------------- Files ------------------------------------
-long Brw_DB_AddPath (const struct Brw_FileMetadata *FileMetadata);
+long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_FileMetadata *FileMetadata);
 void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
 			     const char OldPathInZone[PATH_MAX + 1],
                              const char NewPathInZone[PATH_MAX + 1]);
@@ -118,16 +121,17 @@ void Brw_DB_HideOrUnhideFileOrFolder (Brw_Zone_t Zone,
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
 									       Brw_Zone_t Zone,
 									       const char PathInZone[PATH_MAX + 1]);
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (const struct Brw_FileMetadata *FileMetadata);
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
+										   const struct Brw_FileMetadata *FileMetadata);
 
 //---------------------------- Expanded folders -------------------------------
 void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
-					   const char PathInZone[PATH_MAX + 1]);
+					   const char PathOfFolderInZone[PATH_MAX + 1]);
 void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone);
 ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t Zone,
 								      const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
-					     const char PathInZone[PATH_MAX + 1]);
+					     const char PathOfFolderInZone[PATH_MAX + 1]);
 void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 					   const char PathInZone[PATH_MAX + 1]);
 void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
@@ -147,8 +151,7 @@ void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,
                                       long MyUsrCod,long WorksUsrCod);
 
 //-------------------------- Size of file zones -------------------------------
-void Brw_DB_StoreSizeOfFileBrowser (Brw_Zone_t Zone,
-				    const struct Brw_Size *Size);
+void Brw_DB_StoreSizeOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 				  Hie_Level_t HieLvl,Brw_Zone_t Zone);
 

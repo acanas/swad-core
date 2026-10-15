@@ -29,7 +29,7 @@
 
 #include "swad_constant.h"
 #include "swad_error.h"
-#include "swad_user.h"
+#include "swad_user_type.h"
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
