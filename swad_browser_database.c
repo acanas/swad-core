@@ -35,6 +35,7 @@
 #include "swad_global.h"
 #include "swad_private_public.h"
 #include "swad_project.h"
+#include "swad_time.h"
 
 /*****************************************************************************/
 /******************** Global variables from other modules ********************/

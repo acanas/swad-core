@@ -77,6 +77,7 @@
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_string.h"
+#include "swad_time.h"
 #include "swad_timeline.h"
 #include "swad_timeline_note.h"
 #include "swad_user.h"
@@ -1274,10 +1275,6 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfZones,
 static void Brw_GetNumberOfOERs (Hie_Level_t HieLvl,Brw_License_t License,
                                  unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC]);
 
-struct timespec partial_start;
-struct timespec partial_end;
-struct timespec global_start;
-struct timespec global_end;
 static long scandir_nsec = 0L;
 static long GetFileMetadataByPath_nsec = 0L;
 long Brw_DB_GetFileMetadataByPath_nsec = 0L;
@@ -1288,34 +1285,6 @@ static long GetIfFolderHasPublicFiles_nsec = 0L;
 static long WriteFileOrFolderPublisher_nsec = 0L;
 static long CheckIfAnyHigherLevelIsHidden_nsec = 0L;
 static long ShowFileBrowser_nsec = 0L;
-
-void Tim_StartPartialTiming (void)
-  {
-   if (clock_gettime (CLOCK_REALTIME,&partial_start))
-      Err_ShowErrorAndExit ("Error in clock_gettime");
-  }
-
-long Tim_StopPartialTiming (void)
-  {
-   if (clock_gettime (CLOCK_REALTIME,&partial_end))
-      Err_ShowErrorAndExit ("Error in clock_gettime");
-   return (long) (partial_end.tv_sec  - partial_start.tv_sec) * 1000000000L +
-                  partial_end.tv_nsec - partial_start.tv_nsec;
-  }
-
-void Tim_StartGlobalTiming (void)
-  {
-   if (clock_gettime (CLOCK_REALTIME,&global_start))
-      Err_ShowErrorAndExit ("Error in clock_gettime");
-  }
-
-long Tim_StopGlobalTiming (void)
-  {
-   if (clock_gettime (CLOCK_REALTIME,&global_end))
-      Err_ShowErrorAndExit ("Error in clock_gettime");
-   return (long) (global_end.tv_sec  - global_start.tv_sec) * 1000000000L +
-                  global_end.tv_nsec - global_start.tv_nsec;
-  }
 
 /*****************************************************************************/
 /***************************** Set/get group code ****************************/
