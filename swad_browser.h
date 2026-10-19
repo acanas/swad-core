@@ -56,7 +56,8 @@ void Brw_GetSelectedUsrsAndShowWorks (void);
 void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser);
 
-void Brw_BuildFullPathFromPathAndName (struct Brw_FileMetadata *FileMetadata);
+void Brw_BuildFullPathFromPathAndName (const struct Brw_FileBrowser *FileBrowser,
+				       struct Brw_FileMetadata *FileMetadata);
 void Brw_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
                                        char PathWithoutFileName[PATH_MAX + 1],
                                        char FileName[NAME_MAX + 1]);
@@ -101,8 +102,7 @@ void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (Brw_Zone_t Zone,
 				struct Brw_FileMetadata *FileMetadata);
 void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_FileMetadata *FileMetadata);
-Exi_Exist_t Brw_GetFileTypeSizeAndDate (const struct Brw_FileBrowser *FileBrowser,
-				        struct Brw_FileMetadata *FileMetadata);
+Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata);
 void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);
 void Brw_UpdateMyFileViews (long FilCod);
 

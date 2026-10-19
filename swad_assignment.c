@@ -750,7 +750,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 		   sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
 	 Str_Copy (FileMetadata.FileName,Asg->Folder,
 		   sizeof (FileMetadata.FileName) - 1);
-	 Brw_BuildFullPathFromPathAndName (&FileMetadata);
+	 Brw_BuildFullPathFromPathAndName (&FileBrowser,&FileMetadata);
 	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&FileMetadata);
 	 FileBrowser.FilCod = FileMetadata.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);

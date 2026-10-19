@@ -4814,7 +4814,7 @@ int swad__getDirectoryTree (struct soap *soap,
 	     sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
    Str_Copy (FileMetadata.FileName,".",
 	     sizeof (FileMetadata.FileName) - 1);
-   Brw_BuildFullPathFromPathAndName (&FileMetadata);
+   Brw_BuildFullPathFromPathAndName (&FileBrowser,&FileMetadata);
 
    /* Check if exists the directory for HTML output. If not exists, create it */
    Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
@@ -4903,7 +4903,7 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	    if (!lstat (PathInServIncludingFile,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Brw_BuildFullPathFromPathAndName (FileMetadata);
+	       Brw_BuildFullPathFromPathAndName (FileBrowser,FileMetadata);
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
@@ -4974,7 +4974,7 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
       /* Get file metadata */
       Brw_GetFileMetadataByPath (FileBrowser->Zone,FileMetadata);
       FileBrowser->FilCod = FileMetadata->FilCod;
-      FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser,FileMetadata);
+      FileExists = Brw_GetFileTypeSizeAndDate (FileMetadata);
 
       if (FileMetadata->FilCod <= 0)	// No entry for this file in database table of files
         {
@@ -5160,10 +5160,10 @@ int swad__getFile (struct soap *soap,
 	     sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
    Str_Copy (FileMetadata.FileName,FileMetadata.FileName,
 	     sizeof (FileMetadata.FileName) - 1);
-   Brw_BuildFullPathFromPathAndName (&FileMetadata);
+   Brw_BuildFullPathFromPathAndName (&FileBrowser,&FileMetadata);
 
    /***** Get file size and date *****/
-   FileExists = Brw_GetFileTypeSizeAndDate (&FileBrowser,&FileMetadata);
+   FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    /***** Update number of views *****/
    Brw_GetAndUpdateFileViews (&FileMetadata);

@@ -172,7 +172,8 @@ struct Brw_FileMetadata
    long ZoneUsrCod;
    long PublisherUsrCod;
    unsigned Level;
-   char PathInZone[PATH_MAX + 1];			// Full path in zone = Path/Name
+   char PathInServ[PATH_MAX + 1];			// Absolute path in server of file including file name
+   char PathInZone[PATH_MAX + 1];			// Path in zone including file name
    char PathInZoneWithoutFileName[PATH_MAX + 1];	// Path in zone, without ending '/', until file, folder or link name
    char FileName[NAME_MAX + 1];				// File, folder or link name
    Brw_FileType_t Type;

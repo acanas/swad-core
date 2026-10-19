@@ -1249,17 +1249,14 @@ static void Brw_PutLinkToAskRemOldFiles (Lay_Show_t ShowFullTree);
 static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
 static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
-                                         const char PathInServ[PATH_MAX + 1],
-                                         const char PathInZone[PATH_MAX + 1],
+                                         const struct Brw_FileMetadata *FolderMetadata,
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed);
 
 static void Brw_RemoveFileFromDiskAndDB (Brw_Zone_t Zone,
-					 const char PathInServ[PATH_MAX + 1],
-                                         const char PathInZone[PATH_MAX + 1]);
+					 const struct Brw_FileMetadata *FileMetadata);
 static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
-					  const char PathInServ[PATH_MAX + 1],
-                                          const char PathInZone[PATH_MAX + 1]);
+					  const struct Brw_FileMetadata *FolderMetadata);
 
 static void Brw_WriteStatsFileZonesTableHead1 (void);
 static void Brw_WriteStatsFileZonesTableHead2 (void);
@@ -1949,6 +1946,11 @@ void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
       Err_WrongFileCodeExit ();
    if (ZoneDB != Brw_DB_GetZoneDB_brw_files (FileBrowser->Zone))
       Err_WrongFileZoneExit ();
+
+   /***** Build full file path in server *****/
+   Fil_BuildPath (FileMetadata->PathInServ,"%s/%s",
+		  FileBrowser->PathRootFolderInServ.AboveRootFolder,
+		  FileMetadata->PathInZone);
 
    /***** Set level of this file or folder inside file browser *****/
    FileMetadata->Level = Brw_NumLevelsInPath (FileMetadata->PathInZone);
@@ -2979,7 +2981,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	 Str_Copy (RootFolderMetadata.FileName,
 		   Brw_RootFolderInternalNames[FileBrowser->Zone],
 		   sizeof (RootFolderMetadata.FileName) - 1);
-	 Brw_BuildFullPathFromPathAndName (&RootFolderMetadata);
+	 Brw_BuildFullPathFromPathAndName (FileBrowser,&RootFolderMetadata);
 
 	 /***** Get file metadata *****/
 	 Tim_StartPartialTiming ();
@@ -2987,7 +2989,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
          FileBrowser->FilCod = RootFolderMetadata.FilCod;
 	 GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
 	 Tim_StartPartialTiming ();
-	 FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser,&RootFolderMetadata);
+	 FileExists = Brw_GetFileTypeSizeAndDate (&RootFolderMetadata);
 	 GetFileTypeSizeAndDate_nsec += Tim_StopPartialTiming ();
 
 	 if (Brw_WriteRowFileBrowser (FileBrowser,&RootFolderMetadata,
@@ -3044,8 +3046,10 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 /******************** Construct full path in file zone ***********************/
 /*****************************************************************************/
 
-void Brw_BuildFullPathFromPathAndName (struct Brw_FileMetadata *FileMetadata)
+void Brw_BuildFullPathFromPathAndName (const struct Brw_FileBrowser *FileBrowser,
+				       struct Brw_FileMetadata *FileMetadata)
   {
+   /***** Build path in zone including file name *****/
    if (!FileMetadata->PathInZoneWithoutFileName[0])	// It's the root folder
       // If PathInZoneWithoutFileName is "" and FileName is "descarga"
       // then PathInZone will be "descarga"
@@ -3057,6 +3061,11 @@ void Brw_BuildFullPathFromPathAndName (struct Brw_FileMetadata *FileMetadata)
       Fil_BuildPath (FileMetadata->PathInZone,"%s/%s",
 		     FileMetadata->PathInZoneWithoutFileName,
 		     FileMetadata->FileName);
+
+   /***** Build absolute path in server including file name *****/
+   Fil_BuildPath (FileMetadata->PathInServ,"%s/%s",
+	          FileBrowser->PathRootFolderInServ.AboveRootFolder,
+	          FileMetadata->PathInZone);
   }
 
 /*****************************************************************************/
@@ -3616,7 +3625,6 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
 	    /***** Construct the full path of the file or folder *****/
-	    // FileMetadata.Zone  = FileBrowser->Zone;
 	    FileMetadata.Level = Level;
 	    Fil_BuildPath (PathFileInServ,"%s/%s",
 		           PathInServ,FileList[NumFile]->d_name);
@@ -3626,7 +3634,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 		      sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
 	    Str_Copy (FileMetadata.FileName,FileList[NumFile]->d_name,
 		      sizeof (FileMetadata.FileName) - 1);
-	    Brw_BuildFullPathFromPathAndName (&FileMetadata);
+	    Brw_BuildFullPathFromPathAndName (FileBrowser,&FileMetadata);
 
 	    /***** Add number of row to parent row id *****/
 	    NumRow++;
@@ -3638,7 +3646,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 	    FileBrowser->FilCod = FileMetadata.FilCod;
 	    GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
 	    Tim_StartPartialTiming ();
-	    FileExists = Brw_GetFileTypeSizeAndDate (FileBrowser,&FileMetadata);
+	    FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 	    GetFileTypeSizeAndDate_nsec += Tim_StopPartialTiming ();
 
 	    /***** Get file or folder status *****/
@@ -4847,7 +4855,6 @@ void Brw_RemFile (void)
    extern const char *Txt_You_can_not_remove_this_file_or_link;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_FileMetadata FileMetadata;
-   char PathInServ[PATH_MAX + 1];
    char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
@@ -4862,17 +4869,11 @@ void Brw_RemFile (void)
 	   {
 	    case Brw_IS_FILE:
 	    case Brw_IS_LINK:
-	       /***** Build full file path in server *****/
-	       Fil_BuildPath (PathInServ,"%s/%s",
-			      FileBrowser.PathRootFolderInServ.AboveRootFolder,
-			      FileMetadata.PathInZone);
-
 	       /* Name of the file/link to be shown */
 	       Brw_GetFileNameToShow (FileBrowser.Zone,&FileMetadata,FileNameToShow);
 
 	       /* Remove file/link from disk and database */
-	       Brw_RemoveFileFromDiskAndDB (FileBrowser.Zone,PathInServ,
-					    FileMetadata.PathInZone);
+	       Brw_RemoveFileFromDiskAndDB (FileBrowser.Zone,&FileMetadata);
 
 	       /* Remove affected clipboards */
 	       Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
@@ -4907,7 +4908,6 @@ void Brw_TryRemFolder (void)
    extern const char *Txt_You_can_not_remove_this_folder;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_FileMetadata FolderMetadata;
-   char PathInServ[PATH_MAX + 1 ];
    struct stat FileStatus;
 
    /***** Get parameters related to file browser *****/
@@ -4917,17 +4917,11 @@ void Brw_TryRemFolder (void)
    switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,&FolderMetadata))	// Can I remove this folder?
      {
       case Usr_CAN:
-         /***** Build full file path in server *****/
-	 Fil_BuildPath (PathInServ,"%s/%s",
-			FileBrowser.PathRootFolderInServ.AboveRootFolder,
-			FolderMetadata.PathInZone);
-
 	 /***** Check if it's a file or a folder *****/
-	 if (lstat (PathInServ,&FileStatus))	// On success ==> 0 is returned
+	 if (lstat (FolderMetadata.PathInServ,&FileStatus))	// On success ==> 0 is returned
 	    Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	 else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	    if (Brw_RemoveFolderFromDiskAndDB (FileBrowser.Zone,PathInServ,
-					       FolderMetadata.PathInZone))
+	    if (Brw_RemoveFolderFromDiskAndDB (FileBrowser.Zone,&FolderMetadata))
 	      {
 	       if (errno == ENOTEMPTY)	// The directory is not empty
 		  Brw_AskConfirmRemoveFolderNotEmpty (&FileBrowser,
@@ -4984,7 +4978,6 @@ void Brw_RemSubtree (void)
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_FileMetadata FolderMetadata;
-   char PathInServ[PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
@@ -4993,13 +4986,8 @@ void Brw_RemSubtree (void)
    if (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,
 				        &FolderMetadata) == Usr_CAN)	// Can I remove this subtree?
      {
-      /***** Build full file path *****/
-      Fil_BuildPath (PathInServ,"%s/%s",
-	             FileBrowser.PathRootFolderInServ.AboveRootFolder,
-	             FolderMetadata.PathInZone);
-
       /***** Remove the whole tree *****/
-      Fil_RemoveTree (PathInServ);
+      Fil_RemoveTree (FolderMetadata.PathInServ);
 
       /* If a folder is removed,
          it is necessary to remove it from the database
@@ -5651,7 +5639,7 @@ void Brw_Paste (void)
 //	Possible student in works:	FileBrowser->Clipboard.WorksUsrCod
 //	Path (file or folder):		FileBrowser->Clipboard.Full
 // Destination:
-//	File browser zone:		ParentFolderMetadata->Zone
+//	File browser zone:		FileBrowser->Zone
 //	Path (should be a folder):	ParentFolderMetadata->PathInZone
 //	Possible institution:		Gbl.Hierarchy.Node[Hie_INS].InsCod
 //	Possible center:		Gbl.Hierarchy.Node[Hie_CTR].CtrCod
@@ -6071,7 +6059,6 @@ static Err_SuccessOrError_t Brw_PasteTreeIntoFolder (struct Brw_FileBrowser *Fil
 						   PathDstInServ);
 
 			      /***** Add entry to the table of files/folders *****/
-			      // FileDstMetadata.Zone            = FileBrowser->Zone;
 			      FileDstMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 			      FileDstMetadata.PrivateOrPublic = PriPub_PRIVATE;
 			      FileDstMetadata.License         = Brw_LICENSE_DEFAULT;
@@ -6486,7 +6473,6 @@ void Brw_CreateFolder (void)
    struct Brw_FileBrowser FileBrowser;
    struct Brw_FileMetadata ParentFolderMetadata;
    struct Brw_FileMetadata NewFolderMetadata;
-   char PathInServ[PATH_MAX + 1];
    char ParentFolderNameToShow[NAME_MAX + 1];
    char NewFolderName[NAME_MAX + 1];	// Name of the new folder
 
@@ -6507,12 +6493,12 @@ void Brw_CreateFolder (void)
 	       Fil_BuildPath (NewFolderMetadata.PathInZone,"%s/%s",
 			      ParentFolderMetadata.PathInZone,
 			      NewFolderName);
-	       Fil_BuildPath (PathInServ,"%s/%s",
+	       Fil_BuildPath (NewFolderMetadata.PathInServ,"%s/%s",
 			      FileBrowser.PathRootFolderInServ.AboveRootFolder,
 			      NewFolderMetadata.PathInZone);
 
 	       /* Create the new directory */
-	       if (mkdir (PathInServ,(mode_t) 0777) == 0)
+	       if (mkdir (NewFolderMetadata.PathInServ,(mode_t) 0777) == 0)
 		 {
 		  /* Check if quota has been exceeded */
 		  BrwSiz_CalcSizeOfDir (&FileBrowser.Size,
@@ -6531,7 +6517,6 @@ void Brw_CreateFolder (void)
 										 ParentFolderMetadata.PathInZone);
 
 			/* Add entry to the table of files/folders */
-			// NewFolderMetadata.Zone            = FileBrowser.Zone;
 			NewFolderMetadata.Type            = Brw_IS_FOLDER;
 			NewFolderMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 			NewFolderMetadata.PrivateOrPublic = PriPub_PRIVATE;
@@ -6548,7 +6533,7 @@ void Brw_CreateFolder (void)
 			break;
 		     case Err_ERROR:	// Quota excedeed
 		     default:
-			Fil_RemoveTree (PathInServ);
+			Fil_RemoveTree (NewFolderMetadata.PathInServ);
 			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota,
 				       NewFolderName);
 			break;
@@ -6795,7 +6780,6 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
    struct Par_Param *Par;
    char ClientFileName[PATH_MAX + 1];	// Path received from the client
    char PathInServWithoutFileName[PATH_MAX + 1];// Absolute path in server of file received not including file name
-   char PathInServ[PATH_MAX + 1];		// Absolute path in server of file received including file name
    char PathInServTmp[PATH_MAX + 1];		// Absolute path in server of temporary file received including file name
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    Err_SuccessOrError_t FileIsValid = Err_SUCCESS;
@@ -6829,12 +6813,12 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 		     Fil_BuildPath (NewFileMetadata.PathInZone,"%s/%s",
 				    ParentFolderMetadata->PathInZone,
 				    NewFileName);
-		     Fil_BuildPath (PathInServ,"%s/%s",
+		     Fil_BuildPath (NewFileMetadata.PathInServ,"%s/%s",
 				    FileBrowser->PathRootFolderInServ.AboveRootFolder,
 				    NewFileMetadata.PathInZone);
 
 		     /* Check if the destination file exists */
-		     switch (Fil_CheckIfPathExists (PathInServ))
+		     switch (Fil_CheckIfPathExists (NewFileMetadata.PathInServ))
 		       {
 			case Exi_EXISTS:
 			   Ale_CreateAlert (Ale_WARNING,NULL,
@@ -6844,7 +6828,8 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			case Exi_DOES_NOT_EXIST:
 			default:
 			   /* End receiving the file */
-			   Fil_BuildPath (PathInServTmp,"%s.tmp",PathInServ);
+			   Fil_BuildPath (PathInServTmp,"%s.tmp",
+					  NewFileMetadata.PathInServ);
 			   FileIsValid = Fil_EndReceptionOfFile (PathInServTmp,Par);
 
 			   /* Check if the content of the file of marks is valid */
@@ -6857,14 +6842,14 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 			     {
 			      case Err_SUCCESS:
 				 /* Rename the temporary */
-				 if (rename (PathInServTmp,PathInServ))	// Fail
+				 if (rename (PathInServTmp,NewFileMetadata.PathInServ))	// Fail
 				   {
 				    Fil_RemoveTree (PathInServTmp);
 				    Ale_CreateAlert (Ale_WARNING,NULL,
 						     Txt_UPLOAD_FILE_could_not_create_file_NO_HTML,
 						     NewFileName);
 				   }
-				 else					// Success
+				 else							// Success
 				   {
 				    /* Check if quota has been exceeded */
 				    BrwSiz_CalcSizeOfDir (&FileBrowser->Size,
@@ -6883,7 +6868,6 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 												   ParentFolderMetadata->PathInZone);
 
 					  /* Add entry to the table of files/folders */
-					  // NewFileMetadata.Zone            = FileBrowser->Zone;
 					  NewFileMetadata.Type            = Brw_IS_FILE;
 					  NewFileMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 					  NewFileMetadata.PrivateOrPublic = PriPub_PRIVATE;
@@ -6939,7 +6923,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  break;
 				       case Err_ERROR:	// Qupta exceeded
 				       default:
-					  Fil_RemoveTree (PathInServ);
+					  Fil_RemoveTree (NewFileMetadata.PathInServ);
 					  Ale_CreateAlert (Ale_WARNING,NULL,
 							   Txt_UPLOAD_FILE_X_quota_exceeded_NO_HTML,
 							   NewFileName);
@@ -6996,7 +6980,7 @@ void Brw_CreateLink (void)
    size_t LengthURL;
    char URLUntilLastFilename[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];		// Link (file ending in .url)
-   char PathInServ[PATH_MAX + 1];	// Absolute path in server of the link (file ending in .url) to create
+   // char PathInServ[PATH_MAX + 1];	// Absolute path in server of the link (file ending in .url) to create
    FILE *FileURL;
    char ParentFolderNameToShow[NAME_MAX + 1];
 
@@ -7053,12 +7037,12 @@ void Brw_CreateLink (void)
 		  Fil_BuildPath (NewLinkMetadata.PathInZone,"%s/%s.url",
 				 ParentFolderMetadata.PathInZone,
 				 NewLinkName);
-		  Fil_BuildPath (PathInServ,"%s/%s",
+		  Fil_BuildPath (NewLinkMetadata.PathInServ,"%s/%s",
 			         FileBrowser.PathRootFolderInServ.AboveRootFolder,
 			         NewLinkMetadata.PathInZone);
 
 		  /* Check if the URL file exists */
-		  switch (Fil_CheckIfPathExists (PathInServ))
+		  switch (Fil_CheckIfPathExists (NewLinkMetadata.PathInServ))
 		    {
 		     case Exi_EXISTS:
 			Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name,
@@ -7067,7 +7051,7 @@ void Brw_CreateLink (void)
 		     case Exi_DOES_NOT_EXIST:
 		     default:
 			/***** Create the new file with the URL *****/
-			if ((FileURL = fopen (PathInServ,"wb")) != NULL)
+			if ((FileURL = fopen (NewLinkMetadata.PathInServ,"wb")) != NULL)
 			  {
 			   /* Write URL */
 			   fprintf (FileURL,"%s",URL);
@@ -7096,7 +7080,6 @@ void Brw_CreateLink (void)
 											  ParentFolderMetadata.PathInZone);
 
 				 /* Add entry to the table of files/folders */
-				 // NewLinkMetadata.Zone            = FileBrowser.Zone;
 				 NewLinkMetadata.Type 		 = Brw_IS_LINK;
 				 NewLinkMetadata.PublisherUsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 				 NewLinkMetadata.PrivateOrPublic = PriPub_PRIVATE;
@@ -7142,7 +7125,7 @@ void Brw_CreateLink (void)
 				 break;
 			      case Err_ERROR:	// Quota exceeded
 			      default:
-				 Fil_RemoveTree (PathInServ);
+				 Fil_RemoveTree (NewLinkMetadata.PathInServ);
 				 Ale_ShowAlert (Ale_WARNING,Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota,
 						FileName);
 				 break;
@@ -7306,16 +7289,11 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
    HidVis_HiddenOrVisible_t Hidden;
 
    /***** Get if a file or folder is hidden from database *****/
-
    switch (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (&mysql_res,
 								 Zone,
 								 FileMetadata->PathInZone))
      {
       case HidVis_VISIBLE:
-         FileMetadata->PublisherUsrCod = -1L;
-	 FileMetadata->PrivateOrPublic = PriPub_PRIVATE;
-	 FileMetadata->License         = Brw_LICENSE_DEFAULT;
-	 Brw_DB_AddPath (Zone,FileMetadata);
 	 Hidden = HidVis_VISIBLE;
 	 break;
       case HidVis_HIDDEN:
@@ -7374,7 +7352,6 @@ void Brw_ShowFileMetadata (void)
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
    struct Brw_FileBrowser FileBrowser;
-   Brw_Zone_t ZoneDB;
    struct Brw_FileMetadata FileMetadata;
    struct Usr_Data PublisherUsrDat;
    char FileNameToShow[NAME_MAX + 1];
@@ -7392,24 +7369,9 @@ void Brw_ShowFileMetadata (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / link
 
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
-   Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
-   if (ZoneDB != Brw_DB_GetZoneDB_brw_files (FileBrowser.Zone))
-      Err_WrongFileZoneExit ();
-
-   if (Brw_GetFileTypeSizeAndDate (&FileBrowser,&FileMetadata) == Exi_EXISTS)
+   /***** Get size and date *****/
+   if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
-      if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
-        {
-	 /* Add entry to the table of files/folders */
-         FileMetadata.PublisherUsrCod = -1L;
-	 FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-	 FileMetadata.License         = Brw_LICENSE_DEFAULT;
-	 FileMetadata.FilCod          = Brw_DB_AddPath (FileBrowser.Zone,
-							&FileMetadata);
-        }
-
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
       ICanView = Usr_CAN;
@@ -7869,19 +7831,9 @@ void Brw_DownloadFile (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / link
 
-   /***** Get file metadata *****/
-   if (Brw_GetFileTypeSizeAndDate (&FileBrowser,&FileMetadata) == Exi_EXISTS)
+   /***** Get size and date *****/
+   if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
-      if (FileMetadata.FilCod <= 0)	// No entry for this file in database table of files
-        {
-	 /* Add entry to the table of files/folders */
-         FileMetadata.PublisherUsrCod = -1L;
-	 FileMetadata.PrivateOrPublic = PriPub_PRIVATE;
-	 FileMetadata.License         = Brw_LICENSE_DEFAULT;
-	 FileMetadata.FilCod          = Brw_DB_AddPath (FileBrowser.Zone,
-							&FileMetadata);
-        }
-
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
       ICanView = Usr_CAN;
@@ -8178,10 +8130,8 @@ void Brw_ChgFileMetadata (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / link
 
-   /***** Get file metadata *****/
-   FileMetadata.FilCod = ParCod_GetAndCheckPar (ParCod_Fil);
-   // Brw_GetFileMetadataByCod (&FileBrowser.FileMetadata);
-   if (Brw_GetFileTypeSizeAndDate (&FileBrowser,&FileMetadata) == Exi_EXISTS)
+   /***** Get size and date *****/
+   if (Brw_GetFileTypeSizeAndDate (&FileMetadata) == Exi_EXISTS)
      {
       /***** Check if I can change file metadata *****/
       if (Brw_CheckIfICanEditFileMetadata (FileBrowser.Zone,
@@ -8361,7 +8311,6 @@ void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_FileMetadata *FileM
 static void Brw_ResetFileMetadata (struct Brw_FileMetadata *FileMetadata)
   {
    FileMetadata->FilCod			= -1L;	// Indicates that no entry exists in database
-   // FileMetadata->Zone			= Brw_UNKNOWN;
    FileMetadata->Cod			= -1L;
    FileMetadata->ZoneUsrCod		= -1L;
    FileMetadata->PublisherUsrCod	= -1L;
@@ -8473,16 +8422,11 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 /*****************************************************************************/
 // Return if file exists
 
-Exi_Exist_t Brw_GetFileTypeSizeAndDate (const struct Brw_FileBrowser *FileBrowser,
-				        struct Brw_FileMetadata *FileMetadata)
+Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata)
   {
-   char PathInServ[PATH_MAX + 1];
    struct stat FileStatus;
 
-   Fil_BuildPath (PathInServ,"%s/%s",
-	          FileBrowser->PathRootFolderInServ.AboveRootFolder,
-	          FileMetadata->PathInZone);
-   if (lstat (PathInServ,&FileStatus))	// On success ==> 0 is returned
+   if (lstat (FileMetadata->PathInServ,&FileStatus))	// On success ==> 0 is returned
      {
       // Error on lstat
       FileMetadata->Type = Brw_IS_UNKNOWN;
@@ -9698,6 +9642,7 @@ static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrows
 					 unsigned Months,struct Brw_NumObjects *Removed)
   {
    time_t TimeRemoveFilesOlder;
+   struct Brw_FileMetadata RootFolderMetadata;
 
    /***** Compute time in seconds
           (files older than this time will be removed) *****/
@@ -9708,9 +9653,14 @@ static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrows
    Removed->NumFiles =
    Removed->NumLinks =
    Removed->NumFolds = 0;
+   Str_Copy (RootFolderMetadata.PathInServ,
+	     FileBrowser->PathRootFolderInServ.IncludingRootFolder,
+	     sizeof (RootFolderMetadata.PathInServ) - 1);
+   Str_Copy (RootFolderMetadata.PathInZone,
+	     Brw_RootFolderInternalNames[FileBrowser->Zone],
+	     sizeof (RootFolderMetadata.PathInZone) - 1);
    Brw_ScanDirRemovingOldFiles (FileBrowser->Zone,1,
-				FileBrowser->PathRootFolderInServ.IncludingRootFolder,
-                                Brw_RootFolderInternalNames[FileBrowser->Zone],
+				&RootFolderMetadata,
                                 TimeRemoveFilesOlder,Removed);
 
    /***** Remove affected clipboards *****/
@@ -9727,26 +9677,24 @@ static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrows
 /*****************************************************************************/
 
 static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
-                                         const char PathInServ[PATH_MAX + 1],
-                                         const char PathInZone[PATH_MAX + 1],
+                                         const struct Brw_FileMetadata *FolderMetadata,
                                          time_t TimeRemoveFilesOlder,
                                          struct Brw_NumObjects *Removed)
   {
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathInServIncludingThisFile[PATH_MAX + 1];
-   char PathInZoneIncludingThisFile[PATH_MAX + 1];
+   struct Brw_FileMetadata FileMetadata;
    struct stat FolderStatus;
    struct stat FileStatus;
 
    /***** Save folder status *****/
    // Folder st_mtime must be saved before remove files inside it
    // because st_mtime is updated by the deletion
-   if (lstat (PathInServ,&FolderStatus))	// On success ==> 0 is returned
+   if (lstat (FolderMetadata->PathInServ,&FolderStatus))	// On success ==> 0 is returned
       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
    /***** Scan directory *****/
-   else if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
+   else if ((NumFiles = scandir (FolderMetadata->PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** Check file by file removing old files *****/
       for (NumFile = 0;
@@ -9757,27 +9705,27 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
 	    /***** Construct the full path of the file or folder *****/
-	    Fil_BuildPath (PathInServIncludingThisFile,"%s/%s",
-		           PathInServ,FileList[NumFile]->d_name);
-	    Fil_BuildPath (PathInZoneIncludingThisFile,"%s/%s",
-		           PathInZone,FileList[NumFile]->d_name);
+	    Fil_BuildPath (FileMetadata.PathInServ,"%s/%s",
+		           FolderMetadata->PathInServ,FileList[NumFile]->d_name);
+	    Fil_BuildPath (FileMetadata.PathInZone,"%s/%s",
+		           FolderMetadata->PathInZone,FileList[NumFile]->d_name);
 
 	    /***** Get file or folder status *****/
-	    if (lstat (PathInServIncludingThisFile,&FileStatus))	// On success ==> 0 is returned
+	    if (lstat (FileMetadata.PathInServ,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))				// It's a folder
 	       /* Scan subtree starting at this this directory recursively */
-	       Brw_ScanDirRemovingOldFiles (Zone,Level + 1,PathInServIncludingThisFile,
-					    PathInZoneIncludingThisFile,
+	       Brw_ScanDirRemovingOldFiles (Zone,Level + 1,
+					    &FileMetadata,	// Folder
 					    TimeRemoveFilesOlder,Removed);
 	    else if (S_ISREG (FileStatus.st_mode) &&			// It's a regular file
 		     FileStatus.st_mtime < TimeRemoveFilesOlder) 	// ..and it's old
 	      {
 	       /* Remove file/link from disk and database */
-		Brw_RemoveFileFromDiskAndDB (Zone,PathInServIncludingThisFile,PathInZoneIncludingThisFile);
+		Brw_RemoveFileFromDiskAndDB (Zone,&FileMetadata);
 
 	       /* Update number of files/links removed */
-	       if (Str_FileIs (PathInServIncludingThisFile,"url"))
+	       if (Str_FileIs (FileMetadata.PathInServ,"url"))
 		  (Removed->NumLinks)++;	// It's a link (URL inside a .url file)
 	       else
 		  (Removed->NumFiles)++;	// It's a file
@@ -9793,7 +9741,7 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 	   {
 	    /***** Rescan folder in order to count
 	           the new number of files after deletion *****/
-	    if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
+	    if ((NumFiles = scandir (FolderMetadata->PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
 	      {
 	       /* Free list of files */
 	       for (NumFile = 0;
@@ -9810,7 +9758,7 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 	     FolderStatus.st_mtime < TimeRemoveFilesOlder)	//  ..and it was old before deletion
 	   {
 	    /* Remove folder from disk and database */
-	    if (Brw_RemoveFolderFromDiskAndDB (Zone,PathInServ,PathInZone))
+	    if (Brw_RemoveFolderFromDiskAndDB (Zone,FolderMetadata))
 	       Err_ShowErrorAndExit ("Can not remove folder.");
 
 	    /* Update number of files/links removed */
@@ -9827,16 +9775,15 @@ static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
 /*****************************************************************************/
 
 static void Brw_RemoveFileFromDiskAndDB (Brw_Zone_t Zone,
-					 const char PathInServ[PATH_MAX + 1],
-                                         const char PathInZone[PATH_MAX + 1])
+					 const struct Brw_FileMetadata *FileMetadata)
   {
    /***** Remove file from disk *****/
-   if (unlink (PathInServ))
+   if (unlink (FileMetadata->PathInServ))
       Err_ShowErrorAndExit ("Can not remove file / link.");
 
    /***** If a file is removed,
           it is necessary to remove it from the database *****/
-   Brw_RemoveOneFileOrFolderFromDB (Zone,PathInZone);
+   Brw_RemoveOneFileOrFolderFromDB (Zone,FileMetadata->PathInZone);
   }
 
 /*****************************************************************************/
@@ -9845,22 +9792,21 @@ static void Brw_RemoveFileFromDiskAndDB (Brw_Zone_t Zone,
 // Return the returned value of rmdir
 
 static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
-					  const char PathInServ[PATH_MAX + 1],
-                                          const char PathInZone[PATH_MAX + 1])
+					  const struct Brw_FileMetadata *FolderMetadata)
   {
    int Result;
 
    /***** Remove folder from disk *****/
-   Result = rmdir (PathInServ);	// On success, zero is returned.
-				// On error, -1 is returned, and errno is set appropriately.
+   Result = rmdir (FolderMetadata->PathInServ);	// On success, zero is returned.
+					        // On error, -1 is returned, and errno is set appropriately.
    if (!Result)	// Success
      {
       /***** If a folder is removed,
 	     it is necessary to remove it from the database *****/
-      Brw_RemoveOneFileOrFolderFromDB (Zone,PathInZone);
+      Brw_RemoveOneFileOrFolderFromDB (Zone,FolderMetadata->PathInZone);
 
       /***** Remove affected expanded folders *****/
-      Brw_DB_RemoveAffectedExpandedFolders (Zone,PathInZone);
+      Brw_DB_RemoveAffectedExpandedFolders (Zone,FolderMetadata->PathInZone);
      }
 
    return Result;

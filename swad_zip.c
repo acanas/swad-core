@@ -471,7 +471,6 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
    unsigned long long FullSize = 0;
 
    /***** Scan directory *****/
-   // FileMetadata.Zone = FileBrowser->Zone;
    if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** List files *****/
@@ -485,7 +484,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 		      sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
 	    Str_Copy (FileMetadata.FileName,FileList[NumFile]->d_name,
 	              sizeof (FileMetadata.FileName) - 1);
-            Brw_BuildFullPathFromPathAndName (&FileMetadata);
+            Brw_BuildFullPathFromPathAndName (FileBrowser,&FileMetadata);
 	    Fil_BuildPath (PathFile,"%s/%s",
 		           PathInServ,FileMetadata.FileName);
 	    Fil_BuildPath (PathFileClone,"%s/%s",
