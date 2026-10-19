@@ -4861,7 +4861,12 @@ void Brw_RemFile (void)
 	 switch (FileMetadata.Type)
 	   {
 	    case Brw_IS_FILE:
-	    case Brw_IS_FOLDER:
+	    case Brw_IS_LINK:
+	       /***** Build full file path in server *****/
+	       Fil_BuildPath (PathInServ,"%s/%s",
+			      FileBrowser.PathRootFolderInServ.AboveRootFolder,
+			      FileMetadata.PathInZone);
+
 	       /* Name of the file/link to be shown */
 	       Brw_GetFileNameToShow (FileBrowser.Zone,&FileMetadata,FileNameToShow);
 
