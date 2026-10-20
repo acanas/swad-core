@@ -77,7 +77,6 @@
 #include "swad_setting.h"
 #include "swad_setting_database.h"
 #include "swad_string.h"
-#include "swad_time.h"
 #include "swad_timeline.h"
 #include "swad_timeline_note.h"
 #include "swad_user.h"
@@ -1274,17 +1273,6 @@ static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfZones,
 
 static void Brw_GetNumberOfOERs (Hie_Level_t HieLvl,Brw_License_t License,
                                  unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC]);
-
-static long scandir_nsec = 0L;
-static long GetFileMetadataByPath_nsec = 0L;
-long Brw_DB_GetFileMetadataByPath_nsec = 0L;
-static long GetFileTypeSizeAndDate_nsec = 0L;
-static long GetIfContractedOrExpandedFolder_nsec = 0L;
-static long CheckIfFileOrFolderIsHidden_nsec = 0L;
-static long GetIfFolderHasPublicFiles_nsec = 0L;
-static long WriteFileOrFolderPublisher_nsec = 0L;
-static long CheckIfAnyHigherLevelIsHidden_nsec = 0L;
-static long ShowFileBrowser_nsec = 0L;
 
 /*****************************************************************************/
 /***************************** Set/get group code ****************************/
@@ -2901,8 +2889,6 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
    char FileBrowserSectionId[32];
    __attribute__((unused)) Exi_Exist_t FileExists;
 
-   Tim_StartGlobalTiming ();
-
    /***** Every time user clicks in menu option to view
           his/her (temporary) briefcase ==> remove old files *****/
    if (Gbl.Action.Act == ActAdmBrf)
@@ -2953,13 +2939,9 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 	 Brw_BuildFullPathFromPathAndName (FileBrowser,&RootFolderMetadata);
 
 	 /***** Get file metadata *****/
-	 Tim_StartPartialTiming ();
 	 Brw_GetFileMetadataByPath (FileBrowser->Zone,&RootFolderMetadata);
          FileBrowser->FilCod = RootFolderMetadata.FilCod;
-	 GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
-	 Tim_StartPartialTiming ();
 	 FileExists = Brw_GetFileTypeSizeAndDate (&RootFolderMetadata);
-	 GetFileTypeSizeAndDate_nsec += Tim_StopPartialTiming ();
 
 	 if (Brw_WriteRowFileBrowser (FileBrowser,&RootFolderMetadata,
 				      "1",	// Row id
@@ -2971,24 +2953,10 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 			 &UsrDat,
 			 FileBrowser->PathRootFolderInServ.IncludingRootFolder,
 			 Brw_RootFolderInternalNames[FileBrowser->Zone]);
-	 ShowFileBrowser_nsec = Tim_StopGlobalTiming ();
       HTM_TABLE_End ();
 
       /***** Free memory used for publisher's data *****/
       Usr_UsrDataDestructor (&UsrDat);
-
-      if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-        {
-	 Ale_ShowAlert (Ale_DEBUG,"scandir_nsec = %ld ms",scandir_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"GetFileMetadataByPath_nsec = %ld ms",GetFileMetadataByPath_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"Brw_DB_GetFileMetadataByPath_nsec = %ld ms",Brw_DB_GetFileMetadataByPath_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"GetFileTypeSizeAndDate_nsec = %ld ms",GetFileTypeSizeAndDate_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"GetIfContractedOrExpandedFolder_nsec = %ld ms",GetIfContractedOrExpandedFolder_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"CheckIfFileOrFolderIsHidden_nsec = %ld ms",CheckIfFileOrFolderIsHidden_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"GetIfFolderHasPublicFiles_nsec = %ld ms",GetIfFolderHasPublicFiles_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"WriteFileOrFolderPublisher_nsec = %ld ms",WriteFileOrFolderPublisher_nsec / 1000000);
-	 Ale_ShowAlert (Ale_DEBUG,"ShowFileBrowser_nsec = %ld ms",ShowFileBrowser_nsec / 1000000);
-        }
 
       /***** Show and store number of documents found *****/
       BrwSiz_ShowAndStoreSizeOfFileBrowser (FileBrowser);
@@ -3580,11 +3548,8 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
    __attribute__((unused)) HidVis_HiddenOrVisible_t HiddenOrVisible;
 
    /***** Scan directory *****/
-   Tim_StartPartialTiming ();
    if ((NumFiles = scandir (PathInServ,&FileList,NULL,alphasort)) >= 0)	// No error
      {
-      scandir_nsec += Tim_StopPartialTiming ();
-
       /***** List files *****/
       for (NumFile = 0, NumRow = 0;
 	   NumFile < NumFiles;
@@ -3610,13 +3575,9 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 	    snprintf (RowId,sizeof (RowId),"%s_%u",ParentRowId,NumRow);
 
 	    /***** Get file metadata *****/
-	    Tim_StartPartialTiming ();
 	    Brw_GetFileMetadataByPath (FileBrowser->Zone,&FileMetadata);
 	    FileBrowser->FilCod = FileMetadata.FilCod;
-	    GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
-	    Tim_StartPartialTiming ();
 	    FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
-	    GetFileTypeSizeAndDate_nsec += Tim_StopPartialTiming ();
 
 	    /***** Get file or folder status *****/
             switch (FileMetadata.Type)
@@ -3632,17 +3593,13 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 		     default:
 			ContractedOrExpandedSubtree = ConExp_CONTRACTED;
 			/***** Check if this subdirectory has files or folders in it *****/
-			Tim_StartPartialTiming ();
 			if ((NumFilesInSubdir = scandir (PathFileInServ,&SubdirFileList,NULL,NULL)) >= 0)	// No error
 			  {
-			   scandir_nsec += Tim_StopPartialTiming ();
 			   if (NumFilesInSubdir > 2)
 			     {
 			      /***** Check if the tree starting at this subdirectory must be expanded *****/
-			      Tim_StartPartialTiming ();
 			      ContractedOrExpandedSubtree = Brw_DB_GetIfContractedOrExpandedFolder (FileBrowser->Zone,
 												    FileMetadata.PathInZone);
-			      GetIfContractedOrExpandedFolder_nsec += Tim_StopPartialTiming ();
 			      IconSubtree = IconsSubtree[ContractedOrExpandedSubtree];
 			     }
 			   for (NumFileInSubdir = 0;
@@ -3751,10 +3708,8 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 					   Brw_IS_ADM_DOC |
 					   Brw_IS_ADM_MRK)))
      {
-      Tim_StartPartialTiming ();
       ThisHiddenOrVisible = Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
 							     FileMetadata);
-      CheckIfFileOrFolderIsHidden_nsec += Tim_StopPartialTiming ();
 
       if (ThisHiddenOrVisible == HidVis_HIDDEN &&
 	  (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
@@ -3770,9 +3725,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	 switch (ThisHiddenOrVisible)
 	   {
 	    case HidVis_VISIBLE:	// this row is not marked as hidden
-               Tim_StartPartialTiming ();
                ThisOrAncestorHiddenOrVisible = Brw_CheckIfAnyHigherLevelIsHidden (FileBrowser,FileMetadata->Level);
-               CheckIfAnyHigherLevelIsHidden_nsec += Tim_StopPartialTiming ();
 	       break;
 	    case HidVis_HIDDEN:		// this row is marked as hidden
 	    default:
@@ -3797,11 +3750,9 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 					   Brw_IS_ADM_DOC |
 					   Brw_IS_ADM_SHA)))
      {
-      Tim_StartPartialTiming ();
       RowPublicOrPrivate = FileMetadata->Type == Brw_IS_FOLDER ? Brw_DB_GetIfFolderHasPublicFiles (FileBrowser->Zone,
 												   FileMetadata->PathInZone) :
 								 FileMetadata->PrivateOrPublic;
-      GetIfFolderHasPublicFiles_nsec += Tim_StopPartialTiming ();
       if (FileBrowser->OnlyPublicFiles &&
 	  RowPublicOrPrivate == PriPub_PRIVATE)
          return HidVis_HIDDEN;
@@ -3981,10 +3932,8 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       case Brw_IS_FILE:
       case Brw_IS_LINK:
 	 /***** User who created the file or folder *****/
-	 Tim_StartPartialTiming ();
 	 UsrDat->UsrCod = FileMetadata->PublisherUsrCod;
 	 Brw_WriteFileOrFolderPublisher (UsrDat,FileMetadata->Level);
-	 WriteFileOrFolderPublisher_nsec += Tim_StopPartialTiming ();
 	 break;
       case Brw_IS_UNKNOWN:
       default:

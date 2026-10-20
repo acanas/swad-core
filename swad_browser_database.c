@@ -35,7 +35,6 @@
 #include "swad_global.h"
 #include "swad_private_public.h"
 #include "swad_project.h"
-#include "swad_time.h"
 
 /*****************************************************************************/
 /******************** Global variables from other modules ********************/
@@ -330,11 +329,7 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 					  Brw_Zone_t Zone,
 					  const char FullPath[PATH_MAX + 1])
   {
-   extern long Brw_DB_GetFileMetadataByPath_nsec;
-   Exi_Exist_t Exists;
-
-   Tim_StartPartialTiming ();
-   Exists =
+   return
    DB_QuerySELECTunique (mysql_res,"can not get file metadata",
 			 "SELECT FilCod,"		// row[0]
 				"FileBrowser,"		// row[1]
@@ -357,8 +352,6 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 			 Brw_GetCodForZone (Zone),
 			 Brw_GetZoneUsrCodForZone (Zone),
 			 FullPath);
-   Brw_DB_GetFileMetadataByPath_nsec += Tim_StopPartialTiming ();
-   return Exists;
   }
 
 /*****************************************************************************/

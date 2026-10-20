@@ -66,3 +66,25 @@ long Tim_StopGlobalTiming (void)
    return (long) (global_end.tv_sec  - global_start.tv_sec) * 1000000000L +
                   global_end.tv_nsec - global_start.tv_nsec;
   }
+
+/* Example:
+
+#include "swad_time.h"
+
+   static long globl_nsec = 0L;
+   static long local_nsec = 0L;
+
+   Tim_StartGlobalTiming ();
+
+   Tim_StartPartialTiming ();
+   piece of code to time
+   local_nsec += Tim_StopPartialTiming ();
+
+   global_nsec = Tim_StopGlobalTiming ();
+
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+     {
+      Ale_ShowAlert (Ale_DEBUG,"local nsec = %ld ms",local_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"global nsec = %ld ms",globl_nsec / 1000000);
+     }
+*/

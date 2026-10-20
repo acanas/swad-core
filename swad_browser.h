@@ -34,13 +34,6 @@
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
-
-//--------------------------------- Timing ------------------------------------
-void Tim_StartPartialTiming (void);
-long Tim_StopPartialTiming (void);
-void Tim_StartGlobalTiming (void);
-long Tim_StopGlobalTiming (void);
-
 //--------------------------------- Browser -----------------------------------
 void Brw_SetGrpCod (long GrpCod);
 long Brw_GetGrpCod (void);
