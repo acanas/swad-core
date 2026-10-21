@@ -37,7 +37,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status);
+long Ins_DB_CreateIns (const struct Hie_Node *Ins,Hie_Status_t Status);
 void Ins_DB_UpdateInsCty (long HieCods[Hie_NUM_LEVELS]);
 void Ins_DB_UpdateInsStatus (long HieCod,Hie_Status_t Status);
 void Ins_DB_UpdateInsName (long HieCod,const char *FldName,const char *NewName);

@@ -370,7 +370,7 @@ void Tag_ShowFormEditTags (void)
    long TagCod;
 
    /***** Get current tags in current course *****/
-   if ((NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+   if ((NumTags = Tag_DB_GetAllTagsFromThisCrs (&mysql_res)))
      {
       /***** Begin box and table *****/
       Box_BoxTableBegin (Txt_Tags,NULL,NULL,

@@ -297,11 +297,11 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
 	  Gbl.Hierarchy.HieLvl == Hie_CRS)	// ...and a course is selected
 	{
 	 /* Get user's role in current course */
-	 UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+	 UsrDat->Roles.InThisCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
 	                                                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
 	 /* Get if user has accepted enrolment in current course */
-	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
 	}
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 

@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 void Tst_DB_IncreaseNumMyPrints (void)
   {
    /***** Trivial check: do I belong to current course? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
       return;
 
    /***** Update my number of accesses to test in this course *****/
@@ -272,7 +272,7 @@ unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
 /************ Get the test prints of a user in the current course ************/
 /*****************************************************************************/
 
-unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod)
+unsigned Tst_DB_GetUsrPrintsInThisCrs (MYSQL_RES **mysql_res,long UsrCod)
   {
    /***** Make database query *****/
    /*           From here...                 ...to here

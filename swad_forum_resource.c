@@ -49,7 +49,7 @@ void ForRsc_GetLinkToThread (void)
 
    /***** Get parameters related to forums *****/
    For_GetParsForums (&Forums);
-   Thr.ThrCod = Forums.Thread.Current;
+   Thr.ThrCod = Forums.Thread.This;
 
    /***** Get thread subject *****/
    if (Thr.ThrCod > 0)

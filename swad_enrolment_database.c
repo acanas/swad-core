@@ -41,7 +41,7 @@ extern struct Globals Gbl;
 /*************** Register user in current course in database *****************/
 /*****************************************************************************/
 
-void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole)
+void Enr_DB_InsertUsrInThisCrs (long UsrCod,Rol_Role_t NewRole)
   {
    DB_QueryINSERT ("can not register user in course",
 		   "INSERT INTO crs_users"
@@ -280,7 +280,7 @@ long Enr_DB_GetRamdomStdFromCrs (long HieCod)
 /*********** Get all user codes belonging to the current course **************/
 /*****************************************************************************/
 
-unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Enr_DB_GetUsrsFromThisCrs (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get users from current course",
@@ -1030,7 +1030,7 @@ void Enr_DB_RemAllUsrsFromCrs (long HieCod)
 /************ Create my enrolment request in the current course **************/
 /*****************************************************************************/
 
-long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
+long Enr_DB_CreateMyEnrolmentRequestInThisCrs (Rol_Role_t NewRole)
   {
    return
    DB_QueryINSERTandReturnCode ("can not save enrolment request",
@@ -1047,7 +1047,7 @@ long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole)
 /************* Update my enrolment request in the current course *************/
 /*****************************************************************************/
 
-void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole)
+void Enr_DB_UpdateMyEnrolmentRequestInThisCrs (long ReqCod,Rol_Role_t NewRole)
   {
    DB_QueryUPDATE ("can not update enrolment request",
 		   "UPDATE crs_requests"

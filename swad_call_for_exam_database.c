@@ -80,7 +80,7 @@ long Cfe_DB_CreateCallForExam (const struct Cfe_CallForExam *CallForExam)
 /**************** Get all calls for exams in current course ******************/
 /*****************************************************************************/
 
-unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Cfe_DB_GetCallsForExamsInThisCrs (MYSQL_RES **mysql_res)
   {
    char SubQueryStatus[64];
 
@@ -113,7 +113,7 @@ unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 /**************** Get all calls for exams in current course ******************/
 /*****************************************************************************/
 
-unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Cfe_DB_GetVisibleCallsForExamsInThisCrs (MYSQL_RES **mysql_res)
   {
    /***** Get exam dates (ordered from more recent to older)
 	  of visible calls for exams
@@ -134,7 +134,7 @@ unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
 /******* Get exam announcements (only future exams) in current course ********/
 /*****************************************************************************/
 
-unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Cfe_DB_GetFutureCallsForExamsInThisCrs (MYSQL_RES **mysql_res)
   {
    /***** Get exam dates (ordered from older to more recent)
 	  of future visible calls for exams

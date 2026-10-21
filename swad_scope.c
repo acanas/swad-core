@@ -108,7 +108,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 /********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
-void Sco_PutParCurrentScope (void *HieLvl)
+void Sco_PutParThisScope (void *HieLvl)
   {
    if (HieLvl)
       Sco_PutParScope ("ScopeUsr",*((Hie_Level_t *) HieLvl));

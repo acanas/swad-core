@@ -75,7 +75,7 @@ struct Rub_Rubrics
 				// ...or it needs to be read?
    unsigned Num;		// Total number of rubrics
    long *Lst;			// List of rubric codes
-   unsigned CurrentPage;
+   unsigned ThisPage;
    struct Rub_Rubric Rubric;		// Selected/current rubric
    struct RubCri_Criterion Criterion;	// Selected/current criterion
   };

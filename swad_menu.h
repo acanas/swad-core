@@ -54,7 +54,7 @@ struct Mnu_Menu
 const char *Mnu_GetIconFromNumOptInMenu (unsigned NumOptInMenu);
 const char *Mnu_GetIconFromAction (Act_Action_t Action);
 
-Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void);
+Act_Action_t Mnu_GetFirstActionAvailableInThisTab (void);
 void Mnu_WriteMenuThisTab (void);
 
 void Mnu_PutIconsToSelectMenu (void);

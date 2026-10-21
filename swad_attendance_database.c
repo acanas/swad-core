@@ -666,7 +666,7 @@ void Att_DB_SetUsrsAsPresent (long AttCod,const char *ListUsrs,
 	 if (Usr_ChkIfUsrCodExists (UsrDat.UsrCod) == Exi_EXISTS)
 	    // The user must belong to course,
 	    // but it's not necessary he/she belongs to groups associated to the event
-	    if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
+	    if (Enr_CheckIfUsrBelongsToThisCrs (&UsrDat) == Usr_BELONG)
 	      {
 	       /* Mark user as present */
 	       switch (Att_DB_CheckIfUsrExistsInTableAttUsr (AttCod,UsrDat.UsrCod,&Present))
@@ -798,7 +798,7 @@ void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long HieCod)
 /*********************** Remove an attendance event **************************/
 /*****************************************************************************/
 
-void Att_DB_RemoveEventFromCurrentCrs (long AttCod)
+void Att_DB_RemoveEventFromThisCrs (long AttCod)
   {
    DB_QueryDELETE ("can not remove attendance event",
 		   "DELETE FROM att_events"

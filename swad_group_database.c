@@ -242,7 +242,7 @@ Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long HieCod)
 /******************* Check if name of group type exists **********************/
 /*****************************************************************************/
 
-Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod)
+Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInThisCrs (const char *GrpTypName,long GrpTypCod)
   {
    return
    DB_QueryEXISTS ("can not check if the name of type of group already existed",
@@ -440,7 +440,7 @@ Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod)
 /***** Check if a user belongs to any of my groups in the current course *****/
 /*****************************************************************************/
 
-Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod)
+Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (long UsrCod)
   {
    static Usr_Share_t UsrShares[Exi_NUM_EXIST] =
      {
@@ -537,7 +537,7 @@ unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long HieCod)
 /*********** Get group types in current course that must be opened ***********/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res)
+unsigned Grp_DB_GetGrpTypesInThisCrsToBeOpened (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the types of group to be opened",
@@ -553,7 +553,7 @@ unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res)
 /**************** Get number of groups in the current course *****************/
 /*****************************************************************************/
 
-unsigned Grp_DB_CountNumGrpsInCurrentCrs (void)
+unsigned Grp_DB_CountNumGrpsInThisCrs (void)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of groups in this course",
@@ -618,9 +618,9 @@ unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod)
 /*********** to which a user belongs to (in the current course) **************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
-							      long UsrCod,
-							      Grp_ClosedOpenGrps_t ClosedOpenGroups)
+unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInThisCrsUsrBelongs (MYSQL_RES **mysql_res,
+							   long UsrCod,
+							   Grp_ClosedOpenGrps_t ClosedOpenGroups)
   {
    static const char *ClosedOpenGroupsTxt[Grp_NUM_CLOSED_OPEN_GROUPS] =
      {
@@ -651,8 +651,8 @@ unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_
 /************ to which a user belongs to (in the current course) *************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
-							    long UsrCod,long GrpTypCod)
+unsigned Grp_DB_GetLstCodGrpsOfATypeInThisCrsUsrBelongs (MYSQL_RES **mysql_res,
+							 long UsrCod,long GrpTypCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the groups which a user belongs to",
@@ -675,7 +675,7 @@ unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_re
 /**************** Get groups with file zones which I belong ******************/
 /*****************************************************************************/
 
-unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res)
+unsigned Grp_DB_GetLstCodGrpsWithFileZonesInThisCrsIBelong (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get the groups which you belong to",

@@ -36,24 +36,24 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt);
+void Dpt_DB_CreateDpt (const struct Dpt_Department *Dpt);
 
-unsigned Dpt_DB_GetListDepartmentsInIns (MYSQL_RES **mysql_res,
-                                         long HieCod,Dpt_Order_t SelectedOrder);
-Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod);
-Exi_Exist_t Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *Name,long Cod,
-						__attribute__((unused)) long PrtCod,
-						__attribute__((unused)) unsigned Year);
+unsigned Dpt_DB_GetListDptsInIns (MYSQL_RES **mysql_res,
+                                  long HieCod,Dpt_Order_t SelectedOrder);
+Exi_Exist_t Dpt_DB_GetDptDataByCod (MYSQL_RES **mysql_res,long DptCod);
+Exi_Exist_t Dpt_DB_CheckIfDptNameExists (const char *FldName,const char *Name,long Cod,
+					 __attribute__((unused)) long PrtCod,
+					 __attribute__((unused)) unsigned Year);
 
-unsigned Dpt_DB_GetTotalNumberOfDepartments (void);
-unsigned Dpt_DB_GetNumDepartmentsInIns (long HieCod);
-unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod);
+unsigned Dpt_DB_GetTotalNumOfDpts (void);
+unsigned Dpt_DB_GetNumDptsInIns (long HieCod);
+unsigned Dpt_DB_GetNumTchsThisInsInDpt (long DptCod);
 
 void Dpt_DB_UpdateDptIns (long DptCod,long NewInsCod);
 void Dpt_DB_UpdateDptName (long DptCod,
 			   const char *FldName,const char *NewDptName);
 void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[WWW_MAX_BYTES_WWW + 1]);
 
-void Dpt_DB_RemoveDepartment (long DptCod);
+void Dpt_DB_RemoveDpt (long DptCod);
 
 #endif

@@ -33,6 +33,6 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void SvyRsc_GetLinkToSurvey (void);
+void SvyRsc_GetLinkToSvy (void);
 
 #endif

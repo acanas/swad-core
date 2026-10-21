@@ -80,7 +80,7 @@ struct Svy_Surveys
    unsigned Num;		// Number of surveys
    long *LstSvyCods;		// List of survey codes
    Dat_StartEndTime_t SelectedOrder;
-   unsigned CurrentPage;
+   unsigned ThisPage;
    struct Svy_Survey Svy;	// Selected/current survey
    long QstCod;
   };
@@ -110,27 +110,27 @@ struct Svy_Question	// Must be initialized to 0 before using it
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Svy_ResetSurveys (struct Svy_Surveys *Surveys);
+void Svy_ResetSvys (struct Svy_Surveys *Svys);
 
-void Svy_SeeAllSurveys (void);
-void Svy_ListAllSurveys (struct Svy_Surveys *Surveys);
-void Svy_SeeOneSurvey (void);
+void Svy_SeeAllSvys (void);
+void Svy_ListAllSvys (struct Svy_Surveys *Svys);
+void Svy_SeeOneSvy (void);
 void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_ReqCreatOrEditSvy (void);
-void Svy_GetSurveyDataByCod (struct Svy_Survey *Svy);
-void Svy_GetSurveyDataByFolder (struct Svy_Survey *Svy);
-void Svy_FreeListSurveys (struct Svy_Surveys *Surveys);
-void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                         char **ContentStr,
-                         long SvyCod,Ntf_GetContent_t GetContent);
-void Svy_AskRemSurvey (void);
-void Svy_RemoveSurvey (void);
-void Svy_AskResetSurvey (void);
-void Svy_ResetSurvey (void);
-void Svy_HideSurvey (void);
-void Svy_UnhideSurvey (void);
-void Svy_ReceiveSurvey (void);
-void Svy_RemoveSurveys (Hie_Level_t HieLvl,long HieCod);
+void Svy_GetSvyDataByCod (struct Svy_Survey *Svy);
+void Svy_GetSvyDataByFolder (struct Svy_Survey *Svy);
+void Svy_FreeListSvys (struct Svy_Surveys *Svys);
+void Svy_GetNotifSvy (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                      char **ContentStr,
+                      long SvyCod,Ntf_GetContent_t GetContent);
+void Svy_AskRemSvy (void);
+void Svy_RemoveSvy (void);
+void Svy_AskResetSvy (void);
+void Svy_ResetSvy (void);
+void Svy_HideSvy (void);
+void Svy_UnhideSvy (void);
+void Svy_ReceiveSvy (void);
+void Svy_RemoveSvys (Hie_Level_t HieLvl,long HieCod);
 
 void Svy_ReqEditQuestion (void);
 void Svy_ReceiveQst (void);
@@ -138,11 +138,11 @@ void Svy_ReceiveQst (void);
 void Svy_ReqRemQst (void);
 void Svy_RemoveQst (void);
 
-void Svy_ReceiveSurveyAnswers (void);
+void Svy_ReceiveSvyAnswers (void);
 
-unsigned Svy_GetNumCrsSurveys (Hie_Level_t HieLvl,unsigned *NumNotif);
+unsigned Svy_GetNumCrsSvys (Hie_Level_t HieLvl,unsigned *NumNotif);
 
 //-------------------------------- Figures ------------------------------------
-void Svy_GetAndShowSurveysStats (Hie_Level_t HieLvl);
+void Svy_GetAndShowSvysStats (Hie_Level_t HieLvl);
 
 #endif

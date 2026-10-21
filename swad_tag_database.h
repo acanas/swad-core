@@ -45,10 +45,10 @@ void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
 void Tag_DB_EnableOrDisableTag (long TagCod,HidVis_HiddenOrVisible_t TagHidden);
 
 unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod);
-unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Tag_DB_GetAllTagsFromThisCrs (MYSQL_RES **mysql_res);
 unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 				       long TagCod,long HieCod);
-Exi_Exist_t Tag_DB_CheckIfTagsExistInCurrentCrs (void);
+Exi_Exist_t Tag_DB_CheckIfTagsExistInThisCrs (void);
 long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt);
 void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize);
 

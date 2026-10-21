@@ -92,7 +92,7 @@ void Lgo_DrawLogo (Hie_Level_t HieLvl,const struct Hie_Node *Node,
 	 Ico_PutIcon (Hie_Icons[Hie_SYS],Ico_BLACK,Node->ShrtName,IconClass);
 	 break;
       case Hie_CTY:
-	 Cty_DrawCountryMap (Node,IconClass);
+	 Cty_DrawCtyMap (Node,IconClass);
 	 break;
       case Hie_INS:
       case Hie_CTR:
@@ -312,21 +312,21 @@ void Lgo_ReceiveLogo (Hie_Level_t HieLvl)
    /***** Creates directories if not exist *****/
    Fil_BuildPath (Path,"%s/%s",
 		  Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl]);
-   Fil_CreateDirIfNotExists (Path);
+   Fil_CreateFolderIfNotExists (Path);
    Fil_BuildPath (Path,"%s/%s/%02u",
 		  Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
 		  (unsigned) ((unsigned long) HieCod % 100));
-   Fil_CreateDirIfNotExists (Path);
+   Fil_CreateFolderIfNotExists (Path);
    Fil_BuildPath (Path,"%s/%s/%02u/%lu",
 		  Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
 		  (unsigned) ((unsigned long) HieCod % 100),
 		  (unsigned long) HieCod);
-   Fil_CreateDirIfNotExists (Path);
+   Fil_CreateFolderIfNotExists (Path);
    Fil_BuildPath (Path,"%s/%s/%02u/%lu/logo",
 		  Cfg_PATH_SWAD_PUBLIC,Lgo_Folder[HieLvl],
 		  (unsigned) ((unsigned long) HieCod % 100),
 		  (unsigned long) HieCod);
-   Fil_CreateDirIfNotExists (Path);
+   Fil_CreateFolderIfNotExists (Path);
 
    /***** Copy in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -374,5 +374,5 @@ void Lgo_RemoveLogo (Hie_Level_t HieLvl)
 		  (unsigned) ((unsigned long) HieCod % 100),
 		  (unsigned long) HieCod,
 		  (unsigned long) HieCod);
-   Fil_RemoveTree (PathLogo);
+   Fil_RemoveFolderAndItsContent (PathLogo);
   }

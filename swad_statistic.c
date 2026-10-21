@@ -271,7 +271,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 	    if (Usr_GetIfShowBigList (NumUsrs,NULL,NULL,NULL) == Lay_SHOW)
 	      {
 	       /***** Put link to register students *****/
-	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
+	       Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs ();
 
 	       /***** Begin form *****/
 	       Frm_BeginFormIdAnchor (ActSeeAccCrs,Usr_FORM_TO_SELECT_USRS_ID,
@@ -1364,7 +1364,7 @@ static void Sta_ShowNumHitsPerUsr (const struct Sta_Stats *Stats,
 	 /* Write user's role */
 	 HTM_TD_Begin ("class=\"CT LOG_%s %s\"",
 	               The_GetSuffix (),The_GetColorRows ());
-	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InCurrentCrs][UsrDat.Sex]);
+	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat.Roles.InThisCrs][UsrDat.Sex]);
 	    HTM_NBSP ();
 	 HTM_TD_End ();
 
@@ -1387,7 +1387,7 @@ static void Sta_ShowNumHitsPerUsr (const struct Sta_Stats *Stats,
 	    if (BarWidth)
 	      {
 	       HTM_IMG (Cfg_URL_ICON_PUBLIC,
-			UsrDat.Roles.InCurrentCrs == Rol_STD ? "o1x1.png" :	// Student
+			UsrDat.Roles.InThisCrs == Rol_STD ? "o1x1.png" :	// Student
 							       "r1x1.png",	// Non-editing teacher or teacher
 			NULL,
 			"class=\"LT\" style=\"width:%upx; height:10px; padding-top:4px;\"",
@@ -2975,7 +2975,7 @@ static void Sta_WriteCountry (long HieCod)
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	 /***** Form to go to country *****/
-	 Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
+	 Cty_DrawCtyMapAndNameWithLink (&Cty,ActSeeCtyInf,
 					    "COUNTRY_TINY",
 					    "COUNTRY_MAP_TINY");
 	}
@@ -3069,7 +3069,7 @@ static void Sta_WriteInstit (long HieCod)
 	            The_GetSuffix (),Ins.FullName);
 
 	 /***** Form to go to institution *****/
-	 Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeInsInf,"CT ICO16x16");
+	 Ins_DrawInsLogoAndNameWithLink (&Ins,ActSeeInsInf,"CT ICO16x16");
      }
    else			// Hit with no institution selected
      {
@@ -3162,7 +3162,7 @@ static void Sta_WriteCenter (long HieCod)
                     The_GetSuffix (),Ctr.FullName);
 
 	 /***** Form to go to center *****/
-	 Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeCtrInf,"CT ICO16x16");
+	 Ctr_DrawCtrLogoAndNameWithLink (&Ctr,ActSeeCtrInf,"CT ICO16x16");
      }
    else			// Hit with no center selected
      {
@@ -3255,7 +3255,7 @@ static void Sta_WriteDegree (long HieCod)
                     The_GetSuffix (),Deg.FullName);
 
 	 /***** Form to go to degree *****/
-	 Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
+	 Deg_DrawDegLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
      }
    else			// Hit with no degree selected
      {

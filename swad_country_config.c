@@ -191,7 +191,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 
       /**************************** Right part **********************************/
       /* Check country map */
-      MapImageExists = Cty_CheckIfCountryPhotoExists (&Gbl.Hierarchy.Node[Hie_CTY]);
+      MapImageExists = Cty_CheckIfCtyPhotoExists (&Gbl.Hierarchy.Node[Hie_CTY]);
 
       if (NumCtrsWithMap || MapImageExists == Exi_EXISTS)
 	{
@@ -291,7 +291,7 @@ static void CtyCfg_Map (void)
       Map_AddTileLayer ();
 
       /* Get centers which have coordinates in the current country */
-      NumCtrs = Cty_DB_GetCtrsWithCoordsInCurrentCty (&mysql_res);
+      NumCtrs = Cty_DB_GetCtrsWithCoordsInThisCty (&mysql_res);
 
       /* Add a marker and a popup for each center */
       for (NumCtr = 0;
@@ -347,13 +347,13 @@ static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink)
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
 	              Gbl.Hierarchy.Node[Hie_CTY].WWW);
-      Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],Class[ViewType]);
+      Cty_DrawCtyMap (&Gbl.Hierarchy.Node[Hie_CTY],Class[ViewType]);
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
    HTM_DIV_End ();
 
    /***** Map attribution *****/
-   if (ViewType == Vie_VIEW && Cty_CheckIfICanEditCountries () == Usr_CAN)
+   if (ViewType == Vie_VIEW && Cty_CheckIfICanEditCtys () == Usr_CAN)
      {
       HTM_DIV_Begin ("class=\"CM\"");
 	 Frm_BeginForm (ActChgCtyMapAtt);

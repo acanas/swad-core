@@ -40,29 +40,29 @@
 
 void Ins_SeeInsWithPendingCtrs (void);
 
-void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
-				      Pho_ShowPhotos_t ShowPhotos,
-				      const char *IconClass);
-void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
-                                        const char *IconClass);
+void Ins_DrawInsLogoWithLink (struct Hie_Node *Ins,
+			      Pho_ShowPhotos_t ShowPhotos,
+			      const char *IconClass);
+void Ins_DrawInsLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
+                                     const char *IconClass);
 
-void Ins_ShowInssOfCurrentCty (void);
-void Ins_EditInstitutions (void);
-void Ins_GetBasicListOfInstitutions (long HieCod);
-void Ins_GetFullListOfInstitutions (long HieCod);
+void Ins_ShowInssOfThisCty (void);
+void Ins_EditInss (void);
+void Ins_GetBasicListOfInss (long HieCod);
+void Ins_GetFullListOfInss (long HieCod);
 
-void Ins_WriteInstitutionNameAndCty (long HieCod);
-Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node);
-void Ins_FlushCacheFullNameAndCtyOfInstitution (void);
-void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
-                                         char CtyName[Nam_MAX_BYTES_FULL_NAME + 1]);
+void Ins_WriteInsNameAndCty (long HieCod);
+Err_SuccessOrError_t Ins_GetInsDataByCod (struct Hie_Node *Node);
+void Ins_FlushCacheFullNameAndCtyOfIns (void);
+void Ins_GetShrtNameAndCtyOfIns (struct Hie_Node *Ins,
+                                 char CtyName[Nam_MAX_BYTES_FULL_NAME + 1]);
 
-void Ins_WriteSelectorOfInstitution (void);
+void Ins_WriteSelectorOfIns (void);
 
-void Ins_RemoveInstitution (void);
+void Ins_RemoveIns (void);
 void Ins_RenameInsShort (void);
 void Ins_RenameInsFull (void);
-void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull);
+void Ins_RenameIns (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull);
 void Ins_ChangeInsWWW (void);
 void Ins_ChangeInsStatus (void);
 void Ins_ContEditAfterChgIns (void);
@@ -77,6 +77,6 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 void Ins_PutParInsCod (void *InsCod);
 
 //-------------------------------- Figures ------------------------------------
-void Ins_GetAndShowInstitutionsStats (Hie_Level_t HieLvl);
+void Ins_GetAndShowInssStats (Hie_Level_t HieLvl);
 
 #endif

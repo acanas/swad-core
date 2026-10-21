@@ -89,24 +89,24 @@ static void Con_PutParScope (void *Scope);
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
 
-static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role);
+static void Con_ComputeConnectedUsrsWithARoleBelongingToThisCrs (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsBelongingToScope (Hie_Level_t HieLvl,
 						   unsigned AllowedLvls);
 
 static void Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (Hie_Level_t HieLvl,
 								      Rol_Role_t Role);
-static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role,unsigned *NumUsr);
+static void Con_ShowConnectedUsrsWithARoleBelongingToThisCrsOnRightColumn (Rol_Role_t Role,unsigned *NumUsr);
 static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role);
 
 static void Con_GetNumConnectedWithARole (Hie_Level_t HieLvl,Rol_Role_t Role,
 					  struct Con_ConnectedUsrs *Usrs);
-static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role,
-								 unsigned *NumUsrsConnected,
-								 unsigned *NumUsrsToList);
-static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role,unsigned *NumUsr);
+static void Con_ComputeConnectedUsrsWithARoleInThisCrsOneByOne (Rol_Role_t Role,
+								unsigned *NumUsrsConnected,
+								unsigned *NumUsrsToList);
+static void Con_ShowConnectedUsrsInThisCrsOneByOneOnRightColumn (Rol_Role_t Role,unsigned *NumUsr);
 static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumUsr);
-static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t HieLvl,
-								    Rol_Role_t Role);
+static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t HieLvl,
+								 Rol_Role_t Role);
 
 /*****************************************************************************/
 /******** Update time to refresh depending on number of open sessions ********/
@@ -154,7 +154,7 @@ void Con_RefreshConnected (void)
 
    /***** Number of course connected users *****/
    if (ShowConnected == Lay_SHOW)
-      Con_ShowConnectedUsrsBelongingToCurrentCrs ();
+      Con_ShowConnectedUsrsBelongingToThisCrs ();
    HTM_Char ('|');
 
    /***** Number of users to list *****/
@@ -317,20 +317,20 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 /*********** Compute connected users who belong to current course ************/
 /*****************************************************************************/
 
-void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
+void Con_ComputeConnectedUsrsBelongingToThisCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&		// Right column visible
        Gbl.Hierarchy.HieLvl == Hie_CRS &&			// Course selected
-       (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// I can view users
+       (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG ||	// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
       Con_Connected.NumUsrs       =
       Con_Connected.NumUsrsToList = 0;
 
       /***** Number of teachers, non-editing teachers, and students *****/
-      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
-      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_NET);
-      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STD);
+      Con_ComputeConnectedUsrsWithARoleBelongingToThisCrs (Rol_TCH);
+      Con_ComputeConnectedUsrsWithARoleBelongingToThisCrs (Rol_NET);
+      Con_ComputeConnectedUsrsWithARoleBelongingToThisCrs (Rol_STD);
      }
   }
 
@@ -338,13 +338,13 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
 /** Compute number of connected users of a type who belong to current course */
 /*****************************************************************************/
 
-static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role)
+static void Con_ComputeConnectedUsrsWithARoleBelongingToThisCrs (Rol_Role_t Role)
   {
    /***** Get number of connected users who belong to current course *****/
    Con_GetNumConnectedWithARole (Hie_CRS,Role,&Con_Connected.Usrs[Role]);
 
    /***** Get list connected users belonging to this course *****/
-   Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Role,
+   Con_ComputeConnectedUsrsWithARoleInThisCrsOneByOne (Role,
 							&Con_Connected.NumUsrs,
 							&Con_Connected.NumUsrsToList);
   }
@@ -381,14 +381,14 @@ static void Con_ShowConnectedUsrsBelongingToScope (Hie_Level_t HieLvl,
    HTM_TABLE_End ();
 
    /***** Put link to register students *****/
-   Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
+   Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs ();
   }
 
 /*****************************************************************************/
 /* Show number of connected users who belong to current course on right col. */
 /*****************************************************************************/
 
-void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
+void Con_ShowConnectedUsrsBelongingToThisCrs (void)
   {
    extern const char *Txt_from;
    char CourseName[Nam_MAX_BYTES_SHRT_NAME + 1];
@@ -415,9 +415,9 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    HTM_TABLE_Begin ("CON_LIST");
       Con_Connected.NumUsrs       = 0;
       Con_Connected.NumUsrsToList = 0;
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH,&NumUsr);
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET,&NumUsr);
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD,&NumUsr);
+      Con_ShowConnectedUsrsWithARoleBelongingToThisCrsOnRightColumn (Rol_TCH,&NumUsr);
+      Con_ShowConnectedUsrsWithARoleBelongingToThisCrsOnRightColumn (Rol_NET,&NumUsr);
+      Con_ShowConnectedUsrsWithARoleBelongingToThisCrsOnRightColumn (Rol_STD,&NumUsr);
    HTM_TABLE_End ();
   }
 
@@ -445,7 +445,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (Hie_Level_
       HTM_TR_End ();
 
       /***** I can see connected users *****/
-      Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (HieLvl,Role);
+      Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (HieLvl,Role);
      }
   }
 
@@ -453,7 +453,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToScopeOnMainZone (Hie_Level_
 /** Show number of connected users with a role who belong to current course **/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role,unsigned *NumUsr)
+static void Con_ShowConnectedUsrsWithARoleBelongingToThisCrsOnRightColumn (Rol_Role_t Role,unsigned *NumUsr)
   {
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -477,7 +477,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
       HTM_TR_End ();
 
       /***** I can see connected users *****/
-      Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Role,NumUsr);
+      Con_ShowConnectedUsrsInThisCrsOneByOneOnRightColumn (Role,NumUsr);
 
       /***** Write message with number of users not listed *****/
       if (Con_Connected.NumUsrsToList < Con_Connected.NumUsrs)
@@ -561,9 +561,9 @@ static void Con_GetNumConnectedWithARole (Hie_Level_t HieLvl,Rol_Role_t Role,
 /******************* Compute connected users one by one **********************/
 /*****************************************************************************/
 
-static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role,
-								 unsigned *NumUsrsConnected,
-								 unsigned *NumUsrsToList)
+static void Con_ComputeConnectedUsrsWithARoleInThisCrsOneByOne (Rol_Role_t Role,
+								unsigned *NumUsrsConnected,
+								unsigned *NumUsrsToList)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -605,7 +605,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
 /******************* Show connected users one by one *************************/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role,unsigned *NumUsr)
+static void Con_ShowConnectedUsrsInThisCrsOneByOneOnRightColumn (Rol_Role_t Role,unsigned *NumUsr)
   {
    /***** Write list of connected users *****/
    for (;
@@ -720,8 +720,8 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
 /******************** Show connected users one by one ************************/
 /*****************************************************************************/
 
-static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Hie_Level_t HieLvl,
-								    Rol_Role_t Role)
+static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t HieLvl,
+								 Rol_Role_t Role)
   {
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {

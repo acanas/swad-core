@@ -39,30 +39,30 @@
 /**************************** Get link to survey *****************************/
 /*****************************************************************************/
 
-void SvyRsc_GetLinkToSurvey (void)
+void SvyRsc_GetLinkToSvy (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Surveys;
-   struct Svy_Surveys Surveys;
+   struct Svy_Surveys Svys;
 
    /***** Reset surveys context *****/
-   Svy_ResetSurveys (&Surveys);
+   Svy_ResetSvys (&Svys);
 
    /***** Get survey code *****/
-   Surveys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy);
+   Svys.Svy.SvyCod = ParCod_GetPar (ParCod_Svy);
 
    /***** Get survey data *****/
-   if (Surveys.Svy.SvyCod > 0)
-      Svy_GetSurveyDataByCod (&Surveys.Svy);
+   if (Svys.Svy.SvyCod > 0)
+      Svy_GetSvyDataByCod (&Svys.Svy);
 
    /***** Copy link to survey into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_SURVEY,Surveys.Svy.SvyCod);
+   Rsc_DB_CopyToClipboard (Rsc_SURVEY,Svys.Svy.SvyCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Surveys.Svy.SvyCod > 0 ? Surveys.Svy.Title :
-   					   Txt_Surveys);
+   		  Svys.Svy.SvyCod > 0 ? Svys.Svy.Title :
+   					Txt_Surveys);
 
    /***** Show surveys again *****/
-   Svy_ListAllSurveys (&Surveys);
+   Svy_ListAllSvys (&Svys);
   }

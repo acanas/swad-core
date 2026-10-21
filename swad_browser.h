@@ -50,7 +50,7 @@ void Brw_ShowFileBrowserOrWorks (void);
 void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser);
 
 void Brw_BuildFullPathFromPathAndName (const struct Brw_FileBrowser *FileBrowser,
-				       struct Brw_FileMetadata *FileMetadata);
+				       struct Brw_File *File);
 void Brw_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
                                        char PathWithoutFileName[PATH_MAX + 1],
                                        char FileName[NAME_MAX + 1]);
@@ -73,7 +73,7 @@ void Brw_ExpandFolder (void);
 void Brw_ContractFolder (void);
 void Brw_Copy (void);
 void Brw_Paste (void);
-void Brw_RemSubtree (void);
+void Brw_RemFolder (void);
 void Brw_ShowFormFileBrowser (void);
 void Brw_CreateFolder (void);
 void Brw_RenFolder (void);
@@ -84,23 +84,21 @@ void Brw_CreateLink (void);
 void Brw_SetDocumentAsVisible (void);
 void Brw_SetDocumentAsHidden (void);
 HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
-							  struct Brw_FileMetadata *FileMetadata);
+							  const char PathInZone[PATH_MAX + 1]);
 void Brw_ShowFileMetadata (void);
 
 void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,
-				const struct Brw_FileMetadata *FileMetadata,
-				char *URL);
+				const struct Brw_File *File,char *URL);
 void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
-void Brw_GetFileMetadataByPath (Brw_Zone_t Zone,
-				struct Brw_FileMetadata *FileMetadata);
-void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_FileMetadata *FileMetadata);
-Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_FileMetadata *FileMetadata);
-void Brw_GetAndUpdateFileViews (struct Brw_FileMetadata *FileMetadata);
+void Brw_GetFileMetadataByPath (Brw_Zone_t Zone,struct Brw_File *FileOrFolder);
+void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_File *FileOrFolder);
+Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_File *File);
+void Brw_GetAndUpdateFileViews (struct Brw_File *File);
 void Brw_UpdateMyFileViews (long FilCod);
 
-long Brw_GetZoneUsrCodForZone (Brw_Zone_t Zone);
-void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long Cod,
+long Brw_GetOwnerCodForZone (Brw_Zone_t Zone);
+void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
                                     long HieCods[Hie_NUM_LEVELS],long *GrpCod);
 
 Usr_Can_t Brw_CheckIfFileBrowserIsEditable (Brw_Zone_t Zone);
@@ -118,7 +116,7 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir
 void Brw_PutImplicitParsFileBrowser (void *Zone);
 void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser);
 void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
-					 struct Brw_FileMetadata *FileMetadata);
+					 struct Brw_File *File);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZones (long HieCod,long GrpCod);

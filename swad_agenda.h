@@ -86,7 +86,7 @@ struct Agd_Agenda
    unsigned HiddenVisiblEvents;
    Dat_StartEndTime_t SelectedOrder;
    long AgdCodToEdit;	// Used as parameter in contextual links
-   unsigned CurrentPage;
+   unsigned ThisPage;
   };
 
 #define Agd_NUM_AGENDA_TYPES 4

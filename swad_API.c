@@ -300,12 +300,12 @@ static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 					  long MchCod,char **ListGroups);
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
-			 struct Brw_FileMetadata *FileMetadata,
+			 struct Brw_File *File,
 			 FILE *XML,unsigned Level,
                          const char PathInServ[PATH_MAX + 1],
                          const char PathInZone[PATH_MAX + 1]);
 static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser *FileBrowser,
-							 struct Brw_FileMetadata *FileMetadata,
+							 struct Brw_File *File,
 							 FILE *XML,unsigned Level);
 static void API_IndentXMLLine (FILE *XML,unsigned Level);
 
@@ -587,10 +587,10 @@ static Exi_Exist_t API_GetSomeUsrDataFromUsrCod (struct Usr_Data *UsrDat,
       /***** Get user's role *****/
       if (HieCod > 0)
 	 /* Get the role in the given course */
-	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetRoleUsrInCrs (UsrDat->UsrCod,HieCod);
+	 UsrDat->Roles.InThisCrs = Rol_DB_GetRoleUsrInCrs (UsrDat->UsrCod,HieCod);
       else
 	 /* Get the maximum role in any course */
-	 UsrDat->Roles.InCurrentCrs = Rol_DB_GetMaxRoleUsrInCrss (UsrDat->UsrCod);
+	 UsrDat->Roles.InThisCrs = Rol_DB_GetMaxRoleUsrInCrss (UsrDat->UsrCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -836,7 +836,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
      {
       case Exi_EXISTS:
 	 Gbl.Usrs.Me.Logged = true;
-	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
 	 loginByUserPasswordKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
 
@@ -862,7 +862,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 		   Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
 
 	 loginByUserPasswordKeyOut->userRole =
-	 API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
+	 API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InThisCrs];
 
 	 /***** Generate a key used in subsequents calls to other web services *****/
 	 return API_GenerateNewAPIKey (soap,
@@ -991,7 +991,7 @@ int swad__loginBySessionKey (struct soap *soap,
      {
       case Exi_EXISTS:
 	 Gbl.Usrs.Me.Logged = true;
-	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+	 Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
 	 loginBySessionKeyOut->userCode = (int) Gbl.Usrs.Me.UsrDat.UsrCod;
 
@@ -1016,7 +1016,7 @@ int swad__loginBySessionKey (struct soap *soap,
 	 Str_Copy (loginBySessionKeyOut->userBirthday,
 		   Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
 
-	 loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs];
+	 loginBySessionKeyOut->userRole = API_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.Roles.InThisCrs];
 
 	 /***** Generate a key used in subsequents calls to other web services *****/
 	 return API_GenerateNewAPIKey (soap,
@@ -1071,7 +1071,7 @@ int swad__getAvailableRoles (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Return available roles *****/
    Rol_SetMyRoles ();
@@ -1195,7 +1195,7 @@ int swad__getCourses (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Query my courses from database *****/
    NumCrss = Enr_DB_GetMyCoursesNames (&mysql_res);
@@ -1311,12 +1311,12 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -1645,12 +1645,12 @@ int swad__getUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 				  "Request forbidden",
 				  "Requester must belong to course");
@@ -1670,7 +1670,7 @@ int swad__getUsers (struct soap *soap,
    API_GetLstGrpsSel (groups);
    if (Gbl.Crs.Grps.LstGrpsSel.NumGrps)
       /***** Get list of groups types and groups in current course *****/
-      Grp_GetListGrpTypesInCurrentCrs (Grp_GRP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
    /***** Get list of users *****/
    Usr_GetListUsrs (Hie_CRS,Role);
@@ -1729,13 +1729,13 @@ int swad__findUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
       /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-      if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-          Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-	  Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+      if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+          Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+	  Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
 	 return soap_receiver_fault (soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
@@ -1903,12 +1903,12 @@ int swad__getGroupTypes (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2018,12 +2018,12 @@ int swad__getGroups (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2141,12 +2141,12 @@ int swad__sendMyGroups (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2351,10 +2351,10 @@ int swad__getAttendanceEvents (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2541,10 +2541,10 @@ int swad__sendAttendanceEvent (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2660,10 +2660,10 @@ int swad__removeAttendanceEvent (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2760,10 +2760,10 @@ int swad__getAttendanceUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2909,10 +2909,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2982,7 +2982,7 @@ int swad__getNotifications (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Get my language from database *****/
    if ((ReturnCode = API_GetMyLanguage (soap)) != SOAP_OK)
@@ -3230,7 +3230,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    if (notifications[0])
      {
@@ -3293,7 +3293,7 @@ int swad__sendMessage (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if the message is a reply to a previous message *****/
    if (messageCode)
@@ -3453,7 +3453,7 @@ int swad__sendNotice (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
@@ -3465,7 +3465,7 @@ int swad__sendNotice (struct soap *soap,
    Gbl.Hierarchy.Node[Hie_DEG].HieCod = Crs_DB_GetDegCodOfCourseByCod (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Check if I am a teacher *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -3516,7 +3516,7 @@ int swad__getTestConfig (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
@@ -3525,9 +3525,9 @@ int swad__getTestConfig (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -3611,7 +3611,7 @@ int swad__getTests (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if course code is correct *****/
    if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
@@ -3620,9 +3620,9 @@ int swad__getTests (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -3954,7 +3954,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Loop over recipients' nicknames building query *****/
    DegreesStr[0] = '\0';
@@ -4158,7 +4158,7 @@ int swad__getGames (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
@@ -4337,7 +4337,7 @@ int swad__getMatches (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
@@ -4514,7 +4514,7 @@ int swad__getMatchStatus (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am logged as student in the course *****/
    if (Gbl.Usrs.Me.Role.Logged != Rol_STD)
@@ -4711,7 +4711,7 @@ int swad__getDirectoryTree (struct soap *soap,
    FILE *XML;
    char PathRootFolderInZone[PATH_MAX + 1];
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    unsigned long FileSize;
    unsigned long NumBytesRead;
    long GrpCod;
@@ -4738,7 +4738,7 @@ int swad__getDirectoryTree (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
@@ -4747,9 +4747,9 @@ int swad__getDirectoryTree (struct soap *soap,
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -4809,15 +4809,14 @@ int swad__getDirectoryTree (struct soap *soap,
                   (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod);
    Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser (&FileBrowser);
-   // FileMetadata.Zone = FileBrowser.Zone;
-   Str_Copy (FileMetadata.PathInZoneWithoutFileName,Brw_RootFolderInternalNames[FileBrowser.Zone],
-	     sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
-   Str_Copy (FileMetadata.FileName,".",
-	     sizeof (FileMetadata.FileName) - 1);
-   Brw_BuildFullPathFromPathAndName (&FileBrowser,&FileMetadata);
+   Str_Copy (File.Path.InZoneWithoutName,Brw_RootFolderInternalNames[FileBrowser.Zone],
+	     sizeof (File.Path.InZoneWithoutName) - 1);
+   Str_Copy (File.Path.Name,".",
+	     sizeof (File.Path.Name) - 1);
+   Brw_BuildFullPathFromPathAndName (&FileBrowser,&File);
 
    /* Check if exists the directory for HTML output. If not exists, create it */
-   Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /* Create a unique name for the file */
    Fil_BuildPath (PathXML,"%s/%s.xml",
@@ -4831,14 +4830,14 @@ int swad__getDirectoryTree (struct soap *soap,
 
    /* Get directory tree into XML file */
    XML_WriteStartFile (XML,"tree");
-   FileMetadata.Type = Brw_IS_FOLDER;
+   File.Type = Brw_IS_FOLDER;
    if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-				        &FileMetadata) == HidVis_VISIBLE)
+				        File.Path.InZone) == HidVis_VISIBLE)
      {
       Str_Copy (PathRootFolderInZone,Brw_RootFolderInternalNames[FileBrowser.Zone],
 	        sizeof (PathRootFolderInZone) - 1);
-      API_ListDir (&FileBrowser,&FileMetadata,XML,1,
-                   FileBrowser.PathRootFolderInServ.IncludingRootFolder,
+      API_ListDir (&FileBrowser,&File,XML,1,
+                   FileBrowser.PathRootFolderInServ.WithRootFolder,
                    PathRootFolderInZone);
      }
    XML_WriteEndFile (XML,"tree");
@@ -4865,7 +4864,7 @@ int swad__getDirectoryTree (struct soap *soap,
 /*****************************************************************************/
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
-			 struct Brw_FileMetadata *FileMetadata,
+			 struct Brw_File *File,
 			 FILE *XML,unsigned Level,
                          const char PathInServ[PATH_MAX + 1],
                          const char PathInZone[PATH_MAX + 1])
@@ -4895,24 +4894,24 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	    Fil_BuildPath (PathInZoneIncludingFile,"%s/%s",
 		           PathInZone,FileList[NumFile]->d_name);
 
-	    Str_Copy (FileMetadata->PathInZoneWithoutFileName,PathInZone,
-	 	      sizeof (FileMetadata->PathInZoneWithoutFileName) - 1);
-	    Str_Copy (FileMetadata->FileName,FileList[NumFile]->d_name,
-	 	      sizeof (FileMetadata->FileName) - 1);
+	    Str_Copy (File->Path.InZoneWithoutName,PathInZone,
+	 	      sizeof (File->Path.InZoneWithoutName) - 1);
+	    Str_Copy (File->Path.Name,FileList[NumFile]->d_name,
+	 	      sizeof (File->Path.Name) - 1);
 
 	    if (!lstat (PathInServIncludingFile,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Brw_BuildFullPathFromPathAndName (FileBrowser,FileMetadata);
+	       Brw_BuildFullPathFromPathAndName (FileBrowser,File);
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
 		  /***** Write a row for the subdirectory *****/
-		  FileMetadata->Type = Brw_IS_FOLDER;
-		  if (API_WriteRowFileBrowser (FileBrowser,FileMetadata,XML,Level) == HidVis_VISIBLE)
+		  File->Type = Brw_IS_FOLDER;
+		  if (API_WriteRowFileBrowser (FileBrowser,File,XML,Level) == HidVis_VISIBLE)
 		    {
 		     /* List subtree starting at this this directory */
-		     API_ListDir (FileBrowser,FileMetadata,XML,Level + 1,
+		     API_ListDir (FileBrowser,File,XML,Level + 1,
 		                  PathInServIncludingFile,
 		                  PathInZoneIncludingFile);
 
@@ -4923,9 +4922,9 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 		 }
 	       else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	         {
-		  FileMetadata->Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
-												Brw_IS_FILE;
-		  HiddenOrVisible = API_WriteRowFileBrowser (FileBrowser,FileMetadata,XML,Level);
+		  File->Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+										       Brw_IS_FILE;
+		  HiddenOrVisible = API_WriteRowFileBrowser (FileBrowser,File,XML,Level);
 	         }
 	      }
 	   }
@@ -4944,7 +4943,7 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 // Return if the row is visible or hidden
 
 static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser *FileBrowser,
-							 struct Brw_FileMetadata *FileMetadata,
+							 struct Brw_File *File,
 							 FILE *XML,unsigned Level)
   {
    extern const char *Txt_NEW_LINE;
@@ -4958,7 +4957,7 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
    if (FileBrowser->Zone == Brw_SHOW_DOC_CRS ||
        FileBrowser->Zone == Brw_SHOW_DOC_GRP)
       if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
-					   FileMetadata) == HidVis_HIDDEN)
+					   File->Path.InZone) == HidVis_HIDDEN)
 	 return HidVis_HIDDEN;
 
    /***** XML row *****/
@@ -4966,27 +4965,27 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
    API_IndentXMLLine (XML,Level);
 
    /* Write file or folder data */
-   if (FileMetadata->Type == Brw_IS_FOLDER)
+   if (File->Type == Brw_IS_FOLDER)
       fprintf (XML,"<dir name=\"%s\">%s",
-	       FileMetadata->FileName,Txt_NEW_LINE);
+	       File->Path.Name,Txt_NEW_LINE);
    else	// File or link
      {
       /* Get file metadata */
-      Brw_GetFileMetadataByPath (FileBrowser->Zone,FileMetadata);
-      FileBrowser->FilCod = FileMetadata->FilCod;
-      FileExists = Brw_GetFileTypeSizeAndDate (FileMetadata);
+      Brw_GetFileMetadataByPath (FileBrowser->Zone,File);
+      FileBrowser->FilCod = File->FilCod;
+      FileExists = Brw_GetFileTypeSizeAndDate (File);
 
-      if (FileMetadata->FilCod <= 0)	// No entry for this file in database table of files
+      if (File->FilCod <= 0)	// No entry for this file in database table of files
         {
 	 /* Add entry to the table of files/folders */
-	 FileMetadata->PublisherUsrCod = -1L;
-	 FileMetadata->PrivateOrPublic = PriPub_PRIVATE;
-	 FileMetadata->License         = Brw_LICENSE_DEFAULT;
-	 FileMetadata->FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
-							 FileMetadata);
+	 File->Metadata.PublisherCod    = -1L;
+	 File->Metadata.PrivateOrPublic = PriPub_PRIVATE;
+	 File->Metadata.License         = Brw_LICENSE_DEFAULT;
+	 File->FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+							  File);
 	}
 
-      Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata->PublisherUsrCod;
+      Gbl.Usrs.Other.UsrDat.UsrCod = File->Metadata.PublisherCod;
       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 							   Usr_DONT_GET_PREFS,
 							   Usr_DONT_GET_ROLE_IN_CRS);
@@ -5000,11 +4999,11 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
 		   "<publisher>%s</publisher>"
 		   "<photo>%s</photo>"
 		   "</file>%s",
-	       FileMetadata->FileName,
-	       FileMetadata->FilCod,
-	       (unsigned long) FileMetadata->Size,
-	       (unsigned long) FileMetadata->Time,
-	       Txt_LICENSES[FileMetadata->License],
+	       File->Path.Name,
+	       File->FilCod,
+	       (unsigned long) File->Metadata.Size,
+	       (unsigned long) File->Metadata.Time,
+	       Txt_LICENSES[File->Metadata.License],
 	       Gbl.Usrs.Other.UsrDat.FullName,
 	       PhotoURL,
 	       Txt_NEW_LINE);
@@ -5037,7 +5036,7 @@ int swad__getFile (struct soap *soap,
    int ReturnCode;
    struct Brw_FileBrowser FileBrowser;
    Brw_Zone_t ZoneDB;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    char URL[WWW_MAX_BYTES_WWW + 1];
@@ -5074,14 +5073,14 @@ int swad__getFile (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = FileBrowser.FilCod = (long) fileCode;
-   if (FileMetadata.FilCod <= 0)
+   File.FilCod = FileBrowser.FilCod = (long) fileCode;
+   if (File.FilCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad file code",
 	                        "File code must be a integer greater than 0");
 
-   Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
-   if (FileMetadata.FilCod <= 0)
+   Brw_GetFileMetadataByCod (&ZoneDB,&File);
+   if (File.FilCod <= 0)
       return soap_sender_fault (soap,
 	                        "File does not exist, please refresh",
 	                        "The file requested does not exists");
@@ -5092,9 +5091,7 @@ int swad__getFile (struct soap *soap,
    HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
    HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
    HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-   Brw_GetCrsGrpFromFileMetadata (FileBrowser.Zone,
-				  FileMetadata.Cod,
-                                  HieCods,&GrpCod);
+   Brw_GetCrsGrpFromFileMetadata (FileBrowser.Zone,File.HieCod,HieCods,&GrpCod);
    Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
    Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];
    Gbl.Hierarchy.Node[Hie_DEG].HieCod = HieCods[Hie_DEG];
@@ -5108,7 +5105,7 @@ int swad__getFile (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check course and group codes *****/
    if ((ReturnCode = API_CheckCourseAndGroupCodes (soap,
@@ -5117,9 +5114,9 @@ int swad__getFile (struct soap *soap,
       return ReturnCode;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -5142,7 +5139,7 @@ int swad__getFile (struct soap *soap,
       case Brw_ADMI_MRK_CRS:
       case Brw_ADMI_MRK_GRP:
 	 // Downloading a file of marks is only allowed for teachers
-	 if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+	 if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
 	    return soap_receiver_fault (soap,
 					"Wrong tree",
 					"Wrong file zone");
@@ -5156,30 +5153,26 @@ int swad__getFile (struct soap *soap,
    /***** Set paths *****/
    Brw_SetGrpCod (GrpCod);
    Brw_InitializeFileBrowser (&FileBrowser);
-   Str_Copy (FileMetadata.PathInZoneWithoutFileName,FileMetadata.PathInZoneWithoutFileName,
-	     sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
-   Str_Copy (FileMetadata.FileName,FileMetadata.FileName,
-	     sizeof (FileMetadata.FileName) - 1);
-   Brw_BuildFullPathFromPathAndName (&FileBrowser,&FileMetadata);
+   Brw_BuildFullPathFromPathAndName (&FileBrowser,&File);
 
    /***** Get file size and date *****/
-   FileExists = Brw_GetFileTypeSizeAndDate (&FileMetadata);
+   FileExists = Brw_GetFileTypeSizeAndDate (&File);
 
    /***** Update number of views *****/
-   Brw_GetAndUpdateFileViews (&FileMetadata);
+   Brw_GetAndUpdateFileViews (&File);
 
    /***** Create and get link to download the file *****/
-   Brw_GetLinkToDownloadFile (&FileBrowser,&FileMetadata,URL);
+   Brw_GetLinkToDownloadFile (&FileBrowser,&File,URL);
 
    /***** Copy data into output structure *****/
-   Str_Copy (getFileOut->fileName,FileMetadata.FileName,NAME_MAX);
+   Str_Copy (getFileOut->fileName,File.Path.Name,NAME_MAX);
    Str_Copy (getFileOut->URL,URL,WWW_MAX_BYTES_WWW);
-   getFileOut->size = (int) FileMetadata.Size;
-   getFileOut->time = (int) FileMetadata.Time;
-   Str_Copy (getFileOut->license,Txt_LICENSES[FileMetadata.License],
+   getFileOut->size = (int) File.Metadata.Size;
+   getFileOut->time = (int) File.Metadata.Time;
+   Str_Copy (getFileOut->license,Txt_LICENSES[File.Metadata.License],
              Brw_MAX_BYTES_LICENSE);
 
-   if ((Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod) > 0)
+   if ((Gbl.Usrs.Other.UsrDat.UsrCod = File.Metadata.PublisherCod) > 0)
       /* Get publisher's data */
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
@@ -5206,7 +5199,7 @@ int swad__getMarks (struct soap *soap,
   {
    int ReturnCode;
    Brw_Zone_t ZoneDB;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];	// Not used
@@ -5227,11 +5220,11 @@ int swad__getMarks (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
-   FileMetadata.FilCod = (long) fileCode;
-   Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
+   File.FilCod = (long) fileCode;
+   Brw_GetFileMetadataByCod (&ZoneDB,&File);
 
-   if (FileMetadata.Type != Brw_IS_FILE ||
-       FileMetadata.HiddenOrVisible == HidVis_HIDDEN ||
+   if (File.Type != Brw_IS_FILE ||
+       File.Metadata.HiddenOrVisible == HidVis_HIDDEN ||
        (ZoneDB != Brw_ADMI_MRK_CRS &&
 	ZoneDB != Brw_ADMI_MRK_GRP))
       return soap_receiver_fault (soap,
@@ -5243,8 +5236,7 @@ int swad__getMarks (struct soap *soap,
    HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod,
    HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod,
    HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-   Brw_GetCrsGrpFromFileMetadata (ZoneDB,FileMetadata.Cod,
-                                  HieCods,&GrpCod);
+   Brw_GetCrsGrpFromFileMetadata (ZoneDB,File.HieCod,HieCods,&GrpCod);
    Gbl.Hierarchy.Node[Hie_INS].HieCod = HieCods[Hie_INS];
    Gbl.Hierarchy.Node[Hie_CTR].HieCod = HieCods[Hie_CTR];
    Gbl.Hierarchy.Node[Hie_DEG].HieCod = HieCods[Hie_DEG];
@@ -5263,12 +5255,12 @@ int swad__getMarks (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check if I am a student, non-editing teacher or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_STD &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_NET &&
-       Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs != Rol_TCH)
+   if (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_NET &&
+       Gbl.Usrs.Me.UsrDat.Roles.InThisCrs != Rol_TCH)
       return soap_receiver_fault (soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -5284,7 +5276,7 @@ int swad__getMarks (struct soap *soap,
    ContentStr = NULL;
    Mrk_GetNotifMyMarks (SummaryStr,	// Not used
                         &ContentStr,
-                        FileMetadata.FilCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+                        File.FilCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                         Ntf_GET_CONTENT);
    if (ContentStr != NULL)
      {
@@ -5335,7 +5327,7 @@ int swad__getLocation (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Convert MAC string to number *****/
    if (sscanf (MAC,"%llx",&MACnum) != 1)
@@ -5387,7 +5379,7 @@ int swad__sendMyLocation (struct soap *soap,
 	                          "Can not get user's data from database",
 	                          "User does not exist in database");
    Gbl.Usrs.Me.Logged = true;
-   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs;
+   Gbl.Usrs.Me.Role.Logged = Gbl.Usrs.Me.UsrDat.Roles.InThisCrs;
 
    /***** Check in (insert pair user-room) in the database *****/
    /* Get the code of the inserted item */

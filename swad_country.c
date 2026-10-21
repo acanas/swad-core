@@ -61,24 +61,24 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static struct Hie_Node *Cty_EditingCty = NULL;	// Static variable to keep the country being edited
-long Cty_CurrentCtyCod = -1L;	// Used as parameter in contextual links
+long Cty_ThisCtyCod = -1L;	// Used as parameter in contextual links
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cty_PutHeadCountriesForSeeing (Hie_OrderSelectable_t OrderSelectable);
-static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty);
+static void Cty_PutHeadCtysForSeeing (Hie_OrderSelectable_t OrderSelectable);
+static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty);
 
-static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args);
-static void Cty_PutIconToEditCountries (void);
+static void Cty_PutIconsListingCtys (__attribute__((unused)) void *Args);
+static void Cty_PutIconToEditCtys (void);
 
-static void Cty_EditCountriesInternal (void);
-static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args);
+static void Cty_EditCtysInternal (void);
+static void Cty_PutIconsEditingCtys (__attribute__((unused)) void *Args);
 
-static void Cty_GetFullListOfCountries (void);
+static void Cty_GetFullListOfCtys (void);
 
-static void Cty_ListCountriesForEdition (void);
+static void Cty_ListCtysForEdition (void);
 static void Cty_PutParOthCtyCod (void *HieCod);
 
 static void Cty_UpdateCtyName (long HieCod,const char *FldName,const char *NewCtyName);
@@ -86,11 +86,11 @@ static void Cty_UpdateCtyName (long HieCod,const char *FldName,const char *NewCt
 static void Cty_ShowAlertAndButtonToGoToCty (void);
 static void Cty_PutParGoToCty (void *HieCod);
 
-static void Cty_PutFormToCreateCountry (void);
-static void Cty_PutHeadCountriesForEdition (void);
+static void Cty_PutFormToCreateCty (void);
+static void Cty_PutHeadCtysForEdition (void);
 
-static void Cty_EditingCountryConstructor (void);
-static void Cty_EditingCountryDestructor (void);
+static void Cty_EditingCtyConstructor (void);
+static void Cty_EditingCtyDestructor (void);
 
 static void Cty_FormToGoToMap (struct Hie_Node *Cty);
 
@@ -157,7 +157,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	       /* Country map */
 	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",The_GetSuffix (),BgColor);
-		  Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
+		  Cty_DrawCtyMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL");
 	       HTM_TD_End ();
@@ -185,26 +185,26 @@ void Cty_SeeCtyWithPendingInss (void)
 /****************************** List all countries ***************************/
 /*****************************************************************************/
 
-void Cty_ListCountries (void)
+void Cty_ListCtys (void)
   {
-   Cty_ListCountries1 ();
-   Cty_ListCountries2 ();
+   Cty_ListCtys1 ();
+   Cty_ListCtys2 ();
   }
 
 /*****************************************************************************/
 /****************************** List all countries ***************************/
 /*****************************************************************************/
 
-void Cty_ListCountries1 (void)
+void Cty_ListCtys1 (void)
   {
    /***** Get parameter with the type of order in the list of countries *****/
    Gbl.Hierarchy.List[Hie_CTY].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of countries *****/
-   Cty_GetFullListOfCountries ();
+   Cty_GetFullListOfCtys ();
   }
 
-void Cty_ListCountries2 (void)
+void Cty_ListCtys2 (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
@@ -225,18 +225,18 @@ void Cty_ListCountries2 (void)
 
    /***** Begin box and table *****/
    Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
-		 Cty_PutIconsListingCountries,NULL,
+		 Cty_PutIconsListingCtys,NULL,
 		 Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
       HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Heading *****/
-	 Cty_PutHeadCountriesForSeeing (Hie_ORDER_SELECTABLE);
+	 Cty_PutHeadCtysForSeeing (Hie_ORDER_SELECTABLE);
 
 	 /***** Write all countries and their number of users and institutions *****/
 	 for (NumCty = 0;
 	      NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
 	      NumCty++)
-	    Cty_ListOneCountryForSeeing (&Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty],NumCty + 1);
+	    Cty_ListOneCtyForSeeing (&Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty],NumCty + 1);
 
 	 /***** Separation row *****/
 	 HTM_TR_Begin (NULL);
@@ -304,7 +304,7 @@ void Cty_ListCountries2 (void)
 /******************* Write header with fields of a country *******************/
 /*****************************************************************************/
 
-static void Cty_PutHeadCountriesForSeeing (Hie_OrderSelectable_t OrderSelectable)
+static void Cty_PutHeadCtysForSeeing (Hie_OrderSelectable_t OrderSelectable)
   {
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
@@ -359,7 +359,7 @@ static void Cty_PutHeadCountriesForSeeing (Hie_OrderSelectable_t OrderSelectable
 /************************ List one country for seeing ************************/
 /*****************************************************************************/
 
-static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
+static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty)
   {
    const char *BgColor;
    Hie_Level_t HieLvl;
@@ -376,7 +376,7 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 
       /***** Country map (and link to WWW if exists) *****/
       HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
-	 Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
+	 Cty_DrawCtyMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL");
       HTM_TD_End ();
@@ -413,11 +413,11 @@ static void Cty_ListOneCountryForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
+static void Cty_PutIconsListingCtys (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit countries *****/
-   if (Cty_CheckIfICanEditCountries () == Usr_CAN)
-      Cty_PutIconToEditCountries ();
+   if (Cty_CheckIfICanEditCtys () == Usr_CAN)
+      Cty_PutIconToEditCtys ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -427,7 +427,7 @@ static void Cty_PutIconsListingCountries (__attribute__((unused)) void *Args)
 /********************** Check if I can edit countries ************************/
 /*****************************************************************************/
 
-Usr_Can_t Cty_CheckIfICanEditCountries (void)
+Usr_Can_t Cty_CheckIfICanEditCtys (void)
   {
    return Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
 						   Usr_CAN_NOT;
@@ -437,7 +437,7 @@ Usr_Can_t Cty_CheckIfICanEditCountries (void)
 /************************ Put icon to edit countries *************************/
 /*****************************************************************************/
 
-static void Cty_PutIconToEditCountries (void)
+static void Cty_PutIconToEditCtys (void)
   {
    Ico_PutContextualIconToEdit (ActEdiCty,NULL,NULL,NULL);
   }
@@ -446,9 +446,9 @@ static void Cty_PutIconToEditCountries (void)
 /********************* Draw country map and name with link *******************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
-                                        const char *ClassContainer,
-                                        const char *ClassMap)
+void Cty_DrawCtyMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
+                                    const char *ClassContainer,
+                                    const char *ClassMap)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -463,7 +463,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 	 Str_FreeGoToTitle ();
 
 	    /***** Draw country map *****/
-	    Cty_DrawCountryMap (Cty,ClassMap);
+	    Cty_DrawCtyMap (Cty,ClassMap);
 
 	    /***** Write country name *****/
 	    HTM_NBSP ();
@@ -488,13 +488,13 @@ void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action
 /***************************** Draw country map ******************************/
 /*****************************************************************************/
 
-void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class)
+void Cty_DrawCtyMap (const struct Hie_Node *Cty,const char *Class)
   {
    char URL[WWW_MAX_BYTES_WWW + 1];
    char *Icon;
 
    /***** Draw country map *****/
-   switch (Cty_CheckIfCountryPhotoExists (Cty))
+   switch (Cty_CheckIfCtyPhotoExists (Cty))
      {
       case Exi_EXISTS:
 	 WWW_BuildURL (URL,"%s/%s",Cfg_URL_ICON_COUNTRIES_PUBLIC,Cty->ShrtName);
@@ -514,7 +514,7 @@ void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class)
 /*********************** Check if country map exists *************************/
 /*****************************************************************************/
 
-Exi_Exist_t Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty)
+Exi_Exist_t Cty_CheckIfCtyPhotoExists (const struct Hie_Node *Cty)
   {
    char PathMap[PATH_MAX + 1];
 
@@ -599,41 +599,41 @@ void Cty_WriteScriptGoogleGeochart (void)
 /******************** Put forms to edit institution types ********************/
 /*****************************************************************************/
 
-void Cty_EditCountries (void)
+void Cty_EditCtys (void)
   {
    /***** Country constructor *****/
-   Cty_EditingCountryConstructor ();
+   Cty_EditingCtyConstructor ();
 
    /***** Edit countries *****/
-   Cty_EditCountriesInternal ();
+   Cty_EditCtysInternal ();
 
    /***** Country destructor *****/
-   Cty_EditingCountryDestructor ();
+   Cty_EditingCtyDestructor ();
   }
 
-static void Cty_EditCountriesInternal (void)
+static void Cty_EditCtysInternal (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Get list of countries *****/
    Gbl.Hierarchy.List[Hie_SYS].SelectedOrder = Hie_ORDER_BY_NAME;
-   Cty_GetFullListOfCountries ();
+   Cty_GetFullListOfCtys ();
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_HIERARCHY_PLURAL_Abc[Hie_CTY],
-                 Cty_PutIconsEditingCountries,NULL,
+                 Cty_PutIconsEditingCtys,NULL,
                  Hlp_SYSTEM_Countries,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new country *****/
-      Cty_PutFormToCreateCountry ();
+      Cty_PutFormToCreateCty ();
 
       /***** Forms to edit current countries *****/
       if (Gbl.Hierarchy.List[Hie_SYS].Num)
-	 Cty_ListCountriesForEdition ();
+	 Cty_ListCtysForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -646,7 +646,7 @@ static void Cty_EditCountriesInternal (void)
 /*************** Put contextual icons in edition of countries ****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args)
+static void Cty_PutIconsEditingCtys (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view countries *****/
    Ico_PutContextualIconToView (ActSeeCty,NULL,NULL,NULL);
@@ -659,7 +659,7 @@ static void Cty_PutIconsEditingCountries (__attribute__((unused)) void *Args)
 /********** Get basic list of countries ordered by name of country ***********/
 /*****************************************************************************/
 
-void Cty_GetBasicListOfCountries (void)
+void Cty_GetBasicListOfCtys (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -710,7 +710,7 @@ void Cty_GetBasicListOfCountries (void)
 /********** and number of users who claim to belong to them        ***********/
 /*****************************************************************************/
 
-static void Cty_GetFullListOfCountries (void)
+static void Cty_GetFullListOfCtys (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -766,14 +766,14 @@ static void Cty_GetFullListOfCountries (void)
 /************************** Write selector of country ************************/
 /*****************************************************************************/
 
-void Cty_WriteSelectorOfCountry (void)
+void Cty_WriteSelectorOfCty (void)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    unsigned NumCty;
    const struct Hie_Node *Cty;
 
    /***** Get list of countries *****/
-   Cty_GetBasicListOfCountries ();
+   Cty_GetBasicListOfCtys ();
 
    /***** Begin form *****/
    Frm_BeginFormGoTo (ActSeeIns);
@@ -815,7 +815,7 @@ void Cty_WriteSelectorOfCountry (void)
 /*****************************************************************************/
 // If ClassLink == NULL ==> do not put link
 
-void Cty_WriteCountryName (long HieCod)
+void Cty_WriteCtyName (long HieCod)
   {
    char CtyName[Cty_MAX_BYTES_NAME + 1];
    Frm_PutForm_t PutForm = Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
@@ -823,7 +823,7 @@ void Cty_WriteCountryName (long HieCod)
                         						   Frm_DONT_PUT_FORM;
 
    /***** Get country name *****/
-   Cty_GetCountryNameInLanguage (HieCod,Gbl.Prefs.Language,CtyName);
+   Cty_GetCtyNameInLanguage (HieCod,Gbl.Prefs.Language,CtyName);
 
    switch (PutForm)
      {
@@ -848,7 +848,7 @@ void Cty_WriteCountryName (long HieCod)
 /***************** Get basic data of country given its code ******************/
 /*****************************************************************************/
 
-Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node)
+Err_SuccessOrError_t Cty_GetCtyDataByCod (struct Hie_Node *Node)
   {
    extern const char *Txt_Another_country;
    MYSQL_RES *mysql_res;
@@ -949,13 +949,13 @@ void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 /***************************** Get country name ******************************/
 /*****************************************************************************/
 
-void Cty_FlushCacheCountryName (void)
+void Cty_FlushCacheCtyName (void)
   {
    Gbl.Cache.CountryName.Status = Cac_INVALID;
   }
 
-void Cty_GetCountryNameInLanguage (long HieCod,Lan_Language_t Language,
-				   char CtyName[Cty_MAX_BYTES_NAME + 1])
+void Cty_GetCtyNameInLanguage (long HieCod,Lan_Language_t Language,
+			       char CtyName[Cty_MAX_BYTES_NAME + 1])
   {
    /***** 1. Fast check: Trivial case *****/
    if (HieCod <= 0)
@@ -985,7 +985,7 @@ void Cty_GetCountryNameInLanguage (long HieCod,Lan_Language_t Language,
 /***************************** List all countries ****************************/
 /*****************************************************************************/
 
-static void Cty_ListCountriesForEdition (void)
+static void Cty_ListCtysForEdition (void)
   {
    extern const char *Txt_STR_LANG_NAME[1 + Lan_NUM_LANGUAGES];
    unsigned NumCty;
@@ -1000,7 +1000,7 @@ static void Cty_ListCountriesForEdition (void)
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Cty_PutHeadCountriesForEdition ();
+      Cty_PutHeadCtysForEdition ();
 
       /***** Write all countries *****/
       for (NumCty = 0;
@@ -1121,7 +1121,7 @@ static void Cty_PutParOthCtyCod (void *HieCod)
 /****************************** Remove a country *****************************/
 /*****************************************************************************/
 
-void Cty_RemoveCountry (void)
+void Cty_RemoveCty (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_You_can_not_remove_a_country_with_institutions_or_users;
@@ -1130,7 +1130,7 @@ void Cty_RemoveCountry (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Country constructor *****/
-   Cty_EditingCountryConstructor ();
+   Cty_EditingCtyConstructor ();
 
    /***** Get country code *****/
    Cty_EditingCty->HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
@@ -1156,13 +1156,13 @@ void Cty_RemoveCountry (void)
    else	// Country has no users ==> remove it
      {
       /***** Remove surveys of the country *****/
-      Svy_RemoveSurveys (Hie_CTY,Cty_EditingCty->HieCod);
+      Svy_RemoveSvys (Hie_CTY,Cty_EditingCty->HieCod);
 
       /***** Remove country *****/
       Cty_DB_RemoveCty (Cty_EditingCty->HieCod);
 
       /***** Flush cache *****/
-      Cty_FlushCacheCountryName ();
+      Cty_FlushCacheCtyName ();
       for (HieLvl  = Hie_INS;
 	   HieLvl <= Hie_CRS;
 	   HieLvl++)
@@ -1181,7 +1181,7 @@ void Cty_RemoveCountry (void)
 /************************ Change the name of a country ***********************/
 /*****************************************************************************/
 
-void Cty_RenameCountry (void)
+void Cty_RenameCty (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_The_country_X_already_exists;
@@ -1193,7 +1193,7 @@ void Cty_RenameCountry (void)
    char FldName[4 + 1 + 2 + 1];	// Example: "Name_en"
 
    /***** Country constructor *****/
-   Cty_EditingCountryConstructor ();
+   Cty_EditingCtyConstructor ();
 
    /***** Get the code of the country *****/
    Cty_EditingCty->HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
@@ -1212,7 +1212,7 @@ void Cty_RenameCountry (void)
      {
       /***** Check if old and new names are the same
              (this happens when return is pressed without changes) *****/
-      Cty_GetCountryNameInLanguage (Cty_EditingCty->HieCod,Language,OldCtyName);
+      Cty_GetCtyNameInLanguage (Cty_EditingCty->HieCod,Language,OldCtyName);
       if (strcmp (OldCtyName,NewCtyName))	// Different names
 	 /***** If country was in database... *****/
 	 switch (Cty_DB_CheckIfCountryNameExists (Language,NewCtyName,
@@ -1245,7 +1245,7 @@ static void Cty_UpdateCtyName (long HieCod,const char *FldName,const char *NewCt
    Cty_DB_UpdateCtyField (HieCod,FldName,NewCtyName);
 
    /***** Flush cache *****/
-   Cty_FlushCacheCountryName ();
+   Cty_FlushCacheCtyName ();
   }
 
 /*****************************************************************************/
@@ -1262,7 +1262,7 @@ void Cty_ChangeCtyWWW (void)
    char FldName[3 + 1 + 2 + 1];	// Example: "WWW_en"
 
    /***** Country constructor *****/
-   Cty_EditingCountryConstructor ();
+   Cty_EditingCtyConstructor ();
 
    /***** Get the code of the country *****/
    Cty_EditingCty->HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
@@ -1293,10 +1293,10 @@ void Cty_ContEditAfterChgCty (void)
    Cty_ShowAlertAndButtonToGoToCty ();
 
    /***** Show the form again *****/
-   Cty_EditCountriesInternal ();
+   Cty_EditCtysInternal ();
 
    /***** Country destructor *****/
-   Cty_EditingCountryDestructor ();
+   Cty_EditingCtyDestructor ();
   }
 
 /*****************************************************************************/
@@ -1327,7 +1327,7 @@ static void Cty_PutParGoToCty (void *HieCod)
 /********************* Put a form to create a new country ********************/
 /*****************************************************************************/
 
-static void Cty_PutFormToCreateCountry (void)
+static void Cty_PutFormToCreateCty (void)
   {
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
@@ -1340,7 +1340,7 @@ static void Cty_PutFormToCreateCountry (void)
    Frm_BeginFormTable (ActNewCty,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Cty_PutHeadCountriesForEdition ();
+      Cty_PutHeadCtysForEdition ();
 
       HTM_TR_Begin (NULL);
 
@@ -1421,7 +1421,7 @@ static void Cty_PutFormToCreateCountry (void)
 /******************* Write header with fields of a country *******************/
 /*****************************************************************************/
 
-static void Cty_PutHeadCountriesForEdition (void)
+static void Cty_PutHeadCtysForEdition (void)
   {
    extern const char *Txt_Numeric_BR_code_BR_ISO_3166_1;
    extern const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1;
@@ -1448,7 +1448,7 @@ static void Cty_PutHeadCountriesForEdition (void)
 /******************* Receive form to create a new country ********************/
 /*****************************************************************************/
 
-void Cty_ReceiveNewCountry (void)
+void Cty_CreateNewCty (void)
   {
    extern const char *Txt_You_must_specify_the_numerical_code_of_the_new_country;
    extern const char *Txt_The_numerical_code_X_already_exists;
@@ -1465,7 +1465,7 @@ void Cty_ReceiveNewCountry (void)
    unsigned i;
 
    /***** Country constructoor *****/
-   Cty_EditingCountryConstructor ();
+   Cty_EditingCtyConstructor ();
    for (Lan  = (Lan_Language_t) 1;
 	Lan <= (Lan_Language_t) Lan_NUM_LANGUAGES;
 	Lan++)
@@ -1614,7 +1614,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
       free (Title);
 
 	 /***** Write heading *****/
-	 Cty_PutHeadCountriesForSeeing (Hie_ORDER_NOT_SELECTABLE);
+	 Cty_PutHeadCtysForSeeing (Hie_ORDER_NOT_SELECTABLE);
 
 	 /***** List the countries (one row per country) *****/
 	 for (NumCty  = 1, The_ResetRowColor ();
@@ -1628,7 +1628,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 	    SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	    /* Write data of this country */
-	    Cty_ListOneCountryForSeeing (&Cty,NumCty);
+	    Cty_ListOneCtyForSeeing (&Cty,NumCty);
 	   }
 
       /***** End table and box *****/
@@ -1643,7 +1643,7 @@ void Cty_ListCtysFound (MYSQL_RES **mysql_res,unsigned NumCtys)
 /*********************** Country constructor/destructor **********************/
 /*****************************************************************************/
 
-static void Cty_EditingCountryConstructor (void)
+static void Cty_EditingCtyConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Cty_EditingCty != NULL)
@@ -1661,7 +1661,7 @@ static void Cty_EditingCountryConstructor (void)
    Cty_EditingCty->NumUsrsWhoClaimToBelong.Status = Cac_INVALID;
   }
 
-static void Cty_EditingCountryDestructor (void)
+static void Cty_EditingCtyDestructor (void)
   {
    /***** Free memory used for country *****/
    if (Cty_EditingCty != NULL)

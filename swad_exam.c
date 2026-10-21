@@ -58,6 +58,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_photo.h"
 #include "swad_role.h"
 #include "swad_test.h"
 #include "swad_test_visibility.h"
@@ -165,7 +166,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->NumSelected		= 0;	// Number of exams selected
    Exams->Lst			= NULL;	// List of exams
    Exams->SelectedOrder		= Exa_ORDER_DEFAULT;
-   Exams->CurrentPage		= 0;
+   Exams->ThisPage		= 0;
    Exams->ListQuestions		= NULL;
    Exams->ExaCodsSelected	= NULL;	// String with selected exam codes separated by separator multiple
    Exams->Exam.ExaCod		= -1L;	// Selected/current exam code
@@ -236,9 +237,9 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Exams->Num;
-   Pagination.CurrentPage = Exams->CurrentPage;
+   Pagination.ThisPage = Exams->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Exams->CurrentPage = Pagination.CurrentPage;
+   Exams->ThisPage = Pagination.ThisPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Exams,Exa_PutIconsListExams,Exams,
@@ -264,7 +265,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 
 		     /* Form to change order */
 		     Frm_BeginForm (ActSeeAllExa);
-			Pag_PutParPagNum (Pag_EXAMS,Exams->CurrentPage);
+			Pag_PutParPagNum (Pag_EXAMS,Exams->ThisPage);
 			Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 			HTM_BUTTON_Submit_Begin (Txt_EXAMS_ORDER_HELP[Order],NULL,
 			                         "class=\"BT_LINK\"");
@@ -379,7 +380,7 @@ static void Exa_PutParsToCreateNewExam (void *Exams)
    if (Exams)
      {
       Exa_PutParExamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
-      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
+      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->ThisPage);
      }
   }
 
@@ -745,7 +746,7 @@ void Exa_PutPars (void *Exams)
       Exa_PutParOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->CurrentPage);
+      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->ThisPage);
       ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod.Par);
      }
   }
@@ -764,7 +765,7 @@ void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod)
 
    /***** Get other parameters *****/
    Exams->SelectedOrder = Exa_GetParOrder ();
-   Exams->CurrentPage = Pag_GetParPagNum (Pag_EXAMS);
+   Exams->ThisPage = Pag_GetParPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
    Exams->Exam.ExaCod = GetExaCod[CheckExaCod] (ParCod_Exa);
@@ -1609,7 +1610,7 @@ static void Exa_ShowStudent (struct Usr_Data *UsrDat,Pho_ShowPhotos_t ShowPhoto)
 
       /***** Label *****/
       HTM_DIV_Begin ("class=\"Exa_HEAD_LEFT DAT_STRONG_%s\"",The_GetSuffix ());
-	 HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+	 HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InThisCrs][UsrDat->Sex]);
 	 HTM_Colon ();
       HTM_DIV_End ();
 

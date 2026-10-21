@@ -46,7 +46,7 @@ unsigned Ses_DB_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);
 
 void Ses_DB_RemoveExpiredSessions (void);
 void Ses_DB_RemoveUsrSessions (long UsrCod);
-void Ses_SB_RemoveCurrentSession (void);
+void Ses_SB_RemoveThisSession (void);
 
 //---------------------------- Session parameters -----------------------------
 void Ses_DB_InsertPar (const char *ParName,const char *ParValue);

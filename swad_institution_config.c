@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 static void InsCfg_Configuration (Vie_ViewType_t ViewType);
 static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
 static void InsCfg_Map (void);
-static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void InsCfg_Cty (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void InsCfg_NumUsrs (void);
 static void InsCfg_NumDegs (void);
 static void InsCfg_NumCrss (void);
@@ -136,7 +136,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Country *****/
-	    InsCfg_Country (ViewType,PutFormCty);
+	    InsCfg_Cty (ViewType,PutFormCty);
 
 	    /***** Institution name *****/
 	    HieCfg_Name (PutFormName,Hie_INS,Nam_FULL_NAME);
@@ -254,14 +254,14 @@ static void InsCfg_Map (void)
    HTM_SCRIPT_Begin (NULL,NULL);
 
    /* Let's create a map with pretty Mapbox Streets tiles */
-   Ctr_DB_GetAvgCoordAndZoomInCurrentIns (&InsAvgCoord,&Zoom);
+   Ctr_DB_GetAvgCoordAndZoomInThisIns (&InsAvgCoord,&Zoom);
    Map_CreateMap (InsCfg_MAP_CONTAINER_ID,&InsAvgCoord,Zoom);
 
    /* Add Mapbox Streets tile layer to our map */
    Map_AddTileLayer ();
 
    /* Get centers with coordinates */
-   NumCtrs = Ctr_DB_GetCtrsWithCoordsInCurrentIns (&mysql_res);
+   NumCtrs = Ctr_DB_GetCtrsWithCoordsInThisIns (&mysql_res);
 
    /* Add a marker and a popup for each center */
    for (NumCtr = 0;
@@ -295,7 +295,7 @@ static void InsCfg_Map (void)
 /***************** Show country in institution configuration *****************/
 /*****************************************************************************/
 
-static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
+static void InsCfg_Cty (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -308,7 +308,7 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
      };
 
    /***** Get list of countries *****/
-   Cty_GetBasicListOfCountries ();
+   Cty_GetBasicListOfCtys ();
 
    /***** Country *****/
    HTM_TR_Begin (NULL);
@@ -329,7 +329,7 @@ static void InsCfg_Country (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 					      "class=\"BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
-	       Cty_DrawCountryMap (&Gbl.Hierarchy.Node[Hie_CTY],"COUNTRY_MAP_TINY");
+	       Cty_DrawCtyMap (&Gbl.Hierarchy.Node[Hie_CTY],"COUNTRY_MAP_TINY");
 	       HTM_NBSP ();
 	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
 	       if (ViewType == Vie_VIEW)
@@ -535,12 +535,12 @@ void InsCfg_ChangeInsCty (void)
 
 void InsCfg_RenameInsShort (void)
   {
-   Ins_RenameInstitution (&Gbl.Hierarchy.Node[Hie_INS],Nam_SHRT_NAME);
+   Ins_RenameIns (&Gbl.Hierarchy.Node[Hie_INS],Nam_SHRT_NAME);
   }
 
 void InsCfg_RenameInsFull (void)
   {
-   Ins_RenameInstitution (&Gbl.Hierarchy.Node[Hie_INS],Nam_FULL_NAME);
+   Ins_RenameIns (&Gbl.Hierarchy.Node[Hie_INS],Nam_FULL_NAME);
   }
 
 /*****************************************************************************/

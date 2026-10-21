@@ -223,7 +223,7 @@ const char *Tab_GetTxt (Tab_Tab_t NumTab)
 /*************** Set current tab depending on current action *****************/
 /*****************************************************************************/
 
-void Tab_SetCurrentTab (void)
+void Tab_SetThisTab (void)
   {
    Gbl.Action.Tab = Act_GetTab (Gbl.Action.Act);
 

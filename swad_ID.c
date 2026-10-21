@@ -395,7 +395,7 @@ Usr_Can_t ID__ICanSeeOtherUsrIDs (const struct Usr_Data *UsrDat)
             return Usr_CAN;
 
 	 /* Check 2: I can see the IDs of confirmed students */
-         if (UsrDat->Roles.InCurrentCrs == Rol_STD &&	// A student...
+         if (UsrDat->Roles.InThisCrs == Rol_STD &&	// A student...
 	     UsrDat->Accepted == Usr_HAS_ACCEPTED)	// ...who accepted registration
             return Usr_CAN;
 
@@ -444,7 +444,7 @@ static void ID__PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID
      };
 
    /***** Begin form *****/
-   Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InCurrentCrs],Anchor);
+   Frm_BeginFormAnchor (NextAction[UsrDat->Roles.InThisCrs],Anchor);
       if (Gbl.Action.Original != ActUnk)
 	{
 	 ParCod_PutPar (ParCod_OrgAct,Act_GetActCod (Gbl.Action.Original));	// Original action, used to know where we came from
@@ -959,8 +959,8 @@ void ID__ConfirmOtherUsrID (void)
 	 /* If user is a student in current course,
 	    check if he/she has accepted */
 	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)
-	    if (Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs == Rol_STD)
-	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    if (Gbl.Usrs.Other.UsrDat.Roles.InThisCrs == Rol_STD)
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 
 	 if (ID__ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	    ICanConfirm = Usr_CAN;

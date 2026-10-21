@@ -186,7 +186,7 @@ unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod)
 /*****************************************************************************/
 // Return the number of rows of the result
 
-unsigned Tag_DB_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
+unsigned Tag_DB_GetAllTagsFromThisCrs (MYSQL_RES **mysql_res)
   {
    /***** Get available tags from database *****/
    return (unsigned)
@@ -236,7 +236,7 @@ unsigned Tag_DB_GetEnabledTagsFromCrs (MYSQL_RES **mysql_res,
 /*****************************************************************************/
 // Return the number of rows of the result
 
-Exi_Exist_t Tag_DB_CheckIfTagsExistInCurrentCrs (void)
+Exi_Exist_t Tag_DB_CheckIfTagsExistInThisCrs (void)
   {
    return
    DB_QueryEXISTS ("can not check if course has tags",

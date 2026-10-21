@@ -122,20 +122,20 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	      {
-	       switch (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS])
+	       switch (Gbl.Usrs.Me.IBelongToThis[Hie_CRS])
 	         {
 	          case Usr_BELONG:		// I belong to this course
 		     if (Gbl.Action.Act != ActLogIn &&
 			 Gbl.Action.Act != ActLogInNew &&
 			 Gbl.Action.Act != ActLogInLan)	// I am not just logged
-			if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs] != ActUnk)
+			if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InThisCrs] != ActUnk)
 			  {
 			   /***** Request my removing from this course *****/
 			   if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
 					 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
 			      Err_NotEnoughMemoryExit ();
 			   Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-								ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs],
+								ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InThisCrs],
 								Btn_REMOVE);
 			   free (Description);
 			  }
@@ -153,7 +153,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses
 	      {
 	       if (Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
-		   Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_TCH)	// I am a teacher in current course
+		   Gbl.Usrs.Me.UsrDat.Roles.InThisCrs == Rol_TCH)	// I am a teacher in current course
 		  if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 						   1 << Rol_STD))		// Current course probably has no students
 		     /***** Request students enrolment *****/

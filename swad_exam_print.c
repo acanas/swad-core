@@ -651,7 +651,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
                                          unsigned QstInd,
                                          struct Qst_Question *Qst)
   {
-   static struct ExaSet_Set CurrentSet =
+   static struct ExaSet_Set ThisSet =
      {
       .ExaCod = -1L,
       .SetCod = -1L,
@@ -662,17 +662,17 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
 
    /***** If this is the first question *****/
    if (QstInd == 0)
-      CurrentSet.SetCod = -1L;	// Reset current set
+      ThisSet.SetCod = -1L;	// Reset current set
 
-   if (Print->PrintedQsts[QstInd].SetCod != CurrentSet.SetCod)
+   if (Print->PrintedQsts[QstInd].SetCod != ThisSet.SetCod)
      {
       /***** Get data of this set *****/
-      CurrentSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
-      ExaSet_GetSetDataByCod (&CurrentSet);
+      ThisSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
+      ExaSet_GetSetDataByCod (&ThisSet);
 
       /***** Title for this set *****/
       HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
-	 ExaSet_WriteSetTitle (&CurrentSet);
+	 ExaSet_WriteSetTitle (&ThisSet);
       HTM_DIV_End ();
      }
 

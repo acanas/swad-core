@@ -518,7 +518,7 @@ void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
 /*********** Get centres which have coordinates in current country ***********/
 /*****************************************************************************/
 
-unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res)
+unsigned Cty_DB_GetCtrsWithCoordsInThisCty (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers with coordinates",

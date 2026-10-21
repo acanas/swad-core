@@ -2295,8 +2295,8 @@ void Inf_ReceivePagInfo (void)
 	 if (Str_FileIs (SourceFileName,"html") ||
 	     Str_FileIs (SourceFileName,"htm" )) // .html or .htm file
 	   {
-	    Fil_RemoveTree (PathRelDirHTML);
-	    Fil_CreateDirIfNotExists (PathRelDirHTML);
+	    Fil_RemoveFolderAndItsContent (PathRelDirHTML);
+	    Fil_CreateFolderIfNotExists (PathRelDirHTML);
 
 	    Fil_BuildPath (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
 	    switch (Fil_EndReceptionOfFile (PathRelFileHTML,Par))
@@ -2314,8 +2314,8 @@ void Inf_ReceivePagInfo (void)
 	   }
 	 else if (Str_FileIs (SourceFileName,"zip")) // .zip file
 	   {
-	    Fil_RemoveTree (PathRelDirHTML);
-	    Fil_CreateDirIfNotExists (PathRelDirHTML);
+	    Fil_RemoveFolderAndItsContent (PathRelDirHTML);
+	    Fil_CreateFolderIfNotExists (PathRelDirHTML);
 
 	    Fil_BuildPath (PathRelFileZIP,"%s/%s.zip",
 			   Gbl.Crs.Path.Prv,

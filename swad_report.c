@@ -99,8 +99,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report);
 static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report);
 
 static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report);
-static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
-                                          struct Rep_Report *Report);
+static void Rep_GetAndWriteMyCrss (Rol_Role_t Role,struct Rep_Report *Report);
 static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (struct Rep_Report *Report);
 static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
                                            struct Rep_Report *Report);
@@ -353,7 +352,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
    const char *UniqueNameEncrypted = Cry_GetUniqueNameEncrypted ();
 
    /***** Path for reports *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_REP_PUBLIC);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_REP_PUBLIC);
 
    /***** Unique directory for the file with the report *****/
    /* 1. Create a directory using the leftmost 2 chars of a unique name */
@@ -361,7 +360,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 		  Cfg_PATH_REP_PUBLIC,
 		  UniqueNameEncrypted[0],
 		  UniqueNameEncrypted[1]);
-   Fil_CreateDirIfNotExists (PathUniqueDirL);
+   Fil_CreateFolderIfNotExists (PathUniqueDirL);
 
    /* 2. Create a directory using the rightmost 41 chars of a unique name */
    Fil_BuildPath (PathUniqueDirR,"%s/%s",
@@ -501,7 +500,7 @@ static void Rep_WriteSectionUsrInfo (void)
             Gbl.Usrs.Me.UsrDat.Email);
 
    /***** User's country *****/
-   Cty_GetCountryNameInLanguage (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY],
+   Cty_GetCtyNameInLanguage (Gbl.Usrs.Me.UsrDat.HieCods[Hie_CTY],
 				 Gbl.Prefs.Language,CtyName);
    fprintf (Rep_File,"<li>%s: %s</li>",
             Txt_HIERARCHY_SINGUL_Abc[Hie_CTY],CtyName);
@@ -808,7 +807,7 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
 	Role <= Rol_TCH;
 	Role++)
       /* List my courses with this role */
-      Rep_GetAndWriteMyCurrentCrss (Role,Report);
+      Rep_GetAndWriteMyCrss (Role,Report);
 
    /***** End section *****/
    fprintf (Rep_File,"</ul>"
@@ -878,8 +877,7 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
 /************************* Write my current courses **************************/
 /*****************************************************************************/
 
-static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
-                                          struct Rep_Report *Report)
+static void Rep_GetAndWriteMyCrss (Rol_Role_t Role,struct Rep_Report *Report)
   {
    extern const char *Txt_USER_in_COURSE;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1291,7 +1289,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
       /* Remove report directory and file */
       Fil_BuildPath (PathUniqueDirReport,"%s/%s/%s",
 	             Cfg_PATH_REP_PUBLIC,row[0],row[1]);
-      Fil_RemoveTree (PathUniqueDirReport);
+      Fil_RemoveFolderAndItsContent (PathUniqueDirReport);
      }
 
    /***** Free structure that stores the query result *****/

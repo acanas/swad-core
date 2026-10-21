@@ -64,7 +64,7 @@ void RSS_UpdateRSSFileForACrs (struct Hie_Node *Crs)
 		  Cfg_PATH_CRS_PUBLIC,
 		  (unsigned long) Crs->HieCod,
 		  Cfg_RSS_FOLDER);
-   Fil_CreateDirIfNotExists (PathRelPublRSSDir);
+   Fil_CreateFolderIfNotExists (PathRelPublRSSDir);
 
    /***** Create RSS file *****/
    Fil_BuildPath (PathRelPublRSSFile,"%s/%s",
@@ -247,7 +247,7 @@ static void RSS_WriteCallsForExams (FILE *FileRSS,struct Hie_Node *Crs)
    if (DB_CheckIfDatabaseIsOpen () == CloOpe_OPEN)
      {
       /***** Write exam announcements (only future exams) in current course *****/
-      if ((NumExams = Cfe_DB_GetFutureCallsForExamsInCurrentCrs (&mysql_res)))
+      if ((NumExams = Cfe_DB_GetFutureCallsForExamsInThisCrs (&mysql_res)))
 	{
 	 Usr_UsrDataConstructor (&UsrDat);
 

@@ -179,7 +179,7 @@ void Gam_ResetGames (struct Gam_Games *Games)
    Games->NumSelected		= 0;		// Number of games selected
    Games->Lst			= NULL;	// List of games
    Games->SelectedOrder		= Gam_ORDER_DEFAULT;
-   Games->CurrentPage		= 0;
+   Games->ThisPage		= 0;
    Games->ListQuestions		= NULL;
    Games->GamCodsSelected	= NULL;	// String with selected game codes separated by separator multiple
    Games->Game.GamCod		= -1L;	// Current/selected game code
@@ -247,9 +247,9 @@ void Gam_ListAllGames (struct Gam_Games *Games)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Games->Num;
-   Pagination.CurrentPage = Games->CurrentPage;
+   Pagination.ThisPage = Games->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Games->CurrentPage = Pagination.CurrentPage;
+   Games->ThisPage = Pagination.ThisPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Games,Gam_PutIconsListingGames,Games,
@@ -319,7 +319,7 @@ static void Gam_ListAllGamesHeading (const struct Gam_Games *Games)
 
 	    /* Form to change order */
 	    Frm_BeginForm (ActSeeAllGam);
-	       Pag_PutParPagNum (Pag_GAMES,Games->CurrentPage);
+	       Pag_PutParPagNum (Pag_GAMES,Games->ThisPage);
 	       Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 
 	       HTM_BUTTON_Submit_Begin (Txt_GAMES_ORDER_HELP[Order],NULL,
@@ -424,7 +424,7 @@ static void Gam_PutParsToCreateNewGame (void *Games)
    if (Games)
      {
       Gam_PutParGameOrder (((struct Gam_Games *) Games)->SelectedOrder);
-      Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->CurrentPage);
+      Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->ThisPage);
      }
   }
 
@@ -821,7 +821,7 @@ void Gam_PutPars (void *Games)
       Gam_PutParOrder (((struct Gam_Games *) Games)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->CurrentPage);
+      Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->ThisPage);
      }
   }
 
@@ -833,7 +833,7 @@ long Gam_GetPars (struct Gam_Games *Games)
   {
    /***** Get other parameters *****/
    Games->SelectedOrder = Gam_GetParOrder ();
-   Games->CurrentPage = Pag_GetParPagNum (Pag_GAMES);
+   Games->ThisPage = Pag_GetParPagNum (Pag_GAMES);
 
    /***** Get game code *****/
    return ParCod_GetPar (ParCod_Gam);

@@ -165,27 +165,36 @@ typedef enum
    Brw_FOOTER = 1,
   } Brw_HeadOrFoot_t;
 
-struct Brw_FileMetadata
+struct Brw_File
   {
-   long FilCod;
-   long Cod;						// Code of institution, center, degree, course or group
-   long ZoneUsrCod;
-   long PublisherUsrCod;
-   unsigned Level;
-   char PathInServ[PATH_MAX + 1];			// Absolute path in server of file including file name
-   char PathInZone[PATH_MAX + 1];			// Path in zone including file name
-   char PathInZoneWithoutFileName[PATH_MAX + 1];	// Path in zone, without ending '/', until file, folder or link name
-   char FileName[NAME_MAX + 1];				// File, folder or link name
-   Brw_FileType_t Type;
-   HidVis_HiddenOrVisible_t HiddenOrVisible;
-   PriPub_PrivateOrPublic_t PrivateOrPublic;
-   Brw_License_t License;
-   off_t Size;
-   time_t Time;
-   unsigned NumMyViews;
-   unsigned NumPublicViews;
-   unsigned NumViewsFromLoggedUsrs;
-   unsigned NumLoggedUsrs;
+   long FilCod;		// Internal file code
+   long HieCod;		// Code of institution, center, degree, course, group or project
+   long OwnerCod;	// Briefcase, assignments or works user code
+   unsigned Level;	// Level in zone (0 == root folder)
+   Brw_FileType_t Type;	// File, folder or link
+   struct
+     {
+      HidVis_HiddenOrVisible_t HiddenOrVisible;	// Is hidden of visible?
+      PriPub_PrivateOrPublic_t PrivateOrPublic;	// Is private or public?
+      long PublisherCod;	// Publisher user code (who uploaded the file)
+      Brw_License_t License;	// All rights reserved, Creative Commons...
+      off_t Size;		// Size in bytes
+      time_t Time;		// Date and time
+     } Metadata;
+   struct
+     {
+      unsigned MyViews;			// Number of views/downloads from the logged user
+      unsigned PublicViews;		// Number of views/downloads from non-logged users
+      unsigned ViewsFromLoggedUsrs;	// Number of views/downloads from logged users
+      unsigned LoggedUsrs;		// Number of distinct logged users who have view/downloaded this file
+     } Stats;
+   struct
+     {
+      char InServ[PATH_MAX + 1];		// Absolute path in server of file including file name
+      char InZone[PATH_MAX + 1];		// Path in zone including file name
+      char InZoneWithoutName[PATH_MAX + 1];	// Path in zone, without ending '/', until file, folder or link name
+      char Name[NAME_MAX + 1];			// File, folder or link name
+     } Path;
   };
 
 struct Brw_TmpPubDir
@@ -214,12 +223,12 @@ struct Brw_FileBrowser
    struct
      {
       char AboveRootFolder[PATH_MAX + 1];
-      char IncludingRootFolder[PATH_MAX + 1];
+      char WithRootFolder[PATH_MAX + 1];
      } PathRootFolderInServ;
    long FilCod;			// Used only as hidden parameter in forms
    struct
      {
-      struct Brw_FileMetadata FileMetadata;
+      struct Brw_File File;
       Brw_Zone_t ZoneDB;
       bool IsInCurrentZone;	// Is the clipboard in the current zone?
      } Clipboard;

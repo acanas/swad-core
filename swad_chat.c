@@ -135,7 +135,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       HTM_UL_Begin ("class=\"LIST_TREE\"");
 
 	 /***** Link to chat available for all users *****/
-	 IsLastItemInLevel[1] = Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||
+	 IsLastItemInLevel[1] = Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG ||
 				Gbl.Usrs.Me.Hierarchy[Hie_DEG].Num ? Lay_NO_LAST :
 								     Lay_LAST;
 	 snprintf (ThisRoomFullName,sizeof (ThisRoomFullName),"%s (%s)",

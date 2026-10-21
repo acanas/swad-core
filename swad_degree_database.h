@@ -52,8 +52,8 @@ void Deg_DB_GetDegShrtName (long HieCod,char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 
 Exi_Exist_t Deg_DB_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 unsigned Deg_DB_GetNumDegsOfType (long DegTypCod);
 unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod);
-unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res);
-unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res);
+unsigned Deg_DB_GetDegsOfThisCtrBasic (MYSQL_RES **mysql_res);
+unsigned Deg_DB_GetDegsOfThisCtrFull (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithPendingCrss (MYSQL_RES **mysql_res);
 unsigned Deg_DB_GetDegsWithStds (MYSQL_RES **mysql_res);
 Exi_Exist_t Deg_DB_CheckIfDegNameExistsInCtr (const char *FldName,const char *Name,

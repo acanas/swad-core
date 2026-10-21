@@ -54,14 +54,14 @@ void Usr_ResetMyLastData (void);
 void Usr_UsrDataDestructor (struct Usr_Data *UsrDat);
 void Usr_GetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                   Usr_GetPrefs_t GetPrefs,
-                                  Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
+                                  Usr_GetRoleInThisCrs_t GetRoleInThisCrs);
 void Usr_AllocateListUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 Usr_MeOrOther_t Usr_ItsMe (long UsrCod);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct Usr_Data *UsrDat);
 void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                Usr_GetPrefs_t GetPrefs,
-                               Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
+                               Usr_GetRoleInThisCrs_t GetRoleInThisCrs);
 
 void Usr_BuildFullName (struct Usr_Data *UsrDat);
 
@@ -113,7 +113,7 @@ Exi_Exist_t Usr_ChkIfUsrCodExists (long UsrCod);
 
 Exi_Exist_t Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 						     Usr_GetPrefs_t GetPrefs,
-						     Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs);
+						     Usr_GetRoleInThisCrs_t GetRoleInThisCrs);
 void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 

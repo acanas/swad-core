@@ -80,7 +80,7 @@ static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
 
 static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
-				       const struct Brw_FileMetadata *FileMetadata);
+				       const struct Brw_File *Folder);
 static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 				        const char PathInServ[PATH_MAX + 1],
 				        const char PathInServClone[PATH_MAX + 1],
@@ -170,7 +170,7 @@ void ZIP_CreateZIPAsgWrk (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get user's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	 if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
+	 if (Enr_CheckIfUsrBelongsToThisCrs (&UsrDat) == Usr_BELONG)
 	    ZIP_CreateDirCompressionUsr (&UsrDat);
      }
 
@@ -228,7 +228,7 @@ void ZIP_CreateZIPAsgWrk (void)
       Err_ShowErrorAndExit ("Can not compress files into zip file.");
 
    /***** Remove the directory of compression *****/
-   Fil_RemoveTree (Path);
+   Fil_RemoveFolderAndItsContent (Path);
   }
 
 /*****************************************************************************/
@@ -240,7 +240,7 @@ static void ZIP_CreateTmpDirForCompression (void)
    char PathDirTmp[PATH_MAX + 1];
 
    /***** If the private directory does not exist, create it *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_ZIP_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_ZIP_PRIVATE);
 
    /***** Create a new temporary directory *****/
    Str_Copy (ZIP_TmpDir,Cry_GetUniqueNameEncrypted (),sizeof (ZIP_TmpDir) - 1);
@@ -321,14 +321,14 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 void ZIP_CompressFileTree (void)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File Folder;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&Folder);	// Get folder
 
    /***** Compress folder into ZIP *****/
-   ZIP_CompressFolderIntoZIP (&FileBrowser,&FileMetadata);
+   ZIP_CompressFolderIntoZIP (&FileBrowser,&Folder);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
@@ -340,7 +340,7 @@ void ZIP_CompressFileTree (void)
 /*****************************************************************************/
 
 static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
-				       const struct Brw_FileMetadata *FileMetadata)
+				       const struct Brw_File *Folder)
   {
    extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_ZONES];
    extern const char *Txt_The_folder_is_empty;
@@ -368,14 +368,12 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
    /***** Create a copy of the directory to compress *****/
    Fil_BuildPath (Path,"%s/%s",
 		  FileBrowser->PathRootFolderInServ.AboveRootFolder,
-		  FileMetadata->PathInZone);
+		  Folder->Path.InZone);
    Fil_BuildPath (PathCompression,"%s/%s",
 	          Cfg_PATH_ZIP_PRIVATE,ZIP_TmpDir);	// Example: /var/www/swad/zip/<temporary_dir>
 
    UncompressedSize = ZIP_CloneDir (FileBrowser,
-				    Path,
-				    PathCompression,
-				    FileMetadata->PathInZone);
+				    Path,PathCompression,Folder->Path.InZone);
 
    if (UncompressedSize == 0)					// Nothing to compress
       Ale_ShowAlert (Ale_WARNING,Txt_The_folder_is_empty);
@@ -390,8 +388,8 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
 
       /***** Create public zip file with the assignment and works *****/
       Fil_BuildName (FileNameZIP,"%s.zip",
-	             strcmp (FileMetadata->FileName,".") ? FileMetadata->FileName :
-								 Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Zone]);
+	             strcmp (Folder->Path.Name,".") ? Folder->Path.Name :
+						      Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser->Zone]);
       Fil_BuildPath (PathFileZIP,"%s/%s/%s/%s",
 		     Cfg_PATH_FILE_BROWSER_TMP_PUBLIC,
 		     TmpPubDir.Left,
@@ -432,7 +430,7 @@ static void ZIP_CompressFolderIntoZIP (struct Brw_FileBrowser *FileBrowser,
    // There is no need to worry about deletion if the compression is aborted.
    // The temporary directory used for the compression
    // will eventually be deleted by another swad process.
-   Fil_RemoveTree (PathCompression);
+   Fil_RemoveFolderAndItsContent (PathCompression);
   }
 
 /*****************************************************************************/
@@ -463,7 +461,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    char PathFile[PATH_MAX + 1];
    char PathFileClone[PATH_MAX + 1];
    struct stat FileStatus;
@@ -480,31 +478,29 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
-	    Str_Copy (FileMetadata.PathInZoneWithoutFileName,PathInZone,
-		      sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
-	    Str_Copy (FileMetadata.FileName,FileList[NumFile]->d_name,
-	              sizeof (FileMetadata.FileName) - 1);
-            Brw_BuildFullPathFromPathAndName (FileBrowser,&FileMetadata);
-	    Fil_BuildPath (PathFile,"%s/%s",
-		           PathInServ,FileMetadata.FileName);
-	    Fil_BuildPath (PathFileClone,"%s/%s",
-		           PathInServClone,FileMetadata.FileName);
+	    Str_Copy (File.Path.InZoneWithoutName,PathInZone,
+		      sizeof (File.Path.InZoneWithoutName) - 1);
+	    Str_Copy (File.Path.Name,FileList[NumFile]->d_name,
+	              sizeof (File.Path.Name) - 1);
+            Brw_BuildFullPathFromPathAndName (FileBrowser,&File);
+	    Fil_BuildPath (PathFile,"%s/%s",PathInServ,File.Path.Name);
+	    Fil_BuildPath (PathFileClone,"%s/%s",PathInServClone,File.Path.Name);
 
-	    FileMetadata.Type = Brw_IS_UNKNOWN;
+	    File.Type = Brw_IS_UNKNOWN;
 	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned
 	       Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
-	       FileMetadata.Type = Brw_IS_FOLDER;
+	       File.Type = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	       FileMetadata.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
-										  Brw_IS_FILE;	// It's a file
+	       File.Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
+									  Brw_IS_FILE;	// It's a file
 	    HiddenOrVisible = (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
-														      &FileMetadata) :
+														      File.Path.InZone) :
 										     HidVis_VISIBLE;
 
 	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
-	       switch (FileMetadata.Type)
+	       switch (File.Type)
 	         {
 		  case Brw_IS_FOLDER:
 		     FullSize += (unsigned long long) FileStatus.st_size;
@@ -517,7 +513,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 		     FullSize += ZIP_CloneDir (FileBrowser,
 					       PathFile,
 					       PathFileClone,
-					       FileMetadata.PathInZone);
+					       File.Path.InZone);
 		     break;
 		  case Brw_IS_FILE:
 		  case Brw_IS_LINK:
@@ -529,7 +525,7 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 
 		     /***** Update number of my views of this file *****/
 		     Brw_UpdateMyFileViews (Brw_DB_GetFilCodByPath (FileBrowser->Zone,
-								    FileMetadata.PathInZone,
+								    File.Path.InZone,
 								    Brw_ANY_FILE));	// Any file, public or not
 		     break;
 		  default:

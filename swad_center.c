@@ -74,33 +74,32 @@ static struct Hie_Node *Ctr_EditingCtr = NULL;	// Static variable to keep the ce
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ctr_ListCenters (void);
-static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args);
-static void Ctr_PutIconToEditCenters (void);
-static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr);
+static void Ctr_ListCtrs (void);
+static void Ctr_PutIconsListingCtrs (__attribute__((unused)) void *Args);
+static void Ctr_PutIconToEditCtrs (void);
+static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr);
 
-static void Ctr_EditCentersInternal (void);
-static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args);
+static void Ctr_EditCtrsInternal (void);
+static void Ctr_PutIconsEditingCtrs (__attribute__((unused)) void *Args);
 
-static void Ctr_GetFullListOfCentersInCurrentIns (void);
-static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
-				      struct Hie_Node *Ctr,
-                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToCtr);
+static void Ctr_GetFullListOfCtrsInThisIns (void);
+static void Ctr_GetCtrDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Ctr,
+                                   Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToCtr);
 static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 				 struct Map_Coordinates *Coord);
 
-static void Ctr_ListCentersForEdition (const struct Plc_Places *Places);
-static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr);
+static void Ctr_ListCtrsForEdition (const struct Plc_Places *Places);
+static Usr_Can_t Ctr_CheckIfICanEditACtr (struct Hie_Node *Ctr);
 
 static void Ctr_ShowAlertAndButtonToGoToCtr (void);
 
-static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places);
-static void Ctr_PutHeadCentersForSeeing (Hie_OrderSelectable_t OrderSelectable);
-static void Ctr_PutHeadCentersForEdition (void);
+static void Ctr_PutFormToCreateCtr (const struct Plc_Places *Places);
+static void Ctr_PutHeadCtrsForSeeing (Hie_OrderSelectable_t OrderSelectable);
+static void Ctr_PutHeadCtrsForEdition (void);
 static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status);
 
-static void Ctr_EditingCenterConstructor (void);
-static void Ctr_EditingCenterDestructor (void);
+static void Ctr_EditingCtrConstructor (void);
+static void Ctr_EditingCtrDestructor (void);
 
 static void Ctr_FormToGoToMap (struct Hie_Node *Ctr);
 
@@ -159,7 +158,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",The_GetSuffix (),BgColor);
-		  Ctr_DrawCenterLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM ICO16x16");
+		  Ctr_DrawCtrLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
@@ -184,8 +183,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
 /******************** Draw center logo and name with link ********************/
 /*****************************************************************************/
 
-void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
-                                        const char *IconClass)
+void Ctr_DrawCtrLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
+                                     const char *IconClass)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -215,7 +214,7 @@ void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action
 /*************** Show the centers of the current institution *****************/
 /*****************************************************************************/
 
-void Ctr_ShowCtrsOfCurrentIns (void)
+void Ctr_ShowCtrsOfThisIns (void)
   {
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)		// No institution selected
@@ -225,13 +224,13 @@ void Ctr_ShowCtrsOfCurrentIns (void)
    Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of centers *****/
-   Ctr_GetFullListOfCentersInCurrentIns ();
+   Ctr_GetFullListOfCtrsInThisIns ();
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
 
    /***** List centers *****/
-   Ctr_ListCenters ();
+   Ctr_ListCtrs ();
 
    /***** Free list of centers *****/
    Hie_FreeList (Hie_INS);
@@ -241,7 +240,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
 /******************** List centers in this institution ***********************/
 /*****************************************************************************/
 
-static void Ctr_ListCenters (void)
+static void Ctr_ListCtrs (void)
   {
    extern const char *Hlp_INSTITUTION_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
@@ -253,7 +252,7 @@ static void Ctr_ListCenters (void)
    if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Ctr_PutIconsListingCenters,NULL,
+   Box_BoxBegin (Title,Ctr_PutIconsListingCtrs,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -263,13 +262,13 @@ static void Ctr_ListCenters (void)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading *****/
-	    Ctr_PutHeadCentersForSeeing (Hie_ORDER_SELECTABLE);
+	    Ctr_PutHeadCtrsForSeeing (Hie_ORDER_SELECTABLE);
 
 	    /***** Write all centers and their nuber of teachers *****/
 	    for (NumCtr = 0;
 		 NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
 		 NumCtr++)
-	       Ctr_ListOneCenterForSeeing (&(Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr]),
+	       Ctr_ListOneCtrForSeeing (&(Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr]),
 					   NumCtr + 1);
 
 	 /***** End table *****/
@@ -286,11 +285,11 @@ static void Ctr_ListCenters (void)
 /***************** Put contextual icons in list of centers *******************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
+static void Ctr_PutIconsListingCtrs (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit centers *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
-      Ctr_PutIconToEditCenters ();
+      Ctr_PutIconToEditCtrs ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -300,7 +299,7 @@ static void Ctr_PutIconsListingCenters (__attribute__((unused)) void *Args)
 /********************** Put link (form) to edit centers **********************/
 /*****************************************************************************/
 
-static void Ctr_PutIconToEditCenters (void)
+static void Ctr_PutIconToEditCtrs (void)
   {
    Ico_PutContextualIconToEdit (ActEdiCtr,NULL,NULL,NULL);
   }
@@ -309,7 +308,7 @@ static void Ctr_PutIconToEditCenters (void)
 /************************* List one center for seeing ************************/
 /*****************************************************************************/
 
-static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
+static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
   {
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
    struct Plc_Place Plc;
@@ -339,7 +338,7 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
 
       /***** Center logo and name *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassStrong,The_GetSuffix (),BgColor);
-	 Ctr_DrawCenterLogoAndNameWithLink (Ctr,ActSeeDeg,"CT ICO16x16");
+	 Ctr_DrawCtrLogoAndNameWithLink (Ctr,ActSeeDeg,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
@@ -386,19 +385,19 @@ static void Ctr_ListOneCenterForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
 /************************** Put forms to edit centers ************************/
 /*****************************************************************************/
 
-void Ctr_EditCenters (void)
+void Ctr_EditCtrs (void)
   {
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Edit centers *****/
-   Ctr_EditCentersInternal ();
+   Ctr_EditCtrsInternal ();
 
    /***** Center destructor *****/
-   Ctr_EditingCenterDestructor ();
+   Ctr_EditingCtrDestructor ();
   }
 
-static void Ctr_EditCentersInternal (void)
+static void Ctr_EditCtrsInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Centers;
    extern const char *Txt_Centers_of_INSTITUTION_X;
@@ -414,7 +413,7 @@ static void Ctr_EditCentersInternal (void)
 
    /***** Get list of centers *****/
    Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_ORDER_BY_NAME;
-   Ctr_GetFullListOfCentersInCurrentIns ();
+   Ctr_GetFullListOfCtrsInThisIns ();
 
    /***** Write menu to select country and institution *****/
    Hie_WriteMenuHierarchy ();
@@ -423,16 +422,16 @@ static void Ctr_EditCentersInternal (void)
    if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
 		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Ctr_PutIconsEditingCenters,NULL,
+   Box_BoxBegin (Title,Ctr_PutIconsEditingCtrs,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    free (Title);
 
       /***** Put a form to create a new center *****/
-      Ctr_PutFormToCreateCenter (&Places);
+      Ctr_PutFormToCreateCtr (&Places);
 
       /***** List current centers *****/
       if (Gbl.Hierarchy.List[Hie_INS].Num)
-	 Ctr_ListCentersForEdition (&Places);
+	 Ctr_ListCtrsForEdition (&Places);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -448,7 +447,7 @@ static void Ctr_EditCentersInternal (void)
 /**************** Put contextual icons in edition of centers *****************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args)
+static void Ctr_PutIconsEditingCtrs (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view centers *****/
    Ico_PutContextualIconToView (ActSeeCtr,NULL,NULL,NULL);
@@ -461,7 +460,7 @@ static void Ctr_PutIconsEditingCenters (__attribute__((unused)) void *Args)
 /************ Get basic list of centers ordered by name of center ************/
 /*****************************************************************************/
 
-void Ctr_GetBasicListOfCentersInIns (long HieCod)
+void Ctr_GetBasicListOfCtrsInIns (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCtr;
@@ -481,7 +480,7 @@ void Ctr_GetBasicListOfCentersInIns (long HieCod)
 	   NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
+         Ctr_GetCtrDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
                                    Usr_DONT_GET_NUM_USRS);	// Don't get number of users
 								// who claim to belong to this center
      }
@@ -495,13 +494,13 @@ void Ctr_GetBasicListOfCentersInIns (long HieCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-static void Ctr_GetFullListOfCentersInCurrentIns (void)
+static void Ctr_GetFullListOfCtrsInThisIns (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInCurrentInsWithNumUsrs (&mysql_res);
+   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInThisInsWithNumUsrs (&mysql_res);
 
    if (Gbl.Hierarchy.List[Hie_INS].Num) // Centers found...
      {
@@ -515,7 +514,7 @@ static void Ctr_GetFullListOfCentersInCurrentIns (void)
 	   NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
+         Ctr_GetCtrDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
                                    Usr_GET_NUM_USRS);	// Get number of users
 							// who claim to belong to this center
      }
@@ -528,7 +527,7 @@ static void Ctr_GetFullListOfCentersInCurrentIns (void)
 /************************ Get data of center by code *************************/
 /*****************************************************************************/
 
-Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
+Err_SuccessOrError_t Ctr_GetCtrDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
    Err_SuccessOrError_t SuccessOrError = Err_ERROR;
@@ -550,7 +549,7 @@ Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node)
       if (Ctr_DB_GetCenterDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS) // Center found...
         {
          /* Get center data */
-         Ctr_GetCenterDataFromRow (mysql_res,Node,
+         Ctr_GetCtrDataFromRow (mysql_res,Node,
                                    Usr_DONT_GET_NUM_USRS);	// Don't get number of users
 								// who claim to belong to this center
 
@@ -593,9 +592,8 @@ void Ctr_GetCoordByCod (long HieCod,struct Map_Coordinates *Coord)
 /********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ctr_GetCenterDataFromRow (MYSQL_RES *mysql_res,
-				      struct Hie_Node *Ctr,
-                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToCtr)
+static void Ctr_GetCtrDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Ctr,
+                                   Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToCtr)
   {
    MYSQL_ROW row;
 
@@ -654,7 +652,7 @@ static void Ctr_GetCoordFromRow (MYSQL_RES *mysql_res,
 /************************** Write selector of center *************************/
 /*****************************************************************************/
 
-void Ctr_WriteSelectorOfCenter (void)
+void Ctr_WriteSelectorOfCtr (void)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
@@ -682,7 +680,7 @@ void Ctr_WriteSelectorOfCenter (void)
 	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
 	   {
 	    /***** Get centers in current institution from database *****/
-	    NumCtrs = Ctr_DB_GetBasicListOfCtrsInCurrentIns (&mysql_res);
+	    NumCtrs = Ctr_DB_GetBasicListOfCtrsInThisIns (&mysql_res);
 	    for (NumCtr = 0;
 		 NumCtr < NumCtrs;
 		 NumCtr++)
@@ -717,7 +715,7 @@ void Ctr_WriteSelectorOfCenter (void)
 /***************************** List all centers ******************************/
 /*****************************************************************************/
 
-static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
+static void Ctr_ListCtrsForEdition (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTER_STATUS[Hie_NUM_STATUS_TXT];
@@ -751,7 +749,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Ctr_PutHeadCentersForEdition ();
+      Ctr_PutHeadCtrsForEdition ();
 
       /***** Write all centers *****/
       for (NumCtr = 0;
@@ -760,7 +758,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 	{
 	 Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
 
-	 ICanEdit = Ctr_CheckIfICanEditACenter (Ctr);
+	 ICanEdit = Ctr_CheckIfICanEditACtr (Ctr);
 	 NumDegs = Hie_GetNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 					    Hie_CTR,	// ...in center
 					    Ctr->HieCod);
@@ -905,7 +903,7 @@ static void Ctr_ListCentersForEdition (const struct Plc_Places *Places)
 /************** Check if I can edit, remove, etc. a center *******************/
 /*****************************************************************************/
 
-static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
+static Usr_Can_t Ctr_CheckIfICanEditACtr (struct Hie_Node *Ctr)
   {
    return Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||	// I am an institution administrator or higher
           ((Ctr->Status & Hie_STATUS_BIT_PENDING) &&	// Center is not yet activated
@@ -917,7 +915,7 @@ static Usr_Can_t Ctr_CheckIfICanEditACenter (struct Hie_Node *Ctr)
 /******************************* Remove a center *****************************/
 /*****************************************************************************/
 
-void Ctr_RemoveCenter (void)
+void Ctr_RemoveCtr (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_a_center_you_must_first_remove_all_degrees_and_teachers_in_the_center;
@@ -926,7 +924,7 @@ void Ctr_RemoveCenter (void)
    char PathCtr[PATH_MAX + 1];
 
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Get center code *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -955,7 +953,7 @@ void Ctr_RemoveCenter (void)
       For_DB_RemoveForums (Hie_CTR,Ctr_EditingCtr->HieCod);
 
       /***** Remove surveys of the center *****/
-      Svy_RemoveSurveys (Hie_CTR,Ctr_EditingCtr->HieCod);
+      Svy_RemoveSvys (Hie_CTR,Ctr_EditingCtr->HieCod);
 
       /***** Remove information related to files in center *****/
       Brw_DB_RemoveCtrFiles (Ctr_EditingCtr->HieCod);
@@ -968,7 +966,7 @@ void Ctr_RemoveCenter (void)
 		     Cfg_PATH_CTR_PUBLIC,
 		     (unsigned) ((unsigned long) Ctr_EditingCtr->HieCod % 100),
 		     (unsigned long) Ctr_EditingCtr->HieCod);
-      Fil_RemoveTree (PathCtr);
+      Fil_RemoveFolderAndItsContent (PathCtr);
 
       /***** Remove administrators of this center *****/
       Adm_DB_RemAdmins (Hie_CTR,Ctr_EditingCtr->HieCod);
@@ -1000,7 +998,7 @@ void Ctr_ChangeCtrPlc (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Get center code *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1020,31 +1018,31 @@ void Ctr_ChangeCtrPlc (void)
 /************************ Change the name of a center ************************/
 /*****************************************************************************/
 
-void Ctr_RenameCenterShrt (void)
+void Ctr_RenameCtrShrt (void)
   {
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Rename center *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ctr_RenameCenter (Ctr_EditingCtr,Nam_SHRT_NAME);
+   Ctr_RenameCtr (Ctr_EditingCtr,Nam_SHRT_NAME);
   }
 
-void Ctr_RenameCenterFull (void)
+void Ctr_RenameCtrFull (void)
   {
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Rename center *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ctr_RenameCenter (Ctr_EditingCtr,Nam_FULL_NAME);
+   Ctr_RenameCtr (Ctr_EditingCtr,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a center ************************/
 /*****************************************************************************/
 
-void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
+void Ctr_RenameCtr (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
@@ -1105,7 +1103,7 @@ void Ctr_ChangeCtrWWW (void)
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Get the code of the center *****/
    Ctr_EditingCtr->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1138,7 +1136,7 @@ void Ctr_ChangeCtrStatus (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Get parameters from form *****/
    /* Get center code */
@@ -1166,10 +1164,10 @@ void Ctr_ContEditAfterChgCtr (void)
    Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
-   Ctr_EditCentersInternal ();
+   Ctr_EditCtrsInternal ();
 
    /***** Center destructor *****/
-   Ctr_EditingCenterDestructor ();
+   Ctr_EditingCtrDestructor ();
   }
 
 /*****************************************************************************/
@@ -1194,7 +1192,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
 /********************* Put a form to create a new center *********************/
 /*****************************************************************************/
 
-static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
+static void Ctr_PutFormToCreateCtr (const struct Plc_Places *Places)
   {
    extern const char *Txt_Another_place;
    Act_Action_t NextAction = ActUnk;
@@ -1215,7 +1213,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
    Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Ctr_PutHeadCentersForEdition ();
+      Ctr_PutHeadCtrsForEdition ();
 
       HTM_TR_Begin (NULL);
 
@@ -1293,7 +1291,7 @@ static void Ctr_PutFormToCreateCenter (const struct Plc_Places *Places)
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
-static void Ctr_PutHeadCentersForSeeing (Hie_OrderSelectable_t OrderSelectable)
+static void Ctr_PutHeadCtrsForSeeing (Hie_OrderSelectable_t OrderSelectable)
   {
    extern const char *Txt_CENTERS_HELP_ORDER[2];
    extern const char *Txt_CENTERS_ORDER[2];
@@ -1349,7 +1347,7 @@ static void Ctr_PutHeadCentersForSeeing (Hie_OrderSelectable_t OrderSelectable)
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
-static void Ctr_PutHeadCentersForEdition (void)
+static void Ctr_PutHeadCtrsForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Place;
@@ -1385,7 +1383,7 @@ static void Ctr_PutHeadCentersForEdition (void)
 void Ctr_ReceiveReqCtr (void)
   {
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Receive form to request a new center *****/
    Ctr_ReceiveRequestOrCreateCtr ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
@@ -1398,7 +1396,7 @@ void Ctr_ReceiveReqCtr (void)
 void Ctr_ReceiveNewCtr (void)
   {
    /***** Center constructor *****/
-   Ctr_EditingCenterConstructor ();
+   Ctr_EditingCtrConstructor ();
 
    /***** Receive form to create a new center *****/
    Ctr_ReceiveRequestOrCreateCtr ((Hie_Status_t) 0);
@@ -1568,7 +1566,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
       free (Title);
 
 	 /***** Write heading *****/
-	 Ctr_PutHeadCentersForSeeing (Hie_ORDER_NOT_SELECTABLE);
+	 Ctr_PutHeadCtrsForSeeing (Hie_ORDER_NOT_SELECTABLE);
 
 	 /***** List the centers (one row per center) *****/
 	 for (NumCtr  = 1, The_ResetRowColor ();
@@ -1582,7 +1580,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 	    SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
 	    /* Write data of this center */
-	    Ctr_ListOneCenterForSeeing (&Ctr,NumCtr);
+	    Ctr_ListOneCtrForSeeing (&Ctr,NumCtr);
 	   }
 
       /***** End table and box *****/
@@ -1597,7 +1595,7 @@ void Ctr_ListCtrsFound (MYSQL_RES **mysql_res,unsigned NumCtrs)
 /************************ Center constructor/destructor **********************/
 /*****************************************************************************/
 
-static void Ctr_EditingCenterConstructor (void)
+static void Ctr_EditingCtrConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Ctr_EditingCtr != NULL)
@@ -1618,7 +1616,7 @@ static void Ctr_EditingCenterConstructor (void)
    Ctr_EditingCtr->WWW[0]          = '\0';
   }
 
-static void Ctr_EditingCenterDestructor (void)
+static void Ctr_EditingCtrDestructor (void)
   {
    /***** Free memory used for center *****/
    if (Ctr_EditingCtr != NULL)

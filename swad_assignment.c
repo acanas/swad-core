@@ -128,7 +128,7 @@ void Asg_SetAssignment (const struct Asg_Assignment *Asg)
    Asg_Assignment.ClosedOrOpen = Asg->ClosedOrOpen;
    Str_Copy (Asg_Assignment.Title,Asg->Title,sizeof (Asg_Assignment.Title) - 1);
    Asg_Assignment.SendWork = Asg->SendWork;
-   Str_Copy (Asg_Assignment.Folder,Asg->Folder,sizeof (Asg_Assignment.Folder) - 1);
+   Str_Copy (Asg_Assignment.FolderName,Asg->FolderName,sizeof (Asg_Assignment.FolderName) - 1);
    Asg_Assignment.RubCod = Asg->RubCod;
    Asg_Assignment.ICanDo = Asg->ICanDo;
   }
@@ -148,7 +148,7 @@ void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
    Assignments->Num           = 0;
    Assignments->LstAsgCods    = NULL;
    Assignments->SelectedOrder = Asg_ORDER_DEFAULT;
-   Assignments->CurrentPage   = 0;
+   Assignments->ThisPage   = 0;
    Assignments->Asg.AsgCod    = -1L;	// Used as parameter in contextual links
    Asg_ResetAssignment (&Assignments->Asg);
   }
@@ -167,7 +167,7 @@ void Asg_SeeAssignments (void)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all assignments *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -190,9 +190,9 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Assignments->Num;
-   Pagination.CurrentPage = Assignments->CurrentPage;
+   Pagination.ThisPage = Assignments->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Assignments->CurrentPage = Pagination.CurrentPage;
+   Assignments->ThisPage = Pagination.ThisPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Assignments,Asg_PutIconsListAssignments,Assignments,
@@ -279,7 +279,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	       Frm_BeginForm (ActSeeAllAsg);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
-		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Assignments->CurrentPage);
+		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Assignments->ThisPage);
 		  Par_PutParOrder ((unsigned) Order);
 
 	          /* Begin link to select order */
@@ -382,7 +382,7 @@ static void Asg_ParsMyAllGrps (void *Assignments)
       Par_PutParOrder ((unsigned)
 	               ((struct Asg_Assignments *) Assignments)->SelectedOrder);
       Pag_PutParPagNum (Pag_ASSIGNMENTS,
-                        ((struct Asg_Assignments *) Assignments)->CurrentPage);
+                        ((struct Asg_Assignments *) Assignments)->ThisPage);
      }
   }
 
@@ -401,7 +401,7 @@ void Asg_SeeOneAssignment (void)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -707,7 +707,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
       [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
      };
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    Act_Action_t NextAction;
    Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
 			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
@@ -743,16 +743,14 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 // FileMetadata.Zone = FileBrowser.Zone;
-	 FileMetadata.Type = Brw_IS_FOLDER;
-	 Str_Copy (FileMetadata.PathInZoneWithoutFileName,
+	 File.Type = Brw_IS_FOLDER;
+	 Str_Copy (File.Path.InZoneWithoutName,
 		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		   sizeof (FileMetadata.PathInZoneWithoutFileName) - 1);
-	 Str_Copy (FileMetadata.FileName,Asg->Folder,
-		   sizeof (FileMetadata.FileName) - 1);
-	 Brw_BuildFullPathFromPathAndName (&FileBrowser,&FileMetadata);
-	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&FileMetadata);
-	 FileBrowser.FilCod = FileMetadata.FilCod;
+		   sizeof (File.Path.InZoneWithoutName) - 1);
+	 Str_Copy (File.Path.Name,Asg->FolderName,sizeof (File.Path.Name) - 1);
+	 Brw_BuildFullPathFromPathAndName (&FileBrowser,&File);
+	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&File);
+	 FileBrowser.FilCod = File.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
@@ -776,7 +774,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 		      Icons[ICanSendFiles].Color,Txt_Folder);
 
    /***** Folder name *****/
-   HTM_Txt (Asg->Folder);
+   HTM_Txt (Asg->FolderName);
   }
 
 /*****************************************************************************/
@@ -854,7 +852,7 @@ static void Asg_PutPars (void *Assignments)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ASSIGNMENTS,
-			((struct Asg_Assignments *) Assignments)->CurrentPage);
+			((struct Asg_Assignments *) Assignments)->ThisPage);
      }
   }
 
@@ -925,16 +923,16 @@ void Asg_GetAssignmentDataByCod (struct Asg_Assignment *Asg)
 /*************** Get assignment data using its folder name *******************/
 /*****************************************************************************/
 
-void Asg_GetAssignmentDataByFolder (const char Folder[NAME_MAX + 1])
+void Asg_GetAssignmentDataByFolder (const char FolderName[NAME_MAX + 1])
   {
    MYSQL_RES *mysql_res;
    struct Asg_Assignment Asg;
    Exi_Exist_t AsgExists;
 
-   if (Folder[0])
+   if (FolderName[0])
      {
       /***** Query database *****/
-      AsgExists = Asg_DB_GetAssignmentDataByFolder (&mysql_res,Folder);
+      AsgExists = Asg_DB_GetAssignmentDataByFolder (&mysql_res,FolderName);
 
       /***** Get data of assignment *****/
       Asg_GetAssignmentDataFromRow (&mysql_res,&Asg,AsgExists);
@@ -996,8 +994,8 @@ static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
 
       /* Get the title (row[6]) and the folder (row[7]) of the assignment  */
       Str_Copy (Asg->Title ,row[6],sizeof (Asg->Title ) - 1);
-      Str_Copy (Asg->Folder,row[7],sizeof (Asg->Folder) - 1);
-      Asg->SendWork = (Asg->Folder[0] != '\0');
+      Str_Copy (Asg->FolderName,row[7],sizeof (Asg->FolderName) - 1);
+      Asg->SendWork = (Asg->FolderName[0] != '\0');
 
       /* Can I do this assignment? */
       Asg->ICanDo = Asg_CheckIfICanDoAsgBasedOnGroups (Asg->AsgCod);
@@ -1022,7 +1020,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
    Asg->ClosedOrOpen	      = CloOpe_CLOSED;
    Asg->Title[0]	      = '\0';
    Asg->SendWork	      = Asg_DONT_SEND_WORK;
-   Asg->Folder[0]	      = '\0';
+   Asg->FolderName[0]	      = '\0';
    Asg->RubCod		      = -1L;
    Asg->ICanDo		      = Usr_CAN_NOT;
   }
@@ -1097,7 +1095,7 @@ void Asg_ReqRemAssignment (void)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -1130,7 +1128,7 @@ void Asg_RemoveAssignment (void)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -1139,8 +1137,8 @@ void Asg_RemoveAssignment (void)
    Asg_GetAssignmentDataByCod (&Assignments.Asg);	// Inside this function, the course is checked to be the current one
 
    /***** Remove all folders associated to this assignment *****/
-   if (Assignments.Asg.Folder[0])
-      Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Assignments.Asg.Folder);
+   if (Assignments.Asg.FolderName[0])
+      Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Assignments.Asg.FolderName);
 
    /***** Remove all groups of this assignment *****/
    Asg_DB_RemoveGrpsAssociatedToAnAssignment (Assignments.Asg.AsgCod);
@@ -1182,7 +1180,7 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -1213,7 +1211,7 @@ void Asg_ReqCreatOrEditAsg (void)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
@@ -1321,7 +1319,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments->Asg.Folder,
+		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments->Asg.FolderName,
 				  HTM_NO_ATTR,
 				  "id=\"Folder\" class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1449,7 +1447,7 @@ void Asg_ReceiveAssignment (void)
    /* Get hidden parameters */
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /* Get the code of the assignment */
    OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
@@ -1480,8 +1478,8 @@ void Asg_ReceiveAssignment (void)
    Par_GetParText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /* Get folder name where to send works of the assignment */
-   Par_GetParText ("Folder",Assignments.Asg.Folder,NAME_MAX);
-   Assignments.Asg.SendWork = Assignments.Asg.Folder[0] ? Asg_SEND_WORK :
+   Par_GetParText ("Folder",Assignments.Asg.FolderName,NAME_MAX);
+   Assignments.Asg.SendWork = Assignments.Asg.FolderName[0] ? Asg_SEND_WORK :
 							  Asg_DONT_SEND_WORK;
 
    /* Get assignment text */
@@ -1515,17 +1513,17 @@ void Asg_ReceiveAssignment (void)
 	    switch (Assignments.Asg.SendWork)
 	      {
 	       case Asg_SEND_WORK:
-		  switch (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.Folder))
+		  switch (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.FolderName))
 		    {
 		     case Err_SUCCESS:	// Folder name is valid
 			if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
-								   Assignments.Asg.Folder,
+								   Assignments.Asg.FolderName,
 								   Assignments.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
 			  {
 			   SuccessOrError = Err_ERROR;
 			   Ale_CreateAlert (Ale_WARNING,NULL,
 					    Txt_Already_existed_an_assignment_with_the_folder_X,
-					    Assignments.Asg.Folder);
+					    Assignments.Asg.FolderName);
 			  }
 			break;
 		     case Err_ERROR:	// Folder name not valid
@@ -1538,7 +1536,7 @@ void Asg_ReceiveAssignment (void)
 	       case Asg_DONT_SEND_WORK:
 	       default:
 		  if (OldAsg.SendWork == Asg_SEND_WORK)
-		     if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder) == Exi_EXISTS)
+		     if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.FolderName) == Exi_EXISTS)
 		       {
 			SuccessOrError = Err_ERROR;
 			Ale_CreateAlert (Ale_WARNING,NULL,
@@ -1572,10 +1570,10 @@ void Asg_ReceiveAssignment (void)
 	 switch (OldNewAsg)
 	   {
 	    case OldNew_OLD:
-	       if (OldAsg.Folder[0] && Assignments.Asg.Folder[0])
-		  if (strcmp (OldAsg.Folder,Assignments.Asg.Folder))	// Folder name has changed
-		     SuccessOrError = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.Folder,
-										    Assignments.Asg.Folder);
+	       if (OldAsg.FolderName[0] && Assignments.Asg.FolderName[0])
+		  if (strcmp (OldAsg.FolderName,Assignments.Asg.FolderName))	// Folder name has changed
+		     SuccessOrError = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.FolderName,
+										    Assignments.Asg.FolderName);
 	       if (SuccessOrError == Err_SUCCESS)
 		  Asg_UpdateAssignment (&Assignments.Asg,Description);
 	       break;
@@ -1833,7 +1831,7 @@ Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void)
       return Usr_CAN_NOT;
 
    /***** Check 4: Depending on my role in this course... *****/
-   switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
+   switch (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs)
      {
       case Rol_STD:		// Students...
       case Rol_NET:		// ...and non-editing teachers...
@@ -1850,21 +1848,21 @@ Usr_Can_t Asg_CheckIfICanCreateIntoAssigment (void)
 /*************************** Set assignment folder ***************************/
 /*****************************************************************************/
 
-void Asg_SetFolder (const char PathInZoneWithoutFileName[PATH_MAX + 1],
-		    const char FileName[NAME_MAX + 1],
+void Asg_SetFolder (const char PathInZoneWithoutName[PATH_MAX + 1],
+		    const char Name[NAME_MAX + 1],
 		    unsigned Level,
-		    char Folder[NAME_MAX + 1])
+		    char FolderName[NAME_MAX + 1])
   {
    const char *Ptr;
    unsigned i;
 
    if (Level == 1)
       // We are in this case: assignments/assignment-folder
-      Str_Copy (Folder,FileName,NAME_MAX);
+      Str_Copy (FolderName,Name,NAME_MAX);
    else
      {
       // We are in this case: assignments/assignment-folder/rest-of-path
-      for (Ptr = PathInZoneWithoutFileName;
+      for (Ptr = PathInZoneWithoutName;
 	   *Ptr && *Ptr != '/';
 	   Ptr++);	// Go to first '/'
       if (*Ptr == '/')
@@ -1872,8 +1870,8 @@ void Asg_SetFolder (const char PathInZoneWithoutFileName[PATH_MAX + 1],
       for (i = 0;
 	   i < NAME_MAX && *Ptr && *Ptr != '/';
 	   i++, Ptr++)
-	 Folder[i] = *Ptr;	// Copy assignment folder
-      Folder[i] = '\0';
+	 FolderName[i] = *Ptr;	// Copy assignment folder
+      FolderName[i] = '\0';
      }
   }
 

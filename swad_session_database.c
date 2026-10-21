@@ -249,7 +249,7 @@ void Ses_DB_RemoveUsrSessions (long UsrCod)
 /************************** Remove current session ***************************/
 /*****************************************************************************/
 
-void Ses_SB_RemoveCurrentSession (void)
+void Ses_SB_RemoveThisSession (void)
   {
    /***** Remove current session *****/
    DB_QueryDELETE ("can not remove a session",

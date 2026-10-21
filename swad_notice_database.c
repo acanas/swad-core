@@ -184,7 +184,7 @@ unsigned Not_DB_GetNotices (MYSQL_RES **mysql_res,long HieCod,
 		" ORDER BY CreatTime DESC",
 		   HieCod,
 		   Not_DB_SubQueryVisible[TypeNoticesListing],
-		   Not_DB_SubQueryPublic[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]]);
+		   Not_DB_SubQueryPublic[Gbl.Usrs.Me.IBelongToThis[Hie_CRS]]);
   }
 
 /*****************************************************************************/

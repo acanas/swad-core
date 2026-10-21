@@ -101,7 +101,7 @@ FILE *Fil_GetOutputFile (void)
 void Fil_CreateFileForHTMLOutput (void)
   {
    /***** Check if exists the directory for HTML output. If not exists, create it *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_OUT_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_OUT_PRIVATE);
 
    /***** Create a unique name for the file *****/
    Fil_BuildPath (Fil_HTMLOutput.FileName,"%s/%s.html",
@@ -428,15 +428,15 @@ Exi_Exist_t Fil_CheckIfPathExists (const char *Path)
 /********** Check if a directory exists. If not exists, create it! ***********/
 /*****************************************************************************/
 
-void Fil_CreateDirIfNotExists (const char *Path)
+void Fil_CreateFolderIfNotExists (const char *PathFolder)
   {
    char ErrorMsg[128 + PATH_MAX];
 
-   if (Fil_CheckIfPathExists (Path) == Exi_DOES_NOT_EXIST)
-      if (mkdir (Path,(mode_t) 0777))
+   if (Fil_CheckIfPathExists (PathFolder) == Exi_DOES_NOT_EXIST)
+      if (mkdir (PathFolder,(mode_t) 0777))
         {
 	 snprintf (ErrorMsg,sizeof (ErrorMsg),
-	           "Can not create folder <strong>%s</strong>.",Path);
+	           "Can not create folder <strong>%s</strong>.",PathFolder);
 	 Err_ShowErrorAndExit (ErrorMsg);
         }
   }
@@ -446,7 +446,7 @@ void Fil_CreateDirIfNotExists (const char *Path)
 /*****************************************************************************/
 // If the tree of directories and files exists, remove it
 
-void Fil_RemoveTree (const char *Path)
+void Fil_RemoveFolderAndItsContent (const char *PathFolder)
   {
    struct stat FileStatus;
    struct dirent **FileList;
@@ -456,20 +456,20 @@ void Fil_RemoveTree (const char *Path)
    Err_SuccessOrError_t SuccessOrError;
    char ErrorMsg[128 + PATH_MAX];
 
-   if (Fil_CheckIfPathExists (Path) == Exi_EXISTS)
+   if (Fil_CheckIfPathExists (PathFolder) == Exi_EXISTS)
      {
-      if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+      if (lstat (PathFolder,&FileStatus))	// On success ==> 0 is returned
 	 Err_ShowErrorAndExit ("Can not get information about a file or folder.");
       else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	{
-	 if (rmdir (Path))
+	 if (rmdir (PathFolder))
 	   {
 	    SuccessOrError = Err_SUCCESS;
 	    if (errno == ENOTEMPTY)
 	      {
 	       /***** Remove each directory and file under this directory *****/
 	       /* Scan the directory */
-	       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)
+	       if ((NumFiles = scandir (PathFolder,&FileList,NULL,NULL)) >= 0)
 		 {
 		  /* Remove recursively all directories and files */
 		  for (NumFile = 0;
@@ -480,8 +480,8 @@ void Fil_RemoveTree (const char *Path)
 			 strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 		       {
 			Fil_BuildPath (PathFileRel,"%s/%s",
-				       Path,FileList[NumFile]->d_name);
-			Fil_RemoveTree (PathFileRel);
+				       PathFolder,FileList[NumFile]->d_name);
+			Fil_RemoveFolderAndItsContent (PathFileRel);
 		       }
 		     free (FileList[NumFile]);
 		    }
@@ -491,7 +491,7 @@ void Fil_RemoveTree (const char *Path)
 	          Err_ErrorScanningDirExit ();
 
 	       /***** Remove the directory, now empty *****/
-	       if (rmdir (Path))
+	       if (rmdir (PathFolder))
 		  SuccessOrError = Err_ERROR;
 	      }
 	    else
@@ -499,13 +499,13 @@ void Fil_RemoveTree (const char *Path)
 	    if (SuccessOrError == Err_ERROR)
 	      {
 	       snprintf (ErrorMsg,sizeof (ErrorMsg),
-	                 "Can not remove folder %s.",Path);
+	                 "Can not remove folder %s.",PathFolder);
 	       Err_ShowErrorAndExit (ErrorMsg);
 	      }
 	   }
 	}
       else					// It's a file
-	 if (unlink (Path))
+	 if (unlink (PathFolder))
 	    Err_ShowErrorAndExit ("Can not remove file.");
      }
   }

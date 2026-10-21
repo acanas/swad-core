@@ -160,7 +160,7 @@ void Lay_WriteStartOfPage (void)
       return;
 
    /***** Compute connected users to be displayed in right column *****/
-   Con_ComputeConnectedUsrsBelongingToCurrentCrs ();
+   Con_ComputeConnectedUsrsBelongingToThisCrs ();
 
    /***** Send head width the file type for the HTTP protocol *****/
    if (Gbl.Action.UsesAJAX)
@@ -1173,7 +1173,7 @@ static void Lay_ShowRightColumn (void)
       HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
 	 HTM_LEGEND (Txt_Connected_PLURAL);
 	 HTM_DIV_Begin ("id=\"courseconnected\"");	// Used for AJAX based refresh
-	    Con_ShowConnectedUsrsBelongingToCurrentCrs ();
+	    Con_ShowConnectedUsrsBelongingToThisCrs ();
 	 HTM_DIV_End ();				// Used for AJAX based refresh
       HTM_FIELDSET_End ();
      }

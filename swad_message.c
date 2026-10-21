@@ -200,7 +200,7 @@ static void Msg_ResetMessages (struct Msg_Messages *Messages)
    Messages->Rcv.NumRecipients    = 0;
    Messages->Rcv.NumErrors        = 0;
    Messages->OnlyOneRecipient     = false;
-   Messages->CurrentPage          = 0;
+   Messages->ThisPage          = 0;
    Messages->MsgCod               = -1L;
   }
 
@@ -278,7 +278,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
      }
 
    GetUsrsInCrs = !Messages->OnlyOneRecipient &&				// Show list of potential recipients
-	          (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it...
+	          (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG ||	// If there is a course selected and I belong to it...
 	           Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM);			// ...or I am a system admin
    if (GetUsrsInCrs)
      {
@@ -327,7 +327,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 						    ShowPhotos);
 
 		  /***** Put link to register students *****/
-		  Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
+		  Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs ();
 
 		  /***** Check if it's a big list *****/
 		  ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,
@@ -1447,7 +1447,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
      };
 
    /***** Get the page number *****/
-   Messages->CurrentPage = Pag_GetParPagNum (WhatPaginate[Messages->TypeOfMessages]);
+   Messages->ThisPage = Pag_GetParPagNum (WhatPaginate[Messages->TypeOfMessages]);
 
    /***** Get other parameters *****/
    Msg_GetParMsgsCrsCod (Messages);
@@ -1520,20 +1520,20 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 
 	       if (MsgCod == Messages->ExpandedMsgCod)	// Expanded message found
 		 {
-		  Messages->CurrentPage = NumMsg / Pag_ITEMS_PER_PAGE + 1;
+		  Messages->ThisPage = NumMsg / Pag_ITEMS_PER_PAGE + 1;
 		  break;
 		 }
 	      }
 
 	 /***** Compute variables related to pagination *****/
 	 Pagination.NumItems = Messages->NumMsgs;
-	 Pagination.CurrentPage = Messages->CurrentPage;
+	 Pagination.ThisPage = Messages->ThisPage;
 	 Pag_CalculatePagination (&Pagination);
-	 Messages->CurrentPage = Pagination.CurrentPage;
+	 Messages->ThisPage = Pagination.ThisPage;
 
 	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
 	 Ses_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
-					    Messages->CurrentPage);
+					    Messages->ThisPage);
 
 	 /***** Write links to pages *****/
 	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
@@ -1738,7 +1738,7 @@ static void Msg_PutParsOneMsg (void *Messages)
    if (Messages)
      {
       Pag_PutParPagNum (Msg_WhatPaginate[((struct Msg_Messages *) Messages)->TypeOfMessages],
-			((struct Msg_Messages *) Messages)->CurrentPage);
+			((struct Msg_Messages *) Messages)->ThisPage);
       ParCod_PutPar (ParCod_Msg,((struct Msg_Messages *) Messages)->MsgCod);
       Msg_PutParsMsgsFilters (Messages);
      }
@@ -2717,7 +2717,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
   {
    Frm_BeginForm (ActBanUsrMsg);
       Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
-			Messages->CurrentPage);
+			Messages->ThisPage);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutParsMsgsFilters (Messages);
 	 Ico_PutIconLink ("unlock.svg",Ico_GREEN,ActBanUsrMsg);
@@ -2733,7 +2733,7 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
   {
    Frm_BeginForm (ActUnbUsrMsg);
       Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
-			Messages->CurrentPage);
+			Messages->ThisPage);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutParsMsgsFilters (Messages);
 	 Ico_PutIconLink ("lock.svg",Ico_RED,ActUnbUsrMsg);

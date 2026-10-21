@@ -97,8 +97,7 @@ void Rub_ResetRubrics (struct Rub_Rubrics *Rubrics)
    Rubrics->LstReadStatus = Cac_INVALID;// List not read from database
    Rubrics->Num           = 0;		// Total number of rubrics
    Rubrics->Lst           = NULL;	// List of rubrics
-   Rubrics->CurrentPage   = 0;
-   // Rubrics->Rubric.RubCod = -1L;	// Current/selected rubric code
+   Rubrics->ThisPage   = 0;
   }
 
 /*****************************************************************************/
@@ -165,9 +164,9 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Rubrics->Num;
-   Pagination.CurrentPage = Rubrics->CurrentPage;
+   Pagination.ThisPage = Rubrics->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Rubrics->CurrentPage = Pagination.CurrentPage;
+   Rubrics->ThisPage = Pagination.ThisPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Rubrics,Rub_PutIconsListRubrics,Rubrics,
@@ -331,7 +330,7 @@ static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
 static void Rub_PutParsToCreateNewRubric (void *Rubrics)
   {
    if (Rubrics)
-      Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
+      Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->ThisPage);
   }
 
 /*****************************************************************************/
@@ -563,7 +562,7 @@ void Rub_PutPars (void *Rubrics)
    if (Rubrics)
      {
       ParCod_PutPar (ParCod_Rub,((struct Rub_Rubrics *) Rubrics)->Rubric.RubCod);
-      Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->CurrentPage);
+      Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->ThisPage);
      }
   }
 
@@ -580,7 +579,7 @@ void Rub_GetPars (struct Rub_Rubrics *Rubrics,Rub_CheckRubCod_t CheckRubCod)
      };
 
    /***** Get other parameters *****/
-   Rubrics->CurrentPage = Pag_GetParPagNum (Pag_RUBRICS);
+   Rubrics->ThisPage = Pag_GetParPagNum (Pag_RUBRICS);
 
    /***** Get rubric code *****/
    Rubrics->Rubric.RubCod = GetExaCod[CheckRubCod] (ParCod_Rub);

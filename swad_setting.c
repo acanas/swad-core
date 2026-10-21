@@ -162,7 +162,7 @@ void Set_GetSettingsFromIP (void)
 void Set_SetSettingsFromIP (void)
   {
    /***** Update IP settings for current IP in database *****/
-   Set_DB_UpdateMyIPSettingsForCurrentIP ();
+   Set_DB_UpdateMyIPSettingsForThisIP ();
 
    /***** If I am logged, update my IP settings in database for all my IP's *****/
    if (Gbl.Usrs.Me.Logged)

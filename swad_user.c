@@ -438,7 +438,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct Usr_Data *UsrDat)
    UsrDat->EnUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->Roles.InCurrentCrs = Rol_UNK;// not yet got from database
+   UsrDat->Roles.InThisCrs = Rol_UNK;// not yet got from database
    UsrDat->Roles.InCrss = -1;		// not yet got from database
    UsrDat->Accepted = Usr_HAS_NOT_ACCEPTED;
 
@@ -527,10 +527,10 @@ void Usr_UsrDataDestructor (struct Usr_Data *UsrDat)
 
 void Usr_GetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                   Usr_GetPrefs_t GetPrefs,
-                                  Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
+                                  Usr_GetRoleInThisCrs_t GetRoleInThisCrs)
   {
    ID__GetListIDsFromUsrCod (UsrDat);
-   Usr_GetUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);
+   Usr_GetUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInThisCrs);
   }
 
 /*****************************************************************************/
@@ -590,7 +590,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct Usr_Data *UsrDat)
 
 void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
                                Usr_GetPrefs_t GetPrf,
-                               Usr_GetRoleInCurrentCrs_t GetRol)
+                               Usr_GetRoleInThisCrs_t GetRol)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -619,11 +619,11 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	 switch (GetRol)
 	   {
 	    case Usr_DONT_GET_ROLE_IN_CRS:
-	       UsrDat->Roles.InCurrentCrs = Rol_UNK;
+	       UsrDat->Roles.InThisCrs = Rol_UNK;
 	       UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	       break;
 	    case Usr_GET_ROLE_IN_CRS:
-	       UsrDat->Roles.InCurrentCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+	       UsrDat->Roles.InThisCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
 								 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 	       UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	       break;
@@ -888,12 +888,12 @@ void Usr_FlushCachesUsr (void)
 	HieLvl++)
       Hie_FlushCacheUsrBelongsTo (HieLvl);
 
-   Enr_FlushCacheUsrBelongsToCurrentCrs ();
-   Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+   Enr_FlushCacheUsrBelongsToThisCrs ();
+   Enr_FlushCacheUsrHasAcceptedInThisCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();
-   Rol_FlushCacheMyRoleInCurrentCrs ();
+   Rol_FlushCacheMyRoleInThisCrs ();
    Rol_FlushCacheRoleUsrInCrs ();
-   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs ();
    Grp_FlushCacheIBelongToGrp ();
    Fol_FlushCacheFollow ();
   }
@@ -1032,7 +1032,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a student? *****/
-   if (UsrDat->Roles.InCurrentCrs != Rol_STD)
+   if (UsrDat->Roles.InThisCrs != Rol_STD)
       return Usr_CAN_NOT;
 
    /***** 5. Fast check: Am I a system admin? *****/
@@ -1040,7 +1040,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 7. Fast check: It's me? *****/
@@ -1048,7 +1048,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 8. Fast / slow check: Does he/she belong to the current course? *****/
-   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
+   if (Enr_CheckIfUsrBelongsToThisCrs (UsrDat) == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 9. Fast / slow check depending on roles *****/
@@ -1056,7 +1056,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
      {
       case Rol_STD:
       case Rol_NET:
-	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1086,8 +1086,8 @@ Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
-   return UsrDat->Roles.InCurrentCrs == Rol_NET ||
-          UsrDat->Roles.InCurrentCrs == Rol_TCH ? Usr_CAN :
+   return UsrDat->Roles.InThisCrs == Rol_NET ||
+          UsrDat->Roles.InThisCrs == Rol_TCH ? Usr_CAN :
 						  Usr_CAN_NOT;
   }
 
@@ -1120,7 +1120,7 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 6. Fast check: It's me? *****/
@@ -1128,14 +1128,14 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 7. Fast check: Does he/she belong to the current course? *****/
-   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
+   if (Enr_CheckIfUsrBelongsToThisCrs (UsrDat) == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 8. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1169,7 +1169,7 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
    // Only users beloging to course can have files in assignments/works
-   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
+   if (Enr_CheckIfUsrBelongsToThisCrs (UsrDat) == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 5. Fast check: Am I a system admin? *****/
@@ -1177,7 +1177,7 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 6. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 7. Fast check: It's me? *****/
@@ -1188,7 +1188,7 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1225,7 +1225,7 @@ Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
       return Usr_CAN;
 
    /***** 5. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
       return Usr_CAN_NOT;
 
    /***** 6. Fast check: It's me? *****/
@@ -1236,7 +1236,7 @@ Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
-	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat)];
+	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1365,7 +1365,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 void Usr_WelcomeUsr (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_This_CGI_SWAD_Language;
    extern const char *Txt_NEW_YEAR_GREETING;
    extern const char *Txt_Happy_birthday_X;
    extern const char *Txt_Please_confirm_your_email_address;
@@ -1376,7 +1376,7 @@ void Usr_WelcomeUsr (void)
 
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_This_CGI_SWAD_Language)
         {
          if (Gbl.Usrs.Me.UsrDat.FrstName[0])
            {
@@ -1731,7 +1731,7 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
       if (!Gbl.Action.UsesAJAX)
 	{
 	 Gbl.Action.Act = ActLogOut;
-	 Tab_SetCurrentTab ();
+	 Tab_SetThisTab ();
 	 Ale_ShowAlert (Ale_WARNING,Txt_The_session_has_expired);
 	 FormLogin.PutForm = Frm_PUT_FORM;
 	}
@@ -1864,7 +1864,7 @@ void Usr_ChkUsrGetUsrDataAndAdjustAction (void)
       default:
 	 break;
      }
-   Tab_SetCurrentTab ();	// Adjust action and tab
+   Tab_SetThisTab ();	// Adjust action and tab
 				// (required if action has changed or
 				// if current hierarchy node no longer exists)
   }
@@ -2068,7 +2068,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
 
    Gbl.Action.Act = ActFrmLogIn;
-   Tab_SetCurrentTab ();
+   Tab_SetThisTab ();
    Ale_ShowAlert (Ale_WARNING,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 	          Gbl.Usrs.Me.UsrIdLogin);
   }
@@ -2128,7 +2128,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 
 	 /* Course may have changed ==> get my role in current course again */
 	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
-	    Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	    Gbl.Usrs.Me.UsrDat.Roles.InThisCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
 	 // role and action will be got from last data
          GetRoleAndActionFromLastData = true;
@@ -2156,7 +2156,7 @@ static void Usr_SetMyPrefsAndRoles (void)
 	    if (LastSuperAction != ActUnk)
 	      {
 	       Gbl.Action.Act = LastSuperAction;
-	       Tab_SetCurrentTab ();
+	       Tab_SetThisTab ();
 	      }
 	   }
 	 /* If action is not set to last action,
@@ -2272,13 +2272,13 @@ Exi_Exist_t Usr_ChkIfUsrCodExists (long UsrCod)
 
 Exi_Exist_t Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 						     Usr_GetPrefs_t GetPrefs,
-						     Usr_GetRoleInCurrentCrs_t GetRoleInCurrentCrs)
+						     Usr_GetRoleInThisCrs_t GetRoleInThisCrs)
   {
    /***** Check if a user exists having this user's code *****/
    if (Usr_ChkIfUsrCodExists (UsrDat->UsrCod))
      {
       /* Get user's data */
-      Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInCurrentCrs);
+      Usr_GetAllUsrDataFromUsrCod (UsrDat,GetPrefs,GetRoleInThisCrs);
       return Exi_EXISTS;
      }
 
@@ -2384,7 +2384,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
       Usr_WriteUsrSurnamesAndName (UsrDat,BgColor);
 
       HTM_TD_Begin ("class=\"LM %s\"",BgColor);
-	 Ins_DrawInstitutionLogoWithLink (&Ins,Pho_PHOTOS_SHOW,"ICO25x25");
+	 Ins_DrawInsLogoWithLink (&Ins,Pho_PHOTOS_SHOW,"ICO25x25");
       HTM_TD_End ();
 
    /***** End row *****/
@@ -2445,7 +2445,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       if (UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
-	 Dpt_GetDepartmentDataByCod (&Dpt);
+	 Dpt_GetDptDataByCod (&Dpt);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
@@ -2655,7 +2655,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       if (ShowData == Lay_SHOW && UsrDat->Tch.DptCod > 0)
 	{
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
-	 Dpt_GetDepartmentDataByCod (&Dpt);
+	 Dpt_GetDptDataByCod (&Dpt);
 	}
       Usr_WriteUsrData (The_GetColorRows (),
 			ShowData == Lay_SHOW &&
@@ -2725,7 +2725,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
       Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
 
       HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
-	 Ins_DrawInstitutionLogoWithLink (&Ins,Pho_PHOTOS_SHOW,"ICO25x25");
+	 Ins_DrawInsLogoWithLink (&Ins,Pho_PHOTOS_SHOW,"ICO25x25");
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -3002,7 +3002,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 			break;
 		     case Hie_SYS:	// System
 			// Query result has not a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
+			UsrInList->RoleInThisCrsDB = Rol_UNK;
 			if (Enr_DB_GetNumCrssOfUsr (UsrInList->UsrCod))
 			   UsrInList->Accepted = Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0 ? Usr_HAS_ACCEPTED :
 													      Usr_HAS_NOT_ACCEPTED;
@@ -3014,13 +3014,13 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_CTR:	// Center
 		     case Hie_DEG:	// Degree
 			// Query result has not a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
+			UsrInList->RoleInThisCrsDB = Rol_UNK;
 			UsrInList->Accepted = Enr_DB_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0 ? Usr_HAS_ACCEPTED :
 													   Usr_HAS_NOT_ACCEPTED;
 			break;
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
+			UsrInList->RoleInThisCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
 			UsrInList->Accepted = Usr_GetAcceptedFromYN (row[12][0]);
 			break;
 		    }
@@ -3029,7 +3029,7 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 					// ...so they have not accepted...
 					// ...inscription in any course
                case Rol_DEG_ADM:	// Any admin (degree, center, institution or system)
-	          UsrInList->RoleInCurrentCrsDB = Rol_UNK;
+	          UsrInList->RoleInThisCrsDB = Rol_UNK;
 	          UsrInList->Accepted = Usr_HAS_NOT_ACCEPTED;
 	          break;
                case Rol_STD:
@@ -3046,14 +3046,14 @@ void Usr_GetListUsrsFromQuery (char *Query,Hie_Level_t HieLvl,Rol_Role_t Role)
 		     case Hie_CTR:	// Center
 		     case Hie_DEG:	// Degree
 			// Query result has not a column with the acceptation
-	                UsrInList->RoleInCurrentCrsDB = Rol_UNK;
+	                UsrInList->RoleInThisCrsDB = Rol_UNK;
 			UsrInList->Accepted = Enr_DB_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,
 											  Role) ? Usr_HAS_NOT_ACCEPTED :
 												  Usr_HAS_ACCEPTED;
 			break;
 		     case Hie_CRS:	// Course
 			// Query result has a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
+			UsrInList->RoleInThisCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
 			UsrInList->Accepted = Usr_GetAcceptedFromYN (row[12][0]);
 			break;
 		    }
@@ -3093,7 +3093,7 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
    UsrDat->PhotoVisibility    = UsrInList->PhotoVisibility;
    UsrDat->HieCods[Hie_CTY]   = UsrInList->HieCods[Hie_CTY];
    UsrDat->HieCods[Hie_INS]   = UsrInList->HieCods[Hie_INS];
-   UsrDat->Roles.InCurrentCrs = UsrInList->RoleInCurrentCrsDB;
+   UsrDat->Roles.InThisCrs = UsrInList->RoleInThisCrsDB;
    UsrDat->Accepted           = UsrInList->Accepted;
   }
 
@@ -3883,7 +3883,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	    if (Usr_GetIfShowBigList (NumUsrs,FuncPars,Args,NULL) == Lay_SHOW)
 	      {
 	       /***** Link to register students *****/
-	       Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs ();
+	       Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs ();
 
 	       /***** Form to select users and select date range ****/
 	       /* Begin form */
@@ -4497,7 +4497,7 @@ void Usr_ListAllDataGsts (void)
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
-	       UsrDat.Roles.InCurrentCrs = Rol_GST;	// We know the user's role.
+	       UsrDat.Roles.InThisCrs = Rol_GST;	// We know the user's role.
 							// It is not necessary to retrieve
 							// his/her role from database.
 	       UsrDat.Accepted = Usr_HAS_NOT_ACCEPTED;	// Guests have no courses,...
@@ -4585,7 +4585,7 @@ void Usr_ListAllDataStds (void)
      {
       /* Get list of groups types and groups in current course
          This is necessary to show columns with group selection */
-      Grp_GetListGrpTypesInCurrentCrs (Grp_GRP_TYPES_WITH_GROUPS);
+      Grp_GetListGrpTypesInThisCrs (Grp_GRP_TYPES_WITH_GROUPS);
 
       /* Get groups to show */
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -4710,7 +4710,7 @@ void Usr_ListAllDataStds (void)
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	      {
-	       UsrDat.Roles.InCurrentCrs = Rol_STD;	// We know the user's role.
+	       UsrDat.Roles.InThisCrs = Rol_STD;	// We know the user's role.
 							// It is not necessary to retrieve
 							// his/her role from database.
 	       UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
@@ -4866,7 +4866,7 @@ static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	{
-	 UsrDat.Roles.InCurrentCrs = Role;	// We know the user's role.
+	 UsrDat.Roles.InThisCrs = Role;	// We know the user's role.
 						// It is not necessary to retrieve
 						// his/her role from database.
 	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
@@ -5078,7 +5078,7 @@ void Usr_ListDataAdms (void)
 	    Set_BeginOneSettingSelector ();
 	       Set_BeginPref (ShowPhotos == Pho_PHOTOS_SHOW);
 		  Frm_BeginForm (ActLstOth);
-		     Sco_PutParCurrentScope (&HieLvl);
+		     Sco_PutParThisScope (&HieLvl);
 		     Pho_PutButtonShowPhotos (ShowPhotos,NULL,NULL);
 		  Frm_EndForm ();
 	       Set_EndPref ();
@@ -5229,11 +5229,11 @@ void Usr_ListGuests (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	   {
 	    /***** Form to select type of list of users *****/
-	    Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&ListingPars.HieLvl,
+	    Usr_ShowFormsToSelectUsrListType (Sco_PutParThisScope,&ListingPars.HieLvl,
 					      NULL,ListingPars.ShowPhotos);
 
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,
-				      Sco_PutParCurrentScope,&ListingPars.HieLvl,
+				      Sco_PutParThisScope,&ListingPars.HieLvl,
 				      NULL) == Lay_SHOW)
 	      {
 	       /***** Draw a class photo with guests *****/
@@ -5380,7 +5380,7 @@ void Usr_ListStudents (void)
       /***** Form to select groups *****/
       if (ListingPars.HieLvl == Hie_CRS)
 	 Grp_ShowFormToSelectSeveralGroups (Gbl.Action.Act,
-					    Sco_PutParCurrentScope,
+					    Sco_PutParThisScope,
 					    &ListingPars.HieLvl,NULL);
 
       /***** Begin section with user list *****/
@@ -5392,11 +5392,11 @@ void Usr_ListStudents (void)
 	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	   {
 	    /***** Form to select type of list of users *****/
-	    Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&ListingPars.HieLvl,
+	    Usr_ShowFormsToSelectUsrListType (Sco_PutParThisScope,&ListingPars.HieLvl,
 					      NULL,ListingPars.ShowPhotos);
 
 	    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,
-				      Sco_PutParCurrentScope,&ListingPars.HieLvl,
+				      Sco_PutParThisScope,&ListingPars.HieLvl,
 				      NULL) == Lay_SHOW)
 	      {
 	       /***** Draw a class photo with students of the course *****/
@@ -5554,7 +5554,7 @@ void Usr_ListTeachers (void)
       /***** Form to select groups *****/
       if (ListingPars.HieLvl == Hie_CRS)
 	 Grp_ShowFormToSelectSeveralGroups (Gbl.Action.Act,
-					    Sco_PutParCurrentScope,
+					    Sco_PutParThisScope,
 					    &ListingPars.HieLvl,NULL);
 
       /***** Begin section with user list *****/
@@ -5566,11 +5566,11 @@ void Usr_ListTeachers (void)
 	 if (NumUsrs)
 	   {
 	    /***** Form to select type of list of users *****/
-	    Usr_ShowFormsToSelectUsrListType (Sco_PutParCurrentScope,&ListingPars.HieLvl,
+	    Usr_ShowFormsToSelectUsrListType (Sco_PutParThisScope,&ListingPars.HieLvl,
 					      NULL,ListingPars.ShowPhotos);
 
 	    if (Usr_GetIfShowBigList (NumUsrs,
-				      Sco_PutParCurrentScope,&ListingPars.HieLvl,
+				      Sco_PutParThisScope,&ListingPars.HieLvl,
 				      NULL) == Lay_SHOW)
 	      {
 	       /***** Draw a class photo with teachers of the course *****/
@@ -5987,7 +5987,7 @@ void Usr_DoActionOnUsrs1 (void)
 	 if (Gbl.Action.Act == Gbl.Action.Original)		// Fail, no change in action
 	    Ale_CreateAlert (Ale_ERROR,Usr_USER_LIST_SECTION_ID,"Wrong action.");
 	 else							// Success, action has changed
-	    Tab_SetCurrentTab ();
+	    Tab_SetThisTab ();
 	 break;
       case Exi_DOES_NOT_EXIST:	// If no users selected...
       default:			// ...write warning notice
@@ -6168,7 +6168,7 @@ static void Usr_ShowStdsAllDataPars (void *ShowPhotos)
 
 static void Usr_ShowTchsAllDataPars (void *ListingPars)
   {
-   Sco_PutParCurrentScope (&((struct Usr_ListingPars *) ListingPars)->HieLvl);
+   Sco_PutParThisScope (&((struct Usr_ListingPars *) ListingPars)->HieLvl);
    Set_PutParListWithPhotos (((struct Usr_ListingPars *) ListingPars)->ShowPhotos);
   }
 
@@ -6428,13 +6428,13 @@ void Usr_ConstructPathUsr (long UsrCod,char PathUsr[PATH_MAX + 1])
    char PathAboveUsr[PATH_MAX + 1];
 
    /***** Path for users *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_USR_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_USR_PRIVATE);
 
    /***** Path above user's ID *****/
    Fil_BuildPath (PathAboveUsr,"%s/%02u",
 		  Cfg_PATH_USR_PRIVATE,
 		  (unsigned) ((unsigned long) UsrCod % 100));
-   Fil_CreateDirIfNotExists (PathAboveUsr);
+   Fil_CreateFolderIfNotExists (PathAboveUsr);
 
    /***** Path for user *****/
    Fil_BuildPath (PathUsr,"%s/%lu",PathAboveUsr,(unsigned long) UsrCod);
@@ -6647,13 +6647,13 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
       HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
 
    /* Action to go to user's record depending on role in course */
-   if (!NextAction[UsrDat->Roles.InCurrentCrs])
+   if (!NextAction[UsrDat->Roles.InThisCrs])
       /* Begin div */
       HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
    else
      {
       /* Begin form to go to user's record card */
-      Frm_BeginForm (NextAction[UsrDat->Roles.InCurrentCrs]);
+      Frm_BeginForm (NextAction[UsrDat->Roles.InThisCrs]);
 	 Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	 HTM_BUTTON_Submit_Begin (UsrDat->FullName,NULL,
 	                          "class=\"LT BT_LINK MSG_AUT_%s\"",
@@ -6678,7 +6678,7 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
       HTM_Txt (UsrDat->FrstName);
      }
 
-   if (!NextAction[UsrDat->Roles.InCurrentCrs])
+   if (!NextAction[UsrDat->Roles.InThisCrs])
       /* End div */
       HTM_DIV_End ();
    else

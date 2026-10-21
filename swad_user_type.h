@@ -90,7 +90,7 @@ typedef enum
   {
    Usr_DONT_GET_ROLE_IN_CRS = 0,
    Usr_GET_ROLE_IN_CRS      = 1,
-  } Usr_GetRoleInCurrentCrs_t;
+  } Usr_GetRoleInThisCrs_t;
 
 // Related with user's sexes
 #define Usr_NUM_SEXS 4	// Unknown, female, male, all
@@ -218,7 +218,7 @@ struct Usr_Data
       Cac_Status_t Status;
       long UsrCod;
       Usr_GetPrefs_t GetPrf;
-      Usr_GetRoleInCurrentCrs_t GetRol;
+      Usr_GetRoleInThisCrs_t GetRol;
      } DataCached;
    long UsrCod;
    char EnUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -232,7 +232,7 @@ struct Usr_Data
    char Password[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    struct
      {
-      Rol_Role_t InCurrentCrs;	// Role in current course (Rol_UNK is not filled/calculated or no course selected)
+      Rol_Role_t InThisCrs;	// Role in current course (Rol_UNK is not filled/calculated or no course selected)
       int InCrss;	// Roles in all his/her courses
 			// Check always if filled/calculated
 			// >=0 ==> filled/calculated
@@ -307,9 +307,9 @@ struct Usr_InList
    char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
    long HieCods[Hie_NUM_LEVELS];
-   Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
+   Rol_Role_t RoleInThisCrsDB;	// Role in current course in database
    Usr_Accepted_t Accepted;	// User has accepted joining to one/all courses?
-   bool Remove;		// A boolean associated with each user that indicates if he/she must be removed
+   bool Remove;			// A boolean associated with each user that indicates if he/she must be removed
   };
 
 struct Usr_ListUsrs

@@ -808,7 +808,7 @@ void Acc_CreateNewUsr (struct Usr_Data *UsrDat,Usr_MeOrOther_t MeOrOther)
 
    /***** Create directory for the user, if not exists *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);
-   Fil_CreateDirIfNotExists (PathRelUsr);
+   Fil_CreateFolderIfNotExists (PathRelUsr);
 
    /***** Create user's figures *****/
    Prf_CreateNewUsrFigures (UsrDat->UsrCod,MeOrOther);
@@ -1040,7 +1040,7 @@ void Acc_CompletelyEliminateAccount (struct Usr_Data *UsrDat,
    Rec_DB_RemoveAllFieldContentsFromUsrRecords (UsrDat->UsrCod);
 
    /***** Remove user from all his/her projects *****/
-   Prj_RemoveUsrFromProjects (UsrDat->UsrCod);
+   Prj_RemoveUsrFromPrjs (UsrDat->UsrCod);
 
    /***** Remove user from all attendance events *****/
    Att_DB_RemoveUsrFromAllEvents (UsrDat->UsrCod);
@@ -1172,7 +1172,7 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat)
 
    /***** Remove files of the user's briefcase from disc *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);
-   Fil_RemoveTree (PathRelUsr);
+   Fil_RemoveFolderAndItsContent (PathRelUsr);
   }
 
 /*****************************************************************************/

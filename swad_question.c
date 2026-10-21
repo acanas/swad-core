@@ -196,7 +196,7 @@ void Qst_ShowFormRequestEditQsts (struct Qst_Questions *Qsts)
                  Hlp_ASSESSMENT_Questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
-      if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+      if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromThisCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActLstTstQst);
 	    Par_PutParUnsigned (NULL,"Order",(unsigned) Qst_DEFAULT_ORDER);
@@ -364,7 +364,7 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
                  Hlp_ASSESSMENT_Exams_questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
-      if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+      if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromThisCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActLstTstQstForSet);
 	    ExaSet_PutParsOneSet (Exams);
@@ -420,7 +420,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
                  Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 
       /***** Get tags already present in the table of questions *****/
-      if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res)))
+      if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromThisCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActGamLstTstQst);
 	    Gam_PutPars (Games);
@@ -1601,7 +1601,7 @@ void Qst_PutFormEditOneQst (struct Qst_Question *Qst)
 	 HTM_TR_End ();
 
 	 /***** Get tags already existing for questions in current course *****/
-	 NumTags = Tag_DB_GetAllTagsFromCurrentCrs (&mysql_res);
+	 NumTags = Tag_DB_GetAllTagsFromThisCrs (&mysql_res);
 
 	 /***** Write the tags *****/
 	 HTM_TR_Begin (NULL);

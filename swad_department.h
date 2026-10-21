@@ -63,13 +63,13 @@ struct Dpt_Departments
 /*****************************************************************************/
 
 void Dpt_SeeAllDepts (void);
-void Dpt_EditDepartments (void);
-void Dpt_FreeListDepartments (struct Dpt_Departments *Departments);
-void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt);
-void Dpt_RemoveDepartment (void);
-void Dpt_ChangeDepartIns (void);
-void Dpt_RenameDepartShrt (void);
-void Dpt_RenameDepartFull (void);
+void Dpt_EditDpts (void);
+void Dpt_FreeListDpts (struct Dpt_Departments *Dpts);
+void Dpt_GetDptDataByCod (struct Dpt_Department *Dpt);
+void Dpt_RemoveDpt (void);
+void Dpt_ChangeDptIns (void);
+void Dpt_RenameDptShrt (void);
+void Dpt_RenameDptFull (void);
 void Dpt_ChangeDptWWW (void);
 void Dpt_ContEditAfterChgDpt (void);
 
@@ -77,11 +77,11 @@ void Dpt_ReceiveNewDpt (void);
 void Dpt_FlushCacheNumDptsInIns (void);
 unsigned Dpt_GetNumDptsInIns (long HieCod);
 
-void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
-                                  const char *ParName,
-		                  const char *SelectClass,
-                                  long FirstOption,
-                                  const char *TextWhenNoDptSelected,
-                                  HTM_Attributes_t Attributes);
+void Dpt_WriteSelectorDpt (long HieCod,long DptCod,
+                           const char *ParName,
+		           const char *SelectClass,
+                           long FirstOption,
+                           const char *TextWhenNoDptSelected,
+                           HTM_Attributes_t Attributes);
 
 #endif

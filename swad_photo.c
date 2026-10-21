@@ -177,12 +177,12 @@ Usr_Can_t Pho_ICanChangeOtherUsrPhoto (struct Usr_Data *UsrDat)
      {
       case Rol_TCH:
 	 /* A teacher can change the photo of confirmed students */
-	 if (UsrDat->Roles.InCurrentCrs != Rol_STD)	// Not a student
+	 if (UsrDat->Roles.InThisCrs != Rol_STD)	// Not a student
             return Usr_CAN_NOT;
 
 	 /* It's a student in this course,
 	    check if he/she has accepted registration */
-	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
          return ICanChange[UsrDat->Accepted];
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -225,7 +225,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
       case Usr_OTHER:
       default:
 	 if (Pho_ICanChangeOtherUsrPhoto (UsrDat) == Usr_CAN)
-	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InCurrentCrs],NULL,
+	    Lay_PutContextualLinkOnlyIcon (NextAction[UsrDat->Roles.InThisCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "image-portrait.svg",Ico_BLACK);
 	 break;
@@ -267,7 +267,7 @@ static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args
 
    /***** Link to request the removal of another user's photo *****/
    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL) == Exi_EXISTS)
-      Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],NULL,
+      Lay_PutContextualLinkOnlyIcon (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InThisCrs],NULL,
 				     Usr_PutParOtherUsrCodEncrypted,
 				     Gbl.Usrs.Other.UsrDat.EnUsrCod,
 				     "trash.svg",Ico_RED);
@@ -343,7 +343,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
 	    break;
 	 case Usr_OTHER:
 	 default:
-	    Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]);
+	    Frm_BeginForm (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InThisCrs]);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    break;
 	}
@@ -589,7 +589,7 @@ void Pho_ReqRemUsrPhoto (void)
 				       ClassPhoto[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 
 		     /* End alert */
-		     Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs],
+		     Ale_ShowAlertAndButtonEnd (NextAction[Gbl.Usrs.Other.UsrDat.Roles.InThisCrs],
 						NULL,NULL,
 						Usr_PutParOtherUsrCodEncrypted,
 						Gbl.Usrs.Other.UsrDat.EnUsrCod,
@@ -704,25 +704,25 @@ static Exi_Exist_t Pho_ReceivePhotoAndDetectFaces (Usr_MeOrOther_t MeOrOther,
    Act_Action_t ActChgPho[Rol_NUM_ROLES] =
      {
       [Usr_ME   ] = ActUpdMyPho,
-      [Usr_OTHER] = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InCurrentCrs]
+      [Usr_OTHER] = NextAction[Gbl.Usrs.Other.UsrDat.Roles.InThisCrs]
      };
    char ErrorTxt[256];
    char *Icon;
 
    /***** Creates directories if not exist *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_PHOTO_PRIVATE);
    Fil_BuildPath (PathPhotosPriv,"%s/%02u",
 		  Cfg_PATH_PHOTO_PRIVATE,
 		  (unsigned) ((unsigned long) UsrDat->UsrCod % 100));
-   Fil_CreateDirIfNotExists (PathPhotosPriv);
+   Fil_CreateFolderIfNotExists (PathPhotosPriv);
 
    /***** Create directories if not exists
           and remove old temporary files *****/
    /* Create public directory for photos */
-   Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PUBLIC);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_PHOTO_PUBLIC);
 
    /* Create temporary directory for photos */
-   Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PUBLIC);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_PHOTO_TMP_PUBLIC);
 
    /***** First of all, copy in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,
@@ -1222,7 +1222,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
 	{
 	 /* Get institution short name and country name */
 	 Ins.HieCod = UsrDat->HieCods[Hie_INS];
-	 Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
+	 Ins_GetShrtNameAndCtyOfIns (&Ins,CtyName);
 
 	 /* Write institution short name and country name */
 	 if (asprintf (&Caption.InsCty,"<div class=\"ZOOM_TXT DAT_SMALL_%s\">"
@@ -1235,7 +1235,7 @@ void Pho_BuildHTMLUsrPhoto (const struct Usr_Data *UsrDat,const char *PhotoURL,
       else if (UsrDat->HieCods[Hie_CTY] > 0)
 	{
 	 /* Get country name */
-	 Cty_GetCountryNameInLanguage (UsrDat->HieCods[Hie_CTY],
+	 Cty_GetCtyNameInLanguage (UsrDat->HieCods[Hie_CTY],
 				       Gbl.Prefs.Language,CtyName);
 
 	 /* Write country name */
@@ -1586,18 +1586,18 @@ void Pho_CalcPhotoDegree (void)
    long TotalTimeToComputeAvgPhotoInMicroseconds,PartialTimeToComputeAvgPhotoInMicroseconds;
 
    /***** Create public directories for average photos if not exist *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_PUBLIC);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_PHOTO_PUBLIC);
    for (TypeOfAverage = (Pho_AvgPhotoTypeOfAverage_t) 0;
 	TypeOfAverage < Pho_NUM_AVERAGE_PHOTO_TYPES;
 	TypeOfAverage++)
      {
       Fil_BuildPath (DirAvgPhotosRelPath[TypeOfAverage],"%s/%s",
                      Cfg_PATH_PHOTO_PUBLIC,Pho_StrAvgPhotoDirs[TypeOfAverage]);
-      Fil_CreateDirIfNotExists (DirAvgPhotosRelPath[TypeOfAverage]);
+      Fil_CreateFolderIfNotExists (DirAvgPhotosRelPath[TypeOfAverage]);
      }
 
    /***** Creates private directory for lists of users' photos if not exists *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_PHOTO_TMP_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_PHOTO_TMP_PRIVATE);
 
    /***** Get the degree which photo will be computed *****/
    if ((HieCod = ParCod_GetPar (ParCod_OthDeg)) > 0)	// Parameter may be omitted
@@ -2416,7 +2416,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
 	                     The_GetSuffix (),The_GetColorRows ());
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
-		     Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
+		     Deg_DrawDegLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
 		  else	// Pho_DEGREES_PRINT
 		    {
 		     Lgo_DrawLogo (Hie_DEG,&Deg,"CT ICO20x20");

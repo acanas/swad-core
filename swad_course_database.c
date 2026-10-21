@@ -98,7 +98,7 @@ unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long HieCod)
 /******************** Get courses in current degree *********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res)
+unsigned Crs_DB_GetCrssInThisDegBasic (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get courses of a degree",
@@ -114,7 +114,7 @@ unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res)
 /******************** Get courses in current degree *********************/
 /*****************************************************************************/
 
-unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res)
+unsigned Crs_DB_GetCrssInThisDegFull (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get courses of a degree",
@@ -542,7 +542,7 @@ void Crs_DB_UpdateCrsName (long HieCod,
 /********************** Update degree in table of courses ********************/
 /*****************************************************************************/
 
-void Crs_DB_UpdateDegOfCurrentCrs (long HieCod)
+void Crs_DB_UpdateDegOfThisCrs (long HieCod)
   {
    DB_QueryUPDATE ("can not move course to another degree",
 		   "UPDATE crs_courses"

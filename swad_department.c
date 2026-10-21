@@ -75,39 +75,37 @@ static struct Dpt_Department *Dpt_EditingDpt = NULL;	// Static variable to keep 
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Dpt_ResetDepartments (struct Dpt_Departments *Departments);
+static void Dpt_ResetDpts (struct Dpt_Departments *Dpts);
 
 static Dpt_Order_t Dpt_GetParDptOrder (void);
 static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
 static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args);
-static void Dpt_EditDepartmentsInternal (void);
+static void Dpt_EditDptsInternal (void);
 
-static void Dpt_GetListDepartmentsInIns (struct Dpt_Departments *Departments,
-					 long HieCod);
+static void Dpt_GetListDptsInIns (struct Dpt_Departments *Dpts,long HieCod);
 
-static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
-                                          struct Dpt_Department *Dpt);
+static void Dpt_GetDptDataFromRow (MYSQL_RES *mysql_res,struct Dpt_Department *Dpt);
 
-static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments);
+static void Dpt_ListDptsForEdition (const struct Dpt_Departments *Dpts);
 static void Dpt_PutParDptCod (void *DptCod);
 
-static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull);
+static void Dpt_RenameDpt (Nam_ShrtOrFullName_t ShrtOrFull);
 
-static void Dpt_PutFormToCreateDepartment (void);
-static void Dpt_PutHeadDepartments (void);
+static void Dpt_PutFormToCreateDpt (void);
+static void Dpt_PutHeadDpts (void);
 
-static void Dpt_EditingDepartmentConstructor (void);
-static void Dpt_EditingDepartmentDestructor (void);
+static void Dpt_EditingDptConstructor (void);
+static void Dpt_EditingDptDestructor (void);
 
 /*****************************************************************************/
 /************************* Reset departments context *************************/
 /*****************************************************************************/
 
-static void Dpt_ResetDepartments (struct Dpt_Departments *Departments)
+static void Dpt_ResetDpts (struct Dpt_Departments *Dpts)
   {
-   Departments->Num           = 0;
-   Departments->Lst           = NULL;
-   Departments->SelectedOrder = Dpt_ORDER_DEFAULT;
+   Dpts->Num           = 0;
+   Dpts->Lst           = NULL;
+   Dpts->SelectedOrder = Dpt_ORDER_DEFAULT;
   }
 
 /*****************************************************************************/
@@ -137,13 +135,13 @@ void Dpt_SeeAllDepts (void)
       return;
 
    /***** Reset departments context *****/
-   Dpt_ResetDepartments (&Departments);
+   Dpt_ResetDpts (&Departments);
 
    /***** Get parameter with the type of order in the list of departments *****/
    Departments.SelectedOrder = Dpt_GetParDptOrder ();
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartmentsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Dpt_GetListDptsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
    /***** Begin box and table *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
@@ -207,20 +205,20 @@ void Dpt_SeeAllDepts (void)
       /***** Write teachers of this institution with other department *****/
       HTM_TR_Begin (NULL);
 	 HTM_TD_Txt_Left (Txt_Other_departments);
-	 HTM_TD_Unsigned (Dpt_DB_GetNumTchsCurrentInsInDepartment (0));
+	 HTM_TD_Unsigned (Dpt_DB_GetNumTchsThisInsInDpt (0));
       HTM_TR_End ();
 
       /***** Write teachers with no department *****/
       HTM_TR_Begin (NULL);
 	 HTM_TD_Txt_Left (Txt_Department_unspecified);
-	 HTM_TD_Unsigned (Dpt_DB_GetNumTchsCurrentInsInDepartment (-1L));
+	 HTM_TD_Unsigned (Dpt_DB_GetNumTchsThisInsInDpt (-1L));
       HTM_TR_End ();
 
    /***** End table and box *****/
    Box_BoxTableEnd ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments (&Departments);
+   Dpt_FreeListDpts (&Departments);
   }
 
 /*****************************************************************************/
@@ -258,19 +256,19 @@ static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args)
 /******* Put forms to edit the departments of the current institution ********/
 /*****************************************************************************/
 
-void Dpt_EditDepartments (void)
+void Dpt_EditDpts (void)
   {
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
       /***** Edit departments *****/
-      Dpt_EditDepartmentsInternal ();
+      Dpt_EditDptsInternal ();
 
    /***** Department destructor *****/
-   Dpt_EditingDepartmentDestructor ();
+   Dpt_EditingDptDestructor ();
   }
 
-static void Dpt_EditDepartmentsInternal (void)
+static void Dpt_EditDptsInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_Departments_of_INSTITUTION_X;
@@ -282,13 +280,13 @@ static void Dpt_EditDepartmentsInternal (void)
       return;
 
    /***** Reset departments context *****/
-   Dpt_ResetDepartments (&Departments);
+   Dpt_ResetDpts (&Departments);
 
    /***** Get list of institutions *****/
-   Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+   Ins_GetBasicListOfInss (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartmentsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Dpt_GetListDptsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
@@ -299,17 +297,17 @@ static void Dpt_EditDepartmentsInternal (void)
    free (Title);
 
       /***** Put a form to create a new department *****/
-      Dpt_PutFormToCreateDepartment ();
+      Dpt_PutFormToCreateDpt ();
 
       /***** Forms to edit current departments *****/
       if (Departments.Num)
-	 Dpt_ListDepartmentsForEdition (&Departments);
+	 Dpt_ListDptsForEdition (&Departments);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments (&Departments);
+   Dpt_FreeListDpts (&Departments);
 
    /***** Free list of institutions *****/
    Hie_FreeList (Hie_CTY);
@@ -321,32 +319,32 @@ static void Dpt_EditDepartmentsInternal (void)
 // If InsCod  > 0 ==> get departments of an institution
 // If InsCod <= 0 ==> an empty list is returned
 
-static void Dpt_GetListDepartmentsInIns (struct Dpt_Departments *Departments,
+static void Dpt_GetListDptsInIns (struct Dpt_Departments *Dpts,
 					 long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDpt;
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments (Departments);	// List is initialized to empty
+   Dpt_FreeListDpts (Dpts);	// List is initialized to empty
 
    if (HieCod > 0)	// Institution specified
      {
       /***** Get departments from database *****/
-      Departments->Num = Dpt_DB_GetListDepartmentsInIns (&mysql_res,HieCod,
-                                                    Departments->SelectedOrder);
-      if (Departments->Num) // Departments found...
+      Dpts->Num = Dpt_DB_GetListDptsInIns (&mysql_res,HieCod,
+                                                    Dpts->SelectedOrder);
+      if (Dpts->Num) // Departments found...
 	{
 	 /***** Create list with courses in degree *****/
-	 if ((Departments->Lst = calloc ((size_t) Departments->Num,
-	                                 sizeof (*Departments->Lst))) == NULL)
+	 if ((Dpts->Lst = calloc ((size_t) Dpts->Num,
+	                                 sizeof (*Dpts->Lst))) == NULL)
 	    Err_NotEnoughMemoryExit ();
 
 	 /***** Get the departments *****/
 	 for (NumDpt = 0;
-	      NumDpt < Departments->Num;
+	      NumDpt < Dpts->Num;
 	      NumDpt++)
-	    Dpt_GetDepartmentDataFromRow (mysql_res,&Departments->Lst[NumDpt]);
+	    Dpt_GetDptDataFromRow (mysql_res,&Dpts->Lst[NumDpt]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -358,7 +356,7 @@ static void Dpt_GetListDepartmentsInIns (struct Dpt_Departments *Departments,
 /****************** Get data of department using its code ********************/
 /*****************************************************************************/
 
-void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
+void Dpt_GetDptDataByCod (struct Dpt_Department *Dpt)
   {
    extern const char *Txt_Another_department;
    MYSQL_RES *mysql_res;
@@ -377,8 +375,8 @@ void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
    else if (Dpt->DptCod > 0)
      {
       /***** Get data of a department from database *****/
-      if (Dpt_DB_GetDepartmentDataByCod (&mysql_res,Dpt->DptCod) == Exi_EXISTS) // Department found...
-	 Dpt_GetDepartmentDataFromRow (mysql_res,Dpt);
+      if (Dpt_DB_GetDptDataByCod (&mysql_res,Dpt->DptCod) == Exi_EXISTS) // Department found...
+	 Dpt_GetDptDataFromRow (mysql_res,Dpt);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -389,7 +387,7 @@ void Dpt_GetDepartmentDataByCod (struct Dpt_Department *Dpt)
 /************************** Free list of departments *************************/
 /*****************************************************************************/
 
-void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
+void Dpt_FreeListDpts (struct Dpt_Departments *Departments)
   {
    if (Departments->Lst)
       /***** Free memory used by the list of departments *****/
@@ -403,8 +401,7 @@ void Dpt_FreeListDepartments (struct Dpt_Departments *Departments)
 /****************** Get data of department from database row *****************/
 /*****************************************************************************/
 
-static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
-                                          struct Dpt_Department *Dpt)
+static void Dpt_GetDptDataFromRow (MYSQL_RES *mysql_res,struct Dpt_Department *Dpt)
   {
    MYSQL_ROW row;
 
@@ -435,7 +432,7 @@ static void Dpt_GetDepartmentDataFromRow (MYSQL_RES *mysql_res,
 /***************************** List all departments **************************/
 /*****************************************************************************/
 
-static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departments)
+static void Dpt_ListDptsForEdition (const struct Dpt_Departments *Dpts)
   {
    extern const char *Txt_Another_institution;
    static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
@@ -453,14 +450,14 @@ static void Dpt_ListDepartmentsForEdition (const struct Dpt_Departments *Departm
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Dpt_PutHeadDepartments ();
+      Dpt_PutHeadDpts ();
 
       /***** Write all departments *****/
       for (NumDpt = 0;
-	   NumDpt < Departments->Num;
+	   NumDpt < Dpts->Num;
 	   NumDpt++)
 	{
-	 Dpt = &Departments->Lst[NumDpt];
+	 Dpt = &Dpts->Lst[NumDpt];
 
 	 HTM_TR_Begin (NULL);
 
@@ -546,19 +543,19 @@ static void Dpt_PutParDptCod (void *DptCod)
 /***************************** Remove a department ***************************/
 /*****************************************************************************/
 
-void Dpt_RemoveDepartment (void)
+void Dpt_RemoveDpt (void)
   {
    extern const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department;
    extern const char *Txt_Department_X_removed;
 
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
    /***** Get department code *****/
    Dpt_EditingDpt->DptCod = ParCod_GetAndCheckPar (ParCod_Dpt);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
+   Dpt_GetDptDataByCod (Dpt_EditingDpt);
 
    /***** Check if this department has teachers *****/
    if (Dpt_EditingDpt->NumTchs)	// Department has teachers ==> don't remove
@@ -567,7 +564,7 @@ void Dpt_RemoveDepartment (void)
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
-      Dpt_DB_RemoveDepartment (Dpt_EditingDpt->DptCod);
+      Dpt_DB_RemoveDpt (Dpt_EditingDpt->DptCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -579,12 +576,12 @@ void Dpt_RemoveDepartment (void)
 /****************** Change the institution of a department *******************/
 /*****************************************************************************/
 
-void Dpt_ChangeDepartIns (void)
+void Dpt_ChangeDptIns (void)
   {
    long NewInsCod;
 
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
@@ -594,7 +591,7 @@ void Dpt_ChangeDepartIns (void)
    NewInsCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
+   Dpt_GetDptDataByCod (Dpt_EditingDpt);
 
    /***** Update institution in table of departments *****/
    Dpt_DB_UpdateDptIns (Dpt_EditingDpt->DptCod,NewInsCod);
@@ -604,33 +601,33 @@ void Dpt_ChangeDepartIns (void)
 /******************* Change the short name of a department *******************/
 /*****************************************************************************/
 
-void Dpt_RenameDepartShrt (void)
+void Dpt_RenameDptShrt (void)
   {
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
    /***** Rename department *****/
-   Dpt_RenameDepartment (Nam_SHRT_NAME);
+   Dpt_RenameDpt (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
 /******************* Change the full name of a department ********************/
 /*****************************************************************************/
 
-void Dpt_RenameDepartFull (void)
+void Dpt_RenameDptFull (void)
   {
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
    /***** Rename department *****/
-   Dpt_RenameDepartment (Nam_FULL_NAME);
+   Dpt_RenameDpt (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
+static void Dpt_RenameDpt (Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
@@ -650,7 +647,7 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
    Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get from the database the old names of the department *****/
-   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
+   Dpt_GetDptDataByCod (Dpt_EditingDpt);
 
    /***** Check if new name is empty *****/
    if (NewName[0])
@@ -659,7 +656,7 @@ static void Dpt_RenameDepartment (Nam_ShrtOrFullName_t ShrtOrFull)
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
          /***** If name department was not in database... *****/
-         switch (Dpt_DB_CheckIfDepartmentNameExists (Nam_Fields[ShrtOrFull],
+         switch (Dpt_DB_CheckIfDptNameExists (Nam_Fields[ShrtOrFull],
 						     NewName,Dpt_EditingDpt->DptCod,
 						     -1L,	// Unused
 						     0))	// Unused
@@ -691,7 +688,7 @@ void Dpt_ChangeDptWWW (void)
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the department */
@@ -701,7 +698,7 @@ void Dpt_ChangeDptWWW (void)
    Par_GetParText ("WWW",NewWWW,WWW_MAX_BYTES_WWW);
 
    /***** Get data of the department from database *****/
-   Dpt_GetDepartmentDataByCod (Dpt_EditingDpt);
+   Dpt_GetDptDataByCod (Dpt_EditingDpt);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -724,17 +721,17 @@ void Dpt_ContEditAfterChgDpt (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Dpt_EditDepartmentsInternal ();
+   Dpt_EditDptsInternal ();
 
    /***** Department destructor *****/
-   Dpt_EditingDepartmentDestructor ();
+   Dpt_EditingDptDestructor ();
   }
 
 /*****************************************************************************/
 /******************* Put a form to create a new department *******************/
 /*****************************************************************************/
 
-static void Dpt_PutFormToCreateDepartment (void)
+static void Dpt_PutFormToCreateDpt (void)
   {
    extern const char *Txt_Another_institution;
    unsigned NumIns;
@@ -745,7 +742,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Frm_BeginFormTable (ActNewDpt,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Dpt_PutHeadDepartments ();
+      Dpt_PutHeadDpts ();
 
       HTM_TR_Begin (NULL);
 
@@ -805,7 +802,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
-static void Dpt_PutHeadDepartments (void)
+static void Dpt_PutHeadDpts (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -834,7 +831,7 @@ void Dpt_ReceiveNewDpt (void)
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Department constructor *****/
-   Dpt_EditingDepartmentConstructor ();
+   Dpt_EditingDptConstructor ();
 
    /***** Get parameters from form *****/
    /* Get institution */
@@ -854,12 +851,12 @@ void Dpt_ReceiveNewDpt (void)
       if (Dpt_EditingDpt->WWW[0])
         {
          /***** If name of department was not in database... *****/
-	 if (Nam_CheckIfNameExists (Dpt_DB_CheckIfDepartmentNameExists,
+	 if (Nam_CheckIfNameExists (Dpt_DB_CheckIfDptNameExists,
 				    (const char **) Names,
 				    -1L,
 				    -1L,			// Unused
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
-            Dpt_DB_CreateDepartment (Dpt_EditingDpt);
+            Dpt_DB_CreateDpt (Dpt_EditingDpt);
         }
       else	// If there is not a web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
@@ -890,7 +887,7 @@ unsigned Dpt_GetNumDptsInIns (long HieCod)
 
    /***** 3. Slow: number of departments of an institution from database *****/
    Gbl.Cache.NumDptsInIns.HieCod  = HieCod;
-   Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDepartmentsInIns (HieCod);
+   Gbl.Cache.NumDptsInIns.NumDpts = Dpt_DB_GetNumDptsInIns (HieCod);
    Gbl.Cache.NumDptsInIns.Status = Cac_VALID;
    return Gbl.Cache.NumDptsInIns.NumDpts;
   }
@@ -899,12 +896,12 @@ unsigned Dpt_GetNumDptsInIns (long HieCod)
 /*********************** Put selector for department *************************/
 /*****************************************************************************/
 
-void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
-                                  const char *ParName,
-		                  const char *SelectClass,
-                                  long FirstOption,
-                                  const char *TextWhenNoDptSelected,
-                                  HTM_Attributes_t Attributes)
+void Dpt_WriteSelectorDpt (long HieCod,long DptCod,
+                           const char *ParName,
+		           const char *SelectClass,
+                           long FirstOption,
+                           const char *TextWhenNoDptSelected,
+                           HTM_Attributes_t Attributes)
   {
    extern const char *Txt_Another_department;
    static HTM_Attributes_t AttributesNoDptSelectable[Exi_NUM_EXIST] =
@@ -918,10 +915,10 @@ void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
    Exi_Exist_t NoDptSelectable;
 
    /***** Reset departments context *****/
-   Dpt_ResetDepartments (&Departments);
+   Dpt_ResetDpts (&Departments);
 
    /***** Get list of departments *****/
-   Dpt_GetListDepartmentsInIns (&Departments,HieCod);
+   Dpt_GetListDptsInIns (&Departments,HieCod);
 
    /***** Selector to select department *****/
    /* Begin selector */
@@ -969,14 +966,14 @@ void Dpt_WriteSelectorDepartment (long HieCod,long DptCod,
    HTM_SELECT_End ();
 
    /***** Free list of departments *****/
-   Dpt_FreeListDepartments (&Departments);
+   Dpt_FreeListDpts (&Departments);
   }
 
 /*****************************************************************************/
 /********************** Department constructor/destructor ********************/
 /*****************************************************************************/
 
-static void Dpt_EditingDepartmentConstructor (void)
+static void Dpt_EditingDptConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Dpt_EditingDpt != NULL)
@@ -995,7 +992,7 @@ static void Dpt_EditingDepartmentConstructor (void)
    Dpt_EditingDpt->NumTchs     = 0;
   }
 
-static void Dpt_EditingDepartmentDestructor (void)
+static void Dpt_EditingDptDestructor (void)
   {
    /***** Free memory used for department *****/
    if (Dpt_EditingDpt != NULL)

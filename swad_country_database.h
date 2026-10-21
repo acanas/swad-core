@@ -68,7 +68,7 @@ unsigned Cty_DB_SearchCtys (MYSQL_RES **mysql_res,
                             const char *RangeQuery);
 
 void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
-unsigned Cty_DB_GetCtrsWithCoordsInCurrentCty (MYSQL_RES **mysql_res);
+unsigned Cty_DB_GetCtrsWithCoordsInThisCty (MYSQL_RES **mysql_res);
 unsigned Cty_DB_GetMapAttr (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Cty_DB_CheckIfMapExists (long HieCod);
 

@@ -100,27 +100,26 @@ static struct Hie_Node *Crs_EditingCrs = NULL;	// Static variable to keep the co
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Crs_GetListCrssInCurrentDeg (void);
-static void Crs_ListCourses (void);
-static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args);
-static void Crs_PutIconToEditCourses (void);
-static Exi_Exist_t Crs_ListCoursesOfAYearForSeeing (unsigned Year);
+static void Crs_GetListCrssInThisDeg (void);
+static void Crs_ListCrss (void);
+static void Crs_PutIconsListCrss (__attribute__((unused)) void *Args);
+static void Crs_PutIconToEditCrss (void);
+static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year);
 
-static void Crs_EditCoursesInternal (void);
-static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args);
-static void Crs_ListCoursesForEdition (void);
-static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
+static void Crs_EditCrssInternal (void);
+static void Crs_PutIconsEditingCrss (__attribute__((unused)) void *Args);
+static void Crs_ListCrssForEdition (void);
+static void Crs_ListCrssOfAYearForEdition (unsigned Year);
 static Usr_Can_t Crs_CheckIfICanEdit (struct Hie_Node *Crs);
-static void Crs_PutFormToCreateCourse (void);
-static void Crs_PutHeadCoursesForSeeing (void);
-static void Crs_PutHeadCoursesForEdition (void);
+static void Crs_PutFormToCreateCrs (void);
+static void Crs_PutHeadCrssForSeeing (void);
+static void Crs_PutHeadCrssForEdition (void);
 static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status);
-static void Crs_GetParsNewCourse (struct Hie_Node *Crs);
+static void Crs_GetParsNewCrs (struct Hie_Node *Crs);
 
-static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
-				      struct Hie_Node *Crs);
+static void Crs_GetCrsDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Crs);
 
-static void Crs_EmptyCourseCompletely (long HieCod);
+static void Crs_EmptyCrsCompletely (long HieCod);
 
 static void Crs_PutParCrsCod (void *HieCod);
 static void Crs_PutButtonToRegisterInCrs (void);
@@ -129,8 +128,8 @@ static void Crs_WriteHeadCrss (Crs_WriteColumnAccepted_t WriteColumnAccepted);
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 				 Crs_WriteColumnAccepted_t WriteColumnAccepted);
 
-static void Crs_EditingCourseConstructor (void);
-static void Crs_EditingCourseDestructor (void);
+static void Crs_EditingCrsConstructor (void);
+static void Crs_EditingCrsDestructor (void);
 
 /*****************************************************************************/
 /***************** Show introduction to the current course *******************/
@@ -210,7 +209,7 @@ void Crs_WriteSelectorOfCourse (void)
 	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
 	   {
 	    /***** Get courses belonging to the current degree from database *****/
-	    NumCrss = Crs_DB_GetCrssInCurrentDegBasic (&mysql_res);
+	    NumCrss = Crs_DB_GetCrssInThisDegBasic (&mysql_res);
 	    for (NumCrs = 0;
 		 NumCrs < NumCrss;
 		 NumCrs++)
@@ -245,20 +244,20 @@ void Crs_WriteSelectorOfCourse (void)
 /************************** Show courses of a degree *************************/
 /*****************************************************************************/
 
-void Crs_ShowCrssOfCurrentDeg (void)
+void Crs_ShowCrssOfThisDeg (void)
   {
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0)	// No degree selected
       return;
 
    /***** Get list of courses in this degree *****/
-   Crs_GetListCrssInCurrentDeg ();
+   Crs_GetListCrssInThisDeg ();
 
    /***** Write menu to select country, institution, center and degree *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Show list of courses *****/
-   Crs_ListCourses ();
+   Crs_ListCrss ();
 
    /***** Free list of courses in this degree *****/
    Hie_FreeList (Hie_DEG);
@@ -268,14 +267,14 @@ void Crs_ShowCrssOfCurrentDeg (void)
 /*************** Create a list with courses in current degree ****************/
 /*****************************************************************************/
 
-static void Crs_GetListCrssInCurrentDeg (void)
+static void Crs_GetListCrssInThisDeg (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
    unsigned NumCrs;
 
    /***** Get courses of a degree from database *****/
-   if ((NumCrss = Crs_DB_GetCrssInCurrentDegFull (&mysql_res))) // Courses found...
+   if ((NumCrss = Crs_DB_GetCrssInThisDegFull (&mysql_res))) // Courses found...
      {
       /***** Create list with courses in degree *****/
       if ((Gbl.Hierarchy.List[Hie_DEG].Lst = calloc ((size_t) NumCrss,
@@ -287,7 +286,7 @@ static void Crs_GetListCrssInCurrentDeg (void)
 	   NumCrs < NumCrss;
 	   NumCrs++)
          /* Get data of next course */
-         Crs_GetCourseDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
+         Crs_GetCrsDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
      }
 
    Gbl.Hierarchy.List[Hie_DEG].Num = NumCrss;
@@ -361,7 +360,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 	 /***** Write an option with the current course
 		when I don't belong to it *****/
 	 if (Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
-	     Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)	// I do not belong to it
+	     Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)	// I do not belong to it
 	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 	                HTM_SELECTED | HTM_DISABLED,
 			"%s",Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
@@ -377,7 +376,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 /************************* List courses in this degree ***********************/
 /*****************************************************************************/
 
-static void Crs_ListCourses (void)
+static void Crs_ListCrss (void)
   {
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
@@ -389,7 +388,7 @@ static void Crs_ListCourses (void)
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Crs_PutIconsListCourses,NULL,
+   Box_BoxBegin (Title,Crs_PutIconsListCrss,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -399,18 +398,18 @@ static void Crs_ListCourses (void)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading *****/
-	    Crs_PutHeadCoursesForSeeing ();
+	    Crs_PutHeadCrssForSeeing ();
 
 	    /***** List the courses *****/
 	    for (Year  = 1;
 		 Year <= Deg_MAX_YEARS_PER_DEGREE;
 		 Year++)
 	      {
-	       YearWithCourses = Crs_ListCoursesOfAYearForSeeing (Year);
+	       YearWithCourses = Crs_ListCrssOfAYearForSeeing (Year);
 	       if (YearWithCourses == Exi_EXISTS)	// If this year has courses ==>
 		  The_ChangeRowColor ();		// ==> change color for the next year
 	      }
-	    YearWithCourses = Crs_ListCoursesOfAYearForSeeing (0);	// Courses without a year selected
+	    YearWithCourses = Crs_ListCrssOfAYearForSeeing (0);	// Courses without a year selected
 
 	 /***** End table *****/
 	 HTM_TABLE_End ();
@@ -426,11 +425,11 @@ static void Crs_ListCourses (void)
 /***************** Put contextual icons in list of courses *******************/
 /*****************************************************************************/
 
-static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args)
+static void Crs_PutIconsListCrss (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit courses *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
-      Crs_PutIconToEditCourses ();
+      Crs_PutIconToEditCrss ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_HIERARCHY);
@@ -440,7 +439,7 @@ static void Crs_PutIconsListCourses (__attribute__((unused)) void *Args)
 /************************* Put icon to edit courses **************************/
 /*****************************************************************************/
 
-static void Crs_PutIconToEditCourses (void)
+static void Crs_PutIconToEditCrss (void)
   {
    Ico_PutContextualIconToEdit (ActEdiCrs,NULL,NULL,NULL);
   }
@@ -450,7 +449,7 @@ static void Crs_PutIconToEditCourses (void)
 /*****************************************************************************/
 // Return Exi_EXISTS if this year has courses
 
-static Exi_Exist_t Crs_ListCoursesOfAYearForSeeing (unsigned Year)
+static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
   {
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
@@ -564,26 +563,26 @@ static Exi_Exist_t Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 void Crs_EditCourses (void)
   {
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Edit courses *****/
-   Crs_EditCoursesInternal ();
+   Crs_EditCrssInternal ();
 
    /***** Course destructor *****/
-   Crs_EditingCourseDestructor ();
+   Crs_EditingCrsDestructor ();
   }
 
-static void Crs_EditCoursesInternal (void)
+static void Crs_EditCrssInternal (void)
   {
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    char *Title;
 
    /***** Get list of degrees in this center *****/
-   Deg_GetListDegsInCurrentCtr ();
+   Deg_GetListDegsInThisCtr ();
 
    /***** Get list of courses in this degree *****/
-   Crs_GetListCrssInCurrentDeg ();
+   Crs_GetListCrssInThisDeg ();
 
    /***** Write menu to select country, institution, center and degree *****/
    Hie_WriteMenuHierarchy ();
@@ -592,16 +591,16 @@ static void Crs_EditCoursesInternal (void)
    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,
 		 Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Crs_PutIconsEditingCourses,NULL,
+   Box_BoxBegin (Title,Crs_PutIconsEditingCrss,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    free (Title);
 
       /***** Put a form to create or request a new course *****/
-      Crs_PutFormToCreateCourse ();
+      Crs_PutFormToCreateCrs ();
 
       /***** Forms to edit current courses *****/
       if (Gbl.Hierarchy.List[Hie_DEG].Num)
-	 Crs_ListCoursesForEdition ();
+	 Crs_ListCrssForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -617,7 +616,7 @@ static void Crs_EditCoursesInternal (void)
 /**************** Put contextual icons in edition of courses *****************/
 /*****************************************************************************/
 
-static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args)
+static void Crs_PutIconsEditingCrss (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view courses *****/
    Ico_PutContextualIconToView (ActSeeCrs,NULL,NULL,NULL);
@@ -630,7 +629,7 @@ static void Crs_PutIconsEditingCourses (__attribute__((unused)) void *Args)
 /********************* List current courses for edition **********************/
 /*****************************************************************************/
 
-static void Crs_ListCoursesForEdition (void)
+static void Crs_ListCrssForEdition (void)
   {
    unsigned Year;
 
@@ -638,14 +637,14 @@ static void Crs_ListCoursesForEdition (void)
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Crs_PutHeadCoursesForEdition ();
+      Crs_PutHeadCrssForEdition ();
 
       /***** List the courses *****/
       for (Year = 1;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
 	   Year++)
-	 Crs_ListCoursesOfAYearForEdition (Year);
-      Crs_ListCoursesOfAYearForEdition (0);
+	 Crs_ListCrssOfAYearForEdition (Year);
+      Crs_ListCrssOfAYearForEdition (0);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -655,7 +654,7 @@ static void Crs_ListCoursesForEdition (void)
 /******************** List courses of a year for edition *********************/
 /*****************************************************************************/
 
-static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
+static void Crs_ListCrssOfAYearForEdition (unsigned Year)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Hie_NUM_STATUS_TXT];
@@ -822,7 +821,7 @@ static Usr_Can_t Crs_CheckIfICanEdit (struct Hie_Node *Crs)
 /*********************** Put a form to create a new course *******************/
 /*****************************************************************************/
 
-static void Crs_PutFormToCreateCourse (void)
+static void Crs_PutFormToCreateCrs (void)
   {
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    Act_Action_t NextAction = ActUnk;
@@ -841,7 +840,7 @@ static void Crs_PutFormToCreateCourse (void)
    Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Crs_PutHeadCoursesForEdition ();
+      Crs_PutHeadCrssForEdition ();
 
       HTM_TR_Begin (NULL);
 
@@ -904,7 +903,7 @@ static void Crs_PutFormToCreateCourse (void)
 /******************** Write header with fields of a course *******************/
 /*****************************************************************************/
 
-static void Crs_PutHeadCoursesForSeeing (void)
+static void Crs_PutHeadCrssForSeeing (void)
   {
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Institutional_BR_code;
@@ -928,7 +927,7 @@ static void Crs_PutHeadCoursesForSeeing (void)
 /******************** Write header with fields of a course *******************/
 /*****************************************************************************/
 
-static void Crs_PutHeadCoursesForEdition (void)
+static void Crs_PutHeadCrssForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_optional;
@@ -966,7 +965,7 @@ static void Crs_PutHeadCoursesForEdition (void)
 void Crs_ReceiveReqCrs (void)
   {
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Receive form to request a new course *****/
    Crs_ReceiveRequestOrCreateCrs ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
@@ -979,7 +978,7 @@ void Crs_ReceiveReqCrs (void)
 void Crs_ReceiveNewCrs (void)
   {
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Receive form to create a new course *****/
    Crs_ReceiveRequestOrCreateCrs ((Hie_Status_t) 0);
@@ -1000,7 +999,7 @@ static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
    Crs_EditingCrs->PrtCod = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
 
    /* Get parameters of the new course */
-   Crs_GetParsNewCourse (Crs_EditingCrs);
+   Crs_GetParsNewCrs (Crs_EditingCrs);
 
    /***** Check if year is correct *****/
    if (Crs_EditingCrs->Specific.Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
@@ -1031,7 +1030,7 @@ static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
 /************** Get the parameters of a new course from form *****************/
 /*****************************************************************************/
 
-static void Crs_GetParsNewCourse (struct Hie_Node *Crs)
+static void Crs_GetParsNewCrs (struct Hie_Node *Crs)
   {
    char YearStr[2 + 1];
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -1062,7 +1061,7 @@ void Crs_RemoveCourse (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Get course code *****/
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1082,7 +1081,7 @@ void Crs_RemoveCourse (void)
    else					// Course has no users ==> remove it
      {
       /***** Remove course *****/
-      Crs_RemoveCourseCompletely (Crs_EditingCrs->HieCod);
+      Crs_RemoveCrsCompletely (Crs_EditingCrs->HieCod);
 
       /***** Write message to show the change made *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Course_X_removed,Crs_EditingCrs->FullName);
@@ -1115,7 +1114,7 @@ Err_SuccessOrError_t Crs_GetCourseDataByCod (struct Hie_Node *Node)
       if (Crs_DB_GetCourseDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS) // Course found...
 	{
 	 /***** Get data of the course *****/
-	 Crs_GetCourseDataFromRow (mysql_res,Node);
+	 Crs_GetCrsDataFromRow (mysql_res,Node);
 
          /* Set return value */
 	 SuccessOrError = Err_SUCCESS;
@@ -1132,8 +1131,7 @@ Err_SuccessOrError_t Crs_GetCourseDataByCod (struct Hie_Node *Node)
 /********** Get data of a course from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
-				      struct Hie_Node *Crs)
+static void Crs_GetCrsDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Crs)
   {
    MYSQL_ROW row;
 
@@ -1169,12 +1167,12 @@ static void Crs_GetCourseDataFromRow (MYSQL_RES *mysql_res,
 /****************************** Remove a course ******************************/
 /*****************************************************************************/
 
-void Crs_RemoveCourseCompletely (long HieCod)
+void Crs_RemoveCrsCompletely (long HieCod)
   {
    if (HieCod > 0)
      {
       /***** Empty course *****/
-      Crs_EmptyCourseCompletely (HieCod);
+      Crs_EmptyCrsCompletely (HieCod);
 
       /***** Remove course from table of last accesses to courses in database *****/
       Crs_DB_RemoveCrsLast (HieCod);
@@ -1190,7 +1188,7 @@ void Crs_RemoveCourseCompletely (long HieCod)
 // Start removing less important things to more important things;
 // so, in case of failure, important things can been removed in the future
 
-static void Crs_EmptyCourseCompletely (long HieCod)
+static void Crs_EmptyCrsCompletely (long HieCod)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    struct Hie_Node Crs;
@@ -1239,7 +1237,7 @@ static void Crs_EmptyCourseCompletely (long HieCod)
       Asg_RemoveCrsAssignments (HieCod);
 
       /* Remove projects of the course */
-      Prj_RemoveCrsProjects (HieCod);
+      Prj_RemoveCrsPrjs (HieCod);
 
       /* Remove tests of the course */
       TstPrn_RemoveCrsPrints (HieCod);
@@ -1267,7 +1265,7 @@ static void Crs_EmptyCourseCompletely (long HieCod)
       For_DB_RemoveForums (Hie_CRS,HieCod);
 
       /***** Remove all surveys in the course *****/
-      Svy_RemoveSurveys (Hie_CRS,HieCod);
+      Svy_RemoveSvys (Hie_CRS,HieCod);
 
       /***** Remove groups in the course *****/
       Grp_DB_RemoveCrsGrps (HieCod);
@@ -1282,11 +1280,11 @@ static void Crs_EmptyCourseCompletely (long HieCod)
       /***** Remove directories of the course *****/
       Fil_BuildPath (PathRelCrs,"%s/%lu",
 		     Cfg_PATH_CRS_PRIVATE,(unsigned long) HieCod);
-      Fil_RemoveTree (PathRelCrs);
+      Fil_RemoveFolderAndItsContent (PathRelCrs);
       Fil_BuildPath (PathRelCrs,"%s/%lu",
 		     Cfg_PATH_CRS_PUBLIC,
 		     (unsigned long) HieCod);
-      Fil_RemoveTree (PathRelCrs);
+      Fil_RemoveFolderAndItsContent (PathRelCrs);
      }
   }
 
@@ -1301,7 +1299,7 @@ void Crs_ChangeInsCrsCod (void)
    char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Get parameters from form *****/
    /* Get course code */
@@ -1335,7 +1333,7 @@ void Crs_ChangeCrsYear (void)
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Get parameters from form *****/
    /* Get course code */
@@ -1399,31 +1397,31 @@ void Crs_UpdateCrsYear (struct Hie_Node *Crs,unsigned NewYear)
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-void Crs_RenameCourseShrt (void)
+void Crs_RenameCrsShrt (void)
   {
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Rename course *****/
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Crs_RenameCourse (Crs_EditingCrs,Nam_SHRT_NAME);
+   Crs_RenameCrs (Crs_EditingCrs,Nam_SHRT_NAME);
   }
 
-void Crs_RenameCourseFull (void)
+void Crs_RenameCrsFull (void)
   {
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Rename course *****/
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Crs_RenameCourse (Crs_EditingCrs,Nam_FULL_NAME);
+   Crs_RenameCrs (Crs_EditingCrs,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
+void Crs_RenameCrs (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
@@ -1486,7 +1484,7 @@ void Crs_ChangeCrsStatus (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Course constructor *****/
-   Crs_EditingCourseConstructor ();
+   Crs_EditingCrsConstructor ();
 
    /***** Get parameters from form *****/
    /* Get course code */
@@ -1567,10 +1565,10 @@ void Crs_ContEditAfterChgCrs (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Crs_EditCoursesInternal ();
+   Crs_EditCrssInternal ();
 
    /***** Course destructor *****/
-   Crs_EditingCourseDestructor ();
+   Crs_EditingCrsDestructor ();
   }
 
 /*****************************************************************************/
@@ -1972,7 +1970,7 @@ void Crs_RemoveOldCrss (void)
            NumCrs++)
         {
          HieCod = DB_GetNextCode (mysql_res);
-         Crs_RemoveCourseCompletely (HieCod);
+         Crs_RemoveCrsCompletely (HieCod);
          NumCrssRemoved++;
         }
 
@@ -1989,7 +1987,7 @@ void Crs_RemoveOldCrss (void)
 /************************ Course constructor/destructor **********************/
 /*****************************************************************************/
 
-static void Crs_EditingCourseConstructor (void)
+static void Crs_EditingCrsConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Crs_EditingCrs != NULL)
@@ -2009,7 +2007,7 @@ static void Crs_EditingCourseConstructor (void)
    Crs_EditingCrs->FullName[0]   = '\0';
   }
 
-static void Crs_EditingCourseDestructor (void)
+static void Crs_EditingCrsDestructor (void)
   {
    /***** Free memory used for course *****/
    if (Crs_EditingCrs != NULL)

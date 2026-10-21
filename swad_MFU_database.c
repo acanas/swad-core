@@ -40,7 +40,7 @@ extern struct Globals Gbl;
 /******************** Update score for the current action ********************/
 /*****************************************************************************/
 
-void MFU_DB_UpdateScoreForCurrentAction (long ActCod,double Score)
+void MFU_DB_UpdateScoreForThisAction (long ActCod,double Score)
   {
    Str_SetDecimalPointToUS ();		// To write the decimal point as a dot
    DB_QueryREPLACE ("can not update most frequently used actions",
@@ -109,7 +109,7 @@ unsigned MFU_DB_GetMFUActionsOrderByLastClick (MYSQL_RES **mysql_res)
 /************************ Get score of current action ************************/
 /*****************************************************************************/
 
-Exi_Exist_t MFU_DB_GetScoreForCurrentAction (MYSQL_RES **mysql_res,long ActCod)
+Exi_Exist_t MFU_DB_GetScoreForThisAction (MYSQL_RES **mysql_res,long ActCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get score for current action",

@@ -51,7 +51,7 @@ Exi_Exist_t Grp_DB_GetGroupDataByCod (MYSQL_RES **mysql_res,long GrpCod);
 Exi_Exist_t Grp_DB_CheckIfGrpExists (long GrpCod);
 Exi_Exist_t Grp_DB_CheckIfGrpExistsInCrs (long GrpCod,long HieCod);
 
-Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (const char *GrpTypName,long GrpTypCod);
+Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInThisCrs (const char *GrpTypName,long GrpTypCod);
 Exi_Exist_t Grp_DB_CheckIfGrpNameExistsForGrpTyp (long GrpTypCod,const char *GrpName,long GrpCod);
 
 unsigned Grp_DB_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
@@ -62,24 +62,24 @@ unsigned Grp_DB_GetTchsFromGrpExceptMe (MYSQL_RES **mysql_res,long GrpCod);
 
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrpsOfType (long GrpTypCod);
 Usr_Belong_t Grp_DB_CheckIfIBelongToGrp (long GrpCod);
-Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (long UsrCod);
+Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (long UsrCod);
 
 unsigned Grp_DB_GetGrpTypesWithGrpsInCrs (MYSQL_RES **mysql_res,long HieCod);
 unsigned Grp_DB_GetAllGrpTypesInCrs (MYSQL_RES **mysql_res,long HieCod);
 
-unsigned Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetGrpTypesInThisCrsToBeOpened (MYSQL_RES **mysql_res);
 
-unsigned Grp_DB_CountNumGrpsInCurrentCrs (void);
+unsigned Grp_DB_CountNumGrpsInThisCrs (void);
 unsigned Grp_DB_GetGrpsInCrs (MYSQL_RES **mysql_res,long HieCod);
 unsigned Grp_DB_GetGrpsOfType (MYSQL_RES **mysql_res,long GrpTypCod);
 
 unsigned Grp_DB_GetLstCodGrpsInAllCrssUsrBelongs (MYSQL_RES **mysql_res,long UsrCod);
-unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
-							      long UsrCod,
-							      Grp_ClosedOpenGrps_t ClosedOpenGroups);
-unsigned Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (MYSQL_RES **mysql_res,
-							    long UsrCod,long GrpTypCod);
-unsigned Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (MYSQL_RES **mysql_res);
+unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInThisCrsUsrBelongs (MYSQL_RES **mysql_res,
+							   long UsrCod,
+							   Grp_ClosedOpenGrps_t ClosedOpenGroups);
+unsigned Grp_DB_GetLstCodGrpsOfATypeInThisCrsUsrBelongs (MYSQL_RES **mysql_res,
+							 long UsrCod,long GrpTypCod);
+unsigned Grp_DB_GetLstCodGrpsWithFileZonesInThisCrsIBelong (MYSQL_RES **mysql_res);
 unsigned Grp_DB_GetNamesGrpsUsrBelongsTo (MYSQL_RES **mysql_res,
                                           long UsrCod,long GrpTypCod);
 

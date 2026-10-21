@@ -286,7 +286,7 @@ static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToView (ActSeeDegTyp,NULL,NULL,NULL);
 
    /***** Put icon to view degrees *****/
-   Deg_PutIconToViewDegrees ();
+   Deg_PutIconToViewDegs ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
@@ -353,7 +353,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
    DegTyp_PutIconToEditDegTypes (NULL);
 
    /***** Put icon to view degrees *****/
-   Deg_PutIconToViewDegrees ();
+   Deg_PutIconToViewDegs ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_DEGREE_TYPES);
@@ -749,7 +749,7 @@ static void DegTyp_RemoveDegTypeCompletely (long DegTypCod)
          Err_WrongDegreeExit ();
 
       /* Remove degree */
-      Deg_RemoveDegreeCompletely (HieCod);
+      Deg_RemoveDegCompletely (HieCod);
      }
 
    /* Free structure that stores the query result */

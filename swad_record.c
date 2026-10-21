@@ -934,7 +934,7 @@ void Rec_GetUsrAndShowRecOneStdCrs (void)
 static void Rec_ShowRecordOneStdCrs (struct Usr_Data *UsrDat)
   {
    /***** Get if student has accepted enrolment in current course *****/
-   UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+   UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
 
    /***** Get list of fields of records in current course *****/
    Rec_GetListRecordFieldsCrs ();
@@ -1072,11 +1072,11 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get student's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
+         if (Enr_CheckIfUsrBelongsToThisCrs (&UsrDat) == Usr_BELONG)
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
-            UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+            UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
 
             /* Begin container for this user */
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -1176,7 +1176,7 @@ void Rec_ShowRecordOneTchCrs (void)
    Lay_Show_t ShowOfficeHours;
 
    /***** Get if teacher has accepted enrolment in current course *****/
-   Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+   Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
    ShowOfficeHours = Rec_GetParShowOfficeHours ();
@@ -1299,11 +1299,11 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,	// Get teacher's data from database
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-         if (Enr_CheckIfUsrBelongsToCurrentCrs (&UsrDat) == Usr_BELONG)
+         if (Enr_CheckIfUsrBelongsToThisCrs (&UsrDat) == Usr_BELONG)
            {
             /* Check if this user has accepted
                his/her inscription in the current course */
-            UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+            UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
 
             /* Begin container for this user */
 	    snprintf (RecordSectionId,sizeof (RecordSectionId),"record_%u",NumUsr);
@@ -1902,10 +1902,10 @@ void Rec_ShowFormSignUpInCrsWithMySharedRecord (void)
 void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t DefaultRole)
   {
    /***** Show the form *****/
-   /* In this case UsrDat->Roles.InCurrentCrs
+   /* In this case UsrDat->Roles.InThisCrs
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InCurrentCrs = Gbl.Hierarchy.HieLvl == Hie_CRS ? DefaultRole :	// Course selected
+   UsrDat->Roles.InThisCrs = Gbl.Hierarchy.HieLvl == Hie_CRS ? DefaultRole :	// Course selected
 	                                                          Rol_UNK;	// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_FORM,UsrDat,NULL);
   }
@@ -1929,7 +1929,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
    Usr_GetAllUsrDataFromUsrCod (UsrDat,Usr_DONT_GET_PREFS,Usr_GET_ROLE_IN_CRS);
-   UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+   UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
 
    /***** Show user's record *****/
    HTM_DIV_Begin ("class=\"CM\"");
@@ -2001,8 +2001,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Lay_Show_t ShowData;
    Lay_Show_t ShowIDRows;
    Lay_Show_t ShowAddressRows;
-   bool StudentInCurrentCrs;
-   bool TeacherInCurrentCrs;
+   bool StudentInThisCrs;
+   bool TeacherInThisCrs;
    Lay_Show_t ShowTeacherRows;
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
@@ -2022,22 +2022,22 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    ShowIDRows = TypeOfView != Rec_SHA_RECORD_PUBLIC ? Lay_SHOW :
 						      Lay_DONT_SHOW;
 
-   StudentInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_STD;
-   TeacherInCurrentCrs = UsrDat->Roles.InCurrentCrs == Rol_NET ||
-	                 UsrDat->Roles.InCurrentCrs == Rol_TCH;
+   StudentInThisCrs = UsrDat->Roles.InThisCrs == Rol_STD;
+   TeacherInThisCrs = UsrDat->Roles.InThisCrs == Rol_NET ||
+	                 UsrDat->Roles.InThisCrs == Rol_TCH;
 
    ShowAddressRows = TypeOfView == Rec_SHA_ME_ACCOUNT_FORM  ||
 		     TypeOfView == Rec_SHA_OTHER_ACCOUNT_FORM ||
 		     ((TypeOfView == Rec_SHA_RECORD_LIST   ||
 		       TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		      IAmLoggedAsTeacherOrSysAdm &&
-		      StudentInCurrentCrs) ? Lay_SHOW :
-					     Lay_DONT_SHOW;			// He/she is a student in the current course
+		      StudentInThisCrs) ? Lay_SHOW :
+					  Lay_DONT_SHOW;		// He/she is a student in the current course
    Rol_GetRolesInAllCrss (UsrDat);	// Get user's roles if not got
    ShowTeacherRows = (TypeOfView == Rec_SHA_RECORD_LIST ||
 		      TypeOfView == Rec_SHA_RECORD_PRINT) &&
-		     TeacherInCurrentCrs ? Lay_SHOW :
-					   Lay_DONT_SHOW;			// He/she is a teacher in the current course
+		     TeacherInThisCrs ? Lay_SHOW :
+					Lay_DONT_SHOW;			// He/she is a teacher in the current course
 
    /* Data form = I can edit fields like surnames and name */
    switch (TypeOfView)
@@ -2055,7 +2055,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          break;
      }
 
-   Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InCurrentCrs];
+   Rec_RecordHelp[Rec_SHA_RECORD_LIST] = Rec_RecordListHelp[UsrDat->Roles.InThisCrs];
 
    PutFormLinks = Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&				// Only if not inside another form
                   Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST ? Frm_PUT_FORM :	// Only in main browser tab
@@ -2132,7 +2132,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 			break;
 		     case Rec_SHA_OTHER_ADMIN_FORM:
-			Frm_BeginForm (NextActionOtherAdmin[UsrDat->Roles.InCurrentCrs]);
+			Frm_BeginForm (NextActionOtherAdmin[UsrDat->Roles.InThisCrs]);
 			   Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);	// Existing user
 			break;
 		     case Rec_SHA_OTHER_NEW_FORM:
@@ -2220,7 +2220,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			     {
 			      case Usr_ME:
 				 // Don't show groups if I don't belong to course
-				 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
+				 if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG)
 				    Grp_ShowLstGrpsToChgMyGrps ();
 				 break;
 			      case Usr_OTHER:
@@ -2370,13 +2370,13 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
 	     Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM ||
 	     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-	    Lay_PutContextualLinkOnlyIcon (NextAction[Rec_Record.UsrDat->Roles.InCurrentCrs],NULL,
+	    Lay_PutContextualLinkOnlyIcon (NextAction[Rec_Record.UsrDat->Roles.InThisCrs],NULL,
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user-gear.svg",Ico_BLACK);
 
 	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 	   {
-	    if (Rec_Record.UsrDat->Roles.InCurrentCrs == Rol_STD)	// He/she is a student in current course
+	    if (Rec_Record.UsrDat->Roles.InThisCrs == Rol_STD)	// He/she is a student in current course
 	      {
 	       /***** Buttons to view student's test, exam and match results *****/
 	       if (Usr_CheckIfICanViewTstExaMchResult (Rec_Record.UsrDat) == Usr_CAN)
@@ -2621,7 +2621,7 @@ static void Rec_ShowCountryInHead (struct Usr_Data *UsrDat,Lay_Show_t ShowData)
    HTM_TD_Begin ("class=\"REC_C2_MID LT DAT_STRONG_%s\"",The_GetSuffix ());
       if (ShowData == Lay_SHOW && UsrDat->HieCods[Hie_CTY] > 0)
 	 /* Link to see country information */
-	 Cty_WriteCountryName (UsrDat->HieCods[Hie_CTY]);	// Put link to country
+	 Cty_WriteCtyName (UsrDat->HieCods[Hie_CTY]);	// Put link to country
    HTM_TD_End ();
   }
 
@@ -2760,12 +2760,12 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
 		    {
 		     /***** Set default role *****/
-		     switch (UsrDat->Roles.InCurrentCrs)
+		     switch (UsrDat->Roles.InThisCrs)
 		       {
 			case Rol_STD:	// Student in current course
 			case Rol_NET:	// Non-editing teacher in current course
 			case Rol_TCH:	// Teacher in current course
-			   DefaultRoleInForm = UsrDat->Roles.InCurrentCrs;
+			   DefaultRoleInForm = UsrDat->Roles.InThisCrs;
 			   break;
 			default:	// User does not belong to current course
 			   /* If there is a request of this user, default role is the requested role */
@@ -2940,7 +2940,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 
 	 /* Data */
 	 HTM_TD_Begin ("class=\"REC_C2_BOT LM DAT_STRONG_%s\"",The_GetSuffix ());
-	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+	    HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InThisCrs][UsrDat->Sex]);
 	 HTM_TD_End ();
 	}
 
@@ -3144,7 +3144,7 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
    const struct Hie_Node *Cty;
 
    /***** If list of countries is empty, try to get it *****/
-   Cty_GetBasicListOfCountries ();
+   Cty_GetBasicListOfCtys ();
 
    /***** Selector of country *****/
    HTM_TR_Begin (NULL);
@@ -3465,7 +3465,7 @@ static void Rec_ShowDepartment (struct Usr_Data *UsrDat,Lay_Show_t ShowData)
 	    if (UsrDat->Tch.DptCod > 0)
 	      {
 	       Dpt.DptCod = UsrDat->Tch.DptCod;
-	       Dpt_GetDepartmentDataByCod (&Dpt);
+	       Dpt_GetDptDataByCod (&Dpt);
 	       if (Dpt.WWW[0])
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\""
 			       " class=\"DAT_STRONG_%s\"",
@@ -3713,7 +3713,7 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 					      (1 << Rol_TCH)));	// ...or a teacher in any course
 
    /***** Get list of countries *****/
-   Cty_GetBasicListOfCountries ();
+   Cty_GetBasicListOfCtys ();
 
    /***** Begin section *****/
    HTM_SECTION_Begin (Rec_INS_CTR_DPT_SECTION_ID);
@@ -3789,7 +3789,7 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 		  /* Get list of institutions in this country */
 		  Hie_FreeList (Hie_CTY);
 		  if (UsrDat->InsCtyCod > 0)
-		     Ins_GetBasicListOfInstitutions (UsrDat->InsCtyCod);
+		     Ins_GetBasicListOfInss (UsrDat->InsCtyCod);
 
 		  /* Begin form to select institution */
 	          switch (MeOrOther)
@@ -3848,7 +3848,7 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 		     /* Get list of centers in this institution */
 		     Hie_FreeList (Hie_INS);
 		     if (UsrDat->HieCods[Hie_INS] > 0)
-			Ctr_GetBasicListOfCentersInIns (UsrDat->HieCods[Hie_INS]);
+			Ctr_GetBasicListOfCtrsInIns (UsrDat->HieCods[Hie_INS]);
 
 		     /* Begin form to select center */
 		     switch (MeOrOther)
@@ -3915,7 +3915,7 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 		     if (asprintf (&SelectClass,"REC_C2_BOT_INPUT INPUT_%s",
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
-		     Dpt_WriteSelectorDepartment (UsrDat->HieCods[Hie_INS],	// Departments in my institution
+		     Dpt_WriteSelectorDpt (UsrDat->HieCods[Hie_INS],	// Departments in my institution
 						  UsrDat->Tch.DptCod,	// Selected department
 						  Par_CodeStr[ParCod_Dpt],	// Parameter name
 						  SelectClass,		// Selector class
@@ -4179,7 +4179,7 @@ static void Rec_ChangeDpt (struct Usr_Data *UsrDat)
    /* Get institution of department */
    if (Dpt.DptCod > 0)
      {
-      Dpt_GetDepartmentDataByCod (&Dpt);
+      Dpt_GetDptDataByCod (&Dpt);
       if (UsrDat->HieCods[Hie_INS] != Dpt.HieCod)
 	{
 	 UsrDat->HieCods[Hie_INS] = Dpt.HieCod;

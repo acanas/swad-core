@@ -625,7 +625,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 
    /***** Get calls for exams (the most recent first)
           in current course from database *****/
-   NumCalls = Cfe_DB_GetCallsForExamsInCurrentCrs (&mysql_res);
+   NumCalls = Cfe_DB_GetCallsForExamsInThisCrs (&mysql_res);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Calls_for_exams,Cfe_PutIconsCallsForExams,NULL,
@@ -702,7 +702,7 @@ void Cfe_CreateListCallsForExams (struct Cfe_CallsForExams *CallsForExams)
       /***** Get exam dates (ordered from more recent to older)
              of visible calls for exams
              in current course from database *****/
-      NumExaAnns = Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (&mysql_res);
+      NumExaAnns = Cfe_DB_GetVisibleCallsForExamsInThisCrs (&mysql_res);
 
       /***** The result of the query may be empty *****/
       CallsForExams->Lst = NULL;

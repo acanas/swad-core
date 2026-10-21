@@ -95,7 +95,7 @@ struct Exa_Exams
    unsigned NumSelected;	// Number of exams selected
    struct Exa_ExamSelected *Lst;// List of exams
    Exa_Order_t SelectedOrder;
-   unsigned CurrentPage;
+   unsigned ThisPage;
    char *ListQuestions;
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    struct Exa_Exam Exam;	// Selected/current exam

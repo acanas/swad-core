@@ -94,7 +94,7 @@ void For_DB_RemoveUsrFromReadThrs (long UsrCod);
 
 //-------------------------- Thread clipboard ---------------------------------
 void For_DB_InsertThrInMyClipboard (long ThrCod);
-void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums);
+void For_DB_MoveThrToThisForum (const struct For_Forums *Forums);
 long For_DB_GetThrInMyClipboard (void);
 void For_DB_RemoveThrFromClipboard (long ThrCod);
 void For_DB_RemoveUsrFromClipboard (long UsrCod);

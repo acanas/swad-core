@@ -88,7 +88,7 @@ struct Gam_Games
    unsigned NumSelected;	// Number of games selected
    struct Gam_GameSelected *Lst;// List of games
    Gam_Order_t SelectedOrder;
-   unsigned CurrentPage;
+   unsigned ThisPage;
    char *ListQuestions;
    char *GamCodsSelected;	// String with selected game codes separated by separator multiple
    struct Gam_Game Game;	// Selected/current game

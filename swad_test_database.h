@@ -54,7 +54,7 @@ void Tst_DB_UpdatePrint (const struct TstPrn_Print *Print);
 unsigned Tst_DB_GetPrintsBetweenDates (MYSQL_RES **mysql_res,
                                        const char *From,
                                        const char *To);
-unsigned Tst_DB_GetUsrPrintsInCurrentCrs (MYSQL_RES **mysql_res,long UsrCod);
+unsigned Tst_DB_GetUsrPrintsInThisCrs (MYSQL_RES **mysql_res,long UsrCod);
 Exi_Exist_t Tst_DB_GetPrintDataByPrnCod (MYSQL_RES **mysql_res,long PrnCod);
 
 void Tst_DB_RemovePrintsMadeByUsrInAllCrss (long UsrCod);

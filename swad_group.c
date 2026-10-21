@@ -142,7 +142,7 @@ static void Grp_WriteGrpTypOpening (const struct GroupType *GrpTyp);
 static void Grp_WriteGrpHead (void);
 static void Grp_WriteRowGrp (const struct Group *Grp,Lay_Highlight_t Highlight);
 static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp);
-static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
+static void Grp_PutFormToCreateGroup (const struct GroupType *ThisGrpTyp,
 				      const struct Group *Grp,
 				      const struct Roo_Rooms *Rooms);
 
@@ -782,7 +782,7 @@ void Grp_ChangeUsrGrps (Usr_MeOrOther_t MeOrOther,Cns_Verbose_t Verbose)
 
    /***** A student can not be enroled in more than one group
 	  if the type of group is of single enrolment *****/
-   switch (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs)
+   switch (Usr_UsrDat[MeOrOther]->Roles.InThisCrs)
      {
       case Rol_STD:
 	 SelectionIsValid = Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (MeOrOther,
@@ -845,7 +845,7 @@ Err_SuccessOrError_t Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
    Err_SuccessOrError_t SelectionIsValid;
 
    /***** Lock tables to make the enrolment atomic *****/
-   if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
+   if (Usr_UsrDat[MeOrOther]->Roles.InThisCrs == Rol_STD)
       Grp_DB_LockTables ();
 
    /***** Get list of groups types and groups in this course *****/
@@ -875,7 +875,7 @@ Err_SuccessOrError_t Grp_ChangeGrpsAtomically (Usr_MeOrOther_t MeOrOther,
      }
 
    /***** Unlock tables after changes in groups *****/
-   if (Usr_UsrDat[MeOrOther]->Roles.InCurrentCrs == Rol_STD)
+   if (Usr_UsrDat[MeOrOther]->Roles.InThisCrs == Rol_STD)
       DB_UnlockTables ();
 
    /***** Free memory with the list of groups which user belonged to *****/
@@ -1052,7 +1052,7 @@ Err_SuccessOrError_t Grp_CheckIfAtMostOneSingleEnrolmentGrpIsSelected (Usr_MeOrO
    /* Step 1 (only if I am a student selecting groups):
       check the closed groups I belong
       because these groups are disabled in form, an so not received */
-   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs == Rol_STD)
+   if (MeOrOther == Usr_ME && Gbl.Usrs.Me.UsrDat.Roles.InThisCrs == Rol_STD)
      {
       /* Query in the database the closed group codes which I belong to */
       Grp_GetLstCodGrpsUsrBelongs (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,
@@ -1306,7 +1306,7 @@ void Grp_RemUsrFromAllGrpsInCrs (long UsrCod,long HieCod)
    Grp_DB_RemUsrFromAllGrpsInCrs (UsrCod,HieCod);
 
    /***** Flush caches *****/
-   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs ();
    if (Usr_ItsMe (UsrCod) == Usr_ME)
       Grp_FlushCacheIBelongToGrp ();
   }
@@ -1321,7 +1321,7 @@ void Grp_RemUsrFromAllGrps (long UsrCod)
    Grp_DB_RemUsrFromAllGrps (UsrCod);
 
    /***** Flush caches *****/
-   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs ();
    if (Usr_ItsMe (UsrCod) == Usr_ME)
       Grp_FlushCacheIBelongToGrp ();
   }
@@ -1336,7 +1336,7 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
    Grp_DB_RemoveUsrFromGrp (UsrCod,GrpCod);
 
    /***** Flush caches *****/
-   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs ();
    if (Usr_ItsMe (UsrCod) == Usr_ME)
       Grp_FlushCacheIBelongToGrp ();
   }
@@ -2978,7 +2978,7 @@ static void Grp_PutFormToCreateGroupType (const struct GroupType *GrpTyp)
 /*********************** Put a form to create a new group ********************/
 /*****************************************************************************/
 
-static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
+static void Grp_PutFormToCreateGroup (const struct GroupType *ThisGrpTyp,
 				      const struct Group *Grp,
 				      const struct Roo_Rooms *Rooms)
   {
@@ -3035,8 +3035,8 @@ static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
 		     GrpTyp = &Gbl.Crs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp];
 
 		     HTM_OPTION (HTM_Type_LONG,&GrpTyp->GrpTypCod,
-				 GrpTyp->GrpTypCod == CurrentGrpTyp->GrpTypCod ? HTM_SELECTED :
-									         HTM_NO_ATTR,
+				 GrpTyp->GrpTypCod == ThisGrpTyp->GrpTypCod ? HTM_SELECTED :
+									      HTM_NO_ATTR,
 				 "%s",GrpTyp->Name);
 		    }
 
@@ -3118,14 +3118,14 @@ static void Grp_PutFormToCreateGroup (const struct GroupType *CurrentGrpTyp,
 /*********** Create a list with current group types in this course ***********/
 /*****************************************************************************/
 
-void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
+void Grp_GetListGrpTypesInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumGrpTyp;
    struct GroupType *GrpTyp;
-   static unsigned (*Grp_DB_GetGrpTypesInCurrentCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,
-										 long HieCod) =
+   static unsigned (*Grp_DB_GetGrpTypesInCrs[Grp_NUM_WHICH_GROUP_TYPES]) (MYSQL_RES **mysql_res,
+									  long HieCod) =
     {
      [Grp_GRP_TYPES_WITH_GROUPS] = Grp_DB_GetGrpTypesWithGrpsInCrs,
      [Grp_ALL_GROUP_TYPES      ] = Grp_DB_GetAllGrpTypesInCrs,
@@ -3140,8 +3140,8 @@ void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
 
    /***** Get group types from database *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpTypes =
-   Grp_DB_GetGrpTypesInCurrentCrs[WhichGrpTypes] (&mysql_res,
-						  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   Grp_DB_GetGrpTypesInCrs[WhichGrpTypes] (&mysql_res,
+					   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -3221,7 +3221,7 @@ void Grp_OpenGroupsAutomatically (void)
    long GrpTypCod;
 
    /***** Find group types to be opened *****/
-   NumGrpTypes = Grp_DB_GetGrpTypesInCurrentCrsToBeOpened (&mysql_res);
+   NumGrpTypes = Grp_DB_GetGrpTypesInThisCrsToBeOpened (&mysql_res);
 
    for (NumGrpTyp = 0;
         NumGrpTyp < NumGrpTypes;
@@ -3257,7 +3257,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
    Rol_Role_t Role;
 
    /***** First we get the list of group types *****/
-   Grp_GetListGrpTypesInCurrentCrs (WhichGrpTypes);
+   Grp_GetListGrpTypesInThisCrs (WhichGrpTypes);
 
    /***** Then we get the list of groups for each group type *****/
    for (NumGrpTyp = 0;
@@ -3584,12 +3584,12 @@ Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod)
 /***** Check if a user belongs to any of my groups in the current course *****/
 /*****************************************************************************/
 
-void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void)
+void Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs (void)
   {
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_INVALID;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Status = Cac_INVALID;
   }
 
-Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat)
+Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (const struct Usr_Data *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -3604,7 +3604,7 @@ Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *
       return Usr_DONT_SHARE;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_DONT_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
       return Usr_DONT_SHARE;
 
    /***** 5. Fast check: It's me? *****/
@@ -3613,25 +3613,25 @@ Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *
 
    /***** 6. Fast check: Is already calculated if user shares
                          any group in the current course with me? *****/
-   if (Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status == Cac_VALID &&
-       Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod == UsrDat->UsrCod)
-      return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
+   if (Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Status == Cac_VALID &&
+       Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.UsrCod == UsrDat->UsrCod)
+      return Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Shares;
 
    /***** 7. Fast / slow check: Does he/she belong to the current course? *****/
-   if (Enr_CheckIfUsrBelongsToCurrentCrs (UsrDat) == Usr_DONT_BELONG)
+   if (Enr_CheckIfUsrBelongsToThisCrs (UsrDat) == Usr_DONT_BELONG)
      {
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Usr_DONT_SHARE;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.UsrCod = UsrDat->UsrCod;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Shares = Usr_DONT_SHARE;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Status = Cac_VALID;
       return Usr_DONT_SHARE;
      }
 
    /***** 8. Fast check: Course has groups? *****/
    if (!Gbl.Crs.Grps.NumGrps)
      {
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Usr_SHARE;
-      Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.UsrCod = UsrDat->UsrCod;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Shares = Usr_SHARE;
+      Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Status = Cac_VALID;
       return Usr_SHARE;
      }
 
@@ -3639,10 +3639,10 @@ Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *
 
    /***** 9. Slow check: Get if user shares any group in this course with me from database *****/
    /* Check if user shares any group with me */
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.UsrCod = UsrDat->UsrCod;
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares = Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (UsrDat->UsrCod);
-   Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Status = Cac_VALID;
-   return Gbl.Cache.UsrSharesAnyOfMyGrpsInCurrentCrs.Shares;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.UsrCod = UsrDat->UsrCod;
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Shares = Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat->UsrCod);
+   Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Status = Cac_VALID;
+   return Gbl.Cache.UsrSharesAnyOfMyGrpsInThisCrs.Shares;
   }
 
 /*****************************************************************************/
@@ -3659,10 +3659,10 @@ static void Grp_GetLstCodGrpsUsrBelongs (long UsrCod,long GrpTypCod,
 
    /***** Get groups which a user belong to from database *****/
    if (GrpTypCod < 0)		// Query the groups of any type in the current course
-      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfAnyTypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod,
+      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfAnyTypeInThisCrsUsrBelongs (&mysql_res,UsrCod,
 									      ClosedOpenGroups);
    else				// Query only the groups of specified type in the current course
-      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfATypeInCurrentCrsUsrBelongs (&mysql_res,UsrCod,GrpTypCod);
+      LstGrps->NumGrps = Grp_DB_GetLstCodGrpsOfATypeInThisCrsUsrBelongs (&mysql_res,UsrCod,GrpTypCod);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3693,7 +3693,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
    unsigned NumGrp;
 
    /***** Get groups with file zones which I belong to from database *****/
-   LstGrps->NumGrps = Grp_DB_GetLstCodGrpsWithFileZonesInCurrentCrsIBelong (&mysql_res);
+   LstGrps->NumGrps = Grp_DB_GetLstCodGrpsWithFileZonesInThisCrsIBelong (&mysql_res);
 
    /***** Get the groups *****/
    if (LstGrps->NumGrps)
@@ -3796,7 +3796,7 @@ void Grp_ReceiveNewGrpTyp (void)
 
    if (GrpTyp.Name[0])	// If there's a group type name
       /***** If name of group type was in database... *****/
-      switch (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (GrpTyp.Name,-1L))
+      switch (Grp_DB_CheckIfGrpTypNameExistsInThisCrs (GrpTyp.Name,-1L))
         {
          case Exi_EXISTS:
 	    AlertType = Ale_WARNING;
@@ -4485,7 +4485,7 @@ void Grp_RenameGroupType (void)
              (this happens when return is pressed without changes) *****/
       if (strcmp (GrpTyp.Name,NewGrpTypName))	// Different names
          /***** If group type was in database... *****/
-         switch (Grp_DB_CheckIfGrpTypNameExistsInCurrentCrs (NewGrpTypName,
+         switch (Grp_DB_CheckIfGrpTypNameExistsInThisCrs (NewGrpTypName,
 							     GrpTyp.GrpTypCod))
 	   {
 	    case Exi_EXISTS:
@@ -4780,7 +4780,7 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
 	    If I belong       to this course ==> see only my groups
 	    If I don't belong to this course ==> see all groups
 	    */
-	    MyAllGrpsDefault = MyAllGrps[Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS]];
+	    MyAllGrpsDefault = MyAllGrps[Gbl.Usrs.Me.IBelongToThis[Hie_CRS]];
 	    break;
 	 case ActSeeMyTT:	// Show my timetable
 	 case ActPrnMyTT:	// Print my timetable

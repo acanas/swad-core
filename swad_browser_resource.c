@@ -46,19 +46,19 @@ void BrwRsc_GetLinkToDocFil (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Documents;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,FileMetadata.FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,File.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileMetadata.FilCod > 0 ? FileMetadata.FileName :
-                		            Txt_Documents);
+                  File.FilCod > 0 ? File.Path.Name :
+                		             Txt_Documents);
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -69,19 +69,19 @@ void BrwRsc_GetLinkToMrkFil (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Marks_area;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
 
    /***** Copy link to file into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_MARKS,FileMetadata.FilCod);
+   Rsc_DB_CopyToClipboard (Rsc_MARKS,File.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  FileMetadata.FilCod > 0 ? FileMetadata.FileName :
-                			    Txt_Marks_area);
+                  File.FilCod > 0 ? File.Path.Name :
+                			     Txt_Marks_area);
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -94,21 +94,21 @@ void BrwRsc_GetLinkToMrkFil (void)
 
 void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize)
   {
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
 
    /***** Get file name *****/
-   FileMetadata.FilCod = FilCod;
-   Brw_DB_GetPathByCod (FileMetadata.FilCod,
-                        FileMetadata.PathInZone,
-                        sizeof (FileMetadata.PathInZone) - 1);
-   Brw_SplitFullPathIntoPathAndName (FileMetadata.PathInZone,
-				     FileMetadata.PathInZoneWithoutFileName,
-				     FileMetadata.FileName);
+   File.FilCod = FilCod;
+   Brw_DB_GetPathByCod (File.FilCod,
+                        File.Path.InZone,
+                        sizeof (File.Path.InZone) - 1);
+   Brw_SplitFullPathIntoPathAndName (File.Path.InZone,
+				     File.Path.InZoneWithoutName,
+				     File.Path.Name);
 
    /***** Remove .url if it's a link *****/
-   if (Str_FileIs (FileMetadata.FileName,"url"))
-      FileMetadata.FileName[strlen (FileMetadata.FileName) - 4] = '\0';
+   if (Str_FileIs (File.Path.Name,"url"))
+      File.Path.Name[strlen (File.Path.Name) - 4] = '\0';
 
    /***** Copy file name into title *****/
-   Str_Copy (Title,FileMetadata.FileName,TitleSize);
+   Str_Copy (Title,File.Path.Name,TitleSize);
   }

@@ -805,7 +805,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
   {
    extern Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    Brw_Zone_t ZoneDB;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod = -1L;
    Act_Action_t Action = ActUnk;
@@ -835,13 +835,12 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
-	 if ((FileMetadata.FilCod = Cod) > 0)
+	 if ((File.FilCod = Cod) > 0)
 	   {
-            Brw_GetFileMetadataByCod (&ZoneDB,&FileMetadata);
-            if (FileMetadata.FilCod > 0)
+            Brw_GetFileMetadataByCod (&ZoneDB,&File);
+            if (File.FilCod > 0)
               {
-	       Brw_GetCrsGrpFromFileMetadata (ZoneDB,FileMetadata.Cod,
-					      HieCods,&GrpCod);
+	       Brw_GetCrsGrpFromFileMetadata (ZoneDB,File.HieCod,HieCods,&GrpCod);
 	       switch (NotifyEvent)
 		 {
 		  case Ntf_EVENT_DOCUMENT_FILE:
@@ -871,7 +870,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 		 }
 	       Frm_BeginForm (Action);
 		  ParCod_PutPar (ParCod_Grp,GrpCod);
-		  ParCod_PutPar (ParCod_Fil,FileMetadata.FilCod);
+		  ParCod_PutPar (ParCod_Fil,File.FilCod);
 	      }
 	   }
 	 break;
@@ -1060,7 +1059,7 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
             Msg_DB_SetRcvMsgAsOpen (Cod,UsrCod);
          break;
       case Ntf_EVENT_SURVEY:
-         Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,GetContent);
+         Svy_GetNotifSvy (SummaryStr,ContentStr,Cod,GetContent);
          break;
      }
   }
@@ -1183,7 +1182,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // and I want to be a teacher (checked before calling this function
 	    // to not send requests to be a student to admins)
 	    // ==> send notification to administrators or superusers
-	    NumUsrs = Adm_DB_GetAdmsCurrentScopeExceptMe (&mysql_res);
+	    NumUsrs = Adm_DB_GetAdmsThisScopeExceptMe (&mysql_res);
          break;
       case Ntf_EVENT_TML_COMMENT:	// New comment to one of my social notes or comments
          // Cod is the code of the social publishing

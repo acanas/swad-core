@@ -52,7 +52,7 @@ void AsgRsc_GetLinkToAssignment (void)
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
    Grp_GetParMyAllGrps ();
-   Assignments.CurrentPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);

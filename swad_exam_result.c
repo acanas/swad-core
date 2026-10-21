@@ -368,7 +368,7 @@ static void ExaRes_ListAllResultsInSelectedExams (struct Exa_Exams *Exams)
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	   {
 	    /***** Show sessions results *****/
-	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 	    ExaRes_ShowResults (Exams,Usr_OTHER,-1L,-1L,ExamsSelectedCommas);
 	   }
      }
@@ -434,7 +434,7 @@ static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show sessions results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 	       ExaRes_ShowResults (Exams,Usr_OTHER,-1L,Exams->Exam.ExaCod,NULL);
 	      }
 
@@ -506,7 +506,7 @@ static void ExaRes_ListAllResultsInSes (struct Exa_Exams *Exams)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show sessions results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 	       ExaRes_ShowResults (Exams,Usr_OTHER,Exams->SesCod.Sel,-1L,NULL);
 	      }
 
@@ -1347,7 +1347,7 @@ static void ExaRes_ShowExamResult (const struct Exa_Exam *Exam,
 	 Err_NoPermissionExit ();
 
       /* Get if user has accepted enrolment */
-      UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+      UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
 
       /***** Heading *****/
       Exa_Header (Exam->ExaCod,UsrDat,Session->ShowPhotos);

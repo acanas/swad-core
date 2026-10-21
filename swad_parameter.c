@@ -725,7 +725,7 @@ void Par_GetMainPars (void)
    if (Gbl.WebService.IsWebService)
      {
       Gbl.Action.Act = Gbl.Action.Original = ActWebSvc;
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
       return;
      }
 
@@ -881,7 +881,7 @@ void Par_GetMainPars (void)
       Tab_DisableIncompatibleTabs ();
      }
    else	// Set tab depending on current action
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
   }
 
 /*****************************************************************************/

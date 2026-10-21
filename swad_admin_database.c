@@ -58,7 +58,7 @@ void Adm_DB_InsertAdmin (long UsrCod,Hie_Level_t HieLvl)
 /********** Get all admin codes above the current course, except me **********/
 /*****************************************************************************/
 
-unsigned Adm_DB_GetAdmsCurrentScopeExceptMe (MYSQL_RES **mysql_res)
+unsigned Adm_DB_GetAdmsThisScopeExceptMe (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get admins from current scope",

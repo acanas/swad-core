@@ -394,7 +394,7 @@ void QstImp_ImpQstsFromXML (void)
    Err_SuccessOrError_t SuccessOrError;
 
    /***** Creates directory if not exists *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_TEST_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_TEST_PRIVATE);
 
    /***** First of all, copy in disk the file received *****/
    Par = Fil_StartReceptionOfFile (Fil_NAME_OF_PARAM_FILENAME_ORG,

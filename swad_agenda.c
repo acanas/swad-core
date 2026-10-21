@@ -167,7 +167,7 @@ static void Agd_ResetAgenda (struct Agd_Agenda *Agenda)
 	                        Agd_DEFAULT_VISIBL_EVENTS;
    Agenda->SelectedOrder      = Agd_ORDER_DEFAULT;
    Agenda->AgdCodToEdit       = -1L;
-   Agenda->CurrentPage        = 0;
+   Agenda->ThisPage           = 0;
   }
 
 /*****************************************************************************/
@@ -256,7 +256,7 @@ static void Agd_ShowFormToSelPast__FutureEvents (const struct Agd_Agenda *Agenda
 				    Agenda->PrivatPublicEvents,
 				    Agenda->HiddenVisiblEvents,
 				    Agenda->SelectedOrder,
-				    Agenda->CurrentPage,
+				    Agenda->ThisPage,
 				    -1L);
 	       Ico_PutSettingIconLink (Icon[PstFut],Ico_BLACK,
 				       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
@@ -295,7 +295,7 @@ static void Agd_ShowFormToSelPrivatPublicEvents (const struct Agd_Agenda *Agenda
 				    Agenda->PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
 				    Agenda->HiddenVisiblEvents,
 				    Agenda->SelectedOrder,
-				    Agenda->CurrentPage,
+				    Agenda->ThisPage,
 				    -1L);
 	       Ico_PutSettingIconLink (Icon[PrvPub].Icon,Icon[PrvPub].Color,
 				       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
@@ -326,7 +326,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
 				    Agenda->PrivatPublicEvents,
 				    Agenda->HiddenVisiblEvents ^ (1 << HiddenOrVisible),	// Toggle
 				    Agenda->SelectedOrder,
-				    Agenda->CurrentPage,
+				    Agenda->ThisPage,
 				    -1L);
 	       Ico_PutSettingIconLink (Ico_HiddenVisible[HiddenOrVisible].Icon,
 				       Ico_HiddenVisible[HiddenOrVisible].Color,
@@ -457,7 +457,7 @@ void Agd_ShowUsrAgenda (void)
 void Agd_ShowOtherAgendaAfterLogIn (void)
   {
    extern const char *Hlp_PROFILE_Agenda_public_agenda;
-   extern unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_This_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern struct Usr_Data *Usr_UsrDat[Usr_NUM_ME_OR_OTHER];
    struct Agd_Agenda Agenda;
@@ -471,7 +471,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 
    if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_Current_CGI_SWAD_Language)
+      if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_This_CGI_SWAD_Language)
 	 /***** Get user *****/
 	 /* If nickname is correct, user code is already got from nickname */
 	 switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
@@ -542,9 +542,9 @@ static void Agd_ShowEvents (struct Agd_Agenda *Agenda,
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Agenda->Num;
-   Pagination.CurrentPage = Agenda->CurrentPage;
+   Pagination.ThisPage = Agenda->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Agenda->CurrentPage = Pagination.CurrentPage;
+   Agenda->ThisPage = Pagination.ThisPage;
 
    /***** Write links to pages *****/
    Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],&Pagination,
@@ -659,20 +659,20 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 	       case Agd_MY_AGENDA_TODAY:
 	       case Agd_MY_AGENDA:
 		  Frm_BeginForm (ActSeeMyAgd);
-		     Pag_PutParPagNum (Pag_MY_AGENDA,Agenda->CurrentPage);
+		     Pag_PutParPagNum (Pag_MY_AGENDA,Agenda->ThisPage);
 		  break;
 	       case Agd_ANOTHER_AGENDA_TODAY:
 	       case Agd_ANOTHER_AGENDA:
 		  Frm_BeginForm (ActSeeUsrAgd);
 		     Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
-		     Pag_PutParPagNum (Pag_ANOTHER_AGENDA,Agenda->CurrentPage);
+		     Pag_PutParPagNum (Pag_ANOTHER_AGENDA,Agenda->ThisPage);
 		  break;
 	      }
 	    Agd_PutParsMyAgenda (Agenda->Past__FutureEvents,
 				 Agenda->PrivatPublicEvents,
 				 Agenda->HiddenVisiblEvents,
 				 Order,
-				 Agenda->CurrentPage,
+				 Agenda->ThisPage,
 				 -1L);
 
 	       HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
@@ -933,7 +933,7 @@ static void Agd_PutCurrentParsMyAgenda (void *Agenda)
 			   ((struct Agd_Agenda *) Agenda)->PrivatPublicEvents,
 			   ((struct Agd_Agenda *) Agenda)->HiddenVisiblEvents,
 			   ((struct Agd_Agenda *) Agenda)->SelectedOrder,
-			   ((struct Agd_Agenda *) Agenda)->CurrentPage,
+			   ((struct Agd_Agenda *) Agenda)->ThisPage,
 			   ((struct Agd_Agenda *) Agenda)->AgdCodToEdit);
   }
 
@@ -991,7 +991,7 @@ static void Agd_GetPars (struct Agd_Agenda *Agenda,
       Agenda->HiddenVisiblEvents = Agd_GetParsHiddenVisiblEvents ();
      }
    Agd_GetParEventOrder (Agenda);
-   Agenda->CurrentPage = Pag_GetParPagNum (WhatPaginate[AgendaType]);
+   Agenda->ThisPage = Pag_GetParPagNum (WhatPaginate[AgendaType]);
   }
 
 /*****************************************************************************/

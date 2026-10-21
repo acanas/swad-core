@@ -160,7 +160,7 @@ Exi_Exist_t Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
 /*****************************************************************************/
 
 Exi_Exist_t Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
-                                              const char Folder[NAME_MAX + 1])
+                                              const char FolderName[NAME_MAX + 1])
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get assignment data",
@@ -176,7 +176,7 @@ Exi_Exist_t Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
 			 " WHERE CrsCod=%ld"	// Extra check
 			   " AND Folder='%s'",
 			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			 Folder);
+			 FolderName);
   }
 
 /*****************************************************************************/
@@ -265,7 +265,7 @@ long Asg_DB_CreateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
 				Asg->TimeUTC[Dat_STR_TIME],
 				Asg->TimeUTC[Dat_END_TIME],
 				Asg->Title,
-				Asg->Folder,
+				Asg->FolderName,
 				Txt);
   }
 
@@ -288,7 +288,7 @@ void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
                    Asg->TimeUTC[Dat_STR_TIME],
                    Asg->TimeUTC[Dat_END_TIME],
                    Asg->Title,
-                   Asg->Folder,
+                   Asg->FolderName,
                    Txt,
                    Asg->AsgCod,
                    Gbl.Hierarchy.Node[Hie_CRS].HieCod);

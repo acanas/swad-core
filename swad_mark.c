@@ -89,29 +89,29 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 /*****************************************************************************/
 
 void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
-					    const struct Brw_FileMetadata *FileMetadata)
+					    const struct Brw_File *File)
   {
    extern const char *Txt_TABLE_Header;
    extern const char *Txt_TABLE_Footer;
-   long CurrentGrpCod;
+   long ThisGrpCod;
    struct Mrk_Properties Marks;
    char StrHeadOrFoot[Cns_MAX_DIGITS_UINT + 1];
 
-   if (FileMetadata->Type == Brw_IS_FOLDER)
+   if (File->Type == Brw_IS_FOLDER)
       HTM_TD_ColouredEmpty (2);
    else	// File or link
      {
-      CurrentGrpCod = Brw_GetGrpCod ();
+      ThisGrpCod = Brw_GetGrpCod ();
 
       /***** Get number of rows in header or footer *****/
       Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser->Zone,
-				     FileMetadata->PathInZone);
+				     File->Path.InZone);
 
       /***** Write the number of rows of header *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
 		    The_GetSuffix (),The_GetColorRows ());
-	 Frm_BeginForm (CurrentGrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
-					    ActChgNumRowHeaCrs);	// Course zone
+	 Frm_BeginForm (ThisGrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
+					 ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (FileBrowser);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_Txt (Txt_TABLE_Header); HTM_Colon ();
@@ -127,8 +127,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
       /***** Write the number of rows of footer *****/
       HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
 		    The_GetSuffix (),The_GetColorRows ());
-	 Frm_BeginForm (CurrentGrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
-				            ActChgNumRowFooCrs);	// Course zone
+	 Frm_BeginForm (ThisGrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
+				         ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (FileBrowser);
 	    HTM_LABEL_Begin (NULL);
 	       HTM_Txt (Txt_TABLE_Footer); HTM_Colon ();
@@ -208,20 +208,20 @@ void Mrk_ChangeNumRowsFooter (void)
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
 
    /***** Get the number of rows of the header or footer of the table of marks *****/
    Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
    if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
       /***** Update properties of marks in the database *****/
       Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser.Zone,
-					  FileMetadata.PathInZone,
+					  File.Path.InZone,
 					  HeaderOrFooter,NumRows);
    else
       Err_WrongNumberOfRowsExit ();
@@ -571,42 +571,41 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 void Mrk_ShowMyMarks (void)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_FileMetadata FileMetadata;
+   struct Brw_File File;
    struct Mrk_Properties Marks;
    char PathUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
    char PathPrivate[PATH_MAX + 1 +
 		    PATH_MAX + 1];
-   long CurrentGrpCod;
+   long ThisGrpCod;
    struct Usr_Data *UsrDat;
    Exi_Exist_t UsrExists = Exi_EXISTS;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&FileMetadata);	// Get file / folder / link
+   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
 
    /***** Get the path of the file of marks *****/
    Fil_BuildPath (PathPrivate,"%s/%s",
 		  FileBrowser.PathRootFolderInServ.AboveRootFolder,
-		  FileMetadata.PathInZone);
+		  File.Path.InZone);
 
    /***** Get number of rows of header or footer *****/
-   Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser.Zone,
-				  FileMetadata.PathInZone);
+   Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser.Zone,File.Path.InZone);
 
    /***** Set the student whose marks will be shown *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...
       UsrDat = &Gbl.Usrs.Me.UsrDat;		// ...use my list of IDs
    else						// If I am logged as non-editing teacher, teacher or admin
      {
-      CurrentGrpCod = Brw_GetGrpCod ();
+      ThisGrpCod = Brw_GetGrpCod ();
 
       /* Select a random student from the course */
-      if (CurrentGrpCod > 0)	// Group zone
+      if (ThisGrpCod > 0)	// Group zone
         {
-         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,CurrentGrpCod))	// If there are students in this group
+         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,ThisGrpCod))	// If there are students in this group
            {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (CurrentGrpCod);
+            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (ThisGrpCod);
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
@@ -635,7 +634,7 @@ void Mrk_ShowMyMarks (void)
 
 	 /***** Create temporal file to store my marks (in HTML) *****/
 	 /* If the private directory does not exist, create it */
-	 Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
+	 Fil_CreateFolderIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	 /* Create a new temporary file *****/
 	 Fil_BuildPath (PathUsrMarks,"%s/%s.html",
@@ -695,12 +694,12 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    struct Usr_Data UsrDat;
    unsigned UnsignedNum;
    Brw_Zone_t Zone;
-   long Cod;
+   long HieCod;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod;
    struct Mrk_Properties Marks;
    char PathInZoneFromDBMarksTable[PATH_MAX + 1];
-   char PathInZoneWithoutFileName[PATH_MAX + 1];
+   char PathInZoneWithoutName[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];
    char PathInServMarks[PATH_MAX + 1];
    char PathInServUsrMarksTmp[PATH_MAX + 1];
@@ -732,14 +731,14 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	    Zone = (Brw_Zone_t) UnsignedNum;
 
       /* Course/group code (row[1]) */
-      Cod = Str_ConvertStrCodToLongCod (row[1]);
-      Brw_GetCrsGrpFromFileMetadata (Zone,Cod,HieCods,&GrpCod);
+      HieCod = Str_ConvertStrCodToLongCod (row[1]);
+      Brw_GetCrsGrpFromFileMetadata (Zone,HieCod,HieCods,&GrpCod);
 
       /* Path (row[2]) */
       Str_Copy (PathInZoneFromDBMarksTable,row[2],
 		sizeof (PathInZoneFromDBMarksTable) - 1);
       Brw_SplitFullPathIntoPathAndName (PathInZoneFromDBMarksTable,
-					PathInZoneWithoutFileName,
+					PathInZoneWithoutName,
 					FileName);
       Str_Copy (SummaryStr,FileName,Cns_MAX_BYTES_TEXT);
 
@@ -770,7 +769,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 	    /***** Create temporal file to store my marks (in HTML) *****/
 	    /* If the private directory does not exist, create it */
-	    Fil_CreateDirIfNotExists (Cfg_PATH_MARK_PRIVATE);
+	    Fil_CreateFolderIfNotExists (Cfg_PATH_MARK_PRIVATE);
 
 	    /* Create a new temporary file *****/
 	    Fil_BuildPath (PathInServUsrMarksTmp,"%s/%s.html",

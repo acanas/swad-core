@@ -93,7 +93,7 @@ void Att_DB_RemoveUsrsAbsentWithoutCommentsFromEvent (long AttCod);
 void Att_DB_RemoveAllUsrsFromAnEvent (long AttCod);
 void Att_DB_RemoveUsrFromAllEvents (long UsrCod);
 void Att_DB_RemoveUsrFromCrsEvents (long UsrCod,long HieCod);
-void Att_DB_RemoveEventFromCurrentCrs (long AttCod);
+void Att_DB_RemoveEventFromThisCrs (long AttCod);
 
 void Att_DB_RemoveUsrsFromCrsEvents (long HieCod);
 void Att_DB_RemoveGrpsAssociatedToCrsEvents (long HieCod);

@@ -35,9 +35,9 @@
 
 long Cfe_DB_CreateCallForExam (const struct Cfe_CallForExam *CallForExam);
 
-unsigned Cfe_DB_GetCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res);
-unsigned Cfe_DB_GetVisibleCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res);
-unsigned Cfe_DB_GetFutureCallsForExamsInCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Cfe_DB_GetCallsForExamsInThisCrs (MYSQL_RES **mysql_res);
+unsigned Cfe_DB_GetVisibleCallsForExamsInThisCrs (MYSQL_RES **mysql_res);
+unsigned Cfe_DB_GetFutureCallsForExamsInThisCrs (MYSQL_RES **mysql_res);
 Exi_Exist_t Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
 
 void Cfe_DB_ModifyCallForExam (const struct Cfe_CallForExam *CallForExam,

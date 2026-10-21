@@ -87,7 +87,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 			  const char PathPhoto[PATH_MAX + 1]);
 static void CtrCfg_GetPhotoAttr (long HieCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
-static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void CtrCfg_Place (Frm_PutForm_t PutForm);
 static void CtrCfg_NumUsrs (void);
 static void CtrCfg_NumDegs (void);
@@ -174,7 +174,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Institution *****/
-	    CtrCfg_Institution (ViewType,PutFormIns);
+	    CtrCfg_Ins (ViewType,PutFormIns);
 
 	    /***** Center name *****/
 	    HieCfg_Name (PutFormName,Hie_CTR,Nam_FULL_NAME);
@@ -537,7 +537,7 @@ static void CtrCfg_FreePhotoAttr (char **PhotoAttribution)
 /***************** Show institution in center configuration ******************/
 /*****************************************************************************/
 
-static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
+static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -581,7 +581,7 @@ static void CtrCfg_Institution (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
                break;
             case Frm_PUT_FORM:
 	       /* Get list of institutions of the current country */
-	       Ins_GetBasicListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	       Ins_GetBasicListOfInss (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
 	       /* Put form to select institution */
 	       Frm_BeginForm (ActChgCtrInsCfg);
@@ -876,10 +876,10 @@ void CtrCfg_ReceivePhoto (void)
 
    /***** Create private directories if not exist *****/
    /* Create private directory for images if it does not exist */
-   Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
 
    /* Create temporary private directory for images if it does not exist */
-   Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_TMP_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_MEDIA_TMP_PRIVATE);
 
    /* Get filename extension */
    if ((PtrExtension = strrchr (FileNameImgSrc,(int) '.')) == NULL)
@@ -907,16 +907,16 @@ void CtrCfg_ReceivePhoto (void)
      }
 
    /***** Creates public directories if not exist *****/
-   Fil_CreateDirIfNotExists (Cfg_PATH_CTR_PUBLIC);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_CTR_PUBLIC);
    Fil_BuildPath (Path,"%s/%02u",
 		  Cfg_PATH_CTR_PUBLIC,
 		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
-   Fil_CreateDirIfNotExists (Path);
+   Fil_CreateFolderIfNotExists (Path);
    Fil_BuildPath (Path,"%s/%02u/%lu",
 		  Cfg_PATH_CTR_PUBLIC,
 		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
 		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
-   Fil_CreateDirIfNotExists (Path);
+   Fil_CreateFolderIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
    Fil_BuildPath (PathFileImg,"%s/%02u/%lu/%lu.jpg",
@@ -1044,14 +1044,14 @@ void CtrCfg_ChangeCtrPlc (void)
 /*************** Change the name of a center in configuration ****************/
 /*****************************************************************************/
 
-void CtrCfg_RenameCenterShrt (void)
+void CtrCfg_RenameCtrShrt (void)
   {
-   Ctr_RenameCenter (&Gbl.Hierarchy.Node[Hie_CTR],Nam_SHRT_NAME);
+   Ctr_RenameCtr (&Gbl.Hierarchy.Node[Hie_CTR],Nam_SHRT_NAME);
   }
 
-void CtrCfg_RenameCenterFull (void)
+void CtrCfg_RenameCtrFull (void)
   {
-   Ctr_RenameCenter (&Gbl.Hierarchy.Node[Hie_CTR],Nam_FULL_NAME);
+   Ctr_RenameCtr (&Gbl.Hierarchy.Node[Hie_CTR],Nam_FULL_NAME);
   }
 
 /*****************************************************************************/

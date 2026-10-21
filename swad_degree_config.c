@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 
 static void DegCfg_Configuration (Vie_ViewType_t ViewType);
 static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
-static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void DegCfg_Ctr (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void DegCfg_NumCrss (void);
 
 /*****************************************************************************/
@@ -138,7 +138,7 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Center *****/
-	    DegCfg_Center (ViewType,PutFormCtr);
+	    DegCfg_Ctr (ViewType,PutFormCtr);
 
 	    /***** Degree name *****/
 	    HieCfg_Name (PutFormName,Hie_DEG,Nam_FULL_NAME);
@@ -200,7 +200,7 @@ static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
 /******************** Show center in degree configuration ********************/
 /*****************************************************************************/
 
-static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
+static void DegCfg_Ctr (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -242,7 +242,7 @@ static void DegCfg_Center (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       break;
             case Frm_PUT_FORM:
 	       /* Get list of centers of the current institution */
-	       Ctr_GetBasicListOfCentersInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	       Ctr_GetBasicListOfCtrsInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
 
 	       /* Put form to select center */
 	       Frm_BeginForm (ActChgDegCtrCfg);
@@ -360,12 +360,12 @@ void DegCfg_ChangeDegCtr (void)
 /*************** Change the name of a degree in configuration ****************/
 /*****************************************************************************/
 
-void DegCfg_RenameDegreeShrt (void)
+void DegCfg_RenameDegShrt (void)
   {
    Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Nam_SHRT_NAME);
   }
 
-void DegCfg_RenameDegreeFull (void)
+void DegCfg_RenameDegFull (void)
   {
    Deg_RenameDegree (&Gbl.Hierarchy.Node[Hie_DEG],Nam_FULL_NAME);
   }

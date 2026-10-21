@@ -49,36 +49,36 @@
 
 void Cty_SeeCtyWithPendingInss (void);
 
-void Cty_ListCountries (void);
-void Cty_ListCountries1 (void);
-void Cty_ListCountries2 (void);
+void Cty_ListCtys (void);
+void Cty_ListCtys1 (void);
+void Cty_ListCtys2 (void);
 
-Usr_Can_t Cty_CheckIfICanEditCountries (void);
+Usr_Can_t Cty_CheckIfICanEditCtys (void);
 
-void Cty_DrawCountryMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
-                                        const char *ClassContainer,
-                                        const char *ClassMap);
-void Cty_DrawCountryMap (const struct Hie_Node *Cty,const char *Class);
-Exi_Exist_t Cty_CheckIfCountryPhotoExists (const struct Hie_Node *Cty);
+void Cty_DrawCtyMapAndNameWithLink (struct Hie_Node *Cty,Act_Action_t Action,
+                                    const char *ClassContainer,
+                                    const char *ClassMap);
+void Cty_DrawCtyMap (const struct Hie_Node *Cty,const char *Class);
+Exi_Exist_t Cty_CheckIfCtyPhotoExists (const struct Hie_Node *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
 void Cty_PutParCtyOrder (void);
-void Cty_EditCountries (void);
-void Cty_GetBasicListOfCountries (void);
-void Cty_WriteSelectorOfCountry (void);
-void Cty_WriteCountryName (long HieCod);
-Err_SuccessOrError_t Cty_GetCountrDataByCod (struct Hie_Node *Node);
+void Cty_EditCtys (void);
+void Cty_GetBasicListOfCtys (void);
+void Cty_WriteSelectorOfCty (void);
+void Cty_WriteCtyName (long HieCod);
+Err_SuccessOrError_t Cty_GetCtyDataByCod (struct Hie_Node *Node);
 void Cty_GetNamesAndWWWsByCod (struct Hie_Node *Cty,
 			       char NameInSeveralLanguages[1 + Lan_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1],
 			       char WWWInSeveralLanguages [1 + Lan_NUM_LANGUAGES][WWW_MAX_BYTES_WWW + 1]);
-void Cty_FlushCacheCountryName (void);
-void Cty_GetCountryNameInLanguage (long HieCod,Lan_Language_t Language,
-				   char CtyName[Cty_MAX_BYTES_NAME + 1]);
-void Cty_RemoveCountry (void);
-void Cty_RenameCountry (void);
+void Cty_FlushCacheCtyName (void);
+void Cty_GetCtyNameInLanguage (long HieCod,Lan_Language_t Language,
+			       char CtyName[Cty_MAX_BYTES_NAME + 1]);
+void Cty_RemoveCty (void);
+void Cty_RenameCty (void);
 void Cty_ChangeCtyWWW (void);
 void Cty_ContEditAfterChgCty (void);
-void Cty_ReceiveNewCountry (void);
+void Cty_CreateNewCty (void);
 
 unsigned Cty_GetCachedNumCtysWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 

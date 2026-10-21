@@ -130,7 +130,7 @@ void Ses_CloseSession (void)
 static void Ses_RemoveSessionFromDB (void)
   {
    /***** Remove current session *****/
-   Ses_SB_RemoveCurrentSession ();
+   Ses_SB_RemoveThisSession ();
 
    /***** Clear old unused social timelines in database *****/
    // This is necessary to prevent the table growing and growing

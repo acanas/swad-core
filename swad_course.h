@@ -53,7 +53,7 @@ void Crs_ShowIntroduction (void);
 unsigned Crs_GetCachedNumCrssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Crs_WriteSelectorOfCourse (void);
-void Crs_ShowCrssOfCurrentDeg (void);
+void Crs_ShowCrssOfThisDeg (void);
 void Crs_WriteSelectorMyCoursesInBreadcrumb (void);
 
 void Crs_EditCourses (void);
@@ -63,7 +63,7 @@ void Crs_ReceiveNewCrs (void);
 
 void Crs_RemoveCourse (void);
 Err_SuccessOrError_t Crs_GetCourseDataByCod (struct Hie_Node *Crs);
-void Crs_RemoveCourseCompletely (long HieCod);
+void Crs_RemoveCrsCompletely (long HieCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);
 
@@ -71,9 +71,9 @@ void Crs_UpdateInstitutionalCrsCod (struct Hie_Node *Crs,
                                     const char *NewInstitutionalCrsCod);
 void Crs_UpdateCrsYear (struct Hie_Node *Crs,unsigned NewYear);
 
-void Crs_RenameCourseShrt (void);
-void Crs_RenameCourseFull (void);
-void Crs_RenameCourse (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull);
+void Crs_RenameCrsShrt (void);
+void Crs_RenameCrsFull (void);
+void Crs_RenameCrs (struct Hie_Node *Crs,Nam_ShrtOrFullName_t ShrtOrFull);
 
 void Crs_ChangeCrsStatus (void);
 void Crs_ContEditAfterChgCrs (void);

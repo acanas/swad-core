@@ -73,7 +73,7 @@ struct Globals Gbl;	// All the global parameters and variables must be in this s
 
 void Gbl_InitializeGlobals (void)
   {
-   extern unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_This_CGI_SWAD_Language;
    Rol_Role_t Role;
    Hie_Level_t HieLvl;
    Hie_Level_t HieLvlParent;
@@ -97,7 +97,7 @@ void Gbl_InitializeGlobals (void)
 
    Fil_SetOutputFileToStdout ();
 
-   Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
+   Gbl.Prefs.Language       = Txt_This_CGI_SWAD_Language;
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
    Gbl.Prefs.DateFormat     = Dat_FORMAT_DEFAULT;		// Default date format
    Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu
@@ -177,8 +177,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.WebService.Function = API_unknown;
 
    /* Flush caches */
-   Cty_FlushCacheCountryName ();
-   Ins_FlushCacheFullNameAndCtyOfInstitution ();
+   Cty_FlushCacheCtyName ();
+   Ins_FlushCacheFullNameAndCtyOfIns ();
 
    Dpt_FlushCacheNumDptsInIns ();	// Number of departments in institution
 
@@ -203,14 +203,14 @@ void Gbl_InitializeGlobals (void)
 
    Usr_FlushCacheUsrIsSuperuser ();
    Usr_FlushCacheUsrCodExists ();
-   Enr_FlushCacheUsrBelongsToCurrentCrs ();
-   Enr_FlushCacheUsrHasAcceptedInCurrentCrs ();
+   Enr_FlushCacheUsrBelongsToThisCrs ();
+   Enr_FlushCacheUsrHasAcceptedInThisCrs ();
    Enr_FlushCacheUsrSharesAnyOfMyCrs ();
-   Rol_FlushCacheMyRoleInCurrentCrs ();
+   Rol_FlushCacheMyRoleInThisCrs ();
    Rol_FlushCacheRoleUsrInCrs ();
-   Prj_FlushCacheMyRolesInProject ();
+   Prj_FlushCacheMyRolesInPrj ();
    Grp_FlushCacheIBelongToGrp ();
-   Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs ();
+   Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs ();
    Fol_FlushCacheFollow ();
   }
 

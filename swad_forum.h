@@ -106,13 +106,13 @@ struct For_Forums
   {
    For_ForumSet_t ForumSet;
    Dat_StartEndTime_t ThreadsOrder;
-   unsigned CurrentPageThrs;
-   unsigned CurrentPagePsts;
+   unsigned ThisPageThrs;
+   unsigned ThisPagePsts;
    struct For_Forum Forum;	// Forum selected
    struct
      {
       long Selected;		// Thread selected
-      long Current;		// Current thread
+      long This;		// Current thread
       long ToMove;		// Thread to move
      } Thread;
    long PstCod;			// Post selected

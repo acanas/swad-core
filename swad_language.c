@@ -214,13 +214,13 @@ void Lan_UpdateMyLanguageToCurrentLanguage (void)
 
 Lan_Language_t Lan_GetParLanguage (void)
   {
-   extern unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_This_CGI_SWAD_Language;
 
    return (Lan_Language_t)
 	  Par_GetParUnsignedLong ("Lan",
                                   1,
                                   Lan_NUM_LANGUAGES,
-                                  (unsigned long) Txt_Current_CGI_SWAD_Language);
+                                  (unsigned long) Txt_This_CGI_SWAD_Language);
   }
 
 /*****************************************************************************/
@@ -247,10 +247,10 @@ Lan_Language_t Lan_GetLanguageFromStr (const char *Str)
 
 bool Lan_CheckIfRedirectToMyLanguage (void)
   {
-   extern unsigned Txt_Current_CGI_SWAD_Language;
+   extern unsigned Txt_This_CGI_SWAD_Language;
 
    return Gbl.Usrs.Me.Logged &&							// I am logged
-	  Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language &&	// My language != current language
+	  Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_This_CGI_SWAD_Language &&	// My language != current language
 	  (Gbl.Action.Original == ActLogIn ||		// Regular log in
 	   Gbl.Action.Original == ActLogInNew ||	// Log in when checking account
 	   Gbl.Action.Original == ActLogInUsrAgd);	// Log in to view another user's public agenda

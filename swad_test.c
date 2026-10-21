@@ -373,7 +373,7 @@ void Tst_AssessTest (void)
 	 Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_VIEW);
 
 	 /***** Header *****/
-	 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
+	 if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG)
 	   {
 	    HTM_DIV_Begin ("class=\"Tst_SUBTITLE DAT_%s\"",The_GetSuffix ());
 	       HTM_TxtF (Txt_Test_No_X_that_you_make_in_this_course,NumTst);

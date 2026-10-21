@@ -300,7 +300,7 @@ static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
 	   {
 	    /* Get if student has accepted enrolment in current course */
-	    UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+	    UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
 
 	    /* Create print or get existing print */
 	    ExaPrn_GetQstsPrint (Exams,Session,&UsrDat,&Print,ExaPrn_DO_NOT_UPDATE_DATES);
@@ -347,7 +347,7 @@ static void ExaShe_ShowQuestions (const struct ExaSes_Session *Session,
 				  const struct ExaPrn_Print *Print)
   {
    extern const char *Txt_Questions;
-   static struct ExaSet_Set CurrentSet =
+   static struct ExaSet_Set ThisSet =
      {
       .ExaCod = -1L,
       .SetCod = -1L,
@@ -367,19 +367,19 @@ static void ExaShe_ShowQuestions (const struct ExaSes_Session *Session,
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
-      for (QstInd = 0, CurrentSet.SetCod = -1L;
+      for (QstInd = 0, ThisSet.SetCod = -1L;
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
-	 if (Print->PrintedQsts[QstInd].SetCod != CurrentSet.SetCod)
+	 if (Print->PrintedQsts[QstInd].SetCod != ThisSet.SetCod)
 	   {
 	    /* Get data of this set */
-	    CurrentSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
-	    ExaSet_GetSetDataByCod (&CurrentSet);
+	    ThisSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
+	    ExaSet_GetSetDataByCod (&ThisSet);
 
 	    /* Title for this set */
 	    HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
-	       ExaSet_WriteSetTitle (&CurrentSet);
+	       ExaSet_WriteSetTitle (&ThisSet);
 	    HTM_DIV_End ();
 	   }
 
@@ -519,7 +519,7 @@ static void ExaShe_ShowAnswers (const struct ExaSes_Session *Session,
 			        Vie_ViewType_t ViewType)
   {
    extern const char *Txt_Answers;
-   static struct ExaSet_Set CurrentSet =
+   static struct ExaSet_Set ThisSet =
      {
       .ExaCod = -1L,
       .SetCod = -1L,
@@ -539,19 +539,19 @@ static void ExaShe_ShowAnswers (const struct ExaSes_Session *Session,
    HTM_DIV_Begin ("class=\"Exa_COLS_%u\"",Session->NumCols);
 
       /***** Write one row for each question *****/
-      for (QstInd = 0, CurrentSet.SetCod = -1L;
+      for (QstInd = 0, ThisSet.SetCod = -1L;
 	   QstInd < Print->NumQsts.All;
 	   QstInd++)
 	{
-	 if (Print->PrintedQsts[QstInd].SetCod != CurrentSet.SetCod)
+	 if (Print->PrintedQsts[QstInd].SetCod != ThisSet.SetCod)
 	   {
 	    /* Get data of this set */
-	    CurrentSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
-	    ExaSet_GetSetDataByCod (&CurrentSet);
+	    ThisSet.SetCod = Print->PrintedQsts[QstInd].SetCod;
+	    ExaSet_GetSetDataByCod (&ThisSet);
 
 	    /* Title for this set */
 	    HTM_DIV_Begin ("class=\"Exa_COL_SPAN %s\"",The_GetColorRows ());
-	       ExaSet_WriteSetTitle (&CurrentSet);
+	       ExaSet_WriteSetTitle (&ThisSet);
 	    HTM_DIV_End ();
 	   }
 

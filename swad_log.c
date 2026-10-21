@@ -245,7 +245,7 @@ void Log_GetAndShowLastClicks (void)
 
 	 /* Get country code (row[4]) */
 	 Hie[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-	 Cty_GetCountryNameInLanguage (Hie[Hie_CTY].HieCod,Gbl.Prefs.Language,
+	 Cty_GetCtyNameInLanguage (Hie[Hie_CTY].HieCod,Gbl.Prefs.Language,
 				       Hie[Hie_CTY].FullName);
 
 	 /* Get institution code (row[5]),

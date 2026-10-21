@@ -26,7 +26,6 @@
 /*****************************************************************************/
 
 #define _GNU_SOURCE 		// For asprintf
-// #include <linux/limits.h>	// For PATH_MAX
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stddef.h>		// For NULL
 #include <stdio.h>		// For asprintf
@@ -171,7 +170,7 @@ static void Att_ResetEvents (struct Att_Events *Events)
    Events->Event.AttCod       = -1L;
    Events->ShowDetails        = Lay_DONT_SHOW;
    Events->StrAttCodsSelected = NULL;
-   Events->CurrentPage        = 0;
+   Events->ThisPage           = 0;
   }
 
 /*****************************************************************************/
@@ -188,7 +187,7 @@ void Att_ShowEvents (void)
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
    Grp_GetParMyAllGrps ();
-   Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
    Att_GetListEvents (&Events,Att_NEWEST_FIRST);
@@ -217,9 +216,9 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Events->Num;
-   Pagination.CurrentPage = Events->CurrentPage;
+   Pagination.ThisPage = Events->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Events->CurrentPage = Pagination.CurrentPage;
+   Events->ThisPage = Pagination.ThisPage;
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Events,Att_PutIconsInListOfEvents,Events,
@@ -256,7 +255,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 		     Frm_BeginForm (ActSeeAllAtt);
 			MyAllGrps = Grp_GetParMyAllGrps ();
 			Grp_PutParMyAllGrps (&MyAllGrps);
-			Pag_PutParPagNum (Pag_ATT_EVENTS,Events->CurrentPage);
+			Pag_PutParPagNum (Pag_ATT_EVENTS,Events->ThisPage);
 			Par_PutParOrder ((unsigned) Order);
 
 			HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
@@ -320,7 +319,7 @@ static void Att_ParsMyAllGrps (void *Events)
      {
       Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       Pag_PutParPagNum (Pag_ATT_EVENTS,
-			((struct Att_Events *) Events)->CurrentPage);
+			((struct Att_Events *) Events)->ThisPage);
      }
   }
 
@@ -387,7 +386,7 @@ static void Att_PutParsToCreateNewEvent (void *Events)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ATT_EVENTS,
-			((struct Att_Events *) Events)->CurrentPage);
+			((struct Att_Events *) Events)->ThisPage);
      }
   }
 
@@ -404,8 +403,6 @@ static void Att_PutParsToListUsrsAttendance (void *Events)
       // Par_PutParOrder ((unsigned) ((struct Att_Events *) Events)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      // Pag_PutParPagNum (Pag_ATT_EVENTS,
-      //	           ((struct Att_Events *) Events)->CurrentPage);
      }
   }
 
@@ -648,7 +645,7 @@ static void Att_PutPars (void *Events)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ATT_EVENTS,
-			((struct Att_Events *) Events)->CurrentPage);
+			((struct Att_Events *) Events)->ThisPage);
      }
   }
 
@@ -835,7 +832,7 @@ void Att_AskRemEvent (void)
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
    Grp_GetParMyAllGrps ();
-   Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
@@ -892,7 +889,7 @@ void Att_RemoveEventFromDB (long AttCod)
    Att_DB_RemoveGrpsAssociatedToAnEvent (AttCod);
 
    /***** Remove attendance event *****/
-   Att_DB_RemoveEventFromCurrentCrs (AttCod);
+   Att_DB_RemoveEventFromThisCrs (AttCod);
   }
 
 /*****************************************************************************/
@@ -962,7 +959,7 @@ void Att_ReqCreatOrEditEvent (void)
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
    Grp_GetParMyAllGrps ();
-   Events.CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    OldNewEvent = (Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) > 0 ? OldNew_OLD :
@@ -1010,7 +1007,7 @@ void Att_ReqCreatOrEditEvent (void)
       Par_PutParOrder ((unsigned) Events.SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
-      Pag_PutParPagNum (Pag_ATT_EVENTS,Events.CurrentPage);
+      Pag_PutParPagNum (Pag_ATT_EVENTS,Events.ThisPage);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (Events.Event.Title[0] ? Events.Event.Title :
@@ -1380,7 +1377,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
    /***** Get parameters *****/
    Events->SelectedOrder = Att_GetParAttOrder ();
    Grp_GetParMyAllGrps ();
-   Events->CurrentPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events->ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get data of this attendance event *****/
    Att_GetEventDataByCodAndCheckCrs (&Events->Event);
@@ -2748,7 +2745,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		 {
 	          /* Get if student has accepted enrolment in current course */
-		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
 
 		  /* Write table row of a table with the student attendance */
 		  Att_WriteRowUsrSeveralAttEvents (Events,NumUsr,&UsrDat,ShowPhotos);
@@ -2991,7 +2988,7 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 		  if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
 		    {
 	             /* Get if student has accepted enrolment in current course */
-		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&UsrDat);
+		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
 
 		     /* Write list of attendance events for this student */
 		     Att_ListAttEventsForAStd (Events,NumUsr,&UsrDat);

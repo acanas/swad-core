@@ -41,9 +41,9 @@
 
 long Ctr_DB_CreateCenter (const struct Hie_Node *Ctr,Hie_Status_t Status);
 
-unsigned Ctr_DB_GetBasicListOfCtrsInCurrentIns (MYSQL_RES **mysql_res);
+unsigned Ctr_DB_GetBasicListOfCtrsInThisIns (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetFullListOfCtrsInIns (MYSQL_RES **mysql_res,long HieCod);
-unsigned Ctr_DB_GetFullListOfCtrsInCurrentInsWithNumUsrs (MYSQL_RES **mysql_res);
+unsigned Ctr_DB_GetFullListOfCtrsInThisInsWithNumUsrs (MYSQL_RES **mysql_res);
 unsigned Ctr_DB_GetCtrsWithPendingDegs (MYSQL_RES **mysql_res);
 Exi_Exist_t Ctr_DB_GetCenterDataByCod (MYSQL_RES **mysql_res,long HieCod);
 Exi_Exist_t Ctr_DB_GetCoordByCod (MYSQL_RES **mysql_res,long HieCod);
@@ -74,7 +74,8 @@ void Ctr_DB_UpdateCtrPlc (long HieCod,long NewPlcCod);
 void Ctr_DB_UpdateCtrName (long HieCod,
 			   const char *FldName,const char *NewCtrName);
 void Ctr_DB_UpdateCtrWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1]);
-void Ctr_DB_UpdateCtrPhotoAttribution (long HieCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
+void Ctr_DB_UpdateCtrPhotoAttribution (long HieCod,
+				       const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1]);
 void Ctr_DB_UpdateCtrCoordinate (long HieCod,
 				 const char *CoordField,double NewCoord);
 void Ctr_DB_UpdateCtrStatus (long HieCod,Hie_Status_t NewStatus);
@@ -82,9 +83,10 @@ void Ctr_DB_UpdateCtrStatus (long HieCod,Hie_Status_t NewStatus);
 
 Exi_Exist_t Ctr_DB_CheckIfMapExistsInIns (long HieCod);
 void Ctr_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom);
-void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom);
+void Ctr_DB_GetAvgCoordAndZoomInThisIns (struct Map_Coordinates *Coord,
+					 unsigned *Zoom);
 unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res);
-unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res);
+unsigned Ctr_DB_GetCtrsWithCoordsInThisIns (MYSQL_RES **mysql_res);
 
 unsigned Ctr_DB_GetMyCtrs (MYSQL_RES **mysql_res,long PrtCod);
 Usr_Belong_t Ctr_DB_CheckIfUsrBelongsToCtr (long UsrCod,long HieCod,

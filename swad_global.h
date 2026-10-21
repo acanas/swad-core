@@ -131,7 +131,7 @@ struct Globals
             unsigned Num;		// Number of courses/degrees/centers/institutions/countries
             Cac_Status_t Status;	// List is already filled?
            } Hierarchy[Hie_NUM_LEVELS];	// My hierarchy
-         Usr_Belong_t IBelongToCurrent[Hie_NUM_LEVELS];
+         Usr_Belong_t IBelongToThis[Hie_NUM_LEVELS];
 	 Set_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
@@ -232,13 +232,13 @@ struct Globals
 	 long UsrCod;
 	 Usr_Belong_t Belongs;
 	 Cac_Status_t Status;
-	} UsrBelongsToCurrentCrs;
+	} UsrBelongsToThisCrs;
       struct
 	{
 	 long UsrCod;
 	 Usr_Accepted_t Accepted;
 	 Cac_Status_t Status;
-	} UsrHasAcceptedInCurrentCrs;
+	} UsrHasAcceptedInThisCrs;
       struct
 	{
 	 long UsrCod;
@@ -256,7 +256,7 @@ struct Globals
 	 long UsrCod;
 	 Usr_Share_t Shares;
 	 Cac_Status_t Status;
-	} UsrSharesAnyOfMyGrpsInCurrentCrs;
+	} UsrSharesAnyOfMyGrpsInThisCrs;
       struct
 	{
 	 long UsrCod;
@@ -268,7 +268,7 @@ struct Globals
 	{
 	 Rol_Role_t Role;
 	 Cac_Status_t Status;
-	} MyRoleInCurrentCrs;
+	} MyRoleInThisCrs;
       struct
 	{
 	 long PrjCod;

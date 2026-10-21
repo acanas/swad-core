@@ -74,32 +74,32 @@ static struct Hie_Node *Ins_EditingIns = NULL;	// Static variable to keep the in
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ins_ListInstitutions (void);
-static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args);
-static void Ins_PutIconToEditInstitutions (void);
-static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIns);
-static void Ins_PutHeadInstitutionsForSeeing (Hie_OrderSelectable_t OrderSelectable);
+static void Ins_ListInss (void);
+static void Ins_PutIconsListingInss (__attribute__((unused)) void *Args);
+static void Ins_PutIconToEditInss (void);
+static void Ins_ListOneInsForSeeing (struct Hie_Node *Ins,unsigned NumIns);
+static void Ins_PutHeadInssForSeeing (Hie_OrderSelectable_t OrderSelectable);
 
-static void Ins_EditInstitutionsInternal (void);
-static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args);
+static void Ins_EditInssInternal (void);
+static void Ins_PutIconsEditingInss (__attribute__((unused)) void *Args);
 
-static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Hie_Node *Ins,
-                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToIns);
+static void Ins_GetInsDataFromRow (MYSQL_RES *mysql_res,
+                                   struct Hie_Node *Ins,
+                                   Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToIns);
 
-static void Ins_ListInstitutionsForEdition (void);
+static void Ins_ListInssForEdition (void);
 static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins);
 
 static void Ins_UpdateInsNameDB (long HieCod,const char *FldName,const char *NewName);
 
 static void Ins_ShowAlertAndButtonToGoToIns (void);
 
-static void Ins_PutFormToCreateInstitution (void);
-static void Ins_PutHeadInstitutionsForEdition (void);
+static void Ins_PutFormToCreateIns (void);
+static void Ins_PutHeadInssForEdition (void);
 static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status);
 
-static void Ins_EditingInstitutionConstructor ();
-static void Ins_EditingInstitutionDestructor ();
+static void Ins_EditingInsConstructor ();
+static void Ins_EditingInsDestructor ();
 
 static void Ins_FormToGoToMap (struct Hie_Node *Ins);
 
@@ -184,7 +184,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 	    HTM_TR_Begin (NULL);
 
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",The_GetSuffix (),BgColor);
-		   Ins_DrawInstitLogoAndNameWithLink (&Ins,ActSeeCtr,"CM ICO16x16");
+		   Ins_DrawInsLogoAndNameWithLink (&Ins,ActSeeCtr,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
@@ -209,9 +209,9 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
-				      Pho_ShowPhotos_t ShowPhotos,
-				      const char *IconClass)
+void Ins_DrawInsLogoWithLink (struct Hie_Node *Ins,
+			      Pho_ShowPhotos_t ShowPhotos,
+			      const char *IconClass)
   {
    static Hie_PutLink_t PutOrDontPutLink[Frm_NUM_INSIDE] =
      {
@@ -251,8 +251,8 @@ void Ins_DrawInstitutionLogoWithLink (struct Hie_Node *Ins,
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
 
-void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
-                                        const char *IconClass)
+void Ins_DrawInsLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action,
+                                     const char *IconClass)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -282,7 +282,7 @@ void Ins_DrawInstitLogoAndNameWithLink (struct Hie_Node *Ins,Act_Action_t Action
 /**************** List the institutions of the current country ***************/
 /*****************************************************************************/
 
-void Ins_ShowInssOfCurrentCty (void)
+void Ins_ShowInssOfThisCty (void)
   {
    if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
      {
@@ -290,13 +290,13 @@ void Ins_ShowInssOfCurrentCty (void)
       Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_GetParHieOrder ();
 
       /***** Get list of institutions *****/
-      Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+      Ins_GetFullListOfInss (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
       /***** Write menu to select country *****/
       Hie_WriteMenuHierarchy ();
 
       /***** List institutions *****/
-      Ins_ListInstitutions ();
+      Ins_ListInss ();
 
       /***** Free list of institutions *****/
       Hie_FreeList (Hie_CTY);
@@ -307,7 +307,7 @@ void Ins_ShowInssOfCurrentCty (void)
 /*************** List the institutions of the current country ****************/
 /*****************************************************************************/
 
-static void Ins_ListInstitutions (void)
+static void Ins_ListInss (void)
   {
    extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
@@ -319,7 +319,7 @@ static void Ins_ListInstitutions (void)
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
                  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Ins_PutIconsListingInstitutions,NULL,
+   Box_BoxBegin (Title,Ins_PutIconsListingInss,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -329,13 +329,13 @@ static void Ins_ListInstitutions (void)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading *****/
-	    Ins_PutHeadInstitutionsForSeeing (Hie_ORDER_SELECTABLE);
+	    Ins_PutHeadInssForSeeing (Hie_ORDER_SELECTABLE);
 
 	    /***** Write all institutions and their nuber of users *****/
 	    for (NumIns = 0, The_ResetRowColor ();
 		 NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 		 NumIns++, The_ChangeRowColor ())
-	       Ins_ListOneInstitutionForSeeing (&(Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns]),
+	       Ins_ListOneInsForSeeing (&(Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns]),
 	                                        NumIns + 1);
 
 	 /***** End table *****/
@@ -352,11 +352,11 @@ static void Ins_ListInstitutions (void)
 /*************** Put contextual icons in list of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
+static void Ins_PutIconsListingInss (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit institutions *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
-      Ins_PutIconToEditInstitutions ();
+      Ins_PutIconToEditInss ();
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_INSTITS);
@@ -366,7 +366,7 @@ static void Ins_PutIconsListingInstitutions (__attribute__((unused)) void *Args)
 /******************** Put link (form) to edit institutions *******************/
 /*****************************************************************************/
 
-static void Ins_PutIconToEditInstitutions (void)
+static void Ins_PutIconToEditInss (void)
   {
    Ico_PutContextualIconToEdit (ActEdiIns,NULL,NULL,NULL);
   }
@@ -375,7 +375,7 @@ static void Ins_PutIconToEditInstitutions (void)
 /********************** List one institution for seeing **********************/
 /*****************************************************************************/
 
-static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIns)
+static void Ins_ListOneInsForSeeing (struct Hie_Node *Ins,unsigned NumIns)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
@@ -404,7 +404,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
 
       /***** Institution logo and name *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassStrong,The_GetSuffix (),BgColor);
-	 Ins_DrawInstitLogoAndNameWithLink (Ins,ActSeeCtr,"CT ICO16x16");
+	 Ins_DrawInsLogoAndNameWithLink (Ins,ActSeeCtr,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
@@ -457,7 +457,7 @@ static void Ins_ListOneInstitutionForSeeing (struct Hie_Node *Ins,unsigned NumIn
 /**************** Write header with fields of an institution *****************/
 /*****************************************************************************/
 
-static void Ins_PutHeadInstitutionsForSeeing (Hie_OrderSelectable_t OrderSelectable)
+static void Ins_PutHeadInssForSeeing (Hie_OrderSelectable_t OrderSelectable)
   {
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
@@ -513,26 +513,26 @@ static void Ins_PutHeadInstitutionsForSeeing (Hie_OrderSelectable_t OrderSelecta
 /************************ Put forms to edit institutions *********************/
 /*****************************************************************************/
 
-void Ins_EditInstitutions (void)
+void Ins_EditInss (void)
   {
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Edit institutions *****/
-   Ins_EditInstitutionsInternal ();
+   Ins_EditInssInternal ();
 
    /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
+   Ins_EditingInsDestructor ();
   }
 
-static void Ins_EditInstitutionsInternal (void)
+static void Ins_EditInssInternal (void)
   {
    extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
    char *Title;
 
    /***** Get list of institutions *****/
-   Ins_GetFullListOfInstitutions (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+   Ins_GetFullListOfInss (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
 
    /***** Write menu to select country *****/
    Hie_WriteMenuHierarchy ();
@@ -541,16 +541,16 @@ static void Ins_EditInstitutionsInternal (void)
    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
                  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Ins_PutIconsEditingInstitutions,NULL,
+   Box_BoxBegin (Title,Ins_PutIconsEditingInss,NULL,
                  Hlp_COUNTRY_Institutions,Box_NOT_CLOSABLE);
    free (Title);
 
       /***** Put a form to create a new institution *****/
-      Ins_PutFormToCreateInstitution ();
+      Ins_PutFormToCreateIns ();
 
       /***** Forms to edit current institutions *****/
       if (Gbl.Hierarchy.List[Hie_CTY].Num)
-	 Ins_ListInstitutionsForEdition ();
+	 Ins_ListInssForEdition ();
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -563,7 +563,7 @@ static void Ins_EditInstitutionsInternal (void)
 /************ Put contextual icons in edition of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
+static void Ins_PutIconsEditingInss (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view institutions *****/
    Ico_PutContextualIconToView (ActSeeIns,NULL,NULL,NULL);
@@ -576,7 +576,7 @@ static void Ins_PutIconsEditingInstitutions (__attribute__((unused)) void *Args)
 /******* Get basic list of institutions ordered by name of institution *******/
 /*****************************************************************************/
 
-void Ins_GetBasicListOfInstitutions (long HieCod)
+void Ins_GetBasicListOfInss (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumIns;
@@ -594,7 +594,7 @@ void Ins_GetBasicListOfInstitutions (long HieCod)
 	   NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
+         Ins_GetInsDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
                                    Usr_DONT_GET_NUM_USRS);	// Don't get number of users who claim to belong to this institution
      }
    else
@@ -609,7 +609,7 @@ void Ins_GetBasicListOfInstitutions (long HieCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-void Ins_GetFullListOfInstitutions (long HieCod)
+void Ins_GetFullListOfInss (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumIns;
@@ -627,7 +627,7 @@ void Ins_GetFullListOfInstitutions (long HieCod)
 	   NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
 	   NumIns++)
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
+         Ins_GetInsDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns],
                                    Usr_GET_NUM_USRS);	// Get number of users who claim to belong to this institution
      }
    else
@@ -642,14 +642,14 @@ void Ins_GetFullListOfInstitutions (long HieCod)
 /*****************************************************************************/
 // If ClassLink == NULL ==> do not put link
 
-void Ins_WriteInstitutionNameAndCty (long HieCod)
+void Ins_WriteInsNameAndCty (long HieCod)
   {
    struct Hie_Node Ins;
    char CtyName[Nam_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution short name and country name *****/
    Ins.HieCod = HieCod;
-   Ins_GetShrtNameAndCtyOfInstitution (&Ins,CtyName);
+   Ins_GetShrtNameAndCtyOfIns (&Ins,CtyName);
 
    /***** Write institution short name and country name *****/
    HTM_Txt (Ins.ShrtName);
@@ -661,7 +661,7 @@ void Ins_WriteInstitutionNameAndCty (long HieCod)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
+Err_SuccessOrError_t Ins_GetInsDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
    Err_SuccessOrError_t SuccessOrError = Err_ERROR;
@@ -682,7 +682,7 @@ Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
       if (Ins_DB_GetInsDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS)	// Institution found...
 	{
          /* Get institution data */
-         Ins_GetInstitDataFromRow (mysql_res,Node,
+         Ins_GetInsDataFromRow (mysql_res,Node,
                                    Usr_DONT_GET_NUM_USRS);	// Don't get number of users
 								// who claim to belong to this institution
 
@@ -701,9 +701,9 @@ Err_SuccessOrError_t Ins_GetInstitDataByCod (struct Hie_Node *Node)
 /********** Get data of a center from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Hie_Node *Ins,
-                                      Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToIns)
+static void Ins_GetInsDataFromRow (MYSQL_RES *mysql_res,
+                                   struct Hie_Node *Ins,
+                                   Usr_GetNumUsrs_t GetNumUsrsWhoClaimToBelongToIns)
   {
    MYSQL_ROW row;
 
@@ -750,13 +750,13 @@ static void Ins_GetInstitDataFromRow (MYSQL_RES *mysql_res,
 /******** Get short name and country of an institution from its code *********/
 /*****************************************************************************/
 
-void Ins_FlushCacheFullNameAndCtyOfInstitution (void)
+void Ins_FlushCacheFullNameAndCtyOfIns (void)
   {
    Gbl.Cache.InstitutionShrtNameAndCty.Status = Cac_INVALID;
   }
 
-void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
-                                         char CtyName[Nam_MAX_BYTES_FULL_NAME + 1])
+void Ins_GetShrtNameAndCtyOfIns (struct Hie_Node *Ins,
+                                 char CtyName[Nam_MAX_BYTES_FULL_NAME + 1])
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -816,7 +816,7 @@ void Ins_GetShrtNameAndCtyOfInstitution (struct Hie_Node *Ins,
 /************************ Write selector of institution **********************/
 /*****************************************************************************/
 
-void Ins_WriteSelectorOfInstitution (void)
+void Ins_WriteSelectorOfIns (void)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
@@ -881,7 +881,7 @@ void Ins_WriteSelectorOfInstitution (void)
 /*************************** List all institutions ***************************/
 /*****************************************************************************/
 
-static void Ins_ListInstitutionsForEdition (void)
+static void Ins_ListInssForEdition (void)
   {
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
@@ -912,7 +912,7 @@ static void Ins_ListInstitutionsForEdition (void)
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Ins_PutHeadInstitutionsForEdition ();
+      Ins_PutHeadInssForEdition ();
 
       /***** Write all institutions *****/
       for (NumIns = 0;
@@ -1042,7 +1042,7 @@ static Usr_Can_t Ins_CheckIfICanEdit (struct Hie_Node *Ins)
 /**************************** Remove a institution ***************************/
 /*****************************************************************************/
 
-void Ins_RemoveInstitution (void)
+void Ins_RemoveIns (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centers_and_users_in_the_institution;
@@ -1051,7 +1051,7 @@ void Ins_RemoveInstitution (void)
    char PathIns[PATH_MAX + 1];
 
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Get institution code *****/
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1087,7 +1087,7 @@ void Ins_RemoveInstitution (void)
       For_DB_RemoveForums (Hie_INS,Ins_EditingIns->HieCod);
 
       /***** Remove surveys of the institution *****/
-      Svy_RemoveSurveys (Hie_INS,Ins_EditingIns->HieCod);
+      Svy_RemoveSvys (Hie_INS,Ins_EditingIns->HieCod);
 
       /***** Remove information related to files in institution *****/
       Brw_DB_RemoveInsFiles (Ins_EditingIns->HieCod);
@@ -1097,7 +1097,7 @@ void Ins_RemoveInstitution (void)
 		     Cfg_PATH_INS_PUBLIC,
 		     (unsigned) ((unsigned long) Ins_EditingIns->HieCod % 100),
 		     (unsigned long) Ins_EditingIns->HieCod);
-      Fil_RemoveTree (PathIns);
+      Fil_RemoveFolderAndItsContent (PathIns);
 
       /***** Remove administrators of this institution *****/
       Adm_DB_RemAdmins (Hie_INS,Ins_EditingIns->HieCod);
@@ -1106,7 +1106,7 @@ void Ins_RemoveInstitution (void)
       Ins_DB_RemoveInstitution (Ins_EditingIns->HieCod);
 
       /***** Flush caches *****/
-      Ins_FlushCacheFullNameAndCtyOfInstitution ();
+      Ins_FlushCacheFullNameAndCtyOfIns ();
       Dpt_FlushCacheNumDptsInIns ();
       Hie_FlushCachedNumNodesInHieLvl (Hie_CTR,Hie_INS);	// Number of centers in institution
       Hie_FlushCachedNumNodesInHieLvl (Hie_DEG,Hie_INS);	// Number of degrees in institution
@@ -1128,28 +1128,28 @@ void Ins_RemoveInstitution (void)
 void Ins_RenameInsShort (void)
   {
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Rename institution *****/
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ins_RenameInstitution (Ins_EditingIns,Nam_SHRT_NAME);
+   Ins_RenameIns (Ins_EditingIns,Nam_SHRT_NAME);
   }
 
 void Ins_RenameInsFull (void)
   {
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Rename institution *****/
    Ins_EditingIns->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
-   Ins_RenameInstitution (Ins_EditingIns,Nam_FULL_NAME);
+   Ins_RenameIns (Ins_EditingIns,Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-void Ins_RenameInstitution (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull)
+void Ins_RenameIns (struct Hie_Node *Ins,Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
@@ -1209,7 +1209,7 @@ static void Ins_UpdateInsNameDB (long HieCod,const char *FldName,const char *New
    Ins_DB_UpdateInsName (HieCod,FldName,NewName);
 
    /***** Flush caches *****/
-   Ins_FlushCacheFullNameAndCtyOfInstitution ();
+   Ins_FlushCacheFullNameAndCtyOfIns ();
   }
 
 /*****************************************************************************/
@@ -1223,7 +1223,7 @@ void Ins_ChangeInsWWW (void)
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
@@ -1257,7 +1257,7 @@ void Ins_ChangeInsStatus (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Get parameters from form *****/
    /* Get institution code */
@@ -1285,10 +1285,10 @@ void Ins_ContEditAfterChgIns (void)
    Ins_ShowAlertAndButtonToGoToIns ();
 
    /***** Show the form again *****/
-   Ins_EditInstitutionsInternal ();
+   Ins_EditInssInternal ();
 
    /***** Institution destructor *****/
-   Ins_EditingInstitutionDestructor ();
+   Ins_EditingInsDestructor ();
   }
 
 /*****************************************************************************/
@@ -1313,7 +1313,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
 /****************** Put a form to create a new institution *******************/
 /*****************************************************************************/
 
-static void Ins_PutFormToCreateInstitution (void)
+static void Ins_PutFormToCreateIns (void)
   {
    Act_Action_t NextAction = ActUnk;
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
@@ -1331,7 +1331,7 @@ static void Ins_PutFormToCreateInstitution (void)
    Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Ins_PutHeadInstitutionsForEdition ();
+      Ins_PutHeadInssForEdition ();
 
       HTM_TR_Begin (NULL);
 
@@ -1389,7 +1389,7 @@ static void Ins_PutFormToCreateInstitution (void)
 /**************** Write header with fields of an institution *****************/
 /*****************************************************************************/
 
-static void Ins_PutHeadInstitutionsForEdition (void)
+static void Ins_PutHeadInssForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Short_name_of_the_institution;
@@ -1423,7 +1423,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
 void Ins_ReceiveReqIns (void)
   {
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Receive form to request a new institution *****/
    Ins_ReceiveRequestOrCreateIns ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
@@ -1436,7 +1436,7 @@ void Ins_ReceiveReqIns (void)
 void Ins_ReceiveNewIns (void)
   {
    /***** Institution constructor *****/
-   Ins_EditingInstitutionConstructor ();
+   Ins_EditingInsConstructor ();
 
    /***** Receive form to create a new institution *****/
    Ins_ReceiveRequestOrCreateIns ((Hie_Status_t) 0);
@@ -1473,7 +1473,7 @@ static void Ins_ReceiveRequestOrCreateIns (Hie_Status_t Status)
 				    -1L,
 				    Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
-            Ins_EditingIns->HieCod = Ins_DB_CreateInstitution (Ins_EditingIns,Status);
+            Ins_EditingIns->HieCod = Ins_DB_CreateIns (Ins_EditingIns,Status);
         }
       else	// If there is not a web
          Ale_CreateAlertYouMustSpecifyTheWebAddress ();
@@ -1537,7 +1537,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
       free (Title);
 
       /***** Write heading *****/
-      Ins_PutHeadInstitutionsForSeeing (Hie_ORDER_NOT_SELECTABLE);
+      Ins_PutHeadInssForSeeing (Hie_ORDER_NOT_SELECTABLE);
 
       /***** List the institutions (one row per institution) *****/
       for (NumIns  = 1, The_ResetRowColor ();
@@ -1551,7 +1551,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 	 SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
 
 	 /* Write data of this institution */
-	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);
+	 Ins_ListOneInsForSeeing (&Ins,NumIns);
 	}
 
       /***** End table and box *****/
@@ -1566,7 +1566,7 @@ void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss)
 /********************** Institution constructor/destructor *******************/
 /*****************************************************************************/
 
-static void Ins_EditingInstitutionConstructor (void)
+static void Ins_EditingInsConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Ins_EditingIns != NULL)
@@ -1584,7 +1584,7 @@ static void Ins_EditingInstitutionConstructor (void)
    Ins_EditingIns->WWW[0]      = '\0';
   }
 
-static void Ins_EditingInstitutionDestructor (void)
+static void Ins_EditingInsDestructor (void)
   {
    /***** Free memory used for institution *****/
    if (Ins_EditingIns != NULL)
@@ -1623,7 +1623,7 @@ void Ins_PutParInsCod (void *InsCod)
 /****************** Get and show stats about institutions ********************/
 /*****************************************************************************/
 
-void Ins_GetAndShowInstitutionsStats (Hie_Level_t HieLvl)
+void Ins_GetAndShowInssStats (Hie_Level_t HieLvl)
   {
    extern const char *Hlp_ANALYTICS_Figures_institutions;
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
@@ -1844,7 +1844,7 @@ static void Ins_ShowInss (MYSQL_RES **mysql_res,unsigned NumInss,
 		     NumberThisRow = Ins_GetInsAndStat (&Ins,*mysql_res);
 
 		     /***** Write link to institution *****/
-		     Ins_DrawInstitutionLogoWithLink (&Ins,ShowPhotos,"ICO40x40");
+		     Ins_DrawInsLogoWithLink (&Ins,ShowPhotos,"ICO40x40");
 		     HTM_Unsigned (NumberThisRow);
 
 	          HTM_DIV_End ();

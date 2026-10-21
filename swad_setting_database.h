@@ -58,7 +58,7 @@ void Set_DB_RemUsrFromAllCrssSettings (long UsrCod);
 void Set_DB_RemAllUsrsFromCrsSettings (long HieCod);
 
 //------------------- IP settings (when no user logged) -----------------------
-void Set_DB_UpdateMyIPSettingsForCurrentIP (void);
+void Set_DB_UpdateMyIPSettingsForThisIP (void);
 void Set_DB_UpdateMyIPSettingsForAllMyIPs (void);
 
 Exi_Exist_t Set_DB_GetSettingsFromIP (MYSQL_RES **mysql_res);

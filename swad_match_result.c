@@ -313,7 +313,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
 	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	   {
 	    /***** Show matches results *****/
-	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 	    MchRes_ShowMchResults (Games,Usr_OTHER,-1L,-1L,GamesSelectedCommas);
 	   }
      }
@@ -404,7 +404,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show matches results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 	       MchRes_ShowMchResults (Games,Usr_OTHER,-1L,Games->Game.GamCod,NULL);
 	      }
 
@@ -476,7 +476,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show matches results *****/
-	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (&Gbl.Usrs.Other.UsrDat);
+	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 	       MchRes_ShowMchResults (Games,Usr_OTHER,MchCod,-1L,NULL);
 	      }
 
@@ -1107,13 +1107,13 @@ void MchRes_ShowOneMchResult (void)
 	    Err_NoPermissionExit ();
 
 	 /* Get if user has accepted enrolment */
-	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInCurrentCrs (UsrDat);
+	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
 
 	 /* User */
 	 HTM_TR_Begin (NULL);
 
 	    HTM_TD_Begin ("class=\"RT DAT_STRONG_%s\"",The_GetSuffix ());
-	       HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InCurrentCrs][UsrDat->Sex]);
+	       HTM_Txt (Txt_ROLES_SINGUL_Abc[UsrDat->Roles.InThisCrs][UsrDat->Sex]);
 	       HTM_Colon ();
 	    HTM_TD_End ();
 

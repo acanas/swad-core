@@ -406,7 +406,7 @@ unsigned Deg_DB_GetDegsOfType (MYSQL_RES **mysql_res,long DegTypCod)
 /********* Get degrees belonging to the current center from database *********/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res)
+unsigned Deg_DB_GetDegsOfThisCtrBasic (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get degrees of a center",
@@ -422,7 +422,7 @@ unsigned Deg_DB_GetDegsOfCurrentCtrBasic (MYSQL_RES **mysql_res)
 /********* Get degrees belonging to the current center from database *********/
 /*****************************************************************************/
 
-unsigned Deg_DB_GetDegsOfCurrentCtrFull (MYSQL_RES **mysql_res)
+unsigned Deg_DB_GetDegsOfThisCtrFull (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get degrees of a center",

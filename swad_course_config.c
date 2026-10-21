@@ -59,7 +59,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args);
-static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
+static void CrsCfg_Deg (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void CrsCfg_Year (Frm_PutForm_t PutForm);
 static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm);
 static void CrsCfg_InternalCode (void);
@@ -133,7 +133,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
 	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Degree *****/
-	    CrsCfg_Degree (ViewType,PutFormDeg);
+	    CrsCfg_Deg (ViewType,PutFormDeg);
 
 	    /***** Course name *****/
 	    HieCfg_Name (PutFormName,Hie_CRS,Nam_FULL_NAME);
@@ -207,7 +207,7 @@ void CrsCfg_PrintConfiguration (void)
 /******************** Show degree in course configuration ********************/
 /*****************************************************************************/
 
-static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
+static void CrsCfg_Deg (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
@@ -249,7 +249,7 @@ static void CrsCfg_Degree (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
                break;
             case Frm_PUT_FORM:
 	       /* Get list of degrees of the current center */
-	       Deg_GetListDegsInCurrentCtr ();
+	       Deg_GetListDegsInThisCtr ();
 
 	       /* Put form to select degree */
 	       Frm_BeginForm (ActChgCrsDegCfg);
@@ -474,7 +474,7 @@ void CrsCfg_ChangeCrsDeg (void)
 				 Gbl.Hierarchy.Node[Hie_CRS].Specific.Year) == Exi_DOES_NOT_EXIST)
 	{
 	 /***** Update degree in table of courses *****/
-	 Crs_DB_UpdateDegOfCurrentCrs (NewDeg.HieCod);
+	 Crs_DB_UpdateDegOfThisCrs (NewDeg.HieCod);
 	 Gbl.Hierarchy.Node[Hie_CRS].PrtCod =
 	 Gbl.Hierarchy.Node[Hie_DEG].HieCod = NewDeg.HieCod;
 
@@ -494,14 +494,14 @@ void CrsCfg_ChangeCrsDeg (void)
 /*************** Change the name of a course in configuration ****************/
 /*****************************************************************************/
 
-void CrsCfg_RenameCourseShrt (void)
+void CrsCfg_RenameCrsShrt (void)
   {
-   Crs_RenameCourse (&Gbl.Hierarchy.Node[Hie_CRS],Nam_SHRT_NAME);
+   Crs_RenameCrs (&Gbl.Hierarchy.Node[Hie_CRS],Nam_SHRT_NAME);
   }
 
-void CrsCfg_RenameCourseFull (void)
+void CrsCfg_RenameCrsFull (void)
   {
-   Crs_RenameCourse (&Gbl.Hierarchy.Node[Hie_CRS],Nam_FULL_NAME);
+   Crs_RenameCrs (&Gbl.Hierarchy.Node[Hie_CRS],Nam_FULL_NAME);
   }
 
 /*****************************************************************************/

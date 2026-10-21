@@ -126,14 +126,14 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,
 /****************** Get my last action in the current tab ********************/
 /*****************************************************************************/
 
-Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
+Act_Action_t MFU_GetMyLastActionInThisTab (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumActions;
    unsigned NumAct;
    long ActCod;
    Act_Action_t Action;
-   Act_Action_t MoreRecentActionInCurrentTab = ActUnk;
+   Act_Action_t MoreRecentActionInThisTab = ActUnk;
 
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0)
      {
@@ -155,7 +155,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
 	    if (Act_GetTab (Action) == Gbl.Action.Tab)
 	       if (Act_CheckIfICanExecuteAction (Action) == Usr_CAN)
 		 {
-		  MoreRecentActionInCurrentTab = Action;
+		  MoreRecentActionInThisTab = Action;
 		  break;
 		 }
            }
@@ -165,7 +165,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
       DB_FreeMySQLResult (&mysql_res);
      }
 
-   return MoreRecentActionInCurrentTab;
+   return MoreRecentActionInThisTab;
   }
 
 /*****************************************************************************/
@@ -352,7 +352,7 @@ void MFU_UpdateMFUActions (void)
    Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
 
    /***** Get current score *****/
-   switch (MFU_DB_GetScoreForCurrentAction (&mysql_res,ActCod))
+   switch (MFU_DB_GetScoreForThisAction (&mysql_res,ActCod))
      {
       case Exi_EXISTS:
 	 row = mysql_fetch_row (mysql_res);
@@ -372,7 +372,7 @@ void MFU_UpdateMFUActions (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update score for the current action *****/
-   MFU_DB_UpdateScoreForCurrentAction (ActCod,Score);
+   MFU_DB_UpdateScoreForThisAction (ActCod,Score);
 
    /***** Update score for other actions *****/
    MFU_DB_UpdateScoreForOtherActions (ActCod);

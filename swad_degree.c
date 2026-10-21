@@ -82,29 +82,28 @@ static struct Hie_Node *Deg_EditingDeg = NULL;	// Static variable to keep the de
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes);
-static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg);
-static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes);
-static void Deg_PutHeadDegreesForSeeing (void);
-static void Deg_PutHeadDegreesForEdition (void);
+static void Deg_ListDegsForEdition (const struct DegTyp_DegTypes *DegTypes);
+static Usr_Can_t Deg_CheckIfICanEditADeg (struct Hie_Node *Deg);
+static void Deg_PutFormToCreateDeg (const struct DegTyp_DegTypes *DegTypes);
+static void Deg_PutHeadDegsForSeeing (void);
+static void Deg_PutHeadDegsForEdition (void);
 
-static void Deg_ListDegrees (void);
-static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args);
-static void Deg_PutIconToEditDegrees (void);
-static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg);
+static void Deg_ListDegs (void);
+static void Deg_PutIconsListingDegs (__attribute__((unused)) void *Args);
+static void Deg_PutIconToEditDegs (void);
+static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg);
 
-static void Deg_EditDegreesInternal (void);
-static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args);
+static void Deg_EditDegsInternal (void);
+static void Deg_PutIconsEditingDegs (__attribute__((unused)) void *Args);
 
 static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status);
 
-static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Hie_Node *Deg);
+static void Deg_GetDegDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Deg);
 
 static void Deg_ShowAlertAndButtonToGoToDeg (void);
 
-static void Deg_EditingDegreeConstructor (void);
-static void Deg_EditingDegreeDestructor (void);
+static void Deg_EditingDegConstructor (void);
+static void Deg_EditingDegDestructor (void);
 
 static void Deg_PutParDegCod (void *DegCod);
 
@@ -163,7 +162,7 @@ void Deg_SeeDegWithPendingCrss (void)
 	       /* Degree logo and full name */
 	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
 	                     The_GetSuffix (),BgColor);
-		  Deg_DrawDegreeLogoAndNameWithLink (&Deg,ActSeeCrs,"CM ICO20x20");
+		  Deg_DrawDegLogoAndNameWithLink (&Deg,ActSeeCrs,"CM ICO20x20");
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
@@ -190,8 +189,8 @@ void Deg_SeeDegWithPendingCrss (void)
 /******************** Draw degree logo and name with link ********************/
 /*****************************************************************************/
 
-void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
-                                        const char *IconClass)
+void Deg_DrawDegLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
+                                     const char *IconClass)
   {
    /***** Begin form *****/
    Frm_BeginFormGoTo (Action);
@@ -218,7 +217,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action
 /*************************** Write selector of degree ************************/
 /*****************************************************************************/
 
-void Deg_WriteSelectorOfDegree (void)
+void Deg_WriteSelectorOfDeg (void)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    MYSQL_RES *mysql_res;
@@ -246,7 +245,7 @@ void Deg_WriteSelectorOfDegree (void)
 	 if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
 	   {
 	    /***** Get degrees belonging to the current center from database *****/
-	    NumDegs = Deg_DB_GetDegsOfCurrentCtrBasic (&mysql_res);
+	    NumDegs = Deg_DB_GetDegsOfThisCtrBasic (&mysql_res);
 
 	    /***** Get degrees of this center *****/
 	    for (NumDeg = 0;
@@ -283,21 +282,21 @@ void Deg_WriteSelectorOfDegree (void)
 /************* Show the degrees belonging to the current center **************/
 /*****************************************************************************/
 
-void Deg_ShowDegsOfCurrentCtr (void)
+void Deg_ShowDegsOfThisCtr (void)
   {
    /***** Trivial check *****/
    if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)	// No center selected
       return;
 
    /***** Get list of centers and degrees *****/
-   Ctr_GetBasicListOfCentersInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
-   Deg_GetListDegsInCurrentCtr ();
+   Ctr_GetBasicListOfCtrsInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Deg_GetListDegsInThisCtr ();
 
    /***** Write menu to select country, institution and center *****/
    Hie_WriteMenuHierarchy ();
 
    /***** Show list of degrees *****/
-   Deg_ListDegrees ();
+   Deg_ListDegs ();
 
    /***** Free list of degrees and centers *****/
    Hie_FreeList (Hie_CTR);
@@ -308,7 +307,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 /********************* List current degrees for edition **********************/
 /*****************************************************************************/
 
-static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
+static void Deg_ListDegsForEdition (const struct DegTyp_DegTypes *DegTypes)
   {
    extern const char *Txt_DEGREE_STATUS[Hie_NUM_STATUS_TXT];
    static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
@@ -340,7 +339,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Deg_PutHeadDegreesForEdition ();
+      Deg_PutHeadDegsForEdition ();
 
       /***** List the degrees *****/
       for (NumDeg = 0;
@@ -349,7 +348,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 	{
 	 Deg = &(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
 
-	 ICanEdit = Deg_CheckIfICanEditADegree (Deg);
+	 ICanEdit = Deg_CheckIfICanEditADeg (Deg);
 	 NumCrss = Hie_GetNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 					    Hie_DEG,	// ...in degree
 					    Deg->HieCod);
@@ -491,7 +490,7 @@ static void Deg_ListDegreesForEdition (const struct DegTyp_DegTypes *DegTypes)
 /************** Check if I can edit, remove, etc. a degree *******************/
 /*****************************************************************************/
 
-static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
+static Usr_Can_t Deg_CheckIfICanEditADeg (struct Hie_Node *Deg)
   {
    return Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM ||	// I am a center administrator or higher
           ((Deg->Status & Hie_STATUS_BIT_PENDING) &&	// Degree is not yet activated
@@ -503,7 +502,7 @@ static Usr_Can_t Deg_CheckIfICanEditADegree (struct Hie_Node *Deg)
 /*********************** Put a form to create a new degree *******************/
 /*****************************************************************************/
 
-static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
+static void Deg_PutFormToCreateDeg (const struct DegTyp_DegTypes *DegTypes)
   {
    Act_Action_t NextAction = ActUnk;
    unsigned NumDegTyp;
@@ -523,7 +522,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
    Frm_BeginFormTable (NextAction,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Deg_PutHeadDegreesForEdition ();
+      Deg_PutHeadDegsForEdition ();
 
       HTM_TR_Begin (NULL);
 
@@ -597,7 +596,7 @@ static void Deg_PutFormToCreateDegree (const struct DegTyp_DegTypes *DegTypes)
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
-static void Deg_PutHeadDegreesForSeeing (void)
+static void Deg_PutHeadDegsForSeeing (void)
   {
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    extern const char *Txt_Type;
@@ -620,7 +619,7 @@ static void Deg_PutHeadDegreesForSeeing (void)
 /******************** Write header with fields of a degree *******************/
 /*****************************************************************************/
 
-static void Deg_PutHeadDegreesForEdition (void)
+static void Deg_PutHeadDegsForEdition (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Short_name_of_the_degree;
@@ -668,7 +667,7 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 /************** List degrees belonging to the current center *****************/
 /*****************************************************************************/
 
-static void Deg_ListDegrees (void)
+static void Deg_ListDegs (void)
   {
    extern const char *Hlp_CENTER_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
@@ -680,7 +679,7 @@ static void Deg_ListDegrees (void)
    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
 		 Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Deg_PutIconsListingDegrees,NULL,
+   Box_BoxBegin (Title,Deg_PutIconsListingDegs,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 
@@ -690,13 +689,13 @@ static void Deg_ListDegrees (void)
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Heading *****/
-	    Deg_PutHeadDegreesForSeeing ();
+	    Deg_PutHeadDegsForSeeing ();
 
 	    /***** List the degrees *****/
 	    for (NumDeg = 0;
 		 NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 		 NumDeg++)
-	       Deg_ListOneDegreeForSeeing (&(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]),
+	       Deg_ListOneDegForSeeing (&(Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]),
 					   NumDeg + 1);
 
 	 /***** End table *****/
@@ -713,11 +712,11 @@ static void Deg_ListDegrees (void)
 /***************** Put contextual icons in list of degrees *******************/
 /*****************************************************************************/
 
-static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
+static void Deg_PutIconsListingDegs (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit degrees *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
-      Deg_PutIconToEditDegrees ();
+      Deg_PutIconToEditDegs ();
 
    /***** Put icon to view degree types *****/
    DegTyp_PutIconToViewDegTypes ();
@@ -730,7 +729,7 @@ static void Deg_PutIconsListingDegrees (__attribute__((unused)) void *Args)
 /********************** Put link (form) to edit degrees **********************/
 /*****************************************************************************/
 
-static void Deg_PutIconToEditDegrees (void)
+static void Deg_PutIconToEditDegs (void)
   {
    Ico_PutContextualIconToEdit (ActEdiDeg,NULL,NULL,NULL);
   }
@@ -739,7 +738,7 @@ static void Deg_PutIconToEditDegrees (void)
 /************************ List one degree for seeing *************************/
 /*****************************************************************************/
 
-static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
+static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
   {
    extern const char *Txt_DEGREE_With_courses;
    extern const char *Txt_DEGREE_Without_courses;
@@ -793,7 +792,7 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       /***** Degree logo and name *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
                     TxtClassStrong,The_GetSuffix (),BgColor);
-	 Deg_DrawDegreeLogoAndNameWithLink (Deg,ActSeeCrs,"CM ICO20x20");
+	 Deg_DrawDegLogoAndNameWithLink (Deg,ActSeeCrs,"CM ICO20x20");
       HTM_TD_End ();
 
       /***** Type of degree *****/
@@ -828,19 +827,19 @@ static void Deg_ListOneDegreeForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
 /*************************** Put forms to edit degrees ***********************/
 /*****************************************************************************/
 
-void Deg_EditDegrees (void)
+void Deg_EditDegs (void)
   {
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Edit degrees *****/
-   Deg_EditDegreesInternal ();
+   Deg_EditDegsInternal ();
 
    /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
+   Deg_EditingDegDestructor ();
   }
 
-static void Deg_EditDegreesInternal (void)
+static void Deg_EditDegsInternal (void)
   {
    extern const char *Hlp_CENTER_Degrees;
    extern const char *Txt_Degrees_of_CENTER_X;
@@ -852,7 +851,7 @@ static void Deg_EditDegreesInternal (void)
    DegTyp_GetListDegTypes (&DegTypes,Hie_SYS,DegTyp_ORDER_BY_DEG_TYPE);
 
    /***** Get list of degrees in the current center *****/
-   Deg_GetListDegsInCurrentCtr ();
+   Deg_GetListDegsInThisCtr ();
 
    /***** Write menu to select country, institution and center *****/
    Hie_WriteMenuHierarchy ();
@@ -861,18 +860,18 @@ static void Deg_EditDegreesInternal (void)
    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
 		 Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,Deg_PutIconsEditingDegrees,NULL,
+   Box_BoxBegin (Title,Deg_PutIconsEditingDegs,NULL,
                  Hlp_CENTER_Degrees,Box_NOT_CLOSABLE);
    free (Title);
 
       if (Deg_DB_GetNumDegreeTypes (Hie_SYS))
 	{
 	 /***** Put a form to create a new degree *****/
-	 Deg_PutFormToCreateDegree (&DegTypes);
+	 Deg_PutFormToCreateDeg (&DegTypes);
 
 	 /***** Forms to edit current degrees *****/
 	 if (Gbl.Hierarchy.List[Hie_CTR].Num)
-	    Deg_ListDegreesForEdition (&DegTypes);
+	    Deg_ListDegsForEdition (&DegTypes);
 	}
       else	// No degree types
 	{
@@ -895,7 +894,7 @@ static void Deg_EditDegreesInternal (void)
 /**************** Put contextual icons in edition of degrees *****************/
 /*****************************************************************************/
 
-static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
+static void Deg_PutIconsEditingDegs (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view degrees *****/
    Ico_PutContextualIconToView (ActSeeDeg,NULL,NULL,NULL);
@@ -911,7 +910,7 @@ static void Deg_PutIconsEditingDegrees (__attribute__((unused)) void *Args)
 /*********************** Put icon to view degrees ****************************/
 /*****************************************************************************/
 
-void Deg_PutIconToViewDegrees (void)
+void Deg_PutIconToViewDegs (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeeDeg,NULL,NULL,NULL,
 				  "graduation-cap.svg",Ico_BLACK);
@@ -938,7 +937,7 @@ void Deg_GetListAllDegsWithStds (struct Hie_List *Degs)
       for (NumDeg = 0;
 	   NumDeg < Degs->Num;
 	   NumDeg++)
-         Deg_GetDegreeDataFromRow (mysql_res,&Degs->Lst[NumDeg]);
+         Deg_GetDegDataFromRow (mysql_res,&Degs->Lst[NumDeg]);
      }
    else
       Degs->Lst = NULL;
@@ -951,13 +950,13 @@ void Deg_GetListAllDegsWithStds (struct Hie_List *Degs)
 /************ Get a list with the degrees of the current center **************/
 /*****************************************************************************/
 
-void Deg_GetListDegsInCurrentCtr (void)
+void Deg_GetListDegsInThisCtr (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumDeg;
 
    /***** Get degrees of the current center from database *****/
-   Gbl.Hierarchy.List[Hie_CTR].Num = Deg_DB_GetDegsOfCurrentCtrFull (&mysql_res);
+   Gbl.Hierarchy.List[Hie_CTR].Num = Deg_DB_GetDegsOfThisCtrFull (&mysql_res);
 
    /***** Count number of rows in result *****/
    if (Gbl.Hierarchy.List[Hie_CTR].Num) // Degrees found...
@@ -971,7 +970,7 @@ void Deg_GetListDegsInCurrentCtr (void)
       for (NumDeg = 0;
 	   NumDeg < Gbl.Hierarchy.List[Hie_CTR].Num;
 	   NumDeg++)
-         Deg_GetDegreeDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
+         Deg_GetDegDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_CTR].Lst[NumDeg]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -999,7 +998,7 @@ void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs)
 void Deg_ReceiveReqDeg (void)
   {
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Receive form to request a new degree *****/
    Deg_ReceiveRequestOrCreateDeg ((Hie_Status_t) Hie_STATUS_BIT_PENDING);
@@ -1012,7 +1011,7 @@ void Deg_ReceiveReqDeg (void)
 void Deg_ReceiveNewDeg (void)
   {
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Receive form to create a new degree *****/
    Deg_ReceiveRequestOrCreateDeg ((Hie_Status_t) 0);
@@ -1073,7 +1072,7 @@ void Deg_RemoveDeg (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Get degree code *****/
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1090,7 +1089,7 @@ void Deg_RemoveDeg (void)
    else	// Degree has no courses ==> remove it
      {
       /***** Remove degree *****/
-      Deg_RemoveDegreeCompletely (Deg_EditingDeg->HieCod);
+      Deg_RemoveDegCompletely (Deg_EditingDeg->HieCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -1105,7 +1104,7 @@ void Deg_RemoveDeg (void)
 /*****************************************************************************/
 // Returns if degree found
 
-Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node)
+Err_SuccessOrError_t Deg_GetDegDataByCod (struct Hie_Node *Node)
   {
    MYSQL_RES *mysql_res;
    Err_SuccessOrError_t SuccessOrError = Err_ERROR;
@@ -1126,7 +1125,7 @@ Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node)
       if (Deg_DB_GetDegreeDataByCod (&mysql_res,Node->HieCod) == Exi_EXISTS) // Degree found...
 	{
 	 /***** Get data of degree *****/
-	 Deg_GetDegreeDataFromRow (mysql_res,Node);
+	 Deg_GetDegDataFromRow (mysql_res,Node);
 
          /* Set return value */
 	 SuccessOrError = Err_SUCCESS;
@@ -1143,8 +1142,7 @@ Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node)
 /********** Get data of a degree from a row resulting of a query *************/
 /*****************************************************************************/
 
-static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
-                                      struct Hie_Node *Deg)
+static void Deg_GetDegDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Deg)
   {
    MYSQL_ROW row;
 
@@ -1176,7 +1174,7 @@ static void Deg_GetDegreeDataFromRow (MYSQL_RES *mysql_res,
 /***************************** Remove a degree *******************************/
 /*****************************************************************************/
 
-void Deg_RemoveDegreeCompletely (long HieCod)
+void Deg_RemoveDegCompletely (long HieCod)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
@@ -1197,7 +1195,7 @@ void Deg_RemoveDegreeCompletely (long HieCod)
          Err_WrongCourseExit ();
 
       /* Remove course */
-      Crs_RemoveCourseCompletely (HieCods[Hie_CRS]);
+      Crs_RemoveCrsCompletely (HieCods[Hie_CRS]);
      }
 
    /* Free structure that stores the query result */
@@ -1207,7 +1205,7 @@ void Deg_RemoveDegreeCompletely (long HieCod)
    For_DB_RemoveForums (Hie_DEG,HieCods[Hie_DEG]);
 
    /***** Remove surveys of the degree *****/
-   Svy_RemoveSurveys (Hie_DEG,HieCods[Hie_DEG]);
+   Svy_RemoveSvys (Hie_DEG,HieCods[Hie_DEG]);
 
    /***** Remove information related to files in degree *****/
    Brw_DB_RemoveDegFiles (HieCods[Hie_DEG]);
@@ -1217,7 +1215,7 @@ void Deg_RemoveDegreeCompletely (long HieCod)
 		  Cfg_PATH_DEG_PUBLIC,
 		  (unsigned) ((unsigned long) HieCods[Hie_DEG] % 100),
 		  (unsigned long) HieCods[Hie_DEG]);
-   Fil_RemoveTree (PathDeg);
+   Fil_RemoveFolderAndItsContent (PathDeg);
 
    /***** Remove administrators of this degree *****/
    Adm_DB_RemAdmins (Hie_DEG,HieCods[Hie_DEG]);
@@ -1239,7 +1237,7 @@ void Deg_RemoveDegreeCompletely (long HieCod)
 void Deg_RenameDegShrt (void)
   {
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Rename degree *****/
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1249,7 +1247,7 @@ void Deg_RenameDegShrt (void)
 void Deg_RenameDegFull (void)
   {
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Rename degree *****/
    Deg_EditingDeg->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
@@ -1322,7 +1320,7 @@ void Deg_ChangeDegTyp (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Get parameters from form *****/
    /* Get degree code */
@@ -1350,7 +1348,7 @@ void Deg_ChangeDegWWW (void)
    char NewWWW[WWW_MAX_BYTES_WWW + 1];
 
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Get parameters from form *****/
    /* Get the code of the degree */
@@ -1384,7 +1382,7 @@ void Deg_ChangeDegStatus (void)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Degree constructor *****/
-   Deg_EditingDegreeConstructor ();
+   Deg_EditingDegConstructor ();
 
    /***** Get parameters from form *****/
    /* Get degree code */
@@ -1412,10 +1410,10 @@ void Deg_ContEditAfterChgDeg (void)
    Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/
-   Deg_EditDegreesInternal ();
+   Deg_EditDegsInternal ();
 
    /***** Degree destructor *****/
-   Deg_EditingDegreeDestructor ();
+   Deg_EditingDegDestructor ();
   }
 
 /*****************************************************************************/
@@ -1491,7 +1489,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
       free (Title);
 
 	 /***** Write heading *****/
-	 Deg_PutHeadDegreesForSeeing ();
+	 Deg_PutHeadDegsForSeeing ();
 
 	 /***** List the degrees (one row per degree) *****/
 	 for (NumDeg  = 1, The_ResetRowColor ();
@@ -1505,7 +1503,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 	    SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    /* Write data of this degree */
-	    Deg_ListOneDegreeForSeeing (&Deg,NumDeg);
+	    Deg_ListOneDegForSeeing (&Deg,NumDeg);
 	   }
 
       /***** End table and box *****/
@@ -1520,7 +1518,7 @@ void Deg_ListDegsFound (MYSQL_RES **mysql_res,unsigned NumDegs)
 /************************ Degree constructor/destructor **********************/
 /*****************************************************************************/
 
-static void Deg_EditingDegreeConstructor (void)
+static void Deg_EditingDegConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Deg_EditingDeg != NULL)
@@ -1541,7 +1539,7 @@ static void Deg_EditingDegreeConstructor (void)
    Deg_EditingDeg->WWW[0]          = '\0';
   }
 
-static void Deg_EditingDegreeDestructor (void)
+static void Deg_EditingDegDestructor (void)
   {
    /***** Free memory used for degree *****/
    if (Deg_EditingDeg != NULL)

@@ -50,29 +50,29 @@
 
 void Deg_SeeDegWithPendingCrss (void);
 
-void Deg_DrawDegreeLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
-                                        const char *IconClass);
+void Deg_DrawDegLogoAndNameWithLink (struct Hie_Node *Deg,Act_Action_t Action,
+                                     const char *IconClass);
 
-void Deg_WriteSelectorOfDegree (void);
+void Deg_WriteSelectorOfDeg (void);
 
-void Deg_ShowDegsOfCurrentCtr (void);
+void Deg_ShowDegsOfThisCtr (void);
 
 unsigned Deg_ConvStrToYear (const char *StrYear);
 
-void Deg_EditDegrees (void);
+void Deg_EditDegs (void);
 
-void Deg_PutIconToViewDegrees (void);
+void Deg_PutIconToViewDegs (void);
 
 void Deg_GetListAllDegsWithStds (struct Hie_List *Degs);
-void Deg_GetListDegsInCurrentCtr (void);
+void Deg_GetListDegsInThisCtr (void);
 void Deg_FreeListAllDegsWithStds (struct Hie_List *Degs);
 
 void Deg_ReceiveReqDeg (void);
 void Deg_ReceiveNewDeg (void);
 void Deg_RemoveDeg (void);
 
-Err_SuccessOrError_t Deg_GetDegreeDataByCod (struct Hie_Node *Node);
-void Deg_RemoveDegreeCompletely (long HieCod);
+Err_SuccessOrError_t Deg_GetDegDataByCod (struct Hie_Node *Node);
+void Deg_RemoveDegCompletely (long HieCod);
 void Deg_RenameDegShrt (void);
 void Deg_RenameDegFull (void);
 void Deg_RenameDegree (struct Hie_Node *Deg,Nam_ShrtOrFullName_t ShrtOrFull);

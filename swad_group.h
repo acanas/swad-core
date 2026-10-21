@@ -215,7 +215,7 @@ void Grp_ShowLstGrpsToEditAssociated (Grp_WhichIsAssociatedToGrp_t WhichIsAssoci
 void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
 
-void Grp_GetListGrpTypesInCurrentCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
+void Grp_GetListGrpTypesInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes);
 void Grp_FreeListGrpTypesAndGrps (void);
 
 void Grp_GetGroupTypeDataByCod (struct GroupType *GrpTyp);
@@ -227,8 +227,8 @@ void Grp_GetGroupDataByCod (long *HieCod,long *GrpTypCod,struct Group *Grp);
 
 void Grp_FlushCacheIBelongToGrp (void);
 Usr_Belong_t Grp_GetIfIBelongToGrp (long GrpCod);
-void Grp_FlushCacheUsrSharesAnyOfMyGrpsInCurrentCrs (void);
-Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInCurrentCrs (const struct Usr_Data *UsrDat);
+void Grp_FlushCacheUsrSharesAnyOfMyGrpsInThisCrs (void);
+Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (const struct Usr_Data *UsrDat);
 
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsUsrBelongsTo (long UsrCod,long GrpTypCod,char *GroupNames);

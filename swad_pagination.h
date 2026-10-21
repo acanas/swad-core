@@ -63,7 +63,7 @@ struct Pag_Pagination	// Used for threads and messages pagination
    unsigned NumItems;
    unsigned StartPage;
    unsigned LeftPage;
-   unsigned CurrentPage;	// 1, 2, 3...
+   unsigned ThisPage;	// 1, 2, 3...
    unsigned RightPage;
    unsigned EndPage;
    unsigned NumPags;

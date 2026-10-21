@@ -55,8 +55,8 @@ void Con_RefreshConnected (void);
 
 void Con_ShowConnectedUsrs (void);
 void Con_ShowGlobalConnectedUsrs (void);
-void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void);
-void Con_ShowConnectedUsrsBelongingToCurrentCrs (void);
+void Con_ComputeConnectedUsrsBelongingToThisCrs (void);
+void Con_ShowConnectedUsrsBelongingToThisCrs (void);
 
 void Con_WriteScriptClockConnected (void);
 

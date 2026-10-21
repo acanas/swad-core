@@ -40,7 +40,7 @@ unsigned Rol_GetNumAvailableRoles (void);
 Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles);
 Rol_Role_t Rol_GetMyMaxRoleIn (Hie_Level_t HieLvl,long HieCod);
 
-void Rol_FlushCacheMyRoleInCurrentCrs (void);
+void Rol_FlushCacheMyRoleInThisCrs (void);
 Rol_Role_t Rol_GetMyRoleInCrs (long HieCod);
 void Rol_FlushCacheRoleUsrInCrs (void);
 Rol_Role_t Rol_GetRoleUsrInCrs (long UsrCod,long HieCod);

@@ -106,20 +106,20 @@ void PrjCfg_ShowFormConfig (void)
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Configure_projects;
    extern const char *Txt_Rubrics;
-   struct Prj_Projects Projects;
+   struct Prj_Projects Prjs;
 
    /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Prjs);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Configure_projects,Prj_PutIconsListProjects,&Projects,
+   Box_BoxBegin (Txt_Configure_projects,Prj_PutIconsListPrjs,&Prjs,
                  Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
 
       /***** Projects are editable by non-editing teachers? *****/
       Frm_BeginForm (ActChgNETCanCrePrj);
 	 HTM_FIELDSET_Begin (NULL);
 	    HTM_LEGEND (Act_GetActionText (ActChgPrj));
-	    PrjCfg_ShowFormNETCanCreate (&Projects.Config);
+	    PrjCfg_ShowFormNETCanCreate (&Prjs.Config);
 	 HTM_FIELDSET_End ();
       Frm_EndForm ();
 
@@ -159,16 +159,16 @@ static void PrjCfg_ShowFormNETCanCreate (const struct PrjCfg_Config *Config)
 
 void PrjCfg_ChangeNETCanCreate (void)
   {
-   struct Prj_Projects Projects;
+   struct Prj_Projects Prjs;
 
    /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Prjs);
 
    /***** Get non-editing teachers can create new projects or not *****/
-   Projects.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
+   Prjs.Config.NETCanCreate = PrjCfg_GetIfNETCanCreateFromForm ();
 
    /***** Update database *****/
-   Prj_DB_UpdateNETCanCreate (&Projects);
+   Prj_DB_UpdateNETCanCreate (&Prjs);
 
    /***** Show again the form to configure projects *****/
    PrjCfg_ShowFormConfig ();

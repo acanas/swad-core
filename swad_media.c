@@ -792,10 +792,10 @@ static void Med_GetAndProcessFileFromForm (const char *ParFile,
 
    /***** Create private directories if not exist *****/
    /* Create private directory for images/videos if it does not exist */
-   Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
 
    /* Create temporary private directory for images/videos if it does not exist */
-   Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_TMP_PRIVATE);
+   Fil_CreateFolderIfNotExists (Cfg_PATH_MEDIA_TMP_PRIVATE);
 
    /***** End the reception of original not processed media
           (it may be very big) into a temporary file *****/
@@ -1347,7 +1347,7 @@ void Med_MoveMediaToDefinitiveDir (struct Med_Media *Media)
 			   Cfg_PATH_MEDIA_PRIVATE,
 			   Media->Name[0],
 			   Media->Name[1]);
-	    Fil_CreateDirIfNotExists (PathMedPriv);
+	    Fil_CreateFolderIfNotExists (PathMedPriv);
 
 	    /***** Move files *****/
 	    switch (Media->Type)
@@ -1905,14 +1905,14 @@ long Med_CloneMedia (const struct Med_Media *MediaSrc)
       case Med_OGG:
 	 /***** Create private directories if not exist *****/
 	 /* Create private directory for images/videos if it does not exist */
-	 Fil_CreateDirIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
+	 Fil_CreateFolderIfNotExists (Cfg_PATH_MEDIA_PRIVATE);
 
 	 /* Build paths to private directories */
 	 Fil_BuildPath (MediaPriv[Med_SRC].Path,"%s/%c%c",
 		        Cfg_PATH_MEDIA_PRIVATE,MediaSrc->Name[0],MediaSrc->Name[1]);
 	 Fil_BuildPath (MediaPriv[Med_DST].Path,"%s/%c%c",
 		        Cfg_PATH_MEDIA_PRIVATE,MediaDst.Name[0],MediaDst.Name[1]);
-	 Fil_CreateDirIfNotExists (MediaPriv[Med_DST].Path);
+	 Fil_CreateFolderIfNotExists (MediaPriv[Med_DST].Path);
 
 	 /* Build paths to private files */
 	 Fil_BuildPath (MediaPriv[Med_SRC].FullPath,"%s/%s.%s",

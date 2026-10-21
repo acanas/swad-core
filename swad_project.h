@@ -190,7 +190,7 @@ struct Prj_Projects
    unsigned Num;		// Number of projects
    long *LstPrjCods;		// List of project codes
    Prj_Order_t SelectedOrder;
-   unsigned CurrentPage;
+   unsigned ThisPage;
    unsigned NumIndex;		// Index shown in first column of projects list
    struct Prj_Project Prj;	// Selected/current project
   };
@@ -202,34 +202,34 @@ struct Prj_Projects
 void Prj_SetPrjCod (long PrjCod);
 long Prj_GetPrjCod (void);
 
-void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Projects);
+void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Prjs);
 
 void Prj_ListUsrsToSelect (void);
 void Prj_SeeAllProjects (void);
-void Prj_ShowProjects (struct Prj_Projects *Projects);
+void Prj_ShowProjects (struct Prj_Projects *Prjs);
 void Prj_ShowTableSelectedPrjs (void);
 
-Usr_Can_t Prj_CheckIfICanViewProjectDocuments (long PrjCod);
-Usr_Can_t Prj_CheckIfICanViewProjectAssessment (long PrjCod);
+Usr_Can_t Prj_CheckIfICanViewPrjDocs (long PrjCod);
+Usr_Can_t Prj_CheckIfICanViewPrjAss (long PrjCod);
 
-void Prj_PutCurrentPars (void *Projects);
+void Prj_PutCurrentPars (void *Prjs);
 void Prj_PutPars (const struct Prj_Filter *Filter,
                   Prj_Order_t Order,
                   unsigned NumPage,
                   long PrjCod,
                   Usr_UseListSelectedUsrs UseListSelectedUsrs);
-void Prj_GetPars (struct Prj_Projects *Projects,
+void Prj_GetPars (struct Prj_Projects *Prjs,
 		  Usr_UseListSelectedUsrs UseListSelectedUsrs);
 
-void Prj_PutIconsListProjects (void *Projects);
+void Prj_PutIconsListPrjs (void *Prjs);
 
-void Prj_ShowOneProject (void);
-void Prj_ShowBoxWithOneProject (struct Prj_Projects *Projects);
+void Prj_ShowOnePrj (void);
+void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs);
 
-void Prj_PrintOneProject (void);
+void Prj_PrintOnePrj (void);
 
-void Prj_FlushCacheMyRolesInProject (void);
-unsigned Prj_GetMyRolesInProject (long PrjCod);
+void Prj_FlushCacheMyRolesInPrj (void);
+unsigned Prj_GetMyRolesInPrj (long PrjCod);
 
 void Prj_ReqAddStds (void);
 void Prj_ReqAddTuts (void);
@@ -250,34 +250,34 @@ void Prj_RemEvl (void);
 void Prj_ReqCreatePrj (void);
 void Prj_ReqEditPrj (void);
 
-void Prj_AllocMemProject (struct Prj_Project *Prj);
-void Prj_FreeMemProject (struct Prj_Project *Prj);
+void Prj_AllocMemPrj (struct Prj_Project *Prj);
+void Prj_FreeMemPrj (struct Prj_Project *Prj);
 
-void Prj_GetProjectDataByCod (struct Prj_Project *Prj);
-void Prj_FreeListProjects (struct Prj_Projects *Projects);
+void Prj_GetPrjDataByCod (struct Prj_Project *Prj);
+void Prj_FreeListPrjs (struct Prj_Projects *Prjs);
 
-void Prj_ReqRemProject (void);
-void Prj_RemoveProject (void);
-void Prj_HideProject (void);
-void Prj_UnhideProject (void);
+void Prj_ReqRemPrj (void);
+void Prj_RemovePrj (void);
+void Prj_HidePrj (void);
+void Prj_UnhidePrj (void);
 
-void Prj_ReceiveProject (void);
+void Prj_ReceivePrj (void);
 
 void Prj_ReqLockSelectedPrjsEdition (void);
 void Prj_ReqUnloSelectedPrjsEdition (void);
 void Prj_LockSelectedPrjsEdition (void);
 void Prj_UnloSelectedPrjsEdition (void);
-void Prj_LockProjectEdition (void);
-void Prj_UnloProjectEdition (void);
+void Prj_LockPrjEdition (void);
+void Prj_UnloPrjEdition (void);
 
 void Prj_ChangeReviewStatus (void);
 
 void Prj_ChangeCriterionScore (void);
 
-void Prj_RemoveCrsProjects (long HieCod);
-void Prj_RemoveUsrFromProjects (long UsrCod);
+void Prj_RemoveCrsPrjs (long HieCod);
+void Prj_RemoveUsrFromPrjs (long UsrCod);
 
 //-------------------------------- Figures ------------------------------------
-void Prj_GetAndShowProjectsStats (Hie_Level_t HieLvl);
+void Prj_GetAndShowPrjsStats (Hie_Level_t HieLvl);
 
 #endif

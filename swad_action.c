@@ -114,7 +114,7 @@ Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
    if (Gbl.Hierarchy.HieLvl == Hie_UNK)
       return Usr_CAN_NOT;
 
-   return (ActLst_Actions[Action].Permission[Gbl.Hierarchy.HieLvl][Gbl.Usrs.Me.IBelongToCurrent[Gbl.Hierarchy.HieLvl]]
+   return (ActLst_Actions[Action].Permission[Gbl.Hierarchy.HieLvl][Gbl.Usrs.Me.IBelongToThis[Gbl.Hierarchy.HieLvl]]
            & (1 << Gbl.Usrs.Me.Role.Logged)) != 0 ? Usr_CAN :
 						    Usr_CAN_NOT;
   }
@@ -249,11 +249,11 @@ void Act_AdjustActionWhenClickOnMenu (void)
 	  - the first option allowed *****/
 
    /* Get my last action in current tab */
-   Action = Gbl.Usrs.Me.Logged ? MFU_GetMyLastActionInCurrentTab () :
+   Action = Gbl.Usrs.Me.Logged ? MFU_GetMyLastActionInThisTab () :
 				 ActUnk;
    if (Action == ActUnk)
       /* Get the first option allowed */
-      Action = Mnu_GetFirstActionAvailableInCurrentTab ();
+      Action = Mnu_GetFirstActionAvailableInThisTab ();
 
    Gbl.Action.Act = Action == ActUnk ? (Gbl.Usrs.Me.Logged ? ActSeeGblTL :	// Default action if logged
 							     ActFrmLogIn) :	// Default action if not logged
@@ -292,7 +292,7 @@ void Act_AdjustCurrentAction (void)
    if (!Gbl.Usrs.Me.UsrDat.Password[0])
      {
       Gbl.Action.Act = ActFrmMyAcc;
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
       return;
      }
 
@@ -306,7 +306,7 @@ void Act_AdjustCurrentAction (void)
       if (Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword) == Err_ERROR)
         {
          Gbl.Action.Act = ActFrmMyAcc;
-         Tab_SetCurrentTab ();
+         Tab_SetThisTab ();
          return;
         }
 
@@ -319,7 +319,7 @@ void Act_AdjustCurrentAction (void)
        !Gbl.Usrs.Me.UsrDat.Email[0])
      {
       Gbl.Action.Act = ActFrmMyAcc;
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
       return;
      }
 
@@ -350,7 +350,7 @@ void Act_AdjustCurrentAction (void)
          Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
      {
       Gbl.Action.Act = ActFrmMyAcc;
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
       return;
      }
 
@@ -364,12 +364,12 @@ void Act_AdjustCurrentAction (void)
        Gbl.Usrs.Me.UsrDat.ExPrfVisibility == Pri_VISIBILITY_UNKNOWN)
      {
       Gbl.Action.Act = ActReqEdiSet;
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
       return;
      }
 
    /***** If I belong to current course *****/
-   if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG)
+   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG)
      {
       /***** Adjustment 6:
              -------------
@@ -378,7 +378,7 @@ void Act_AdjustCurrentAction (void)
              is to show a form to ask for enrolment *****/
       if (Gbl.Usrs.Me.UsrDat.Accepted == Usr_HAS_NOT_ACCEPTED)
 	{
-	 switch (Gbl.Usrs.Me.UsrDat.Roles.InCurrentCrs)
+	 switch (Gbl.Usrs.Me.UsrDat.Roles.InThisCrs)
 	   {
 	    case Rol_STD:
 	       Gbl.Action.Act = ActReqAccEnrStd;
@@ -390,7 +390,7 @@ void Act_AdjustCurrentAction (void)
 	    default:
 	       break;
 	   }
-	 Tab_SetCurrentTab ();
+	 Tab_SetThisTab ();
 	 return;
 	}
 
@@ -408,7 +408,7 @@ void Act_AdjustCurrentAction (void)
 	       if (Grp_DB_CheckIfAvailableGrpTyp (-1L))	// This query may be slow
 		 {
 		  Gbl.Action.Act = ActReqSelAllGrp;
-		  Tab_SetCurrentTab ();
+		  Tab_SetThisTab ();
 		  return;
 		 }
 
@@ -428,7 +428,7 @@ void Act_AdjustCurrentAction (void)
 		     /* If limit of clicks has been reached,
 			the only action possible is show a form to send my photo */
 		     Gbl.Action.Act = ActReqMyPho;
-		     Tab_SetCurrentTab ();
+		     Tab_SetThisTab ();
 		     return;
 		    }
 
@@ -444,7 +444,7 @@ void Act_AdjustCurrentAction (void)
 	    if (TstCfg_CheckIfPluggableIsUnknownAndCrsHasTests ())
 	      {
 	       Gbl.Action.Act = ActCfgTst;
-	       Tab_SetCurrentTab ();
+	       Tab_SetThisTab ();
 	       return;
 	      }
             break;
@@ -459,6 +459,6 @@ void Act_AdjustCurrentAction (void)
    if (JustAfterLogin)
      {
       Gbl.Action.Act = ActLst_DEFAULT_ACTION_AFTER_LOGIN;
-      Tab_SetCurrentTab ();
+      Tab_SetThisTab ();
      }
   }

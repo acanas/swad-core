@@ -216,7 +216,7 @@ static Brw_Zone_t Brw_DB_GetZoneDB_brw_expanded (Brw_Zone_t Zone)
 /**************** Add a path of file/folder to the database ******************/
 /*****************************************************************************/
 
-long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_FileMetadata *FileMetadata)
+long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_File *File)
   {
    extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
 
@@ -224,19 +224,19 @@ long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_FileMetadata *FileMetadata
    return
    DB_QueryINSERTandReturnCode ("can not add path to database",
 				"INSERT INTO brw_files"
-				" (FileBrowser,Cod,ZoneUsrCod,PublisherUsrCod,"
+				" (FileBrowser,Cod,ZoneUsrCod,PublisherUsrCod,"	// TODO: Change to OwnerCod
 				  "FileType,Path,Hidden,Public,License)"
 				" VALUES"
 				" (%u,%ld,%ld,%ld,"
 				  "%u,'%s','N','%c',%u)",
 				(unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 				Brw_GetCodForZone (Zone),
-				Brw_GetZoneUsrCodForZone (Zone),
-				FileMetadata->PublisherUsrCod,
-				(unsigned) FileMetadata->Type,
-				FileMetadata->PathInZone,
-				PriPub_Public_YN[FileMetadata->PrivateOrPublic],
-				(unsigned) FileMetadata->License);
+				Brw_GetOwnerCodForZone (Zone),
+				File->Metadata.PublisherCod,
+				(unsigned) File->Type,
+				File->Path.InZone,
+				PriPub_Public_YN[File->Metadata.PrivateOrPublic],
+				(unsigned) File->Metadata.License);
   }
 
 /*****************************************************************************/
@@ -253,12 +253,12 @@ void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
 		     " SET Path='%s'"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
+		     " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		     " AND Path='%s'",
 		   NewPathInZone,
 		   (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 		   Brw_GetCodForZone (Zone),
-		   Brw_GetZoneUsrCodForZone (Zone),
+		   Brw_GetOwnerCodForZone (Zone),
 		   OldPathInZone);
   }
 
@@ -278,12 +278,12 @@ void Brw_DB_RenameChildrenFilesOrFolders (Brw_Zone_t Zone,
 		     " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
+		     " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		     " AND Path LIKE '%s/%%'",
 	           NewPathInZone,StartFinalSubpathNotChanged,
 	           (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 	           Brw_GetCodForZone (Zone),
-	           Brw_GetZoneUsrCodForZone (Zone),
+	           Brw_GetOwnerCodForZone (Zone),
 	           OldPathInZone);
   }
 
@@ -307,14 +307,14 @@ long Brw_DB_GetFilCodByPath (Brw_Zone_t Zone,const char *PathInZone,
 			       " FROM brw_files FORCE INDEX (FileBrowser)"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 			      " WHERE FileBrowser=%u"
 			        " AND Cod=%ld"
-			        " AND ZoneUsrCod=%ld"
+			        " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 			        " AND Path='%s'"
 			        "%s"
 			   " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 			      " LIMIT 1",		// Select the most recent entry.
 			      (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			      Brw_GetCodForZone (Zone),
-			      Brw_GetZoneUsrCodForZone (Zone),
+			      Brw_GetOwnerCodForZone (Zone),
 			      PathInZone,
 			      SubQuery[OnlyIfPublic]);
   }
@@ -334,7 +334,7 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 			 "SELECT FilCod,"		// row[0]
 				"FileBrowser,"		// row[1]
 				"Cod,"			// row[2]
-				"ZoneUsrCod,"		// row[3]
+				"ZoneUsrCod,"		// row[3]	// TODO: Change to OwnerCod
 				"PublisherUsrCod,"	// row[4]
 				"FileType,"		// row[5]
 				"Path,"			// row[6]
@@ -344,13 +344,13 @@ Exi_Exist_t Brw_DB_GetFileMetadataByPath (MYSQL_RES **mysql_res,
 			  " FROM brw_files FORCE INDEX (FileBrowser)"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld"
-			   " AND ZoneUsrCod=%ld"
+			   " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 			   " AND Path='%s'"
 		      " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 			 " LIMIT 1",		// Select the most recent entry.
 			 (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			 Brw_GetCodForZone (Zone),
-			 Brw_GetZoneUsrCodForZone (Zone),
+			 Brw_GetOwnerCodForZone (Zone),
 			 FullPath);
   }
 
@@ -367,7 +367,7 @@ Exi_Exist_t Brw_DB_GetFileMetadataByCod (MYSQL_RES **mysql_res,long FilCod)
 			 "SELECT FilCod,"		// row[0]
 				"FileBrowser,"		// row[1]
 				"Cod,"			// row[2]
-				"ZoneUsrCod,"		// row[3]
+				"ZoneUsrCod,"		// row[3]	// TODO: Change to OwnerCod
 				"PublisherUsrCod,"	// row[4]
 				"FileType,"		// row[5]
 				"Path,"			// row[6]
@@ -407,13 +407,13 @@ long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
 			       " FROM brw_files"
 			      " WHERE FileBrowser=%u"
 				" AND Cod=%ld"
-				" AND ZoneUsrCod=%ld"
+				" AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 			        " AND (Path='%s'"
 				     " OR"
 				     " Path LIKE '%s/%%')",
 			      (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			      Brw_GetCodForZone (Zone),
-			      Brw_GetZoneUsrCodForZone (Zone),
+			      Brw_GetOwnerCodForZone (Zone),
 			      PathInZone,
 			      PathInZone);
   }
@@ -527,7 +527,7 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
 				   const char PathInZone[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForZone (Zone);
-   long ZoneUsrCod = Brw_GetZoneUsrCodForZone (Zone);
+   long OwnerCod = Brw_GetOwnerCodForZone (Zone);
    Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
 
    /***** Remove from database the entries that store the marks properties *****/
@@ -552,12 +552,12 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
 		         "brw_views"
 		  " WHERE brw_files.FileBrowser=%u"
 		    " AND brw_files.Cod=%ld"
-		    " AND brw_files.ZoneUsrCod=%ld"
+		    " AND brw_files.ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		    " AND brw_files.Path='%s'"
 		    " AND brw_files.FilCod=brw_views.FilCod",
 	          (unsigned) ZoneDB,
 	          Cod,
-	          ZoneUsrCod,
+	          OwnerCod,
 	          PathInZone);
 
    /***** Remove from database the entry that stores the data of a file *****/
@@ -565,11 +565,11 @@ void Brw_DB_RemoveOneFileOrFolder (Brw_Zone_t Zone,
 		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
+		     " AND ZoneUsrCod=%ld"		// TODO: Change to OwnerCod
 		     " AND Path='%s'",
 	           (unsigned) ZoneDB,
 	           Cod,
-	           ZoneUsrCod,
+	           OwnerCod,
 	           PathInZone);
   }
 
@@ -581,7 +581,7 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
 				    const char PathInZone[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForZone (Zone);
-   long ZoneUsrCod = Brw_GetZoneUsrCodForZone (Zone);
+   long OwnerCod = Brw_GetOwnerCodForZone (Zone);
    Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_files (Zone);
 
    /***** Remove from database the entries that store the marks properties *****/
@@ -606,12 +606,12 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
 		         "brw_views"
 		  " WHERE brw_files.FileBrowser=%u"
 		    " AND brw_files.Cod=%ld"
-		    " AND brw_files.ZoneUsrCod=%ld"
+		    " AND brw_files.ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		    " AND brw_files.Path LIKE '%s/%%'"
 		    " AND brw_files.FilCod=brw_views.FilCod",
                   (unsigned) ZoneDB,
                   Cod,
-                  ZoneUsrCod,
+                  OwnerCod,
                   PathInZone);
 
    /***** Remove from database the entries that store the data of files *****/
@@ -619,11 +619,11 @@ void Brw_DB_RemoveChildrenOfFolder (Brw_Zone_t Zone,
 		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
+		     " AND ZoneUsrCod=%ld"		// TODO: Change to OwnerCod
 		     " AND Path LIKE '%s/%%'",
                    (unsigned) ZoneDB,
                    Cod,
-                   ZoneUsrCod,
+                   OwnerCod,
                    PathInZone);
   }
 
@@ -1340,7 +1340,7 @@ void Brw_DB_RemoveSomeInfoAboutCrsUsrFiles (long UsrCod,long HieCod)
 /*************** Remove user's works in a course from database ***************/
 /*****************************************************************************/
 
-void Brw_DB_RemoveWrkFiles (long HieCod,long UsrCod)
+void Brw_DB_RemoveWrkFiles (long HieCod,long OwnerCod)
   {
    /***** Remove from database the entries that store the file views *****/
    DB_QueryDELETE ("can not remove file views",
@@ -1349,51 +1349,51 @@ void Brw_DB_RemoveWrkFiles (long HieCod,long UsrCod)
 		          "brw_views"
 		   " WHERE brw_files.FileBrowser IN (%u,%u)"
 		     " AND brw_files.Cod=%ld"
-		     " AND brw_files.ZoneUsrCod=%ld"
+		     " AND brw_files.ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		     " AND brw_files.FilCod=brw_views.FilCod",
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
-	           HieCod,UsrCod);
+	           HieCod,OwnerCod);
 
    /***** Remove from database expanded folders *****/
    DB_QueryDELETE ("can not remove expanded folders of a group",
 		   "DELETE LOW_PRIORITY FROM brw_expanded"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
-		     " AND WorksUsrCod=%ld",
+		     " AND WorksUsrCod=%ld",		// TODO: Change to OwnerCod
 	           (unsigned) Brw_ADMI_ASG_CRS,
 	           (unsigned) Brw_ADMI_WRK_CRS,
-	           HieCod,UsrCod);
+	           HieCod,OwnerCod);
 
    /***** Remove from database the entries that store clipboards *****/
    DB_QueryDELETE ("can not remove clipboards",
 		   "DELETE FROM brw_clipboards"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
-		     " AND WorksUsrCod=%ld",
+		     " AND WorksUsrCod=%ld",		// TODO: Change to OwnerCod
 	           (unsigned) Brw_ADMI_ASG_CRS,
 	           (unsigned) Brw_ADMI_WRK_CRS,
-	           HieCod,UsrCod);
+	           HieCod,OwnerCod);
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove file browser sizes",
 		   "DELETE FROM brw_sizes"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld",
+		     " AND ZoneUsrCod=%ld",		// TODO: Change to OwnerCod
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
-	           HieCod,UsrCod);
+	           HieCod,OwnerCod);
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files",
 		   "DELETE FROM brw_files"
 		   " WHERE FileBrowser IN (%u,%u)"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld",
+		     " AND ZoneUsrCod=%ld",		// TODO: Change to OwnerCod
 	           (unsigned) Brw_ADMI_ASG_USR,
 	           (unsigned) Brw_ADMI_WRK_USR,
-	           HieCod,UsrCod);
+	           HieCod,OwnerCod);
   }
 
 /*****************************************************************************/
@@ -1409,7 +1409,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
 		   "DELETE FROM brw_views"
 		   " USING brw_files,"
 		          "brw_views"
-		   " WHERE brw_files.ZoneUsrCod=%ld"
+		   " WHERE brw_files.ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		     " AND brw_files.FilCod=brw_views.FilCod",
 	           UsrCod);
 
@@ -1434,13 +1434,13 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
    /***** Remove from database the entries that store the sizes of the file zones *****/
    DB_QueryDELETE ("can not remove sizes of user's file zones",
 		   "DELETE FROM brw_sizes"
-		   " WHERE ZoneUsrCod=%ld",
+		   " WHERE ZoneUsrCod=%ld",		// TODO: Change to OwnerCod
 	           UsrCod);
 
    /***** Remove from database the entries that store the data files *****/
    DB_QueryDELETE ("can not remove files in user's file zones",
 		   "DELETE FROM brw_files"
-		   " WHERE ZoneUsrCod=%ld",
+		   " WHERE ZoneUsrCod=%ld",		// TODO: Change to OwnerCod
 	           UsrCod);
   }
 
@@ -1467,14 +1467,14 @@ void Brw_DB_ChangeFilePublic (Brw_Zone_t Zone,
 		          "License=%u"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
+		     " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		     " AND FilCod=%ld"
 		     " AND Path='%s'",
 	           PriPub_Public_YN[PrivateOrPublic],
 	           (unsigned) License,
 	           (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 	           Brw_GetCodForZone (Zone),
-	           Brw_GetZoneUsrCodForZone (Zone),
+	           Brw_GetOwnerCodForZone (Zone),
 	           FilCod,
 	           PathInZone);
   }
@@ -1499,12 +1499,12 @@ PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (Brw_Zone_t Zone,
 			      " FROM brw_files"
 			     " WHERE FileBrowser=%u"
 			       " AND Cod=%ld"
-			       " AND ZoneUsrCod=%ld"
+			       " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 			       " AND Path LIKE '%s/%%'"
 			       " AND Public='Y')",
 			    (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 			    Brw_GetCodForZone (Zone),
-			    Brw_GetZoneUsrCodForZone (Zone),
+			    Brw_GetOwnerCodForZone (Zone),
 			    PathInZone);
    return FolderHasPublicFiles[Exists];
   }
@@ -2158,7 +2158,7 @@ unsigned Brw_DB_SearchMyFiles (MYSQL_RES **mysql_res,
 // 2. ...and the folder name is not empty (the teacher has set that the user must send work(s) for that assignment)
 // 3. ...the assignment is not restricted to groups or (if restricted to groups), the owner of zone belong to any of the groups
 
-unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod)
+unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long OwnerCod)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get folders of assignments",
@@ -2180,7 +2180,7 @@ unsigned Brw_DB_GetFoldersAssignments (MYSQL_RES **mysql_res,long ZoneUsrCod)
 			       " AND asg_groups.GrpCod=grp_users.GrpCod)"
 			  ")",
 		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-		   ZoneUsrCod);
+		   OwnerCod);
   }
 
 /*****************************************************************************/
@@ -2341,12 +2341,12 @@ void Brw_DB_HideOrUnhideFileOrFolder (Brw_Zone_t Zone,
 		     " SET Hidden='%c'"
 		   " WHERE FileBrowser=%u"
 		     " AND Cod=%ld"
-		     " AND ZoneUsrCod=%ld"
+		     " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 		     " AND Path='%s'",
 		   HidVis_Hidden_YN[HiddenOrVisible],
 	           (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 	           Brw_GetCodForZone (Zone),
-	           Brw_GetZoneUsrCodForZone (Zone),
+	           Brw_GetOwnerCodForZone (Zone),
 	           PathInZone);
   }
 
@@ -2370,13 +2370,13 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 				   " FROM brw_files FORCE INDEX (FileBrowser)"	// Very important to optimize by this composed index (FileBrowser,Cod,ZoneUsrCod)
 				  " WHERE FileBrowser=%u"
 				    " AND Cod=%ld"
-				    " AND ZoneUsrCod=%ld"
+				    " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 				    " AND Path='%s'"
 			       " ORDER BY FilCod DESC"	// Due to errors, there could be old entries for the same path.
 				  " LIMIT 1",		// Select the most recent entry.
 				  (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
 				  Brw_GetCodForZone (Zone),
-				  Brw_GetZoneUsrCodForZone (Zone),
+				  Brw_GetOwnerCodForZone (Zone),
 				  PathInZone);
    return Hidden[Exists];
   }
@@ -2386,7 +2386,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 /*****************************************************************************/
 
 HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
-										   const struct Brw_FileMetadata *FileMetadata)
+										   const struct Brw_File *File)
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {
@@ -2408,16 +2408,16 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadat
 			      " FROM brw_files"
 			     " WHERE FileBrowser=%u"
 			       " AND Cod=%ld"
-			       " AND ZoneUsrCod=%ld"
+			       " AND ZoneUsrCod=%ld"	// TODO: Change to OwnerCod
 			       " AND Hidden='Y'"
 			       " AND (Path='%s'"
 				    " OR"
 				    " LOCATE(CONCAT(Path,'/'),'%s')=1))",
 			    (unsigned) Brw_DB_GetZoneDB_brw_files (Zone),
-			    FileMetadata->Cod,
-			    FileMetadata->ZoneUsrCod,
-			    FileMetadata->PathInZone,
-			    FileMetadata->PathInZone);
+			    File->HieCod,
+			    File->OwnerCod,
+			    File->Path.InZone,
+			    File->Path.InZone);
    return Hidden[Exists];
   }
 
@@ -2431,13 +2431,13 @@ void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
    // Path must be stored with final '/'
    DB_QueryINSERT ("can not expand the content of a folder",
 		   "INSERT INTO brw_expanded"
-		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
+		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"	// TODO: Change to OwnerCod
 		   " VALUES"
 		   " (%ld,%u,%ld,%ld,'%s/',NOW())",
 	           Gbl.Usrs.Me.UsrDat.UsrCod,
 	           (unsigned) Brw_DB_GetZoneDB_brw_expanded (Zone),
 	           Brw_GetCodForZone (Zone),
-	           Brw_GetZoneUsrCodForZone (Zone),
+	           Brw_GetOwnerCodForZone (Zone),
 	           PathOfFolderInZone);
   }
 
@@ -2448,23 +2448,23 @@ void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,
 void Brw_DB_UpdateClickTimeOfThisFileBrowserInExpandedFolders (Brw_Zone_t Zone)
   {
    long Cod = Brw_GetCodForZone (Zone);
-   long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
+   long OwnerCod = Brw_GetOwnerCodForZone (Zone);
    Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
 
    if (Cod > 0)
      {
-      if (WorksUsrCod > 0)
+      if (OwnerCod > 0)
 	 DB_QueryUPDATE ("can not update expanded folder",
 			 "UPDATE brw_expanded"
 			   " SET ClickTime=NOW()"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld",
+			   " AND WorksUsrCod=%ld",	// TODO: Change to OwnerCod
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
 		         (unsigned) ZoneDB,
 		         Cod,
-		         WorksUsrCod);
+		         OwnerCod);
       else
 	 DB_QueryUPDATE ("can not update expanded folder",
 			 "UPDATE brw_expanded"
@@ -2499,13 +2499,13 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
       [Exi_EXISTS        ] = ConExp_EXPANDED,
      };
    long Cod = Brw_GetCodForZone (Zone);
-   long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
+   long OwnerCod = Brw_GetOwnerCodForZone (Zone);
    Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
    Exi_Exist_t Exists;
 
    if (Cod > 0)
      {
-      if (WorksUsrCod > 0)
+      if (OwnerCod > 0)
 	 Exists = DB_QueryEXISTS ("can not check if a folder is expanded",
 				  "SELECT EXISTS"
 				  "(SELECT *"
@@ -2513,12 +2513,12 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
 				   " WHERE UsrCod=%ld"
 				     " AND FileBrowser=%u"
 				     " AND Cod=%ld"
-				     " AND WorksUsrCod=%ld"
+				     " AND WorksUsrCod=%ld"	// TODO: Change to OwnerCod
 				     " AND Path='%s/')",
 				  Gbl.Usrs.Me.UsrDat.UsrCod,
 				  (unsigned) ZoneDB,
 				  Cod,
-				  WorksUsrCod,
+				  OwnerCod,
 				  PathInZone);
       else
 	 Exists = DB_QueryEXISTS ("can not check if a folder is expanded",
@@ -2557,23 +2557,23 @@ void Brw_DB_RemoveFolderFromExpandedFolders (Brw_Zone_t Zone,
 					     const char PathOfFolderInZone[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForZone (Zone);
-   long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
+   long OwnerCod = Brw_GetOwnerCodForZone (Zone);
    Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
 
    if (Cod > 0)
      {
-      if (WorksUsrCod > 0)
+      if (OwnerCod > 0)
          DB_QueryDELETE ("can not contract the content of a folder",
 			 "DELETE FROM brw_expanded"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld"
+			   " AND WorksUsrCod=%ld"	// TODO: Change to OwnerCod
 			   " AND Path='%s/'",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
 		         (unsigned) ZoneDB,
 		         Cod,
-		         WorksUsrCod,
+		         OwnerCod,
 		         PathOfFolderInZone);
       else
 	 DB_QueryDELETE ("can not contract the content of a folder",
@@ -2606,23 +2606,23 @@ void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 					   const char PathInZone[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForZone (Zone);
-   long WorksUsrCod = Brw_GetZoneUsrCodForZone (Zone);
+   long OwnerCod = Brw_GetOwnerCodForZone (Zone);
    Brw_Zone_t ZoneDB = Brw_DB_GetZoneDB_brw_expanded (Zone);
 
    if (Cod > 0)
      {
-      if (WorksUsrCod > 0)
+      if (OwnerCod > 0)
          DB_QueryDELETE ("can not remove expanded folders",
 			 "DELETE FROM brw_expanded"
 			 " WHERE UsrCod=%ld"
 			   " AND FileBrowser=%u"
 			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld"
+			   " AND WorksUsrCod=%ld"	// TODO: Change to OwnerCod
 			   " AND Path LIKE '%s/%%'",
 		         Gbl.Usrs.Me.UsrDat.UsrCod,
 		         (unsigned) ZoneDB,
 		         Cod,
-		         WorksUsrCod,
+		         OwnerCod,
 		         PathInZone);
       else
          DB_QueryDELETE ("can not remove expanded folders",
@@ -2652,7 +2652,7 @@ void Brw_DB_RemoveAffectedExpandedFolders (Brw_Zone_t Zone,
 /*****************************************************************************/
 
 void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
-                                           long MyUsrCod,long WorksUsrCod,
+                                           long MyUsrCod,long OwnerCod,
                                            const char OldPathInZone[PATH_MAX + 1],
                                            const char NewPathInZone[PATH_MAX + 1])
   {
@@ -2664,20 +2664,20 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
      {
       if (MyUsrCod > 0)
 	{
-	 if (WorksUsrCod > 0)
+	 if (OwnerCod > 0)
 	    DB_QueryUPDATE ("can not update expanded folders",
 			    "UPDATE brw_expanded"
 			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 			    " WHERE UsrCod=%ld"
 			      " AND FileBrowser=%u"
 			      " AND Cod=%ld"
-			      " AND WorksUsrCod=%ld"
+			      " AND WorksUsrCod=%ld"	// TODO: Change to OwnerCod
 			      " AND Path LIKE '%s/%%'",
 		            NewPathInZone,StartFinalSubpathNotChanged,
 		            MyUsrCod,
 		            (unsigned) ZoneDB,
 		            Cod,
-		            WorksUsrCod,
+		            OwnerCod,
 		            OldPathInZone);
 	 else
 	    DB_QueryUPDATE ("can not update expanded folders",
@@ -2695,18 +2695,18 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 	}
       else	// MyUsrCod <= 0 means expanded folders for any user
 	{
-	 if (WorksUsrCod > 0)
+	 if (OwnerCod > 0)
 	    DB_QueryUPDATE ("can not update expanded folders",
 			    "UPDATE brw_expanded"
 			      " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 			    " WHERE FileBrowser=%u"
 			      " AND Cod=%ld"
-			      " AND WorksUsrCod=%ld"
+			      " AND WorksUsrCod=%ld"	// TODO: Change to OwnerCod
 			      " AND Path LIKE '%s/%%'",
 		            NewPathInZone,StartFinalSubpathNotChanged,
 		            (unsigned) ZoneDB,
 		            Cod,
-		            WorksUsrCod,
+		            OwnerCod,
 		            OldPathInZone);
 	 else
 	    DB_QueryUPDATE ("can not update expanded folders",
@@ -2755,13 +2755,13 @@ void Brw_DB_AddPathToClipboards (Brw_Zone_t Zone,Brw_FileType_t FileType,
   {
    DB_QueryINSERT ("can not add source of copy to clipboard",
 		   "INSERT INTO brw_clipboards"
-		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"
+		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"	// TODO: Change to OwnerCod
 		   " VALUES"
 		   " (%ld,%u,%ld,%ld,%u,'%s')",
 	           Gbl.Usrs.Me.UsrDat.UsrCod,
 	           (unsigned) Zone,
 	           Brw_GetCodForZone (Zone),
-	           Brw_GetZoneUsrCodForZone (Zone),
+	           Brw_GetOwnerCodForZone (Zone),
 	           (unsigned) FileType,
 	           PathInZone);
   }
@@ -2777,13 +2777,13 @@ void Brw_DB_UpdatePathInClipboard (Brw_Zone_t Zone,Brw_FileType_t FileType,
 		   "UPDATE brw_clipboards"
 		     " SET FileBrowser=%u,"
 		          "Cod=%ld,"
-		          "WorksUsrCod=%ld,"
+		          "WorksUsrCod=%ld,"	// TODO: Change to OwnerCod
 		          "FileType=%u,"
 		          "Path='%s'"
 		   " WHERE UsrCod=%ld",
 	           (unsigned) Zone,
 	           Brw_GetCodForZone (Zone),
-	           Brw_GetZoneUsrCodForZone (Zone),
+	           Brw_GetOwnerCodForZone (Zone),
 	           (unsigned) FileType,
 	           PathInZone,
 	           Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2799,7 +2799,7 @@ unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res)
    DB_QuerySELECT (mysql_res,"can not get source of copy from clipboard",
 		   "SELECT FileBrowser,"	// row[0]
 		          "Cod,"		// row[1]
-		          "WorksUsrCod,"	// row[2]
+		          "WorksUsrCod,"	// row[2]	// TODO: Change to OwnerCod
 		          "FileType,"		// row[3]
 		          "Path"		// row[4]
 		    " FROM brw_clipboards"
@@ -2824,7 +2824,7 @@ void Brw_DB_RemoveExpiredClipboards (void)
 /*****************************************************************************/
 
 void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,
-                                      long MyUsrCod,long WorksUsrCod)
+                                      long MyUsrCod,long OwnerCod)
   {
    switch (Zone)
      {
@@ -2857,10 +2857,10 @@ void Brw_DB_RemoveAffectedClipboards (Brw_Zone_t Zone,
 			 "DELETE FROM brw_clipboards"
 			 " WHERE FileBrowser=%u"
 			   " AND Cod=%ld"
-			   " AND WorksUsrCod=%ld",
+			   " AND WorksUsrCod=%ld",	// TODO: Change to OwnerCod
                          (unsigned) Zone,
                          Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-                         WorksUsrCod);
+                         OwnerCod);
          break;
       case Brw_ADMI_ASG_USR:
       case Brw_ADMI_WRK_USR:
@@ -2894,14 +2894,14 @@ void Brw_DB_StoreSizeOfFileBrowser (const struct Brw_FileBrowser *FileBrowser)
   {
    DB_QueryREPLACE ("can not store the size of a file zone",
 		    "REPLACE INTO brw_sizes"
-		    " (FileBrowser,Cod,ZoneUsrCod,"
+		    " (FileBrowser,Cod,ZoneUsrCod,"	// TODO: Change to OwnerCod
 		      "NumLevels,NumFolders,NumFiles,TotalSize)"
 		    " VALUES"
 		    " (%u,%ld,%ld,"
 		      "%u,'%lu','%lu','%llu')",
 	            (unsigned) Brw_DB_GetZoneDB_brw_files (FileBrowser->Zone),
 		    Brw_GetCodForZone (FileBrowser->Zone),
-		    Brw_GetZoneUsrCodForZone (FileBrowser->Zone),
+		    Brw_GetOwnerCodForZone (FileBrowser->Zone),
 	            FileBrowser->Size.NumLevls,
 	            FileBrowser->Size.NumFolds,
 	            FileBrowser->Size.NumFiles,
@@ -3006,7 +3006,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT COUNT(DISTINCT Cod),"			// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT ZoneUsrCod),"		// row[2]
+				      "COUNT(DISTINCT ZoneUsrCod),"		// row[2]	// TODO: Change to OwnerCod
 				      "MAX(NumLevels),"				// row[3]
 				      "SUM(NumFolders),"			// row[4]
 				      "SUM(NumFiles),"				// row[5]
@@ -3019,7 +3019,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT -1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT ZoneUsrCod),"		// row[2]
+				      "COUNT(DISTINCT ZoneUsrCod),"		// row[2]	// TODO: Change to OwnerCod
 				      "MAX(NumLevels),"				// row[3]
 				      "SUM(NumFolders),"			// row[4]
 				      "SUM(NumFiles),"				// row[5]
@@ -3162,7 +3162,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT COUNT(DISTINCT brw_sizes.Cod),"		// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3185,7 +3185,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT -1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3201,7 +3201,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"			// TODO: Change to OwnerCod
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Node[Hie_CTY].HieCod,
 			       (unsigned) Zone);
@@ -3332,7 +3332,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT COUNT(DISTINCT brw_sizes.Cod),"		// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3353,7 +3353,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT -1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3367,7 +3367,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			         " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"			// TODO: Change to OwnerCod
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Node[Hie_INS].HieCod,
 			       (unsigned) Zone);
@@ -3490,7 +3490,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT COUNT(DISTINCT brw_sizes.Cod),"		// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3509,7 +3509,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT -1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3521,7 +3521,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			       " WHERE deg_degrees.CtrCod=%ld"
 			         " AND deg_degrees.DegCod=crs_courses.DegCod"
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"			// TODO: Change to OwnerCod
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
 			       (unsigned) Zone);
@@ -3636,7 +3636,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT COUNT(DISTINCT brw_sizes.Cod),"		// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3653,7 +3653,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT -1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3663,7 +3663,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			              "brw_sizes"
 			       " WHERE crs_courses.DegCod=%ld"
 			         " AND crs_courses.CrsCod=crs_users.CrsCod"
-			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"			// TODO: Change to OwnerCod
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Node[Hie_DEG].HieCod,
 			       (unsigned) Zone);
@@ -3770,7 +3770,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT 1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT ZoneUsrCod),"		// row[2]
+				      "COUNT(DISTINCT ZoneUsrCod),"		// row[2]	// TODO: Change to OwnerCod
 				      "MAX(NumLevels),"				// row[3]
 				      "SUM(NumFolders),"			// row[4]
 				      "SUM(NumFiles),"				// row[5]
@@ -3785,7 +3785,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 	       DB_QuerySELECT (mysql_res,"can not get size of a file browser",
 			       "SELECT -1,"					// row[0]
 				      "-1,"					// row[1]
-				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]
+				      "COUNT(DISTINCT brw_sizes.ZoneUsrCod),"	// row[2]	// TODO: Change to OwnerCod
 				      "MAX(brw_sizes.NumLevels),"		// row[3]
 				      "SUM(brw_sizes.NumFolders),"		// row[4]
 				      "SUM(brw_sizes.NumFiles),"		// row[5]
@@ -3793,7 +3793,7 @@ void Brw_DB_GetSizeOfFileBrowser (MYSQL_RES **mysql_res,
 			        " FROM crs_users,"
 			              "brw_sizes"
 			       " WHERE crs_users.CrsCod=%ld"
-			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"
+			         " AND crs_users.UsrCod=brw_sizes.ZoneUsrCod"			// TODO: Change to OwnerCod
 			         " AND brw_sizes.FileBrowser=%u",
 			       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
 			       (unsigned) Zone);

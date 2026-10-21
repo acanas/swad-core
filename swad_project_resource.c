@@ -42,37 +42,37 @@ void PrjRsc_GetLinkToProject (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Projects;
-   struct Prj_Projects Projects;
+   struct Prj_Projects Prjs;
 
    /***** Reset projects *****/
-   Prj_ResetPrjsAndReadConfig (&Projects);
+   Prj_ResetPrjsAndReadConfig (&Prjs);
 
    /***** Get parameters *****/
-   Prj_GetPars (&Projects,Usr_USE_LIST_SELECTED_USERS);
-   Projects.Prj.PrjCod = ParCod_GetPar (ParCod_Prj);
+   Prj_GetPars (&Prjs,Usr_USE_LIST_SELECTED_USERS);
+   Prjs.Prj.PrjCod = ParCod_GetPar (ParCod_Prj);
 
    /***** Allocate memory for the project *****/
-   Prj_AllocMemProject (&Projects.Prj);
+   Prj_AllocMemPrj (&Prjs.Prj);
 
    /***** Get project data *****/
-   Prj_GetProjectDataByCod (&Projects.Prj);
+   Prj_GetPrjDataByCod (&Prjs.Prj);
 
    /***** Copy link to PROJECT into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_PROJECT,Projects.Prj.PrjCod);
+   Rsc_DB_CopyToClipboard (Rsc_PROJECT,Prjs.Prj.PrjCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Projects.Prj.PrjCod > 0 ? Projects.Prj.Title :
+   		  Prjs.Prj.PrjCod > 0 ? Prjs.Prj.Title :
    					    Txt_Projects);
 
    /***** The link may point to all projects or to a given project.
           It it points to a given project, show it. *****/
-   if (Projects.Prj.PrjCod > 0)
-      Prj_ShowBoxWithOneProject (&Projects);
+   if (Prjs.Prj.PrjCod > 0)
+      Prj_ShowBoxWithOnePrj (&Prjs);
 
    /***** Free memory of the project *****/
-   Prj_FreeMemProject (&Projects.Prj);
+   Prj_FreeMemPrj (&Prjs.Prj);
 
    /***** Show projects again *****/
-   Prj_ShowProjects (&Projects);
+   Prj_ShowProjects (&Prjs);
   }

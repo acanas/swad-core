@@ -73,7 +73,7 @@ long Ctr_DB_CreateCenter (const struct Hie_Node *Ctr,Hie_Status_t Status)
 /************ Get basic list of centers ordered by name of center ************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetBasicListOfCtrsInCurrentIns (MYSQL_RES **mysql_res)
+unsigned Ctr_DB_GetBasicListOfCtrsInThisIns (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers",
@@ -113,7 +113,7 @@ unsigned Ctr_DB_GetFullListOfCtrsInIns (MYSQL_RES **mysql_res,long HieCod)
 /************* with number of users who claim to belong to them **************/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetFullListOfCtrsInCurrentInsWithNumUsrs (MYSQL_RES **mysql_res)
+unsigned Ctr_DB_GetFullListOfCtrsInThisInsWithNumUsrs (MYSQL_RES **mysql_res)
   {
    static const char *OrderBySubQuery[Hie_NUM_ORDERS] =
      {
@@ -577,7 +577,8 @@ void Ctr_DB_UpdateCtrWWW (long HieCod,const char NewWWW[WWW_MAX_BYTES_WWW + 1])
 /******* Update the table changing old attribution by new attribution ********/
 /*****************************************************************************/
 
-void Ctr_DB_UpdateCtrPhotoAttribution (long HieCod,const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1])
+void Ctr_DB_UpdateCtrPhotoAttribution (long HieCod,
+				       const char NewPhotoAttribution[Med_MAX_BYTES_ATTRIBUTION + 1])
   {
    DB_QueryUPDATE ("can not update the photo attribution of a center",
 		   "UPDATE ctr_centers"
@@ -666,7 +667,8 @@ void Ctr_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
 /********* Get average coordinates of centers in current institution *********/
 /*****************************************************************************/
 
-void Ctr_DB_GetAvgCoordAndZoomInCurrentIns (struct Map_Coordinates *Coord,unsigned *Zoom)
+void Ctr_DB_GetAvgCoordAndZoomInThisIns (struct Map_Coordinates *Coord,
+					 unsigned *Zoom)
   {
    char *Query;
 
@@ -706,7 +708,7 @@ unsigned Ctr_DB_GetCtrsWithCoords (MYSQL_RES **mysql_res)
 /******** Get centres which have coordinates in current institution **********/
 /*****************************************************************************/
 
-unsigned Ctr_DB_GetCtrsWithCoordsInCurrentIns (MYSQL_RES **mysql_res)
+unsigned Ctr_DB_GetCtrsWithCoordsInThisIns (MYSQL_RES **mysql_res)
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get centers with coordinates",

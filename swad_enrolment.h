@@ -73,14 +73,14 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Enr_CheckStdsAndPutButtonToEnrolStdsInCurrentCrs (void);
+void Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs (void);
 void Enr_PutButtonInlineToEnrolStds (long HieCod,
 				     unsigned Scope,const Lay_Last_t *IsLastItemInLevel,
 				     Lay_Highlight_t Highlight);
 
 void Enr_PutLinkToRequestSignUp (void);
 
-void Enr_ModifyRoleInCurrentCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole);
+void Enr_ModifyRoleInThisCrs (struct Usr_Data *UsrDat,Rol_Role_t NewRole);
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction,void (*FuncPars) (void));
 
@@ -137,10 +137,10 @@ void Enr_CreateNewUsr2 (void);
 void Enr_AdminUsr1 (void);
 void Enr_AdminUsr2 (void);
 
-void Enr_FlushCacheUsrBelongsToCurrentCrs (void);
-Usr_Belong_t Enr_CheckIfUsrBelongsToCurrentCrs (const struct Usr_Data *UsrDat);
-void Enr_FlushCacheUsrHasAcceptedInCurrentCrs (void);
-Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInCurrentCrs (const struct Usr_Data *UsrDat);
+void Enr_FlushCacheUsrBelongsToThisCrs (void);
+Usr_Belong_t Enr_CheckIfUsrBelongsToThisCrs (const struct Usr_Data *UsrDat);
+void Enr_FlushCacheUsrHasAcceptedInThisCrs (void);
+Usr_Accepted_t Enr_CheckIfUsrHasAcceptedInThisCrs (const struct Usr_Data *UsrDat);
 void Enr_FlushCacheUsrSharesAnyOfMyCrs (void);
 Usr_Share_t Enr_CheckIfUsrSharesAnyOfMyCrs (struct Usr_Data *UsrDat);
 

@@ -389,7 +389,7 @@ void Set_DB_RemAllUsrsFromCrsSettings (long HieCod)
 /**************** Update settings from current IP in database ****************/
 /*****************************************************************************/
 
-void Set_DB_UpdateMyIPSettingsForCurrentIP (void)
+void Set_DB_UpdateMyIPSettingsForThisIP (void)
   {
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern struct The_Theme The_Themes[The_NUM_THEMES];

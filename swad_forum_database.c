@@ -821,7 +821,7 @@ void For_DB_InsertThrInMyClipboard (long ThrCod)
 /************************ Move a thread to current forum *********************/
 /*****************************************************************************/
 
-void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
+void For_DB_MoveThrToThisForum (const struct For_Forums *Forums)
   {
    /***** Move a thread to current forum *****/
    switch (Forums->Forum.Type)
@@ -836,7 +836,7 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			        "HieCod=-1"
 			 " WHERE ThrCod=%ld",
                          (unsigned) Forums->Forum.Type,
-                         Forums->Thread.Current);
+                         Forums->Thread.This);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
@@ -847,7 +847,7 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
 		         Forums->Forum.HieCod,
-		         Forums->Thread.Current);
+		         Forums->Thread.This);
          break;
       case For_FORUM_CENTER_USRS:
       case For_FORUM_CENTER_TCHS:
@@ -858,7 +858,7 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
                          (unsigned) Forums->Forum.Type,
                          Forums->Forum.HieCod,
-                         Forums->Thread.Current);
+                         Forums->Thread.This);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
@@ -869,7 +869,7 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
 		         Forums->Forum.HieCod,
-		         Forums->Thread.Current);
+		         Forums->Thread.This);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -880,7 +880,7 @@ void For_DB_MoveThrToCurrentForum (const struct For_Forums *Forums)
 			 " WHERE ThrCod=%ld",
 		         (unsigned) Forums->Forum.Type,
 		         Forums->Forum.HieCod,
-		         Forums->Thread.Current);
+		         Forums->Thread.This);
          break;
       default:
 	 Err_WrongForumExit ();

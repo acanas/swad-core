@@ -35,7 +35,7 @@
 /*****************************************************************************/
 
 //------------------------------ Users in courses -----------------------------
-void Enr_DB_InsertUsrInCurrentCrs (long UsrCod,Rol_Role_t NewRole);
+void Enr_DB_InsertUsrInThisCrs (long UsrCod,Rol_Role_t NewRole);
 void Enr_DB_AcceptUsrInCrs (long UsrCod,long HieCod);
 
 void Enr_DB_CreateTmpTableMyCourses (void);
@@ -48,7 +48,7 @@ Usr_Belong_t Enr_DB_CheckIfUsrBelongsToCrs (long UsrCod,long HieCod,
 Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
 Usr_Share_t Enr_DB_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 long Enr_DB_GetRamdomStdFromCrs (long HieCod);
-unsigned Enr_DB_GetUsrsFromCurrentCrs (MYSQL_RES **mysql_res);
+unsigned Enr_DB_GetUsrsFromThisCrs (MYSQL_RES **mysql_res);
 unsigned Enr_DB_GetUsrsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod);
 unsigned Enr_DB_GetTchsFromCrsExceptMe (MYSQL_RES **mysql_res,long HieCod);
 unsigned Enr_DB_GetNumCrssOfUsr (long UsrCod);
@@ -67,8 +67,8 @@ void Enr_DB_RemUsrFromAllCrss (long UsrCod);
 void Enr_DB_RemAllUsrsFromCrs (long HieCod);
 
 //-------------------------- Enrolment requests -------------------------------
-long Enr_DB_CreateMyEnrolmentRequestInCurrentCrs (Rol_Role_t NewRole);
-void Enr_DB_UpdateMyEnrolmentRequestInCurrentCrs (long ReqCod,Rol_Role_t NewRole);
+long Enr_DB_CreateMyEnrolmentRequestInThisCrs (Rol_Role_t NewRole);
+void Enr_DB_UpdateMyEnrolmentRequestInThisCrs (long ReqCod,Rol_Role_t NewRole);
 
 unsigned Enr_DB_GetEnrolmentRequests (MYSQL_RES **mysql_res,
 				      Hie_Level_t HieLvl,unsigned RolesSelected);

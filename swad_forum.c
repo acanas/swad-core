@@ -411,14 +411,14 @@ void For_ResetForums (struct For_Forums *Forums)
   {
    Forums->ForumSet        = For_DEFAULT_FORUM_SET;
    Forums->ThreadsOrder    = For_DEFAULT_ORDER;
-   Forums->CurrentPageThrs = 0;
-   Forums->CurrentPagePsts = 0;
+   Forums->ThisPageThrs = 0;
+   Forums->ThisPagePsts = 0;
 
    Forums->Forum.Type      = For_FORUM_UNKNOWN;
    Forums->Forum.HieCod  = -1L;
 
    Forums->Thread.Selected =
-   Forums->Thread.Current  =
+   Forums->Thread.This     =
    Forums->Thread.ToMove   = -1L;
 
    Forums->PstCod          = -1L;
@@ -729,7 +729,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
    /***** Get data of the thread *****/
    Thread.ThrCod =
-   Forums->Thread.Current =
+   Forums->Thread.This =
    Forums->Thread.Selected;
    For_GetThreadData (&Thread);
 
@@ -795,10 +795,10 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 
 	    /***** Compute variables related to pagination *****/
 	    PaginationPsts.NumItems = NumPsts;
-	    PaginationPsts.CurrentPage = Forums->CurrentPagePsts;
+	    PaginationPsts.ThisPage = Forums->ThisPagePsts;
 	    Pag_CalculatePagination (&PaginationPsts);
 	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
-	    Forums->CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
+	    Forums->ThisPagePsts = (unsigned) PaginationPsts.ThisPage;
 
 	    /***** Write links to pages *****/
 	    Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,&PaginationPsts,
@@ -900,12 +900,12 @@ static void For_PutIconsOneThread (void *Forums)
 static void For_PutParsNewPost (void *Forums)
   {
    if (Forums)
-      For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
+      For_PutAllParsForum (((struct For_Forums *) Forums)->ThisPageThrs,	// Page of threads = current
 			   UINT_MAX,						// Page of posts   = last
 			   ((struct For_Forums *) Forums)->ForumSet,
 			   ((struct For_Forums *) Forums)->ThreadsOrder,
 			   ((struct For_Forums *) Forums)->Forum.HieCod,
-			   ((struct For_Forums *) Forums)->Thread.Current,
+			   ((struct For_Forums *) Forums)->Thread.This,
 			   -1L);
   }
 
@@ -1191,12 +1191,12 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 static void For_PutParsForum (void *Forums)
   {
    if (Forums)
-      For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
-                           ((struct For_Forums *) Forums)->CurrentPagePsts,	// Page of posts   = current
+      For_PutAllParsForum (((struct For_Forums *) Forums)->ThisPageThrs,	// Page of threads = current
+                           ((struct For_Forums *) Forums)->ThisPagePsts,	// Page of posts   = current
                            ((struct For_Forums *) Forums)->ForumSet,
 			   ((struct For_Forums *) Forums)->ThreadsOrder,
 			   ((struct For_Forums *) Forums)->Forum.HieCod,
-			   ((struct For_Forums *) Forums)->Thread.Current,
+			   ((struct For_Forums *) Forums)->Thread.This,
 			   ((struct For_Forums *) Forums)->PstCod);
   }
 
@@ -1322,7 +1322,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 			      if (For_WriteLinksToDegForums (Forums,
 							     Gbl.Hierarchy.Node[Hie_DEG].HieCod,Lay_LAST,	// Last degree
 							     IsLastItemInLevel) > 0)
-				 if (Gbl.Usrs.Me.IBelongToCurrent[Hie_CRS] == Usr_BELONG ||
+				 if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG ||
 				     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 				    /***** Links to forums of current degree *****/
 				    For_WriteLinksToCrsForums (Forums,
@@ -2102,10 +2102,10 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
    /***** Compute variables related to pagination of threads *****/
    PaginationThrs.NumItems = NumThrs;
-   PaginationThrs.CurrentPage = Forums->CurrentPageThrs;
+   PaginationThrs.ThisPage = Forums->ThisPageThrs;
    Pag_CalculatePagination (&PaginationThrs);
    PaginationThrs.Anchor = For_FORUM_THREADS_SECTION_ID;
-   Forums->CurrentPageThrs = (unsigned) PaginationThrs.CurrentPage;
+   Forums->ThisPageThrs = (unsigned) PaginationThrs.ThisPage;
 
    /***** Fill the list of threads for current page *****/
    mysql_data_seek (mysql_res,(my_ulonglong) (PaginationThrs.FirstItemVisible - 1));
@@ -2154,7 +2154,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 
 			Frm_BeginFormAnchor (For_ActionsSeeFor[Forums->Forum.Type],
 					     For_FORUM_THREADS_SECTION_ID);
-			   For_PutAllParsForum (Forums->CurrentPageThrs,	// Page of threads = current
+			   For_PutAllParsForum (Forums->ThisPageThrs,	// Page of threads = current
 					        1,				// Page of posts   = first
 					        Forums->ForumSet,
 					        Order,
@@ -2182,7 +2182,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 	       HTM_TR_End ();
 
 	       /***** List the threads *****/
-	       For_ListForumThrs (Forums,ThrCods,Forums->Thread.Current,&PaginationThrs);
+	       For_ListForumThrs (Forums,ThrCods,Forums->Thread.This,&PaginationThrs);
 
 	    /***** End table *****/
 	    HTM_TABLE_End ();
@@ -2285,7 +2285,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       /***** Get the data of this thread *****/
       Thr.ThrCod = ThrCods[NumThrInScreen];
       For_GetThreadData (&Thr);
-      Forums->Thread.Current = Thr.ThrCod;
+      Forums->Thread.This = Thr.ThrCod;
       Class = Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
 	                           "MSG_AUT";
       BgColor =  Thr.ThrCod == ThreadInMyClipboard ? "LIGHT_GREEN" :
@@ -2329,7 +2329,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       HTM_BR ();
 	       Frm_BeginFormAnchor (For_ActionsCutThrFor[Forums->Forum.Type],
 				    For_FORUM_THREADS_SECTION_ID);
-		  For_PutAllParsForum (Forums->CurrentPageThrs,	// Page of threads = current
+		  For_PutAllParsForum (Forums->ThisPageThrs,	// Page of threads = current
 				       1,			// Page of posts   = first
 				       Forums->ForumSet,
 				       Forums->ThreadsOrder,
@@ -2347,8 +2347,8 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 
 	    /* Calculate pagination */
 	    PaginationPsts.NumItems = Thr.NumPosts;
-	    PaginationPsts.CurrentPage =
-	       Thr.ThrCod == Forums->Thread.Selected ? Forums->CurrentPagePsts :	// Current page
+	    PaginationPsts.ThisPage =
+	       Thr.ThrCod == Forums->Thread.Selected ? Forums->ThisPagePsts :	// Current page
 						       0;				// No page is shown
 	    Pag_CalculatePagination (&PaginationPsts);
 	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
@@ -2454,7 +2454,7 @@ static void For_LinkToFirstPageWithSubject (const struct For_Forums *Forums,
       /***** Begin form *****/
       Frm_BeginFormAnchor (For_ActionsSeePstFor[Forums->Forum.Type],
 			   For_FORUM_POSTS_SECTION_ID);
-	 For_PutAllParsForum (Forums->CurrentPageThrs,	// Page of threads = current
+	 For_PutAllParsForum (Forums->ThisPageThrs,	// Page of threads = current
 			      1,			// Page of posts   = first
 			      Forums->ForumSet,
 			      Forums->ThreadsOrder,
@@ -2638,11 +2638,11 @@ void For_GetParsForums (struct For_Forums *Forums)
 						  (unsigned long) For_DEFAULT_ORDER);
 
    /***** Get optional page numbers for threads and posts *****/
-   Forums->CurrentPageThrs = Pag_GetParPagNum (Pag_THREADS_FORUM);
-   Forums->CurrentPagePsts = Pag_GetParPagNum (Pag_POSTS_FORUM);
+   Forums->ThisPageThrs = Pag_GetParPagNum (Pag_THREADS_FORUM);
+   Forums->ThisPagePsts = Pag_GetParPagNum (Pag_POSTS_FORUM);
 
    /***** Get optional parameter with code of a selected thread *****/
-   Forums->Thread.Current  =
+   Forums->Thread.This  =
    Forums->Thread.Selected = ParCod_GetPar (ParCod_Thr);
 
    /***** Get optional parameter with code of a selected post *****/
@@ -2652,10 +2652,10 @@ void For_GetParsForums (struct For_Forums *Forums)
    if (Forums->PstCod > 0)	// If post specified ==> get other parameters in function of post
       // Get thread, type and hierarchy code from database
       Forums->Thread.Selected =
-      Forums->Thread.Current  = For_GetThreadForumTypeAndHieCodOfAPost (Forums->PstCod,&Forums->Forum);
-   else if (Forums->Thread.Current > 0)	// If thread specified ==> get other parameters in function of thread
+      Forums->Thread.This  = For_GetThreadForumTypeAndHieCodOfAPost (Forums->PstCod,&Forums->Forum);
+   else if (Forums->Thread.This > 0)	// If thread specified ==> get other parameters in function of thread
       // Get type and hierarchy code from database
-      For_GetForumTypeAndHieCodOfAThread (Forums->Thread.Current,&Forums->Forum);
+      For_GetForumTypeAndHieCodOfAThread (Forums->Thread.This,&Forums->Forum);
 
    /***** Restrict access to forum *****/
    For_RestrictAccess (Forums);
@@ -3023,24 +3023,24 @@ void For_ReceiveForumPost (void)
 	 // Forums.ThrCod has been received from form
 
 	 /***** Create last message of the thread *****/
-	 PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
+	 PstCod = For_InsertForumPst (Forums.Thread.This,Gbl.Usrs.Me.UsrDat.UsrCod,
 				      Subject,Content,&Media);
 
 	 /***** Modify last message of the thread *****/
-	 For_DB_UpdateThrLastPst (Forums.Thread.Current,PstCod);
+	 For_DB_UpdateThrLastPst (Forums.Thread.This,PstCod);
 	 break;
       case For_FIRST_POST_IN_THREAD:	// This post is the first of a new thread
       default:
 	 /***** Create new thread with unknown first and last message codes *****/
-	 Forums.Thread.Current  =
+	 Forums.Thread.This  =
 	 Forums.Thread.Selected = For_DB_InsertForumThread (&Forums,-1L);
 
 	 /***** Create first (and last) message of the thread *****/
-	 PstCod = For_InsertForumPst (Forums.Thread.Current,Gbl.Usrs.Me.UsrDat.UsrCod,
+	 PstCod = For_InsertForumPst (Forums.Thread.This,Gbl.Usrs.Me.UsrDat.UsrCod,
 				      Subject,Content,&Media);
 
 	 /***** Update first and last posts of new thread *****/
-	 For_DB_UpdateThrFirstAndLastPst (Forums.Thread.Current,PstCod,PstCod);
+	 For_DB_UpdateThrFirstAndLastPst (Forums.Thread.This,PstCod,PstCod);
 	 break;
      }
 
@@ -3127,7 +3127,7 @@ void For_RemovePost (void)
       Err_NoPermissionExit ();
 
    /* Check if the message is the last message in the thread */
-   if (Forums.PstCod != For_DB_GetThrLastPst (Forums.Thread.Current))
+   if (Forums.PstCod != For_DB_GetThrLastPst (Forums.Thread.This))
       Err_NoPermissionExit ();
 
    /***** Remove the post *****/
@@ -3185,7 +3185,7 @@ void For_ReqRemThread (void)
    For_GetParsForums (&Forums);
 
    /***** Get subject of the thread to delete *****/
-   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.This,Subject);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -3206,12 +3206,12 @@ void For_ReqRemThread (void)
 static void For_PutParsRemThread (void *Forums)
   {
    if (Forums)
-      For_PutAllParsForum (((struct For_Forums *) Forums)->CurrentPageThrs,	// Page of threads = current
+      For_PutAllParsForum (((struct For_Forums *) Forums)->ThisPageThrs,	// Page of threads = current
 			   1,				// Page of posts   = first
 			   ((struct For_Forums *) Forums)->ForumSet,
 			   ((struct For_Forums *) Forums)->ThreadsOrder,
 			   ((struct For_Forums *) Forums)->Forum.HieCod,
-			   ((struct For_Forums *) Forums)->Thread.Current,
+			   ((struct For_Forums *) Forums)->Thread.This,
 			   -1L);
   }
 
@@ -3239,10 +3239,10 @@ void For_RemoveThread (void)
       Err_NoPermissionExit ();
 
    /***** Get subject of thread to delete *****/
-   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.This,Subject);
 
    /***** Remove the thread and all its posts *****/
-   For_RemoveThreadAndItsPsts (Forums.Thread.Current);
+   For_RemoveThreadAndItsPsts (Forums.Thread.This);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -3277,10 +3277,10 @@ void For_CutThread (void)
    For_GetParsForums (&Forums);
 
    /***** Get subject of thread to cut *****/
-   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.This,Subject);
 
    /***** Mark the thread as cut *****/
-   For_InsertThrInClipboard (Forums.Thread.Current);
+   For_InsertThrInClipboard (Forums.Thread.This);
 
    /***** Show forum list again *****/
    For_ShowForumList (&Forums);
@@ -3318,10 +3318,10 @@ void For_PasteThread (void)
    For_GetParsForums (&Forums);
 
    /***** Get subject of thread to paste *****/
-   For_DB_GetThrSubject (Forums.Thread.Current,Subject);
+   For_DB_GetThrSubject (Forums.Thread.This,Subject);
 
    /***** Check if paste (move) the thread to current forum has sense *****/
-   switch (For_DB_CheckIfThrExistsInForum (Forums.Thread.Current,&Forums.Forum))
+   switch (For_DB_CheckIfThrExistsInForum (Forums.Thread.This,&Forums.Forum))
      {
       case Exi_EXISTS:
 	 /***** Show forum list again *****/
@@ -3340,7 +3340,7 @@ void For_PasteThread (void)
       case Exi_DOES_NOT_EXIST:
       default:
 	 /***** Paste (move) the thread to current forum *****/
-	 For_DB_MoveThrToCurrentForum (&Forums);
+	 For_DB_MoveThrToThisForum (&Forums);
 
 	 /***** Show forum list again *****/
 	 For_ShowForumList (&Forums);

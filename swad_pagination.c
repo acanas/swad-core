@@ -101,17 +101,17 @@ void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
       Pagination->MoreThanOnePage = true;
 
       /* If page to show is greater than number of pages, then show last page also */
-      if (Pagination->CurrentPage > Pagination->NumPags)
-         Pagination->CurrentPage = Pagination->NumPags;
+      if (Pagination->ThisPage > Pagination->NumPags)
+         Pagination->ThisPage = Pagination->NumPags;
 
       /* Compute first page with link around the current */
-      if (Pagination->CurrentPage <= Pag_NUM_PAGES_BEFORE_CURRENT)
+      if (Pagination->ThisPage <= Pag_NUM_PAGES_BEFORE_CURRENT)
          Pagination->StartPage = 1;
       else
-         Pagination->StartPage = Pagination->CurrentPage - Pag_NUM_PAGES_BEFORE_CURRENT;
+         Pagination->StartPage = Pagination->ThisPage - Pag_NUM_PAGES_BEFORE_CURRENT;
 
       /* Compute last page with link around the current */
-      if ((Pagination->EndPage = Pagination->CurrentPage + Pag_NUM_PAGES_AFTER_CURRENT) > Pagination->NumPags)
+      if ((Pagination->EndPage = Pagination->ThisPage + Pag_NUM_PAGES_AFTER_CURRENT) > Pagination->NumPags)
          Pagination->EndPage = Pagination->NumPags;
 
       /* Compute left page with link in the middle of first page and current page */
@@ -121,9 +121,9 @@ void Pag_CalculatePagination (struct Pag_Pagination *Pagination)
       Pagination->RightPage = (Pagination->EndPage + Pagination->NumPags) / 2;
      }
    else      // Only one page
-      Pagination->CurrentPage = 1;  // If there is only a page, the number of page to show is 1
+      Pagination->ThisPage = 1;  // If there is only a page, the number of page to show is 1
 
-   Pagination->LastItemVisible = Pagination->CurrentPage * Pag_ITEMS_PER_PAGE;
+   Pagination->LastItemVisible = Pagination->ThisPage * Pag_ITEMS_PER_PAGE;
    Pagination->FirstItemVisible = Pagination->LastItemVisible - (Pag_ITEMS_PER_PAGE - 1);
    if (Pagination->LastItemVisible > Pagination->NumItems)
       Pagination->LastItemVisible = Pagination->NumItems;
@@ -228,7 +228,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-		  For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+		  For_PutAllParsForum (((struct For_Forums *) Context)->ThisPageThrs,	// Page of threads = current
 				       1,	// Page of posts   = first
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
@@ -352,7 +352,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-		  For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+		  For_PutAllParsForum (((struct For_Forums *) Context)->ThisPageThrs,	// Page of threads = current
 				       Pagination->LeftPage,	// Page of posts   = left
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
@@ -479,7 +479,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	    case Pag_POSTS_FORUM:
 	       Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
 				    Pagination->Anchor);
-		  For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+		  For_PutAllParsForum (((struct For_Forums *) Context)->ThisPageThrs,	// Page of threads = current
 				       NumPage,	// Page of posts   = number of page
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
@@ -525,7 +525,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 
 	    if (asprintf (&Title,Txt_Page_X_of_Y,NumPage,Pagination->NumPags) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    if (NumPage == Pagination->CurrentPage)
+	    if (NumPage == Pagination->ThisPage)
 	      {
 	       HTM_BUTTON_Submit_Begin (Title,NULL,
 					"class=\"BT_LINK PAG_CUR PAG_CUR_%s %s_%s\"",
@@ -613,7 +613,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-		  For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+		  For_PutAllParsForum (((struct For_Forums *) Context)->ThisPageThrs,	// Page of threads = current
 				       Pagination->RightPage,	// Page of posts   = right
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
@@ -738,7 +738,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Frm_BeginFormAnchor (For_ActionsSeePstFor[((struct For_Forums *) Context)->Forum.Type],
                                     Pagination->Anchor);
-		  For_PutAllParsForum (((struct For_Forums *) Context)->CurrentPageThrs,	// Page of threads = current
+		  For_PutAllParsForum (((struct For_Forums *) Context)->ThisPageThrs,	// Page of threads = current
 				       Pagination->NumPags,	// Page of posts   = last
 				       ((struct For_Forums *) Context)->ForumSet,
 				       ((struct For_Forums *) Context)->ThreadsOrder,
@@ -811,14 +811,14 @@ void Pag_PutParPagNum (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
 
 unsigned Pag_GetParPagNum (Pag_WhatPaginate_t WhatPaginate)
   {
-   unsigned CurrentPage;
+   unsigned ThisPage;
 
    /***** Try to get parameter with the number of page *****/
-   CurrentPage = (unsigned) Par_GetParUnsignedLong (Pag_ParNumPag[WhatPaginate],
-						    1,
-						    UINT_MAX,
-						    0);
-   if (CurrentPage == 0)
+   ThisPage = (unsigned) Par_GetParUnsignedLong (Pag_ParNumPag[WhatPaginate],
+						 1,
+						 UINT_MAX,
+						 0);
+   if (ThisPage == 0)
       /***** If there's no parameter page, return a default value *****/
       switch (WhatPaginate)
 	{
@@ -839,7 +839,7 @@ unsigned Pag_GetParPagNum (Pag_WhatPaginate_t WhatPaginate)
 	    return 1;
 	}
 
-   return CurrentPage;
+   return ThisPage;
   }
 
 /*****************************************************************************/

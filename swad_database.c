@@ -448,13 +448,13 @@ mysql> DESCRIBE brw_clipboards;
 			"UsrCod INT NOT NULL,"
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
-			"WorksUsrCod INT NOT NULL,"
+			"WorksUsrCod INT NOT NULL,"	// TODO: Change to OwnerCod
 			"FileType TINYINT NOT NULL DEFAULT 0,"
 			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"CopyTime TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(FileBrowser,Cod),"
-		   "INDEX(WorksUsrCod)"
+		   "INDEX(WorksUsrCod)"			// TODO: Change to OwnerCod
 		   ") ENGINE=MyISAM");
 
    /***** Table brw_expanded *****/
@@ -476,12 +476,12 @@ mysql> DESCRIBE brw_expanded;
 			"UsrCod INT NOT NULL,"
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
-			"WorksUsrCod INT NOT NULL,"
+			"WorksUsrCod INT NOT NULL,"	// TODO: Change to OwnerCod
 			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"ClickTime DATETIME NOT NULL,"
 		   "INDEX(UsrCod,FileBrowser,Cod),"
 		   "INDEX(FileBrowser,Cod),"
-		   "INDEX(WorksUsrCod)"
+		   "INDEX(WorksUsrCod)"			// TODO: Change to OwnerCod
 		   ") ENGINE=MyISAM");
 
    /***** Table brw_files *****/
@@ -507,16 +507,16 @@ mysql> DESCRIBE brw_files;
 			"FilCod INT NOT NULL AUTO_INCREMENT,"
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
-			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
-			"PublisherUsrCod INT NOT NULL,"
+			"ZoneUsrCod INT NOT NULL DEFAULT -1,"	// TODO: Change to OwnerCod
+			"PublisherUsrCod INT NOT NULL,"		// TODO: Change to PublisherCod
 			"FileType TINYINT NOT NULL DEFAULT 0,"
 			"Path VARCHAR(4096) COLLATE latin1_bin NOT NULL,"	// PATH_MAX
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"License TINYINT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(FilCod),"
-		   "INDEX(FileBrowser,Cod,ZoneUsrCod,Path(256),FilCod),"
-		   "INDEX(ZoneUsrCod),"
+		   "INDEX(FileBrowser,Cod,ZoneUsrCod,Path(256),FilCod),"	// TODO: Change to OwnerCod
+		   "INDEX(ZoneUsrCod),"						// TODO: Change to OwnerCod
 		   "INDEX(PublisherUsrCod)"
 		   ") ENGINE=MyISAM");
 
@@ -560,13 +560,13 @@ mysql> DESCRIBE brw_sizes;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_sizes ("
 			"FileBrowser TINYINT NOT NULL,"
 			"Cod INT NOT NULL DEFAULT -1,"
-			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
+			"ZoneUsrCod INT NOT NULL DEFAULT -1,"	// TODO: Change to OwnerCod
 			"NumLevels INT NOT NULL,"
 			"NumFolders INT NOT NULL,"
 			"NumFiles INT NOT NULL,"
 			"TotalSize BIGINT NOT NULL,"
-		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
-		   "INDEX(ZoneUsrCod)"
+		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"	// TODO: Change to OwnerCod
+		   "INDEX(ZoneUsrCod)"				// TODO: Change to OwnerCod
 		   ") ENGINE=MyISAM");
 
    /***** Table brw_views *****/

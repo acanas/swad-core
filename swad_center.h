@@ -43,21 +43,21 @@
 
 void Ctr_SeeCtrWithPendingDegs (void);
 
-void Ctr_DrawCenterLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
-                                        const char *IconClass);
+void Ctr_DrawCtrLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
+                                     const char *IconClass);
 
-void Ctr_ShowCtrsOfCurrentIns (void);
-void Ctr_EditCenters (void);
+void Ctr_ShowCtrsOfThisIns (void);
+void Ctr_EditCtrs (void);
 
-void Ctr_GetBasicListOfCentersInIns (long HieCod);
-Err_SuccessOrError_t Ctr_GetCenterDataByCod (struct Hie_Node *Node);
+void Ctr_GetBasicListOfCtrsInIns (long HieCod);
+Err_SuccessOrError_t Ctr_GetCtrDataByCod (struct Hie_Node *Node);
 void Ctr_GetCoordByCod (long HieCod,struct Map_Coordinates *Coord);
-void Ctr_WriteSelectorOfCenter (void);
-void Ctr_RemoveCenter (void);
+void Ctr_WriteSelectorOfCtr (void);
+void Ctr_RemoveCtr (void);
 void Ctr_ChangeCtrPlc (void);
-void Ctr_RenameCenterShrt (void);
-void Ctr_RenameCenterFull (void);
-void Ctr_RenameCenter (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull);
+void Ctr_RenameCtrShrt (void);
+void Ctr_RenameCtrFull (void);
+void Ctr_RenameCtr (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull);
 void Ctr_ChangeCtrWWW (void);
 void Ctr_ChangeCtrStatus (void);
 void Ctr_ContEditAfterChgCtr (void);

@@ -39,8 +39,8 @@ void Crs_DB_CreateCourse (struct Hie_Node *Crs,Hie_Status_t Status);
 
 unsigned Crs_DB_GetAllCrss (MYSQL_RES **mysql_res);
 unsigned Crs_DB_GetCrssInDeg (MYSQL_RES **mysql_res,long HieCod);
-unsigned Crs_DB_GetCrssInCurrentDegBasic (MYSQL_RES **mysql_res);
-unsigned Crs_DB_GetCrssInCurrentDegFull (MYSQL_RES **mysql_res);
+unsigned Crs_DB_GetCrssInThisDegBasic (MYSQL_RES **mysql_res);
+unsigned Crs_DB_GetCrssInThisDegFull (MYSQL_RES **mysql_res);
 Exi_Exist_t Crs_DB_GetCourseDataByCod (MYSQL_RES **mysql_res,long HieCod);
 long Crs_DB_GetDegCodOfCourseByCod (long HieCod);
 void Crs_DB_GetShortNamesByCod (long HieCod,
@@ -69,7 +69,7 @@ void Crs_DB_UpdateInstitutionalCrsCod (long HieCod,const char *NewInstitutionalC
 void Crs_DB_UpdateCrsYear (long HieCod,unsigned NewYear);
 void Crs_DB_UpdateCrsName (long HieCod,
 			   const char *FldName,const char *NewCrsName);
-void Crs_DB_UpdateDegOfCurrentCrs (long HieCod);
+void Crs_DB_UpdateDegOfThisCrs (long HieCod);
 void Crs_DB_UpdateCrsStatus (long HieCod,Hie_Status_t Status);
 
 void Crs_DB_UpdateCrsLastClick (void);

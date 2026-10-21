@@ -215,7 +215,7 @@ const char *Mnu_GetIconFromAction (Act_Action_t Action)
 /******* When I change to another tab, go to the first option allowed ********/
 /*****************************************************************************/
 
-Act_Action_t Mnu_GetFirstActionAvailableInCurrentTab (void)
+Act_Action_t Mnu_GetFirstActionAvailableInThisTab (void)
   {
    unsigned NumOptInMenu;
    Act_Action_t Action;

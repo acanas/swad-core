@@ -92,10 +92,10 @@ unsigned (*Hie_GetMyNodesFromDB[Hie_NUM_LEVELS]) (MYSQL_RES **mysql_res,
 
 Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node) =
   {
-   [Hie_CTY] = Cty_GetCountrDataByCod,
-   [Hie_INS] = Ins_GetInstitDataByCod,
-   [Hie_CTR] = Ctr_GetCenterDataByCod,
-   [Hie_DEG] = Deg_GetDegreeDataByCod,
+   [Hie_CTY] = Cty_GetCtyDataByCod,
+   [Hie_INS] = Ins_GetInsDataByCod,
+   [Hie_CTR] = Ctr_GetCtrDataByCod,
+   [Hie_DEG] = Deg_GetDegDataByCod,
    [Hie_CRS] = Crs_GetCourseDataByCod,
   };
 
@@ -232,10 +232,10 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_HIERARCHY_SINGUL_Abc[Hie_NUM_LEVELS];
    static void (*FunctionWriteSelector[Hie_NUM_LEVELS]) (void) =
      {
-      [Hie_CTY] = Cty_WriteSelectorOfCountry,
-      [Hie_INS] = Ins_WriteSelectorOfInstitution,
-      [Hie_CTR] = Ctr_WriteSelectorOfCenter,
-      [Hie_DEG] = Deg_WriteSelectorOfDegree,
+      [Hie_CTY] = Cty_WriteSelectorOfCty,
+      [Hie_INS] = Ins_WriteSelectorOfIns,
+      [Hie_CTR] = Ctr_WriteSelectorOfCtr,
+      [Hie_DEG] = Deg_WriteSelectorOfDeg,
       [Hie_CRS] = Crs_WriteSelectorOfCourse,
      };
    Hie_Level_t HieLvl;
@@ -686,13 +686,13 @@ void Hie_InitHierarchy (void)
 
       /***** If any of the course directories does not exist, create it *****/
       if (Fil_CheckIfPathExists (Gbl.Crs.Path.Prv) == Exi_DOES_NOT_EXIST)
-	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.Prv);
+	 Fil_CreateFolderIfNotExists (Gbl.Crs.Path.Prv);
       if (Fil_CheckIfPathExists (Gbl.Crs.Path.Pub) == Exi_DOES_NOT_EXIST)
-	 Fil_CreateDirIfNotExists (Gbl.Crs.Path.Pub);
+	 Fil_CreateFolderIfNotExists (Gbl.Crs.Path.Pub);
 
       /***** Count number of groups in current course
              (used in some actions) *****/
-      Gbl.Crs.Grps.NumGrps = Grp_DB_CountNumGrpsInCurrentCrs ();
+      Gbl.Crs.Grps.NumGrps = Grp_DB_CountNumGrpsInThisCrs ();
       if (Gbl.Crs.Grps.NumGrps == 0)
 	 Gbl.Crs.Grps.MyAllGrps = Grp_ALL_GROUPS;
      }
@@ -720,7 +720,7 @@ void Hie_ResetHierarchy (void)
       Gbl.Hierarchy.Node[HieLvl].ShrtName[0] =
       Gbl.Hierarchy.Node[HieLvl].FullName[0] = '\0';
       Gbl.Hierarchy.Node[HieLvl].WWW[0]      = '\0';
-      Gbl.Usrs.Me.IBelongToCurrent[HieLvl] = Usr_DONT_BELONG;
+      Gbl.Usrs.Me.IBelongToThis[HieLvl] = Usr_DONT_BELONG;
      }
    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod = -1L;
    Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod = -1L;
@@ -781,7 +781,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		     SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]);
 
 		     /* Write institution logo and name */
-		     Ins_DrawInstitLogoAndNameWithLink (&Hie[Hie_INS],ActSeeInsInf,"LT ICO16x16");
+		     Ins_DrawInsLogoAndNameWithLink (&Hie[Hie_INS],ActSeeInsInf,"LT ICO16x16");
 		    }
 		  break;
 	       case Hie_CTR:	// Center
@@ -791,7 +791,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		     SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]);
 
 		     /* Write center logo and name */
-		     Ctr_DrawCenterLogoAndNameWithLink (&Hie[Hie_CTR],ActSeeCtrInf,"LT ICO16x16");
+		     Ctr_DrawCtrLogoAndNameWithLink (&Hie[Hie_CTR],ActSeeCtrInf,"LT ICO16x16");
 		    }
 		  break;
 	       case Hie_DEG:	// Degree
@@ -801,7 +801,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 		     SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]);
 
 		     /* Write degree logo and name */
-		     Deg_DrawDegreeLogoAndNameWithLink (&Hie[Hie_DEG],ActSeeDegInf,"LT ICO20x20");
+		     Deg_DrawDegLogoAndNameWithLink (&Hie[Hie_DEG],ActSeeDegInf,"LT ICO20x20");
 		    }
 		  break;
 	       default:	// There are no administrators in other scopes
@@ -1017,7 +1017,7 @@ void Hie_ResetMyHierarchy (void)
       Gbl.Usrs.Me.Hierarchy[HieLvl].Nodes = NULL;
       Gbl.Usrs.Me.Hierarchy[HieLvl].Num = 0;
       Gbl.Usrs.Me.Hierarchy[HieLvl].Status = Cac_INVALID;
-      Gbl.Usrs.Me.IBelongToCurrent[HieLvl] = Usr_DONT_BELONG;
+      Gbl.Usrs.Me.IBelongToThis[HieLvl] = Usr_DONT_BELONG;
      }
   }
 

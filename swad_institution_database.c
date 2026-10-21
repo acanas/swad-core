@@ -45,7 +45,7 @@ extern struct Globals Gbl;
 /************************** Create a new institution *************************/
 /*****************************************************************************/
 
-long Ins_DB_CreateInstitution (const struct Hie_Node *Ins,Hie_Status_t Status)
+long Ins_DB_CreateIns (const struct Hie_Node *Ins,Hie_Status_t Status)
   {
    return
    DB_QueryINSERTandReturnCode ("can not create institution",

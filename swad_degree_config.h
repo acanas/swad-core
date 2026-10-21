@@ -31,8 +31,8 @@ void DegCfg_ShowConfiguration (void);
 void DegCfg_PrintConfiguration (void);
 
 void DegCfg_ChangeDegCtr (void);
-void DegCfg_RenameDegreeShrt (void);
-void DegCfg_RenameDegreeFull (void);
+void DegCfg_RenameDegShrt (void);
+void DegCfg_RenameDegFull (void);
 void DegCfg_ChangeDegWWW (void);
 void DegCfg_ReqLogo (void);
 void DegCfg_ReceiveLogo (void);

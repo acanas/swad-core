@@ -40,7 +40,7 @@ extern struct Globals Gbl;
 /************************** Create a new department **************************/
 /*****************************************************************************/
 
-void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt)
+void Dpt_DB_CreateDpt (const struct Dpt_Department *Dpt)
   {
    /***** Create a new department *****/
    DB_QueryINSERT ("can not create a new department",
@@ -58,8 +58,8 @@ void Dpt_DB_CreateDepartment (const struct Dpt_Department *Dpt)
 /************** Get list of departments in a given institution ***************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetListDepartmentsInIns (MYSQL_RES **mysql_res,
-                                         long HieCod,Dpt_Order_t SelectedOrder)
+unsigned Dpt_DB_GetListDptsInIns (MYSQL_RES **mysql_res,
+                                  long HieCod,Dpt_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Dpt_NUM_ORDERS] =
      {
@@ -109,7 +109,7 @@ unsigned Dpt_DB_GetListDepartmentsInIns (MYSQL_RES **mysql_res,
 /****************** Get data of department using its code ********************/
 /*****************************************************************************/
 
-Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
+Exi_Exist_t Dpt_DB_GetDptDataByCod (MYSQL_RES **mysql_res,long DptCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get data of a department",
@@ -151,7 +151,7 @@ Exi_Exist_t Dpt_DB_GetDepartmentDataByCod (MYSQL_RES **mysql_res,long DptCod)
 /******************* Check if the name of department exists ******************/
 /*****************************************************************************/
 
-Exi_Exist_t Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *Name,long Cod,
+Exi_Exist_t Dpt_DB_CheckIfDptNameExists (const char *FldName,const char *Name,long Cod,
 						__attribute__((unused)) long PrtCod,
 						__attribute__((unused)) unsigned Year)
   {
@@ -170,7 +170,7 @@ Exi_Exist_t Dpt_DB_CheckIfDepartmentNameExists (const char *FldName,const char *
 /************************** Get number of departments ************************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetTotalNumberOfDepartments (void)
+unsigned Dpt_DB_GetTotalNumOfDpts (void)
   {
    return (unsigned) DB_GetNumRowsTable ("dpt_departments");
   }
@@ -179,7 +179,7 @@ unsigned Dpt_DB_GetTotalNumberOfDepartments (void)
 /********+*** Get number of departments in a given institution ***************/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetNumDepartmentsInIns (long HieCod)
+unsigned Dpt_DB_GetNumDptsInIns (long HieCod)
   {
    return (unsigned)
    DB_QueryCOUNT ("can not get number of departments in an institution",
@@ -193,7 +193,7 @@ unsigned Dpt_DB_GetNumDepartmentsInIns (long HieCod)
 /* Get number of teachers in courses of the current instit. in a department **/
 /*****************************************************************************/
 
-unsigned Dpt_DB_GetNumTchsCurrentInsInDepartment (long DptCod)
+unsigned Dpt_DB_GetNumTchsThisInsInDpt (long DptCod)
   {
    /***** Get the number of teachers
           from the current institution in a department *****/
@@ -265,7 +265,7 @@ void Dpt_DB_UpdateDptWWW (long DptCod,char NewWWW[WWW_MAX_BYTES_WWW + 1])
 /***************************** Remove a department ***************************/
 /*****************************************************************************/
 
-void Dpt_DB_RemoveDepartment (long DptCod)
+void Dpt_DB_RemoveDpt (long DptCod)
   {
    DB_QueryDELETE ("can not remove a department",
 		   "DELETE FROM dpt_departments"

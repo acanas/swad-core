@@ -78,7 +78,7 @@ struct Att_Events
    struct Att_Event Event;	// Selected/current event
    Lay_Show_t ShowDetails;
    char *StrAttCodsSelected;
-   unsigned CurrentPage;
+   unsigned ThisPage;
   };
 
 #define Att_NUM_PRESENT 2

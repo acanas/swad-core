@@ -106,7 +106,7 @@ struct Msg_Messages
       unsigned NumErrors;
      } Rcv;
    bool OnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
-   unsigned CurrentPage;
+   unsigned ThisPage;
    long MsgCod;	// Used as parameter with message to be removed
   };
 
