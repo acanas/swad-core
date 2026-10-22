@@ -300,7 +300,7 @@ static void API_GetListGrpsInMatchFromDB (struct soap *soap,
 					  long MchCod,char **ListGroups);
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
-			 struct Brw_File *File,
+			 struct Brw_File *FileOrFolder,
 			 FILE *XML,unsigned Level,
                          const char PathInServ[PATH_MAX + 1],
                          const char PathInZone[PATH_MAX + 1]);
@@ -4864,7 +4864,7 @@ int swad__getDirectoryTree (struct soap *soap,
 /*****************************************************************************/
 
 static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
-			 struct Brw_File *File,
+			 struct Brw_File *FileOrFolder,
 			 FILE *XML,unsigned Level,
                          const char PathInServ[PATH_MAX + 1],
                          const char PathInZone[PATH_MAX + 1])
@@ -4889,29 +4889,30 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 	 if (strcmp (FileList[NumFile]->d_name,".") &&
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
+            Brw_ResetFileMetadata (FileOrFolder);	// Paths are not reset
 	    Fil_BuildPath (PathInServIncludingFile,"%s/%s",
 		           PathInServ,FileList[NumFile]->d_name);
 	    Fil_BuildPath (PathInZoneIncludingFile,"%s/%s",
 		           PathInZone,FileList[NumFile]->d_name);
 
-	    Str_Copy (File->Path.InZoneWithoutName,PathInZone,
-	 	      sizeof (File->Path.InZoneWithoutName) - 1);
-	    Str_Copy (File->Path.Name,FileList[NumFile]->d_name,
-	 	      sizeof (File->Path.Name) - 1);
+	    Str_Copy (FileOrFolder->Path.InZoneWithoutName,PathInZone,
+	 	      sizeof (FileOrFolder->Path.InZoneWithoutName) - 1);
+	    Str_Copy (FileOrFolder->Path.Name,FileList[NumFile]->d_name,
+	 	      sizeof (FileOrFolder->Path.Name) - 1);
 
 	    if (!lstat (PathInServIncludingFile,&FileStatus))	// On success ==> 0 is returned
 	      {
 	       /***** Construct the full path of the file or folder *****/
-	       Brw_BuildFullPathFromPathAndName (FileBrowser,File);
+	       Brw_BuildFullPathFromPathAndName (FileBrowser,FileOrFolder);
 
 	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 		 {
 		  /***** Write a row for the subdirectory *****/
-		  File->Type = Brw_IS_FOLDER;
-		  if (API_WriteRowFileBrowser (FileBrowser,File,XML,Level) == HidVis_VISIBLE)
+		  FileOrFolder->Type = Brw_IS_FOLDER;
+		  if (API_WriteRowFileBrowser (FileBrowser,FileOrFolder,XML,Level) == HidVis_VISIBLE)
 		    {
 		     /* List subtree starting at this this directory */
-		     API_ListDir (FileBrowser,File,XML,Level + 1,
+		     API_ListDir (FileBrowser,FileOrFolder,XML,Level + 1,
 		                  PathInServIncludingFile,
 		                  PathInZoneIncludingFile);
 
@@ -4922,9 +4923,9 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 		 }
 	       else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	         {
-		  File->Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+		  FileOrFolder->Type = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
 										       Brw_IS_FILE;
-		  HiddenOrVisible = API_WriteRowFileBrowser (FileBrowser,File,XML,Level);
+		  HiddenOrVisible = API_WriteRowFileBrowser (FileBrowser,FileOrFolder,XML,Level);
 	         }
 	      }
 	   }
@@ -5073,6 +5074,7 @@ int swad__getFile (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
+   Brw_ResetFileMetadata (File);	// Paths are not reset
    File.FilCod = FileBrowser.FilCod = (long) fileCode;
    if (File.FilCod <= 0)
       return soap_sender_fault (soap,
@@ -5220,6 +5222,7 @@ int swad__getMarks (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
+   Brw_ResetFileMetadata (File);	// Paths are not reset
    File.FilCod = (long) fileCode;
    Brw_GetFileMetadataByCod (&ZoneDB,&File);
 

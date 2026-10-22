@@ -835,6 +835,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
       case Ntf_EVENT_MARKS_FILE:
+         Brw_ResetFileMetadata (&File);	// Paths are not reset
 	 if ((File.FilCod = Cod) > 0)
 	   {
             Brw_GetFileMetadataByCod (&ZoneDB,&File);

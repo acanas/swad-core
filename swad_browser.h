@@ -93,6 +93,7 @@ void Brw_DownloadFile (void);
 void Brw_ChgFileMetadata (void);
 void Brw_GetFileMetadataByPath (Brw_Zone_t Zone,struct Brw_File *FileOrFolder);
 void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_File *FileOrFolder);
+void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder);
 Exi_Exist_t Brw_GetFileTypeSizeAndDate (struct Brw_File *File);
 void Brw_GetAndUpdateFileViews (struct Brw_File *File);
 void Brw_UpdateMyFileViews (long FilCod);

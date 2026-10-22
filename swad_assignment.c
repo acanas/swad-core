@@ -707,7 +707,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
       [Usr_CAN    ] = {.Icon = "folder-open.svg"	,.Color = Ico_GREEN	},
      };
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File File;
+   struct Brw_File Folder;
    Act_Action_t NextAction;
    Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
 			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
@@ -743,14 +743,15 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-	 File.Type = Brw_IS_FOLDER;
-	 Str_Copy (File.Path.InZoneWithoutName,
+         Brw_ResetFileMetadata (Folder);	// Paths are not reset
+	 Folder.Type = Brw_IS_FOLDER;
+	 Str_Copy (Folder.Path.InZoneWithoutName,
 		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-		   sizeof (File.Path.InZoneWithoutName) - 1);
-	 Str_Copy (File.Path.Name,Asg->FolderName,sizeof (File.Path.Name) - 1);
-	 Brw_BuildFullPathFromPathAndName (&FileBrowser,&File);
-	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&File);
-	 FileBrowser.FilCod = File.FilCod;
+		   sizeof (Folder.Path.InZoneWithoutName) - 1);
+	 Str_Copy (Folder.Path.Name,Asg->FolderName,sizeof (Folder.Path.Name) - 1);
+	 Brw_BuildFullPathFromPathAndName (&FileBrowser,&Folder);
+	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&Folder);
+	 FileBrowser.FilCod = Folder.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 

@@ -1216,7 +1216,6 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
                                               const char *FileNameToShow);
 static Brw_License_t Brw_GetParLicense (void);
 
-static void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder);
 static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 				        Brw_Zone_t *ZoneDB,
                                         struct Brw_File *FileOrFolder);
@@ -1891,6 +1890,7 @@ void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
    char FolderName[NAME_MAX + 1];
 
    /***** Get file code *****/
+   Brw_ResetFileMetadata (File);	// Paths are not reset
    if ((File->FilCod = FileBrowser->FilCod = ParCod_GetPar (ParCod_Fil)) <= 0)
       return;
 
@@ -3560,6 +3560,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 	     strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 	   {
 	    /***** Construct the full path of the file or folder *****/
+            Brw_ResetFileMetadata (&FileOrFolder);	// Paths are not reset
 	    FileOrFolder.Level = Level;
 	    Fil_BuildPath (PathFileInServ,"%s/%s",
 		           PathInServ,FileList[NumFile]->d_name);
@@ -3739,7 +3740,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
    if (FileOrFolder->FilCod <= 0)	// No entry for this file in database table of files
      {
       /* Add entry to the table of files/folders */
-      FileOrFolder->Metadata.PublisherCod       = -1L;
+      FileOrFolder->Metadata.PublisherCod    = -1L;
       FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVATE;
       FileOrFolder->Metadata.License         = Brw_LICENSE_DEFAULT;
       FileOrFolder->FilCod         	     = Brw_DB_AddPath (FileBrowser->Zone,
@@ -5577,6 +5578,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
    Brw_Zone_t ZoneDB;
    struct Brw_File FirstFile;
 
+   Brw_ResetFileMetadata (&FirstFile);	// Paths are not reset
    FirstFile.FilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
 
    Pasted.NumFiles =
@@ -7884,18 +7886,18 @@ static Usr_Can_t Brw_CheckIfICanEditFileMetadata (Brw_Zone_t Zone,
       case Brw_ADMI_WRK_USR:	case Brw_ADMI_WRK_CRS:
       case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
       case Brw_ADMI_BRF_USR:
-	 if (Gbl.Usrs.Me.Logged)							// I am logged
+	 if (Gbl.Usrs.Me.Logged)						// I am logged
 	   {
-	    if (PublisherUsrCod > 0)							// The file has publisher
+	    if (PublisherUsrCod > 0)						// The file has publisher
 	      {
-	       if (PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)			// I am the publisher
+	       if (PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)		// I am the publisher
 		  return Usr_CAN;
 	      }
-	    else									// The file has no publisher
+	    else								// The file has no publisher
 	      {
 	       OwnerCod = Brw_GetOwnerCodForZone (Zone);
 	       if ((OwnerCod <= 0 && Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
-		   OwnerCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
+		   OwnerCod == Gbl.Usrs.Me.UsrDat.UsrCod)			// I am the owner
 		  return Usr_CAN;
 	      }
 	   }
@@ -8165,16 +8167,17 @@ void Brw_GetFileMetadataByPath (Brw_Zone_t Zone,struct Brw_File *FileOrFolder)
 					 FileOrFolder->Path.InZone))
      {
       case Exi_EXISTS:
-         Brw_ResetFileMetadata (FileOrFolder);	// Paths are not reset
 	 Brw_GetFileMetadataFromRow (mysql_res,&ZoneDB,FileOrFolder);
 	 if (ZoneDB != Brw_DB_GetZoneDB_brw_files (Zone))
 	    Err_WrongFileZoneExit ();
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-         Brw_ResetFileMetadata (FileOrFolder);	// Paths are not reset
 	 break;
      }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
   }
 
 /*****************************************************************************/
@@ -8192,12 +8195,10 @@ void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_File *FileOrFolder)
    switch (Brw_DB_GetFileMetadataByCod (&mysql_res,FileOrFolder->FilCod))
      {
       case Exi_EXISTS:
-	 Brw_ResetFileMetadata (FileOrFolder);	// Paths are not reset
 	 Brw_GetFileMetadataFromRow (mysql_res,ZoneDB,FileOrFolder);
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Brw_ResetFileMetadata (FileOrFolder);	// Paths are not reset
 	 break;
      }
 
@@ -8208,25 +8209,26 @@ void Brw_GetFileMetadataByCod (Brw_Zone_t *ZoneDB,struct Brw_File *FileOrFolder)
 /*****************************************************************************/
 /*************************** Reset file metadata *****************************/
 /*****************************************************************************/
-// Resets all fields except paths
+// Resets all fields except level and paths
 
-static void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder)
+void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder)
   {
-   FileOrFolder->FilCod			= -1L;	// Indicates that no entry exists in database
-   FileOrFolder->HieCod			= -1L;
+   FileOrFolder->FilCod				= -1L;	// Indicates that no entry exists in database
+   FileOrFolder->HieCod				= -1L;
    FileOrFolder->OwnerCod			= -1L;
-   FileOrFolder->Level			= 0;
-   FileOrFolder->Type			= Brw_IS_UNKNOWN;
+   FileOrFolder->Type				= Brw_IS_UNKNOWN;
+
    FileOrFolder->Metadata.PublisherCod		= -1L;
    FileOrFolder->Metadata.HiddenOrVisible	= HidVis_HIDDEN;
    FileOrFolder->Metadata.PrivateOrPublic	= PriPub_PRIVATE;
    FileOrFolder->Metadata.License		= Brw_LICENSE_DEFAULT;
    FileOrFolder->Metadata.Size			= (off_t) 0;
    FileOrFolder->Metadata.Time			= (time_t) 0;
-   FileOrFolder->Stats.MyViews		   =
-   FileOrFolder->Stats.PublicViews	   =
-   FileOrFolder->Stats.ViewsFromLoggedUsrs =
-   FileOrFolder->Stats.LoggedUsrs	   = 0;
+
+   FileOrFolder->Stats.MyViews		   	=
+   FileOrFolder->Stats.PublicViews	   	=
+   FileOrFolder->Stats.ViewsFromLoggedUsrs 	=
+   FileOrFolder->Stats.LoggedUsrs	   	= 0;
   }
 
 /*****************************************************************************/
@@ -9049,6 +9051,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       *ContentStr = NULL;
 
    /***** Get file metadata *****/
+   Brw_ResetFileMetadata (&File);	// Paths are not reset
    File.FilCod = FilCod;
    Brw_GetFileMetadataByCod (&ZoneDB,&File);
 
@@ -9204,6 +9207,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    row[10] = GrpCod
 */
    /***** Get file code (row[0]) and metadata *****/
+   Brw_ResetFileMetadata (&File);	// Paths are not reset
    File.FilCod = FileBrowser.FilCod = Str_ConvertStrCodToLongCod (row[0]);
    Brw_GetFileMetadataByCod (&ZoneDB,&File);
    FileBrowser.Zone = ZoneDB;
