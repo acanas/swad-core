@@ -2892,7 +2892,7 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
    unsigned NumUsr;
    Err_SuccessOrError_t UsrIDValid;
 
-   if (ListUsrCods->NumUsrs)	// User(s) found with the ID
+   if (ListUsrCods->NumUsrs)	// User(s) found
      {
       /***** Warning if more than one user found *****/
       if (ListUsrCods->NumUsrs > 1)
@@ -2917,7 +2917,7 @@ static void Enr_AskIfEnrRemUsr (struct Usr_ListUsrCods *ListUsrCods,Rol_Role_t R
       /***** Free list of users' codes *****/
       Usr_FreeListUsrCods (ListUsrCods);
      }
-   else	// No users found, he/she is a new user
+   else				// No users found, he/she is a new user
      {
       /***** If UsrCod is not present in parameters from form,
 	     use user's ID to identify the user to be enroled *****/
@@ -2970,13 +2970,13 @@ static void Enr_ShowFormToEditOtherUsr (void)
 	    /* Check if this user belongs to the current course */
 	    switch (Enr_CheckIfUsrBelongsToThisCrs (&Gbl.Usrs.Other.UsrDat))
 	      {
-	       case Usr_BELONG:
+	       case Usr_BELONG:		// The user belongs to the current course
 		  Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 		  Ale_ShowAlert (Ale_INFO,*Usr_AcceptedTxt[Gbl.Usrs.Other.UsrDat.Accepted],
 				 Gbl.Usrs.Other.UsrDat.FullName,
 				 Gbl.Hierarchy.Node[Hie_CRS].FullName);
 		  break;
-	       case Usr_DONT_BELONG:	// User does not belong to the current course
+	       case Usr_DONT_BELONG:	// The user does not belong to the current course
 	       default:
 		  Ale_ShowAlert (Ale_INFO,Txt_THE_USER_X_exists_in_Y_but_is_not_enroled_in_the_course_Z,
 				 Gbl.Usrs.Other.UsrDat.FullName,

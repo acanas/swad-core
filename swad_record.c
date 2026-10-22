@@ -2231,7 +2231,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
 			/***** Which action (enroling, removing...)? *****/
 			Enr_PutActionsEnrRemOneUsr (MeOrOther);
-
 			Frm_EndForm ();
 			break;
 		     default:

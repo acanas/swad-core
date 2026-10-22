@@ -2032,29 +2032,27 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 
 static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
   {
-   Usr_Can_t ICanEdit = (Frm_CheckIfInside () == Frm_OUTSIDE_FORM &&
-			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)) ? Usr_CAN :
-								     Usr_CAN_NOT;
-
-   /***** Icon to edit groups *****/
-   if (ICanEdit == Usr_CAN)
-      Ico_PutContextualIconToEdit (ActEdiGrp,NULL,NULL,NULL);
-
-   /***** Icon to view and select my groups *****/
-   Grp_PutIconToViewAndSelectMyGroups ();
-
-   /***** Link to get resource link *****/
-   switch (Gbl.Action.Act)
+   if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM)
      {
-      case ActReqSelAllGrp:
-      case ActReqSelOneGrpTyp:
-      case ActChgGrp:
-      case ActReqLnkAllGrp:
-         Ico_PutContextualIconToGetLink (ActReqLnkAllGrp,NULL,NULL,NULL);
-         break;
-      default:
-	 break;
+      /***** Icon to edit groups *****/
+      if (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
+	  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+	 Ico_PutContextualIconToEdit (ActEdiGrp,NULL,NULL,NULL);
+
+      switch (Gbl.Action.Act)
+	{
+	 case ActReqSelAllGrp:
+	 case ActReqSelOneGrpTyp:
+	 case ActChgGrp:
+	 case ActReqLnkAllGrp:
+	    /***** Link to get resource link *****/
+	    Ico_PutContextualIconToGetLink (ActReqLnkAllGrp,NULL,NULL,NULL);
+	    break;
+	 default:
+	    /***** Icon to view and select my groups *****/
+	    Grp_PutIconToViewAndSelectMyGroups ();
+	    break;
+	}
      }
   }
 
