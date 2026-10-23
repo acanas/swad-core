@@ -420,7 +420,7 @@ void Ico_PutContextualIconToViewAndSelectMyGroups (Act_Action_t NextAction,
                                                    void (*FuncPars) (void *Args),void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
-				  "sitemap.svg",Ico_BLACK);
+				  "mysitemap.png",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToShowCheckList (Act_Action_t NextAction,

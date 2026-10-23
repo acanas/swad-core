@@ -219,7 +219,7 @@ static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
       Lgo_PutIconToChangeLogo (Hie_INS);
 
    /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+   Plc_PutIconToViewPlcs ();
   }
 
 /*****************************************************************************/

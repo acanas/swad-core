@@ -88,7 +88,7 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
 static void CtrCfg_GetPhotoAttr (long HieCod,char **PhotoAttribution);
 static void CtrCfg_FreePhotoAttr (char **PhotoAttribution);
 static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
-static void CtrCfg_Place (Frm_PutForm_t PutForm);
+static void CtrCfg_Plc (Frm_PutForm_t PutForm);
 static void CtrCfg_NumUsrs (void);
 static void CtrCfg_NumDegs (void);
 static void CtrCfg_NumCrss (void);
@@ -181,7 +181,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	    HieCfg_Name (PutFormName,Hie_CTR,Nam_SHRT_NAME);
 
 	    /***** Place *****/
-	    CtrCfg_Place (PutFormPlc);
+	    CtrCfg_Plc (PutFormPlc);
 
 	    /***** Coordinates *****/
 	    if (PutFormCoor == Frm_PUT_FORM)
@@ -270,7 +270,7 @@ static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
    Ico_PutContextualIconToPrint (ActPrnCtrInf,NULL,NULL);
 
    /***** Put icon to view places *****/
-   Plc_PutIconToViewPlaces ();
+   Plc_PutIconToViewPlcs ();
 
    if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
       // Only center admins, institution admins and system admins
@@ -615,7 +615,7 @@ static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 /**************** Show center place in center configuration ******************/
 /*****************************************************************************/
 
-static void CtrCfg_Place (Frm_PutForm_t PutForm)
+static void CtrCfg_Plc (Frm_PutForm_t PutForm)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
    extern const char *Txt_Place;
@@ -630,7 +630,7 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
      };
 
    /***** Reset places context *****/
-   Plc_ResetPlaces (&Places);
+   Plc_ResetPlcs (&Places);
 
    /***** Place *****/
    HTM_TR_Begin (NULL);
@@ -646,13 +646,13 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
             case Frm_DONT_PUT_FORM:	// I can not change center place
 	       /* Text with the place name */
 	       Plc.PlcCod = Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod;
-	       Plc_GetPlaceDataByCod (&Plc);
+	       Plc_GetPlcDataByCod (&Plc);
 	       HTM_Txt (Plc.FullName);
                break;
             case Frm_PUT_FORM:
 	       /* Get list of places of the current institution */
 	       Places.SelectedOrder = Plc_ORDER_BY_PLACE;
-	       Plc_GetListPlaces (&Places);
+	       Plc_GetListPlcs (&Places);
 
 	       /* Put form to select place */
 	       Frm_BeginForm (ActChgCtrPlcCfg);
@@ -676,7 +676,7 @@ static void CtrCfg_Place (Frm_PutForm_t PutForm)
 	       Frm_EndForm ();
 
 	       /* Free list of places */
-	       Plc_FreeListPlaces (&Places);
+	       Plc_FreeListPlcs (&Places);
                break;
            }
 

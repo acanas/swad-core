@@ -293,10 +293,10 @@ static void Hld_EditHolidaysInternal (void)
    Hld_ResetHolidays (&Holidays);
 
    /***** Reset places context *****/
-   Plc_ResetPlaces (&Places);
+   Plc_ResetPlcs (&Places);
 
    /***** Get list of places *****/
-   Plc_GetListPlaces (&Places);
+   Plc_GetListPlcs (&Places);
 
    /***** Get list of holidays *****/
    Hld_GetListHolidays (&Holidays);
@@ -308,7 +308,7 @@ static void Hld_EditHolidaysInternal (void)
    Hld_FreeListHolidays (&Holidays);
 
    /***** Free list of places *****/
-   Plc_FreeListPlaces (&Places);
+   Plc_FreeListPlcs (&Places);
   }
 
 /*****************************************************************************/
@@ -681,7 +681,7 @@ void Hld_ChangeHolidayPlace (void)
    NewPlace.PlcCod = ParCod_GetPar (ParCod_Plc);
 
    /***** Get place and holiday data from database *****/
-   Plc_GetPlaceDataByCod (&NewPlace);
+   Plc_GetPlcDataByCod (&NewPlace);
    Hld_GetHolidayDataByCod (Hld_EditingHld);
 
    /***** Update the place in database *****/

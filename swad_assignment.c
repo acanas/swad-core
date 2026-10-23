@@ -743,7 +743,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
         }
       Frm_BeginForm (NextAction);
 
-         Brw_ResetFileMetadata (Folder);	// Paths are not reset
+         Brw_ResetFileMetadata (&Folder);	// Paths are not reset
 	 Folder.Type = Brw_IS_FOLDER;
 	 Str_Copy (Folder.Path.InZoneWithoutName,
 		   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,

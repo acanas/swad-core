@@ -41227,29 +41227,6 @@ const char *Txt_Show =
 	"Show";		// Çeviri lazim!
 #endif
 
-const char *Txt_Show_all_files =
-#if   L==1	// ca
-	"Mostrar tots els arxius";
-#elif L==2	// de
-	"Alle Dateien anzeigen";
-#elif L==3	// en
-	"Show all files";
-#elif L==4	// es
-	"Mostrar todos los archivos";
-#elif L==5	// fr
-	"Afficher tous les fichiers";
-#elif L==6	// gn
-	"Mostrar todos los archivos";	// Okoteve traducción
-#elif L==7	// it
-	"Mostra tutti i file";
-#elif L==8	// pl
-	"Poka&zdot; wszystkie pliki";
-#elif L==9	// pt
-	"Mostrar todos os arquivos";
-#elif L==10	// tr
-	"Show all files";		// Çeviri lazim!
-#endif
-
 const char *Txt_Show_all_NOTIFICATIONS =
 #if   L==1	// ca
 	"Mostrar tots";

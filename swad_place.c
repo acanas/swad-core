@@ -61,32 +61,32 @@ static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the p
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static Usr_Can_t Plc_CheckIfICanEditPlaces (void);
+static Usr_Can_t Plc_CheckIfICanEditPlcs (void);
 
 static Plc_Order_t Plc_GetParPlcOrder (void);
-static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args);
-static void Plc_PutIconToEditPlaces (void);
-static void Plc_EditPlacesInternal (void);
-static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args);
+static void Plc_PutIconsListingPlcs (__attribute__((unused)) void *Args);
+static void Plc_PutIconToEditPlcs (void);
+static void Plc_EditPlcsInternal (void);
+static void Plc_PutIconsEditingPlcs (__attribute__((unused)) void *Args);
 
-static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc);
+static void Plc_GetPlcDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc);
 
-static void Plc_ListPlacesForEdition (const struct Plc_Places *Places);
+static void Plc_ListPlcsForEdition (const struct Plc_Places *Plcs);
 static void Plc_PutParPlcCod (void *PlcCod);
 
-static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull);
+static void Plc_RenamePlc (Nam_ShrtOrFullName_t ShrtOrFull);
 
-static void Plc_PutFormToCreatePlace (void);
-static void Plc_PutHeadPlaces (void);
+static void Plc_PutFormToCreatePlc (void);
+static void Plc_PutHeadPlcs (void);
 
-static void Plc_EditingPlaceConstructor (void);
-static void Plc_EditingPlaceDestructor (void);
+static void Plc_EditingPlcConstructor (void);
+static void Plc_EditingPlcDestructor (void);
 
 /*****************************************************************************/
 /************************* Check if I can edit places ************************/
 /*****************************************************************************/
 
-static Usr_Can_t Plc_CheckIfICanEditPlaces (void)
+static Usr_Can_t Plc_CheckIfICanEditPlcs (void)
   {
    static Usr_Can_t Plc_ICanEditPlaces[Rol_NUM_ROLES] =
      {
@@ -102,18 +102,18 @@ static Usr_Can_t Plc_CheckIfICanEditPlaces (void)
 /**************************** Reset places context ***************************/
 /*****************************************************************************/
 
-void Plc_ResetPlaces (struct Plc_Places *Places)
+void Plc_ResetPlcs (struct Plc_Places *Plcs)
   {
-   Places->Num           = 0;
-   Places->Lst           = NULL;
-   Places->SelectedOrder = Plc_ORDER_DEFAULT;
+   Plcs->Num           = 0;
+   Plcs->Lst           = NULL;
+   Plcs->SelectedOrder = Plc_ORDER_DEFAULT;
   }
 
 /*****************************************************************************/
 /***************************** List all places *******************************/
 /*****************************************************************************/
 
-void Plc_SeeAllPlaces (void)
+void Plc_SeeAllPlcs (void)
   {
    extern const char *Hlp_INSTITUTION_Places;
    extern const char *Txt_Places;
@@ -130,16 +130,16 @@ void Plc_SeeAllPlaces (void)
    if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
      {
       /***** Reset places context *****/
-      Plc_ResetPlaces (&Places);
+      Plc_ResetPlcs (&Places);
 
       /***** Get parameter with the type of order in the list of places *****/
       Places.SelectedOrder = Plc_GetParPlcOrder ();
 
       /***** Get list of places *****/
-      Plc_GetListPlaces (&Places);
+      Plc_GetListPlcs (&Places);
 
       /***** Begin box *****/
-      Box_BoxBegin (Txt_Places,Plc_PutIconsListingPlaces,NULL,
+      Box_BoxBegin (Txt_Places,Plc_PutIconsListingPlcs,NULL,
                     Hlp_INSTITUTION_Places,Box_NOT_CLOSABLE);
 
          /***** Table head *****/
@@ -214,7 +214,7 @@ void Plc_SeeAllPlaces (void)
       Box_BoxEnd ();
 
       /***** Free list of places *****/
-      Plc_FreeListPlaces (&Places);
+      Plc_FreeListPlcs (&Places);
      }
   }
 
@@ -234,18 +234,18 @@ static Plc_Order_t Plc_GetParPlcOrder (void)
 /****************** Put contextual icons in list of places *******************/
 /*****************************************************************************/
 
-static void Plc_PutIconsListingPlaces (__attribute__((unused)) void *Args)
+static void Plc_PutIconsListingPlcs (__attribute__((unused)) void *Args)
   {
    /***** Put icon to edit places *****/
-   if (Plc_CheckIfICanEditPlaces () == Usr_CAN)
-      Plc_PutIconToEditPlaces ();
+   if (Plc_CheckIfICanEditPlcs () == Usr_CAN)
+      Plc_PutIconToEditPlcs ();
   }
 
 /*****************************************************************************/
 /********************** Put a link (form) to edit places *********************/
 /*****************************************************************************/
 
-static void Plc_PutIconToEditPlaces (void)
+static void Plc_PutIconToEditPlcs (void)
   {
    Ico_PutContextualIconToEdit (ActEdiPlc,NULL,NULL,NULL);
   }
@@ -254,53 +254,53 @@ static void Plc_PutIconToEditPlaces (void)
 /*************************** Put forms to edit places ************************/
 /*****************************************************************************/
 
-void Plc_EditPlaces (void)
+void Plc_EditPlcs (void)
   {
    /***** Place constructor *****/
-   Plc_EditingPlaceConstructor ();
+   Plc_EditingPlcConstructor ();
 
    /***** Edit places *****/
-   Plc_EditPlacesInternal ();
+   Plc_EditPlcsInternal ();
 
    /***** Place destructor *****/
-   Plc_EditingPlaceDestructor ();
+   Plc_EditingPlcDestructor ();
   }
 
-static void Plc_EditPlacesInternal (void)
+static void Plc_EditPlcsInternal (void)
   {
    extern const char *Hlp_INSTITUTION_Places_edit;
    extern const char *Txt_Places;
    struct Plc_Places Places;
 
    /***** Reset places context *****/
-   Plc_ResetPlaces (&Places);
+   Plc_ResetPlcs (&Places);
 
    /***** Get list of places *****/
-   Plc_GetListPlaces (&Places);
+   Plc_GetListPlcs (&Places);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Places,Plc_PutIconsEditingPlaces,NULL,
+   Box_BoxBegin (Txt_Places,Plc_PutIconsEditingPlcs,NULL,
                  Hlp_INSTITUTION_Places_edit,Box_NOT_CLOSABLE);
 
       /***** Put a form to create a new place *****/
-      Plc_PutFormToCreatePlace ();
+      Plc_PutFormToCreatePlc ();
 
       /***** Forms to edit current places *****/
       if (Places.Num)
-	 Plc_ListPlacesForEdition (&Places);
+	 Plc_ListPlcsForEdition (&Places);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of places *****/
-   Plc_FreeListPlaces (&Places);
+   Plc_FreeListPlcs (&Places);
   }
 
 /*****************************************************************************/
 /**************** Put contextual icons in edition of places *****************/
 /*****************************************************************************/
 
-static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
+static void Plc_PutIconsEditingPlcs (__attribute__((unused)) void *Args)
   {
    /***** Put icon to view places *****/
    Ico_PutContextualIconToView (ActSeePlc,NULL,NULL,NULL);
@@ -310,7 +310,7 @@ static void Plc_PutIconsEditingPlaces (__attribute__((unused)) void *Args)
 /************************** Put icon to view places **************************/
 /*****************************************************************************/
 
-void Plc_PutIconToViewPlaces (void)
+void Plc_PutIconToViewPlcs (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
                                   Ins_PutParInsCod,&Gbl.Hierarchy.Node[Hie_INS].HieCod,
@@ -321,13 +321,13 @@ void Plc_PutIconToViewPlaces (void)
 /******************************* List all places *****************************/
 /*****************************************************************************/
 
-void Plc_GetListPlaces (struct Plc_Places *Places)
+void Plc_GetListPlcs (struct Plc_Places *Places)
   {
    MYSQL_RES *mysql_res;
    unsigned NumPlc;
 
    /***** Get places from database *****/
-   if ((Places->Num = Plc_DB_GetListPlaces (&mysql_res,Places->SelectedOrder))) // Places found...
+   if ((Places->Num = Plc_DB_GetListPlcs (&mysql_res,Places->SelectedOrder))) // Places found...
      {
       /***** Create list with courses in center *****/
       if ((Places->Lst = calloc ((size_t) Places->Num,
@@ -338,7 +338,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
       for (NumPlc = 0;
 	   NumPlc < Places->Num;
 	   NumPlc++)
-         Plc_GetPlaceDataFromRow (mysql_res,&Places->Lst[NumPlc]);
+         Plc_GetPlcDataFromRow (mysql_res,&Places->Lst[NumPlc]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -349,7 +349,7 @@ void Plc_GetListPlaces (struct Plc_Places *Places)
 /************************ Get place data using its code **********************/
 /*****************************************************************************/
 
-void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
+void Plc_GetPlcDataByCod (struct Plc_Place *Plc)
   {
    extern const char *Txt_Place_unspecified;
    extern const char *Txt_Another_place;
@@ -374,8 +374,8 @@ void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
    else if (Plc->PlcCod > 0)
      {
       /***** Get data of a place from database *****/
-      if (Plc_DB_GetPlaceDataByCod (&mysql_res,Plc->PlcCod) == Exi_EXISTS) // Place found...
-         Plc_GetPlaceDataFromRow (mysql_res,Plc);
+      if (Plc_DB_GetPlcDataByCod (&mysql_res,Plc->PlcCod) == Exi_EXISTS) // Place found...
+         Plc_GetPlcDataFromRow (mysql_res,Plc);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -386,7 +386,7 @@ void Plc_GetPlaceDataByCod (struct Plc_Place *Plc)
 /********************** Get place data from database row *********************/
 /*****************************************************************************/
 
-static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc)
+static void Plc_GetPlcDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc)
   {
    MYSQL_ROW row;
 
@@ -410,7 +410,7 @@ static void Plc_GetPlaceDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc)
 /**************************** Free list of places ****************************/
 /*****************************************************************************/
 
-void Plc_FreeListPlaces (struct Plc_Places *Places)
+void Plc_FreeListPlcs (struct Plc_Places *Places)
   {
    if (Places->Lst)
      {
@@ -425,7 +425,7 @@ void Plc_FreeListPlaces (struct Plc_Places *Places)
 /***************************** List all places *******************************/
 /*****************************************************************************/
 
-static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
+static void Plc_ListPlcsForEdition (const struct Plc_Places *Plcs)
   {
    static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
@@ -440,14 +440,14 @@ static void Plc_ListPlacesForEdition (const struct Plc_Places *Places)
    HTM_TABLE_Begin ("TBL_SCROLL");
 
       /***** Write heading *****/
-      Plc_PutHeadPlaces ();
+      Plc_PutHeadPlcs ();
 
       /***** Write all places *****/
       for (NumPlc = 0;
-	   NumPlc < Places->Num;
+	   NumPlc < Plcs->Num;
 	   NumPlc++)
 	{
-	 Plc = &Places->Lst[NumPlc];
+	 Plc = &Plcs->Lst[NumPlc];
 
 	 HTM_TR_Begin (NULL);
 
@@ -496,19 +496,19 @@ static void Plc_PutParPlcCod (void *PlcCod)
 /******************************* Remove a place ******************************/
 /*****************************************************************************/
 
-void Plc_RemovePlace (void)
+void Plc_RemovePlc (void)
   {
    extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centers_of_that_place;
    extern const char *Txt_Place_X_removed;
 
    /***** Place constructor *****/
-   Plc_EditingPlaceConstructor ();
+   Plc_EditingPlcConstructor ();
 
    /***** Get place code *****/
    Plc_EditingPlc->PlcCod = ParCod_GetAndCheckPar (ParCod_Plc);
 
    /***** Get place data from database *****/
-   Plc_GetPlaceDataByCod (Plc_EditingPlc);
+   Plc_GetPlcDataByCod (Plc_EditingPlc);
 
    /***** Check if this place has centers *****/
    if (Plc_EditingPlc->NumCtrs)	// Place has centers ==> don't remove
@@ -517,7 +517,7 @@ void Plc_RemovePlace (void)
    else			// Place has no centers ==> remove it
      {
       /***** Remove place *****/
-      Plc_DB_RemovePlace (Plc_EditingPlc->PlcCod);
+      Plc_DB_RemovePlc (Plc_EditingPlc->PlcCod);
 
       /***** Write message to show the change made *****/
       Ale_CreateAlert (Ale_SUCCESS,NULL,
@@ -529,33 +529,33 @@ void Plc_RemovePlace (void)
 /********************* Change the short name of a place **********************/
 /*****************************************************************************/
 
-void Plc_RenamePlaceShrt (void)
+void Plc_RenamePlcShrt (void)
   {
    /***** Place constructor *****/
-   Plc_EditingPlaceConstructor ();
+   Plc_EditingPlcConstructor ();
 
    /***** Rename place *****/
-   Plc_RenamePlace (Nam_SHRT_NAME);
+   Plc_RenamePlc (Nam_SHRT_NAME);
   }
 
 /*****************************************************************************/
 /********************* Change the full name of a place ***********************/
 /*****************************************************************************/
 
-void Plc_RenamePlaceFull (void)
+void Plc_RenamePlcFull (void)
   {
    /***** Place constructor *****/
-   Plc_EditingPlaceConstructor ();
+   Plc_EditingPlcConstructor ();
 
    /***** Rename place *****/
-   Plc_RenamePlace (Nam_FULL_NAME);
+   Plc_RenamePlc (Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
 /************************ Change the name of a place *************************/
 /*****************************************************************************/
 
-static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
+static void Plc_RenamePlc (Nam_ShrtOrFullName_t ShrtOrFull)
   {
    extern const char *Nam_Fields[Nam_NUM_SHRT_FULL_NAMES];
    extern unsigned Nam_MaxBytes[Nam_NUM_SHRT_FULL_NAMES];
@@ -575,7 +575,7 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
    Nam_GetParShrtOrFullName (ShrtOrFull,NewName);
 
    /***** Get place old names from database  *****/
-   Plc_GetPlaceDataByCod (Plc_EditingPlc);
+   Plc_GetPlcDataByCod (Plc_EditingPlc);
 
    /***** Check if new name is empty *****/
    if (NewName[0])
@@ -584,7 +584,7 @@ static void Plc_RenamePlace (Nam_ShrtOrFullName_t ShrtOrFull)
              (this happens when return is pressed without changes) *****/
       if (strcmp (CurrentName[ShrtOrFull],NewName))	// Different names
          /***** If place was in database... *****/
-         switch (Plc_DB_CheckIfPlaceNameExists (Nam_Fields[ShrtOrFull],
+         switch (Plc_DB_CheckIfPlcNameExists (Nam_Fields[ShrtOrFull],
 					        NewName,Plc_EditingPlc->PlcCod,
 					        Gbl.Hierarchy.Node[Hie_INS].HieCod,
 					        0))	// Unused
@@ -617,17 +617,17 @@ void Plc_ContEditAfterChgPlc (void)
    Ale_ShowAlerts (NULL);
 
    /***** Show the form again *****/
-   Plc_EditPlacesInternal ();
+   Plc_EditPlcsInternal ();
 
    /***** Place destructor *****/
-   Plc_EditingPlaceDestructor ();
+   Plc_EditingPlcDestructor ();
   }
 
 /*****************************************************************************/
 /********************* Put a form to create a new place **********************/
 /*****************************************************************************/
 
-static void Plc_PutFormToCreatePlace (void)
+static void Plc_PutFormToCreatePlc (void)
   {
    const char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
@@ -635,7 +635,7 @@ static void Plc_PutFormToCreatePlace (void)
    Frm_BeginFormTable (ActNewPlc,NULL,NULL,NULL,"TBL_SCROLL");
 
       /***** Write heading *****/
-      Plc_PutHeadPlaces ();
+      Plc_PutHeadPlcs ();
 
       HTM_TR_Begin (NULL);
 
@@ -665,7 +665,7 @@ static void Plc_PutFormToCreatePlace (void)
 /******************** Write header with fields of a place ********************/
 /*****************************************************************************/
 
-static void Plc_PutHeadPlaces (void)
+static void Plc_PutHeadPlcs (void)
   {
    extern const char *Txt_Code;
    extern const char *Txt_Short_name;
@@ -685,12 +685,12 @@ static void Plc_PutHeadPlaces (void)
 /******************* Receive form to create a new place **********************/
 /*****************************************************************************/
 
-void Plc_ReceiveNewPlace (void)
+void Plc_ReceiveNewPlc (void)
   {
    char *Names[Nam_NUM_SHRT_FULL_NAMES];
 
    /***** Place constructor *****/
-   Plc_EditingPlaceConstructor ();
+   Plc_EditingPlcConstructor ();
 
    /***** Get parameters from form *****/
    /* Get place short name and full name */
@@ -702,12 +702,12 @@ void Plc_ReceiveNewPlace (void)
        Plc_EditingPlc->FullName[0])	// If there's a place name
      {
       /***** If name of place was not in database... *****/
-      if (Nam_CheckIfNameExists (Plc_DB_CheckIfPlaceNameExists,
+      if (Nam_CheckIfNameExists (Plc_DB_CheckIfPlcNameExists,
 				 (const char **) Names,
 				 -1L,
 				 Gbl.Hierarchy.Node[Hie_INS].HieCod,
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
-         Plc_DB_CreatePlace (Plc_EditingPlc);
+         Plc_DB_CreatePlc (Plc_EditingPlc);
      }
    else	// If there is not a place name
       Ale_CreateAlertYouMustSpecifyShrtNameAndFullName ();
@@ -717,7 +717,7 @@ void Plc_ReceiveNewPlace (void)
 /************************* Place constructor/destructor **********************/
 /*****************************************************************************/
 
-static void Plc_EditingPlaceConstructor (void)
+static void Plc_EditingPlcConstructor (void)
   {
    /***** Pointer must be NULL *****/
    if (Plc_EditingPlc != NULL)
@@ -735,7 +735,7 @@ static void Plc_EditingPlaceConstructor (void)
    Plc_EditingPlc->NumCtrs     = 0;
   }
 
-static void Plc_EditingPlaceDestructor (void)
+static void Plc_EditingPlcDestructor (void)
   {
    /***** Free memory used for place *****/
    if (Plc_EditingPlc != NULL)

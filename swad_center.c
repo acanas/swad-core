@@ -349,7 +349,7 @@ static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       /***** Place *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
 	 Plc.PlcCod = Ctr->Specific.PlcCod;
-	 Plc_GetPlaceDataByCod (&Plc);
+	 Plc_GetPlcDataByCod (&Plc);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
 
@@ -405,11 +405,11 @@ static void Ctr_EditCtrsInternal (void)
    char *Title;
 
    /***** Reset places context *****/
-   Plc_ResetPlaces (&Places);
+   Plc_ResetPlcs (&Places);
 
    /***** Get list of places *****/
    Places.SelectedOrder = Plc_ORDER_BY_PLACE;
-   Plc_GetListPlaces (&Places);
+   Plc_GetListPlcs (&Places);
 
    /***** Get list of centers *****/
    Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_ORDER_BY_NAME;
@@ -440,7 +440,7 @@ static void Ctr_EditCtrsInternal (void)
    Hie_FreeList (Hie_INS);
 
    /***** Free list of places *****/
-   Plc_FreeListPlaces (&Places);
+   Plc_FreeListPlcs (&Places);
   }
 
 /*****************************************************************************/

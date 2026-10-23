@@ -5074,7 +5074,7 @@ int swad__getFile (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
-   Brw_ResetFileMetadata (File);	// Paths are not reset
+   Brw_ResetFileMetadata (&File);	// Paths are not reset
    File.FilCod = FileBrowser.FilCod = (long) fileCode;
    if (File.FilCod <= 0)
       return soap_sender_fault (soap,
@@ -5222,7 +5222,7 @@ int swad__getMarks (struct soap *soap,
 	                          "Web service key does not exist in database");
 
    /***** Get file metadata *****/
-   Brw_ResetFileMetadata (File);	// Paths are not reset
+   Brw_ResetFileMetadata (&File);	// Paths are not reset
    File.FilCod = (long) fileCode;
    Brw_GetFileMetadataByCod (&ZoneDB,&File);
 

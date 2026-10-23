@@ -1079,6 +1079,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser);
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutIconsFileBrowsersAsgWrkCrs (void *FileBrowser);
 
 static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowser);
 static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
@@ -1086,13 +1087,13 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser);
 static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsFileBrowser (void *FileBrowser);
+static void Brw_PutIconToShowFullTree (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (Brw_Zone_t Zone);
 static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser);
 
-static void Brw_PutCheckboxFullTree (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutParsFullTree (void *FileBrowser);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (Brw_Zone_t Zone);
@@ -2478,7 +2479,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
    Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
 
    /***** Begin box and table *****/
-   Box_BoxBegin (Txt_Assignments_and_other_works,Brw_PutIconShowFigure,NULL,
+   Box_BoxBegin (Txt_Assignments_and_other_works,
+		 Brw_PutIconsFileBrowsersAsgWrkCrs,FileBrowser,
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
       /***** List the assignments and works of the selected users *****/
@@ -2547,6 +2549,19 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
+  }
+
+/*****************************************************************************/
+/******************* Put contextual icons in file browser ********************/
+/*****************************************************************************/
+
+static void Brw_PutIconsFileBrowsersAsgWrkCrs (void *FileBrowser)
+  {
+   /***** Put icon to show all files *****/
+   Brw_PutIconToShowFullTree ((struct Brw_FileBrowser *) FileBrowser);
+
+   /***** Put icon to show a figure *****/
+   Brw_PutIconShowFigure (NULL);
   }
 
 /*****************************************************************************/
@@ -3115,6 +3130,9 @@ static void Brw_PutIconsFileBrowser (void *FileBrowser)
 	 break;
      }
 
+   /***** Put icon to show all files *****/
+   Brw_PutIconToShowFullTree ((struct Brw_FileBrowser *) FileBrowser);
+
    /***** Put icon to get resource link *****/
    if (Brw_ActReqLnk[((struct Brw_FileBrowser *) FileBrowser)->Zone] != ActUnk)
       Ico_PutContextualIconToGetLink (Brw_ActReqLnk[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
@@ -3134,6 +3152,26 @@ static void Brw_PutIconsFileBrowser (void *FileBrowser)
      }
   }
 
+static void Brw_PutIconToShowFullTree (struct Brw_FileBrowser *FileBrowser)
+  {
+   static struct
+     {
+      Lay_Show_t ParShowFullTree;
+      const char *Icon;
+     } Params[Lay_NUM_SHOW] =
+     {
+      [Lay_DONT_SHOW] = {Lay_SHOW	,"sitemap.svg"  },
+      [Lay_SHOW     ] = {Lay_DONT_SHOW	,"mysitemap.png"}
+     };
+   Lay_Show_t CurrentShowFullTree = ((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree;
+
+   FileBrowser->ShowFullTree = Params[CurrentShowFullTree].ParShowFullTree;
+   Lay_PutContextualLinkOnlyIcon (Brw_ActSeeAdm[FileBrowser->Zone],NULL,
+				  Brw_PutParsFullTree,FileBrowser,
+				  Params[CurrentShowFullTree].Icon,Ico_BLACK);
+   FileBrowser->ShowFullTree = CurrentShowFullTree;
+  }
+
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
   {
    /***** Put icon to show a figure *****/
@@ -3150,20 +3188,25 @@ static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBr
    Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-      Brw_PutCheckboxFullTree (FileBrowser);	// Checkbox to show the full tree
-      if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_BRF))
-	{
-	 if (Gbl.Action.Act != ActReqRemOldBrf)
-	    Brw_PutLinkToAskRemOldFiles (FileBrowser->ShowFullTree);	// Remove old files
+   if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_BRF))
+     {
+      if (Gbl.Action.Act != ActReqRemOldBrf)
+        {
+	 Mnu_ContextMenuBegin ();
+	 Brw_PutLinkToAskRemOldFiles (FileBrowser->ShowFullTree);	// Remove old files
+	 Mnu_ContextMenuEnd ();
 	}
-      else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
-	{
-	 if (ZIP_GetCreateZIP () == ZIP_DONT_CREATE_ZIP)
-	    ZIP_PutLinkToCreateZIPAsgWrk (FileBrowser);	// Create a zip file with the...
+     }
+   else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
+     {
+      if (ZIP_GetCreateZIP () == ZIP_DONT_CREATE_ZIP)
+        {
+	 Mnu_ContextMenuBegin ();
+	 ZIP_PutLinkToCreateZIPAsgWrk (FileBrowser);	// Create a zip file with the...
 							//... works of the selected users
+	 Mnu_ContextMenuEnd ();
 	}
-   Mnu_ContextMenuEnd ();
+     }
 
    /***** Initialize hidden levels *****/
    switch (FileBrowser->Zone)
@@ -3347,27 +3390,6 @@ static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser)
       FileBrowser->HiddenLevels[Level] = HidVis_VISIBLE;
   }
 
-/*****************************************************************************/
-/************** Write a form to select whether show full tree ****************/
-/*****************************************************************************/
-
-static void Brw_PutCheckboxFullTree (struct Brw_FileBrowser *FileBrowser)
-  {
-   extern const char *Txt_Show_all_files;
-   static HTM_Attributes_t Attributes[Lay_NUM_SHOW] =
-     {
-      [Lay_DONT_SHOW] = HTM_NO_ATTR,
-      [Lay_SHOW     ] = HTM_CHECKED,
-     };
-
-   Lay_PutContextualCheckbox (Brw_ActSeeAdm[FileBrowser->Zone],
-                              Brw_PutParsFullTree,FileBrowser,
-                              "FullTree",
-                              Attributes[FileBrowser->ShowFullTree] |
-                              HTM_SUBMIT_ON_CHANGE,
-                              Txt_Show_all_files,Txt_Show_all_files);
-  }
-
 static void Brw_PutParsFullTree (void *FileBrowser)
   {
    if (     (Brw_ZoneType[((struct Brw_FileBrowser *) FileBrowser)->Zone] & Brw_IS_GRP_BRW))
@@ -3376,6 +3398,9 @@ static void Brw_PutParsFullTree (void *FileBrowser)
       ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
    else if ((Brw_ZoneType[((struct Brw_FileBrowser *) FileBrowser)->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
+
+   /***** If full tree selected? *****/
+   Brw_PutParFullTreeIfSelected (&((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree);
   }
 
 /*****************************************************************************/

@@ -39,7 +39,7 @@ extern struct Globals Gbl;
 /**************************** Create a new place *****************************/
 /*****************************************************************************/
 
-void Plc_DB_CreatePlace (const struct Plc_Place *Plc)
+void Plc_DB_CreatePlc (const struct Plc_Place *Plc)
   {
    DB_QueryINSERT ("can not create place",
 		   "INSERT INTO plc_places"
@@ -71,7 +71,7 @@ void Plc_DB_UpdatePlcName (long PlcCod,
 /************************** Get list of all places ***************************/
 /*****************************************************************************/
 
-unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
+unsigned Plc_DB_GetListPlcs (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
   {
    static const char *OrderBySubQuery[Plc_NUM_ORDERS] =
      {
@@ -116,7 +116,7 @@ unsigned Plc_DB_GetListPlaces (MYSQL_RES **mysql_res,Plc_Order_t SelectedOrder)
 /********************* Get data of a place from database *********************/
 /*****************************************************************************/
 
-Exi_Exist_t Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
+Exi_Exist_t Plc_DB_GetPlcDataByCod (MYSQL_RES **mysql_res,long PlcCod)
   {
    return
    DB_QuerySELECTunique (mysql_res,"can not get data of a place",
@@ -150,9 +150,9 @@ Exi_Exist_t Plc_DB_GetPlaceDataByCod (MYSQL_RES **mysql_res,long PlcCod)
 /********************** Check if the name of place exists ********************/
 /*****************************************************************************/
 
-Exi_Exist_t Plc_DB_CheckIfPlaceNameExists (const char *FldName,const char *Name,long Cod,
-					   long PrtCod,
-					   __attribute__((unused)) unsigned Year)
+Exi_Exist_t Plc_DB_CheckIfPlcNameExists (const char *FldName,const char *Name,long Cod,
+					 long PrtCod,
+					 __attribute__((unused)) unsigned Year)
   {
    return
    DB_QueryEXISTS ("can not check if the name of a place already existed",
@@ -171,7 +171,7 @@ Exi_Exist_t Plc_DB_CheckIfPlaceNameExists (const char *FldName,const char *Name,
 /******************************** Remove place *******************************/
 /*****************************************************************************/
 
-void Plc_DB_RemovePlace (long PlcCod)
+void Plc_DB_RemovePlc (long PlcCod)
   {
    DB_QueryDELETE ("can not remove a place",
 		   "DELETE FROM plc_places"

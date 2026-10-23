@@ -321,12 +321,12 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgCtrSta	] = {1209, 1,TabIns,Ctr_ChangeCtrStatus		,Ctr_ContEditAfterChgCtr	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
 
    // Places
-   [ActSeePlc		] = { 703, 2,TabIns,NULL			,Plc_SeeAllPlaces		,{{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3C7},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActEdiPlc		] = { 704, 2,TabIns,NULL			,Plc_EditPlaces			,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActNewPlc		] = { 705, 2,TabIns,Plc_ReceiveNewPlace		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemPlc		] = { 776, 2,TabIns,Plc_RemovePlace		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRenPlcSho	] = { 894, 2,TabIns,Plc_RenamePlaceShrt		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRenPlcFul	] = { 895, 2,TabIns,Plc_RenamePlaceFull		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActSeePlc		] = { 703, 2,TabIns,NULL			,Plc_SeeAllPlcs		,{{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3C7},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActEdiPlc		] = { 704, 2,TabIns,NULL			,Plc_EditPlcs			,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActNewPlc		] = { 705, 2,TabIns,Plc_ReceiveNewPlc		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemPlc		] = { 776, 2,TabIns,Plc_RemovePlc		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRenPlcSho	] = { 894, 2,TabIns,Plc_RenamePlcShrt		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRenPlcFul	] = { 895, 2,TabIns,Plc_RenamePlcFull		,Plc_ContEditAfterChgPlc	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
 
    // Departments
    [ActSeeDpt		] = { 675, 3,TabIns,NULL			,Dpt_SeeAllDepts		,{{    0,    0},{    0,    0},{    0,    0},{0x3C7,0x3C7},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},

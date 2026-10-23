@@ -61,19 +61,19 @@ struct Plc_Places
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Plc_ResetPlaces (struct Plc_Places *Places);
+void Plc_ResetPlcs (struct Plc_Places *Plcs);
 
-void Plc_SeeAllPlaces (void);
-void Plc_EditPlaces (void);
-void Plc_PutIconToViewPlaces (void);
-void Plc_GetListPlaces (struct Plc_Places *Places);
-void Plc_FreeListPlaces (struct Plc_Places *Places);
-void Plc_GetPlaceDataByCod (struct Plc_Place *Plc);
-void Plc_RemovePlace (void);
-void Plc_RenamePlaceShrt (void);
-void Plc_RenamePlaceFull (void);
+void Plc_SeeAllPlcs (void);
+void Plc_EditPlcs (void);
+void Plc_PutIconToViewPlcs (void);
+void Plc_GetListPlcs (struct Plc_Places *Plcs);
+void Plc_FreeListPlcs (struct Plc_Places *Plcs);
+void Plc_GetPlcDataByCod (struct Plc_Place *Plc);
+void Plc_RemovePlc (void);
+void Plc_RenamePlcShrt (void);
+void Plc_RenamePlcFull (void);
 void Plc_ContEditAfterChgPlc (void);
 
-void Plc_ReceiveNewPlace (void);
+void Plc_ReceiveNewPlc (void);
 
 #endif
