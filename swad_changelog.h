@@ -641,10 +641,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.17 (2026-10-23)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.17.1 (2026-10-23)"
 #define Chl_CSS_FILE		"swad26.6.3.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.17.1:  Oct 23, 2026	Fixed bug in file browser. (347719 lines)
 	Version 26.17:    Oct 23, 2026	New icon to show all files in file browser. (347713 lines)
 					Copy the following icons to icon public directory:
 sudo cp icon/sitemap.svg /var/www/html/swad/icon/

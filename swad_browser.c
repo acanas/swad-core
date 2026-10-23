@@ -8241,6 +8241,7 @@ void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder)
    FileOrFolder->FilCod				= -1L;	// Indicates that no entry exists in database
    FileOrFolder->HieCod				= -1L;
    FileOrFolder->OwnerCod			= -1L;
+   FileOrFolder->Level				= 0;
    FileOrFolder->Type				= Brw_IS_UNKNOWN;
 
    FileOrFolder->Metadata.PublisherCod		= -1L;
@@ -8254,6 +8255,11 @@ void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder)
    FileOrFolder->Stats.PublicViews	   	=
    FileOrFolder->Stats.ViewsFromLoggedUsrs 	=
    FileOrFolder->Stats.LoggedUsrs	   	= 0;
+
+   FileOrFolder->Path.InServ[0]	   		=
+   FileOrFolder->Path.InZone[0]	   		=
+   FileOrFolder->Path.InZoneWithoutName[0]	=
+   FileOrFolder->Path.Name[0]	   		= '\0';
   }
 
 /*****************************************************************************/
