@@ -641,10 +641,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.19 (2026-10-24)"
-#define Chl_CSS_FILE		"swad26.6.3.css"
+#define Chl_PLATFORM_VERSION	"SWAD 26.19.1 (2026-10-24)"
+#define Chl_CSS_FILE		"swad26.19.1.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.19.1:  Oct 24, 2026	Changed font familiy for input fields. (347797 lines)
 	Version 26.19:    Oct 24, 2026	New selector to show all files in file browser. (347795 lines)
 	Version 26.18:    Oct 24, 2026	New icon to create ZIP of assignments/works. (347713 lines)
 	Version 26.17.1:  Oct 23, 2026	Fixed bug in file browser. (347719 lines)
