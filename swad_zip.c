@@ -89,17 +89,15 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize);
 
 /*****************************************************************************/
-/*********** Put link to create ZIP file of assignments and works ************/
+/*********** Put icon to create ZIP file of assignments and works ************/
 /*****************************************************************************/
 
-void ZIP_PutLinkToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
+void ZIP_PutIconToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_Create_ZIP_file;
-
-   Lay_PutContextualLinkIconText (ActAdmAsgWrkCrs,NULL,
-				  ZIP_PutLinkToCreateZIPAsgWrkPars,FileBrowser,
-				  "download.svg",Ico_BLACK,
-				  Txt_Create_ZIP_file,NULL);
+   if (ZIP_GetCreateZIP () == ZIP_DONT_CREATE_ZIP)
+      Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrkCrsZIP,NULL,
+				     ZIP_PutLinkToCreateZIPAsgWrkPars,FileBrowser,
+				     "download.svg",Ico_BLACK);
   }
 
 static void ZIP_PutLinkToCreateZIPAsgWrkPars (void *FileBrowser)

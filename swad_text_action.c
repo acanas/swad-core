@@ -24881,25 +24881,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActAdmAsgWrkCrs] =
 #if   L==1	// ca
-	"Manage all assignments/works in course"			// Necessita traducció
+	"Administrar las actividades/trabajos de los usuarios seleccionados"	// Necessita traducció
 #elif L==2	// de
-	"Manage all assignments/works in course"			// Need Übersetzung
+	"Manage the assignments/works of selected users"			// Need Übersetzung
 #elif L==3	// en
-	"Manage all assignments/works in course"
+	"Manage the assignments/works of selected users"
 #elif L==4	// es
-	"Administrar todas las actividades/trabajos de asignatura"
+	"Administrar las actividades/trabajos de los usuarios seleccionados"
 #elif L==5	// fr
-	"Manage all assignments/works in course"			// Besoin de traduction
+	"Manage the assignments/works of selected users"			// Besoin de traduction
 #elif L==6	// gn
-	"Administrar todas las actividades/trabajos de asignatura"	// Okoteve traducción
+	"Administrar las actividades/trabajos de los usuarios seleccionados"	// Okoteve traducción
 #elif L==7	// it
-	"Manage all assignments/works in course"			// Bisogno di traduzione
+	"Manage the assignments/works of selected users"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Manage all assignments/works in course"			// Potrzebujesz tlumaczenie
+	"Manage the assignments/works of selected users"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Manage all assignments/works in course"			// Precisa de tradução
+	"Manage the assignments/works of selected users"			// Precisa de tradução
 #elif L==10	// tr
-	"Manage all assignments/works in course"			// Çeviri lazim!
+	"Manage the assignments/works of selected users"			// Çeviri lazim!
+#endif
+	,
+	[ActAdmAsgWrkCrsZIP] =
+#if   L==1	// ca
+	"Crear un arxiu ZIP amb les activitats/treballs dels usuaris seleccionats"
+#elif L==2	// de
+	"Erstellen Sie eine ZIP-Datei mit den Aufgaben/Werken der ausgew&auml;hlten Benutzer"
+#elif L==3	// en
+	"Create a ZIP file containing the assignments/works of the selected users"
+#elif L==4	// es
+	"Crear un archivo ZIP con las actividades/trabajos de los usuarios seleccionados"
+#elif L==5	// fr
+	"Cr&eacute;er un fichier ZIP contenant les activit&eacute;s/travaux des utilisateurs s&eacute;lectionn&eacute;s"
+#elif L==6	// gn
+	"Ejapo pete&itilde; archivo ZIP oguerek&oacute;va umi actividad/tembiapo umi puruh&aacute;ra ojeporav&oacute;va."	// Okoteve traducción
+#elif L==7	// it
+	"Crea un file ZIP contenente i compiti/lavori degli utenti selezionati"
+#elif L==8	// pl
+	"Utw&oacute;rz plik ZIP zawieraj&aogon;cy zadania/prace wybranych u&zdot;ytkownik&oacute;w"
+#elif L==9	// pt
+	"Crie um arquivo ZIP contendo as atividades/trabalhos dos utilizadores selecionados"
+#elif L==10	// tr
+	"Se&ccedil;ilen kullan&inodot;c&inodot;lar&inodot;n atamalar&inodot;n&inodot;/&ccedil;al&inodot;&scedil;malar&inodot;n&inodot; i&ccedil;eren bir ZIP dosyas&inodot; olu&scedil;turun"
 #endif
 	,
 	[ActAdmAsgWrkUsr] =

@@ -1654,7 +1654,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
          return Brw_ADMI_ASG_USR;
 
       /***** Another users' assignments *****/
-      case ActAdmAsgWrkCrs:
+      case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
       case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
       case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
       case ActCopAsgCrs:	case ActPasAsgCrs:
@@ -2560,6 +2560,9 @@ static void Brw_PutIconsFileBrowsersAsgWrkCrs (void *FileBrowser)
    /***** Put icon to show all files *****/
    Brw_PutIconToShowFullTree ((struct Brw_FileBrowser *) FileBrowser);
 
+   /***** Put icon to create ZIP file *****/
+   ZIP_PutIconToCreateZIPAsgWrk ((struct Brw_FileBrowser *) FileBrowser);
+
    /***** Put icon to show a figure *****/
    Brw_PutIconShowFigure (NULL);
   }
@@ -3189,24 +3192,12 @@ static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBr
 
    /***** Contextual menu *****/
    if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_BRF))
-     {
       if (Gbl.Action.Act != ActReqRemOldBrf)
         {
 	 Mnu_ContextMenuBegin ();
-	 Brw_PutLinkToAskRemOldFiles (FileBrowser->ShowFullTree);	// Remove old files
+	    Brw_PutLinkToAskRemOldFiles (FileBrowser->ShowFullTree);	// Remove old files
 	 Mnu_ContextMenuEnd ();
 	}
-     }
-   else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
-     {
-      if (ZIP_GetCreateZIP () == ZIP_DONT_CREATE_ZIP)
-        {
-	 Mnu_ContextMenuBegin ();
-	 ZIP_PutLinkToCreateZIPAsgWrk (FileBrowser);	// Create a zip file with the...
-							//... works of the selected users
-	 Mnu_ContextMenuEnd ();
-	}
-     }
 
    /***** Initialize hidden levels *****/
    switch (FileBrowser->Zone)

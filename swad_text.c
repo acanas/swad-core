@@ -6643,29 +6643,6 @@ const char *Txt_Create_BR_notification =
 	"Create<br>notification";		// Çeviri lazim!
 #endif
 
-const char *Txt_Create_ZIP_file =
-#if   L==1	// ca
-	"Crear arxiu ZIP";
-#elif L==2	// de
-	"ZIP-Datei erstellen";
-#elif L==3	// en
-	"Create ZIP file";
-#elif L==4	// es
-	"Crear archivo ZIP";
-#elif L==5	// fr
-	"Cr&eacute;er fichier ZIP";
-#elif L==6	// gn
-	"Crear archivo ZIP";	// Okoteve traducción
-#elif L==7	// it
-	"Crea file ZIP";
-#elif L==8	// pl
-	"Utw&oacute;rz pliku ZIP";
-#elif L==9	// pt
-	"Criar arquivo ZIP";
-#elif L==10	// tr
-	"Create ZIP file";	// Çeviri lazim!
-#endif
-
 const char *Txt_Created_tables_in_the_database_that_did_not_exist =
 #if   L==1	// ca
 	"Creades les taules de la base de dades que no existien.";
@@ -12675,7 +12652,7 @@ const char *Txt_Files_assignments =
 #elif L==4	// es
 	"Archivos actividades";
 #elif L==5	// fr
-	"Fichiers activites";
+	"Fichiers activit&eacute;s";
 #elif L==6	// gn
 	"Archivos actividades";	// Okoteve traducción
 #elif L==7	// it

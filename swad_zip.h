@@ -37,7 +37,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ZIP_PutLinkToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser);
+void ZIP_PutIconToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser);
 
 void ZIP_SetCreateZIPFromForm (void);
 ZIP_CreateZIP_t ZIP_GetCreateZIP (void);

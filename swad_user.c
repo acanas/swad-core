@@ -3892,7 +3892,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 
 		  /* Hidden parameters */
 		  Grp_PutParsCodGrps ();
-		  if (Gbl.Action.Act == ActAdmAsgWrkCrs)
+		  if (Gbl.Action.Act == ActReqAsgWrkCrs)
 		    {
 		     ShowFullTree = Lay_SHOW;	// By default, show all files
 		     Brw_PutParFullTreeIfSelected (&ShowFullTree);

@@ -1393,6 +1393,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    // Assignments and works of course
    [ActReqAsgWrkCrs	] = { 899,10,TabFil,NULL			,Brw_AskEditWorksCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActAdmAsgWrkCrs	] = { 139,10,TabFil,NULL			,Brw_GetSelectedUsrsAndShowWorks,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActAdmAsgWrkCrsZIP	] = {2221,10,TabFil,NULL			,Brw_GetSelectedUsrsAndShowWorks,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActReqRemFilAsgCrs	] = { 837,10,TabFil,NULL			,Brw_ReqRemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActRemFilAsgCrs	] = { 838,10,TabFil,NULL			,Brw_RemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActRemFolAsgCrs	] = { 820,10,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
@@ -4166,7 +4167,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActConSeeTreNodAss,	// #2143
 	ActExpEdiTreNodAss,	// #2144
 	ActConEdiTreNodAss,	// #2145
-
 	ActFrmSeeFAQQaA,	// #2146
 	ActFrmEdiFAQQaA,	// #2147
 	ActNewFAQQaA,		// #2148
@@ -4179,7 +4179,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDwnFAQQaA,		// #2155
 	ActFrmChgFAQQaA,	// #2156
 	ActChgFAQQaA,		// #2157
-
 	ActFrmSeeCrsLnk,	// #2158
 	ActFrmEdiCrsLnk,	// #2159
 	ActNewCrsLnk,		// #2160
@@ -4191,7 +4190,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDwnCrsLnk,		// #2166
 	ActFrmChgCrsLnk,	// #2167
 	ActChgCrsLnk,		// #2168
-
 	ActFrmSeeBibRef,	// #2169
 	ActFrmEdiBibRef,	// #2170
 	ActNewBibRef,		// #2171
@@ -4203,7 +4201,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActDwnBibRef,		// #2177
 	ActFrmChgBibRef,	// #2178
 	ActChgBibRef,		// #2179
-
 	ActExpTstQst,		// #2180
 	ActSeeOneExaSes,	// #2181
 	ActPrnExaQstShe,	// #2182
@@ -4245,4 +4242,5 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActPrnLstMyRub,		// #2218
 	ActSeeLstUsrRub,	// #2219
 	ActPrnLstUsrRub,	// #2220
+	ActAdmAsgWrkCrsZIP,	// #2221
   };
