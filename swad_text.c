@@ -3884,6 +3884,56 @@ const char *Txt_Briefcases =
 	"Evrak &ccedil;antalar&inodot;";
 #endif
 
+
+const char *Txt_BRW_WHICH_FILES[Brw_NUM_WHICH_FILES] =
+	{
+	// Brw_EXPANDED_FOLDERS
+#if   L==1	// ca
+	"Nom&eacute;s les carpetes expandides"
+#elif L==2	// de
+	"Nur meine Gruppen"
+#elif L==3	// en
+	"Only expanded folders"
+#elif L==4	// es
+	"S&oacute;lo carpetas expandidas"
+#elif L==5	// fr
+	"Uniquement mes groupes"
+#elif L==6	// gn
+	"Solo mis grupos"	// Okoteve traducción
+#elif L==7	// it
+	"Solo i miei gruppi"
+#elif L==8	// pl
+	"Tylko moje grupy"
+#elif L==9	// pt
+	"Apenas os meus grupos"
+#elif L==10	// tr
+	"Only my groups"	// Çeviri lazim!
+#endif
+	,
+	// Brw_ALL_FILES
+#if   L==1	// ca
+	"Tots els arxius"
+#elif L==2	// de
+	"Alle Gruppen"
+#elif L==3	// en
+	"All files"
+#elif L==4	// es
+	"Todos los archivos"
+#elif L==5	// fr
+	"Tous les groupes"
+#elif L==6	// gn
+	"Todos los grupos"	// Okoteve traducción
+#elif L==7	// it
+	"Tutti i gruppi"
+#elif L==8	// pl
+	"Wszystkie grupy"
+#elif L==9	// pt
+	"Todos os grupos"
+#elif L==10	// tr
+	"All groups"		// Çeviri lazim!
+#endif
+	};
+
 const char *Txt_Building =
 #if   L==1	// ca
 	"Edifici";

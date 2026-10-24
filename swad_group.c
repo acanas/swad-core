@@ -4719,7 +4719,7 @@ void Grp_PutParWhichGrpsAllGrps (void)
 void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
                                  void (*FuncPars) (void *Args),void *Args)
   {
-   extern const char *Txt_GROUP_WHICH_GROUPS[2];
+   extern const char *Txt_GROUP_WHICH_GROUPS[Grp_NUM_MY_ALL_GROUPS];
    static const char *Icon[Grp_NUM_MY_ALL_GROUPS] =
      {
       [Grp_MY_GROUPS ] = "mysitemap.png",

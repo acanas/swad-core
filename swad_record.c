@@ -2467,11 +2467,10 @@ static void Rec_PutParsStdResults (__attribute__((unused)) void *Args)
 
 static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
   {
-   Lay_Show_t ShowFullTree = Lay_SHOW;
+   Brw_WhichFiles_t WhichFiles = Brw_ALL_FILES;	// By default, show all files
 
    Rec_PutParsStudent (NULL);
-   Par_PutParChar ("FullTree",'Y');	// By default, show all files
-   Brw_PutParFullTreeIfSelected (&ShowFullTree);
+   Brw_PutParWhichFiles (&WhichFiles);
   }
 
 static void Rec_PutParsStudent (__attribute__((unused)) void *Args)

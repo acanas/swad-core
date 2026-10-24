@@ -1086,15 +1086,16 @@ static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser);
 static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser);
+
+static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
+
 static void Brw_PutIconsFileBrowser (void *FileBrowser);
-static void Brw_PutIconToShowFullTree (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (Brw_Zone_t Zone);
 static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser);
-
-static void Brw_PutParsFullTree (void *FileBrowser);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (Brw_Zone_t Zone);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
@@ -1245,7 +1246,7 @@ static Usr_Can_t Brw_CheckIfICanModifyPrjAssFileOrFolder (Brw_Zone_t Zone,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
-static void Brw_PutLinkToAskRemOldFiles (Lay_Show_t ShowFullTree);
+static void Brw_PutLinkToAskRemOldFiles (Brw_WhichFiles_t WhichFiles);
 static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
 static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
@@ -1321,9 +1322,13 @@ void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser)
    /* Get whether to show only public files */
    FileBrowser->OnlyPublicFiles = Brw_GetOnlyPublicFiles (FileBrowser->Zone);
 
-   /* Get whether to show full tree */
-   FileBrowser->ShowFullTree = FileBrowser->OnlyPublicFiles ? Lay_SHOW :	// If I can see only public files, show full tree
-							      Lay_GetParShow ("FullTree");
+   /* Get whether to show all files */
+   FileBrowser->WhichFiles = FileBrowser->OnlyPublicFiles ? Brw_ALL_FILES :	// If I can see only public files, show all files
+							    (Grp_MyAllGrps_t)
+							    Par_GetParUnsignedLong ("WhichFiles",
+										    0,
+										    Brw_NUM_WHICH_FILES - 1,
+										    (unsigned long) Brw_NUM_WHICH_FILES_DEFAULT);
 
    /***** Initialize file browser *****/
    Brw_InitializeFileBrowser (FileBrowser);
@@ -1873,11 +1878,22 @@ void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser)
       Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
      }
 
-   /***** If full tree selected? *****/
-   Brw_PutParFullTreeIfSelected (&FileBrowser->ShowFullTree);
+   /***** Show only the files in expanded folders or all files? *****/
+   Brw_PutParWhichFiles (&FileBrowser->WhichFiles);
 
    /***** File code *****/
    ParCod_PutPar (ParCod_Fil,FileBrowser->FilCod);
+  }
+
+/*****************************************************************************/
+/***** Parameter to show only the files in expanded folders or all files *****/
+/*****************************************************************************/
+
+void Brw_PutParWhichFiles (void *WhichFiles)
+  {
+   if (WhichFiles)
+      Par_PutParUnsigned (NULL,"WhichFiles",
+			  (unsigned) *((Brw_WhichFiles_t *) WhichFiles));
   }
 
 /*****************************************************************************/
@@ -2483,6 +2499,11 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 		 Brw_PutIconsFileBrowsersAsgWrkCrs,FileBrowser,
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
+      /***** Setting selector *****/
+      Set_BeginSettingsHead ();
+	 Brw_ShowFormToShowAllFiles (FileBrowser);
+      Set_EndSettingsHead ();
+
       /***** List the assignments and works of the selected users *****/
       for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
            *Ptr;
@@ -2557,9 +2578,6 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
 
 static void Brw_PutIconsFileBrowsersAsgWrkCrs (void *FileBrowser)
   {
-   /***** Put icon to show all files *****/
-   Brw_PutIconToShowFullTree ((struct Brw_FileBrowser *) FileBrowser);
-
    /***** Put icon to create ZIP file *****/
    ZIP_PutIconToCreateZIPAsgWrk ((struct Brw_FileBrowser *) FileBrowser);
 
@@ -2588,7 +2606,7 @@ void Brw_PutLegalNotice (void)
 static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
-   Lay_Show_t ParShowFullTree = FileBrowser->ShowFullTree;
+   Brw_WhichFiles_t ParWhichFiles = FileBrowser->WhichFiles;
    long ThisGrpCod;
    struct ListCodGrps LstMyGrps;
    unsigned NumGrp;
@@ -2603,7 +2621,7 @@ static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowse
 
    /***** Begin form *****/
    Frm_BeginForm (Brw_ActChgZone[FileBrowser->Zone]);
-      Brw_PutParFullTreeIfSelected (&ParShowFullTree);
+      Brw_PutParWhichFiles (&ParWhichFiles);
 
       /***** List start *****/
       HTM_UL_Begin ("class=\"LIST_LEFT\"");
@@ -2939,6 +2957,21 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       /***** Subtitle *****/
       Brw_WriteSubtitleOfFileBrowser (FileBrowser);
 
+      /***** Setting selector *****/
+      switch (((struct Brw_FileBrowser *) FileBrowser)->Zone)
+	{
+	 case Brw_ADMI_WRK_CRS:
+	 case Brw_ADMI_ASG_CRS:
+	 case Brw_ADMI_DOC_PRJ:
+	 case Brw_ADMI_ASS_PRJ:
+	    break;
+	 default:
+	    Set_BeginSettingsHead ();
+	       Brw_ShowFormToShowAllFiles (FileBrowser);
+	    Set_EndSettingsHead ();
+	    break;
+	}
+
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
@@ -2994,6 +3027,48 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       default:
          break;
      }
+  }
+
+/*****************************************************************************/
+/***** Show form to choice whether to show only my groups or all groups ******/
+/*****************************************************************************/
+
+static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_BRW_WHICH_FILES[Brw_NUM_WHICH_FILES];
+   static const char *Icon[Brw_NUM_WHICH_FILES] =
+     {
+      [Brw_EXPANDED_FOLDERS] = "mysitemap.png",
+      [Brw_ALL_FILES       ] = "sitemap.svg"
+     };
+   Brw_WhichFiles_t WhichFiles;
+   Brw_Zone_t Zone = FileBrowser->Zone;
+
+   Set_BeginOneSettingSelector ();
+      for (WhichFiles  = Brw_EXPANDED_FOLDERS;
+	   WhichFiles <= Brw_ALL_FILES;
+	   WhichFiles++)
+	{
+	 Set_BeginPref (WhichFiles == FileBrowser->WhichFiles);
+	    Frm_BeginForm (Brw_ActSeeAdm[Zone]);
+	       Brw_PutParsWhichFiles (Zone);
+	       Par_PutParUnsigned (NULL,"WhichFiles",(unsigned) WhichFiles);
+	       Ico_PutSettingIconLink (Icon[WhichFiles],Ico_BLACK,
+				       Txt_BRW_WHICH_FILES[WhichFiles]);
+	    Frm_EndForm ();
+	 Set_EndPref ();
+	}
+   Set_EndOneSettingSelector ();
+  }
+
+static void Brw_PutParsWhichFiles (Brw_Zone_t Zone)
+  {
+   if (     (Brw_ZoneType[Zone] & Brw_IS_GRP_BRW))
+      ParCod_PutPar (ParCod_Grp,Brw_GetGrpCod ());
+   else if ((Brw_ZoneType[Zone] & Brw_IS_ADM_PRJ))	// This file browser needs specify a project
+      ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
+   else if ((Brw_ZoneType[Zone] & Brw_IS_ADM_CRS_ASG_WRK))
+      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
   }
 
 /*****************************************************************************/
@@ -3123,18 +3198,15 @@ static void Brw_PutIconsFileBrowser (void *FileBrowser)
 	 break;
       case Brw_ICON_VIEW:
 	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
-				      Brw_PutParFullTreeIfSelected,
-				      &((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree);
+				      Brw_PutParWhichFiles,
+				      &((struct Brw_FileBrowser *) FileBrowser)->WhichFiles);
 	 break;
       case Brw_ICON_EDIT:
 	 Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
-				      Brw_PutParFullTreeIfSelected,
-				      &((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree);
+				      Brw_PutParWhichFiles,
+				      &((struct Brw_FileBrowser *) FileBrowser)->WhichFiles);
 	 break;
      }
-
-   /***** Put icon to show all files *****/
-   Brw_PutIconToShowFullTree ((struct Brw_FileBrowser *) FileBrowser);
 
    /***** Put icon to get resource link *****/
    if (Brw_ActReqLnk[((struct Brw_FileBrowser *) FileBrowser)->Zone] != ActUnk)
@@ -3153,26 +3225,6 @@ static void Brw_PutIconsFileBrowser (void *FileBrowser)
 	 Brw_PutIconShowFigure (NULL);
 	 break;
      }
-  }
-
-static void Brw_PutIconToShowFullTree (struct Brw_FileBrowser *FileBrowser)
-  {
-   static struct
-     {
-      Lay_Show_t ParShowFullTree;
-      const char *Icon;
-     } Params[Lay_NUM_SHOW] =
-     {
-      [Lay_DONT_SHOW] = {Lay_SHOW	,"sitemap.svg"  },
-      [Lay_SHOW     ] = {Lay_DONT_SHOW	,"mysitemap.png"}
-     };
-   Lay_Show_t CurrentShowFullTree = ((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree;
-
-   FileBrowser->ShowFullTree = Params[CurrentShowFullTree].ParShowFullTree;
-   Lay_PutContextualLinkOnlyIcon (Brw_ActSeeAdm[FileBrowser->Zone],NULL,
-				  Brw_PutParsFullTree,FileBrowser,
-				  Params[CurrentShowFullTree].Icon,Ico_BLACK);
-   FileBrowser->ShowFullTree = CurrentShowFullTree;
   }
 
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
@@ -3195,7 +3247,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBr
       if (Gbl.Action.Act != ActReqRemOldBrf)
         {
 	 Mnu_ContextMenuBegin ();
-	    Brw_PutLinkToAskRemOldFiles (FileBrowser->ShowFullTree);	// Remove old files
+	    Brw_PutLinkToAskRemOldFiles (FileBrowser->WhichFiles);	// Remove old files
 	 Mnu_ContextMenuEnd ();
 	}
 
@@ -3379,30 +3431,6 @@ static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser)
 	Level <= Brw_MAX_DIR_LEVELS;
 	Level++)
       FileBrowser->HiddenLevels[Level] = HidVis_VISIBLE;
-  }
-
-static void Brw_PutParsFullTree (void *FileBrowser)
-  {
-   if (     (Brw_ZoneType[((struct Brw_FileBrowser *) FileBrowser)->Zone] & Brw_IS_GRP_BRW))
-      ParCod_PutPar (ParCod_Grp,Brw_GetGrpCod ());
-   else if ((Brw_ZoneType[((struct Brw_FileBrowser *) FileBrowser)->Zone] & Brw_IS_ADM_PRJ))	// This file browser needs specify a project
-      ParCod_PutPar (ParCod_Prj,Prj_GetPrjCod ());
-   else if ((Brw_ZoneType[((struct Brw_FileBrowser *) FileBrowser)->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
-      Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
-
-   /***** If full tree selected? *****/
-   Brw_PutParFullTreeIfSelected (&((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree);
-  }
-
-/*****************************************************************************/
-/********* Put hidden parameter "full tree" if full tree is selected *********/
-/*****************************************************************************/
-
-void Brw_PutParFullTreeIfSelected (void *ShowFullTree)
-  {
-   if (ShowFullTree)
-      if (*((Lay_Show_t *) ShowFullTree) == Lay_SHOW)	// Put hidden parameter only if full tree selected
-	 Par_PutParChar ("FullTree",'Y');
   }
 
 /*****************************************************************************/
@@ -3602,12 +3630,13 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
               {
 	       case Brw_IS_FOLDER:
 		  IconSubtree = Brw_ICON_NOTHING;
-		  switch (FileBrowser->ShowFullTree)
+		  switch (FileBrowser->WhichFiles)
 		    {
-		     case Lay_SHOW:
+		     case Brw_ALL_FILES:	// Show files in all folders
+
 			ContractedOrExpandedSubtree = ConExp_EXPANDED;
 			break;
-		     case Lay_DONT_SHOW:
+		     case Brw_EXPANDED_FOLDERS:	// Show only files in expanded folders
 		     default:
 			ContractedOrExpandedSubtree = ConExp_CONTRACTED;
 			/***** Check if this subdirectory has files or folders in it *****/
@@ -9459,13 +9488,13 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 /***************** Write a form (link) to remove old files *******************/
 /*****************************************************************************/
 
-static void Brw_PutLinkToAskRemOldFiles (Lay_Show_t ShowFullTree)
+static void Brw_PutLinkToAskRemOldFiles (Brw_WhichFiles_t WhichFiles)
   {
    extern const char *Txt_Remove_old_files;
-   Lay_Show_t ParShowFullTree = ShowFullTree;
+   Brw_WhichFiles_t ParWhichFiles = WhichFiles;
 
    Lay_PutContextualLinkIconText (ActReqRemOldBrf,NULL,
-				  Brw_PutParFullTreeIfSelected,&ParShowFullTree,
+				  Brw_PutParWhichFiles,&ParWhichFiles,
 				  "trash.svg",Ico_RED,
 				  Txt_Remove_old_files,NULL);
   }
@@ -9487,7 +9516,7 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldBrf);
-      Brw_PutParFullTreeIfSelected (&FileBrowser.ShowFullTree);
+      Brw_PutParWhichFiles (&FileBrowser.WhichFiles);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Remove_old_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);

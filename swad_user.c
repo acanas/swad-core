@@ -3843,7 +3843,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
    Pho_ShowPhotos_t ShowPhotos;
-   Lay_Show_t ShowFullTree;
+   Brw_WhichFiles_t WhichFiles;
    unsigned NumUsrs;
 
    /***** Begin box *****/
@@ -3894,8 +3894,8 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 		  Grp_PutParsCodGrps ();
 		  if (Gbl.Action.Act == ActReqAsgWrkCrs)
 		    {
-		     ShowFullTree = Lay_SHOW;	// By default, show all files
-		     Brw_PutParFullTreeIfSelected (&ShowFullTree);
+		     WhichFiles = Brw_ALL_FILES;	// By default, show all files
+		     Brw_PutParWhichFiles (&WhichFiles);
 		    }
 		  if (FuncPars)
 		     FuncPars (Args);

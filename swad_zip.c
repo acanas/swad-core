@@ -103,7 +103,7 @@ void ZIP_PutIconToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
 static void ZIP_PutLinkToCreateZIPAsgWrkPars (void *FileBrowser)
   {
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
-   Brw_PutParFullTreeIfSelected (&(((struct Brw_FileBrowser *) FileBrowser)->ShowFullTree));
+   Brw_PutParWhichFiles (&(((struct Brw_FileBrowser *) FileBrowser)->WhichFiles));
    Par_PutParChar ("CreateZIP",'Y');
   }
 

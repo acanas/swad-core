@@ -137,6 +137,14 @@ typedef enum
    Brw_DROPZONE_UPLOAD,
   } Brw_UploadType_t;
 
+#define Brw_NUM_WHICH_FILES 2
+typedef enum
+  {
+   Brw_EXPANDED_FOLDERS,	// Show only files in expanded folders
+   Brw_ALL_FILES		// Show files in all folders
+  } Brw_WhichFiles_t;
+#define Brw_NUM_WHICH_FILES_DEFAULT Brw_EXPANDED_FOLDERS
+
 #define Brw_NUM_ONLY_PUBLIC_FILES 2
 typedef enum
   {
@@ -218,7 +226,7 @@ struct Brw_FileBrowser
   {
    unsigned Id;		// Each file browser in the page has a unique identifier
    Brw_Zone_t Zone;
-   Lay_Show_t ShowFullTree;	// Show full tree?
+   Brw_WhichFiles_t WhichFiles;	// Show files in expanded folders / all files
    bool OnlyPublicFiles;	// Show only public files?
    struct
      {

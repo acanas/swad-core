@@ -55,8 +55,6 @@ void Brw_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
                                        char PathWithoutFileName[PATH_MAX + 1],
                                        char FileName[NAME_MAX + 1]);
 
-void Brw_PutParFullTreeIfSelected (void *ShowFullTree);
-
 void Brw_CreateDirDownloadTmp (struct Brw_TmpPubDir *TmpPubDir);
 
 void Brw_AskEditWorksCrs (void);
@@ -116,6 +114,7 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir
 
 void Brw_PutImplicitParsFileBrowser (void *Zone);
 void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser);
+void Brw_PutParWhichFiles (void *WhichFiles);
 void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
 					 struct Brw_File *File);
 
