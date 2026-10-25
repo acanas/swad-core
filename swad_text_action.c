@@ -13632,6 +13632,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file into documents zone of a project"		// Çeviri lazim!
 #endif
 	,
+	[ActShoCliDocPrj] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of a project"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de un proyecto"
+#elif L==5	// fr
+	"Show clipboard in documents zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of a project"			// Çeviri lazim!
+#endif
+	,
 	[ActRemTreDocPrj] =
 #if   L==1	// ca
 	"Remove non-empty folder from documents zone of a project"		// Necessita traducció
@@ -14067,6 +14090,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file into assessment zone of a project"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file into assessment zone of a project"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliAssPrj] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in assessment zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in assessment zone of a project"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"
+#elif L==5	// fr
+	"Show clipboard in assessment zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in assessment zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in assessment zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in assessment zone of a project"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAssPrj] =
@@ -18623,6 +18669,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of institution"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliDocIns] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de instituci&oacute;n"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of institution"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of institution"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de instituci&oacute;n"
+#elif L==5	// fr
+	"Show clipboard in documents zone of institution"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de instituci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of institution"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of institution"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of institution"			// Çeviri lazim!
+#endif
+	,
 	[ActRemTreDocIns] =
 #if   L==1	// ca
 	"Remove non-empty folder from documents zone of institution"			// Necessita traducció
@@ -19104,6 +19173,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in shared zone of institution"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in shared zone of institution"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliShaIns] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona compartida de instituci&oacute;n"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in shared zone of institution"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in shared zone of institution"
+#elif L==4	// es
+	"Mostrar portapapeles en zona compartida de instituci&oacute;n"
+#elif L==5	// fr
+	"Show clipboard in shared zone of institution"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona compartida de instituci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in shared zone of institution"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in shared zone of institution"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in shared zone of institution"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in shared zone of institution"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaIns] =
@@ -19750,6 +19842,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of center"		// Çeviri lazim!
 #endif
 	,
+	[ActShoCliDocCtr] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de centro"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of center"		// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of center"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de centro"
+#elif L==5	// fr
+	"Show clipboard in documents zone of center"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de centro"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of center"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of center"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of center"		// Çeviri lazim!
+#endif
+	,
 	[ActRemTreDocCtr] =
 #if   L==1	// ca
 	"Remove non-empty folder from documents zone of center"			// Necessita traducció
@@ -20231,6 +20346,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in shared zone of center"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in shared zone of center"		// Çeviri lazim!
+#endif
+	,
+	[ActShoCliShaCtr] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona compartida de centro"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in shared zone of center"		// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in shared zone of center"
+#elif L==4	// es
+	"Mostrar portapapeles en zona compartida de centro"
+#elif L==5	// fr
+	"Show clipboard in shared zone of center"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona compartida de centro"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in shared zone of center"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in shared zone of center"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in shared zone of center"		// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in shared zone of center"		// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaCtr] =
@@ -20877,6 +21015,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of degree"				// Çeviri lazim!
 #endif
 	,
+	[ActShoCliDocDeg] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de titulaci&oacute;n"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of degree"				// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of degree"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de titulaci&oacute;n"
+#elif L==5	// fr
+	"Show clipboard in documents zone of degree"				// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of degree"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of degree"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of degree"				// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of degree"				// Çeviri lazim!
+#endif
+	,
 	[ActRemTreDocDeg] =
 #if   L==1	// ca
 	"Remove non-empty folder from documents zone of degree"				// Necessita traducció
@@ -21358,6 +21519,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in shared zone of degree"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in shared zone of degree"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliShaDeg] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona compartida de titulaci&oacute;n"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in shared zone of degree"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in shared zone of degree"
+#elif L==4	// es
+	"Mostrar portapapeles en zona compartida de titulaci&oacute;n"
+#elif L==5	// fr
+	"Show clipboard in shared zone of degree"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona compartida de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in shared zone of degree"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in shared zone of degree"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in shared zone of degree"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in shared zone of degree"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaDeg] =
@@ -22165,6 +22349,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of course"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliDocCrs] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de asignatura"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of course"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of course"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de asignatura"
+#elif L==5	// fr
+	"Show clipboard in documents zone of course"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of course"			// Çeviri lazim!
+#endif
+	,
 	[ActRemTreDocCrs] =
 #if   L==1	// ca
 	"Remove non-empty folder from documents zone of course"			// Necessita traducció
@@ -22669,6 +22876,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in documents zone of group"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in documents zone of group"		// Çeviri lazim!
+#endif
+	,
+	[ActShoCliDocGrp] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de grupo"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of group"		// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of group"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de grupo"
+#elif L==5	// fr
+	"Show clipboard in documents zone of group"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de grupo"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of group"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of group"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of group"		// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of group"		// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocGrp] =
@@ -23200,6 +23430,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in teachers' documents zone of course"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliTchCrs] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de profesores de asignatura"		// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in teachers' documents zone of course"					// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in teachers' documents zone of course"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de profesores de asignatura"
+#elif L==5	// fr
+	"Show clipboard in teachers' documents zone of course"					// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de profesores de asignatura"		// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in teachers' documents zone of course"					// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in teachers' documents zone of course"					// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in teachers' documents zone of course"					// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in teachers' documents zone of course"					// Çeviri lazim!
+#endif
+	,
 	[ActRemTreTchCrs] =
 #if   L==1	// ca
 	"Remove non-empty folder from teachers' documents zone of course"			// Necessita traducció
@@ -23635,6 +23888,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in teachers' documents zone of group"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in teachers' documents zone of group"		// Çeviri lazim!
+#endif
+	,
+	[ActShoCliTchGrp] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de profesores de grupo"		// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in teachers' documents zone of group"				// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in teachers' documents zone of group"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de profesores de grupo"
+#elif L==5	// fr
+	"Show clipboard in teachers' documents zone of group"				// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de profesores de grupo"		// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in teachers' documents zone of group"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in teachers' documents zone of group"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in teachers' documents zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in teachers' documents zone of group"				// Çeviri lazim!
 #endif
 	,
 	[ActRemTreTchGrp] =
@@ -24120,6 +24396,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in shared files zone of course"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliShaCrs] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de archivos compartidos de asignatura"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in shared files zone of course"				// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in shared files zone of course"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de archivos compartidos de asignatura"
+#elif L==5	// fr
+	"Show clipboard in shared files zone of course"				// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de archivos compartidos de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in shared files zone of course"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in shared files zone of course"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in shared files zone of course"				// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in shared files zone of course"				// Çeviri lazim!
+#endif
+	,
 	[ActRemTreShaCrs] =
 #if   L==1	// ca
 	"Remove non-empty folder from shared files zone of course"			// Necessita traducció
@@ -24555,6 +24854,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in shared files zone of group"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in shared files zone of group"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliShaGrp] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de archivos compartidos de grupo"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in shared files zone of group"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in shared files zone of group"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de archivos compartidos de grupo"
+#elif L==5	// fr
+	"Show clipboard in shared files zone of group"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de archivos compartidos de grupo"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in shared files zone of group"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in shared files zone of group"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in shared files zone of group"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in shared files zone of group"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreShaGrp] =
@@ -25063,6 +25385,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in user's assignments"		// Çeviri lazim!
 #endif
 	,
+	[ActShoCliAsgUsr] =
+#if   L==1	// ca
+	"Mostrar portapapeles en actividades de usuario"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in user's assignments"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in user's assignments"
+#elif L==4	// es
+	"Mostrar portapapeles en actividades de usuario"
+#elif L==5	// fr
+	"Show clipboard in user's assignments"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en actividades de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in user's assignments"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in user's assignments"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in user's assignments"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in user's assignments"			// Çeviri lazim!
+#endif
+	,
 	[ActRemTreAsgUsr] =
 #if   L==1	// ca
 	"Remove non-empty folder of user's assignments"			// Necessita traducció
@@ -25475,6 +25820,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in user's works"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in user's works"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliWrkUsr] =
+#if   L==1	// ca
+	"Mostrar portapapeles en trabajos de usuario"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in user's works"		// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in user's works"
+#elif L==4	// es
+	"Mostrar portapapeles en trabajos de usuario"
+#elif L==5	// fr
+	"Show clipboard in user's works"		// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en trabajos de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in user's works"		// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in user's works"		// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in user's works"		// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in user's works"		// Çeviri lazim!
 #endif
 	,
 	[ActRemTreWrkUsr] =
@@ -25891,6 +26259,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in assignments zone of course"		// Çeviri lazim!
 #endif
 	,
+	[ActShoCliAsgCrs] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de actividades de asignatura"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in assignments zone of course"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in assignments zone of course"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de actividades de asignatura"
+#elif L==5	// fr
+	"Show clipboard in assignments zone of course"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de actividades de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in assignments zone of course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in assignments zone of course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in assignments zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in assignments zone of course"			// Çeviri lazim!
+#endif
+	,
 	[ActRemTreAsgCrs] =
 #if   L==1	// ca
 	"Remove non-empty folder from assignments zone of course"		// Necessita traducció
@@ -26303,6 +26694,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in works zone of course"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in works zone of course"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliWrkCrs] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de trabajos de asignatura"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in works zone of course"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in works zone of course"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de trabajos de asignatura"
+#elif L==5	// fr
+	"Show clipboard in works zone of course"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de trabajos de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in works zone of course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in works zone of course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in works zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in works zone of course"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreWrkCrs] =
@@ -27064,6 +27478,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in marks zone of course"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliMrkCrs] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de calificaciones de asignatura"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in marks zone of course"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in marks zone of course"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de calificaciones de asignatura"
+#elif L==5	// fr
+	"Show clipboard in marks zone of course"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de calificaciones de asignatura"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in marks zone of course"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in marks zone of course"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in marks zone of course"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in marks zone of course"			// Çeviri lazim!
+#endif
+	,
 	[ActRemTreMrkCrs] =
 #if   L==1	// ca
 	"Remove non-empty folder from marks zone of course"				// Necessita traducció
@@ -27593,6 +28030,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in marks zone of group"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliMrkGrp] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de calificaciones de grupo"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in marks zone of group"				// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in marks zone of group"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de calificaciones de grupo"
+#elif L==5	// fr
+	"Show clipboard in marks zone of group"				// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de calificaciones de grupo"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in marks zone of group"				// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in marks zone of group"				// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in marks zone of group"				// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in marks zone of group"				// Çeviri lazim!
+#endif
+	,
 	[ActRemTreMrkGrp] =
 #if   L==1	// ca
 	"Remove non-empty folder from marks zone of group"			// Necessita traducció
@@ -28097,6 +28557,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in briefcase"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in briefcase"		// Çeviri lazim!
+#endif
+	,
+	[ActShoCliBrf] =
+#if   L==1	// ca
+	"Mostrar portapapeles en malet&iacute;n"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in briefcase"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in briefcase"
+#elif L==4	// es
+	"Mostrar portapapeles en malet&iacute;n"
+#elif L==5	// fr
+	"Show clipboard in briefcase"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en malet&iacute;n"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in briefcase"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in briefcase"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in briefcase"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in briefcase"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreBrf] =

@@ -641,10 +641,18 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.19.1 (2026-10-24)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.21 (2026-10-25)"
 #define Chl_CSS_FILE		"swad26.19.1.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.21:    Oct 25, 2026	New option to show file browser clipboard. Not finished. (348370 lines)
+					Copy the following icons to icon public directory:
+sudo cp icon/folder-tree-open.png /var/www/html/swad/icon/
+sudo cp icon/folder-tree-open-closed.png /var/www/html/swad/icon/
+sudo cp icon/folder-tree-closed.png /var/www/html/swad/icon/
+
+	Version 26.20.1:  Oct 25, 2026	New icon to remove old files in briefcase. (? lines)
+	Version 26.20:    Oct 24, 2026	New icon to remove old files in briefcase. (347752 lines)
 	Version 26.19.1:  Oct 24, 2026	Changed font familiy for input fields. (347797 lines)
 	Version 26.19:    Oct 24, 2026	New selector to show all files in file browser. (347795 lines)
 	Version 26.18:    Oct 24, 2026	New icon to create ZIP of assignments/works. (347713 lines)
