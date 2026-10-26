@@ -414,7 +414,7 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
    static Box_Closable_t AlertClosable[Ale_NUM_ALERT_TYPES] =
      {
       [Ale_NONE     ] = Box_NOT_CLOSABLE,
-      [Ale_CLIPBOARD] = Box_CLOSABLE,
+      [Ale_CLIPBOARD] = Box_NOT_CLOSABLE,
       [Ale_INFO     ] = Box_CLOSABLE,
       [Ale_SUCCESS  ] = Box_CLOSABLE,
       [Ale_QUESTION ] = Box_CLOSABLE,

@@ -718,6 +718,39 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_ASS_PRJ] = ActShoCliAssPrj,
   };
 
+static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
+  {
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActUnk,
+   [Brw_SHOW_MRK_CRS] = ActUnk,
+   [Brw_ADMI_DOC_CRS] = ActShoCliDocCrs,	// TODO: Change to ActRemCliDocCrs
+   [Brw_ADMI_SHR_CRS] = ActShoCliShaCrs,	// TODO: Change
+   [Brw_ADMI_SHR_GRP] = ActShoCliShaGrp,	// TODO: Change
+   [Brw_ADMI_WRK_USR] = ActShoCliWrkUsr,	// TODO: Change
+   [Brw_ADMI_WRK_CRS] = ActShoCliWrkCrs,	// TODO: Change
+   [Brw_ADMI_MRK_CRS] = ActShoCliMrkCrs,	// TODO: Change
+   [Brw_ADMI_BRF_USR] = ActShoCliBrf,		// TODO: Change
+   [Brw_SHOW_DOC_GRP] = ActUnk,
+   [Brw_ADMI_DOC_GRP] = ActShoCliDocGrp,	// TODO: Change
+   [Brw_SHOW_MRK_GRP] = ActUnk,
+   [Brw_ADMI_MRK_GRP] = ActShoCliMrkGrp,	// TODO: Change
+   [Brw_ADMI_ASG_USR] = ActShoCliAsgUsr,	// TODO: Change
+   [Brw_ADMI_ASG_CRS] = ActShoCliAsgCrs,	// TODO: Change
+   [Brw_SHOW_DOC_DEG] = ActUnk,
+   [Brw_ADMI_DOC_DEG] = ActShoCliDocDeg,	// TODO: Change
+   [Brw_SHOW_DOC_CTR] = ActUnk,
+   [Brw_ADMI_DOC_CTR] = ActShoCliDocCtr,	// TODO: Change
+   [Brw_SHOW_DOC_INS] = ActUnk,
+   [Brw_ADMI_DOC_INS] = ActShoCliDocIns,	// TODO: Change
+   [Brw_ADMI_SHR_DEG] = ActShoCliShaDeg,	// TODO: Change
+   [Brw_ADMI_SHR_CTR] = ActShoCliShaCtr,	// TODO: Change
+   [Brw_ADMI_SHR_INS] = ActShoCliShaIns,	// TODO: Change
+   [Brw_ADMI_TCH_CRS] = ActShoCliTchCrs,	// TODO: Change
+   [Brw_ADMI_TCH_GRP] = ActShoCliTchGrp,	// TODO: Change
+   [Brw_ADMI_DOC_PRJ] = ActShoCliDocPrj,	// TODO: Change
+   [Brw_ADMI_ASS_PRJ] = ActShoCliAssPrj,	// TODO: Change
+  };
+
 static Act_Action_t Brw_ActFormCreate[Brw_NUM_ZONES] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -1203,7 +1236,8 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
 						const char FolderName[NAME_MAX + 1]);
 
-static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser);
+static void Brw_WriteCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutIconsClipboard (void *FileBrowser);
 
 static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *FileBrowser);
@@ -5079,9 +5113,11 @@ void Brw_Copy (void)
 /********* Write a title with the content of the current clipboard ***********/
 /*****************************************************************************/
 
-static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser)
+static void Brw_WriteCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
   {
+   extern const char *Hlp_FILES_Clipboard;
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
+   extern const char *Txt_Clipboard;
    extern const char *Txt_Copy_source;
    extern const char *Txt_documents_management_area;
    extern const char *Txt_teachers_files_area;
@@ -5326,22 +5362,38 @@ static void Brw_WriteCurrentClipboard (const struct Brw_FileBrowser *FileBrowser
          break;
      }
 
-   if (FileBrowser->Clipboard.File.Level)		// Is the root folder?
-     {
-      // Not the root folder
-      Brw_GetFileNameToShow ( FileBrowser->Clipboard.ZoneDB,
-			     &FileBrowser->Clipboard.File,FileNameToShow);
+   Box_BoxBegin (Txt_Clipboard,
+		 Brw_PutIconsClipboard,FileBrowser,
+		 Hlp_FILES_Clipboard,Box_CLOSABLE);
+      if (FileBrowser->Clipboard.File.Level)		// Is the root folder?
+	{
+	 // Not the root folder
+	 Brw_GetFileNameToShow ( FileBrowser->Clipboard.ZoneDB,
+				&FileBrowser->Clipboard.File,FileNameToShow);
 
-      Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
-                     Txt_Copy_source,TxtClipboardZone,
-                     *TxtFileType[FileBrowser->Clipboard.File.Type],
-                     FileNameToShow);
-     }
-   else
-      // The root folder
-      Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s.",
-                     Txt_Copy_source,TxtClipboardZone,
-                     Txt_all_files_inside_the_root_folder);
+	 Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
+			Txt_Copy_source,TxtClipboardZone,
+			*TxtFileType[FileBrowser->Clipboard.File.Type],
+			FileNameToShow);
+	}
+      else
+	 // The root folder
+	 Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s.",
+			Txt_Copy_source,TxtClipboardZone,
+			Txt_all_files_inside_the_root_folder);
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/******* Put contextual icons when showing clipboard in file browser *********/
+/*****************************************************************************/
+
+static void Brw_PutIconsClipboard (void *FileBrowser)
+  {
+   /***** Put icon to remove resource clipboard in program *****/
+   if (((struct Brw_FileBrowser *) FileBrowser)->Clipboard.ZoneDB != Brw_UNKNOWN)
+      Ico_PutContextualIconToRemove (Brw_ActRemCli[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
+				     NULL,NULL);
   }
 
 /*****************************************************************************/

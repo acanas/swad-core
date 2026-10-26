@@ -2348,6 +2348,29 @@ const char *Hlp_FILES_Briefcase =
 	"FILES.Briefcase.en";
 #endif
 
+const char *Hlp_FILES_Clipboard =
+#if   L==1	// ca
+	"FILES.Clipboard.es";
+#elif L==2	// de
+	"FILES.Clipboard.en";
+#elif L==3	// en
+	"FILES.Clipboard.en";
+#elif L==4	// es
+	"FILES.Clipboard.es";
+#elif L==5	// fr
+	"FILES.Clipboard.en";
+#elif L==6	// gn
+	"FILES.Clipboard.es";
+#elif L==7	// it
+	"FILES.Clipboard.en";
+#elif L==8	// pl
+	"FILES.Clipboard.en";
+#elif L==9	// pt
+	"FILES.Clipboard.en";
+#elif L==10	// tr
+	"FILES.Clipboard.en";
+#endif
+
 /***** USERS tab *****/
 
 const char *Hlp_USERS_Groups =
