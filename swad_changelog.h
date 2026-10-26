@@ -641,10 +641,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.21.2 (2026-10-26)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.21.3 (2026-10-27)"
 #define Chl_CSS_FILE		"swad26.19.1.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.21.3:  Oct 27, 2026	New option to remove file browser clipboard. Not finished. (349040 lines)
 	Version 26.21.2:  Oct 26, 2026	Changes showing file browser clipboard. Not finished. (348456 lines)
 	Version 26.21.1:  Oct 26, 2026	Fixed bugs and code refactoring in file browser clipboard. (348384 lines)
 	Version 26.21:    Oct 25, 2026	New option to show file browser clipboard. Not finished. (348370 lines)

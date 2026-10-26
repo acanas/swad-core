@@ -73,6 +73,7 @@ void Brw_ContractFolder (void);
 void Brw_Copy (void);
 void Brw_Paste (void);
 void Brw_ShowClipboard (void);
+void Brw_RemClipboard (void);
 
 void Brw_RemFolder (void);
 void Brw_ShowFormFileBrowser (void);

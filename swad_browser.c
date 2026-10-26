@@ -723,32 +723,32 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
    [Brw_SHOW_MRK_CRS] = ActUnk,
-   [Brw_ADMI_DOC_CRS] = ActShoCliDocCrs,	// TODO: Change to ActRemCliDocCrs
-   [Brw_ADMI_SHR_CRS] = ActShoCliShaCrs,	// TODO: Change
-   [Brw_ADMI_SHR_GRP] = ActShoCliShaGrp,	// TODO: Change
-   [Brw_ADMI_WRK_USR] = ActShoCliWrkUsr,	// TODO: Change
-   [Brw_ADMI_WRK_CRS] = ActShoCliWrkCrs,	// TODO: Change
-   [Brw_ADMI_MRK_CRS] = ActShoCliMrkCrs,	// TODO: Change
-   [Brw_ADMI_BRF_USR] = ActShoCliBrf,		// TODO: Change
+   [Brw_ADMI_DOC_CRS] = ActRemCliDocCrs,	// TODO: Change to ActRemCliDocCrs
+   [Brw_ADMI_SHR_CRS] = ActRemCliShaCrs,	// TODO: Change
+   [Brw_ADMI_SHR_GRP] = ActRemCliShaGrp,	// TODO: Change
+   [Brw_ADMI_WRK_USR] = ActRemCliWrkUsr,	// TODO: Change
+   [Brw_ADMI_WRK_CRS] = ActRemCliWrkCrs,	// TODO: Change
+   [Brw_ADMI_MRK_CRS] = ActRemCliMrkCrs,	// TODO: Change
+   [Brw_ADMI_BRF_USR] = ActRemCliBrf,		// TODO: Change
    [Brw_SHOW_DOC_GRP] = ActUnk,
-   [Brw_ADMI_DOC_GRP] = ActShoCliDocGrp,	// TODO: Change
+   [Brw_ADMI_DOC_GRP] = ActRemCliDocGrp,	// TODO: Change
    [Brw_SHOW_MRK_GRP] = ActUnk,
-   [Brw_ADMI_MRK_GRP] = ActShoCliMrkGrp,	// TODO: Change
-   [Brw_ADMI_ASG_USR] = ActShoCliAsgUsr,	// TODO: Change
-   [Brw_ADMI_ASG_CRS] = ActShoCliAsgCrs,	// TODO: Change
+   [Brw_ADMI_MRK_GRP] = ActRemCliMrkGrp,	// TODO: Change
+   [Brw_ADMI_ASG_USR] = ActRemCliAsgUsr,	// TODO: Change
+   [Brw_ADMI_ASG_CRS] = ActRemCliAsgCrs,	// TODO: Change
    [Brw_SHOW_DOC_DEG] = ActUnk,
-   [Brw_ADMI_DOC_DEG] = ActShoCliDocDeg,	// TODO: Change
+   [Brw_ADMI_DOC_DEG] = ActRemCliDocDeg,	// TODO: Change
    [Brw_SHOW_DOC_CTR] = ActUnk,
-   [Brw_ADMI_DOC_CTR] = ActShoCliDocCtr,	// TODO: Change
+   [Brw_ADMI_DOC_CTR] = ActRemCliDocCtr,	// TODO: Change
    [Brw_SHOW_DOC_INS] = ActUnk,
-   [Brw_ADMI_DOC_INS] = ActShoCliDocIns,	// TODO: Change
-   [Brw_ADMI_SHR_DEG] = ActShoCliShaDeg,	// TODO: Change
-   [Brw_ADMI_SHR_CTR] = ActShoCliShaCtr,	// TODO: Change
-   [Brw_ADMI_SHR_INS] = ActShoCliShaIns,	// TODO: Change
-   [Brw_ADMI_TCH_CRS] = ActShoCliTchCrs,	// TODO: Change
-   [Brw_ADMI_TCH_GRP] = ActShoCliTchGrp,	// TODO: Change
-   [Brw_ADMI_DOC_PRJ] = ActShoCliDocPrj,	// TODO: Change
-   [Brw_ADMI_ASS_PRJ] = ActShoCliAssPrj,	// TODO: Change
+   [Brw_ADMI_DOC_INS] = ActRemCliDocIns,	// TODO: Change
+   [Brw_ADMI_SHR_DEG] = ActRemCliShaDeg,	// TODO: Change
+   [Brw_ADMI_SHR_CTR] = ActRemCliShaCtr,	// TODO: Change
+   [Brw_ADMI_SHR_INS] = ActRemCliShaIns,	// TODO: Change
+   [Brw_ADMI_TCH_CRS] = ActRemCliTchCrs,	// TODO: Change
+   [Brw_ADMI_TCH_GRP] = ActRemCliTchGrp,	// TODO: Change
+   [Brw_ADMI_DOC_PRJ] = ActRemCliDocPrj,	// TODO: Change
+   [Brw_ADMI_ASS_PRJ] = ActRemCliAssPrj,	// TODO: Change
   };
 
 static Act_Action_t Brw_ActFormCreate[Brw_NUM_ZONES] =
@@ -1499,7 +1499,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmDocIns:
       case ActReqRemFilDocIns:	case ActRemFilDocIns:
       case ActRemFolDocIns:	case ActRemTreDocIns:
-      case ActCopDocIns:	case ActPasDocIns:	case ActShoCliDocIns:
+      case ActCopDocIns:	case ActPasDocIns:
+      case ActShoCliDocIns:	case ActRemCliDocIns:
       case ActFrmCreDocIns:	case ActCreFolDocIns:	case ActCreLnkDocIns:
       case ActRenFolDocIns:
       case ActRcvFilDocInsDZ:	case ActRcvFilDocInsCla:
@@ -1514,7 +1515,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmShaIns:
       case ActReqRemFilShaIns:	case ActRemFilShaIns:
       case ActRemFolShaIns:	case ActRemTreShaIns:
-      case ActCopShaIns:	case ActPasShaIns:	case ActShoCliShaIns:
+      case ActCopShaIns:	case ActPasShaIns:
+      case ActShoCliShaIns:	case ActRemCliShaIns:
       case ActFrmCreShaIns:	case ActCreFolShaIns:	case ActCreLnkShaIns:
       case ActRenFolShaIns:
       case ActRcvFilShaInsDZ:	case ActRcvFilShaInsCla:
@@ -1537,7 +1539,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmDocCtr:
       case ActReqRemFilDocCtr:	case ActRemFilDocCtr:
       case ActRemFolDocCtr:	case ActRemTreDocCtr:
-      case ActCopDocCtr:	case ActPasDocCtr:	case ActShoCliDocCtr:
+      case ActCopDocCtr:	case ActPasDocCtr:
+      case ActShoCliDocCtr:	case ActRemCliDocCtr:
       case ActFrmCreDocCtr:	case ActCreFolDocCtr:	case ActCreLnkDocCtr:
       case ActRenFolDocCtr:
       case ActRcvFilDocCtrDZ:	case ActRcvFilDocCtrCla:
@@ -1552,7 +1555,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmShaCtr:
       case ActReqRemFilShaCtr:	case ActRemFilShaCtr:
       case ActRemFolShaCtr:	case ActRemTreShaCtr:
-      case ActCopShaCtr:	case ActPasShaCtr:	case ActShoCliShaCtr:
+      case ActCopShaCtr:	case ActPasShaCtr:
+      case ActShoCliShaCtr:	case ActRemCliShaCtr:
       case ActFrmCreShaCtr:	case ActCreFolShaCtr:	case ActCreLnkShaCtr:
       case ActRenFolShaCtr:
       case ActRcvFilShaCtrDZ:	case ActRcvFilShaCtrCla:
@@ -1575,7 +1579,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmDocDeg:
       case ActReqRemFilDocDeg:	case ActRemFilDocDeg:
       case ActRemFolDocDeg:	case ActRemTreDocDeg:
-      case ActCopDocDeg:	case ActPasDocDeg:	case ActShoCliDocDeg:
+      case ActCopDocDeg:	case ActPasDocDeg:
+      case ActShoCliDocDeg:	case ActRemCliDocDeg:
       case ActFrmCreDocDeg:	case ActCreFolDocDeg:	case ActCreLnkDocDeg:
       case ActRenFolDocDeg:
       case ActRcvFilDocDegDZ:	case ActRcvFilDocDegCla:
@@ -1590,7 +1595,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmShaDeg:
       case ActReqRemFilShaDeg:	case ActRemFilShaDeg:
       case ActRemFolShaDeg:	case ActRemTreShaDeg:
-      case ActCopShaDeg:	case ActPasShaDeg:	case ActShoCliShaDeg:
+      case ActCopShaDeg:	case ActPasShaDeg:
+      case ActShoCliShaDeg:	case ActRemCliShaDeg:
       case ActFrmCreShaDeg:	case ActCreFolShaDeg:	case ActCreLnkShaDeg:
       case ActRenFolShaDeg:
       case ActRcvFilShaDegDZ:	case ActRcvFilShaDegCla:
@@ -1626,7 +1632,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmDocCrs:
       case ActReqRemFilDocCrs:	case ActRemFilDocCrs:
       case ActRemFolDocCrs:	case ActRemTreDocCrs:
-      case ActCopDocCrs:	case ActPasDocCrs:	case ActShoCliDocCrs:
+      case ActCopDocCrs:	case ActPasDocCrs:
+      case ActShoCliDocCrs:	case ActRemCliDocCrs:
       case ActFrmCreDocCrs:	case ActCreFolDocCrs:	case ActCreLnkDocCrs:
       case ActRenFolDocCrs:
       case ActRcvFilDocCrsDZ:	case ActRcvFilDocCrsCla:
@@ -1640,7 +1647,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmDocGrp:
       case ActReqRemFilDocGrp:	case ActRemFilDocGrp:
       case ActRemFolDocGrp:	case ActRemTreDocGrp:
-      case ActCopDocGrp:	case ActPasDocGrp:	case ActShoCliDocGrp:
+      case ActCopDocGrp:	case ActPasDocGrp:
+      case ActShoCliDocGrp:	case ActRemCliDocGrp:
       case ActFrmCreDocGrp:	case ActCreFolDocGrp:	case ActCreLnkDocGrp:
       case ActRenFolDocGrp:
       case ActRcvFilDocGrpDZ:	case ActRcvFilDocGrpCla:
@@ -1660,7 +1668,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmTchCrs:
       case ActReqRemFilTchCrs:	case ActRemFilTchCrs:
       case ActRemFolTchCrs:	case ActRemTreTchCrs:
-      case ActCopTchCrs:	case ActPasTchCrs:	case ActShoCliTchCrs:
+      case ActCopTchCrs:	case ActPasTchCrs:
+      case ActShoCliTchCrs:	case ActRemCliTchCrs:
       case ActFrmCreTchCrs:	case ActCreFolTchCrs:	case ActCreLnkTchCrs:
       case ActRenFolTchCrs:
       case ActRcvFilTchCrsDZ:	case ActRcvFilTchCrsCla:
@@ -1672,7 +1681,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmTchGrp:
       case ActReqRemFilTchGrp:	case ActRemFilTchGrp:
       case ActRemFolTchGrp:	case ActRemTreTchGrp:
-      case ActCopTchGrp:	case ActPasTchGrp:	case ActShoCliTchGrp:
+      case ActCopTchGrp:	case ActPasTchGrp:
+      case ActShoCliTchGrp:	case ActRemCliTchGrp:
       case ActFrmCreTchGrp:	case ActCreFolTchGrp:	case ActCreLnkTchGrp:
       case ActRenFolTchGrp:
       case ActRcvFilTchGrpDZ:	case ActRcvFilTchGrpCla:
@@ -1691,7 +1701,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmShaCrs:
       case ActReqRemFilShaCrs:	case ActRemFilShaCrs:
       case ActRemFolShaCrs:	case ActRemTreShaCrs:
-      case ActCopShaCrs:	case ActPasShaCrs:	case ActShoCliShaCrs:
+      case ActCopShaCrs:	case ActPasShaCrs:
+      case ActShoCliShaCrs:	case ActRemCliShaCrs:
       case ActFrmCreShaCrs:	case ActCreFolShaCrs:	case ActCreLnkShaCrs:
       case ActRenFolShaCrs:
       case ActRcvFilShaCrsDZ:	case ActRcvFilShaCrsCla:
@@ -1703,7 +1714,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmShaGrp:
       case ActReqRemFilShaGrp:	case ActRemFilShaGrp:
       case ActRemFolShaGrp:	case ActRemTreShaGrp:
-      case ActCopShaGrp:	case ActPasShaGrp:	case ActShoCliShaGrp:
+      case ActCopShaGrp:	case ActPasShaGrp:
+      case ActShoCliShaGrp:	case ActRemCliShaGrp:
       case ActFrmCreShaGrp:	case ActCreFolShaGrp:	case ActCreLnkShaGrp:
       case ActRenFolShaGrp:
       case ActRcvFilShaGrpDZ:	case ActRcvFilShaGrpCla:
@@ -1716,7 +1728,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       /***** My assignments *****/
       case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
       case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
-      case ActCopAsgUsr:	case ActPasAsgUsr:	case ActShoCliAsgUsr:
+      case ActCopAsgUsr:	case ActPasAsgUsr:
+      case ActShoCliAsgUsr:	case ActRemCliAsgUsr:
       case ActFrmCreAsgUsr:	case ActCreFolAsgUsr:	case ActCreLnkAsgUsr:
       case ActRenFolAsgUsr:
       case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
@@ -1730,7 +1743,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
       case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
       case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
-      case ActCopAsgCrs:	case ActPasAsgCrs:	case ActShoCliAsgCrs:
+      case ActCopAsgCrs:	case ActPasAsgCrs:
+      case ActShoCliAsgCrs:	case ActRemCliAsgCrs:
       case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
       case ActRenFolAsgCrs:
       case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
@@ -1744,7 +1758,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmAsgWrkUsr:
       case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
       case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
-      case ActCopWrkUsr:	case ActPasWrkUsr:	case ActShoCliWrkUsr:
+      case ActCopWrkUsr:	case ActPasWrkUsr:
+      case ActShoCliWrkUsr:	case ActRemCliWrkUsr:
       case ActFrmCreWrkUsr:	case ActCreFolWrkUsr:	case ActCreLnkWrkUsr:
       case ActRenFolWrkUsr:
       case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
@@ -1757,7 +1772,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       /***** Another users' works *****/
       case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
       case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
-      case ActCopWrkCrs:	case ActPasWrkCrs:	case ActShoCliWrkCrs:
+      case ActCopWrkCrs:	case ActPasWrkCrs:
+      case ActShoCliWrkCrs:	case ActRemCliWrkCrs:
       case ActFrmCreWrkCrs:	case ActCreFolWrkCrs:	case ActCreLnkWrkCrs:
       case ActRenFolWrkCrs:
       case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
@@ -1772,7 +1788,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmDocPrj:
       case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
       case ActRemFolDocPrj:	case ActRemTreDocPrj:
-      case ActCopDocPrj:	case ActPasDocPrj:	case ActShoCliDocPrj:
+      case ActCopDocPrj:	case ActPasDocPrj:
+      case ActShoCliDocPrj:	case ActRemCliDocPrj:
       case ActFrmCreDocPrj:	case ActCreFolDocPrj:	case ActCreLnkDocPrj:
       case ActRenFolDocPrj:
       case ActRcvFilDocPrjDZ:	case ActRcvFilDocPrjCla:
@@ -1786,7 +1803,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmAssPrj:
       case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
       case ActRemFolAssPrj:	case ActRemTreAssPrj:
-      case ActCopAssPrj:	case ActPasAssPrj:	case ActShoCliAssPrj:
+      case ActCopAssPrj:	case ActPasAssPrj:
+      case ActShoCliAssPrj:	case ActRemCliAssPrj:
       case ActFrmCreAssPrj:	case ActCreFolAssPrj:	case ActCreLnkAssPrj:
       case ActRenFolAssPrj:
       case ActRcvFilAssPrjDZ:	case ActRcvFilAssPrjCla:
@@ -1837,7 +1855,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmMrkCrs:
       case ActReqRemFilMrkCrs:	case ActRemFilMrkCrs:
       case ActRemFolMrkCrs:	case ActRemTreMrkCrs:
-      case ActCopMrkCrs:	case ActPasMrkCrs:	case ActShoCliMrkCrs:
+      case ActCopMrkCrs:	case ActPasMrkCrs:
+      case ActShoCliMrkCrs:	case ActRemCliMrkCrs:
       case ActFrmCreMrkCrs:	case ActCreFolMrkCrs:
       case ActRenFolMrkCrs:
       case ActRcvFilMrkCrsDZ:	case ActRcvFilMrkCrsCla:
@@ -1852,7 +1871,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmMrkGrp:
       case ActReqRemFilMrkGrp:	case ActRemFilMrkGrp:
       case ActRemFolMrkGrp:	case ActRemTreMrkGrp:
-      case ActCopMrkGrp:	case ActPasMrkGrp:	case ActShoCliMrkGrp:
+      case ActCopMrkGrp:	case ActPasMrkGrp:
+      case ActShoCliMrkGrp:	case ActRemCliMrkGrp:
       case ActFrmCreMrkGrp:	case ActCreFolMrkGrp:
       case ActRenFolMrkGrp:
       case ActRcvFilMrkGrpDZ:	case ActRcvFilMrkGrpCla:
@@ -1868,7 +1888,8 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActAdmBrf:
       case ActReqRemFilBrf:	case ActRemFilBrf:
       case ActRemFolBrf:	case ActRemTreBrf:
-      case ActCopBrf:		case ActPasBrf:		case ActShoCliBrf:
+      case ActCopBrf:		case ActPasBrf:
+      case ActShoCliBrf:	case ActRemCliBrf:
       case ActFrmCreBrf:	case ActCreFolBrf:	case ActCreLnkBrf:
       case ActRenFolBrf:
       case ActRcvFilBrfDZ:	case ActRcvFilBrfCla:
@@ -5966,12 +5987,31 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
      }
   }
 
-
 /*****************************************************************************/
-/**** Paste the arch/carp indicado in the portapapelesde in file browser *****/
+/*********************** Show clipboard in file browser **********************/
 /*****************************************************************************/
 
 void Brw_ShowClipboard (void)
+  {
+   struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** If browser is editable, get and write current clipboard *****/
+   if (Brw_CheckIfFileBrowserIsEditable (FileBrowser.Zone) == Usr_CAN)
+      if (Brw_GetMyClipboard (&FileBrowser) == Exi_EXISTS)
+	 Brw_WriteCurrentClipboard (&FileBrowser);
+
+   /***** Show again the file browser *****/
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+/*****************************************************************************/
+/********************** Remove clipboard in file browser *********************/
+/*****************************************************************************/
+
+void Brw_RemClipboard (void)	// TODO: Rewrite to remove clipboard
   {
    struct Brw_FileBrowser FileBrowser;
 
