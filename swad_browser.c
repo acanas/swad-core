@@ -1126,7 +1126,8 @@ static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
 static void Brw_PutIconsFileBrowser (void *FileBrowser);
 static void Brw_PutIconToViewClipboard (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
-static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBrowser);
+
+static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (Brw_Zone_t Zone);
 static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser);
@@ -2465,8 +2466,8 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
 
 void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser)
   {
-   /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
+   /***** Initializations before showing one or several file browsers *****/
+   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
 
    /****** Show the file browser *****/
    Brw_ShowFileBrowser (FileBrowser);
@@ -2488,12 +2489,12 @@ void Brw_ShowFileBrowserProject (long PrjCod)
           and show again project including file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
+   /***** Initializations before showing one or several file browsers *****/
+   Brw_BeforeShowingOneOrSeveralFileBrowsers (&FileBrowser);
+
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
       HTM_LEGEND (Txt_Documents);
-
-      /***** Write top before showing file browser *****/
-      Brw_WriteTopBeforeShowingFileBrowser (&FileBrowser);
 
       if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
 	{
@@ -2532,8 +2533,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
    if (ZIP_GetCreateZIP () == ZIP_CREATE_ZIP)
       ZIP_CreateZIPAsgWrk ();
 
-   /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
+   /***** Initializations before showing one or several file browsers *****/
+   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
 
    /***** Begin box and table *****/
    Box_BoxBegin (Txt_Assignments_and_other_works,
@@ -2596,8 +2597,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
   {
-   /***** Write top before showing file browser *****/
-   Brw_WriteTopBeforeShowingFileBrowser (FileBrowser);
+   /***** Initializations before showing one or several file browsers *****/
+   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
 
    /***** Show the tree with the assignments *****/
    FileBrowser->Zone = Brw_ADMI_ASG_USR;
@@ -3020,7 +3021,6 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
          Brw_ResetFileMetadata (&RootFolder);
 	 RootFolder.Level = 0;	// Root folder
 	 RootFolder.Type  = Brw_IS_FOLDER;
-	 RootFolder.Path.InZoneWithoutName[0] = '\0';
 	 Str_Copy (RootFolder.Path.Name,
 		   Brw_RootFolderInternalNames[FileBrowser->Zone],
 		   sizeof (RootFolder.Path.Name) - 1);
@@ -3289,18 +3289,18 @@ static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
-/********************** Write title of a file browser ************************/
+/******** Initializations before showing one or several file browsers ********/
 /*****************************************************************************/
 
-static void Brw_WriteTopBeforeShowingFileBrowser (struct Brw_FileBrowser *FileBrowser)
+static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *FileBrowser)
   {
+   __attribute__((unused)) Exi_Exist_t MyClipboardExists;
+
    /***** Update last access to this file browser *****/
    Brw_UpdateLastAccess (FileBrowser->Zone);
 
-   /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_CheckIfFileBrowserIsEditable (FileBrowser->Zone) == Usr_CAN)
-      if (Brw_GetMyClipboard (FileBrowser) == Exi_EXISTS)
-	 Brw_WriteCurrentClipboard (FileBrowser);
+   /***** Get my clipboard *****/
+   MyClipboardExists = Brw_GetMyClipboard (FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5038,6 +5038,11 @@ void Brw_ContractFolder (void)
 
 void Brw_Copy (void)
   {
+   static void (*AddOrUpdatePathInClipboard[Exi_NUM_EXIST]) (const struct Brw_FileBrowser *FileBrowser) =
+     {
+      [Exi_DOES_NOT_EXIST] = Brw_DB_AddPathToClipboards,
+      [Exi_EXISTS        ] = Brw_DB_UpdatePathInClipboard,
+     };
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
 
@@ -5045,24 +5050,26 @@ void Brw_Copy (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
 
-   /***** Remove old clipboards (from all users) *****/
-   Brw_DB_RemoveExpiredClipboards ();   // Someone must do this work. Let's do it whenever a user click in a copy button
+   /****** Update my clipboard *****/
+   FileBrowser.Clipboard.ZoneDB          = Brw_DB_GetZoneDB_brw_clipboards (FileBrowser.Zone);
+   FileBrowser.Clipboard.IsInCurrentZone = true;	// Copying now, so it's in current zone
+   FileBrowser.Clipboard.File.HieCod     = Brw_GetCodForZone (FileBrowser.Zone);
+   FileBrowser.Clipboard.File.OwnerCod   = Brw_GetOwnerCodForZone (FileBrowser.Zone);
+   FileBrowser.Clipboard.File.Level      = Brw_NumLevelsInPath (File.Path.InZone);
+   FileBrowser.Clipboard.File.Type       = File.Type;
+   Str_Copy (FileBrowser.Clipboard.File.Path.InZone,File.Path.InZone,
+             sizeof (FileBrowser.Clipboard.File.Path.InZone) - 1);
+   Brw_SplitFullPathIntoPathAndName (FileBrowser.Clipboard.File.Path.InZone,
+				     FileBrowser.Clipboard.File.Path.InZoneWithoutName,	// Not used
+				     FileBrowser.Clipboard.File.Path.Name);
 
-   /***** Put the path in the clipboard *****/
-   switch (Brw_GetMyClipboard (&FileBrowser))
-     {
-      case Exi_EXISTS:
-	 Brw_DB_UpdatePathInClipboard (FileBrowser.Zone,
-				       File.Type,
-				       File.Path.InZone);
-	 break;
-      case Exi_DOES_NOT_EXIST:
-      default:
-	 Brw_DB_AddPathToClipboards (FileBrowser.Zone,
-				     File.Type,
-				     File.Path.InZone);
-	 break;
-     }
+   /***** Remove old clipboards (from all users) *****/
+   // Someone must do this work.
+   // Let's do it whenever a user click in a copy button.
+   Brw_DB_RemoveExpiredClipboards ();
+
+   /***** Put the path in the clipboard in database *****/
+   AddOrUpdatePathInClipboard[Brw_DB_CheckIfMyClipboardExists ()] (&FileBrowser);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
@@ -5351,9 +5358,9 @@ static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser)
    unsigned UnsignedNum;
 
    /***** Clear clipboard data *****/
+   FileBrowser->Clipboard.ZoneDB = Brw_UNKNOWN;
+   FileBrowser->Clipboard.IsInCurrentZone = false;
    Brw_ResetFileMetadata (&FileBrowser->Clipboard.File);
-   FileBrowser->Clipboard.File.Path.InZone[0] = '\0';
-   FileBrowser->Clipboard.File.Path.Name[0]   = '\0';
 
    /***** Get my current clipboard from database *****/
    if ((NumRows = Brw_DB_GetMyClipboard (&mysql_res)) == 1)
@@ -5647,7 +5654,6 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
    struct Brw_File FirstFile;
 
    Brw_ResetFileMetadata (&FirstFile);	// Paths are not reset
-   FirstFile.FilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
 
    Pasted.NumFiles =
    Pasted.NumLinks =
