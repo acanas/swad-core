@@ -5991,7 +5991,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 /*********************** Show clipboard in file browser **********************/
 /*****************************************************************************/
 
-void Brw_ShowClipboard (void)
+void Brw_ShowMyClipboard (void)
   {
    struct Brw_FileBrowser FileBrowser;
 
@@ -6011,17 +6011,16 @@ void Brw_ShowClipboard (void)
 /********************** Remove clipboard in file browser *********************/
 /*****************************************************************************/
 
-void Brw_RemClipboard (void)	// TODO: Rewrite to remove clipboard
+void Brw_RemMyClipboard (void)
   {
    struct Brw_FileBrowser FileBrowser;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
-   /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_CheckIfFileBrowserIsEditable (FileBrowser.Zone) == Usr_CAN)
-      if (Brw_GetMyClipboard (&FileBrowser) == Exi_EXISTS)
-	 Brw_WriteCurrentClipboard (&FileBrowser);
+   /***** If I have current clipboard, remove it *****/
+   if (Brw_DB_CheckIfMyClipboardExists () == Exi_EXISTS)
+      Brw_DB_RemoveUsrClipboard (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);

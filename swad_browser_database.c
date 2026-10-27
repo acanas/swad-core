@@ -1420,10 +1420,7 @@ void Brw_DB_RemoveUsrFiles (long UsrCod)
 	           UsrCod);
 
    /***** Remove from database the entries that store clipboards *****/
-   DB_QueryDELETE ("can not remove user's clipboards",
-		   "DELETE FROM brw_clipboards"
-		   " WHERE UsrCod=%ld",	// User's clipboard
-	           UsrCod);
+   Brw_DB_RemoveUsrClipboard (UsrCod);
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    DB_QueryDELETE ("can not remove user's last visits to file zones",
@@ -2818,6 +2815,18 @@ unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res)
 		    " FROM brw_clipboards"
 		   " WHERE UsrCod=%ld",
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
+  }
+
+/*****************************************************************************/
+/************************* Remove a user's clipboard *************************/
+/*****************************************************************************/
+
+void Brw_DB_RemoveUsrClipboard (long UsrCod)
+  {
+   DB_QueryDELETE ("can not remove user's clipboards",
+		   "DELETE FROM brw_clipboards"
+		   " WHERE UsrCod=%ld",	// User's clipboard
+	           UsrCod);
   }
 
 /*****************************************************************************/
