@@ -2744,13 +2744,13 @@ void Brw_DB_RemoveExpiredExpandedFolders (void)
   }
 
 /*****************************************************************************/
-/***************************** Add path to clipboards ************************/
+/************************** Update path in my clipboard **********************/
 /*****************************************************************************/
 
-void Brw_DB_AddPathToClipboards (const struct Brw_FileBrowser *FileBrowser)
+void Brw_DB_ReplacePathInClipboard (const struct Brw_FileBrowser *FileBrowser)
   {
    DB_QueryINSERT ("can not add source of copy to clipboard",
-		   "INSERT INTO brw_clipboards"
+		   "REPLACE INTO brw_clipboards"
 		   " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"	// TODO: Change to OwnerCod
 		   " VALUES"
 		   " (%ld,%u,%ld,%ld,%u,'%s')",
@@ -2760,43 +2760,6 @@ void Brw_DB_AddPathToClipboards (const struct Brw_FileBrowser *FileBrowser)
 	           FileBrowser->Clipboard.File.OwnerCod,
 	           (unsigned) FileBrowser->Clipboard.File.Type,
 	           FileBrowser->Clipboard.File.Path.InZone);
-  }
-
-/*****************************************************************************/
-/************************** Update path in my clipboard **********************/
-/*****************************************************************************/
-
-void Brw_DB_UpdatePathInClipboard (const struct Brw_FileBrowser *FileBrowser)
-  {
-   DB_QueryUPDATE ("can not update source of copy in clipboard",
-		   "UPDATE brw_clipboards"
-		     " SET FileBrowser=%u,"
-		          "Cod=%ld,"
-		          "WorksUsrCod=%ld,"	// TODO: Change to OwnerCod
-		          "FileType=%u,"
-		          "Path='%s'"
-		   " WHERE UsrCod=%ld",
-	           (unsigned) FileBrowser->Clipboard.ZoneDB,
-	           FileBrowser->Clipboard.File.HieCod,
-	           FileBrowser->Clipboard.File.OwnerCod,
-	           (unsigned) FileBrowser->Clipboard.File.Type,
-	           FileBrowser->Clipboard.File.Path.InZone,
-	           Gbl.Usrs.Me.UsrDat.UsrCod);
-  }
-
-/*****************************************************************************/
-/************************ Check if my clipboard exists ***********************/
-/*****************************************************************************/
-
-Exi_Exist_t Brw_DB_CheckIfMyClipboardExists (void)
-  {
-   return
-   DB_QueryEXISTS ("can not check if a folder contains public files",
-		   "SELECT EXISTS"
-		   "(SELECT *"
-		     " FROM brw_clipboards"
-		    " WHERE UsrCod=%ld)",
-		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/

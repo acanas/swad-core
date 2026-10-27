@@ -431,18 +431,18 @@ mysql> DESCRIBE brw_caches;
    /***** Table brw_clipboards *****/
 /*
 mysql> DESCRIBE brw_clipboards;
-+-------------+------------+------+-----+-------------------+-----------------------------+
-| Field       | Type       | Null | Key | Default           | Extra                       |
-+-------------+------------+------+-----+-------------------+-----------------------------+
-| UsrCod      | int(11)    | NO   | PRI | NULL              |                             |
-| FileBrowser | tinyint(4) | NO   | MUL | NULL              |                             |
-| Cod         | int(11)    | NO   |     | -1                |                             |
-| WorksUsrCod | int(11)    | NO   | MUL | NULL              |                             |
-| FileType    | tinyint(4) | NO   |     | 0                 |                             |
-| Path        | text       | NO   |     | NULL              |                             |
-| CopyTime    | timestamp  | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+-------------+------------+------+-----+-------------------+-----------------------------+
-7 rows in set (0.00 sec)
++-------------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type      | Null | Key | Default           | Extra                                         |
++-------------+-----------+------+-----+-------------------+-----------------------------------------------+
+| UsrCod      | int       | NO   | PRI | NULL              |                                               |
+| FileBrowser | tinyint   | NO   | MUL | NULL              |                                               |
+| Cod         | int       | NO   |     | -1                |                                               |
+| WorksUsrCod | int       | NO   | MUL | NULL              |                                               |
+| FileType    | tinyint   | NO   |     | 0                 |                                               |
+| Path        | text      | NO   |     | NULL              |                                               |
+| CopyTime    | timestamp | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-----------+------+-----+-------------------+-----------------------------------------------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS brw_clipboards ("
 			"UsrCod INT NOT NULL,"
@@ -451,7 +451,7 @@ mysql> DESCRIBE brw_clipboards;
 			"WorksUsrCod INT NOT NULL,"	// TODO: Change to OwnerCod
 			"FileType TINYINT NOT NULL DEFAULT 0,"
 			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
-			"CopyTime TIMESTAMP,"
+			"CopyTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod),"
 		   "INDEX(FileBrowser,Cod),"
 		   "INDEX(WorksUsrCod)"			// TODO: Change to OwnerCod
@@ -1505,17 +1505,17 @@ mysql> DESCRIBE faq_questions;
    /***** Table fig_figures *****/
    /*
 mysql> DESCRIBE fig_figures;
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-| Field       | Type                                      | Null | Key | Default           | Extra                       |
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-| Figure      | int(11)                                   | NO   | PRI | NULL              |                             |
-| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                             |
-| Cod         | int(11)                                   | NO   | PRI | -1                |                             |
-| ValueInt    | int(11)                                   | NO   |     | 0                 |                             |
-| ValueDouble | double                                    | NO   |     | 0                 |                             |
-| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+-------------+-------------------------------------------+------+-----+-------------------+-----------------------------+
-6 rows in set (0.00 sec)
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field       | Type                                      | Null | Key | Default           | Extra                                         |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Figure      | int                                       | NO   | PRI | NULL              |                                               |
+| Scope       | enum('Sys','Cty','Ins','Ctr','Deg','Crs') | NO   | PRI | Sys               |                                               |
+| Cod         | int                                       | NO   | PRI | -1                |                                               |
+| ValueInt    | int                                       | NO   |     | NULL              |                                               |
+| ValueDouble | double                                    | NO   |     | NULL              |                                               |
+| LastUpdate  | timestamp                                 | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-------------+-------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+6 rows in set (0,00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS fig_figures ("
 			"Figure INT NOT NULL,"
@@ -1523,7 +1523,7 @@ mysql> DESCRIBE fig_figures;
 			"Cod INT NOT NULL DEFAULT -1,"
 			"ValueInt INT NOT NULL,"
 			"ValueDouble DOUBLE PRECISION NOT NULL,"
-			"LastUpdate TIMESTAMP,"
+			"LastUpdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(Figure,Scope,Cod)"
 		   ") ENGINE=MyISAM");
 
@@ -1572,19 +1572,19 @@ mysql> DESCRIBE fir_log;
    /***** Table for_clipboards *****/
 /*
 mysql> DESCRIBE for_clipboards;
-+------------+-----------+------+-----+-------------------+-----------------------------+
-| Field      | Type      | Null | Key | Default           | Extra                       |
-+------------+-----------+------+-----+-------------------+-----------------------------+
-| ThrCod     | int(11)   | NO   | PRI | NULL              |                             |
-| UsrCod     | int(11)   | NO   | UNI | NULL              |                             |
-| TimeInsert | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+------------+-----------+------+-----+-------------------+-----------------------------+
-3 rows in set (0.00 sec)
++------------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field      | Type      | Null | Key | Default           | Extra                                         |
++------------+-----------+------+-----+-------------------+-----------------------------------------------+
+| ThrCod     | int       | NO   | PRI | NULL              |                                               |
+| UsrCod     | int       | NO   | UNI | NULL              |                                               |
+| TimeInsert | timestamp | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++------------+-----------+------+-----+-------------------+-----------------------------------------------+
+3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS for_clipboards ("
 			"ThrCod INT NOT NULL,"
 			"UsrCod INT NOT NULL,"
-			"TimeInsert TIMESTAMP NOT NULL,"
+			"TimeInsert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(ThrCod),"
 		   "UNIQUE INDEX(UsrCod)"
 		   ") ENGINE=MyISAM");
@@ -2219,36 +2219,36 @@ mysql> DESCRIBE mch_matches;
    /***** Table mch_players *****/
 /*
 mysql> DESCRIBE mch_players;
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| Field  | Type      | Null | Key | Default           | Extra                       |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| MchCod | int(11)   | NO   | PRI | NULL              |                             |
-| UsrCod | int(11)   | NO   | PRI | NULL              |                             |
-| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-3 rows in set (0.00 sec)
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                                         |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| MchCod | int       | NO   | PRI | NULL              |                                               |
+| UsrCod | int       | NO   | PRI | NULL              |                                               |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_players ("
 			"MchCod INT NOT NULL,"
 	                "UsrCod INT NOT NULL,"
-		        "TS TIMESTAMP,"
+		        "TS TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(MchCod,UsrCod)"
 		   ") ENGINE=MyISAM");
 
    /***** Table mch_playing *****/
 /*
 mysql> DESCRIBE mch_playing;
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| Field  | Type      | Null | Key | Default           | Extra                       |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-| MchCod | int(11)   | NO   | PRI | NULL              |                             |
-| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
-+--------+-----------+------+-----+-------------------+-----------------------------+
-2 rows in set (0.01 sec)
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field  | Type      | Null | Key | Default           | Extra                                         |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+| MchCod | int       | NO   | PRI | NULL              |                                               |
+| TS     | timestamp | NO   |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++--------+-----------+------+-----+-------------------+-----------------------------------------------+
+2 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mch_playing ("
 			"MchCod INT NOT NULL,"
-		        "TS TIMESTAMP,"
+		        "TS TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(MchCod)"
 		   ") ENGINE=MyISAM");
 
@@ -2927,15 +2927,15 @@ mysql> DESCRIBE roo_rooms;
    /***** Table rsc_clipboards *****/
 /*
 mysql> DESCRIBE rsc_clipboards;
-+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| Field    | Type                                                                                                                                                  | Null | Key | Default | Extra |
-+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
-| UsrCod   | int                                                                                                                                                   | NO   | PRI | NULL    |       |
-| CrsCod   | int                                                                                                                                                   | NO   | PRI | NULL    |       |
-| Type     | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   | PRI | non     |       |
-| Cod      | int                                                                                                                                                   | NO   | PRI | -1      |       |
-| CopyTime | timestamp                                                                                                                                             | YES  | MUL | NULL    |       |
-+----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+---------+-------+
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| Field    | Type                                                                                                                                                  | Null | Key | Default           | Extra                                         |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------------------------+
+| UsrCod   | int                                                                                                                                                   | NO   | PRI | NULL              |                                               |
+| CrsCod   | int                                                                                                                                                   | NO   | PRI | NULL              |                                               |
+| Type     | enum('non','inf','gui','lec','pra','bib','faq','lnk','ass','tmt','asg','prj','cfe','tst','exa','gam','rub','doc','mrk','grp','tch','att','for','svy') | NO   | PRI | non               |                                               |
+| Cod      | int                                                                                                                                                   | NO   | PRI | -1                |                                               |
+| CopyTime | timestamp                                                                                                                                             | NO   | MUL | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++----------+-------------------------------------------------------------------------------------------------------------------------------------------------------+------+-----+-------------------+-----------------------------------------------+
 5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS rsc_clipboards ("
@@ -2946,7 +2946,7 @@ mysql> DESCRIBE rsc_clipboards;
 				  "'exa','gam','rub','doc','mrk','grp','tch',"
 				  "'att','for','svy') NOT NULL DEFAULT 'non',"
 			"Cod INT NOT NULL DEFAULT -1,"
-			"CopyTime TIMESTAMP,"
+			"CopyTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod,CrsCod,Type,Cod),"
 		   "INDEX(CrsCod,Type,Cod),"
 		   "INDEX(CopyTime)"
@@ -3870,19 +3870,19 @@ mysql> DESCRIBE usr_clicks_without_photo;
    /***** Table usr_clipboards *****/
 /*
 mysql> DESCRIBE usr_clipboards;
-+-----------+-----------+------+-----+---------+-------+
-| Field     | Type      | Null | Key | Default | Extra |
-+-----------+-----------+------+-----+---------+-------+
-| UsrCod    | int       | NO   | PRI | NULL    |       |
-| OthUsrCod | int       | NO   | PRI | NULL    |       |
-| CopyTime  | timestamp | YES  | MUL | NULL    |       |
-+-----------+-----------+------+-----+---------+-------+
++-----------+-----------+------+-----+-------------------+-----------------------------------------------+
+| Field     | Type      | Null | Key | Default           | Extra                                         |
++-----------+-----------+------+-----+-------------------+-----------------------------------------------+
+| UsrCod    | int       | NO   | PRI | NULL              |                                               |
+| OthUsrCod | int       | NO   | PRI | NULL              |                                               |
+| CopyTime  | timestamp | NO   | MUL | CURRENT_TIMESTAMP | DEFAULT_GENERATED on update CURRENT_TIMESTAMP |
++-----------+-----------+------+-----+-------------------+-----------------------------------------------+
 3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_clipboards ("
 			"UsrCod INT NOT NULL,"
 			"OthUsrCod INT NOT NULL,"
-			"CopyTime TIMESTAMP,"
+			"CopyTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 		   "UNIQUE INDEX(UsrCod,OthUsrCod),"
 		   "INDEX(CopyTime)"
 		   ") ENGINE=MyISAM");

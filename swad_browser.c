@@ -5093,11 +5093,6 @@ void Brw_ContractFolder (void)
 
 void Brw_Copy (void)
   {
-   static void (*AddOrUpdatePathInClipboard[Exi_NUM_EXIST]) (const struct Brw_FileBrowser *FileBrowser) =
-     {
-      [Exi_DOES_NOT_EXIST] = Brw_DB_AddPathToClipboards,
-      [Exi_EXISTS        ] = Brw_DB_UpdatePathInClipboard,
-     };
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
 
@@ -5124,7 +5119,7 @@ void Brw_Copy (void)
    Brw_DB_RemoveExpiredClipboards ();
 
    /***** Put the path in the clipboard in database *****/
-   AddOrUpdatePathInClipboard[Brw_DB_CheckIfMyClipboardExists ()] (&FileBrowser);
+   Brw_DB_ReplacePathInClipboard (&FileBrowser);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
@@ -6019,8 +6014,7 @@ void Brw_RemMyClipboard (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** If I have current clipboard, remove it *****/
-   if (Brw_DB_CheckIfMyClipboardExists () == Exi_EXISTS)
-      Brw_DB_RemoveUsrClipboard (Gbl.Usrs.Me.UsrDat.UsrCod);
+   Brw_DB_RemoveUsrClipboard (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);

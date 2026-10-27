@@ -142,9 +142,7 @@ void Brw_DB_RenameAffectedExpandedFolders (Brw_Zone_t Zone,
 void Brw_DB_RemoveExpiredExpandedFolders (void);
 
 //------------------------------- Cliboards -----------------------------------
-void Brw_DB_AddPathToClipboards (const struct Brw_FileBrowser *FileBrowser);
-void Brw_DB_UpdatePathInClipboard (const struct Brw_FileBrowser *FileBrowser);
-Exi_Exist_t Brw_DB_CheckIfMyClipboardExists (void);
+void Brw_DB_ReplacePathInClipboard (const struct Brw_FileBrowser *FileBrowser);
 unsigned Brw_DB_GetMyClipboard (MYSQL_RES **mysql_res);
 void Brw_DB_RemoveUsrClipboard (long UsrCod);
 void Brw_DB_RemoveExpiredClipboards (void);

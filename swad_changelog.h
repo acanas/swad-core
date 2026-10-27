@@ -641,11 +641,24 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.21.4 (2026-10-27)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.21.5 (2026-10-27)"
 #define Chl_CSS_FILE		"swad26.19.1.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
-	Version 26.21.4:  Oct 27, 2026	Remove user's file browser clipboard. (? lines)
+TODO: Pasar parámetro WhichFiles al ver y eliminar el portapoapeles de archivos.
+TODO: Comprobar ver y borrar portapapeles en trabajos y en proyectos.
+	Version 26.21.5:  Oct 27, 2026	Database optimization in file browser clipboard.
+					Changes in database. (349017 lines)
+					7 changes necessary in database:
+ALTER TABLE brw_clipboards CHANGE COLUMN CopyTime CopyTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE fig_figures CHANGE COLUMN LastUpdate LastUpdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE for_clipboards CHANGE COLUMN TimeInsert TimeInsert TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE mch_players CHANGE COLUMN TS TS TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE mch_playing CHANGE COLUMN TS TS TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE rsc_clipboards CHANGE COLUMN CopyTime CopyTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+ALTER TABLE usr_clipboards CHANGE COLUMN CopyTime CopyTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+	Version 26.21.4:  Oct 27, 2026	Remove user's file browser clipboard. (349048 lines)
 	Version 26.21.3:  Oct 27, 2026	New option to remove user's file browser clipboard. Not finished. (349040 lines)
 	Version 26.21.2:  Oct 26, 2026	Changes showing file browser clipboard. Not finished. (348456 lines)
 	Version 26.21.1:  Oct 26, 2026	Fixed bugs and code refactoring in file browser clipboard. (348384 lines)
