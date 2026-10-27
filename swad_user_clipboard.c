@@ -398,17 +398,17 @@ static void UsrClp_GetUsrsLst (void)
 
 void UsrClp_PutIconToViewClipboardGsts (void)
   {
-   Ico_PutContextualIconToViewClipboard (ActSeeCliGst,NULL,NULL,NULL);
+   Ico_PutContextualIconToViewClipboard (ActSeeCliGst,NULL,NULL);
   }
 
 void UsrClp_PutIconToViewClipboardStds (void)
   {
-   Ico_PutContextualIconToViewClipboard (ActSeeCliStd,NULL,NULL,NULL);
+   Ico_PutContextualIconToViewClipboard (ActSeeCliStd,NULL,NULL);
   }
 
 void UsrClp_PutIconToViewClipboardTchs (void)
   {
-   Ico_PutContextualIconToViewClipboard (ActSeeCliTch,NULL,NULL,NULL);
+   Ico_PutContextualIconToViewClipboard (ActSeeCliTch,NULL,NULL);
   }
 
 /*****************************************************************************/

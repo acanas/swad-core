@@ -381,10 +381,10 @@ void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
 				  "copy.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,const char *Anchor,
+void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,
                                            void (*FuncPars) (void *Args),void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
+   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "clipboard.svg",Ico_BLACK);
   }
 

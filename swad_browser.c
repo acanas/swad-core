@@ -723,32 +723,32 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
    [Brw_SHOW_MRK_CRS] = ActUnk,
-   [Brw_ADMI_DOC_CRS] = ActRemCliDocCrs,	// TODO: Change to ActRemCliDocCrs
-   [Brw_ADMI_SHR_CRS] = ActRemCliShaCrs,	// TODO: Change
-   [Brw_ADMI_SHR_GRP] = ActRemCliShaGrp,	// TODO: Change
-   [Brw_ADMI_WRK_USR] = ActRemCliWrkUsr,	// TODO: Change
-   [Brw_ADMI_WRK_CRS] = ActRemCliWrkCrs,	// TODO: Change
-   [Brw_ADMI_MRK_CRS] = ActRemCliMrkCrs,	// TODO: Change
-   [Brw_ADMI_BRF_USR] = ActRemCliBrf,		// TODO: Change
+   [Brw_ADMI_DOC_CRS] = ActRemCliDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActRemCliShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActRemCliShaGrp,
+   [Brw_ADMI_WRK_USR] = ActRemCliWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActRemCliWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActRemCliMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActRemCliBrf,
    [Brw_SHOW_DOC_GRP] = ActUnk,
-   [Brw_ADMI_DOC_GRP] = ActRemCliDocGrp,	// TODO: Change
+   [Brw_ADMI_DOC_GRP] = ActRemCliDocGrp,
    [Brw_SHOW_MRK_GRP] = ActUnk,
-   [Brw_ADMI_MRK_GRP] = ActRemCliMrkGrp,	// TODO: Change
-   [Brw_ADMI_ASG_USR] = ActRemCliAsgUsr,	// TODO: Change
-   [Brw_ADMI_ASG_CRS] = ActRemCliAsgCrs,	// TODO: Change
+   [Brw_ADMI_MRK_GRP] = ActRemCliMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActRemCliAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActRemCliAsgCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
-   [Brw_ADMI_DOC_DEG] = ActRemCliDocDeg,	// TODO: Change
+   [Brw_ADMI_DOC_DEG] = ActRemCliDocDeg,
    [Brw_SHOW_DOC_CTR] = ActUnk,
-   [Brw_ADMI_DOC_CTR] = ActRemCliDocCtr,	// TODO: Change
+   [Brw_ADMI_DOC_CTR] = ActRemCliDocCtr,
    [Brw_SHOW_DOC_INS] = ActUnk,
-   [Brw_ADMI_DOC_INS] = ActRemCliDocIns,	// TODO: Change
-   [Brw_ADMI_SHR_DEG] = ActRemCliShaDeg,	// TODO: Change
-   [Brw_ADMI_SHR_CTR] = ActRemCliShaCtr,	// TODO: Change
-   [Brw_ADMI_SHR_INS] = ActRemCliShaIns,	// TODO: Change
-   [Brw_ADMI_TCH_CRS] = ActRemCliTchCrs,	// TODO: Change
-   [Brw_ADMI_TCH_GRP] = ActRemCliTchGrp,	// TODO: Change
-   [Brw_ADMI_DOC_PRJ] = ActRemCliDocPrj,	// TODO: Change
-   [Brw_ADMI_ASS_PRJ] = ActRemCliAssPrj,	// TODO: Change
+   [Brw_ADMI_DOC_INS] = ActRemCliDocIns,
+   [Brw_ADMI_SHR_DEG] = ActRemCliShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActRemCliShaCtr,
+   [Brw_ADMI_SHR_INS] = ActRemCliShaIns,
+   [Brw_ADMI_TCH_CRS] = ActRemCliTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActRemCliTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActRemCliDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRemCliAssPrj,
   };
 
 static Act_Action_t Brw_ActFormCreate[Brw_NUM_ZONES] =
@@ -1157,7 +1157,7 @@ static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowse
 static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
 
 static void Brw_PutIconsFileBrowser (void *FileBrowser);
-static void Brw_PutIconToViewClipboard (const struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 
 static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *FileBrowser);
@@ -2034,6 +2034,9 @@ void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
+   /***** Initialize parameter file code *****/
+   FileBrowser->FilCod = -1L;
+
    /***** Initialize hidden levels *****/
    if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 					   Brw_IS_ADM_DOC |
@@ -3324,14 +3327,14 @@ static void Brw_PutIconsFileBrowser (void *FileBrowser)
 /************************ Put icon to view clipboard *************************/
 /*****************************************************************************/
 
-static void Brw_PutIconToViewClipboard (const struct Brw_FileBrowser *FileBrowser)
+static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    Act_Action_t NextAction = Brw_ActShoCli[FileBrowser->Zone];
 
    if (NextAction != ActUnk)	// This zone allows to show clipboard
       if (FileBrowser->Clipboard.File.Path.InZone[0])	// Clipboard not empty
-	 Ico_PutContextualIconToViewClipboard (NextAction,NULL,
-					       NULL,NULL);
+	 Ico_PutContextualIconToViewClipboard (NextAction,
+					       Brw_PutImplicitParsFileBrowser,FileBrowser);
   }
 
 /*****************************************************************************/
@@ -4139,14 +4142,12 @@ static void Brw_PutIconRemove (struct Brw_FileBrowser *FileBrowser,
 	       case Brw_IS_FILE:
 	       case Brw_IS_LINK:
 		  /***** Form to remove a file or link *****/
-		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],
-						 NULL,
+		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],NULL,
 						 Brw_PutImplicitParsFileBrowser,FileBrowser);
 		  break;
 	       case Brw_IS_FOLDER:
 		  /***** Form to remove a folder *****/
-		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],
-						 NULL,
+		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],NULL,
 						 Brw_PutImplicitParsFileBrowser,FileBrowser);
 		  break;
 	       default:
@@ -5409,7 +5410,7 @@ static void Brw_PutIconsClipboard (void *FileBrowser)
    /***** Put icon to remove resource clipboard in program *****/
    if (((struct Brw_FileBrowser *) FileBrowser)->Clipboard.ZoneDB != Brw_UNKNOWN)
       Ico_PutContextualIconToRemove (Brw_ActRemCli[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
-				     NULL,NULL);
+				     Brw_PutImplicitParsFileBrowser,FileBrowser);
   }
 
 /*****************************************************************************/
@@ -6150,11 +6151,11 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 			      Fil_FastCopyOfFiles (PathOrgInServ,PathDstInServ);
 
 			      /***** Add entry to the table of files/folders *****/
-			      FileDst.Metadata.PublisherCod       = Gbl.Usrs.Me.UsrDat.UsrCod;
+			      FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
 			      FileDst.Metadata.PrivateOrPublic = PriPub_PRIVATE;
 			      FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
-			      FileDst.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
-										&FileDst);
+			      FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
+										 &FileDst);
 			      if (*FirstFilCod <= 0)
 				 *FirstFilCod = FileDst.FilCod;
 
