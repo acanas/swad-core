@@ -4262,29 +4262,6 @@ const char *Txt_CALL_FOR_EXAM_Course =
 	"Kurs";
 #endif
 
-const char *Txt_CALL_FOR_EXAM_Documentation_required =
-#if   L==1	// ca
-	"Documentaci&oacute; exigida";
-#elif L==2	// de
-	"Ausweis erforderlich";
-#elif L==3	// en
-	"ID required";
-#elif L==4	// es
-	"Documentaci&oacute;n exigida";
-#elif L==5	// fr
-	"Pi&egrave;ce d'identité obligatoire";
-#elif L==6	// gn
-	"Documentaci&oacute;n exigida";	// Okoteve traducción
-#elif L==7	// it
-	"Documentazione richiesta";
-#elif L==8	// pl
-	"ID wymagane";
-#elif L==9	// pt
-	"Documenta&ccedil;&atilde;o necess&aacute;ria";
-#elif L==10	// tr
-	"ID required";			// Çeviri lazim!
-#endif
-
 const char *Txt_CALL_FOR_EXAM_Exam_date =
 #if   L==1	// ca
 	"Data de l'examen";
@@ -4421,6 +4398,29 @@ const char *Txt_CALL_FOR_EXAM_Place_of_exam =
 	"Local do exame";
 #elif L==10	// tr
 	"Place of exam";		// Çeviri lazim!
+#endif
+
+const char *Txt_CALL_FOR_EXAM_Required_documentation =
+#if   L==1	// ca
+	"Documentaci&oacute; exigida";
+#elif L==2	// de
+	"Ausweis erforderlich";
+#elif L==3	// en
+	"Required documentation";
+#elif L==4	// es
+	"Documentaci&oacute;n exigida";
+#elif L==5	// fr
+	"Documentation obligatoire";
+#elif L==6	// gn
+	"Kuatia o&ntilde;eikotev&etilde;va";
+#elif L==7	// it
+	"Documentazione richiesta";
+#elif L==8	// pl
+	"Wymagana dokumentacja";
+#elif L==9	// pt
+	"Documenta&ccedil;&atilde;o necess&aacute;ria";
+#elif L==10	// tr
+	"Gerekli belgeler";
 #endif
 
 const char *Txt_CALL_FOR_EXAM_Session =

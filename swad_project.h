@@ -223,8 +223,9 @@ void Prj_GetPars (struct Prj_Projects *Prjs,
 
 void Prj_PutIconsListPrjs (const void *Prjs);
 
-void Prj_ShowOnePrj (void);
-void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs);
+void Prj_ShowOnePrj (struct Brw_FileBrowser *FileBrowser);
+void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs,
+			    struct Brw_FileBrowser *FileBrowser);
 
 void Prj_PrintOnePrj (void);
 

@@ -2540,37 +2540,47 @@ void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser)
 /************* Show file browser with the documents of a project *************/
 /*****************************************************************************/
 
-void Brw_ShowFileBrowserProject (long PrjCod)
+void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser)
   {
+   extern const char *Hlp_ASSESSMENT_Projects_project_files;
+   extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_Documents;
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser
-          and show again project including file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Initializations before showing one or several file browsers *****/
-   Brw_BeforeShowingOneOrSeveralFileBrowsers (&FileBrowser);
+   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
 
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
       HTM_LEGEND (Txt_Documents);
 
-      if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
-	{
-	 /***** Show the tree with the project documents *****/
-	 FileBrowser.Zone = Brw_ADMI_DOC_PRJ;
-	 Brw_InitializeFileBrowser (&FileBrowser);
-	 Brw_ShowFileBrowser (&FileBrowser);
-	}
+      /***** Begin box *****/
+      Box_BoxBegin (Txt_Documents,
+		    Brw_PutIconsFileBrowsersPrj,FileBrowser,
+		    Hlp_ASSESSMENT_Projects_project_files,Box_NOT_CLOSABLE);
 
-      if (Prj_CheckIfICanViewPrjAss (PrjCod) == Usr_CAN)
-	{
-	 /***** Show the tree with the project assessment *****/
-	 FileBrowser.Zone = Brw_ADMI_ASS_PRJ;
-	 Brw_InitializeFileBrowser (&FileBrowser);
-	 Brw_ShowFileBrowser (&FileBrowser);
-	}
+	 /***** Setting selector *****/
+	 Set_BeginSettingsHead ();
+	    Brw_ShowFormToShowAllFiles (FileBrowser);
+	 Set_EndSettingsHead ();
+
+	 if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
+	   {
+	    /***** Show the tree with the project documents *****/
+	    FileBrowser->Zone = Brw_ADMI_DOC_PRJ;
+	    Brw_InitializeFileBrowser (FileBrowser);
+	    Brw_ShowFileBrowser (FileBrowser);
+	   }
+
+	 if (Prj_CheckIfICanViewPrjAss (PrjCod) == Usr_CAN)
+	   {
+	    /***** Show the tree with the project assessment *****/
+	    FileBrowser->Zone = Brw_ADMI_ASS_PRJ;
+	    Brw_InitializeFileBrowser (FileBrowser);
+	    Brw_ShowFileBrowser (FileBrowser);
+	   }
+
+      /***** End box *****/
+      Box_BoxEnd ();
 
       /***** Put legal notice *****/
       Brw_PutLegalNotice ();
@@ -2688,6 +2698,19 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
+  }
+
+/*****************************************************************************/
+/******************* Put contextual icons in file browser ********************/
+/*****************************************************************************/
+
+void Brw_PutIconsFileBrowsersPrj (const void *FileBrowser)
+  {
+   /***** Put icon to show clipboard *****/
+   Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
+
+   /***** Put icon to show a figure *****/
+   Brw_PutIconShowFigure (NULL);
   }
 
 /*****************************************************************************/
@@ -2953,7 +2976,7 @@ void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser)
    else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
       Brw_ShowFileBrowsersAsgWrkCrs (FileBrowser);
    else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_PRJ))
-      Prj_ShowOnePrj ();
+      Prj_ShowOnePrj (FileBrowser);
    else
       Brw_ShowFileBrowserNormal (FileBrowser);
   }
@@ -2977,6 +3000,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
    extern const char *Hlp_FILES_Marks;
    extern const char *Hlp_FILES_Briefcase;
 
+   extern const char *Txt_Project_documents;
+   extern const char *Txt_Project_assessment;
    extern const char *Txt_Documents_area;
    extern const char *Txt_Documents_management_area;
    extern const char *Txt_Teachers_files_area;
@@ -3017,8 +3042,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_SHR_INS] = &Txt_Shared_files_area,
       [Brw_ADMI_TCH_CRS] = &Txt_Teachers_files_area,
       [Brw_ADMI_TCH_GRP] = &Txt_Teachers_files_area,
-      [Brw_ADMI_DOC_PRJ] = NULL,
-      [Brw_ADMI_ASS_PRJ] = NULL,
+      [Brw_ADMI_DOC_PRJ] = &Txt_Project_documents,
+      [Brw_ADMI_ASS_PRJ] = &Txt_Project_assessment,
      };
    static void (*FunctionToDrawContextualIcons[Brw_NUM_ZONES]) (const void *Args) =
      {

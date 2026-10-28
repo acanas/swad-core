@@ -641,11 +641,13 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.22.2 (2026-10-28)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.22.3 (2026-10-29)"
 #define Chl_CSS_FILE		"swad26.19.1.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
-TODO: Mejorar zona de archivos de un proyecto. Botones de WhichFiles en un proyecto. Comprobar ver y borrar portapapeles en un proyecto.
+TODO: Anchor en documentos proyecto para que al editar archivos la pantalla se vaya a la zona de documentos.
+TODO: Cuando se establece origen de copia, debe salir la ventana del portapapeles.
+	Version 26.22.3:  Oct 29, 2026	Changes in project file browsers. (348924 lines)
 	Version 26.22.2:  Oct 28, 2026	Changes in file browsers. (348876 lines)
 	Version 26.22.1:  Oct 28, 2026	Changes in user assigments/works file browsers. (348986 lines)
 	Version 26.22:    Oct 28, 2026	Code refactoring. Changes in file browsers. (348926 lines)

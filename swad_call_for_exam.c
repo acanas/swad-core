@@ -869,7 +869,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    extern const char *Txt_CALL_FOR_EXAM_Place_of_exam;
    extern const char *Txt_CALL_FOR_EXAM_Mode;
    extern const char *Txt_CALL_FOR_EXAM_Structure_of_the_exam;
-   extern const char *Txt_CALL_FOR_EXAM_Documentation_required;
+   extern const char *Txt_CALL_FOR_EXAM_Required_documentation;
    extern const char *Txt_CALL_FOR_EXAM_Material_required;
    extern const char *Txt_CALL_FOR_EXAM_Material_allowed;
    extern const char *Txt_CALL_FOR_EXAM_Other_information;
@@ -1322,7 +1322,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    Frm_LabelColumn ("Frm_C1 RT",
 			     ViewType == Vie_EDIT ? "DocRequired" :
 						    NULL,
-			     Txt_CALL_FOR_EXAM_Documentation_required);
+			     Txt_CALL_FOR_EXAM_Required_documentation);
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
@@ -1601,7 +1601,7 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
    extern const char *Txt_CALL_FOR_EXAM_Place_of_exam;
    extern const char *Txt_CALL_FOR_EXAM_Mode;
    extern const char *Txt_CALL_FOR_EXAM_Structure_of_the_exam;
-   extern const char *Txt_CALL_FOR_EXAM_Documentation_required;
+   extern const char *Txt_CALL_FOR_EXAM_Required_documentation;
    extern const char *Txt_CALL_FOR_EXAM_Material_required;
    extern const char *Txt_CALL_FOR_EXAM_Material_allowed;
    extern const char *Txt_CALL_FOR_EXAM_Other_information;
@@ -1656,7 +1656,7 @@ static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *Call
                  Txt_CALL_FOR_EXAM_Place_of_exam,CallsForExams->CallForExam.Place,
                  Txt_CALL_FOR_EXAM_Mode,CallsForExams->CallForExam.Mode,
                  Txt_CALL_FOR_EXAM_Structure_of_the_exam,CallsForExams->CallForExam.Structure,
-                 Txt_CALL_FOR_EXAM_Documentation_required,CallsForExams->CallForExam.DocRequired,
+                 Txt_CALL_FOR_EXAM_Required_documentation,CallsForExams->CallForExam.DocRequired,
                  Txt_CALL_FOR_EXAM_Material_required,CallsForExams->CallForExam.MatRequired,
                  Txt_CALL_FOR_EXAM_Material_allowed,CallsForExams->CallForExam.MatAllowed,
                  Txt_CALL_FOR_EXAM_Other_information,CallsForExams->CallForExam.OtherInfo) < 0)

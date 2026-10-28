@@ -60,7 +60,8 @@ void Brw_CreateDirDownloadTmp (struct Brw_TmpPubDir *TmpPubDir);
 void Brw_AskEditWorksCrs (void);
 
 void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser);
-void Brw_ShowFileBrowserProject (long PrjCod);
+void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser);
+void Brw_PutIconsFileBrowsersPrj (const void *FileBrowser);
 
 void Brw_PutLegalNotice (void);
 

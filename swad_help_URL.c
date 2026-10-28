@@ -1518,6 +1518,29 @@ const char *Hlp_ASSESSMENT_Projects_add_user =
 	"ASSESSMENT.Projects.en#add-user";
 #endif
 
+const char *Hlp_ASSESSMENT_Projects_project_files =
+#if   L==1	// ca
+	"ASSESSMENT.Projects.es#archivos-de-un-proyecto";
+#elif L==2	// de
+	"ASSESSMENT.Projects.en#project-files";
+#elif L==3	// en
+	"ASSESSMENT.Projects.en#project-files";
+#elif L==4	// es
+	"ASSESSMENT.Projects.es#archivos-de-un-proyecto";
+#elif L==5	// fr
+	"ASSESSMENT.Projects.en#project-files";
+#elif L==6	// gn
+	"ASSESSMENT.Projects.es#archivos-de-un-proyecto";
+#elif L==7	// it
+	"ASSESSMENT.Projects.en#project-files";
+#elif L==8	// pl
+	"ASSESSMENT.Projects.en#project-files";
+#elif L==9	// pt
+	"ASSESSMENT.Projects.en#project-files";
+#elif L==10	// tr
+	"ASSESSMENT.Projects.en#project-files";
+#endif
+
 const char *Hlp_ASSESSMENT_Calls_for_exams =
 #if   L==1	// ca
 	"ASSESSMENT.Calls_for_exams.es";

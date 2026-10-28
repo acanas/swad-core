@@ -1421,7 +1421,7 @@ static void Prj_PutIconToShowAllData (struct Prj_Projects *Prjs)
 /************* Show a project followed by the list of projects ***************/
 /*****************************************************************************/
 
-void Prj_ShowOnePrj (void)
+void Prj_ShowOnePrj (struct Brw_FileBrowser *FileBrowser)
   {
    struct Prj_Projects Prjs;
 
@@ -1436,7 +1436,7 @@ void Prj_ShowOnePrj (void)
           then show project and (if possible) its file browser *****/
    Prj_AllocMemPrj (&Prjs.Prj);
       Prj_GetPrjDataByCod (&Prjs.Prj);
-      Prj_ShowBoxWithOnePrj (&Prjs);
+      Prj_ShowBoxWithOnePrj (&Prjs,FileBrowser);
    Prj_FreeMemPrj (&Prjs.Prj);
 
    /***** Show projects again *****/
@@ -1447,7 +1447,8 @@ void Prj_ShowOnePrj (void)
 /*** Show one project and (if possible) a file browser with its documents ****/
 /*****************************************************************************/
 
-void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs)
+void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs,
+			    struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_ASSESSMENT_Projects;
    extern const char *Txt_Project;
@@ -1473,7 +1474,7 @@ void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs)
 
       /***** Show project file browsers *****/
       if (Prj_CheckIfICanViewPrjFiles (Prjs->Prj.PrjCod) == Usr_CAN)
-	 Brw_ShowFileBrowserProject (Prjs->Prj.PrjCod);
+	 Brw_ShowFileBrowserProject (Prjs->Prj.PrjCod,FileBrowser);
 
       /***** Show project rubrics *****/
       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove this rectriction when rubrics are finished
@@ -4801,6 +4802,7 @@ static Usr_Can_t Prj_CheckIfICanFillRubric (long PrjCod,PrjCfg_RubricType_t Whic
 void Prj_ChangeCriterionScore (void)
   {
    struct Prj_Project Prj;
+   struct Brw_FileBrowser FileBrowser;
    long CriCod;
    double Score;
    long RubCod;
@@ -4839,7 +4841,7 @@ void Prj_ChangeCriterionScore (void)
    Prj_FreeMemPrj (&Prj);
 
    /***** Show again project including file browser *****/
-   Prj_ShowOnePrj ();
+   Prj_ShowOnePrj (&FileBrowser);
   }
 
 /*****************************************************************************/
