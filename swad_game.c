@@ -115,23 +115,23 @@ static void Gam_ListAllGamesHeading (const struct Gam_Games *Games);
 
 static Usr_Can_t Gam_CheckIfICanEditGames (void);
 static Usr_Can_t Gam_CheckIfICanListGameQuestions (void);
-static void Gam_PutIconsListingGames (void *Games);
+static void Gam_PutIconsListingGames (const void *Games);
 static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
-static void Gam_PutParsToCreateNewGame (void *Games);
+static void Gam_PutParsToCreateNewGame (const void *Games);
 
 static void Gam_ShowGameMainData (struct Gam_Games *Games,
 				  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
-static void Gam_PutIconsViewingOneGame (void *Games);
-static void Gam_PutIconsEditingOneGame (void *Games);
-static void Gam_WriteAuthor (struct Gam_Game *Game);
+static void Gam_PutIconsViewingOneGame (const void *Games);
+static void Gam_PutIconsEditingOneGame (const void *Games);
+static void Gam_WriteAuthor (const struct Gam_Game *Game);
 
 static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder);
 
-static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
+static void Gam_PutIconsToRemEditOneGame (const struct Gam_Games *Games,
 					  const char *Anchor);
 
-static void Gam_PutParsOneQst (void *Games);
+static void Gam_PutParsOneQst (const void *Games);
 static void Gam_PutParOrder (Gam_Order_t SelectedOrder);
 static Gam_Order_t Gam_GetParOrder (void);
 
@@ -158,7 +158,7 @@ static void Gam_ListQuestionForEdition (struct Qst_Question *Qst,
 				        unsigned QstInd,Exi_Exist_t QstExists,
 				        const char *Anchor);
 
-static void Gam_PutIconToAddNewQuestions (void *Games);
+static void Gam_PutIconToAddNewQuestions (const void *Games);
 
 static void Gam_AllocateListSelectedQuestions (struct Gam_Games *Games);
 static void Gam_FreeListsSelectedQuestions (struct Gam_Games *Games);
@@ -376,7 +376,7 @@ static Usr_Can_t Gam_CheckIfICanListGameQuestions (void)
 /**************** Put contextual icons when listing games ********************/
 /*****************************************************************************/
 
-static void Gam_PutIconsListingGames (void *Games)
+static void Gam_PutIconsListingGames (const void *Games)
   {
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
      {
@@ -419,7 +419,7 @@ static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games)
 /******************** Put parameters to create a new game ********************/
 /*****************************************************************************/
 
-static void Gam_PutParsToCreateNewGame (void *Games)
+static void Gam_PutParsToCreateNewGame (const void *Games)
   {
    if (Games)
      {
@@ -703,7 +703,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 /**************** Put icons when viewing or editing one game *****************/
 /*****************************************************************************/
 
-static void Gam_PutIconsViewingOneGame (void *Games)
+static void Gam_PutIconsViewingOneGame (const void *Games)
   {
    char *Anchor = NULL;
 
@@ -720,7 +720,7 @@ static void Gam_PutIconsViewingOneGame (void *Games)
      }
   }
 
-static void Gam_PutIconsEditingOneGame (void *Games)
+static void Gam_PutIconsEditingOneGame (const void *Games)
   {
    if (Games)
       /***** Icon to view game *****/
@@ -731,7 +731,7 @@ static void Gam_PutIconsEditingOneGame (void *Games)
 /************************ Write the author of a game *************************/
 /*****************************************************************************/
 
-static void Gam_WriteAuthor (struct Gam_Game *Game)
+static void Gam_WriteAuthor (const struct Gam_Game *Game)
   {
    Usr_WriteAuthor1Line (Game->UsrCod,Game->Hidden);
   }
@@ -749,7 +749,7 @@ static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder)
 /******************** Put icons to remove/edit one game **********************/
 /*****************************************************************************/
 
-static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
+static void Gam_PutIconsToRemEditOneGame (const struct Gam_Games *Games,
 					  const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -798,7 +798,7 @@ static void Gam_PutIconsToRemEditOneGame (struct Gam_Games *Games,
 /**************** Put parameter to move/remove one question ******************/
 /*****************************************************************************/
 
-static void Gam_PutParsOneQst (void *Games)
+static void Gam_PutParsOneQst (const void *Games)
   {
    if (Games)
      {
@@ -811,7 +811,7 @@ static void Gam_PutParsOneQst (void *Games)
 /*********************** Params used to edit a game **************************/
 /*****************************************************************************/
 
-void Gam_PutPars (void *Games)
+void Gam_PutPars (const void *Games)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -1295,7 +1295,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Txt_Game;
-   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
       [OldNew_OLD] = Gam_PutIconsEditingOneGame,
       [OldNew_NEW] = NULL,
@@ -1655,7 +1655,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    Usr_Can_t ICanEditQuestions = Gam_CheckIfICanEditGame (&Games->Game);
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (const void *Args) =
      {
       [Usr_CAN_NOT] = NULL,
       [Usr_CAN    ] = Gam_PutIconToAddNewQuestions,
@@ -1881,7 +1881,7 @@ static void Gam_ListQuestionForEdition (struct Qst_Question *Qst,
 /***************** Put icon to add a new questions to game *******************/
 /*****************************************************************************/
 
-static void Gam_PutIconToAddNewQuestions (void *Games)
+static void Gam_PutIconToAddNewQuestions (const void *Games)
   {
    Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,Gam_PutPars,Games);
   }

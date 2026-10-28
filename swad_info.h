@@ -136,7 +136,7 @@ void Inf_SetInfoSrc (void);
 void Inf_ConfigInfo (void);
 Inf_Type_t Inf_AsignInfoType (void);
 Inf_Type_t Inf_GetParInfoType (void);
-void Inf_PutParInfoType (void *InfoType);
+void Inf_PutParInfoType (const void *InfoType);
 Inf_Src_t Inf_GetInfoSrcFromForm (void);
 Inf_Src_t Inf_GetInfoSrcFromDB (long HieCod,Inf_Type_t InfoType);
 void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info);

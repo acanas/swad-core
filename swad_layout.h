@@ -108,14 +108,14 @@ void Lay_WriteHTTPStatus204NoContent (void);
 void Lay_WriteEndOfPage (void);
 
 void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncPars) (void *Args),void *Args,
+				    void (*FuncPars) (const void *Args),const void *Args,
 				    const char *Icon,Ico_Color_t Color);
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
-				    void (*FuncPars) (void *Args),void *Args,
+				    void (*FuncPars) (const void *Args),const void *Args,
 				    const char *Icon,Ico_Color_t Color,
 				    const char *Text,const char *OnSubmit);
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
-				void (*FuncPars) (void *Args),void *Args,
+				void (*FuncPars) (const void *Args),const void *Args,
                                 const char *CheckboxName,
                                 HTM_Attributes_t Attributes,
                                 const char *Title,const char *Text);

@@ -70,21 +70,21 @@ long Cty_ThisCtyCod = -1L;	// Used as parameter in contextual links
 static void Cty_PutHeadCtysForSeeing (Hie_OrderSelectable_t OrderSelectable);
 static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty);
 
-static void Cty_PutIconsListingCtys (__attribute__((unused)) void *Args);
+static void Cty_PutIconsListingCtys (__attribute__((unused)) const void *Args);
 static void Cty_PutIconToEditCtys (void);
 
 static void Cty_EditCtysInternal (void);
-static void Cty_PutIconsEditingCtys (__attribute__((unused)) void *Args);
+static void Cty_PutIconsEditingCtys (__attribute__((unused)) const void *Args);
 
 static void Cty_GetFullListOfCtys (void);
 
 static void Cty_ListCtysForEdition (void);
-static void Cty_PutParOthCtyCod (void *HieCod);
+static void Cty_PutParOthCtyCod (const void *HieCod);
 
 static void Cty_UpdateCtyName (long HieCod,const char *FldName,const char *NewCtyName);
 
 static void Cty_ShowAlertAndButtonToGoToCty (void);
-static void Cty_PutParGoToCty (void *HieCod);
+static void Cty_PutParGoToCty (const void *HieCod);
 
 static void Cty_PutFormToCreateCty (void);
 static void Cty_PutHeadCtysForEdition (void);
@@ -413,7 +413,7 @@ static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsListingCtys (__attribute__((unused)) void *Args)
+static void Cty_PutIconsListingCtys (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit countries *****/
    if (Cty_CheckIfICanEditCtys () == Usr_CAN)
@@ -646,7 +646,7 @@ static void Cty_EditCtysInternal (void)
 /*************** Put contextual icons in edition of countries ****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsEditingCtys (__attribute__((unused)) void *Args)
+static void Cty_PutIconsEditingCtys (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view countries *****/
    Ico_PutContextualIconToView (ActSeeCty,NULL,NULL,NULL);
@@ -1111,7 +1111,7 @@ static void Cty_ListCtysForEdition (void)
 /******************** Write parameter with code of country *******************/
 /*****************************************************************************/
 
-static void Cty_PutParOthCtyCod (void *HieCod)
+static void Cty_PutParOthCtyCod (const void *HieCod)
   {
    if (HieCod)
       ParCod_PutPar (ParCod_OthCty,*((long *) HieCod));
@@ -1317,7 +1317,7 @@ static void Cty_ShowAlertAndButtonToGoToCty (void)
       Ale_ShowAlerts (NULL);
   }
 
-static void Cty_PutParGoToCty (void *HieCod)
+static void Cty_PutParGoToCty (const void *HieCod)
   {
    if (HieCod)
       ParCod_PutPar (ParCod_Cty,*((long *) HieCod));

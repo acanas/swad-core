@@ -81,10 +81,10 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
                          OneSev_OneOrSeveral_t OneOrMultiple,
                          Vie_ViewType_t ViewType);
 static Usr_Can_t Asg_CheckIfICanCreateAssignments (void);
-static void Asg_PutIconsListAssignments (void *Assignments);
-static void Asg_PutIconToCreateNewAsg (void *Assignments);
-static void Asg_ParsMyAllGrps (void *Assignments);
-static void Asg_PutIconsOneAsg (void *Assignments);
+static void Asg_PutIconsListAssignments (const void *Assignments);
+static void Asg_PutIconToCreateNewAsg (const void *Assignments);
+static void Asg_ParsMyAllGrps (const void *Assignments);
+static void Asg_PutIconsOneAsg (const void *Assignments);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
                                    OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType);
@@ -92,9 +92,9 @@ static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 				       Vie_ViewType_t ViewType);
 
-static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
+static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignments,
                                          const char *Anchor);
-static void Asg_PutPars (void *Assignments);
+static void Asg_PutPars (const void *Assignments);
 static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
 static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
                                           struct Asg_Assignment *Asg,
@@ -340,7 +340,7 @@ static Usr_Can_t Asg_CheckIfICanCreateAssignments (void)
 /*************** Put contextual icons in list of assignments *****************/
 /*****************************************************************************/
 
-static void Asg_PutIconsListAssignments (void *Assignments)
+static void Asg_PutIconsListAssignments (const void *Assignments)
   {
    /***** Put icon to create a new assignment *****/
    if (Assignments)
@@ -362,7 +362,7 @@ static void Asg_PutIconsListAssignments (void *Assignments)
 /******************* Put icon to create a new assignment *********************/
 /*****************************************************************************/
 
-static void Asg_PutIconToCreateNewAsg (void *Assignments)
+static void Asg_PutIconToCreateNewAsg (const void *Assignments)
   {
    if (Assignments)
      {
@@ -375,7 +375,7 @@ static void Asg_PutIconToCreateNewAsg (void *Assignments)
 /**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
 
-static void Asg_ParsMyAllGrps (void *Assignments)
+static void Asg_ParsMyAllGrps (const void *Assignments)
   {
    if (Assignments)
      {
@@ -485,7 +485,7 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
 /****************** Put contextual icons in an assignment ********************/
 /*****************************************************************************/
 
-static void Asg_PutIconsOneAsg (void *Assignments)
+static void Asg_PutIconsOneAsg (const void *Assignments)
   {
    char *Anchor = NULL;
 
@@ -795,7 +795,7 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void)
 /******************** Put icons to edit one assignment ***********************/
 /*****************************************************************************/
 
-static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
+static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignments,
                                          const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -840,7 +840,7 @@ static void Asg_PutIconsToRemEditOneAsg (struct Asg_Assignments *Assignments,
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Asg_PutPars (void *Assignments)
+static void Asg_PutPars (const void *Assignments)
   {
    Grp_MyAllGrps_t MyAllGrps;
 

@@ -468,7 +468,7 @@ static Err_SuccessOrError_t Tst_CheckIfNextTstAllowed (void)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-void Tst_PutIconsTests (void *Questions)
+void Tst_PutIconsTests (const void *Qsts)
   {
    long TagCod;
 
@@ -498,8 +498,8 @@ void Tst_PutIconsTests (void *Questions)
      }
 
    /***** Link to get resource link *****/
-   if (Questions)
-      TagCod = ((struct Qst_Questions *) Questions)->Tags.PreselectedTagCod;
+   if (Qsts)
+      TagCod = ((struct Qst_Questions *) Qsts)->Tags.PreselectedTagCod;
    else
       TagCod = -1L;
    Ico_PutContextualIconToGetLink (ActReqLnkTst,NULL,Tag_PutPars,&TagCod);

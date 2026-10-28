@@ -67,7 +67,7 @@ static Pho_ShowPhotos_t Set_ShowPhotos = Pho_PHOTOS_DEFAULT;
 /*****************************************************************************/
 
 static void Set_PutIconsToSelectSideCols (void);
-static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args);
+static void Set_PutIconsSideColumns (__attribute__((unused)) const void *Args);
 
 static void Set_GetAndUpdateUsrListType (void);
 static void Set_GetUsrListTypeFromForm (void);
@@ -207,7 +207,7 @@ static void Set_PutIconsToSelectSideCols (void)
 /************** Put contextual icons in side-columns setting *****************/
 /*****************************************************************************/
 
-static void Set_PutIconsSideColumns (__attribute__((unused)) void *Args)
+static void Set_PutIconsSideColumns (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_SIDE_COLUMNS);

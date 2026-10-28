@@ -134,7 +134,7 @@ static const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWOR
 static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title);
 
-static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args);
+static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) const void *Args);
 
 static void Net_ChangeWebs (struct Usr_Data *UsrDat);
 
@@ -279,7 +279,7 @@ void Net_ShowFormWebsAndSocialNets (struct Usr_Data *UsrDat)
 /************** Put contextual icons in my web / social networks *************/
 /*****************************************************************************/
 
-static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) void *Args)
+static void Net_PutIconsWebsSocialNetworks (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_SOCIAL_NETWORKS);

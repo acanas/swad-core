@@ -59,14 +59,14 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Rub_PutIconsListRubrics (void *Rubrics);
+static void Rub_PutIconsListRubrics (const void *Rubrics);
 static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics);
-static void Rub_PutParsToCreateNewRubric (void *Rubrics);
-static void Rub_PutParsToListUsrsRubrics (void *Rubrics);
+static void Rub_PutParsToCreateNewRubric (const void *Rubrics);
+static void Rub_PutParsToListUsrsRubrics (const void *Rubrics);
 
-static void Rub_PutIconsViewingOneRubric (void *Rubrics);
-static void Rub_PutIconsEditingOneRubric (void *Rubrics);
-static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics);
+static void Rub_PutIconsViewingOneRubric (const void *Rubrics);
+static void Rub_PutIconsEditingOneRubric (const void *Rubrics);
+static void Rub_PutIconsToRemEditOneRubric (const struct Rub_Rubrics *Rubrics);
 static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric);
 
 static void Rub_RemoveRubricFromAllTables (long RubCod);
@@ -85,8 +85,8 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
 static void Rub_ReqListOrPrintUsrsRubricsCrs (__attribute__((unused)) void *Args);
 static void Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_UsrsViewType_t UsrsViewType);
 static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType);
-static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) void *Args);
-static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) void *Args);
+static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) const void *Args);
+static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /*************************** Reset rubrics context ***************************/
@@ -274,7 +274,7 @@ Usr_Can_t Rub_CheckIfICanEdit (void)
 /****************** Put contextual icons in list of rubrics ******************/
 /*****************************************************************************/
 
-static void Rub_PutIconsListRubrics (void *Rubrics)
+static void Rub_PutIconsListRubrics (const void *Rubrics)
   {
    if (Rubrics)
      {
@@ -327,7 +327,7 @@ static void Rub_PutIconToCreateNewRubric (struct Rub_Rubrics *Rubrics)
 /******************* Put parameters to create a new rubric *******************/
 /*****************************************************************************/
 
-static void Rub_PutParsToCreateNewRubric (void *Rubrics)
+static void Rub_PutParsToCreateNewRubric (const void *Rubrics)
   {
    if (Rubrics)
       Pag_PutParPagNum (Pag_RUBRICS,((struct Rub_Rubrics *) Rubrics)->ThisPage);
@@ -337,7 +337,7 @@ static void Rub_PutParsToCreateNewRubric (void *Rubrics)
 /***************** Put parameters to list students rubrics *******************/
 /*****************************************************************************/
 
-static void Rub_PutParsToListUsrsRubrics (void *Rubrics)
+static void Rub_PutParsToListUsrsRubrics (const void *Rubrics)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -516,20 +516,20 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
 /*************** Put icons when viewing or editing one rubric ****************/
 /*****************************************************************************/
 
-static void Rub_PutIconsViewingOneRubric (void *Rubrics)
+static void Rub_PutIconsViewingOneRubric (const void *Rubrics)
   {
    if (Rubrics)
       Rub_PutIconsToRemEditOneRubric (Rubrics);
   }
 
-static void Rub_PutIconsEditingOneRubric (void *Rubrics)
+static void Rub_PutIconsEditingOneRubric (const void *Rubrics)
   {
    if (Rubrics)
       /***** Icon to view rubric *****/
       Ico_PutContextualIconToView (ActSeeOneRub,NULL,Rub_PutPars,Rubrics);
   }
 
-static void Rub_PutIconsToRemEditOneRubric (struct Rub_Rubrics *Rubrics)
+static void Rub_PutIconsToRemEditOneRubric (const struct Rub_Rubrics *Rubrics)
   {
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN)
      {
@@ -557,7 +557,7 @@ static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric)
 /*********************** Params used to edit a rubric ************************/
 /*****************************************************************************/
 
-void Rub_PutPars (void *Rubrics)
+void Rub_PutPars (const void *Rubrics)
   {
    if (Rubrics)
      {
@@ -831,7 +831,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
    extern const char *Txt_Rubric;
-   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
       [OldNew_OLD] = Rub_PutIconsEditingOneRubric,
       [OldNew_NEW] = NULL,
@@ -1194,7 +1194,7 @@ Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod)
 
 void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 			    Act_Action_t NextAction,
-                            void (*FuncPars) (void *Args),void *Args,
+                            void (*FuncPars) (const void *Args),const void *Args,
 			    unsigned NumRubrics,MYSQL_RES *mysql_res)
   {
    unsigned NumRub;
@@ -1394,14 +1394,14 @@ static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
 /******************** Put icon to print rubrics of users *********************/
 /*****************************************************************************/
 
-static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) void *Args)
+static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to print users rubrics *****/
    Ico_PutContextualIconToPrint (ActPrnLstUsrRub,
 				 Rub_PutParsToPrintUsrsRubrics,NULL);
   }
 
-static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) void *Args)
+static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) const void *Args)
   {
    Grp_PutParsCodGrps ();
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);

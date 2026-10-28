@@ -79,7 +79,7 @@ static long Ban_BanCodClicked;
 static struct Ban_Banner *Ban_GetEditingBanner (void);
 
 static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners);
-static void Ban_PutIconsListingBanners (__attribute__((unused)) void *Args);
+static void Ban_PutIconsListingBanners (__attribute__((unused)) const void *Args);
 static void Ban_PutIconToEditBanners (void);
 static void Ban_EditBannersInternal (struct Ban_Banners *Banners,
                                      const struct Ban_Banner *Ban);
@@ -90,10 +90,10 @@ static void Ban_FreeListBanners (struct Ban_Banners *Banners);
 static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
                                       struct Ban_Banner *Ban);
 
-static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args);
+static void Ban_PutIconsEditingBanners (__attribute__((unused)) const void *Args);
 
 static void Ban_ListBannersForEdition (struct Ban_Banners *Banners);
-static void Ban_PutParBanCod (void *BanCod);
+static void Ban_PutParBanCod (const void *BanCod);
 static void Ban_ShowOrHideBanner (struct Ban_Banner *Ban,
                                   HidVis_HiddenOrVisible_t HiddenOrVisible);
 
@@ -189,7 +189,7 @@ static void Ban_WriteListOfBanners (const struct Ban_Banners *Banners)
 /***************** Put contextual icons in list of banners *******************/
 /*****************************************************************************/
 
-static void Ban_PutIconsListingBanners (__attribute__((unused)) void *Args)
+static void Ban_PutIconsListingBanners (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view banners *****/
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
@@ -354,7 +354,7 @@ static void Ban_GetBannerDataFromRow (MYSQL_RES *mysql_res,
 /**************** Put contextual icons in edition of banners *****************/
 /*****************************************************************************/
 
-static void Ban_PutIconsEditingBanners (__attribute__((unused)) void *Args)
+static void Ban_PutIconsEditingBanners (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view banners *****/
    Ico_PutContextualIconToView (ActSeeBan,NULL,NULL,NULL);
@@ -481,7 +481,7 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
 /******************* Write parameter with code of banner *********************/
 /*****************************************************************************/
 
-static void Ban_PutParBanCod (void *BanCod)
+static void Ban_PutParBanCod (const void *BanCod)
   {
    if (BanCod)
       ParCod_PutPar (ParCod_Ban,*((long *) BanCod));

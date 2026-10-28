@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args);
+static void CrsCfg_PutIconToPrint (__attribute__((unused)) const void *Args);
 static void CrsCfg_Deg (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void CrsCfg_Year (Frm_PutForm_t PutForm);
 static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm);
@@ -75,7 +75,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
    extern const char *Txt_NULL;
    static struct
      {
-      void (*FunctionToDrawContextualIcons) (void *Args);
+      void (*FunctionToDrawContextualIcons) (const void *Args);
       const char **HelpLink;
      } BoxArgs[Vie_NUM_VIEW_TYPES] =
      {
@@ -189,7 +189,7 @@ void CrsCfg_Configuration (Vie_ViewType_t ViewType)
 /************* Put icon to print the configuration of a course ***************/
 /*****************************************************************************/
 
-static void CrsCfg_PutIconToPrint (__attribute__((unused)) void *Args)
+static void CrsCfg_PutIconToPrint (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToPrint (ActPrnCrsInf,NULL,NULL);
   }

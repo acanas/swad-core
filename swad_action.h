@@ -81,7 +81,7 @@ struct Act_Actions
 struct Act_ActionFunc
   {
    Act_Action_t NextAction;
-   void (*FuncPars) (void *Args);
+   void (*FuncPars) (const void *Args);
    void *Args;
   };
 

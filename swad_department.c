@@ -78,8 +78,8 @@ static struct Dpt_Department *Dpt_EditingDpt = NULL;	// Static variable to keep 
 static void Dpt_ResetDpts (struct Dpt_Departments *Dpts);
 
 static Dpt_Order_t Dpt_GetParDptOrder (void);
-static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args);
-static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args);
+static void Dpt_PutIconToEditDpts (__attribute__((unused)) const void *Args);
+static void Dpt_PutIconToViewDpts (__attribute__((unused)) const void *Args);
 static void Dpt_EditDptsInternal (void);
 
 static void Dpt_GetListDptsInIns (struct Dpt_Departments *Dpts,long HieCod);
@@ -87,7 +87,7 @@ static void Dpt_GetListDptsInIns (struct Dpt_Departments *Dpts,long HieCod);
 static void Dpt_GetDptDataFromRow (MYSQL_RES *mysql_res,struct Dpt_Department *Dpt);
 
 static void Dpt_ListDptsForEdition (const struct Dpt_Departments *Dpts);
-static void Dpt_PutParDptCod (void *DptCod);
+static void Dpt_PutParDptCod (const void *DptCod);
 
 static void Dpt_RenameDpt (Nam_ShrtOrFullName_t ShrtOrFull);
 
@@ -237,7 +237,7 @@ static Dpt_Order_t Dpt_GetParDptOrder (void)
 /************************ Put icon to edit departments ***********************/
 /*****************************************************************************/
 
-static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
+static void Dpt_PutIconToEditDpts (__attribute__((unused)) const void *Args)
   {
    if (Dpt_ICanEditDpts[Gbl.Usrs.Me.Role.Logged] == Usr_CAN)
       Ico_PutContextualIconToEdit (ActEdiDpt,NULL,NULL,NULL);
@@ -247,7 +247,7 @@ static void Dpt_PutIconToEditDpts (__attribute__((unused)) void *Args)
 /************************ Put icon to view departments ***********************/
 /*****************************************************************************/
 
-static void Dpt_PutIconToViewDpts (__attribute__((unused)) void *Args)
+static void Dpt_PutIconToViewDpts (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToView (ActSeeDpt,NULL,NULL,NULL);
   }
@@ -533,7 +533,7 @@ static void Dpt_ListDptsForEdition (const struct Dpt_Departments *Dpts)
 /****************** Write parameter with code of department ******************/
 /*****************************************************************************/
 
-static void Dpt_PutParDptCod (void *DptCod)
+static void Dpt_PutParDptCod (const void *DptCod)
   {
    if (DptCod)
       ParCod_PutPar (ParCod_Dpt,*((long *) DptCod));

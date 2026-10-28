@@ -114,7 +114,7 @@ static void TmlNot_PutFormToRemoveNote (const struct Tml_Timeline *Timeline,
                                         long NotCod);
 
 static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline);
-static void TmlNot_PutParsRemoveNote (void *Timeline);
+static void TmlNot_PutParsRemoveNote (const void *Timeline);
 static void TmlNot_RemoveNote (void);
 static void TmlNot_RemoveNoteMediaAndDBEntries (struct TmlNot_Note *Not);
 
@@ -1055,7 +1055,7 @@ static void TmlNot_ReqRemNote (struct Tml_Timeline *Timeline)
 /********************* Put parameters to remove a note ***********************/
 /*****************************************************************************/
 
-static void TmlNot_PutParsRemoveNote (void *Timeline)
+static void TmlNot_PutParsRemoveNote (const void *Timeline)
   {
    if (Timeline)
      {

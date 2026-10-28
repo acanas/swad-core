@@ -189,7 +189,7 @@ void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
 
 void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
-				        void (*FuncPars) (void *Args),void *Args,
+				        void (*FuncPars) (const void *Args),const void *Args,
 				        const char *OnSubmit);
 void Grp_PutParsCodGrps (void);
 void Grp_PutParsCodGrpsAssociated (Grp_Association_t Association,long Cod);
@@ -257,11 +257,11 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted);
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps);
 void Grp_PutParAllGroups (void);
 
-void Grp_PutParMyAllGrps (void *WhichGrps);
+void Grp_PutParMyAllGrps (const void *WhichGrps);
 void Grp_PutParWhichGrpsOnlyMyGrps (void);
 void Grp_PutParWhichGrpsAllGrps (void);
 void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
-                                 void (*FuncPars) (void *Args),void *Args);
+                                 void (*FuncPars) (const void *Args),const void *Args);
 Grp_MyAllGrps_t Grp_GetParMyAllGrps (void);
 
 void Grp_DB_RemoveCrsGrps (long HieCod);

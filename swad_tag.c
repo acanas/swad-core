@@ -430,7 +430,7 @@ void Tag_ShowFormEditTags (void)
 /********************* Params used to edit a tag question ********************/
 /*****************************************************************************/
 
-void Tag_PutPars (void *TagCod)
+void Tag_PutPars (const void *TagCod)
   {
    if (TagCod)
       ParCod_PutPar (ParCod_Tag,*((long *) TagCod));

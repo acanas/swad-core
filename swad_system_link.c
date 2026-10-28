@@ -73,12 +73,12 @@ static struct SysLnk_Link *SysLnk_EditingLnk = NULL;	// Static variable to keep 
 
 static Usr_Can_t SysLnk_CheckIfICanEditLinks (void);
 
-static void SysLnk_PutIconsListingLinks (__attribute__((unused)) void *Args);
+static void SysLnk_PutIconsListingLinks (__attribute__((unused)) const void *Args);
 static void SysLnk_PutIconToEditLinks (void);
 static void SysLnk_WriteListOfLinks (const struct SysLnk_Links *Links,const char *Class);
 
 static void SysLnk_EditLinksInternal (void);
-static void SysLnk_PutIconsEditingLinks (__attribute__((unused)) void *Args);
+static void SysLnk_PutIconsEditingLinks (__attribute__((unused)) const void *Args);
 
 static void SysLnk_GetListLinks (struct SysLnk_Links *Links);
 static void SysLnk_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct SysLnk_Link *Lnk);
@@ -86,7 +86,7 @@ static void SysLnk_GetLinkDataFromRow (MYSQL_RES *mysql_res,struct SysLnk_Link *
 static void SysLnk_FreeListLinks (struct SysLnk_Links *Links);
 
 static void SysLnk_ListLinksForEdition (const struct SysLnk_Links *Links);
-static void SysLnk_PutParLnkCod (void *LnkCod);
+static void SysLnk_PutParLnkCod (const void *LnkCod);
 
 static void SysLnk_RenameLink (Nam_ShrtOrFullName_t ShrtOrFull);
 
@@ -146,7 +146,7 @@ void SysLnk_SeeLinks (void)
 /***************** Put contextual icons in list of links *********************/
 /*****************************************************************************/
 
-static void SysLnk_PutIconsListingLinks (__attribute__((unused)) void *Args)
+static void SysLnk_PutIconsListingLinks (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit links *****/
    if (SysLnk_CheckIfICanEditLinks () == Usr_CAN)
@@ -272,7 +272,7 @@ static void SysLnk_EditLinksInternal (void)
 /******************** Put contextual icons to view links *********************/
 /*****************************************************************************/
 
-static void SysLnk_PutIconsEditingLinks (__attribute__((unused)) void *Args)
+static void SysLnk_PutIconsEditingLinks (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view links *****/
    Ico_PutContextualIconToView (ActSeeLnk,NULL,NULL,NULL);
@@ -463,7 +463,7 @@ static void SysLnk_ListLinksForEdition (const struct SysLnk_Links *Links)
 /******************** Write parameter with code of link **********************/
 /*****************************************************************************/
 
-static void SysLnk_PutParLnkCod (void *LnkCod)
+static void SysLnk_PutParLnkCod (const void *LnkCod)
   {
    if (LnkCod)
       ParCod_PutPar (ParCod_Lnk,*((long *) LnkCod));

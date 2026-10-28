@@ -80,11 +80,11 @@ static unsigned Att_ColSpan[Pho_NUM_PHOTOS] =
 static void Att_ResetEvents (struct Att_Events *Events);
 
 static void Att_ShowAllEvents (struct Att_Events *Events);
-static void Att_ParsMyAllGrps (void *Events);
-static void Att_PutIconsInListOfEvents (void *Events);
-static void Att_PutIconToCreateNewEvent (struct Att_Events *Events);
-static void Att_PutParsToCreateNewEvent (void *Events);
-static void Att_PutParsToListUsrsAttendance (void *Events);
+static void Att_ParsMyAllGrps (const void *Events);
+static void Att_PutIconsInListOfEvents (const void *Events);
+static void Att_PutIconToCreateNewEvent (const struct Att_Events *Events);
+static void Att_PutParsToCreateNewEvent (const void *Events);
+static void Att_PutParsToListUsrsAttendance (const void *Events);
 
 static void Att_ShowOneEventRow (struct Att_Events *Events,
                                  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
@@ -93,7 +93,7 @@ static Dat_StartEndTime_t Att_GetParAttOrder (void);
 
 static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
                                            const char *Anchor);
-static void Att_PutPars (void *Events);
+static void Att_PutPars (const void *Events);
 static void Att_GetListEvents (struct Att_Events *Events,
                                Att_OrderNewestOldest_t OrderNewestOldest);
 static void Att_GetEventDataByCodAndCheckCrs (struct Att_Event *Event);
@@ -103,13 +103,13 @@ static void Att_FreeListEvents (struct Att_Events *Events);
 
 static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void Att_PutParAttCod (void *Events);
+static void Att_PutParAttCod (const void *Events);
 
 static void Att_CreateGroups (long AttCod);
 static void Att_GetAndWriteNamesOfGrpsAssociatedToEvent (struct Att_Event *Event);
 
 static void Att_ShowEvent (struct Att_Events *Events);
-static void Att_PutIconsOneEvent (void *Events);
+static void Att_PutIconsOneEvent (const void *Events);
 
 static void Att_ListEventOnlyMeAsStudent (struct Att_Event *Event);
 static void Att_ListEventStudents (struct Att_Events *Events);
@@ -133,16 +133,16 @@ static void Att_ListOrPrintUsrsAttendanceCrs (void *UsrsViewType);
 
 static void Att_GetListSelectedAttCods (struct Att_Events *Events);
 
-static void Att_PutIconsMyAttList (void *Events);
-static void Att_PutFormToPrintMyListPars (void *Events);
-static void Att_PutIconsStdsAttList (void *Events);
-static void Att_PutParsToPrintStdsList (void *Events);
+static void Att_PutIconsMyAttList (const void *Events);
+static void Att_PutFormToPrintMyListPars (const void *Events);
+static void Att_PutIconsStdsAttList (const void *Events);
+static void Att_PutParsToPrintStdsList (const void *Events);
 
 static void Att_PutButtonToShowDetails (const struct Att_Events *Events);
 static void Att_ListEventsToSelect (struct Att_Events *Events,
                                     Vie_UsrsViewType_t UsrsViewType);
-static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args);
-static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args);
+static void Att_PutIconToViewAttEvents (__attribute__((unused)) const void *Args);
+static void Att_PutIconToEditAttEvents (__attribute__((unused)) const void *Args);
 static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
                                          Vie_UsrsViewType_t UsrsViewType,
 	                                 const struct Usr_ListCods *ListCods);
@@ -313,7 +313,7 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
 /***************** Put params to select which groups to show *****************/
 /*****************************************************************************/
 
-static void Att_ParsMyAllGrps (void *Events)
+static void Att_ParsMyAllGrps (const void *Events)
   {
    if (Events)
      {
@@ -327,7 +327,7 @@ static void Att_ParsMyAllGrps (void *Events)
 /************* Put contextual icons in list of attendance events *************/
 /*****************************************************************************/
 
-static void Att_PutIconsInListOfEvents (void *Events)
+static void Att_PutIconsInListOfEvents (const void *Events)
   {
    if (Events)
      {
@@ -366,7 +366,7 @@ static void Att_PutIconsInListOfEvents (void *Events)
 /**************** Put icon to create a new attendance event ******************/
 /*****************************************************************************/
 
-static void Att_PutIconToCreateNewEvent (struct Att_Events *Events)
+static void Att_PutIconToCreateNewEvent (const struct Att_Events *Events)
   {
    Ico_PutContextualIconToAdd (ActFrmNewAtt,NULL,
                                Att_PutParsToCreateNewEvent,Events);
@@ -376,7 +376,7 @@ static void Att_PutIconToCreateNewEvent (struct Att_Events *Events)
 /************** Put parameters to create a new attendance event **************/
 /*****************************************************************************/
 
-static void Att_PutParsToCreateNewEvent (void *Events)
+static void Att_PutParsToCreateNewEvent (const void *Events)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -394,7 +394,7 @@ static void Att_PutParsToCreateNewEvent (void *Events)
 /*************** Put parameters to list students attendance ******************/
 /*****************************************************************************/
 
-static void Att_PutParsToListUsrsAttendance (void *Events)
+static void Att_PutParsToListUsrsAttendance (const void *Events)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -634,7 +634,7 @@ Usr_Can_t Att_CheckIfICanEditEvents (void)
 /***************** Params used to edit an attendance event *******************/
 /*****************************************************************************/
 
-static void Att_PutPars (void *Events)
+static void Att_PutPars (const void *Events)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -1412,7 +1412,7 @@ static void Att_ShowEvent (struct Att_Events *Events)
 /*************** Put contextual icons in an attendance event *****************/
 /*****************************************************************************/
 
-static void Att_PutIconsOneEvent (void *Events)
+static void Att_PutIconsOneEvent (const void *Events)
   {
    char *Anchor = NULL;
 
@@ -1630,7 +1630,7 @@ static void Att_ListEventStudents (struct Att_Events *Events)
 /************** Write parameter with code of attendance event ****************/
 /*****************************************************************************/
 
-static void Att_PutParAttCod (void *Events)
+static void Att_PutParAttCod (const void *Events)
   {
    if (Events)
       ParCod_PutPar (ParCod_Att,((struct Att_Events *) Events)->Event.AttCod);
@@ -2479,7 +2479,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
 /******* Put contextual icons when listing my assistance (as student) ********/
 /*****************************************************************************/
 
-static void Att_PutIconsMyAttList (void *Events)
+static void Att_PutIconsMyAttList (const void *Events)
   {
    if (Events)
      {
@@ -2493,7 +2493,7 @@ static void Att_PutIconsMyAttList (void *Events)
      }
   }
 
-static void Att_PutFormToPrintMyListPars (void *Events)
+static void Att_PutFormToPrintMyListPars (const void *Events)
   {
    if (Events)
      {
@@ -2509,7 +2509,7 @@ static void Att_PutFormToPrintMyListPars (void *Events)
 /******** Put icon to print assistance of students to several events *********/
 /*****************************************************************************/
 
-static void Att_PutIconsStdsAttList (void *Events)
+static void Att_PutIconsStdsAttList (const void *Events)
   {
    if (Events)
      {
@@ -2523,7 +2523,7 @@ static void Att_PutIconsStdsAttList (void *Events)
      }
   }
 
-static void Att_PutParsToPrintStdsList (void *Events)
+static void Att_PutParsToPrintStdsList (const void *Events)
   {
    if (Events)
      {
@@ -2571,7 +2571,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Update_attendance;
-   static void (*FunctionToDrawContextualIcons[Vie_NUM_USRS_VIEW_TYPES]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Vie_NUM_USRS_VIEW_TYPES]) (const void *Args) =
      {
       [Vie_VIEW_ONLY_ME] = Att_PutIconToViewAttEvents,
       [Vie_VIEW_SEL_USR] = Att_PutIconToEditAttEvents,
@@ -2684,7 +2684,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 /*********** Put icon to list (without edition) attendance events ************/
 /*****************************************************************************/
 
-static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
+static void Att_PutIconToViewAttEvents (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToViewAttEvents (ActSeeAllAtt,NULL,NULL);
   }
@@ -2693,7 +2693,7 @@ static void Att_PutIconToViewAttEvents (__attribute__((unused)) void *Args)
 /************ Put icon to list (with edition) attendance events **************/
 /*****************************************************************************/
 
-static void Att_PutIconToEditAttEvents (__attribute__((unused)) void *Args)
+static void Att_PutIconToEditAttEvents (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToEdit (ActSeeAllAtt,NULL,NULL,NULL);
   }

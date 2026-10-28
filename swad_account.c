@@ -101,7 +101,7 @@ static Err_SuccessOrError_t Acc_GetParsNewAccount (char NewNickWithoutArr[Nck_MA
 						   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1]);
 static void Acc_CreateNewEncryptedUsrCod (struct Usr_Data *UsrDat);
 
-static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod);
+static void Acc_PutParsToRemoveMyAccount (const void *EncryptedUsrCod);
 
 static void Acc_AskIfRemoveUsrAccount (Usr_MeOrOther_t MeOrOther);
 static void Acc_AskIfRemoveOtherUsrAccount (void);
@@ -622,7 +622,7 @@ void Acc_ShowFormsChgOthAccount (void)
 /************* Put an icon (form) to request removing my account *************/
 /*****************************************************************************/
 
-void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
+void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) const void *Args)
   {
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Me.UsrDat.UsrCod) == Usr_CAN)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyAcc,NULL,
@@ -630,7 +630,7 @@ void Acc_PutLinkToRemoveMyAccount (__attribute__((unused)) void *Args)
 				     "trash.svg",Ico_RED);
   }
 
-static void Acc_PutParsToRemoveMyAccount (void *EncryptedUsrCod)
+static void Acc_PutParsToRemoveMyAccount (const void *EncryptedUsrCod)
   {
    Usr_PutParOtherUsrCodEncrypted (EncryptedUsrCod);
    Par_PutParUnsigned (NULL,"EnrRemAction",

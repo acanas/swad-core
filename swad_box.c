@@ -56,7 +56,7 @@ static struct
 /*****************************************************************************/
 
 static void Box_BoxInternalBegin (const char *Title,
-				  void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+				  void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame);
 
@@ -66,7 +66,7 @@ static void Box_BoxInternalBegin (const char *Title,
 // CellPadding must be 0, 1, 2, 4 or 8
 
 void Box_BoxTableBegin (const char *Title,
-                        void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                        void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
@@ -75,7 +75,7 @@ void Box_BoxTableBegin (const char *Title,
   }
 
 void Box_BoxTableShadowBegin (const char *Title,
-                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                               const char *HelpLink,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
@@ -86,7 +86,7 @@ void Box_BoxTableShadowBegin (const char *Title,
   }
 
 void Box_BoxBegin (const char *Title,
-                   void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                   void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                    const char *HelpLink,Box_Closable_t Closable)
   {
    char *ClassFrame;
@@ -102,7 +102,7 @@ void Box_BoxBegin (const char *Title,
   }
 
 void Box_BoxShadowBegin (const char *Title,
-                         void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                         void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                          const char *HelpLink)
   {
    char *ClassFrame;
@@ -119,7 +119,7 @@ void Box_BoxShadowBegin (const char *Title,
 
 // Return pointer to box id string
 static void Box_BoxInternalBegin (const char *Title,
-				  void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+				  void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
   {

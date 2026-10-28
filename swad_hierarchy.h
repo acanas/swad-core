@@ -64,7 +64,7 @@ void Hie_WriteStatusCellEditable (Usr_Can_t ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT]);
 Hie_Status_t Hie_GetParStatus (void);
-void Hie_PutParOtherHieCod (void *HieCod);
+void Hie_PutParOtherHieCod (const void *HieCod);
 
 Hie_Order_t Hie_GetParHieOrder (void);
 
@@ -101,7 +101,7 @@ unsigned Hie_GetNumUsrsWhoClaimToBelongTo (Hie_Level_t HieLvl,
 
 //--------------------------- My hierarchy ------------------------------------
 void Hie_PutIconToSelectMyHierarchyInBreadcrumb (void);
-void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) void *Args);
+void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) const void *Args);
 
 void Hie_SelOneNodeFromMyHierarchy (void);
 

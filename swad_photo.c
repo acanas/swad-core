@@ -97,8 +97,8 @@ static char Pho_FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args);
-static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args);
+static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) const void *Args);
+static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) const void *Args);
 static void Pho_ReqOtherUsrPhoto (void);
 
 static void Pho_ReqPhoto (const struct Usr_Data *UsrDat);
@@ -123,7 +123,7 @@ static void Pho_ComputeAveragePhoto (long HieCod,Usr_Sex_t Sex,Rol_Role_t Role,
                                      unsigned *NumStds,unsigned *NumStdsWithPhoto,
                                      long *TimeToComputeAvgPhotoInMicroseconds);
 static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint);
-static void Pho_PutParsDegPhoto (void *DegPhotos);
+static void Pho_PutParsDegPhoto (const void *DegPhotos);
 static void Pho_PutSelectorForTypeOfAvg (const struct Pho_DegPhotos *DegPhotos);
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void);
 static void Pho_PutSelectorForHowComputePhotoSize (const struct Pho_DegPhotos *DegPhotos);
@@ -131,8 +131,8 @@ static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void);
 static void Pho_PutSelectorForHowOrderDegrees (const struct Pho_DegPhotos *DegPhotos);
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void);
 
-static void Pho_PutIconToPrintDegreeStats (void *DegPhotos);
-static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos);
+static void Pho_PutIconToPrintDegreeStats (const void *DegPhotos);
+static void Pho_PutLinkToPrintViewOfDegreeStatsPars (const void *DegPhotos);
 
 static void Pho_PutLinkToCalculateDegreeStats (const struct Pho_DegPhotos *DegPhotos);
 static void Pho_GetMaxStdsPerDegree (struct Pho_DegPhotos *DegPhotos);
@@ -236,7 +236,7 @@ void Pho_PutIconToChangeUsrPhoto (struct Usr_Data *UsrDat)
 /************** Put a link to request the removal of my photo ****************/
 /*****************************************************************************/
 
-static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args)
+static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) const void *Args)
   {
    if (Gbl.Usrs.Me.MyPhotoExists == Exi_EXISTS)
       Lay_PutContextualLinkOnlyIcon (ActReqRemMyPho,NULL,
@@ -248,7 +248,7 @@ static void Pho_PutIconToReqRemMyPhoto (__attribute__((unused)) void *Args)
 /********** Put a link to request the removal of a user's photo **************/
 /*****************************************************************************/
 
-static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) void *Args)
+static void Pho_PutIconToReqRemOtherUsrPhoto (__attribute__((unused)) const void *Args)
   {
    char PhotoURL[WWW_MAX_BYTES_WWW + 1];
    static Act_Action_t NextAction[Rol_NUM_ROLES] =
@@ -324,7 +324,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
       [Rol_INS_ADM] = ActDetOthPho,
       [Rol_SYS_ADM] = ActDetOthPho,
      };
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
      {
       [Usr_ME   ] = Pho_PutIconToReqRemMyPhoto,
       [Usr_OTHER] = Pho_PutIconToReqRemOtherUsrPhoto
@@ -1926,7 +1926,7 @@ static void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 /**************** Put parameter for degree average photos ********************/
 /*****************************************************************************/
 
-static void Pho_PutParsDegPhoto (void *DegPhotos)
+static void Pho_PutParsDegPhoto (const void *DegPhotos)
   {
    if (DegPhotos)
      {
@@ -2138,13 +2138,13 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 /*************** Put icon to print view the stats of degrees ***************/
 /*****************************************************************************/
 
-static void Pho_PutIconToPrintDegreeStats (void *DegPhotos)
+static void Pho_PutIconToPrintDegreeStats (const void *DegPhotos)
   {
    Ico_PutContextualIconToPrint (ActPrnPhoDeg,
 				 Pho_PutLinkToPrintViewOfDegreeStatsPars,DegPhotos);
   }
 
-static void Pho_PutLinkToPrintViewOfDegreeStatsPars (void *DegPhotos)
+static void Pho_PutLinkToPrintViewOfDegreeStatsPars (const void *DegPhotos)
   {
    Pho_PutParTypeOfAvg (((struct Pho_DegPhotos *) DegPhotos)->TypeOfAverage);
    Pho_PutParPhotoSize (((struct Pho_DegPhotos *) DegPhotos)->HowComputePhotoSize);

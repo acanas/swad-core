@@ -689,7 +689,7 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
       [Inf_ASSESSMENT	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodAss,	// Expanded  ,     Editing ==> action to contract
      };
    static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (Act_Action_t Actions,const char *Anchor,
-								     void (*FuncPars) (void *Args),void *Args) =
+								     void (*FuncPars) (const void *Args),const void *Args) =
      {
       [ConExp_CONTRACTED] = Ico_PutContextualIconToExpand,	// Contracted ==> function to expand
       [ConExp_EXPANDED  ] = Ico_PutContextualIconToContract,	// Expanded   ==> function to contract
@@ -1248,7 +1248,7 @@ static DenAll_DenyOrAllow_t Tre_CheckIfMoveLeftIsAllowed (unsigned NumNode)
 /********************** Params used to edit a tree node **********************/
 /*****************************************************************************/
 
-void Tre_PutPars (void *Node)
+void Tre_PutPars (const void *Node)
   {
    static Inf_Type_t InfoType;
 

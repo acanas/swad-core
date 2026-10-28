@@ -42,7 +42,7 @@
 
 static void RubRsc_ShowClipboard (void);
 
-static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
+static void RubRsc_PutIconsClipboard (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /**************************** Get link to rubric *****************************/
@@ -114,7 +114,7 @@ static void RubRsc_ShowClipboard (void)
 /****** Put contextual icons when showing resource clipboard in rubrics ******/
 /*****************************************************************************/
 
-static void RubRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
+static void RubRsc_PutIconsClipboard (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to remove resource clipboard in rubrics *****/
    if (Rub_CheckIfICanEditRubrics () == Usr_CAN)

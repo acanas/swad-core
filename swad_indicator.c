@@ -81,7 +81,7 @@ static Lay_Show_t Ind_GetIfShowBigList (struct Ind_Indicators *Indicators,
 					unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indicators,
                                                      unsigned NumCrss);
-static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators);
+static void Ind_PutParsConfirmIWantToSeeBigList (const void *Indicators);
 
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -395,7 +395,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (struct Ind_Indicators *Indi
                            NumCrss);
   }
 
-static void Ind_PutParsConfirmIWantToSeeBigList (void *Indicators)
+static void Ind_PutParsConfirmIWantToSeeBigList (const void *Indicators)
   {
    if (Indicators)
      {

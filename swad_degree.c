@@ -89,12 +89,12 @@ static void Deg_PutHeadDegsForSeeing (void);
 static void Deg_PutHeadDegsForEdition (void);
 
 static void Deg_ListDegs (void);
-static void Deg_PutIconsListingDegs (__attribute__((unused)) void *Args);
+static void Deg_PutIconsListingDegs (__attribute__((unused)) const void *Args);
 static void Deg_PutIconToEditDegs (void);
 static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg);
 
 static void Deg_EditDegsInternal (void);
-static void Deg_PutIconsEditingDegs (__attribute__((unused)) void *Args);
+static void Deg_PutIconsEditingDegs (__attribute__((unused)) const void *Args);
 
 static void Deg_ReceiveRequestOrCreateDeg (Hie_Status_t Status);
 
@@ -105,7 +105,7 @@ static void Deg_ShowAlertAndButtonToGoToDeg (void);
 static void Deg_EditingDegConstructor (void);
 static void Deg_EditingDegDestructor (void);
 
-static void Deg_PutParDegCod (void *DegCod);
+static void Deg_PutParDegCod (const void *DegCod);
 
 /*****************************************************************************/
 /******************* List degrees with pending courses ***********************/
@@ -712,7 +712,7 @@ static void Deg_ListDegs (void)
 /***************** Put contextual icons in list of degrees *******************/
 /*****************************************************************************/
 
-static void Deg_PutIconsListingDegs (__attribute__((unused)) void *Args)
+static void Deg_PutIconsListingDegs (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit degrees *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
@@ -894,7 +894,7 @@ static void Deg_EditDegsInternal (void)
 /**************** Put contextual icons in edition of degrees *****************/
 /*****************************************************************************/
 
-static void Deg_PutIconsEditingDegs (__attribute__((unused)) void *Args)
+static void Deg_PutIconsEditingDegs (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view degrees *****/
    Ico_PutContextualIconToView (ActSeeDeg,NULL,NULL,NULL);
@@ -1587,7 +1587,7 @@ void Deg_GetUsrMainDeg (long UsrCod,
 /******************** Write parameter with code of degree ********************/
 /*****************************************************************************/
 
-static void Deg_PutParDegCod (void *DegCod)
+static void Deg_PutParDegCod (const void *DegCod)
   {
    if (DegCod)
       ParCod_PutPar (ParCod_Deg,*((long *) DegCod));

@@ -62,7 +62,7 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
                              Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
 void Rub_SetCurrentRubCod (long GamCod);
-void Rub_PutPars (void *Rubrics);
+void Rub_PutPars (const void *Rubrics);
 void Rub_GetPars (struct Rub_Rubrics *Rubrics,Rub_CheckRubCod_t CheckRubCod);
 
 void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics);
@@ -85,7 +85,7 @@ Exi_Exist_t Rub_FindRubCodInStack (const struct Rub_Node *TOS,long RubCod);
 
 void Rub_ShowRubricsToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 			    Act_Action_t NextAction,
-                            void (*FuncPars) (void *Args),void *Args,
+                            void (*FuncPars) (const void *Args),const void *Args,
 			    unsigned NumRubrics,MYSQL_RES *mysql_res);
 
 //-------------------------- Listing users rubrics -----------------------------

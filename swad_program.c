@@ -37,8 +37,8 @@
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args);
-static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args);
+static void Prg_PutIconsWhenViewing (__attribute__((unused)) const void *Args);
+static void Prg_PutIconsWhenEditing (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /*************************** Before and after tree ***************************/
@@ -48,7 +48,7 @@ void Prg_BeforeTree (Tre_ListingType_t ListingType)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_COURSE_program;
-   static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (const void *Args) =
      {
       [Tre_VIEW		] = Prg_PutIconsWhenViewing,
       [Tre_EDIT_NODES	] = Prg_PutIconsWhenEditing,
@@ -243,7 +243,7 @@ void Prg_ContractNodeEditing (void)
 /**************** Put contextual icons in list of tree nodes *****************/
 /*****************************************************************************/
 
-static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args)
+static void Prg_PutIconsWhenViewing (__attribute__((unused)) const void *Args)
   {
    struct Tre_Node Node;
 
@@ -262,7 +262,7 @@ static void Prg_PutIconsWhenViewing (__attribute__((unused)) void *Args)
 /*************** Put contextual icons in list of tree nodes ******************/
 /*****************************************************************************/
 
-static void Prg_PutIconsWhenEditing (__attribute__((unused)) void *Args)
+static void Prg_PutIconsWhenEditing (__attribute__((unused)) const void *Args)
   {
    struct Tre_Node Node;
 

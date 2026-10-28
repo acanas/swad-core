@@ -64,15 +64,15 @@ static struct Plc_Place *Plc_EditingPlc = NULL;	// Static variable to keep the p
 static Usr_Can_t Plc_CheckIfICanEditPlcs (void);
 
 static Plc_Order_t Plc_GetParPlcOrder (void);
-static void Plc_PutIconsListingPlcs (__attribute__((unused)) void *Args);
+static void Plc_PutIconsListingPlcs (__attribute__((unused)) const void *Args);
 static void Plc_PutIconToEditPlcs (void);
 static void Plc_EditPlcsInternal (void);
-static void Plc_PutIconsEditingPlcs (__attribute__((unused)) void *Args);
+static void Plc_PutIconsEditingPlcs (__attribute__((unused)) const void *Args);
 
 static void Plc_GetPlcDataFromRow (MYSQL_RES *mysql_res,struct Plc_Place *Plc);
 
 static void Plc_ListPlcsForEdition (const struct Plc_Places *Plcs);
-static void Plc_PutParPlcCod (void *PlcCod);
+static void Plc_PutParPlcCod (const void *PlcCod);
 
 static void Plc_RenamePlc (Nam_ShrtOrFullName_t ShrtOrFull);
 
@@ -234,7 +234,7 @@ static Plc_Order_t Plc_GetParPlcOrder (void)
 /****************** Put contextual icons in list of places *******************/
 /*****************************************************************************/
 
-static void Plc_PutIconsListingPlcs (__attribute__((unused)) void *Args)
+static void Plc_PutIconsListingPlcs (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit places *****/
    if (Plc_CheckIfICanEditPlcs () == Usr_CAN)
@@ -300,7 +300,7 @@ static void Plc_EditPlcsInternal (void)
 /**************** Put contextual icons in edition of places *****************/
 /*****************************************************************************/
 
-static void Plc_PutIconsEditingPlcs (__attribute__((unused)) void *Args)
+static void Plc_PutIconsEditingPlcs (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view places *****/
    Ico_PutContextualIconToView (ActSeePlc,NULL,NULL,NULL);
@@ -486,7 +486,7 @@ static void Plc_ListPlcsForEdition (const struct Plc_Places *Plcs)
 /******************** Write parameter with code of place *********************/
 /*****************************************************************************/
 
-static void Plc_PutParPlcCod (void *PlcCod)
+static void Plc_PutParPlcCod (const void *PlcCod)
   {
    if (PlcCod)
       ParCod_PutPar (ParCod_Plc,*((long *) PlcCod));

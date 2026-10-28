@@ -150,7 +150,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct Usr_Data *UsrDat);
 void Rec_ShowPublicSharedRecordOtherUsr (void);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct Usr_Data *UsrDat,const char *Anchor);
-void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args);
+void Rec_PutParUsrCodEncrypted (__attribute__((unused)) const void *Args);
 
 void Rec_ChangeMyRecord (void);
 void Rec_ChangeOthRecord (void);

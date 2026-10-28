@@ -114,15 +114,15 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Exa_PutIconsListExams (void *Exams);
+static void Exa_PutIconsListExams (const void *Exams);
 static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
-static void Exa_PutParsToCreateNewExam (void *Exams);
+static void Exa_PutParsToCreateNewExam (const void *Exams);
 
 static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
-static void Exa_PutIconsViewingOneExam (void *Exams);
-static void Exa_PutIconsEditingOneExam (void *Exams);
+static void Exa_PutIconsViewingOneExam (const void *Exams);
+static void Exa_PutIconsEditingOneExam (const void *Exams);
 static void Exa_WriteAuthor (struct Exa_Exam *Exam);
 
 static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder);
@@ -332,7 +332,7 @@ Usr_Can_t Exa_CheckIfICanEditExams (void)
 /***************** Put contextual icons in list of exams *******************/
 /*****************************************************************************/
 
-static void Exa_PutIconsListExams (void *Exams)
+static void Exa_PutIconsListExams (const void *Exams)
   {
    static Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
@@ -375,7 +375,7 @@ static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams)
 /******************* Put parameters to create a new exam *******************/
 /*****************************************************************************/
 
-static void Exa_PutParsToCreateNewExam (void *Exams)
+static void Exa_PutParsToCreateNewExam (const void *Exams)
   {
    if (Exams)
      {
@@ -645,7 +645,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 /***************** Put icons when viewing/editing an exam ********************/
 /*****************************************************************************/
 
-static void Exa_PutIconsViewingOneExam (void *Exams)
+static void Exa_PutIconsViewingOneExam (const void *Exams)
   {
    char *Anchor;
 
@@ -662,7 +662,7 @@ static void Exa_PutIconsViewingOneExam (void *Exams)
      }
   }
 
-static void Exa_PutIconsEditingOneExam (void *Exams)
+static void Exa_PutIconsEditingOneExam (const void *Exams)
   {
    if (Exams)
       /***** Icon to view exam *****/
@@ -736,7 +736,7 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 /*********************** Params used to edit an exam **************************/
 /*****************************************************************************/
 
-void Exa_PutPars (void *Exams)
+void Exa_PutPars (const void *Exams)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -1284,7 +1284,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Txt_Exam;
-   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
       [OldNew_OLD] = Exa_PutIconsEditingOneExam,
       [OldNew_NEW] = NULL,

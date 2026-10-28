@@ -64,7 +64,7 @@ void Tst_ShowNewTest (void);
 void Tst_ReceiveTestDraft (void);
 void Tst_AssessTest (void);
 
-void Tst_PutIconsTests (void *Qsts);
+void Tst_PutIconsTests (const void *Qsts);
 
 Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Qsts,
 				     Tst_ActionToDoWithQuestions_t ActionToDo);

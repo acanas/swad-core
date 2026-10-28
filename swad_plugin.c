@@ -78,8 +78,8 @@ static struct Plg_Plugin *Plg_EditingPlg;	// Plugin being edited.
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args);
-static void Plg_PutIconToViewPlugins (__attribute__((unused)) void *Args);
+static void Plg_PutIconToEditPlugins (__attribute__((unused)) const void *Args);
+static void Plg_PutIconToViewPlugins (__attribute__((unused)) const void *Args);
 static void Plg_EditPluginsInternal (void);
 
 static void Plg_GetPluginDataFromRow (MYSQL_RES *mysql_res,
@@ -87,7 +87,7 @@ static void Plg_GetPluginDataFromRow (MYSQL_RES *mysql_res,
 
 static void Plg_FreeListPlugins (struct Plg_Plugins *Plugins);
 static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins);
-static void Plg_PutParPlgCod (void *PlgCod);
+static void Plg_PutParPlgCod (const void *PlgCod);
 static void Plg_GetListPlugins (struct Plg_Plugins *Plugins);
 static void Plg_PutFormToCreatePlugin (void);
 static void Plg_PutHeadPlugins (void);
@@ -181,7 +181,7 @@ void Plg_ListPlugins (void)
 /*************************** Put icon to edit plugins ************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args)
+static void Plg_PutIconToEditPlugins (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToEdit (ActEdiPlg,NULL,NULL,NULL);
   }
@@ -190,7 +190,7 @@ static void Plg_PutIconToEditPlugins (__attribute__((unused)) void *Args)
 /*************************** Put icon to view plugins ************************/
 /*****************************************************************************/
 
-static void Plg_PutIconToViewPlugins (__attribute__((unused)) void *Args)
+static void Plg_PutIconToViewPlugins (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToView (ActSeePlg,NULL,NULL,NULL);
   }
@@ -464,7 +464,7 @@ static void Plg_ListPluginsForEdition (struct Plg_Plugins *Plugins)
 /******************* Write parameter with code of plugin *********************/
 /*****************************************************************************/
 
-static void Plg_PutParPlgCod (void *PlgCod)
+static void Plg_PutParPlgCod (const void *PlgCod)
   {
    if (PlgCod)
       ParCod_PutPar (ParCod_Plg,*((long *) PlgCod));

@@ -133,7 +133,7 @@ static void Hie_ShowHierarchyCell (const char *ClassTxt,int Num);
 
 //--------------------------- My hierarchy ------------------------------------
 static void Hie_WriteListMyHierarchyToSelectNode (void);
-static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args);
+static void Hie_PutIconToSearchCourses (__attribute__((unused)) const void *Args);
 static void Hie_WriteMyHierarchyNodes (struct Hie_Node Hie[Hie_NUM_LEVELS],
 			               Lay_Last_t IsLastItemInLevel[1 + 6],
 			               Hie_Level_t HieLvl);
@@ -969,7 +969,7 @@ static Hie_Status_t Hie_GetStatusBitsFromStatusTxt (Hie_StatusTxt_t StatusTxt)
 /**** Write parameter with code of other institution/center/degree/course ****/
 /*****************************************************************************/
 
-void Hie_PutParOtherHieCod (void *HieCod)
+void Hie_PutParOtherHieCod (const void *HieCod)
   {
    if (HieCod)
       ParCod_PutPar (ParCod_OthHie,*((long *) HieCod));
@@ -1611,7 +1611,7 @@ void Hie_PutIconToSelectMyHierarchyInBreadcrumb (void)
 /***************** Put an icon (form) to select my hierarchy *****************/
 /*****************************************************************************/
 
-void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) void *Args)
+void Hie_PutIconToSelectMyHierarchy (__attribute__((unused)) const void *Args)
   {
    if (Gbl.Usrs.Me.Logged)		// I am logged
       Lay_PutContextualLinkOnlyIcon (ActMyCrs,NULL,
@@ -1669,7 +1669,7 @@ static void Hie_WriteListMyHierarchyToSelectNode (void)
 /******************* Put an icon (form) to search courses ********************/
 /*****************************************************************************/
 
-static void Hie_PutIconToSearchCourses (__attribute__((unused)) void *Args)
+static void Hie_PutIconToSearchCourses (__attribute__((unused)) const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActReqSch,NULL,
 				  Sch_PutLinkToSearchCoursesPars,NULL,

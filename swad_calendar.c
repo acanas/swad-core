@@ -71,15 +71,15 @@ Err_SuccessOrError_t Cal_DayIsValidAsFirstDayOfWeek[7] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args);
+static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) const void *Args);
 
 static unsigned Cal_GetParFirstDayOfWeek (void);
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
-                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                               Vie_ViewType_t ViewType);
-static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args);
+static void Cal_PutIconsCalendar (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
@@ -102,7 +102,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
 /************ Put contextual icons in first-day-of-week setting **************/
 /*****************************************************************************/
 
-static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
+static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_FIRST_DAY_OF_WEEK);
@@ -113,7 +113,7 @@ static void Cal_PutIconsFirstDayOfWeek (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
-                                      void (*FuncPars) (void *Args),void *Args)
+                                      void (*FuncPars) (const void *Args),const void *Args)
   {
    extern const char *Txt_First_day_of_the_week_X;
    extern const char *Txt_DAYS[7];
@@ -245,7 +245,7 @@ void Cal_PrintCalendar (void)
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
-                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                               Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_START_Calendar;
@@ -316,7 +316,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 /******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Cal_PutIconsCalendar (__attribute__((unused)) void *Args)
+static void Cal_PutIconsCalendar (__attribute__((unused)) const void *Args)
   {
    /***** Print calendar *****/
    Ico_PutContextualIconToPrint (ActPrnCal,NULL,NULL);

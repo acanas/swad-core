@@ -120,7 +120,7 @@ void Mch_RemoveMatchesMadeByUsrInCrs (long UsrCod,long HieCod);
 
 void Mch_ReqCreatOrEditMatch (void);
 
-void Mch_PutParsEdit (void *Games);
+void Mch_PutParsEdit (const void *Games);
 void Mch_GetAndCheckPars (struct Gam_Games *Games,
                           struct Mch_Match *Match);
 

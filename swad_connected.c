@@ -84,8 +84,8 @@ static struct
 
 static unsigned long Con_GetTimeToRefresh (void);
 
-static void Con_PutIconToUpdateConnected (void *Scope);
-static void Con_PutParScope (void *Scope);
+static void Con_PutIconToUpdateConnected (const void *Scope);
+static void Con_PutParScope (const void *Scope);
 
 static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
 
@@ -233,13 +233,13 @@ void Con_ShowConnectedUsrs (void)
 /******************** Put icon to update connected users *********************/
 /*****************************************************************************/
 
-static void Con_PutIconToUpdateConnected (void *Scope)
+static void Con_PutIconToUpdateConnected (const void *Scope)
   {
    Ico_PutContextualIconToUpdate (ActLstCon,NULL,
                                   Con_PutParScope,Scope);
   }
 
-static void Con_PutParScope (void *Scope)
+static void Con_PutParScope (const void *Scope)
   {
    Sco_PutParScope ("ScopeCon",*((Hie_Level_t *) Scope));
   }

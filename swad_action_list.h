@@ -746,7 +746,7 @@ typedef enum
 	ActRemEvlPrj,
 	ActChgPrjSco,
 	ActReqLnkPrj,
-	ActAdmDocPrj,
+
 	ActReqRemFilDocPrj,
 	ActRemFilDocPrj,
 	ActRemFolDocPrj,
@@ -767,7 +767,7 @@ typedef enum
 	ActReqDatDocPrj,
 	ActChgDatDocPrj,
 	ActDowDocPrj,
-	ActAdmAssPrj,
+
 	ActReqRemFilAssPrj,
 	ActRemFilAssPrj,
 	ActRemFolAssPrj,
@@ -1316,9 +1316,12 @@ typedef enum
 	ActChgDatShaGrp,
 	ActDowShaGrp,
 
-   // Assignments and works of user -------------------------------------------
+   // My assignments and works ------------------------------------------------
 
 	ActAdmAsgWrkUsr,
+
+   // My assignments ----------------------------------------------------------
+
 	ActReqRemFilAsgUsr,
 	ActRemFilAsgUsr,
 	ActRemFolAsgUsr,
@@ -1339,6 +1342,9 @@ typedef enum
 	ActReqDatAsgUsr,
 	ActChgDatAsgUsr,
 	ActDowAsgUsr,
+
+   // My works ----------------------------------------------------------------
+
 	ActReqRemFilWrkUsr,
 	ActRemFilWrkUsr,
 	ActRemFolWrkUsr,
@@ -1360,18 +1366,21 @@ typedef enum
 	ActChgDatWrkUsr,
 	ActDowWrkUsr,
 
-   // Assignments and works of course -----------------------------------------
+   // Assignments and works of a course ---------------------------------------
 
 	ActReqAsgWrkCrs,
 	ActAdmAsgWrkCrs,
 	ActAdmAsgWrkCrsZIP,
+	ActShoCliAsgWrkCrs,
+	ActRemCliAsgWrkCrs,
+
+   // Assignments of a course -------------------------------------------------
+
 	ActReqRemFilAsgCrs,
 	ActRemFilAsgCrs,
 	ActRemFolAsgCrs,
 	ActCopAsgCrs,
 	ActPasAsgCrs,
-	ActShoCliAsgCrs,
-	ActRemCliAsgCrs,
 	ActRemTreAsgCrs,
 	ActFrmCreAsgCrs,
 	ActCreFolAsgCrs,
@@ -1385,13 +1394,14 @@ typedef enum
 	ActReqDatAsgCrs,
 	ActChgDatAsgCrs,
 	ActDowAsgCrs,
+
+   // Works of a course -------------------------------------------------------
+
 	ActReqRemFilWrkCrs,
 	ActRemFilWrkCrs,
 	ActRemFolWrkCrs,
 	ActCopWrkCrs,
 	ActPasWrkCrs,
-	ActShoCliWrkCrs,
-	ActRemCliWrkCrs,
 	ActRemTreWrkCrs,
 	ActFrmCreWrkCrs,
 	ActCreFolWrkCrs,

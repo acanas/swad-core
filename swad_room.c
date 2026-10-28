@@ -98,9 +98,9 @@ static void Roo_GetAndEditMACAddresses (long RooCod,const char *Anchor);
 
 static Roo_Order_t Roo_GetParRoomOrder (void);
 static Usr_Can_t Roo_CheckIfICanCreateRooms (void);
-static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args);
+static void Roo_PutIconsListingRooms (__attribute__((unused)) const void *Args);
 static void Roo_PutIconToEditRooms (void);
-static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args);
+static void Roo_PutIconsEditingRooms (__attribute__((unused)) const void *Args);
 
 static void Roo_GetRoomDataByCod (struct Roo_Room *Room);
 static void Roo_GetRoomDataFromRow (MYSQL_RES *mysql_res,
@@ -113,7 +113,7 @@ static void Roo_EditRoomsInternal (void);
 
 static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
                                      const struct Roo_Rooms *Rooms);
-static void Roo_PutParRooCod (void *RooCod);
+static void Roo_PutParRooCod (const void *RooCod);
 static void Roo_PutSelectorBuilding (long BldCod,
                                      const struct Bld_Buildings *Buildings,
                                      HTM_Attributes_t Attributes);
@@ -380,7 +380,7 @@ static Usr_Can_t Roo_CheckIfICanCreateRooms (void)
 /****************** Put contextual icons in list of rooms ********************/
 /*****************************************************************************/
 
-static void Roo_PutIconsListingRooms (__attribute__((unused)) void *Args)
+static void Roo_PutIconsListingRooms (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit rooms *****/
    if (Roo_CheckIfICanCreateRooms () == Usr_CAN)
@@ -450,7 +450,7 @@ static void Roo_EditRoomsInternal (void)
 /***************** Put contextual icons in edition of rooms ******************/
 /*****************************************************************************/
 
-static void Roo_PutIconsEditingRooms (__attribute__((unused)) void *Args)
+static void Roo_PutIconsEditingRooms (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view rooms *****/
    Ico_PutContextualIconToView (ActSeeRoo,NULL,NULL,NULL);
@@ -723,7 +723,7 @@ static void Roo_ListRoomsForEdition (const struct Bld_Buildings *Buildings,
 /********************* Write parameter with code of room *********************/
 /*****************************************************************************/
 
-static void Roo_PutParRooCod (void *RooCod)
+static void Roo_PutParRooCod (const void *RooCod)
   {
    if (RooCod)
       ParCod_PutPar (ParCod_Roo,*((long *) RooCod));

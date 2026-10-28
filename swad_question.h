@@ -72,8 +72,8 @@ void Qst_ShowFormRequestSelectQstsForExamSet (struct Exa_Exams *Exams,
 void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
                                            struct Qst_Questions *Qsts);
 
-void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args);
-void Qst_PutIconsEditBankQsts (void *Qsts);
+void Qst_PutIconsRequestBankQsts (__attribute__((unused)) const void *Args);
+void Qst_PutIconsEditBankQsts (const void *Qsts);
 
 void Qst_WriteAnswerType (Qst_AnswerType_t AnswerType,ExaSet_Validity_t Validity);
 void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
@@ -98,7 +98,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 void Qst_PutCheckboxToSelectAllQuestions (void);
 void Qst_WriteQuestionRowForSelection (unsigned QstInd,struct Qst_Question *Qst);
 
-void Qst_PutParsEditQst (void *Qsts);
+void Qst_PutParsEditQst (const void *Qsts);
 
 void Qst_WriteAnswers (struct Qst_Question *Qst,
                        const char *ClassTxt,const char *ClassFeedback);
@@ -149,15 +149,15 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst);
 
 void Qst_ReqRemSelectedQsts (void);
 void Qst_RemoveSelectedQsts (void);
-void Qst_PutIconToRemoveOneQst (void *QstCod);
+void Qst_PutIconToRemoveOneQst (const void *QstCod);
 void Qst_ReqRemOneQst (void);
-void Qst_PutParsRemoveOnlyThisQst (void *QstCod);
+void Qst_PutParsRemoveOnlyThisQst (const void *QstCod);
 void Qst_RemoveOneQst (void);
 void Qst_RemoveOneQstFromDB (long HieCod,long QstCod);
 
 void Qst_ChangeShuffleQst (void);
 
-void Qst_PutParQstCod (void *QstCod);
+void Qst_PutParQstCod (const void *QstCod);
 
 void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Qst);
 void Qst_InsertOrUpdateQstIntoDB (struct Qst_Question *Qst);

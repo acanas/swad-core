@@ -178,7 +178,7 @@ void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType)
 /************* Put hidden parameters for figures (statistics) ****************/
 /*****************************************************************************/
 
-void Fig_PutParsFigures (void *Figures)
+void Fig_PutParsFigures (const void *Figures)
   {
    if (Figures)
      {

@@ -73,15 +73,15 @@ static void Cfe_GetDateToHighlight (struct Cfe_CallsForExams *CallsForExams);
 
 static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
                                    Vie_ViewType_t ViewType);
-static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args);
+static void Cfe_PutIconsCallsForExams (__attribute__((unused)) const void *Args);
 
 static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
                                  long ExaCod,
 			         Vie_ViewType_t ViewType,
 			         Lay_Highlight_t Highlight);
-static void Cfe_PutIconsCallForExam (void *CallsForExams);
+static void Cfe_PutIconsCallForExam (const void *CallsForExams);
 
-static void Cfe_PutParExaCod (void *ExaCod);
+static void Cfe_PutParExaCod (const void *ExaCod);
 
 static void Cfe_GetNotifContentCallForExam (const struct Cfe_CallsForExams *CallsForExams,
                                             char **ContentStr);
@@ -676,7 +676,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 /*********************** Put icons in calls for exams ************************/
 /*****************************************************************************/
 
-static void Cfe_PutIconsCallsForExams (__attribute__((unused)) void *Args)
+static void Cfe_PutIconsCallsForExams (__attribute__((unused)) const void *Args)
   {
    /***** Icon to create a new call for exam *****/
    if (Cfe_CheckIfICanEditCallsForExams () == Usr_CAN)
@@ -884,7 +884,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    unsigned Hour;
    unsigned Minute;
    char *Anchor = NULL;
-   void (*FunctionToDrawContextualIcons) (void *Args);
+   void (*FunctionToDrawContextualIcons) (const void *Args);
    const char *HelpLink;
    static struct
      {
@@ -1465,7 +1465,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 /*********** Put icons to remove / edit / print a call for exam **************/
 /*****************************************************************************/
 
-static void Cfe_PutIconsCallForExam (void *CallsForExams)
+static void Cfe_PutIconsCallForExam (const void *CallsForExams)
   {
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Cfe_NUM_STATUS] =
      {
@@ -1539,7 +1539,7 @@ Usr_Can_t Cfe_CheckIfICanEditCallsForExams (void)
 /***************** Param with the code of a call for exam ********************/
 /*****************************************************************************/
 
-static void Cfe_PutParExaCod (void *ExaCod)
+static void Cfe_PutParExaCod (const void *ExaCod)
   {
    if (ExaCod)
       ParCod_PutPar (ParCod_Exa,*((long *) ExaCod));

@@ -78,7 +78,7 @@ static struct Mail *Mai_EditingMai = NULL;	// Static variable to keep the mail d
 /*****************************************************************************/
 
 static Mai_DomainsOrder_t Mai_GetParMaiOrder (void);
-static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args);
+static void Mai_PutIconToEditMailDomains (__attribute__((unused)) const void *Args);
 static void Mai_EditMailDomainsInternal (void);
 static void Mai_GetListMailDomainsAllowedForNotif (struct Mai_Mails *Mails);
 static void Mai_GetMailDomain (const char *Email,
@@ -89,7 +89,7 @@ static void Mai_GetMailDomainDataFromRow (MYSQL_RES *mysql_res,
 static void Mai_FreeListMailDomains (struct Mai_Mails *Mails);
 
 static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails);
-static void Mai_PutParMaiCod (void *MaiCod);
+static void Mai_PutParMaiCod (const void *MaiCod);
 
 static void Mai_RenameMailDomain (Nam_ShrtOrFullName_t ShrtOrFull);
 
@@ -100,8 +100,8 @@ static void Mai_PutFormToSelectUsrsToListEmails (__attribute__((unused)) void *A
 static void Mai_ListEmails (__attribute__((unused)) void *Args);
 
 static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther);
-static void Mai_PutParsRemoveMyEmail (void *Email);
-static void Mai_PutParsRemoveOtherEmail (void *Email);
+static void Mai_PutParsRemoveMyEmail (const void *Email);
+static void Mai_PutParsRemoveOtherEmail (const void *Email);
 
 static Mai_Confirmed_t Mai_GetConfirmedFromYN (char Ch);
 
@@ -215,7 +215,7 @@ static Mai_DomainsOrder_t Mai_GetParMaiOrder (void)
 /************************ Put icon to edit mail domains **********************/
 /*****************************************************************************/
 
-static void Mai_PutIconToEditMailDomains (__attribute__((unused)) void *Args)
+static void Mai_PutIconToEditMailDomains (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToEdit (ActEdiMai,NULL,NULL,NULL);
   }
@@ -518,7 +518,7 @@ static void Mai_ListMailDomainsForEdition (const struct Mai_Mails *Mails)
 /******************** Write parameter with code of mail **********************/
 /*****************************************************************************/
 
-static void Mai_PutParMaiCod (void *MaiCod)
+static void Mai_PutParMaiCod (const void *MaiCod)
   {
    if (MaiCod)
       ParCod_PutPar (ParCod_Mai,*((long *) MaiCod));
@@ -1092,7 +1092,7 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
       [Usr_OTHER] = {.Remove = ActRemMaiOth,
 	             .Change = ActChgMaiOth}
      };
-   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (const void *ID) =
      {
       [Usr_ME   ] = Mai_PutParsRemoveMyEmail,
       [Usr_OTHER] = Mai_PutParsRemoveOtherEmail
@@ -1226,13 +1226,13 @@ static void Mai_ShowFormChangeUsrEmail (Usr_MeOrOther_t MeOrOther)
    HTM_TABLE_End ();
   }
 
-static void Mai_PutParsRemoveMyEmail (void *Email)
+static void Mai_PutParsRemoveMyEmail (const void *Email)
   {
    if (Email)
       Par_PutParString (NULL,"Email",Email);
   }
 
-static void Mai_PutParsRemoveOtherEmail (void *Email)
+static void Mai_PutParsRemoveOtherEmail (const void *Email)
   {
    if (Email)
      {

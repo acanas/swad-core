@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void InsCfg_Configuration (Vie_ViewType_t ViewType);
-static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
+static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) const void *Args);
 static void InsCfg_Map (void);
 static void InsCfg_Cty (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void InsCfg_NumUsrs (void);
@@ -209,7 +209,7 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 /********* Put contextual icons in configuration of an institution ***********/
 /*****************************************************************************/
 
-static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
+static void InsCfg_PutIconsToPrintAndUpload (__attribute__((unused)) const void *Args)
   {
    /***** Icon to print info about institution *****/
    Ico_PutContextualIconToPrint (ActPrnInsInf,NULL,NULL);

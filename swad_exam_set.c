@@ -72,7 +72,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ExaSet_PutParsOneQst (void *Exams);
+static void ExaSet_PutParsOneQst (const void *Exams);
 
 static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  struct ExaSet_Set *Set,
@@ -117,13 +117,13 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
 static void ExaSet_ExchangeSets (long ExaCod,
                                  unsigned SetIndTop,unsigned SetIndBottom);
 
-static void ExaSet_PutIconToAddNewQuestions (void *Exams);
+static void ExaSet_PutIconToAddNewQuestions (const void *Exams);
 
 /*****************************************************************************/
 /************ Put parameter to move/remove one set of questions **************/
 /*****************************************************************************/
 
-void ExaSet_PutParsOneSet (void *Exams)
+void ExaSet_PutParsOneSet (const void *Exams)
   {
    if (Exams)
      {
@@ -136,7 +136,7 @@ void ExaSet_PutParsOneSet (void *Exams)
 /**************** Put parameter to move/remove one question ******************/
 /*****************************************************************************/
 
-static void ExaSet_PutParsOneQst (void *Exams)
+static void ExaSet_PutParsOneQst (const void *Exams)
   {
    if (Exams)
      {
@@ -1590,7 +1590,7 @@ static void ExaSet_ExchangeSets (long ExaCod,
 /***************** Put icon to add a new questions to exam *******************/
 /*****************************************************************************/
 
-static void ExaSet_PutIconToAddNewQuestions (void *Exams)
+static void ExaSet_PutIconToAddNewQuestions (const void *Exams)
   {
    Ico_PutContextualIconToAdd (ActReqAddQstExaSet,NULL,
 			       ExaSet_PutParsOneSet,Exams);

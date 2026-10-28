@@ -256,7 +256,7 @@ void Frm_EndForm (void)
 /*****************************************************************************/
 
 void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,
-                         void (*FuncPars) (void *Args),void *Args,
+                         void (*FuncPars) (const void *Args),const void *Args,
                          const char *ClassTable)
   {
    /***** Begin fieldset *****/

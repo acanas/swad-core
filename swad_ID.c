@@ -83,8 +83,8 @@ static void ID__PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID
 
 static void ID__ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther);
 
-static void ID__PutParsRemoveMyID (void *ID);
-static void ID__PutParsRemoveOtherID (void *ID);
+static void ID__PutParsRemoveMyID (const void *ID);
+static void ID__PutParsRemoveOtherID (const void *ID);
 
 static void ID__RemoveUsrID (const struct Usr_Data *UsrDat,
 			     Usr_MeOrOther_t MeOrOther);
@@ -550,7 +550,7 @@ static void ID__ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther)
       [Usr_OTHER] = {.Remove = ActRemID_Oth,
 	             .Change = ActChgID_Oth}
      };
-   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (const void *ID) =
      {
       [Usr_ME   ] = ID__PutParsRemoveMyID,
       [Usr_OTHER] = ID__PutParsRemoveOtherID
@@ -667,13 +667,13 @@ static void ID__ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther)
    HTM_TABLE_End ();
   }
 
-static void ID__PutParsRemoveMyID (void *ID)
+static void ID__PutParsRemoveMyID (const void *ID)
   {
    if (ID)
       Par_PutParString (NULL,"UsrID",(char *) ID);
   }
 
-static void ID__PutParsRemoveOtherID (void *ID)
+static void ID__PutParsRemoveOtherID (const void *ID)
   {
    if (ID)
      {

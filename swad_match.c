@@ -96,7 +96,7 @@ long Mch_MchCodBeingPlayed;	// Used to refresh game via AJAX
 
 static void Mch_SetMchCodBeingPlayed (long MchCod);
 
-static void Mch_PutIconsInListOfMatches (void *Games);
+static void Mch_PutIconsInListOfMatches (const void *Games);
 static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games);
 
 static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
@@ -131,7 +131,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 					    struct Mch_Match *Match,
 					    const char *BgColor,
 					    unsigned NumQsts);
-static void Mch_PutParMchCod (void *MchCod);
+static void Mch_PutParMchCod (const void *MchCod);
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
                                             const struct Mch_Match *Match,
                                             const char *BgColor);
@@ -144,7 +144,7 @@ static void Mch_GetMatchDataFromRow (MYSQL_RES *mysql_res,
 				     struct Mch_Match *Match);
 
 static void Mch_PutFormMatch (struct Mch_Match *Match);
-static void Mch_ParsFormMatch (void *Match);
+static void Mch_ParsFormMatch (const void *Match);
 static void Mch_UpdateMatchTitleAndGrps (const struct Mch_Match *Match);
 
 static long Mch_CreateMatch (long GamCod,char Title[Mch_MAX_BYTES_TITLE + 1]);
@@ -336,7 +336,7 @@ void Mch_GetMatchDataByCod (struct Mch_Match *Match)
 /****************** Put icons in list of matches of a game *******************/
 /*****************************************************************************/
 
-static void Mch_PutIconsInListOfMatches (void *Games)
+static void Mch_PutIconsInListOfMatches (const void *Games)
   {
    if (Games)
       if (Mch_CheckIfICanEditMatches () == Usr_CAN)
@@ -793,7 +793,7 @@ static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 /******************** Write parameter with code of match *********************/
 /*****************************************************************************/
 
-static void Mch_PutParMchCod (void *MchCod)
+static void Mch_PutParMchCod (const void *MchCod)
   {
    if (MchCod)
       ParCod_PutPar (ParCod_Mch,*((long *) MchCod));
@@ -1174,7 +1174,7 @@ void Mch_ReqCreatOrEditMatch (void)
 /*********************** Params used to edit a match *************************/
 /*****************************************************************************/
 
-void Mch_PutParsEdit (void *Games)
+void Mch_PutParsEdit (const void *Games)
   {
    if (Games)
      {
@@ -1268,7 +1268,7 @@ static void Mch_PutFormMatch (struct Mch_Match *Match)
    HTM_SECTION_End ();
   }
 
-static void Mch_ParsFormMatch (void *Match)
+static void Mch_ParsFormMatch (const void *Match)
   {
    ParCod_PutPar (ParCod_Gam,((struct Mch_Match *) Match)->GamCod);
    ParCod_PutPar (ParCod_Mch,((struct Mch_Match *) Match)->MchCod);

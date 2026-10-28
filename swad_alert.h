@@ -71,20 +71,20 @@ void Ale_ShowAlertsAndExit ();
 void Ale_ShowAlerts (const char *Section);
 void Ale_ShowAlert (Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowLastAlertAndButtonGo (Act_Action_t NextAction,
-                                   void (*FuncPars) (void *Args),void *Args,
+                                   void (*FuncPars) (const void *Args),const void *Args,
 				   const char *Where);
 void Ale_ShowLastAlertAndButtonBegin (void);
 void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
-                          void (*FuncPars) (void *Args),void *Args,
+                          void (*FuncPars) (const void *Args),const void *Args,
 			  const char *Txt,const char *Title);
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                             void (*FuncPars) (void *Args),void *Args,
+                             void (*FuncPars) (const void *Args),const void *Args,
                              Btn_Button_t Button,
 			     Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowAlertAndButtonBegin (Ale_AlertType_t AlertType,const char *fmt,...);
 void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,
 				const char *Anchor,const char *OnSubmit,
-                                void (*FuncPars) (void *Args),void *Args,
+                                void (*FuncPars) (const void *Args),const void *Args,
                                 Btn_Button_t Button);
 
 void Ale_ShowAlertYouCanNotLeaveFieldEmpty (void);

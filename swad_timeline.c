@@ -158,7 +158,7 @@ static void Tml_GetAndShowOldTimeline (struct Tml_Timeline *Timeline);
 
 static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
                               long NotCodToHighlight,const char *Title);
-static void Tml_PutIconsTimeline (__attribute__((unused)) void *Args);
+static void Tml_PutIconsTimeline (__attribute__((unused)) const void *Args);
 static unsigned Tml_ListRecentPubs (const struct Tml_Timeline *Timeline,
                                     long NotCodToHighlight);
 
@@ -472,7 +472,7 @@ static void Tml_ShowTimeline (struct Tml_Timeline *Timeline,
 /********************* Put contextual icons in timeline **********************/
 /*****************************************************************************/
 
-static void Tml_PutIconsTimeline (__attribute__((unused)) void *Args)
+static void Tml_PutIconsTimeline (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TIMELINE);

@@ -94,6 +94,6 @@ Err_SuccessOrError_t Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH
 					   const char *FldName,
 					   const char *CharSet,const char *Collate);
 
-void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) void *Args);
+void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) const void *Args);
 
 #endif

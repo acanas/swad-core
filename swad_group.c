@@ -99,7 +99,7 @@ static void Grp_EditGroupTypes (const struct GroupType *GrpTyp);
 static void Grp_EditGroups (const struct GroupType *GrpTyp,
 			    const struct Group *Grp,
 			    const struct Roo_Rooms *Rooms);
-static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args);
+static void Grp_PutIconsEditingGroups (__attribute__((unused)) const void *Args);
 
 static void Grp_PutCheckboxAllGrps (void);
 
@@ -117,7 +117,7 @@ static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Alr
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
 
 static void Grp_ListGroupTypesForEdition (void);
-static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args);
+static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) const void *Args);
 static void Grp_PutIconToViewAndSelectMyGroups (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
@@ -128,7 +128,7 @@ static void Grp_ListGrpsOfATypeToEditAsgAttSvyEvtMch (Grp_WhichIsAssociatedToGrp
 						      long Cod,
 						      struct GroupType *GrpTyp);
 
-static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args);
+static void Grp_PutIconsMyGroups (__attribute__((unused)) const void *Args);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
 static Usr_Can_t Grp_ListGrpsForChangeMySelection (const struct GroupType *GrpTyp,
@@ -164,8 +164,8 @@ static void Grp_RemoveGroupTypeCompletely (long GrpTypCod);
 static void Grp_RemoveGroupCompletely (long GrpCod);
 
 static void Grp_WriteMaxStds (char Str[Cns_MAX_DIGITS_UINT + 1],unsigned MaxStudents);
-static void Grp_PutParGrpTypCod (void *GrpTypCod);
-static void Grp_PutParGrpCod (void *GrpCod);
+static void Grp_PutParGrpTypCod (const void *GrpTypCod);
+static void Grp_PutParGrpCod (const void *GrpCod);
 
 /*****************************************************************************/
 /**************** Reset data of a group type to default values ***************/
@@ -419,7 +419,7 @@ static void Grp_EditGroups (const struct GroupType *GrpTyp,
 /**************** Put contextual icons in edition of groups ******************/
 /*****************************************************************************/
 
-static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
+static void Grp_PutIconsEditingGroups (__attribute__((unused)) const void *Args)
   {
    /***** Icon to view and select my groups *****/
    Grp_PutIconToViewAndSelectMyGroups ();
@@ -430,7 +430,7 @@ static void Grp_PutIconsEditingGroups (__attribute__((unused)) void *Args)
 /*****************************************************************************/
 
 void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,
-				        void (*FuncPars) (void *Args),void *Args,
+				        void (*FuncPars) (const void *Args),const void *Args,
 				        const char *OnSubmit)
   {
    extern const char *Hlp_USERS_Groups;
@@ -1511,7 +1511,7 @@ static void Grp_ListGroupTypesForEdition (void)
 /************ Put contextual icons in edition of types of group **************/
 /*****************************************************************************/
 
-static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) void *Args)
+static void Grp_PutIconsEditingGroupTypes (__attribute__((unused)) const void *Args)
   {
    /***** Icon to view and select my groups *****/
    Grp_PutIconToViewAndSelectMyGroups ();
@@ -2030,7 +2030,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 /*************************** Put icon to edit groups *************************/
 /*****************************************************************************/
 
-static void Grp_PutIconsMyGroups (__attribute__((unused)) void *Args)
+static void Grp_PutIconsMyGroups (__attribute__((unused)) const void *Args)
   {
    if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM)
      {
@@ -4574,7 +4574,7 @@ void Grp_RenameGroup (void)
 /****************** Write parameter with code of group type ******************/
 /*****************************************************************************/
 
-static void Grp_PutParGrpTypCod (void *GrpTypCod)
+static void Grp_PutParGrpTypCod (const void *GrpTypCod)
   {
    if (GrpTypCod)
       ParCod_PutPar (ParCod_GrpTyp,*((long *) GrpTypCod));
@@ -4584,7 +4584,7 @@ static void Grp_PutParGrpTypCod (void *GrpTypCod)
 /********************* Write parameter with code of group ********************/
 /*****************************************************************************/
 
-static void Grp_PutParGrpCod (void *GrpCod)
+static void Grp_PutParGrpCod (const void *GrpCod)
   {
    if (GrpCod)
       ParCod_PutPar (ParCod_Grp,*((long *) GrpCod));
@@ -4695,7 +4695,7 @@ void Grp_PutParAllGroups (void)
 /************* Parameter to show only my groups or all groups ****************/
 /*****************************************************************************/
 
-void Grp_PutParMyAllGrps (void *MyAllGrps)
+void Grp_PutParMyAllGrps (const void *MyAllGrps)
   {
    if (MyAllGrps)
       Par_PutParUnsigned (NULL,"WhichGrps",
@@ -4717,7 +4717,7 @@ void Grp_PutParWhichGrpsAllGrps (void)
 /*****************************************************************************/
 
 void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
-                                 void (*FuncPars) (void *Args),void *Args)
+                                 void (*FuncPars) (const void *Args),const void *Args)
   {
    extern const char *Txt_GROUP_WHICH_GROUPS[Grp_NUM_MY_ALL_GROUPS];
    static const char *Icon[Grp_NUM_MY_ALL_GROUPS] =

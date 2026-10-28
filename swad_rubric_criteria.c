@@ -74,7 +74,7 @@ static const char *RubCri_ParValues[RubCri_NUM_VALUES] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void RubCri_PutParsOneCriterion (void *Rubrics);
+static void RubCri_PutParsOneCriterion (const void *Rubrics);
 
 static void RubCri_PutFormNewCriterion (struct Rub_Rubrics *Rubrics,
 				        unsigned MaxCriInd);
@@ -94,7 +94,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
                                                     MYSQL_RES *mysql_res);
 static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
                                                 Act_Action_t NextAction,
-                                                void (*FuncPars) (void *Args),void *Args,
+                                                void (*FuncPars) (const void *Args),const void *Args,
                                                 struct Rub_Node **TOS,
 					        unsigned NumCriteria,MYSQL_RES *mysql_res);
 static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
@@ -125,7 +125,7 @@ static void RubCri_ExchangeCriteria (long RubCod,
 /*************** Put parameter to edit one rubric criterion ******************/
 /*****************************************************************************/
 
-static void RubCri_PutParsOneCriterion (void *Rubrics)
+static void RubCri_PutParsOneCriterion (const void *Rubrics)
   {
    if (Rubrics)
      {
@@ -573,7 +573,7 @@ void RubCri_ListCriteriaForEdition (struct Rub_Rubrics *Rubrics)
 
 void RubCri_ListCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
 				Act_Action_t NextAction,
-                                void (*FuncPars) (void *Args),void *Args,
+                                void (*FuncPars) (const void *Args),const void *Args,
                                 long RubCod)
   {
    MYSQL_RES *mysql_res;
@@ -808,7 +808,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 
 static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFill,
                                                 Act_Action_t NextAction,
-                                                void (*FuncPars) (void *Args),void *Args,
+                                                void (*FuncPars) (const void *Args),const void *Args,
                                                 struct Rub_Node **TOS,
 					        unsigned NumCriteria,MYSQL_RES *mysql_res)
   {

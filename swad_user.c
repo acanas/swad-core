@@ -248,7 +248,7 @@ const char *Usr_ParUsrCod[Rol_NUM_ROLES] =
 /****************************** Private variables ****************************/
 /*****************************************************************************/
 
-static void (*Usr_FuncParsBigList) (void *Args);	// Used to pass pointer to function
+static void (*Usr_FuncParsBigList) (const void *Args);	// Used to pass pointer to function
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -270,7 +270,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void);
 
 static void Usr_SetMyPrefsAndRoles (void);
 static void Usr_PutLabelRole (void);
-static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args);
+static void Usr_PutLinkToLogOut (__attribute__((unused)) const void *Args);
 
 static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 				    Pho_ShowPhotos_t ShowPhotos);
@@ -292,9 +292,9 @@ static void Usr_GetGstsLst (Hie_Level_t HieLvl);
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
-                                                     void (*FuncPars) (void *Args),void *Args,
+                                                     void (*FuncPars) (const void *Args),const void *Args,
                                                      const char *OnSubmit);
-static void Usr_PutParsConfirmIWantToSeeBigList (void *Args);
+static void Usr_PutParsConfirmIWantToSeeBigList (const void *Args);
 
 static void Usr_BuildParName (char **ParName,
 			      const char *ParRoot,const char *ParSuffix);
@@ -303,7 +303,7 @@ static void Usr_AllocateListSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *S
 						      Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
-static void Usr_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
+static void Usr_FormToSelectUsrListType (void (*FuncPars) (const void *Args),const void *Args,
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
 					 Pho_ShowPhotos_t ShowPhotos);
@@ -334,9 +334,9 @@ static void Usr_ShowOneListUsrsAction (Usr_ListUsrsAction_t ListUsrsAction,
                                        const char *Label);
 static Usr_ListUsrsAction_t Usr_GetListUsrsAction (Usr_ListUsrsAction_t DefaultAction);
 
-static void Usr_PutIconsListGsts (void *ShowPhotos);
-static void Usr_PutIconsListStds (void *ShowPhotos);
-static void Usr_PutIconsListTchs (void *ListingPars);
+static void Usr_PutIconsListGsts (const void *ShowPhotos);
+static void Usr_PutIconsListStds (const void *ShowPhotos);
+static void Usr_PutIconsListTchs (const void *ListingPars);
 
 static void Usr_PutIconToPrintGsts (Pho_ShowPhotos_t ShowPhotos);
 static void Usr_PutIconToPrintStds (Pho_ShowPhotos_t ShowPhotos);
@@ -344,9 +344,9 @@ static void Usr_PutIconToPrintTchs (struct Usr_ListingPars *ListingPars);
 static void Usr_PutIconToShowGstsAllData (Pho_ShowPhotos_t ShowPhotos);
 static void Usr_PutIconToShowStdsAllData (Pho_ShowPhotos_t ShowPhotos);
 static void Usr_PutIconToShowTchsAllData (Pho_ShowPhotos_t ShowPhotos);
-static void Usr_ShowGstsAllDataPars (void *ShowPhotos);
-static void Usr_ShowStdsAllDataPars (void *ShowPhotos);
-static void Usr_ShowTchsAllDataPars (void *ListingPars);
+static void Usr_ShowGstsAllDataPars (const void *ShowPhotos);
+static void Usr_ShowStdsAllDataPars (const void *ShowPhotos);
+static void Usr_ShowTchsAllDataPars (const void *ListingPars);
 
 static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
@@ -1646,7 +1646,7 @@ unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *L
 /********* Put hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
-void Usr_PutParOtherUsrCodEncrypted (void *EncryptedUsrCod)
+void Usr_PutParOtherUsrCodEncrypted (const void *EncryptedUsrCod)
   {
    Usr_PutParUsrCodEncrypted ((const char *) EncryptedUsrCod);
   }
@@ -2229,7 +2229,7 @@ static void Usr_PutLabelRole (void)
 /************** Put an icon (form) to close the current session **************/
 /*****************************************************************************/
 
-static void Usr_PutLinkToLogOut (__attribute__((unused)) void *Args)
+static void Usr_PutLinkToLogOut (__attribute__((unused)) const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (ActLogOut,NULL,
 				  NULL,NULL,
@@ -3134,7 +3134,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 /*****************************************************************************/
 
 Lay_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
-				 void (*FuncPars) (void *Args),void *Args,
+				 void (*FuncPars) (const void *Args),const void *Args,
 				 const char *OnSubmit)
   {
    Lay_Show_t ShowBigList;
@@ -3158,7 +3158,7 @@ Lay_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
 /*****************************************************************************/
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
-                                                     void (*FuncPars) (void *Args),void *Args,
+                                                     void (*FuncPars) (const void *Args),const void *Args,
                                                      const char *OnSubmit)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
@@ -3172,7 +3172,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,
                            NumUsrs);
   }
 
-static void Usr_PutParsConfirmIWantToSeeBigList (void *Args)
+static void Usr_PutParsConfirmIWantToSeeBigList (const void *Args)
   {
    Grp_PutParsCodGrps ();
    Set_PutParsPrefsAboutUsrList ();
@@ -3747,7 +3747,7 @@ void Usr_FreeListOtherRecipients (void)
 /*************************** Selection of list type **************************/
 /*****************************************************************************/
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
+void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (const void *Args),const void *Args,
 				       const char *OnSubmit,
 				       Pho_ShowPhotos_t ShowPhotos)
   {
@@ -3790,7 +3790,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
 /************* Put a radio element to select a users' list type **************/
 /*****************************************************************************/
 
-static void Usr_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
+static void Usr_FormToSelectUsrListType (void (*FuncPars) (const void *Args),const void *Args,
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
 					 Pho_ShowPhotos_t ShowPhotos)
@@ -3830,7 +3830,7 @@ static void Usr_FormToSelectUsrListType (void (*FuncPars) (void *Args),void *Arg
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
-				       void (*FuncPars) (void *Args),void *Args,
+				       void (*FuncPars) (const void *Args),const void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        Btn_Button_t Button,
@@ -6028,7 +6028,7 @@ void Usr_DoActionOnUsrs2 (void)
 /***************** Put contextual icons in list of guests ********************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListGsts (void *ShowPhotos)
+static void Usr_PutIconsListGsts (const void *ShowPhotos)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
@@ -6056,7 +6056,7 @@ static void Usr_PutIconsListGsts (void *ShowPhotos)
 /**************** Put contextual icons in list of students *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListStds (void *ShowPhotos)
+static void Usr_PutIconsListStds (const void *ShowPhotos)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
@@ -6084,7 +6084,7 @@ static void Usr_PutIconsListStds (void *ShowPhotos)
 /**************** Put contextual icons in list of teachers *******************/
 /*****************************************************************************/
 
-static void Usr_PutIconsListTchs (void *ListingPars)
+static void Usr_PutIconsListTchs (const void *ListingPars)
   {
    switch (Gbl.Usrs.Me.ListType)
      {
@@ -6155,18 +6155,18 @@ static void Usr_PutIconToShowTchsAllData (Pho_ShowPhotos_t ShowPhotos)
 			          "table.svg",Ico_BLACK);
   }
 
-static void Usr_ShowGstsAllDataPars (void *ShowPhotos)
+static void Usr_ShowGstsAllDataPars (const void *ShowPhotos)
   {
    Set_PutParListWithPhotos (*(Pho_ShowPhotos_t *) ShowPhotos);
   }
 
-static void Usr_ShowStdsAllDataPars (void *ShowPhotos)
+static void Usr_ShowStdsAllDataPars (const void *ShowPhotos)
   {
    Grp_PutParsCodGrps ();
    Set_PutParListWithPhotos (*(Pho_ShowPhotos_t *) ShowPhotos);
   }
 
-static void Usr_ShowTchsAllDataPars (void *ListingPars)
+static void Usr_ShowTchsAllDataPars (const void *ListingPars)
   {
    Sco_PutParThisScope (&((struct Usr_ListingPars *) ListingPars)->HieLvl);
    Set_PutParListWithPhotos (((struct Usr_ListingPars *) ListingPars)->ShowPhotos);

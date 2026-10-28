@@ -52,15 +52,15 @@ struct MAC_Pars
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void MAC_PutPars (void *Args);
+static void MAC_PutPars (const void *Args);
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
-                                         void (*FuncPars) (void *Args),void *Args);
+                                         void (*FuncPars) (const void *Args),const void *Args);
 
 /*****************************************************************************/
 /**************** Put hidden parameters to edit a MAC address ****************/
 /*****************************************************************************/
 
-static void MAC_PutPars (void *Args)
+static void MAC_PutPars (const void *Args)
   {
    if (Args)
      {
@@ -74,7 +74,7 @@ static void MAC_PutPars (void *Args)
 /*****************************************************************************/
 
 static void MAC_PutFormToEditMACAddress (Act_Action_t NextAction,const char *Anchor,
-                                         void (*FuncPars) (void *Args),void *Args)
+                                         void (*FuncPars) (const void *Args),const void *Args)
   {
    /***** Form to enter a new MAC address *****/
    Frm_BeginFormAnchor (NextAction,Anchor);

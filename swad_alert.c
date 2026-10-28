@@ -292,7 +292,7 @@ static void Ale_ShowFixAlert (Ale_AlertType_t AlertType,const char *Txt)
 /*****************************************************************************/
 
 void Ale_ShowLastAlertAndButtonGo (Act_Action_t NextAction,
-                                   void (*FuncPars) (void *Args),void *Args,
+                                   void (*FuncPars) (const void *Args),const void *Args,
 				   const char *Where)
   {
    extern const char *Txt_Go_to_X_QUESTION;
@@ -332,7 +332,7 @@ void Ale_ShowLastAlertAndButtonBegin (void)
 /*****************************************************************************/
 
 void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
-                          void (*FuncPars) (void *Args),void *Args,
+                          void (*FuncPars) (const void *Args),const void *Args,
 			  const char *Txt,const char *Title)
   {
    Ale_ShowAlertAndButton (NextAction,Anchor,NULL,
@@ -346,7 +346,7 @@ void Ale_ShowAlertRemove (Act_Action_t NextAction,const char *Anchor,
 /*****************************************************************************/
 
 void Ale_ShowAlertAndButton (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit,
-                             void (*FuncPars) (void *Args),void *Args,
+                             void (*FuncPars) (const void *Args),const void *Args,
                              Btn_Button_t Button,
 			     Ale_AlertType_t AlertType,const char *fmt,...)
   {
@@ -492,7 +492,7 @@ static void Ale_ShowFixAlertAndButtonBegin (Ale_AlertType_t AlertType,const char
 
 void Ale_ShowAlertAndButtonEnd (Act_Action_t NextAction,
 				const char *Anchor,const char *OnSubmit,
-                                void (*FuncPars) (void *Args),void *Args,
+                                void (*FuncPars) (const void *Args),const void *Args,
                                 Btn_Button_t Button)
   {
       /***** Optional button *****/

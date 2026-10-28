@@ -54,7 +54,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Coo_PutIconsCookies (__attribute__((unused)) void *Args);
+static void Coo_PutIconsCookies (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /************* Get if accept or refuse from a 'Y'/'N' character ***************/
@@ -131,7 +131,7 @@ void Coo_EditMyPrefsOnCookies (void)
 /***************** Put contextual icons in cookies preference ****************/
 /*****************************************************************************/
 
-static void Coo_PutIconsCookies (__attribute__((unused)) void *Args)
+static void Coo_PutIconsCookies (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_COOKIES);

@@ -75,12 +75,12 @@ static struct Hie_Node *Ctr_EditingCtr = NULL;	// Static variable to keep the ce
 /*****************************************************************************/
 
 static void Ctr_ListCtrs (void);
-static void Ctr_PutIconsListingCtrs (__attribute__((unused)) void *Args);
+static void Ctr_PutIconsListingCtrs (__attribute__((unused)) const void *Args);
 static void Ctr_PutIconToEditCtrs (void);
 static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr);
 
 static void Ctr_EditCtrsInternal (void);
-static void Ctr_PutIconsEditingCtrs (__attribute__((unused)) void *Args);
+static void Ctr_PutIconsEditingCtrs (__attribute__((unused)) const void *Args);
 
 static void Ctr_GetFullListOfCtrsInThisIns (void);
 static void Ctr_GetCtrDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Ctr,
@@ -103,7 +103,7 @@ static void Ctr_EditingCtrDestructor (void);
 
 static void Ctr_FormToGoToMap (struct Hie_Node *Ctr);
 
-static void Ctr_PutParCtrCod (void *CtrCod);
+static void Ctr_PutParCtrCod (const void *CtrCod);
 
 /*****************************************************************************/
 /******************* List centers with pending degrees ***********************/
@@ -285,7 +285,7 @@ static void Ctr_ListCtrs (void)
 /***************** Put contextual icons in list of centers *******************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsListingCtrs (__attribute__((unused)) void *Args)
+static void Ctr_PutIconsListingCtrs (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit centers *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
@@ -447,7 +447,7 @@ static void Ctr_EditCtrsInternal (void)
 /**************** Put contextual icons in edition of centers *****************/
 /*****************************************************************************/
 
-static void Ctr_PutIconsEditingCtrs (__attribute__((unused)) void *Args)
+static void Ctr_PutIconsEditingCtrs (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view centers *****/
    Ico_PutContextualIconToView (ActSeeCtr,NULL,NULL,NULL);
@@ -1650,7 +1650,7 @@ static void Ctr_FormToGoToMap (struct Hie_Node *Ctr)
 /******************** Write parameter with code of center ********************/
 /*****************************************************************************/
 
-static void Ctr_PutParCtrCod (void *CtrCod)
+static void Ctr_PutParCtrCod (const void *CtrCod)
   {
    if (CtrCod)
       ParCod_PutPar (ParCod_Ctr,*((long *) CtrCod));

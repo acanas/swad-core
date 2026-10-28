@@ -36,7 +36,7 @@
 
 void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 			   Hie_Level_t HieLvl,unsigned AllowedLvls);
-void Sco_PutParThisScope (void *HieLvl);
+void Sco_PutParThisScope (const void *HieLvl);
 void Sco_PutParScope (const char *ParName,Hie_Level_t HieLvl);
 Hie_Level_t Sco_GetScope (const char *ParName,
 			  Hie_Level_t DefaultHieLvl,unsigned AllowedLvls);

@@ -96,12 +96,12 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
 static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
                                        Agd_AgendaType_t AgendaType);
 
-static void Agd_PutIconsMyFullAgenda (void *Agenda);
-static void Agd_PutIconsMyPublicAgenda (void *EncryptedUsrCod);
-static void Agd_PutIconToCreateNewEvent (void *Agenda);
-static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod);
+static void Agd_PutIconsMyFullAgenda (const void *Agenda);
+static void Agd_PutIconsMyPublicAgenda (const void *EncryptedUsrCod);
+static void Agd_PutIconToCreateNewEvent (const void *Agenda);
+static void Agd_PutIconToViewEditMyFullAgenda (const void *EncryptedUsrCod);
 static void Agd_PutIconToShowQR (void);
-static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod);
+static void Agd_PutIconsOtherPublicAgenda (const void *EncryptedUsrCod);
 
 static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
                               Agd_AgendaType_t AgendaType,long AgdCod);
@@ -110,9 +110,8 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
                                            struct Agd_Event *AgdEvent,
                                            const char *Anchor);
 
-static void Agd_PutCurrentParsMyAgenda (void *Agenda);
-static void Agd_GetPars (struct Agd_Agenda *Agenda,
-                           Agd_AgendaType_t AgendaType);
+static void Agd_PutCurrentParsMyAgenda (const void *Agenda);
+static void Agd_GetPars (struct Agd_Agenda *Agenda,Agd_AgendaType_t AgendaType);
 
 static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
                                Agd_AgendaType_t AgendaType);
@@ -402,7 +401,7 @@ void Agd_ShowUsrAgenda (void)
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
    char *Title;
-   static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (void *EncryptedUsrCod) =
+   static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (const void *EncryptedUsrCod) =
      {
       [Usr_ME   ] = Agd_PutIconsMyPublicAgenda,
       [Usr_OTHER] = Agd_PutIconsOtherPublicAgenda,
@@ -463,7 +462,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    struct Agd_Agenda Agenda;
    Usr_MeOrOther_t MeOrOther;
    char *Title;
-   static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (void *EncryptedUsrCod) =
+   static void (*FuncPutIcons[Usr_NUM_ME_OR_OTHER]) (const void *EncryptedUsrCod) =
      {
       [Usr_ME   ] = Agd_PutIconToViewEditMyFullAgenda,
       [Usr_OTHER] = Agd_PutIconsOtherPublicAgenda,
@@ -700,7 +699,7 @@ static void Agd_WriteHeaderListEvents (const struct Agd_Agenda *Agenda,
 /********************** Put contextual icons in agenda ***********************/
 /*****************************************************************************/
 
-static void Agd_PutIconsMyFullAgenda (void *Agenda)
+static void Agd_PutIconsMyFullAgenda (const void *Agenda)
   {
    /***** Put icon to create a new event *****/
    Agd_PutIconToCreateNewEvent (Agenda);
@@ -709,7 +708,7 @@ static void Agd_PutIconsMyFullAgenda (void *Agenda)
    Agd_PutIconToShowQR ();
   }
 
-static void Agd_PutIconsMyPublicAgenda (void *EncryptedUsrCod)
+static void Agd_PutIconsMyPublicAgenda (const void *EncryptedUsrCod)
   {
    /***** Put icon to view/edit my full agenda *****/
    Agd_PutIconToViewEditMyFullAgenda (EncryptedUsrCod);
@@ -718,14 +717,14 @@ static void Agd_PutIconsMyPublicAgenda (void *EncryptedUsrCod)
    Agd_PutIconToShowQR ();
   }
 
-static void Agd_PutIconToCreateNewEvent (void *Agenda)
+static void Agd_PutIconToCreateNewEvent (const void *Agenda)
   {
    ((struct Agd_Agenda *) Agenda)->AgdCodToEdit = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewEvtMyAgd,NULL,
 			       Agd_PutCurrentParsMyAgenda,Agenda);
   }
 
-static void Agd_PutIconToViewEditMyFullAgenda (void *EncryptedUsrCod)
+static void Agd_PutIconToViewEditMyFullAgenda (const void *EncryptedUsrCod)
   {
    Ico_PutContextualIconToEdit (ActSeeMyAgd,NULL,NULL,EncryptedUsrCod);
   }
@@ -742,7 +741,7 @@ static void Agd_PutIconToShowQR (void)
                             QR_PutParQRString,URL);
   }
 
-static void Agd_PutIconsOtherPublicAgenda (void *EncryptedUsrCod)
+static void Agd_PutIconsOtherPublicAgenda (const void *EncryptedUsrCod)
   {
    /***** Button to view user's public profile *****/
    if (Pri_CheckIfICanView (Gbl.Usrs.Other.UsrDat.BaPrfVisibility,
@@ -926,7 +925,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
 /****************** Parameters passed in my agenda forms *********************/
 /*****************************************************************************/
 
-static void Agd_PutCurrentParsMyAgenda (void *Agenda)
+static void Agd_PutCurrentParsMyAgenda (const void *Agenda)
   {
    if (Agenda)
       Agd_PutParsMyAgenda (((struct Agd_Agenda *) Agenda)->Past__FutureEvents,
@@ -973,8 +972,7 @@ void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
 /********** Get parameter with the type or order in list of events ***********/
 /*****************************************************************************/
 
-static void Agd_GetPars (struct Agd_Agenda *Agenda,
-                           Agd_AgendaType_t AgendaType)
+static void Agd_GetPars (struct Agd_Agenda *Agenda,Agd_AgendaType_t AgendaType)
   {
    static Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {

@@ -186,7 +186,7 @@ struct Mnu_Menu Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args);
+static void Mnu_PutIconsMenu (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /***** Get icon associated to a number of option in menu of current tab ******/
@@ -347,7 +347,7 @@ void Mnu_PutIconsToSelectMenu (void)
 /******************* Put contextual icons in menu setting ********************/
 /*****************************************************************************/
 
-static void Mnu_PutIconsMenu (__attribute__((unused)) void *Args)
+static void Mnu_PutIconsMenu (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_MENUS);

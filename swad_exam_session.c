@@ -106,7 +106,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 				         unsigned NumUsr,struct Usr_Data *UsrDat);
 static void ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_USRS_NUM_OPTIONS]);
 
-static void ExaSes_PutIconsInListOfSessions (void *Exams);
+static void ExaSes_PutIconsInListOfSessions (const void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
 
 static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
@@ -154,7 +154,7 @@ static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
 				   Usr_Can_t ICanChangeModality);
-static void ExaSes_ParsFormSession (void *Session);
+static void ExaSes_ParsFormSession (const void *Session);
 
 static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 					 Usr_Can_t ICanChangeModality);
@@ -799,7 +799,7 @@ void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session)
 /***************** Put icons in list of sessions of an exam ******************/
 /*****************************************************************************/
 
-static void ExaSes_PutIconsInListOfSessions (void *Exams)
+static void ExaSes_PutIconsInListOfSessions (const void *Exams)
   {
    if (Exams)
       if (ExaSes_CheckIfICanEditSessions () == Usr_CAN)
@@ -1746,7 +1746,7 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
    HTM_SECTION_End ();
   }
 
-static void ExaSes_ParsFormSession (void *Session)
+static void ExaSes_ParsFormSession (const void *Session)
   {
    ParCod_PutPar (ParCod_Exa,((struct ExaSes_Session *) Session)->ExaCod);
    ParCod_PutPar (ParCod_Ses,((struct ExaSes_Session *) Session)->SesCod);

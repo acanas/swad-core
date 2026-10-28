@@ -322,9 +322,9 @@ static void For_RemoveThreadAndItsPsts (long ThrCod);
 
 static time_t For_GetThrReadTime (long ThrCod);
 
-static void For_PutIconsOneThread (void *Forums);
+static void For_PutIconsOneThread (const void *Forums);
 
-static void For_PutParsNewPost (void *Forums);
+static void For_PutParsNewPost (const void *Forums);
 
 static void For_ShowAForumPost (struct For_Forums *Forums,
 	                        unsigned PstNum,
@@ -337,11 +337,11 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             struct Med_Media *Media);
 static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod);
 
-static void For_PutParsForum (void *Forums);
+static void For_PutParsForum (const void *Forums);
 
 static void For_PutParForumSet (For_ForumSet_t ForumSet);
 
-static void For_PutIconsForums (__attribute__((unused)) void *Args);
+static void For_PutIconsForums (__attribute__((unused)) const void *Args);
 static void For_PutFormWhichForums (const struct For_Forums *Forums);
 
 static void For_WriteLinksToGblForums (const struct For_Forums *Forums,
@@ -371,8 +371,8 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 
 static void For_WriteNumberOfThrs (unsigned NumThrs);
 
-static void For_PutIconsThreads (void *Forums);
-static void For_PutParsNewThread (void *Forums);
+static void For_PutIconsThreads (const void *Forums);
+static void For_PutParsNewThread (const void *Forums);
 static void For_ListForumThrs (struct For_Forums *Forums,
 	                       long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
@@ -389,7 +389,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
                                    For_FirstOrReply_t FirstOrReply,
                                    const char *Subject);
 
-static void For_PutParsRemThread (void *Forums);
+static void For_PutParsRemThread (const void *Forums);
 
 static Usr_Can_t For_CheckIfICanMoveThreads (void);
 static void For_InsertThrInClipboard (long ThrCod);
@@ -881,7 +881,7 @@ void For_ShowPostsOfAThread (struct For_Forums *Forums,
 /*********************** Put icon to write a new post ************************/
 /*****************************************************************************/
 
-static void For_PutIconsOneThread (void *Forums)
+static void For_PutIconsOneThread (const void *Forums)
   {
    if (Forums)
      {
@@ -897,7 +897,7 @@ static void For_PutIconsOneThread (void *Forums)
      }
   }
 
-static void For_PutParsNewPost (void *Forums)
+static void For_PutParsNewPost (const void *Forums)
   {
    if (Forums)
       For_PutAllParsForum (((struct For_Forums *) Forums)->ThisPageThrs,	// Page of threads = current
@@ -1188,7 +1188,7 @@ static void For_WriteNumberOfPosts (const struct For_Forums *Forums,long UsrCod)
 /************** Put all hidden parameters related to forums ******************/
 /*****************************************************************************/
 
-static void For_PutParsForum (void *Forums)
+static void For_PutParsForum (const void *Forums)
   {
    if (Forums)
       For_PutAllParsForum (((struct For_Forums *) Forums)->ThisPageThrs,	// Page of threads = current
@@ -1433,7 +1433,7 @@ void For_ShowForumList (struct For_Forums *Forums)
 /********************** Put contextual icons in forums ***********************/
 /*****************************************************************************/
 
-static void For_PutIconsForums (__attribute__((unused)) void *Args)
+static void For_PutIconsForums (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_FORUMS);
@@ -2207,7 +2207,7 @@ void For_ShowForumThreadsHighlightingOneThread (struct For_Forums *Forums,
 /***************** Put icons in list of threads of a forum *******************/
 /*****************************************************************************/
 
-static void For_PutIconsThreads (void *Forums)
+static void For_PutIconsThreads (const void *Forums)
   {
    if (Forums)
      {
@@ -2223,7 +2223,7 @@ static void For_PutIconsThreads (void *Forums)
      }
   }
 
-static void For_PutParsNewThread (void *Forums)
+static void For_PutParsNewThread (const void *Forums)
   {
    if (Forums)
       For_PutAllParsForum (1,	// Page of threads = first
@@ -2892,7 +2892,7 @@ static void For_WriteFormForumPst (struct For_Forums *Forums,
       [For_FIRST_POST_IN_THREAD ] = For_ActionsRecThrFor,	// Write the first post of a new thread
       [For_REPLY_TO_ANOTHER_POST] = For_ActionsRecRepFor,	// Write a reply to a post of an existing thread
      };
-   static void (*PutPars [For_NUM_FIRST_OR_REPLY]) (void *Forums) =
+   static void (*PutPars [For_NUM_FIRST_OR_REPLY]) (const void *Forums) =
      {
       [For_FIRST_POST_IN_THREAD ] = For_PutParsNewThread,
       [For_REPLY_TO_ANOTHER_POST] = For_PutParsNewPost,
@@ -3203,7 +3203,7 @@ void For_ReqRemThread (void)
    For_ShowForumThreadsHighlightingOneThread (&Forums,Ale_SUCCESS,NULL);
   }
 
-static void For_PutParsRemThread (void *Forums)
+static void For_PutParsRemThread (const void *Forums)
   {
    if (Forums)
       For_PutAllParsForum (((struct For_Forums *) Forums)->ThisPageThrs,	// Page of threads = current

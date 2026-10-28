@@ -234,7 +234,7 @@ static Usr_Can_t Prj_CheckIfICanCreatePrjs (const struct Prj_Projects *Prjs);
 static void Prj_PutIconToCreateNewPrj (struct Prj_Projects *Prjs);
 static void Prj_PutIconToShowAllData (struct Prj_Projects *Prjs);
 
-static void Prj_PutIconsOnePrj (void *Prjs);
+static void Prj_PutIconsOnePrj (const void *Prjs);
 
 //---------------------- Show one project in a row ----------------------------
 static void Prj_ShowPrjRow (struct Prj_Projects *Prjs);
@@ -311,7 +311,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj);
 
 static Prj_Order_t Prj_GetParPrjOrder (void);
 
-static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Prjs,
+static void Prj_PutIconsToRemEditOnePrj (const struct Prj_Projects *Prjs,
                                          const char *Anchor);
 
 static Usr_Can_t Prj_CheckIfICanEditPrj (const struct Prj_Project *Prj);
@@ -959,7 +959,7 @@ static Usr_Can_t Prj_CheckIfICanViewPrjFiles (long PrjCod)
       case Rol_STD:
       case Rol_NET:
 	 return Prj_GetMyRolesInPrj (PrjCod) ? Usr_CAN :	// Am I a member?
-						   Usr_CAN_NOT;
+					       Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
 	 return Usr_CAN;
@@ -979,7 +979,7 @@ Usr_Can_t Prj_CheckIfICanViewPrjDocs (long PrjCod)
       case Rol_STD:
       case Rol_NET:
 	 return Prj_GetMyRolesInPrj (PrjCod) ? Usr_CAN :	// Am I a member?
-						   Usr_CAN_NOT;
+					       Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return Usr_CAN;
@@ -998,9 +998,9 @@ Usr_Can_t Prj_CheckIfICanViewPrjAss (long PrjCod)
      {
       case Rol_STD:
       case Rol_NET:
-	 return ((Prj_GetMyRolesInPrj (PrjCod) & (1 << Prj_ROLE_TUT |		// Tutor...
-	                                              1 << Prj_ROLE_EVL))) ? Usr_CAN :	// ...or evaluator
-	                                        			     Usr_CAN_NOT;
+	 return ((Prj_GetMyRolesInPrj (PrjCod) & (1 << Prj_ROLE_TUT |			// Tutor...
+	                                          1 << Prj_ROLE_EVL))) ? Usr_CAN :	// ...or evaluator
+	                                        			 Usr_CAN_NOT;
       case Rol_TCH:	// Editing teachers in a course can access to all files
       case Rol_SYS_ADM:
          return Usr_CAN;
@@ -1013,7 +1013,7 @@ Usr_Can_t Prj_CheckIfICanViewPrjAss (long PrjCod)
 /********************** Put parameters used in projects **********************/
 /*****************************************************************************/
 
-void Prj_PutCurrentPars (void *Prjs)
+void Prj_PutCurrentPars (const void *Prjs)
   {
    if (Prjs)
       Prj_PutPars (&((struct Prj_Projects *) Prjs)->Filter,
@@ -1359,7 +1359,7 @@ static Usr_Can_t Prj_CheckIfICanCreatePrjs (const struct Prj_Projects *Prjs)
 /***************** Put contextual icons in list of projects ******************/
 /*****************************************************************************/
 
-void Prj_PutIconsListPrjs (void *Prjs)
+void Prj_PutIconsListPrjs (const void *Prjs)
   {
    Usr_Can_t ICanConfigAllProjects;
 
@@ -1487,7 +1487,7 @@ void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs)
 /****************** Put contextual icons in an assignment ********************/
 /*****************************************************************************/
 
-static void Prj_PutIconsOnePrj (void *Prjs)
+static void Prj_PutIconsOnePrj (const void *Prjs)
   {
    char *Anchor = NULL;
 
@@ -1631,12 +1631,6 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
   {
    extern const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
-   static Act_Action_t NextActions[Usr_NUM_CAN] =
-     {
-      [Usr_CAN_NOT] = ActSeeOnePrj,
-      [Usr_CAN    ] = ActAdmDocPrj,
-     };
-   Act_Action_t NextAction;
    char *Id;
 
    /***** Write first row of data of this project *****/
@@ -1743,10 +1737,12 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
 	 HTM_ARTICLE_Begin (Anchor);
 	    if (Prjs->Prj.Title[0])
 	      {
-	       NextAction = NextActions[Prj_CheckIfICanViewPrjFiles (Prjs->Prj.PrjCod)];
-	       Frm_BeginForm (NextAction);
+	       // NextAction = NextActions[Prj_CheckIfICanViewPrjFiles (Prjs->Prj.PrjCod)];
+	       // Frm_BeginForm (NextAction);
+	       Frm_BeginForm (ActSeeOnePrj);
 		  Prj_PutCurrentPars (Prjs);
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),NULL,
+		  // HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),NULL,
+		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOnePrj),NULL,
 					   "class=\"LT BT_LINK %s_%s\"",
 					   HidVis_TitleClass[Prjs->Prj.Hidden],
 					   The_GetSuffix ());
@@ -3344,7 +3340,7 @@ static Prj_Order_t Prj_GetParPrjOrder (void)
 /****************** Put a link (form) to edit one project ********************/
 /*****************************************************************************/
 
-static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Prjs,
+static void Prj_PutIconsToRemEditOnePrj (const struct Prj_Projects *Prjs,
                                          const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -3369,10 +3365,14 @@ static void Prj_PutIconsToRemEditOnePrj (struct Prj_Projects *Prjs,
 				   Prj_PutCurrentPars,Prjs);
      }
 
-   /***** Icon to admin project documents *****/
    if (Prj_CheckIfICanViewPrjFiles (Prjs->Prj.PrjCod) == Usr_CAN)
-      Ico_PutContextualIconToViewFiles (ActAdmDocPrj,
+     {
+      /***** Icon to admin project documents *****/
+      Ico_PutContextualIconToViewFiles (ActSeeOnePrj,
                                         Prj_PutCurrentPars,Prjs);
+
+      // Brw_PutIconToViewClipboard (FileBrowser);	// TODO: Icon to view clipboard
+     }
 
    /***** Icon to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentPars,Prjs);

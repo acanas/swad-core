@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Fol_PutIconsWhoToFollow (__attribute__((unused)) void *Args);
+static void Fol_PutIconsWhoToFollow (__attribute__((unused)) const void *Args);
 static void Fol_PutIconToUpdateWhoToFollow (void);
 
 static void Fol_ShowNumberOfFollowingOrFollowers (const struct Usr_Data *UsrDat,
@@ -83,7 +83,7 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
 
 static void Fol_RequestFollowUsrs (Act_Action_t NextAction);
 static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction);
-static void Fol_PutParSelectedUsrsCods (void *SelectedUsrs);
+static void Fol_PutParSelectedUsrsCods (const void *SelectedUsrs);
 static void Fol_GetFollowedFromSelectedUsrs (unsigned *NumFollowed,
                                              unsigned *NumNotFollowed);
 
@@ -232,7 +232,7 @@ void Fol_SuggestUsrsToFollowOnRightColumn (void)
 /****************** Put contextual icons in "who to follow" ******************/
 /*****************************************************************************/
 
-static void Fol_PutIconsWhoToFollow (__attribute__((unused)) void *Args)
+static void Fol_PutIconsWhoToFollow (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to update who to follow *****/
    Fol_PutIconToUpdateWhoToFollow ();
@@ -939,7 +939,7 @@ static void Fol_RequestUnfollowUsrs (Act_Action_t NextAction)
    Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
   }
 
-static void Fol_PutParSelectedUsrsCods (void *SelectedUsrs)
+static void Fol_PutParSelectedUsrsCods (const void *SelectedUsrs)
   {
    if (SelectedUsrs)
       Usr_PutParSelectedUsrsCods ((struct Usr_SelectedUsrs *) SelectedUsrs);

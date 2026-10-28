@@ -50,7 +50,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 void Exa_ShowOnlyOneExamEnd (void);
 
 void Exa_SetCurrentExaCod (long ExaCod);
-void Exa_PutPars (void *Exams);
+void Exa_PutPars (const void *Exams);
 void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod);
 
 void Exa_GetListExams (struct Exa_Exams *Exams,Exa_Order_t SelectedOrder);

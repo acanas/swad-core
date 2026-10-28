@@ -57,7 +57,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void SysCfg_Configuration (Vie_ViewType_t ViewType);
-static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args);
+static void SysCfg_PutIconToPrint (__attribute__((unused)) const void *Args);
 static void SysCfg_Map (void);
 static void SysCfg_Platform (void);
 static void SysCfg_NumCtys (void);
@@ -178,7 +178,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
 /************* Put icon to print the configuration of a country **************/
 /*****************************************************************************/
 
-static void SysCfg_PutIconToPrint (__attribute__((unused)) void *Args)
+static void SysCfg_PutIconToPrint (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToPrint (ActPrnSysInf,NULL,NULL);
   }

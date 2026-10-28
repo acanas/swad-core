@@ -75,13 +75,13 @@ static struct Hie_Node *Ins_EditingIns = NULL;	// Static variable to keep the in
 /*****************************************************************************/
 
 static void Ins_ListInss (void);
-static void Ins_PutIconsListingInss (__attribute__((unused)) void *Args);
+static void Ins_PutIconsListingInss (__attribute__((unused)) const void *Args);
 static void Ins_PutIconToEditInss (void);
 static void Ins_ListOneInsForSeeing (struct Hie_Node *Ins,unsigned NumIns);
 static void Ins_PutHeadInssForSeeing (Hie_OrderSelectable_t OrderSelectable);
 
 static void Ins_EditInssInternal (void);
-static void Ins_PutIconsEditingInss (__attribute__((unused)) void *Args);
+static void Ins_PutIconsEditingInss (__attribute__((unused)) const void *Args);
 
 static void Ins_GetInsDataFromRow (MYSQL_RES *mysql_res,
                                    struct Hie_Node *Ins,
@@ -352,7 +352,7 @@ static void Ins_ListInss (void)
 /*************** Put contextual icons in list of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsListingInss (__attribute__((unused)) void *Args)
+static void Ins_PutIconsListingInss (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit institutions *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
@@ -563,7 +563,7 @@ static void Ins_EditInssInternal (void)
 /************ Put contextual icons in edition of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsEditingInss (__attribute__((unused)) void *Args)
+static void Ins_PutIconsEditingInss (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view institutions *****/
    Ico_PutContextualIconToView (ActSeeIns,NULL,NULL,NULL);
@@ -1613,7 +1613,7 @@ static void Ins_FormToGoToMap (struct Hie_Node *Ins)
 /***************** Write parameter with code of institution ******************/
 /*****************************************************************************/
 
-void Ins_PutParInsCod (void *InsCod)
+void Ins_PutParInsCod (const void *InsCod)
   {
    if (InsCod)
       ParCod_PutPar (ParCod_Ins,*((long *) InsCod));

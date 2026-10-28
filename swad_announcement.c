@@ -51,7 +51,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args);
+static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) const void *Args);
 
 static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
                                             struct Ann_Announcement *Announcement);
@@ -59,7 +59,7 @@ static void Ann_GetAnnouncementDataFromRow (MYSQL_RES *mysql_res,
 static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
                                     Lay_Show_t ShowAll,
                                     Usr_Can_t ICanEdit);
-static void Ann_PutParAnnCod (void *AnnCod);
+static void Ann_PutParAnnCod (const void *AnnCod);
 static void Ann_PutSubjectMessage (const char *Field,const char *Label,
                                    unsigned Rows);
 
@@ -126,7 +126,7 @@ void Ann_ShowAllAnnouncements (void)
 /******************** Put icon to add a new announcement *********************/
 /*****************************************************************************/
 
-static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) void *Args)
+static void Ann_PutIconToAddNewAnnouncement (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToAdd (ActWriAnn,NULL,NULL,NULL);
   }
@@ -295,7 +295,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Ann_PutParAnnCod (void *AnnCod)
+static void Ann_PutParAnnCod (const void *AnnCod)
   {
    if (AnnCod)
       ParCod_PutPar (ParCod_Ann,*((long *) AnnCod));

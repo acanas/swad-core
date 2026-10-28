@@ -74,9 +74,9 @@ const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES] = // ISO 639-1 language codes
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args);
+static void Lan_PutIconsLanguage (__attribute__((unused)) const void *Args);
 
-static void Lan_PutParLanguage (void *Language);
+static void Lan_PutParLanguage (const void *Language);
 
 /*****************************************************************************/
 /*************** Put link to change language (edit settings) *****************/
@@ -109,7 +109,7 @@ void Lan_PutBoxToSelectLanguage (void)
 /**************** Put contextual icons in language setting *******************/
 /*****************************************************************************/
 
-static void Lan_PutIconsLanguage (__attribute__((unused)) void *Args)
+static void Lan_PutIconsLanguage (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_LANGUAGES);
@@ -171,7 +171,7 @@ void Lan_AskChangeLanguage (void)
 /******************************* Change language *****************************/
 /*****************************************************************************/
 
-static void Lan_PutParLanguage (void *Language)
+static void Lan_PutParLanguage (const void *Language)
   {
    if (Language)
       Par_PutParUnsigned (NULL,"Lan",(unsigned) *((Lan_Language_t *) Language));

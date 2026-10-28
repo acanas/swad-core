@@ -74,7 +74,7 @@ static char ZIP_TmpDir[NAME_MAX + 1];
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void ZIP_PutLinkToCreateZIPAsgWrkPars (void *FileBrowser);
+static void ZIP_PutLinkToCreateZIPAsgWrkPars (const void *FileBrowser);
 
 static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat);
@@ -100,7 +100,7 @@ void ZIP_PutIconToCreateZIPAsgWrk (struct Brw_FileBrowser *FileBrowser)
 				     "download.svg",Ico_BLACK);
   }
 
-static void ZIP_PutLinkToCreateZIPAsgWrkPars (void *FileBrowser)
+static void ZIP_PutLinkToCreateZIPAsgWrkPars (const void *FileBrowser)
   {
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Brw_PutParWhichFiles (&(((struct Brw_FileBrowser *) FileBrowser)->WhichFiles));

@@ -455,7 +455,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
+void Qst_PutIconsRequestBankQsts (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to create a new test question *****/
    Ico_PutContextualIconToAdd (ActEdiOneTstQst,NULL,NULL,NULL);
@@ -474,7 +474,7 @@ void Qst_PutIconsRequestBankQsts (__attribute__((unused)) void *Args)
 /********************* Put contextual icons in tests *************************/
 /*****************************************************************************/
 
-void Qst_PutIconsEditBankQsts (void *Questions)
+void Qst_PutIconsEditBankQsts (const void *Qsts)
   {
    /***** Put form to remove selected test questions *****/
    switch (Gbl.Action.Act)
@@ -486,7 +486,7 @@ void Qst_PutIconsEditBankQsts (void *Questions)
       case ActRemOneTstQst:	// Remove a question
       case ActChgShfTstQst:	// Change shuffle of a question
 	 Ico_PutContextualIconToRemove (ActReqRemSevTstQst,NULL,
-					Qst_PutParsEditQst,Questions);
+					Qst_PutParsEditQst,Qsts);
 	 break;
       default:
 	 break;
@@ -500,7 +500,7 @@ void Qst_PutIconsEditBankQsts (void *Questions)
    Tag_PutIconToEditTags ();
 
    /***** Put icon to export questions *****/
-   QstImp_PutIconToExportQuestions (Questions);
+   QstImp_PutIconToExportQuestions (Qsts);
 
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_TESTS);
@@ -1293,26 +1293,26 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,struct Qst_Question *Qst)
 /************ Put hidden parameters for edition of test questions ************/
 /*****************************************************************************/
 
-void Qst_PutParsEditQst (void *Questions)
+void Qst_PutParsEditQst (const void *Qsts)
   {
-   if (Questions)
+   if (Qsts)
      {
       Par_PutParChar ("AllTags",
-	              ((struct Qst_Questions *) Questions)->Tags.All ? 'Y' :
+	              ((struct Qst_Questions *) Qsts)->Tags.All ? 'Y' :
 					                               'N');
 
-      if (((struct Qst_Questions *) Questions)->Tags.NumSelected)
+      if (((struct Qst_Questions *) Qsts)->Tags.NumSelected)
          Par_PutParListOfCodes ("ChkTag",
-				((struct Qst_Questions *) Questions)->Tags.ListSelectedTagCods,
-				((struct Qst_Questions *) Questions)->Tags.NumSelected);
+				((struct Qst_Questions *) Qsts)->Tags.ListSelectedTagCods,
+				((struct Qst_Questions *) Qsts)->Tags.NumSelected);
 
       Par_PutParChar ("AllAnsTypes",
-	              ((struct Qst_Questions *) Questions)->AnswerTypes.All ? 'Y' :
+	              ((struct Qst_Questions *) Qsts)->AnswerTypes.All ? 'Y' :
 								              'N');
       Par_PutParString (NULL,"AnswerType",
-	                ((struct Qst_Questions *) Questions)->AnswerTypes.List);
+	                ((struct Qst_Questions *) Qsts)->AnswerTypes.List);
 
-      ParCod_PutPar (ParCod_Qst,((struct Qst_Questions *) Questions)->Qst.QstCod);
+      ParCod_PutPar (ParCod_Qst,((struct Qst_Questions *) Qsts)->Qst.QstCod);
       // if (Test->NumQsts == 1)
       //    Par_PutParChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
       Dat_WriteParsIniEndDates ();
@@ -2621,7 +2621,7 @@ void Qst_RemoveSelectedQsts (void)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-void Qst_PutIconToRemoveOneQst (void *QstCod)
+void Qst_PutIconToRemoveOneQst (const void *QstCod)
   {
    Ico_PutContextualIconToRemove (ActReqRemOneTstQst,NULL,
                                   Qst_PutParsRemoveOnlyThisQst,QstCod);
@@ -2678,7 +2678,7 @@ void Qst_ReqRemOneQst (void)
 /***** Put parameters to remove question when editing only one question ******/
 /*****************************************************************************/
 
-void Qst_PutParsRemoveOnlyThisQst (void *QstCod)
+void Qst_PutParsRemoveOnlyThisQst (const void *QstCod)
   {
    if (QstCod)
      {
@@ -2786,7 +2786,7 @@ void Qst_ChangeShuffleQst (void)
 /************ Put parameter with question code to edit, remove... ************/
 /*****************************************************************************/
 
-void Qst_PutParQstCod (void *QstCod)	// Should be a pointer to long
+void Qst_PutParQstCod (const void *QstCod)	// Should be a pointer to long
   {
    if (QstCod)
       ParCod_PutPar (ParCod_Qst,*((long *) QstCod));

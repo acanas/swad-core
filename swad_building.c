@@ -61,9 +61,9 @@ static struct Bld_Building *Bld_EditingBuilding = NULL;	// Static variable to ke
 
 static Bld_Order_t Bld_GetParBuildingOrder (void);
 static Usr_Can_t Bld_CheckIfICanCreateBuildings (void);
-static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args);
+static void Bld_PutIconsListingBuildings (__attribute__((unused)) const void *Args);
 static void Bld_PutIconToEditBuildings (void);
-static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args);
+static void Bld_PutIconsEditingBuildings (__attribute__((unused)) const void *Args);
 
 static void Bld_EditBuildingsInternal (void);
 
@@ -72,7 +72,7 @@ static void Bld_GetBuildingDataFromRow (MYSQL_RES *mysql_res,
                                         Bld_WhichData_t WhichData);
 
 static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings);
-static void Bld_PutParBldCod (void *BldCod);
+static void Bld_PutParBldCod (const void *BldCod);
 
 static void Bld_RenameBuilding (Nam_ShrtOrFullName_t ShrtOrFull);
 
@@ -206,7 +206,7 @@ static Usr_Can_t Bld_CheckIfICanCreateBuildings (void)
 /**************** Put contextual icons in list of buildings ******************/
 /*****************************************************************************/
 
-static void Bld_PutIconsListingBuildings (__attribute__((unused)) void *Args)
+static void Bld_PutIconsListingBuildings (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit buildings *****/
    if (Bld_CheckIfICanCreateBuildings () == Usr_CAN)
@@ -272,7 +272,7 @@ static void Bld_EditBuildingsInternal (void)
 /*************** Put contextual icons in edition of buildings ****************/
 /*****************************************************************************/
 
-static void Bld_PutIconsEditingBuildings (__attribute__((unused)) void *Args)
+static void Bld_PutIconsEditingBuildings (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view buildings *****/
    Ico_PutContextualIconToView (ActSeeBld,NULL,NULL,NULL);
@@ -458,7 +458,7 @@ static void Bld_ListBuildingsForEdition (const struct Bld_Buildings *Buildings)
 /******************* Write parameter with code of building *******************/
 /*****************************************************************************/
 
-static void Bld_PutParBldCod (void *BldCod)
+static void Bld_PutParBldCod (const void *BldCod)
   {
    if (BldCod)
       ParCod_PutPar (ParCod_Bld,*((long *) BldCod));

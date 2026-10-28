@@ -209,9 +209,9 @@ static void Inf_AfterTree (void);
 
 static void Inf_PutFormWhichSyllabus (Inf_Type_t InfoType,Vie_ViewType_t ViewType);
 
-static void Inf_PutIconsWhenViewing (void *Info);
-static void Inf_PutIconsWhenEditing (void *Info);
-static void Inf_PutIconsWhenConfiguring (void *Info);
+static void Inf_PutIconsWhenViewing (const void *Info);
+static void Inf_PutIconsWhenEditing (const void *Info);
+static void Inf_PutIconsWhenConfiguring (const void *Info);
 
 static Exi_Exist_t Inf_CheckPage (Inf_Type_t InfoType);
 static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType);
@@ -260,7 +260,7 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
    extern const char *Hlp_COURSE_Links;
    extern const char *Hlp_COURSE_Assessment;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   static void (*FunctionToDrawContextualIcons[Vie_NUM_VIEW_TYPES]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Vie_NUM_VIEW_TYPES]) (const void *Args) =
      {
       [Vie_VIEW		] = Inf_PutIconsWhenViewing,
       [Vie_EDIT		] = Inf_PutIconsWhenEditing,
@@ -775,7 +775,7 @@ void Inf_ChangeItem (void)
 /******************** Put icons to view/edit course info *********************/
 /*****************************************************************************/
 
-static void Inf_PutIconsWhenViewing (void *Info)
+static void Inf_PutIconsWhenViewing (const void *Info)
   {
    struct Tre_Node Node;
    Act_Action_t ActionEdit;
@@ -801,7 +801,7 @@ static void Inf_PutIconsWhenViewing (void *Info)
         }
   }
 
-static void Inf_PutIconsWhenEditing (void *Info)
+static void Inf_PutIconsWhenEditing (const void *Info)
   {
    struct Tre_Node Node;
 
@@ -830,7 +830,7 @@ static void Inf_PutIconsWhenEditing (void *Info)
      }
   }
 
-static void Inf_PutIconsWhenConfiguring (void *Info)
+static void Inf_PutIconsWhenConfiguring (const void *Info)
   {
    struct Tre_Node Node;
    Act_Action_t ActionEdit;
@@ -1601,7 +1601,7 @@ Inf_Type_t Inf_GetParInfoType (void)
 /****************** Put parameter with type of syllabus **********************/
 /*****************************************************************************/
 
-void Inf_PutParInfoType (void *InfoType)
+void Inf_PutParInfoType (const void *InfoType)
   {
    if (InfoType)
       switch (*((Inf_Type_t *) InfoType))

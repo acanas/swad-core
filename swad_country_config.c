@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CtyCfg_Configuration (Vie_ViewType_t ViewType);
-static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args);
+static void CtyCfg_PutIconToPrint (__attribute__((unused)) const void *Args);
 static void CtyCfg_Title (Hie_PutLink_t PutLink);
 static void CtyCfg_Map (void);
 static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink);
@@ -103,7 +103,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
    extern const char *Txt_NULL;
    static struct
      {
-      void (*FunctionToDrawContextualIcons) (void *Args);
+      void (*FunctionToDrawContextualIcons) (const void *Args);
       const char **HelpLink;
      } BoxArgs[Vie_NUM_VIEW_TYPES] =
      {
@@ -218,7 +218,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 /************* Put icon to print the configuration of a country **************/
 /*****************************************************************************/
 
-static void CtyCfg_PutIconToPrint (__attribute__((unused)) void *Args)
+static void CtyCfg_PutIconToPrint (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToPrint (ActPrnCtyInf,NULL,NULL);
   }

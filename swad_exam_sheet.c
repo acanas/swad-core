@@ -59,11 +59,11 @@ static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
 				      ExaShe_BlankOrSolved_t BlankOrSolved,
 				      Vie_ViewType_t ViewType);
 
-static void ExaShe_PutIconsPrintBlankSheets (void *Exams);
-static void ExaShe_PutParsToPrintBlankSheets (void *Exams);
+static void ExaShe_PutIconsPrintBlankSheets (const void *Exams);
+static void ExaShe_PutParsToPrintBlankSheets (const void *Exams);
 
-static void ExaShe_PutIconsPrintSolvedSheets (void *Exams);
-static void ExaShe_PutParsToPrintSolvedSheets (void *Exams);
+static void ExaShe_PutIconsPrintSolvedSheets (const void *Exams);
+static void ExaShe_PutParsToPrintSolvedSheets (const void *Exams);
 
 static void ExaShe_ShowMultipleSheets (struct Exa_Exams *Exams,
 				       const struct ExaSes_Session *Session,
@@ -138,7 +138,7 @@ static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
   {
    extern const char *Hlp_ASSESSMENT_Exams_sheets;
    extern const char *Txt_List_of_exam_sheets;
-   void (*FunctionToDrawContextualIcons[ExaShe_NUM_BLANK_OR_SOLVED]) (void *Args) =
+   void (*FunctionToDrawContextualIcons[ExaShe_NUM_BLANK_OR_SOLVED]) (const void *Args) =
      {
       [ExaShe_BLANK ] = ExaShe_PutIconsPrintBlankSheets,
       [ExaShe_SOLVED] = ExaShe_PutIconsPrintSolvedSheets,
@@ -233,14 +233,14 @@ static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
 /************* Put icon to print selected exam question sheets ***************/
 /*****************************************************************************/
 
-static void ExaShe_PutIconsPrintBlankSheets (void *Exams)
+static void ExaShe_PutIconsPrintBlankSheets (const void *Exams)
   {
    if (Exams)
       Ico_PutContextualIconToPrint (ActPrnExaQstShe,
 				    ExaShe_PutParsToPrintBlankSheets,Exams);
   }
 
-static void ExaShe_PutParsToPrintBlankSheets (void *Exams)
+static void ExaShe_PutParsToPrintBlankSheets (const void *Exams)
   {
    if (Exams)
      {
@@ -254,14 +254,14 @@ static void ExaShe_PutParsToPrintBlankSheets (void *Exams)
 /************* Put icon to print selected exam answer sheets *****************/
 /*****************************************************************************/
 
-static void ExaShe_PutIconsPrintSolvedSheets (void *Exams)
+static void ExaShe_PutIconsPrintSolvedSheets (const void *Exams)
   {
    if (Exams)
       Ico_PutContextualIconToPrint (ActPrnExaAnsShe,
 				    ExaShe_PutParsToPrintSolvedSheets,Exams);
   }
 
-static void ExaShe_PutParsToPrintSolvedSheets (void *Exams)
+static void ExaShe_PutParsToPrintSolvedSheets (const void *Exams)
   {
    if (Exams)
      {

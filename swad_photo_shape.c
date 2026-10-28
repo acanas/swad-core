@@ -53,7 +53,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) void *Args);
+static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /******************* Put icons to select user photo shape ********************/
@@ -103,7 +103,7 @@ void PhoSha_PutIconsToSelectPhotoShape (void)
 /************** Put contextual icons in side-columns setting *****************/
 /*****************************************************************************/
 
-static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) void *Args)
+static void PhoSha_PutIconsPhotoShape (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_PHOTO_SHAPES);

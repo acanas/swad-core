@@ -77,20 +77,20 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static Usr_Can_t Svy_CheckIfICanCreateSvy (void);
-static void Svy_PutIconsListSvys (void *Svys);
+static void Svy_PutIconsListSvys (const void *Svys);
 static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Svys);
-static void Svy_PutParsToCreateNewSvy (void *Svys);
-static void Svy_ParsMyAllGrps (void *Svys);
+static void Svy_PutParsToCreateNewSvy (const void *Svys);
+static void Svy_ParsMyAllGrps (const void *Svys);
 static void Svy_ShowOneSvy (struct Svy_Surveys *Svys,
                             Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
-static void Svy_PutIconsOneSvy (void *Svys);
+static void Svy_PutIconsOneSvy (const void *Svys);
 static void Svy_WriteAuthor (struct Svy_Survey *Svy);
 static void Svy_WriteStatus (struct Svy_Survey *Svy);
 static Dat_StartEndTime_t Svy_GetParSvyOrder (void);
 
 static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Svys,
                                          const char *Anchor);
-static void Svy_PutPars (void *Svys);
+static void Svy_PutPars (const void *Svys);
 
 static void Svy_GetListSvys (struct Svy_Surveys *Svys);
 
@@ -119,8 +119,8 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Svys);
 static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
                                    struct Svy_Question *SvyQst,
                                    char Stem[Cns_MAX_BYTES_TEXT + 1]);
-static void Svy_PutParsToEditQuestion (void *Svys);
-static void Svy_PutIconToAddNewQuestion (void *Svys);
+static void Svy_PutParsToEditQuestion (const void *Svys);
+static void Svy_PutIconToAddNewQuestion (const void *Svys);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
                                     struct Svy_Question *SvyQst,
@@ -130,8 +130,8 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
                                      Frm_PutForm_t PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
 
-static void Svy_PutIconToRemoveOneQst (void *Svys);
-static void Svy_PutParsRemoveOneQst (void *Svys);
+static void Svy_PutIconToRemoveOneQst (const void *Svys);
+static void Svy_PutParsRemoveOneQst (const void *Svys);
 
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
 
@@ -303,7 +303,7 @@ static Usr_Can_t Svy_CheckIfICanCreateSvy (void)
 /***************** Put contextual icons in list of surveys *******************/
 /*****************************************************************************/
 
-static void Svy_PutIconsListSvys (void *Svys)
+static void Svy_PutIconsListSvys (const void *Svys)
   {
    /***** Put icon to create a new survey *****/
    if (Svy_CheckIfICanCreateSvy () == Usr_CAN)
@@ -330,7 +330,7 @@ static void Svy_PutIconToCreateNewSvy (struct Svy_Surveys *Svys)
 /******************* Put parameters to create a new survey *******************/
 /*****************************************************************************/
 
-static void Svy_PutParsToCreateNewSvy (void *Svys)
+static void Svy_PutParsToCreateNewSvy (const void *Svys)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -347,7 +347,7 @@ static void Svy_PutParsToCreateNewSvy (void *Svys)
 /**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
 
-static void Svy_ParsMyAllGrps (void *Svys)
+static void Svy_ParsMyAllGrps (const void *Svys)
   {
    if (Svys)
      {
@@ -693,7 +693,7 @@ static void Svy_ShowOneSvy (struct Svy_Surveys *Svys,
 /******************** Put contextual icons in a survey ***********************/
 /*****************************************************************************/
 
-static void Svy_PutIconsOneSvy (void *Svys)
+static void Svy_PutIconsOneSvy (const void *Svys)
   {
    char *Anchor = NULL;
 
@@ -887,7 +887,7 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Svys,
 /********************** Params used to edit a survey *************************/
 /*****************************************************************************/
 
-static void Svy_PutPars (void *Svys)
+static void Svy_PutPars (const void *Svys)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -2749,7 +2749,7 @@ static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
 /******************** Put parameters to edit a question **********************/
 /*****************************************************************************/
 
-static void Svy_PutParsToEditQuestion (void *Svys)
+static void Svy_PutParsToEditQuestion (const void *Svys)
   {
    if (Svys)
      {
@@ -2762,7 +2762,7 @@ static void Svy_PutParsToEditQuestion (void *Svys)
 /***************** Put icon to add a new question to survey ******************/
 /*****************************************************************************/
 
-static void Svy_PutIconToAddNewQuestion (void *Svys)
+static void Svy_PutIconToAddNewQuestion (const void *Svys)
   {
    Ico_PutContextualIconToAdd (ActEdiOneSvyQst,NULL,Svy_PutPars,Svys);
   }
@@ -3034,7 +3034,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 /********************* Put icon to remove one question ***********************/
 /*****************************************************************************/
 
-static void Svy_PutIconToRemoveOneQst (void *Svys)
+static void Svy_PutIconToRemoveOneQst (const void *Svys)
   {
    Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
 				  Svy_PutParsRemoveOneQst,Svys);
@@ -3044,7 +3044,7 @@ static void Svy_PutIconToRemoveOneQst (void *Svys)
 /****************** Put parameter to remove one question *********************/
 /*****************************************************************************/
 
-static void Svy_PutParsRemoveOneQst (void *Svys)
+static void Svy_PutParsRemoveOneQst (const void *Svys)
   {
    if (Svys)
      {

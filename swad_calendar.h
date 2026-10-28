@@ -41,7 +41,7 @@
 
 void Cal_PutIconsToSelectFirstDayOfWeek (void);
 void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,
-                                      void (*FuncPars) (void *Args),void *Args);
+                                      void (*FuncPars) (const void *Args),const void *Args);
 void Cal_Change1stDayOfWeek (void);
 unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str);
 

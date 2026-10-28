@@ -87,7 +87,7 @@ struct Fig_Figures
 
 void Fig_ReqShowFigures (void);
 void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType);
-void Fig_PutParsFigures (void *Figures);
+void Fig_PutParsFigures (const void *Figures);
 void Fig_ShowFigures (void);
 
 #endif

@@ -65,9 +65,9 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Lgo_PutIconToRemoveLogoIns (__attribute__((unused)) void *Args);
-static void Lgo_PutIconToRemoveLogoCtr (__attribute__((unused)) void *Args);
-static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) void *Args);
+static void Lgo_PutIconToRemoveLogoIns (__attribute__((unused)) const void *Args);
+static void Lgo_PutIconToRemoveLogoCtr (__attribute__((unused)) const void *Args);
+static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) const void *Args);
 static void Lgo_PutIconToRemoveLogo (Act_Action_t ActionRem);
 
 /*****************************************************************************/
@@ -224,7 +224,7 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
       [Hie_CTR] = ActRecCtrLog,
       [Hie_DEG] = ActRecDegLog,
      };
-   static void (*FunctionToDrawContextualIcons[Hie_NUM_LEVELS]) (void *Args) =
+   static void (*FunctionToDrawContextualIcons[Hie_NUM_LEVELS]) (const void *Args) =
      {
       [Hie_INS] = Lgo_PutIconToRemoveLogoIns,
       [Hie_CTR] = Lgo_PutIconToRemoveLogoCtr,
@@ -272,17 +272,17 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
 /************** Put a link to request the removal of the logo ****************/
 /*****************************************************************************/
 
-static void Lgo_PutIconToRemoveLogoIns (__attribute__((unused)) void *Args)
+static void Lgo_PutIconToRemoveLogoIns (__attribute__((unused)) const void *Args)
   {
    Lgo_PutIconToRemoveLogo (ActRemInsLog);
   }
 
-static void Lgo_PutIconToRemoveLogoCtr (__attribute__((unused)) void *Args)
+static void Lgo_PutIconToRemoveLogoCtr (__attribute__((unused)) const void *Args)
   {
    Lgo_PutIconToRemoveLogo (ActRemCtrLog);
   }
 
-static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) void *Args)
+static void Lgo_PutIconToRemoveLogoDeg (__attribute__((unused)) const void *Args)
   {
    Lgo_PutIconToRemoveLogo (ActRemDegLog);
   }

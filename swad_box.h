@@ -51,17 +51,17 @@ typedef enum
 /*****************************************************************************/
 
 void Box_BoxTableBegin (const char *Title,
-                        void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                        void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding);
 void Box_BoxBegin (const char *Title,
-                   void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                   void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                    const char *HelpLink,Box_Closable_t Closable);
 void Box_BoxShadowBegin (const char *Title,
-                         void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                         void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                          const char *HelpLink);
 void Box_BoxTableShadowBegin (const char *Title,
-                              void (*FunctionToDrawContextualIcons) (void *Args),void *Args,
+                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
                               const char *HelpLink,
                               unsigned CellPadding);
 void Box_BoxTableEnd (void);

@@ -76,7 +76,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void CtrCfg_Configuration (Vie_ViewType_t ViewType);
-static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args);
+static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) const void *Args);
 static void CtrCfg_PutIconToChangePhoto (void);
 static void CtrCfg_Map (const struct Map_Coordinates *Coord);
 static void CtrCfg_Latitude (double Latitude);
@@ -264,7 +264,7 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 /************ Put contextual icons in configuration of a center **************/
 /*****************************************************************************/
 
-static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) void *Args)
+static void CtrCfg_PutIconsCtrConfig (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to print info about center *****/
    Ico_PutContextualIconToPrint (ActPrnCtrInf,NULL,NULL);

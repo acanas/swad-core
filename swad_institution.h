@@ -74,7 +74,7 @@ unsigned Ins_GetCachedNumInssWithUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
 
 void Ins_ListInssFound (MYSQL_RES **mysql_res,unsigned NumInss);
 
-void Ins_PutParInsCod (void *InsCod);
+void Ins_PutParInsCod (const void *InsCod);
 
 //-------------------------------- Figures ------------------------------------
 void Ins_GetAndShowInssStats (Hie_Level_t HieLvl);

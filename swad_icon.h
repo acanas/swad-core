@@ -80,56 +80,56 @@ Ico_IconSet_t Ico_GetParIconSet (void);
 Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str);
 
 void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
-				 void (*FuncPars) (void *Args),void *Args);
+				 void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncPars) (void *Args),void *Args);
+                                    void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToReset (Act_Action_t NextAction,const char *Anchor,
-                                   void (*FuncPars) (void *Args),void *Args);
+                                   void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToUpdate (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncPars) (void *Args),void *Args);
+                                    void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
-				  void (*FuncPars) (void *Args),void *Args);
+				  void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
-                                       void (*FuncPars) (void *Args),void *Args);
+                                       void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
-                                  void (*FuncPars) (void *Args),void *Args);
+                                  void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,const char *Anchor,
-                                       void (*FuncPars) (void *Args),void *Args);
+                                       void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToHideUnhide (Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
                                         const char *Anchor,
-                                        void (*FuncPars) (void *Args),void *Args,
+                                        void (*FuncPars) (const void *Args),const void *Args,
                                         HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Ico_PutContextualIconToPrivatePublic (Act_Action_t NextAction[PriPub_NUM_PRIVATE_PUBLIC],
                                            const char *Anchor,
-                                           void (*FuncPars) (void *Args),void *Args,
+                                           void (*FuncPars) (const void *Args),const void *Args,
                                            PriPub_PrivateOrPublic_t PrivateOrPublic);
 void Ico_PutContextualIconToExpand (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncPars) (void *Args),void *Args);
+                                    void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToContract (Act_Action_t NextAction,const char *Anchor,
-                                      void (*FuncPars) (void *Args),void *Args);
+                                      void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
-                                   void (*FuncPars) (void *Args),void *Args);
+                                   void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
-                                     void (*FuncPars) (void *Args),void *Args);
+                                     void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
-                                  void (*FuncPars) (void *Args),void *Args);
+                                  void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,
-                                           void (*FuncPars) (void *Args),void *Args);
+                                           void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
-                                   void (*FuncPars) (void *Args),void *Args);
+                                   void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
-                                            void (*FuncPars) (void *Args),void *Args,
+                                            void (*FuncPars) (const void *Args),const void *Args,
                                             CloOpe_ClosedOrOpen_t ClosedOrOpen);
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
-                                         void (*FuncPars) (void *Args),void *Args);
+                                         void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToViewAndSelectMyGroups (Act_Action_t NextAction,
-                                                   void (*FuncPars) (void *Args),void *Args);
+                                                   void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToShowCheckList (Act_Action_t NextAction,
-                                                void (*FuncPars) (void *Args),void *Args);
+                                                void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToViewAttEvents (Act_Action_t NextAction,
-                                           void (*FuncPars) (void *Args),void *Args);
+                                           void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
-                                 void (*FuncPars) (void *Args),void *Args);
+                                 void (*FuncPars) (const void *Args),const void *Args);
 
 void Ico_PutDivIcon (const char *DivClass,
                      const char *Icon,Ico_Color_t Color,const char *Title);

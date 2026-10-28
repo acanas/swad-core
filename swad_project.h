@@ -212,7 +212,7 @@ void Prj_ShowTableSelectedPrjs (void);
 Usr_Can_t Prj_CheckIfICanViewPrjDocs (long PrjCod);
 Usr_Can_t Prj_CheckIfICanViewPrjAss (long PrjCod);
 
-void Prj_PutCurrentPars (void *Prjs);
+void Prj_PutCurrentPars (const void *Prjs);
 void Prj_PutPars (const struct Prj_Filter *Filter,
                   Prj_Order_t Order,
                   unsigned NumPage,
@@ -221,7 +221,7 @@ void Prj_PutPars (const struct Prj_Filter *Filter,
 void Prj_GetPars (struct Prj_Projects *Prjs,
 		  Usr_UseListSelectedUsrs UseListSelectedUsrs);
 
-void Prj_PutIconsListPrjs (void *Prjs);
+void Prj_PutIconsListPrjs (const void *Prjs);
 
 void Prj_ShowOnePrj (void);
 void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs);

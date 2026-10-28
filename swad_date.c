@@ -126,7 +126,7 @@ static const char *Dat_ParTimeUTCName[Dat_NUM_START_END_TIME] =
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args);
+static void Dat_PutIconsDateFormat (__attribute__((unused)) const void *Args);
 static Dat_Format_t Dat_GetParDateFormat (void);
 
 static bool Dat_GetIfLeapYear (unsigned Year);
@@ -338,7 +338,7 @@ void Dat_PutBoxToSelectDateFormat (void)
 /*************** Put contextual icons in date-format setting *****************/
 /*****************************************************************************/
 
-static void Dat_PutIconsDateFormat (__attribute__((unused)) void *Args)
+static void Dat_PutIconsDateFormat (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_DATE_FORMAT);

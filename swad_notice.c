@@ -94,7 +94,7 @@ static void Not_HideUnhideNotice (HidVis_HiddenOrVisible_t HiddenOrVisible);
 static void Not_PutLinkToRSSFile (void);
 
 static Usr_Can_t Not_CheckIfICanEditNotices (void);
-static void Not_PutIconsListNotices (__attribute__((unused)) void *Args);
+static void Not_PutIconsListNotices (__attribute__((unused)) const void *Args);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
 static void Not_GetNoticeDataFromRow (MYSQL_RES *mysql_res,
@@ -104,7 +104,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              struct Not_Notice *Notice,
                              Lay_Highlight_t Highlight);
 
-static void Not_PutParNotCod (void *NotCod);
+static void Not_PutParNotCod (const void *NotCod);
 
 /*****************************************************************************/
 /*********** Set/get notice code of the notice to be highlighted *************/
@@ -500,7 +500,7 @@ static Usr_Can_t Not_CheckIfICanEditNotices (void)
 /****************** Put contextual icons in list of notices ******************/
 /*****************************************************************************/
 
-static void Not_PutIconsListNotices (__attribute__((unused)) void *Args)
+static void Not_PutIconsListNotices (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to add a new notice *****/
    if (Not_CheckIfICanEditNotices () == Usr_CAN)
@@ -869,7 +869,7 @@ unsigned Not_GetNumNoticesDeleted (Hie_Level_t HieLvl,unsigned *NumNotif)
 /*************** Put parameter with the code of a notice *********************/
 /*****************************************************************************/
 
-static void Not_PutParNotCod (void *NotCod)
+static void Not_PutParNotCod (const void *NotCod)
   {
    if (NotCod)
       ParCod_PutPar (ParCod_Not,*((long *) NotCod));

@@ -117,8 +117,8 @@ static void Msg_PutLinkToViewBannedUsers(void);
 static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
                                char **NumMsgsStr,unsigned NumUnreadMsgs);
 
-static void Msg_PutIconsListMsgs (void *Messages);
-static void Msg_PutParsOneMsg (void *Messages);
+static void Msg_PutIconsListMsgs (const void *Messages);
+static void Msg_PutParsOneMsg (const void *Messages);
 
 static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Messages);
 static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages);
@@ -128,8 +128,8 @@ static bool Msg_GetParOnlyUnreadMsgs (void);
 static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
                                             long MsgNum,long MsgCod);
 static void Msg_PutLinkToShowMorePotentialRecipients (struct Msg_Messages *Messages);
-static void Msg_PutParsShowMorePotentialRecipients (void *Messages);
-static void Msg_PutParsWriteMsg (void *Messages);
+static void Msg_PutParsShowMorePotentialRecipients (const void *Messages);
+static void Msg_PutParsWriteMsg (const void *Messages);
 static void Msg_PutParsSubjectAndContent (void);
 static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (const char *Label);
@@ -458,7 +458,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (struct Msg_Messages *Messa
 /************ Put parameters to show more potential recipients ***************/
 /*****************************************************************************/
 
-static void Msg_PutParsShowMorePotentialRecipients (void *Messages)
+static void Msg_PutParsShowMorePotentialRecipients (const void *Messages)
   {
    if (Messages)
      {
@@ -479,7 +479,7 @@ static void Msg_PutParsShowMorePotentialRecipients (void *Messages)
 /***************** Put parameters when writing a message *********************/
 /*****************************************************************************/
 
-static void Msg_PutParsWriteMsg (void *Messages)
+static void Msg_PutParsWriteMsg (const void *Messages)
   {
    if (Messages)
      {
@@ -1662,7 +1662,7 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
 /***************** Put contextual icons in list of messages ******************/
 /*****************************************************************************/
 
-static void Msg_PutIconsListMsgs (void *Messages)
+static void Msg_PutIconsListMsgs (const void *Messages)
   {
    static Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
      {
@@ -1733,7 +1733,7 @@ static void Msg_PutIconsListMsgs (void *Messages)
 /******* Put hidden parameters to expand, contract or delete a message *******/
 /*****************************************************************************/
 
-static void Msg_PutParsOneMsg (void *Messages)
+static void Msg_PutParsOneMsg (const void *Messages)
   {
    if (Messages)
      {
@@ -1748,7 +1748,7 @@ static void Msg_PutParsOneMsg (void *Messages)
 /****************** Put hidden parameters with filters ***********************/
 /*****************************************************************************/
 
-void Msg_PutParsMsgsFilters (void *Messages)
+void Msg_PutParsMsgsFilters (const void *Messages)
   {
    if (Messages)
      {

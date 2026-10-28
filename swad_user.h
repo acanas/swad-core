@@ -98,7 +98,7 @@ void Usr_PutFormLogOut (void);
 void Usr_GetParUsrIdLogin (void);
 unsigned Usr_GetParOtherUsrIDNickOrEMailAndGetUsrCods (struct Usr_ListUsrCods *ListUsrCods);
 
-void Usr_PutParOtherUsrCodEncrypted (void *EncryptedUsrCod);
+void Usr_PutParOtherUsrCodEncrypted (const void *EncryptedUsrCod);
 void Usr_PutParUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 void Usr_GetParOtherUsrCodEncrypted (struct Usr_Data *UsrDat);
 void Usr_GetParOtherUsrCodEncryptedAndGetListIDs (void);
@@ -136,7 +136,7 @@ void Usr_CopyBasicUsrDataFromList (struct Usr_Data *UsrDat,
 void Usr_FreeUsrsList (Rol_Role_t Role);
 
 Lay_Show_t Usr_GetIfShowBigList (unsigned NumUsrs,
-				 void (*FuncPars) (void *Args),void *Args,
+				 void (*FuncPars) (const void *Args),const void *Args,
 				 const char *OnSubmit);
 
 void Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (struct Usr_SelectedUsrs *SelectedUsrs,
@@ -164,7 +164,7 @@ void Usr_FreeSubqueryUsrCods (char *SubQueryUsrs);
 
 void Usr_FreeListOtherRecipients (void);
 
-void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (void *Args),void *Args,
+void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (const void *Args),const void *Args,
 				       const char *OnSubmit,
 				       Pho_ShowPhotos_t ShowPhotos);
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos);
@@ -176,7 +176,7 @@ void Usr_WriteHeaderFieldsUsrDat (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 
 void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 				       Act_Action_t NextAction,
-				       void (*FuncPars) (void *Args),void *Args,
+				       void (*FuncPars) (const void *Args),const void *Args,
 				       const char *Title,
                                        const char *HelpLink,
                                        Btn_Button_t Button,

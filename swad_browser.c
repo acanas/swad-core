@@ -252,8 +252,8 @@ static Act_Action_t Brw_ActSeeAdm[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_INS] = ActAdmShaIns,
    [Brw_ADMI_TCH_CRS] = ActAdmTchCrs,
    [Brw_ADMI_TCH_GRP] = ActAdmTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActAdmDocPrj,
-   [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
+   [Brw_ADMI_DOC_PRJ] = ActSeeOnePrj,
+   [Brw_ADMI_ASS_PRJ] = ActSeeOnePrj,
   };
 
 static Act_Action_t Brw_ActFromSeeToAdm[Brw_NUM_ZONES] =
@@ -694,7 +694,7 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_CRS] = ActShoCliShaCrs,
    [Brw_ADMI_SHR_GRP] = ActShoCliShaGrp,
    [Brw_ADMI_WRK_USR] = ActShoCliWrkUsr,
-   [Brw_ADMI_WRK_CRS] = ActShoCliWrkCrs,
+   [Brw_ADMI_WRK_CRS] = ActShoCliAsgWrkCrs,
    [Brw_ADMI_MRK_CRS] = ActShoCliMrkCrs,
    [Brw_ADMI_BRF_USR] = ActShoCliBrf,
    [Brw_SHOW_DOC_GRP] = ActUnk,
@@ -702,7 +702,7 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_SHOW_MRK_GRP] = ActUnk,
    [Brw_ADMI_MRK_GRP] = ActShoCliMrkGrp,
    [Brw_ADMI_ASG_USR] = ActShoCliAsgUsr,
-   [Brw_ADMI_ASG_CRS] = ActShoCliAsgCrs,
+   [Brw_ADMI_ASG_CRS] = ActShoCliAsgWrkCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
    [Brw_ADMI_DOC_DEG] = ActShoCliDocDeg,
    [Brw_SHOW_DOC_CTR] = ActUnk,
@@ -727,7 +727,7 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_CRS] = ActRemCliShaCrs,
    [Brw_ADMI_SHR_GRP] = ActRemCliShaGrp,
    [Brw_ADMI_WRK_USR] = ActRemCliWrkUsr,
-   [Brw_ADMI_WRK_CRS] = ActRemCliWrkCrs,
+   [Brw_ADMI_WRK_CRS] = ActRemCliAsgWrkCrs,
    [Brw_ADMI_MRK_CRS] = ActRemCliMrkCrs,
    [Brw_ADMI_BRF_USR] = ActRemCliBrf,
    [Brw_SHOW_DOC_GRP] = ActUnk,
@@ -735,7 +735,7 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_SHOW_MRK_GRP] = ActUnk,
    [Brw_ADMI_MRK_GRP] = ActRemCliMrkGrp,
    [Brw_ADMI_ASG_USR] = ActRemCliAsgUsr,
-   [Brw_ADMI_ASG_CRS] = ActRemCliAsgCrs,
+   [Brw_ADMI_ASG_CRS] = ActRemCliAsgWrkCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
    [Brw_ADMI_DOC_DEG] = ActRemCliDocDeg,
    [Brw_SHOW_DOC_CTR] = ActUnk,
@@ -978,8 +978,8 @@ static Act_Action_t Brw_ActRefreshAfterUploadFiles[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_INS] = ActAdmShaIns,
    [Brw_ADMI_TCH_CRS] = ActAdmTchCrs,
    [Brw_ADMI_TCH_GRP] = ActAdmTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActAdmDocPrj,
-   [Brw_ADMI_ASS_PRJ] = ActAdmAssPrj,
+   [Brw_ADMI_DOC_PRJ] = ActSeeOnePrj,
+   [Brw_ADMI_ASS_PRJ] = ActSeeOnePrj,
   };
 
 static Act_Action_t Brw_ActExpandFolder[Brw_NUM_ZONES] =
@@ -1145,7 +1145,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser);
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser);
-static void Brw_PutIconsFileBrowsersAsgWrkCrs (void *FileBrowser);
+static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser);
 
 static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowser);
 static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
@@ -1156,7 +1156,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
 
-static void Brw_PutIconsFileBrowser (void *FileBrowser);
+static void Brw_PutIconsFileBrowser (const void *FileBrowser);
 static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 
@@ -1237,7 +1237,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrow
 						const char FolderName[NAME_MAX + 1]);
 
 static void Brw_WriteCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
-static void Brw_PutIconsClipboard (void *FileBrowser);
+static void Brw_PutIconsClipboard (const void *FileBrowser);
 
 static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *FileBrowser);
@@ -1273,8 +1273,8 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
 							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType);
 
-static void Brw_PutIconToGetLinkToFile (void *FileBrowser);
-static void Brw_PutParsToGetLinkToFile (void *FileBrowser);
+static void Brw_PutIconToGetLinkToFile (const void *FileBrowser);
+static void Brw_PutParsToGetLinkToFile (const void *FileBrowser);
 
 static Usr_Can_t Brw_CheckIfICanEditFileMetadata (Brw_Zone_t Zone,
 						  long PublisherUsrCod);
@@ -1725,6 +1725,9 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActDowShaGrp:
          return Brw_ADMI_SHR_GRP;
 
+      /***** My assignments and works *****/
+      case ActAdmAsgWrkUsr:
+
       /***** My assignments *****/
       case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
       case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
@@ -1739,23 +1742,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActDowAsgUsr:
          return Brw_ADMI_ASG_USR;
 
-      /***** Another users' assignments *****/
-      case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
-      case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
-      case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
-      case ActCopAsgCrs:	case ActPasAsgCrs:
-      case ActShoCliAsgCrs:	case ActRemCliAsgCrs:
-      case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
-      case ActRenFolAsgCrs:
-      case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
-      case ActExpAsgCrs:	case ActConAsgCrs:
-      case ActZIPAsgCrs:
-      case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
-      case ActDowAsgCrs:
-         return Brw_ADMI_ASG_CRS;
-
       /***** My works *****/
-      case ActAdmAsgWrkUsr:
       case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
       case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
       case ActCopWrkUsr:	case ActPasWrkUsr:
@@ -1769,11 +1756,28 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActDowWrkUsr:
          return Brw_ADMI_WRK_USR;
 
-      /***** Another users' works *****/
+      /***** Assignments and works of users in course *****/
+      case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
+      case ActShoCliAsgWrkCrs:	case ActRemCliAsgWrkCrs:
+         return Brw_ADMI_ASG_CRS;
+
+      /***** Assignments of users in course *****/
+      case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
+      case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
+      case ActCopAsgCrs:	case ActPasAsgCrs:
+      case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
+      case ActRenFolAsgCrs:
+      case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
+      case ActExpAsgCrs:	case ActConAsgCrs:
+      case ActZIPAsgCrs:
+      case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
+      case ActDowAsgCrs:
+         return Brw_ADMI_ASG_CRS;
+
+      /***** Works of users in course *****/
       case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
       case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
       case ActCopWrkCrs:	case ActPasWrkCrs:
-      case ActShoCliWrkCrs:	case ActRemCliWrkCrs:
       case ActFrmCreWrkCrs:	case ActCreFolWrkCrs:	case ActCreLnkWrkCrs:
       case ActRenFolWrkCrs:
       case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
@@ -1783,9 +1787,11 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActDowWrkCrs:
          return Brw_ADMI_WRK_CRS;
 
-      /***** Documents in project *****/
+      /***** Documents and assessment in a project *****/
       case ActSeeOnePrj:
-      case ActAdmDocPrj:
+         return Brw_ADMI_DOC_PRJ;
+
+      /***** Documents in a project *****/
       case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
       case ActRemFolDocPrj:	case ActRemTreDocPrj:
       case ActCopDocPrj:	case ActPasDocPrj:
@@ -1799,8 +1805,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActDowDocPrj:
          return Brw_ADMI_DOC_PRJ;
 
-      /***** Assessment of project *****/
-      case ActAdmAssPrj:
+      /***** Assessment of a project *****/
       case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
       case ActRemFolAssPrj:	case ActRemTreAssPrj:
       case ActCopAssPrj:	case ActPasAssPrj:
@@ -1946,13 +1951,13 @@ static bool Brw_GetOnlyPublicFiles (Brw_Zone_t Zone)
 /**************** Write parameters related with file browser *****************/
 /*****************************************************************************/
 
-void Brw_PutImplicitParsFileBrowser (void *FileBrowser)
+void Brw_PutImplicitParsFileBrowser (const void *FileBrowser)
   {
    if (FileBrowser)
       Brw_PutParsFileBrowser ((struct Brw_FileBrowser *) FileBrowser);
   }
 
-void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser)
+void Brw_PutParsFileBrowser (const struct Brw_FileBrowser *FileBrowser)
   {
    if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_GRP_BRW))	// This file browser needs specify a group
       /***** Group code *****/
@@ -1978,7 +1983,7 @@ void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser)
 /***** Parameter to show only the files in expanded folders or all files *****/
 /*****************************************************************************/
 
-void Brw_PutParWhichFiles (void *WhichFiles)
+void Brw_PutParWhichFiles (const void *WhichFiles)
   {
    if (WhichFiles)
       Par_PutParUnsigned (NULL,"WhichFiles",
@@ -2676,7 +2681,7 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
 /******************* Put contextual icons in file browser ********************/
 /*****************************************************************************/
 
-static void Brw_PutIconsFileBrowsersAsgWrkCrs (void *FileBrowser)
+static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser)
   {
    /***** Put icon to create ZIP file *****/
    ZIP_PutIconToCreateZIPAsgWrk ((struct Brw_FileBrowser *) FileBrowser);
@@ -3231,7 +3236,7 @@ void Brw_SplitFullPathIntoPathAndName (const char FullPath[PATH_MAX + 1],
 /******************* Put contextual icons in file browser ********************/
 /*****************************************************************************/
 
-static void Brw_PutIconsFileBrowser (void *FileBrowser)
+static void Brw_PutIconsFileBrowser (const void *FileBrowser)
   {
    enum
      {
@@ -5405,7 +5410,7 @@ static void Brw_WriteCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
 /******* Put contextual icons when showing clipboard in file browser *********/
 /*****************************************************************************/
 
-static void Brw_PutIconsClipboard (void *FileBrowser)
+static void Brw_PutIconsClipboard (const void *FileBrowser)
   {
    /***** Put icon to remove resource clipboard in program *****/
    if (((struct Brw_FileBrowser *) FileBrowser)->Clipboard.ZoneDB != Brw_UNKNOWN)
@@ -6403,7 +6408,6 @@ static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FileBrowser *FileB
 
 	 /***** Put button to refresh file browser after upload *****/
 	 Frm_BeginForm (Brw_ActRefreshAfterUploadFiles[FileBrowser->Zone]);
-	    FileBrowser->FilCod = -1L;	// Not used
 	    Brw_PutParsFileBrowser (FileBrowser);
 
 	    /***** Button to finish *****/
@@ -7839,13 +7843,13 @@ void Brw_ShowFileMetadata (void)
 /*********************** Put icon to get link to file ************************/
 /*****************************************************************************/
 
-static void Brw_PutIconToGetLinkToFile (void *FileBrowser)
+static void Brw_PutIconToGetLinkToFile (const void *FileBrowser)
   {
    Ico_PutContextualIconToGetLink (Brw_ActReqLnk[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
                                    Brw_PutParsToGetLinkToFile,FileBrowser);
   }
 
-static void Brw_PutParsToGetLinkToFile (void *FileBrowser)
+static void Brw_PutParsToGetLinkToFile (const void *FileBrowser)
   {
    if (FileBrowser)
       Brw_PutParsFileBrowser ((struct Brw_FileBrowser *) FileBrowser);

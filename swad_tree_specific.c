@@ -71,8 +71,8 @@ static void (*TreSpc_GetItemDataFromRow[Inf_NUM_TYPES]) (MYSQL_RES *mysql_res,
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void TreSpc_PutIconsViewItem (void *Node);
-static void TreSpc_PutIconsEditItem (void *Node);
+static void TreSpc_PutIconsViewItem (const void *Node);
+static void TreSpc_PutIconsEditItem (const void *Node);
 
 static void TreSpc_WriteRowViewItem (struct Tre_Node *Node,unsigned NumItem);
 static void TreSpc_WriteRowEditItem (struct Tre_Node *Node,
@@ -264,7 +264,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
       [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
       [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_VIEW,
      };
-   static void (*PutIconsListItems[Vie_NUM_VIEW_TYPES]) (void *Node) =
+   static void (*PutIconsListItems[Vie_NUM_VIEW_TYPES]) (const void *Node) =
      {
       [Vie_VIEW] = TreSpc_PutIconsEditItem,
       [Vie_EDIT] = TreSpc_PutIconsViewItem,
@@ -386,7 +386,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 /************** Put contextual icons in list of node resources ***************/
 /*****************************************************************************/
 
-static void TreSpc_PutIconsViewItem (void *Node)
+static void TreSpc_PutIconsViewItem (const void *Node)
   {
    static Act_Action_t Actions[Inf_NUM_TYPES] =
      {
@@ -410,7 +410,7 @@ static void TreSpc_PutIconsViewItem (void *Node)
 					 Tre_PutPars,Node);
   }
 
-static void TreSpc_PutIconsEditItem (void *Node)
+static void TreSpc_PutIconsEditItem (const void *Node)
   {
    static Act_Action_t Actions[Inf_NUM_TYPES] =
      {
@@ -735,7 +735,7 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
 /******************* Param used to edit a specific item **********************/
 /*****************************************************************************/
 
-void TreSpc_PutParItmCod (void *ItmCod)
+void TreSpc_PutParItmCod (const void *ItmCod)
   {
    if (ItmCod)
       ParCod_PutPar (ParCod_Itm,*((long *) ItmCod));

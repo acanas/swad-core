@@ -117,11 +117,11 @@ static void Tmt_FreeTimeTable (void);
 
 static void Tmt_ShowTimeTableGrpsSelected (void);
 static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable);
-static void Tmt_PutContextualIcons (void *Timetable);
+static void Tmt_PutContextualIcons (const void *Timetable);
 static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable);
 
-static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args);
-static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args);
+static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) const void *Args);
+static void Tmt_PutIconToViewMyTT (__attribute__((unused)) const void *Args);
 
 static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
                                          long HieCod);
@@ -439,7 +439,7 @@ void Tmt_ShowCrsTimeTable (void)
 /***************** Put contextual icons above the time table *****************/
 /*****************************************************************************/
 
-static void Tmt_PutContextualIcons (void *Timetable)
+static void Tmt_PutContextualIcons (const void *Timetable)
   {
    static Act_Action_t NextAction[Tmt_NUM_TIMETABLE_TYPES] =
      {
@@ -528,7 +528,7 @@ void Tmt_EditMyTutTimeTable (void)
 /********************** Put icon to view course timetable ********************/
 /*****************************************************************************/
 
-static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
+static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToView (ActSeeCrsTT,NULL,NULL,NULL);
   }
@@ -537,7 +537,7 @@ static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) void *Args)
 /************************ Put icon to view my timetable **********************/
 /*****************************************************************************/
 
-static void Tmt_PutIconToViewMyTT (__attribute__((unused)) void *Args)
+static void Tmt_PutIconToViewMyTT (__attribute__((unused)) const void *Args)
   {
    Ico_PutContextualIconToView (ActSeeMyTT,NULL,NULL,NULL);
   }

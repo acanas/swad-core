@@ -102,12 +102,12 @@ static struct Hie_Node *Crs_EditingCrs = NULL;	// Static variable to keep the co
 
 static void Crs_GetListCrssInThisDeg (void);
 static void Crs_ListCrss (void);
-static void Crs_PutIconsListCrss (__attribute__((unused)) void *Args);
+static void Crs_PutIconsListCrss (__attribute__((unused)) const void *Args);
 static void Crs_PutIconToEditCrss (void);
 static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year);
 
 static void Crs_EditCrssInternal (void);
-static void Crs_PutIconsEditingCrss (__attribute__((unused)) void *Args);
+static void Crs_PutIconsEditingCrss (__attribute__((unused)) const void *Args);
 static void Crs_ListCrssForEdition (void);
 static void Crs_ListCrssOfAYearForEdition (unsigned Year);
 static Usr_Can_t Crs_CheckIfICanEdit (struct Hie_Node *Crs);
@@ -121,7 +121,7 @@ static void Crs_GetCrsDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Crs);
 
 static void Crs_EmptyCrsCompletely (long HieCod);
 
-static void Crs_PutParCrsCod (void *HieCod);
+static void Crs_PutParCrsCod (const void *HieCod);
 static void Crs_PutButtonToRegisterInCrs (void);
 
 static void Crs_WriteHeadCrss (Crs_WriteColumnAccepted_t WriteColumnAccepted);
@@ -425,7 +425,7 @@ static void Crs_ListCrss (void)
 /***************** Put contextual icons in list of courses *******************/
 /*****************************************************************************/
 
-static void Crs_PutIconsListCrss (__attribute__((unused)) void *Args)
+static void Crs_PutIconsListCrss (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit courses *****/
    if (Hie_CheckIfICanEdit () == Usr_CAN)
@@ -616,7 +616,7 @@ static void Crs_EditCrssInternal (void)
 /**************** Put contextual icons in edition of courses *****************/
 /*****************************************************************************/
 
-static void Crs_PutIconsEditingCrss (__attribute__((unused)) void *Args)
+static void Crs_PutIconsEditingCrss (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view courses *****/
    Ico_PutContextualIconToView (ActSeeCrs,NULL,NULL,NULL);
@@ -1575,7 +1575,7 @@ void Crs_ContEditAfterChgCrs (void)
 /******************** Write parameter with code of degree ********************/
 /*****************************************************************************/
 
-static void Crs_PutParCrsCod (void *HieCod)
+static void Crs_PutParCrsCod (const void *HieCod)
   {
    if (HieCod)
       ParCod_PutPar (ParCod_Crs,*((long *) HieCod));

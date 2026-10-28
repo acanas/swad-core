@@ -57,7 +57,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void DegCfg_Configuration (Vie_ViewType_t ViewType);
-static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args);
+static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) const void *Args);
 static void DegCfg_Ctr (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm);
 static void DegCfg_NumCrss (void);
 
@@ -92,7 +92,7 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
    extern const char *Txt_NULL;
    static struct
      {
-      void (*FunctionToDrawContextualIcons) (void *Args);
+      void (*FunctionToDrawContextualIcons) (const void *Args);
       const char **HelpLink;
      } BoxArgs[Vie_NUM_VIEW_TYPES] =
      {
@@ -184,7 +184,7 @@ static void DegCfg_Configuration (Vie_ViewType_t ViewType)
 /************ Put contextual icons in configuration of a degree **************/
 /*****************************************************************************/
 
-static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) void *Args)
+static void DegCfg_PutIconsToPrintAndUpload (__attribute__((unused)) const void *Args)
   {
    /***** Link to print info about degree *****/
    Ico_PutContextualIconToPrint (ActPrnDegInf,NULL,NULL);

@@ -74,11 +74,11 @@ static void DegTyp_ListDegTypes (const struct DegTyp_DegTypes *DegTypes,
                                  DegTyp_Order_t SelectedOrder);
 
 static void DegTyp_EditDegTypesInternal (const struct DegTyp_DegTypes *DegTypes);
-static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) void *Args);
+static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) const void *Args);
 
 static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes);
-static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args);
-static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args);
+static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) const void *Args);
+static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) const void *Args);
 static void DegTyp_ListDegTypesForEdition (const struct DegTyp_DegTypes *DegTypes);
 
 static void DegTyp_PutFormToCreateDegreeType (void);
@@ -88,7 +88,7 @@ static void DegTyp_PutHeadDegTypesForSeeing (Act_Action_t NextAction,
                                              DegTyp_Order_t SelectedOrder);
 static void DegTyp_PutHeadDegTypesForEdition (void);
 
-static void DegTyp_PutParOtherDegTypCod (void *DegTypCod);
+static void DegTyp_PutParOtherDegTypCod (const void *DegTypCod);
 
 static void DegTyp_RemoveDegTypeCompletely (long DegTypCod);
 
@@ -280,7 +280,7 @@ static void DegTyp_EditDegTypesInternal (const struct DegTyp_DegTypes *DegTypes)
 /************ Put contextual icons when editing degree types *****************/
 /*****************************************************************************/
 
-static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) void *Args)
+static void DegTyp_PutIconsEditingDegTypes (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view degree types *****/
    Ico_PutContextualIconToView (ActSeeDegTyp,NULL,NULL,NULL);
@@ -347,7 +347,7 @@ static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes
 /************** Put contextual icons in list of degree types *****************/
 /*****************************************************************************/
 
-static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
+static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to edit degree types *****/
    DegTyp_PutIconToEditDegTypes (NULL);
@@ -363,7 +363,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) void *Args)
 /******************* Put link (form) to edit degree types ********************/
 /*****************************************************************************/
 
-static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) void *Args)
+static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) const void *Args)
   {
    if (Gbl.Hierarchy.HieLvl == Hie_CTR &&	// Only editable if center tab is visible
        DegTyp_CheckIfICanCreateDegTypes () == Usr_CAN)
@@ -695,7 +695,7 @@ void DegTyp_RemoveDegTyp (void)
 /***************** Write parameter with code of degree type ******************/
 /*****************************************************************************/
 
-static void DegTyp_PutParOtherDegTypCod (void *DegTypCod)
+static void DegTyp_PutParOtherDegTypCod (const void *DegTypCod)
   {
    if (DegTypCod)
       ParCod_PutPar (ParCod_OthDegTyp,*((long *) DegTypCod));

@@ -56,7 +56,7 @@ void TreSpc_ListNodeItems (Tre_ListingType_t ListingType,
 			   long SelectedItmCod,
 			   HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-void TreSpc_PutParItmCod (void *ItmCod);
+void TreSpc_PutParItmCod (const void *ItmCod);
 void TreSpc_ViewListItemsAfterEdit (Inf_Type_t InfoType);
 void TreSpc_EditListItems (Inf_Type_t InfoType);
 void TreSpc_EditTreeWithFormItem (Inf_Type_t InfoType);

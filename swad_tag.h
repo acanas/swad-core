@@ -51,7 +51,7 @@ void Tag_InsertTagsIntoDB (long QstCod,const struct Tag_Tags *Tags);
 void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
                           Tag_ShowAllOrVisibleTags_t ShowAllOrVisibleTags);
 void Tag_ShowFormEditTags (void);
-void Tag_PutPars (void *TagCod);
+void Tag_PutPars (const void *TagCod);
 
 void Tag_GetAndWriteTagsQst (long QstCod);
 void Tag_ShowTagList (unsigned NumTags,MYSQL_RES *mysql_res);

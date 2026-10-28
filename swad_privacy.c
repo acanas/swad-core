@@ -75,7 +75,7 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Pri_PutIconsPrivacy (__attribute__((unused)) void *Args);
+static void Pri_PutIconsPrivacy (__attribute__((unused)) const void *Args);
 
 static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Act_Action_t Action,const char *ParName,
@@ -149,7 +149,7 @@ void Pri_EditMyPrivacy (void)
 /****************** Put contextual icons in privacy setting ******************/
 /*****************************************************************************/
 
-static void Pri_PutIconsPrivacy (__attribute__((unused)) void *Args)
+static void Pri_PutIconsPrivacy (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_PRIVACY);

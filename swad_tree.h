@@ -132,7 +132,7 @@ void Tre_PutIconToEditTree (struct Tre_Node *Node);
 void Tre_PutIconToViewTree (struct Tre_Node *Node);
 void Tre_PutIconToCreateNewNode (struct Tre_Node *Node);
 
-void Tre_PutPars (void *Node);
+void Tre_PutPars (const void *Node);
 void Tre_GetPars (struct Tre_Node *Node);
 
 void Tre_GetListNodes (Inf_Type_t InfoType);

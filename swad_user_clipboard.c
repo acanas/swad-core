@@ -54,7 +54,7 @@ static void UsrClp_AddUsrsToClipboard (void);
 static void UsrClp_OverwriteUsrsClipboard (void);
 
 static void UsrClp_ShowClipboard (Rol_Role_t Role);
-static void UsrClp_PutIconsClipboard (void *Args);
+static void UsrClp_PutIconsClipboard (const void *Args);
 
 static void UsrClp_GetUsrsLst (void);
 
@@ -260,7 +260,7 @@ static void UsrClp_ShowClipboard (Rol_Role_t Role)
 /************* Put contextual icons when showing user clipboard **************/
 /*****************************************************************************/
 
-static void UsrClp_PutIconsClipboard (void *Args)
+static void UsrClp_PutIconsClipboard (const void *Args)
   {
    static Act_Action_t NextActions[Rol_NUM_ROLES] =
      {

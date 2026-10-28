@@ -106,7 +106,7 @@ static void TmlCom_PutFormToRemoveComm (const struct Tml_Timeline *Timeline,
 static long TmlCom_ReceiveComm (void);
 
 static void TmlCom_ReqRemComm (struct Tml_Timeline *Timeline);
-static void TmlCom_PutParsRemoveComm (void *Timeline);
+static void TmlCom_PutParsRemoveComm (const void *Timeline);
 static void TmlCom_RemoveComm (void);
 
 static void TmlCom_GetCommDataFromRow (MYSQL_RES *mysql_res,
@@ -929,7 +929,7 @@ static void TmlCom_ReqRemComm (struct Tml_Timeline *Timeline)
 /******************** Put parameters to remove a comment *********************/
 /*****************************************************************************/
 
-static void TmlCom_PutParsRemoveComm (void *Timeline)
+static void TmlCom_PutParsRemoveComm (const void *Timeline)
   {
    if (Timeline)
      {

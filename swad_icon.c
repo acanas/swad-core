@@ -104,7 +104,7 @@ struct Ico_IconColor Ico_PrivatePublic[PriPub_NUM_PRIVATE_PUBLIC] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Ico_PutIconsIconSet (__attribute__((unused)) void *Args);
+static void Ico_PutIconsIconSet (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /******************* Get color name for CSS class preffix ********************/
@@ -204,7 +204,7 @@ void Ico_PutIconsToSelectIconSet (void)
 /***************** Put contextual icons in icon-set setting *******************/
 /*****************************************************************************/
 
-static void Ico_PutIconsIconSet (__attribute__((unused)) void *Args)
+static void Ico_PutIconsIconSet (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_ICON_SETS);
@@ -268,56 +268,56 @@ Ico_IconSet_t Ico_GetIconSetFromStr (const char *Str)
 /*****************************************************************************/
 
 void Ico_PutContextualIconToAdd (Act_Action_t NextAction,const char *Anchor,
-				 void (*FuncPars) (void *Args),void *Args)
+				 void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "plus.svg",Ico_GREEN);
   }
 
 void Ico_PutContextualIconToRemove (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncPars) (void *Args),void *Args)
+                                    void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "trash.svg",Ico_RED);
   }
 
 void Ico_PutContextualIconToReset (Act_Action_t NextAction,const char *Anchor,
-                                   void (*FuncPars) (void *Args),void *Args)
+                                   void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "recycle.svg",Ico_RED);
   }
 
 void Ico_PutContextualIconToUpdate (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncPars) (void *Args),void *Args)
+                                    void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "recycle.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToEdit (Act_Action_t NextAction,const char *Anchor,
-				  void (*FuncPars) (void *Args),void *Args)
+				  void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "pen.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToViewFiles (Act_Action_t NextAction,
-                                       void (*FuncPars) (void *Args),void *Args)
+                                       void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "folder-open.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToView (Act_Action_t NextAction,const char *Anchor,
-                                  void (*FuncPars) (void *Args),void *Args)
+                                  void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "list.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,const char *Anchor,
-                                       void (*FuncPars) (void *Args),void *Args)
+                                       void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "cog.svg",Ico_BLACK);
@@ -325,7 +325,7 @@ void Ico_PutContextualIconToConfigure (Act_Action_t NextAction,const char *Ancho
 
 void Ico_PutContextualIconToHideUnhide (Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE],
                                         const char *Anchor,
-                                        void (*FuncPars) (void *Args),void *Args,
+                                        void (*FuncPars) (const void *Args),const void *Args,
                                         HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction[HiddenOrVisible],Anchor,
@@ -336,7 +336,7 @@ void Ico_PutContextualIconToHideUnhide (Act_Action_t NextAction[HidVis_NUM_HIDDE
 
 void Ico_PutContextualIconToPrivatePublic (Act_Action_t NextAction[PriPub_NUM_PRIVATE_PUBLIC],
                                            const char *Anchor,
-                                           void (*FuncPars) (void *Args),void *Args,
+                                           void (*FuncPars) (const void *Args),const void *Args,
                                            PriPub_PrivateOrPublic_t PrivateOrPublic)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction[PrivateOrPublic],Anchor,
@@ -346,28 +346,28 @@ void Ico_PutContextualIconToPrivatePublic (Act_Action_t NextAction[PriPub_NUM_PR
   }
 
 void Ico_PutContextualIconToExpand (Act_Action_t NextAction,const char *Anchor,
-                                    void (*FuncPars) (void *Args),void *Args)
+                                    void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "caret-right.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToContract (Act_Action_t NextAction,const char *Anchor,
-                                      void (*FuncPars) (void *Args),void *Args)
+                                      void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "caret-down.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
-                                   void (*FuncPars) (void *Args),void *Args)
+                                   void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "print.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
-                                     void (*FuncPars) (void *Args),void *Args)
+                                     void (*FuncPars) (const void *Args),const void *Args)
   {
    if (Rsc_CheckIfICanGetLink () == Usr_CAN)
       Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
@@ -375,28 +375,28 @@ void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
   }
 
 void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
-                                  void (*FuncPars) (void *Args),void *Args)
+                                  void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "copy.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,
-                                           void (*FuncPars) (void *Args),void *Args)
+                                           void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "clipboard.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
-                                   void (*FuncPars) (void *Args),void *Args)
+                                   void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "paste.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
-                                            void (*FuncPars) (void *Args),void *Args,
+                                            void (*FuncPars) (const void *Args),const void *Args,
                                             CloOpe_ClosedOrOpen_t ClosedOrOpen)
   {
    static const char *CloOpe_Icon[CloOpe_NUM_CLOSED_OPEN] =
@@ -410,35 +410,35 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
   }
 
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
-                                         void (*FuncPars) (void *Args),void *Args)
+                                         void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "trophy.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToViewAndSelectMyGroups (Act_Action_t NextAction,
-                                                   void (*FuncPars) (void *Args),void *Args)
+                                                   void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "mysitemap.png",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToShowCheckList (Act_Action_t NextAction,
-                                           void (*FuncPars) (void *Args),void *Args)
+                                           void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "tasks.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToViewAttEvents (Act_Action_t NextAction,
-                                           void (*FuncPars) (void *Args),void *Args)
+                                           void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "calendar-check.svg",Ico_BLACK);
   }
 
 void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
-                                 void (*FuncPars) (void *Args),void *Args)
+                                 void (*FuncPars) (const void *Args),const void *Args)
   {
    Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
 				  "download.svg",Ico_BLACK);

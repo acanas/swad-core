@@ -73,7 +73,7 @@ struct The_Theme The_Themes[The_NUM_THEMES] =
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void The_PutIconsTheme (__attribute__((unused)) void *Args);
+static void The_PutIconsTheme (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /************************ Put icons to select a theme ***********************/
@@ -115,7 +115,7 @@ void The_PutIconsToSelectTheme (void)
 /****************** Put contextual icons in theme setting ********************/
 /*****************************************************************************/
 
-static void The_PutIconsTheme (__attribute__((unused)) void *Args)
+static void The_PutIconsTheme (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to show a figure *****/
    Fig_PutIconToShowFigure (Fig_THEMES);

@@ -57,8 +57,8 @@ const char *Nck_NICKNAME_SECTION_ID = "nickname_section";
 /*****************************************************************************/
 
 static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther);
-static void Nck_PutParsRemoveMyNick (void *Nick);
-static void Nck_PutParsRemoveOtherNick (void *Nick);
+static void Nck_PutParsRemoveMyNick (const void *Nick);
+static void Nck_PutParsRemoveOtherNick (const void *Nick);
 
 static void Nck_ChangeUsrNick (struct Usr_Data *UsrDat);
 
@@ -199,7 +199,7 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
       [Usr_OTHER] = {.Remove = ActRemNicOth,
 	             .Change = ActChgNicOth}
      };
-   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (void *ID) =
+   static void (*FuncParsRemove[Usr_NUM_ME_OR_OTHER]) (const void *ID) =
      {
       [Usr_ME   ] = Nck_PutParsRemoveMyNick,
       [Usr_OTHER] = Nck_PutParsRemoveOtherNick
@@ -337,13 +337,13 @@ static void Nck_ShowFormChangeUsrNickname (Usr_MeOrOther_t MeOrOther)
    HTM_SECTION_End ();
   }
 
-static void Nck_PutParsRemoveMyNick (void *Nick)
+static void Nck_PutParsRemoveMyNick (const void *Nick)
   {
    if (Nick)
       Par_PutParString (NULL,"Nick",Nick);
   }
 
-static void Nck_PutParsRemoveOtherNick (void *Nick)
+static void Nck_PutParsRemoveOtherNick (const void *Nick)
   {
    if (Nick)
      {

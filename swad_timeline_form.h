@@ -84,6 +84,6 @@ void TmlFrm_FormToShowHiddenComms (long NotCod,
 void TmlFrm_BeginAlertRemove (const char *QuestionTxt);
 void TmlFrm_EndAlertRemove (struct Tml_Timeline *Timeline,
                             TmlFrm_Action_t Action,
-                            void (*FuncPars) (void *Args));
+                            void (*FuncPars) (const void *Args));
 
 #endif

@@ -110,7 +110,7 @@ static void Rec_WriteHeadingRecordFields (void);
 
 static void Rec_AskConfirmRemFieldWithRecords (void);
 
-static void Rec_PutParFldCod (void *FldCod);
+static void Rec_PutParFldCod (const void *FldCod);
 static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
@@ -127,19 +127,19 @@ static void Rec_ShowSelectorRecsPerPag (unsigned RecsPerPag);
 static unsigned Rec_GetParRecordsPerPage (void);
 static void Rec_WriteFormShowOfficeHours (OneSev_OneOrSeveral_t OneOrMultiple,
 					  Lay_Show_t ShowOfficeHours);
-static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args);
-static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void *Args);
+static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) const void *Args);
+static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) const void *Args);
 static Lay_Show_t Rec_GetParShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct Usr_Data *UsrDat,const char *Anchor);
 static Usr_Can_t Rec_CheckIfICanEditField (Rec_VisibilityRecordFields_t Visibility);
 
-static void Rec_PutIconsCommands (__attribute__((unused)) void *Args);
-static void Rec_PutParsMyResults (__attribute__((unused)) void *Args);
-static void Rec_PutParsStdResults (__attribute__((unused)) void *Args);
-static void Rec_PutParsWorks (__attribute__((unused)) void *Args);
-static void Rec_PutParsStudent (__attribute__((unused)) void *Args);
-static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args);
+static void Rec_PutIconsCommands (__attribute__((unused)) const void *Args);
+static void Rec_PutParsMyResults (__attribute__((unused)) const void *Args);
+static void Rec_PutParsStdResults (__attribute__((unused)) const void *Args);
+static void Rec_PutParsWorks (__attribute__((unused)) const void *Args);
+static void Rec_PutParsStudent (__attribute__((unused)) const void *Args);
+static void Rec_PutParsMsgUsr (__attribute__((unused)) const void *Args);
 static void Rec_ShowInstitutionInHead (struct Hie_Node *Ins,
 				       Frm_PutForm_t PutFormLinks);
 static void Rec_ShowPhoto (struct Usr_Data *UsrDat);
@@ -584,7 +584,7 @@ static void Rec_AskConfirmRemFieldWithRecords (void)
 /********************** Put parameter with field code ************************/
 /*****************************************************************************/
 
-static void Rec_PutParFldCod (void *FldCod)
+static void Rec_PutParFldCod (const void *FldCod)
   {
    if (FldCod)
       ParCod_PutPar (ParCod_Fld,*((long *) FldCod));
@@ -1419,7 +1419,7 @@ static void Rec_WriteFormShowOfficeHours (OneSev_OneOrSeveral_t OneOrMultiple,
    static struct
      {
       Act_Action_t Action;
-      void (*FuncPutPars) (__attribute__((unused)) void *Args);
+      void (*FuncPutPars) (__attribute__((unused)) const void *Args);
      } Actions[OneSev_NUM_ONE_SEVERAL] =
      {
       [OneSev_ONE    ] = {.Action	= ActSeeRecOneTch,
@@ -1441,13 +1441,13 @@ static void Rec_WriteFormShowOfficeHours (OneSev_OneOrSeveral_t OneOrMultiple,
                               Txt_Show_tutoring_hours);
   }
 
-static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) void *Args)
+static void Rec_PutParsShowOfficeHoursOneTch (__attribute__((unused)) const void *Args)
   {
    Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
    Par_PutParChar ("ParamOfficeHours",'Y');
   }
 
-static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) void *Args)
+static void Rec_PutParsShowOfficeHoursSeveralTchs (__attribute__((unused)) const void *Args)
   {
    Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
    Par_PutParChar ("ParamOfficeHours",'Y');
@@ -2250,7 +2250,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 /*********** Show commands (icon to make actions) in record card *************/
 /*****************************************************************************/
 
-static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
+static void Rec_PutIconsCommands (__attribute__((unused)) const void *Args)
   {
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (Rec_Record.UsrDat->UsrCod);
    Usr_Can_t ICanViewUsrProfile;
@@ -2298,22 +2298,22 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
       [Usr_ME   ] = ActSeeLstMyAtt,
       [Usr_OTHER] = ActSeeLstUsrAtt,
      };
-   static void (*FuncPutParsAgd[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+   static void (*FuncPutParsAgd[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
      {
       [Usr_ME   ] = NULL,
       [Usr_OTHER] = Rec_PutParUsrCodEncrypted,
      };
-   static void (*FuncPutParsResults[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+   static void (*FuncPutParsResults[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
      {
       [Usr_ME   ] = Rec_PutParsMyResults,
       [Usr_OTHER] = Rec_PutParsStdResults,
      };
-   static void (*FuncPutParsAdmAsgWrk[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+   static void (*FuncPutParsAdmAsgWrk[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
      {
       [Usr_ME   ] = NULL,
       [Usr_OTHER] = Rec_PutParsWorks,	// Not me, I am not a student in current course
      };
-   static void (*FuncPutParsSeeLstAtt[Usr_NUM_ME_OR_OTHER]) (void *Args) =
+   static void (*FuncPutParsSeeLstAtt[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
      {
       [Usr_ME   ] = NULL,
       [Usr_OTHER] = Rec_PutParsStudent,
@@ -2447,25 +2447,25 @@ static void Rec_PutIconsCommands (__attribute__((unused)) void *Args)
      }
   }
 
-void Rec_PutParUsrCodEncrypted (__attribute__((unused)) void *Args)
+void Rec_PutParUsrCodEncrypted (__attribute__((unused)) const void *Args)
   {
    Usr_PutParUsrCodEncrypted (Rec_Record.UsrDat->EnUsrCod);
   }
 
-static void Rec_PutParsMyResults (__attribute__((unused)) void *Args)
+static void Rec_PutParsMyResults (__attribute__((unused)) const void *Args)
   {
    Dat_SetDatesToPastNow ();
    Dat_WriteParsIniEndDates ();
   }
 
-static void Rec_PutParsStdResults (__attribute__((unused)) void *Args)
+static void Rec_PutParsStdResults (__attribute__((unused)) const void *Args)
   {
    Rec_PutParsStudent (NULL);
    Dat_SetDatesToPastNow ();
    Dat_WriteParsIniEndDates ();
   }
 
-static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
+static void Rec_PutParsWorks (__attribute__((unused)) const void *Args)
   {
    Brw_WhichFiles_t WhichFiles = Brw_ALL_FILES;	// By default, show all files
 
@@ -2473,13 +2473,13 @@ static void Rec_PutParsWorks (__attribute__((unused)) void *Args)
    Brw_PutParWhichFiles (&WhichFiles);
   }
 
-static void Rec_PutParsStudent (__attribute__((unused)) void *Args)
+static void Rec_PutParsStudent (__attribute__((unused)) const void *Args)
   {
    Par_PutParString (NULL,"UsrCodStd",Rec_Record.UsrDat->EnUsrCod);
    Grp_PutParAllGroups ();
   }
 
-static void Rec_PutParsMsgUsr (__attribute__((unused)) void *Args)
+static void Rec_PutParsMsgUsr (__attribute__((unused)) const void *Args)
   {
    Rec_PutParUsrCodEncrypted (NULL);
    Grp_PutParAllGroups ();

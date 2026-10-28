@@ -75,7 +75,7 @@ const char *Pwd_PASSWORD_SECTION_ID = "password_section";
 
 static void Pwd_CheckAndUpdateNewPwd (struct Usr_Data *UsrDat);
 
-static void Pwd_PutLinkToSendNewPasswdPars (void *UsrIdLogin);
+static void Pwd_PutLinkToSendNewPasswdPars (const void *UsrIdLogin);
 
 static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
@@ -262,7 +262,7 @@ void Pwd_PutLinkToSendNewPasswd (void)
 				  Txt_Forgotten_password,NULL);
   }
 
-static void Pwd_PutLinkToSendNewPasswdPars (void *UsrIdLogin)
+static void Pwd_PutLinkToSendNewPasswdPars (const void *UsrIdLogin)
   {
    if (UsrIdLogin)
       Par_PutParString (NULL,"UsrId",(char *) Gbl.Usrs.Me.UsrIdLogin);

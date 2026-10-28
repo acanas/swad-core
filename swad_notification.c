@@ -295,7 +295,7 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
 static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
 				    unsigned NumNotifications);
-static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args);
+static void Ntf_PutIconsNotif (__attribute__((unused)) const void *Args);
 static void Ntf_WriteHeading (void);
 static void Ntf_GetNotif (MYSQL_RES *mysql_res,
 			  Ntf_NotifyEvent_t *NotifyEvent,
@@ -458,7 +458,7 @@ static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
 /****************** Put contextual icons in notifications ********************/
 /*****************************************************************************/
 
-static void Ntf_PutIconsNotif (__attribute__((unused)) void *Args)
+static void Ntf_PutIconsNotif (__attribute__((unused)) const void *Args)
   {
    /***** Edit notification settings *****/
    if (Gbl.Action.Act != ActReqEdiSet &&

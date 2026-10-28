@@ -116,9 +116,9 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const struct Brw_TmpPubDir *TmpPubDir
 					   const char FullPathIncludingFile[PATH_MAX + 1],
                                            const char FileName[NAME_MAX + 1]);
 
-void Brw_PutImplicitParsFileBrowser (void *Zone);
-void Brw_PutParsFileBrowser (struct Brw_FileBrowser *FileBrowser);
-void Brw_PutParWhichFiles (void *WhichFiles);
+void Brw_PutImplicitParsFileBrowser (const void *FileBrowser);
+void Brw_PutParsFileBrowser (const struct Brw_FileBrowser *FileBrowser);
+void Brw_PutParWhichFiles (const void *WhichFiles);
 void Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrowser,
 					 struct Brw_File *File);
 

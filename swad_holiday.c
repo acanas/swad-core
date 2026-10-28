@@ -63,8 +63,8 @@ static struct Hld_Holiday *Hld_EditingHld = NULL;	// Static variable to keep the
 static Usr_Can_t Hld_CheckIfICanEditHlds (void);
 
 static Hld_Order_t Hld_GetParHldOrder (void);
-static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args);
-static void Hld_PutIconsEditHolidays (__attribute__((unused)) void *Args);
+static void Hld_PutIconsSeeHolidays (__attribute__((unused)) const void *Args);
+static void Hld_PutIconsEditHolidays (__attribute__((unused)) const void *Args);
 
 static void Hld_EditHolidaysInternal (void);
 
@@ -76,7 +76,7 @@ static Hld_HolidayType_t Hld_GetParHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
 static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 					const struct Plc_Places *Places);
-static void Hld_PutParHldCod (void *HldCod);
+static void Hld_PutParHldCod (const void *HldCod);
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate);
 static void Hld_PutFormToCreateHoliday (const struct Plc_Places *Places);
 static void Hld_PutHeadHolidays (void);
@@ -238,7 +238,7 @@ static Hld_Order_t Hld_GetParHldOrder (void)
 /******************** Put contextual icons in calendar ***********************/
 /*****************************************************************************/
 
-static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
+static void Hld_PutIconsSeeHolidays (__attribute__((unused)) const void *Args)
   {
    /***** Edit holidays *****/
    if (Hld_CheckIfICanEditHlds () == Usr_CAN)
@@ -248,7 +248,7 @@ static void Hld_PutIconsSeeHolidays (__attribute__((unused)) void *Args)
    Cal_PutIconToSeeCalendar ();
   }
 
-static void Hld_PutIconsEditHolidays (__attribute__((unused)) void *Args)
+static void Hld_PutIconsEditHolidays (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to view holidays *****/
    Ico_PutContextualIconToView (ActSeeHld,NULL,NULL,NULL);
@@ -631,7 +631,7 @@ static void Hld_ListHolidaysForEdition (const struct Hld_Holidays *Holidays,
 /******************** Write parameter with code of holiday *******************/
 /*****************************************************************************/
 
-static void Hld_PutParHldCod (void *HldCod)
+static void Hld_PutParHldCod (const void *HldCod)
   {
    if (HldCod)
       ParCod_PutPar (ParCod_Hld,*((long *) HldCod));

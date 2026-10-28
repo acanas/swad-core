@@ -49,7 +49,7 @@
 /*****************************************************************************/
 
 static void PrgRsc_ShowClipboard (void);
-static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args);
+static void PrgRsc_PutIconsClipboard (__attribute__((unused)) const void *Args);
 
 /*****************************************************************************/
 /**************************** Get resource data ******************************/
@@ -197,7 +197,7 @@ static void PrgRsc_ShowClipboard (void)
 /****** Put contextual icons when showing resource clipboard in program ******/
 /*****************************************************************************/
 
-static void PrgRsc_PutIconsClipboard (__attribute__((unused)) void *Args)
+static void PrgRsc_PutIconsClipboard (__attribute__((unused)) const void *Args)
   {
    /***** Put icon to remove resource clipboard in program *****/
    if (Tre_CheckIfICanEditTree () == Usr_CAN)

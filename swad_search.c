@@ -876,7 +876,7 @@ static void Sch_SaveLastSearchIntoSession (void)
 /*************** Write parameters for link to search courses *****************/
 /*****************************************************************************/
 
-void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) void *Args)
+void Sch_PutLinkToSearchCoursesPars (__attribute__((unused)) const void *Args)
   {
    Sco_PutParScope ("ScopeSch",Hie_SYS);
    Par_PutParUnsigned (NULL,"WhatToSearch",(unsigned) Sch_SEARCH_COURSES);

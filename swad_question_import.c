@@ -55,7 +55,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void QstImp_PutParsExportQsts (void *Questions);
+static void QstImp_PutParsExportQsts (const void *Qsts);
 static void QstImp_PutCreateXMLPar (void);
 
 static void QstImp_ExportQuestion (struct Qst_Question *Qst,FILE *FileXML);
@@ -78,7 +78,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 /**************** Put a link (form) to export test questions *****************/
 /*****************************************************************************/
 
-void QstImp_PutIconToExportQuestions (struct Qst_Questions *Qsts)
+void QstImp_PutIconToExportQuestions (const struct Qst_Questions *Qsts)
   {
    Lay_PutContextualLinkOnlyIcon (ActExpTstQst,NULL,
                                   QstImp_PutParsExportQsts,Qsts,
@@ -89,13 +89,13 @@ void QstImp_PutIconToExportQuestions (struct Qst_Questions *Qsts)
 /****************** Put params to export test questions **********************/
 /*****************************************************************************/
 
-static void QstImp_PutParsExportQsts (void *Questions)
+static void QstImp_PutParsExportQsts (const void *Qsts)
   {
-   if (Questions)
+   if (Qsts)
      {
-      Qst_PutParsEditQst (Questions);
+      Qst_PutParsEditQst (Qsts);
       Par_PutParChar ("OnlyThisQst",'N');
-      Par_PutParUnsigned (NULL,"Order",(unsigned) (((struct Qst_Questions *) Questions)->SelectedOrder));
+      Par_PutParUnsigned (NULL,"Order",(unsigned) (((struct Qst_Questions *) Qsts)->SelectedOrder));
       QstImp_PutCreateXMLPar ();
      }
   }

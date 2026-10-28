@@ -144,7 +144,7 @@ void Msg_ConRecMsg (void);
 void Msg_ShowSntMsgs (void);
 void Msg_ShowRecMsgs (void);
 
-void Msg_PutParsMsgsFilters (void *Messages);
+void Msg_PutParsMsgsFilters (const void *Messages);
 void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,long MsgCod,Ntf_GetContent_t GetContent);
 
