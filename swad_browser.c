@@ -1145,6 +1145,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser);
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutIconsFileBrowsersAsgWrkUsr (const void *FileBrowser);
 static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser);
 
 static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowser);
@@ -2599,7 +2600,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
    /***** Initializations before showing one or several file browsers *****/
    Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
 
-   /***** Begin box and table *****/
+   /***** Begin box *****/
    Box_BoxBegin (Txt_Assignments_and_other_works,
 		 Brw_PutIconsFileBrowsersAsgWrkCrs,FileBrowser,
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
@@ -2647,7 +2648,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 	      }
 	}
 
-   /***** End table and box *****/
+   /***** End box *****/
    Box_BoxEnd ();
 
    /***** Put legal notice *****/
@@ -2660,18 +2661,34 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
   {
+   extern const char *Hlp_FILES_Homework_for_students;
+   extern const char *Txt_Assignments_and_other_works;
+
    /***** Initializations before showing one or several file browsers *****/
    Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
 
-   /***** Show the tree with the assignments *****/
-   FileBrowser->Zone = Brw_ADMI_ASG_USR;
-   Brw_InitializeFileBrowser (FileBrowser);
-   Brw_ShowFileBrowser (FileBrowser);
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_Assignments_and_other_works,
+		 Brw_PutIconsFileBrowsersAsgWrkUsr,FileBrowser,
+		 Hlp_FILES_Homework_for_students,Box_NOT_CLOSABLE);
 
-   /***** Show the tree with the works *****/
-   FileBrowser->Zone = Brw_ADMI_WRK_USR;
-   Brw_InitializeFileBrowser (FileBrowser);
-   Brw_ShowFileBrowser (FileBrowser);
+      /***** Setting selector *****/
+      Set_BeginSettingsHead ();
+	 Brw_ShowFormToShowAllFiles (FileBrowser);
+      Set_EndSettingsHead ();
+
+      /***** Show the tree with the assignments *****/
+      FileBrowser->Zone = Brw_ADMI_ASG_USR;
+      Brw_InitializeFileBrowser (FileBrowser);
+      Brw_ShowFileBrowser (FileBrowser);
+
+      /***** Show the tree with the works *****/
+      FileBrowser->Zone = Brw_ADMI_WRK_USR;
+      Brw_InitializeFileBrowser (FileBrowser);
+      Brw_ShowFileBrowser (FileBrowser);
+
+   /***** End box *****/
+   Box_BoxEnd ();
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
@@ -2686,6 +2703,19 @@ static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser)
    /***** Put icon to create ZIP file *****/
    ZIP_PutIconToCreateZIPAsgWrk ((struct Brw_FileBrowser *) FileBrowser);
 
+   /***** Put icon to show clipboard *****/
+   Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
+
+   /***** Put icon to show a figure *****/
+   Brw_PutIconShowFigure (NULL);
+  }
+
+/*****************************************************************************/
+/******************* Put contextual icons in file browser ********************/
+/*****************************************************************************/
+
+static void Brw_PutIconsFileBrowsersAsgWrkUsr (const void *FileBrowser)
+  {
    /***** Put icon to show clipboard *****/
    Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
 
@@ -2994,6 +3024,38 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_DOC_PRJ] = NULL,
       [Brw_ADMI_ASS_PRJ] = NULL,
      };
+   static void (*FunctionToDrawContextualIcons[Brw_NUM_ZONES]) (const void *Args) =
+     {
+      [Brw_UNKNOWN     ] = NULL,
+      [Brw_SHOW_DOC_CRS] = Brw_PutIconsFileBrowser,
+      [Brw_SHOW_MRK_CRS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_DOC_CRS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_SHR_CRS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_SHR_GRP] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_WRK_USR] = NULL,
+      [Brw_ADMI_WRK_CRS] = NULL,
+      [Brw_ADMI_MRK_CRS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_BRF_USR] = Brw_PutIconsFileBrowser,
+      [Brw_SHOW_DOC_GRP] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_DOC_GRP] = Brw_PutIconsFileBrowser,
+      [Brw_SHOW_MRK_GRP] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_MRK_GRP] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_ASG_USR] = NULL,
+      [Brw_ADMI_ASG_CRS] = NULL,
+      [Brw_SHOW_DOC_DEG] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_DOC_DEG] = Brw_PutIconsFileBrowser,
+      [Brw_SHOW_DOC_CTR] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_DOC_CTR] = Brw_PutIconsFileBrowser,
+      [Brw_SHOW_DOC_INS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_DOC_INS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_SHR_DEG] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_SHR_CTR] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_SHR_INS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_TCH_CRS] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_TCH_GRP] = Brw_PutIconsFileBrowser,
+      [Brw_ADMI_DOC_PRJ] = NULL,
+      [Brw_ADMI_ASS_PRJ] = NULL,
+     };
    static const char **Brw_HelpOfFileBrowser[Brw_NUM_ZONES] =
      {
       [Brw_UNKNOWN     ] = NULL,
@@ -3002,7 +3064,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_DOC_CRS] = &Hlp_FILES_Documents,
       [Brw_ADMI_SHR_CRS] = &Hlp_FILES_Shared,
       [Brw_ADMI_SHR_GRP] = &Hlp_FILES_Shared,
-      [Brw_ADMI_WRK_USR] = &Hlp_FILES_Homework_for_students,
+      [Brw_ADMI_WRK_USR] = NULL,
       [Brw_ADMI_WRK_CRS] = NULL,
       [Brw_ADMI_MRK_CRS] = &Hlp_FILES_Marks,
       [Brw_ADMI_BRF_USR] = &Hlp_FILES_Briefcase,
@@ -3010,7 +3072,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_DOC_GRP] = &Hlp_FILES_Documents,
       [Brw_SHOW_MRK_GRP] = &Hlp_FILES_Marks,
       [Brw_ADMI_MRK_GRP] = &Hlp_FILES_Marks,
-      [Brw_ADMI_ASG_USR] = &Hlp_FILES_Homework_for_students,
+      [Brw_ADMI_ASG_USR] = NULL,
       [Brw_ADMI_ASG_CRS] = NULL,
       [Brw_SHOW_DOC_DEG] = &Hlp_FILES_Documents,
       [Brw_ADMI_DOC_DEG] = &Hlp_FILES_Documents,
@@ -3059,14 +3121,17 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
       if (Brw_TitleOfFileBrowser[FileBrowser->Zone])
 	 Box_BoxBegin (*Brw_TitleOfFileBrowser[FileBrowser->Zone],
-		       Brw_PutIconsFileBrowser,FileBrowser,
-		       *Brw_HelpOfFileBrowser[FileBrowser->Zone],Box_NOT_CLOSABLE);
+		       FunctionToDrawContextualIcons[FileBrowser->Zone],FileBrowser,
+		       Brw_HelpOfFileBrowser[FileBrowser->Zone] ? *Brw_HelpOfFileBrowser[FileBrowser->Zone] :
+								  NULL,
+		       Box_NOT_CLOSABLE);
 
       /***** Subtitle *****/
       Brw_WriteSubtitleOfFileBrowser (FileBrowser);
 
       /***** Setting selector *****/
-      if (!(Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_CRS_ASG_WRK |
+      if (!(Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_USR_ASG_WRK |
+					       Brw_IS_ADM_CRS_ASG_WRK |
 					       Brw_IS_ADM_PRJ)))
 	{
 	 Set_BeginSettingsHead ();
