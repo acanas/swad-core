@@ -13494,6 +13494,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to project(s)"		// Çeviri lazim!
 #endif
 	,
+	[ActShoCliPrj] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents/assessment zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents/assessment zone of a project"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"
+#elif L==5	// fr
+	"Show clipboard in documents/assessment zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents/assessment zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents/assessment zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents/assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents/assessment zone of a project"			// Çeviri lazim!
+#endif
+	,
+	[ActRemCliPrj] =
+#if   L==1	// ca
+	"Eliminar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Remove clipboard in documents/assessment zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Remove clipboard in documents/assessment zone of a project"
+#elif L==4	// es
+	"Eliminar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"
+#elif L==5	// fr
+	"Remove clipboard in documents/assessment zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Remove clipboard in documents/assessment zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove clipboard in documents/assessment zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove clipboard in documents/assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove clipboard in documents/assessment zone of a project"			// Çeviri lazim!
+#endif
+	,
 	[ActReqRemFilDocPrj] =
 #if   L==1	// ca
 	"Request removal of file from documents zone of a project"			// Necessita traducció
@@ -13607,52 +13653,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file into documents zone of a project"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file into documents zone of a project"		// Çeviri lazim!
-#endif
-	,
-	[ActShoCliDocPrj] =
-#if   L==1	// ca
-	"Mostrar portapapeles en zona de documentos de un proyecto"	// Necessita traducció
-#elif L==2	// de
-	"Show clipboard in documents zone of a project"			// Need Übersetzung
-#elif L==3	// en
-	"Show clipboard in documents zone of a project"
-#elif L==4	// es
-	"Mostrar portapapeles en zona de documentos de un proyecto"
-#elif L==5	// fr
-	"Show clipboard in documents zone of a project"			// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar portapapeles en zona de documentos de un proyecto"	// Okoteve traducción
-#elif L==7	// it
-	"Show clipboard in documents zone of a project"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Show clipboard in documents zone of a project"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show clipboard in documents zone of a project"			// Precisa de tradução
-#elif L==10	// tr
-	"Show clipboard in documents zone of a project"			// Çeviri lazim!
-#endif
-	,
-	[ActRemCliDocPrj] =
-#if   L==1	// ca
-	"Eliminar portapapeles en zona de documentos de un proyecto"	// Necessita traducció
-#elif L==2	// de
-	"Remove clipboard in documents zone of a project"		// Need Übersetzung
-#elif L==3	// en
-	"Remove clipboard in documents zone of a project"
-#elif L==4	// es
-	"Eliminar portapapeles en zona de documentos de un proyecto"
-#elif L==5	// fr
-	"Remove clipboard in documents zone of a project"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar portapapeles en zona de documentos de un proyecto"	// Okoteve traducción
-#elif L==7	// it
-	"Remove clipboard in documents zone of a project"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove clipboard in documents zone of a project"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove clipboard in documents zone of a project"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove clipboard in documents zone of a project"		// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocPrj] =
@@ -14067,52 +14067,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file into assessment zone of a project"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file into assessment zone of a project"			// Çeviri lazim!
-#endif
-	,
-	[ActShoCliAssPrj] =
-#if   L==1	// ca
-	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Necessita traducció
-#elif L==2	// de
-	"Show clipboard in assessment zone of a project"			// Need Übersetzung
-#elif L==3	// en
-	"Show clipboard in assessment zone of a project"
-#elif L==4	// es
-	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"
-#elif L==5	// fr
-	"Show clipboard in assessment zone of a project"			// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
-#elif L==7	// it
-	"Show clipboard in assessment zone of a project"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Show clipboard in assessment zone of a project"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show clipboard in assessment zone of a project"			// Precisa de tradução
-#elif L==10	// tr
-	"Show clipboard in assessment zone of a project"			// Çeviri lazim!
-#endif
-	,
-	[ActRemCliAssPrj] =
-#if   L==1	// ca
-	"Eliminar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Necessita traducció
-#elif L==2	// de
-	"Remove clipboard in assessment zone of a project"			// Need Übersetzung
-#elif L==3	// en
-	"Remove clipboard in assessment zone of a project"
-#elif L==4	// es
-	"Eliminar portapapeles en zona de evaluaci&oacute;n de un proyecto"
-#elif L==5	// fr
-	"Remove clipboard in assessment zone of a project"			// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
-#elif L==7	// it
-	"Remove clipboard in assessment zone of a project"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove clipboard in assessment zone of a project"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove clipboard in assessment zone of a project"			// Precisa de tradução
-#elif L==10	// tr
-	"Remove clipboard in assessment zone of a project"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAssPrj] =
@@ -25477,6 +25431,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Manage the assignments/works of user"			// Çeviri lazim!
 #endif
 	,
+	[ActShoCliAsgWrkUsr] =
+#if   L==1	// ca
+	"Mostrar portapapeles en actividades/trabajo de usuario"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in user's assignments/works"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in user's assignments/works"
+#elif L==4	// es
+	"Mostrar portapapeles en actividades/trabajo de usuario"
+#elif L==5	// fr
+	"Show clipboard in user's assignments/works"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en actividades/trabajo de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in user's assignments/works"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in user's assignments/works"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in user's assignments/works"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in user's assignments/works"			// Çeviri lazim!
+#endif
+	,
+	[ActRemCliAsgWrkUsr] =
+#if   L==1	// ca
+	"Eliminar portapapeles en actividades/trabajo de usuario"	// Necessita traducció
+#elif L==2	// de
+	"Remove clipboard in user's assignments/works"			// Need Übersetzung
+#elif L==3	// en
+	"Remove clipboard in user's assignments/works"
+#elif L==4	// es
+	"Eliminar portapapeles en actividades/trabajo de usuario"
+#elif L==5	// fr
+	"Remove clipboard in user's assignments/works"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles en actividades/trabajo de usuario"	// Okoteve traducción
+#elif L==7	// it
+	"Remove clipboard in user's assignments/works"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove clipboard in user's assignments/works"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove clipboard in user's assignments/works"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove clipboard in user's assignments/works"			// Çeviri lazim!
+#endif
+	,
 	[ActReqRemFilAsgUsr] =
 #if   L==1	// ca
 	"Request removal of file from user's assignments"			// Necessita traducció
@@ -25590,52 +25590,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in user's assignments"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in user's assignments"		// Çeviri lazim!
-#endif
-	,
-	[ActShoCliAsgUsr] =
-#if   L==1	// ca
-	"Mostrar portapapeles en actividades de usuario"	// Necessita traducció
-#elif L==2	// de
-	"Show clipboard in user's assignments"			// Need Übersetzung
-#elif L==3	// en
-	"Show clipboard in user's assignments"
-#elif L==4	// es
-	"Mostrar portapapeles en actividades de usuario"
-#elif L==5	// fr
-	"Show clipboard in user's assignments"			// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar portapapeles en actividades de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Show clipboard in user's assignments"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Show clipboard in user's assignments"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show clipboard in user's assignments"			// Precisa de tradução
-#elif L==10	// tr
-	"Show clipboard in user's assignments"			// Çeviri lazim!
-#endif
-	,
-	[ActRemCliAsgUsr] =
-#if   L==1	// ca
-	"Eliminar portapapeles en actividades de usuario"	// Necessita traducció
-#elif L==2	// de
-	"Remove clipboard in user's assignments"		// Need Übersetzung
-#elif L==3	// en
-	"Remove clipboard in user's assignments"
-#elif L==4	// es
-	"Eliminar portapapeles en actividades de usuario"
-#elif L==5	// fr
-	"Remove clipboard in user's assignments"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar portapapeles en actividades de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Remove clipboard in user's assignments"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove clipboard in user's assignments"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove clipboard in user's assignments"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove clipboard in user's assignments"		// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAsgUsr] =
@@ -26050,52 +26004,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file in user's works"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file in user's works"			// Çeviri lazim!
-#endif
-	,
-	[ActShoCliWrkUsr] =
-#if   L==1	// ca
-	"Mostrar portapapeles en trabajos de usuario"	// Necessita traducció
-#elif L==2	// de
-	"Show clipboard in user's works"		// Need Übersetzung
-#elif L==3	// en
-	"Show clipboard in user's works"
-#elif L==4	// es
-	"Mostrar portapapeles en trabajos de usuario"
-#elif L==5	// fr
-	"Show clipboard in user's works"		// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar portapapeles en trabajos de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Show clipboard in user's works"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Show clipboard in user's works"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show clipboard in user's works"		// Precisa de tradução
-#elif L==10	// tr
-	"Show clipboard in user's works"		// Çeviri lazim!
-#endif
-	,
-	[ActRemCliWrkUsr] =
-#if   L==1	// ca
-	"Eliminar portapapeles en trabajos de usuario"	// Necessita traducció
-#elif L==2	// de
-	"Remove clipboard in user's works"		// Need Übersetzung
-#elif L==3	// en
-	"Remove clipboard in user's works"
-#elif L==4	// es
-	"Eliminar portapapeles en trabajos de usuario"
-#elif L==5	// fr
-	"Remove clipboard in user's works"		// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar portapapeles en trabajos de usuario"	// Okoteve traducción
-#elif L==7	// it
-	"Remove clipboard in user's works"		// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove clipboard in user's works"		// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove clipboard in user's works"		// Precisa de tradução
-#elif L==10	// tr
-	"Remove clipboard in user's works"		// Çeviri lazim!
 #endif
 	,
 	[ActRemTreWrkUsr] =

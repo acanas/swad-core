@@ -693,7 +693,7 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_DOC_CRS] = ActShoCliDocCrs,
    [Brw_ADMI_SHR_CRS] = ActShoCliShaCrs,
    [Brw_ADMI_SHR_GRP] = ActShoCliShaGrp,
-   [Brw_ADMI_WRK_USR] = ActShoCliWrkUsr,
+   [Brw_ADMI_WRK_USR] = ActShoCliAsgWrkUsr,
    [Brw_ADMI_WRK_CRS] = ActShoCliAsgWrkCrs,
    [Brw_ADMI_MRK_CRS] = ActShoCliMrkCrs,
    [Brw_ADMI_BRF_USR] = ActShoCliBrf,
@@ -701,7 +701,7 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_DOC_GRP] = ActShoCliDocGrp,
    [Brw_SHOW_MRK_GRP] = ActUnk,
    [Brw_ADMI_MRK_GRP] = ActShoCliMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActShoCliAsgUsr,
+   [Brw_ADMI_ASG_USR] = ActShoCliAsgWrkUsr,
    [Brw_ADMI_ASG_CRS] = ActShoCliAsgWrkCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
    [Brw_ADMI_DOC_DEG] = ActShoCliDocDeg,
@@ -714,8 +714,8 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_INS] = ActShoCliShaIns,
    [Brw_ADMI_TCH_CRS] = ActShoCliTchCrs,
    [Brw_ADMI_TCH_GRP] = ActShoCliTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActShoCliDocPrj,
-   [Brw_ADMI_ASS_PRJ] = ActShoCliAssPrj,
+   [Brw_ADMI_DOC_PRJ] = ActShoCliPrj,
+   [Brw_ADMI_ASS_PRJ] = ActShoCliPrj,
   };
 
 static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
@@ -726,7 +726,7 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_ADMI_DOC_CRS] = ActRemCliDocCrs,
    [Brw_ADMI_SHR_CRS] = ActRemCliShaCrs,
    [Brw_ADMI_SHR_GRP] = ActRemCliShaGrp,
-   [Brw_ADMI_WRK_USR] = ActRemCliWrkUsr,
+   [Brw_ADMI_WRK_USR] = ActRemCliAsgWrkUsr,
    [Brw_ADMI_WRK_CRS] = ActRemCliAsgWrkCrs,
    [Brw_ADMI_MRK_CRS] = ActRemCliMrkCrs,
    [Brw_ADMI_BRF_USR] = ActRemCliBrf,
@@ -734,7 +734,7 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_ADMI_DOC_GRP] = ActRemCliDocGrp,
    [Brw_SHOW_MRK_GRP] = ActUnk,
    [Brw_ADMI_MRK_GRP] = ActRemCliMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActRemCliAsgUsr,
+   [Brw_ADMI_ASG_USR] = ActRemCliAsgWrkUsr,
    [Brw_ADMI_ASG_CRS] = ActRemCliAsgWrkCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
    [Brw_ADMI_DOC_DEG] = ActRemCliDocDeg,
@@ -747,8 +747,8 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_INS] = ActRemCliShaIns,
    [Brw_ADMI_TCH_CRS] = ActRemCliTchCrs,
    [Brw_ADMI_TCH_GRP] = ActRemCliTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActRemCliDocPrj,
-   [Brw_ADMI_ASS_PRJ] = ActRemCliAssPrj,
+   [Brw_ADMI_DOC_PRJ] = ActRemCliPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRemCliPrj,
   };
 
 static Act_Action_t Brw_ActFormCreate[Brw_NUM_ZONES] =
@@ -1728,12 +1728,12 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
 
       /***** My assignments and works *****/
       case ActAdmAsgWrkUsr:
+      case ActShoCliAsgWrkUsr:	case ActRemCliAsgWrkUsr:
 
       /***** My assignments *****/
       case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
       case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
       case ActCopAsgUsr:	case ActPasAsgUsr:
-      case ActShoCliAsgUsr:	case ActRemCliAsgUsr:
       case ActFrmCreAsgUsr:	case ActCreFolAsgUsr:	case ActCreLnkAsgUsr:
       case ActRenFolAsgUsr:
       case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
@@ -1747,7 +1747,6 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
       case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
       case ActCopWrkUsr:	case ActPasWrkUsr:
-      case ActShoCliWrkUsr:	case ActRemCliWrkUsr:
       case ActFrmCreWrkUsr:	case ActCreFolWrkUsr:	case ActCreLnkWrkUsr:
       case ActRenFolWrkUsr:
       case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
@@ -1760,7 +1759,6 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       /***** Assignments and works of users in course *****/
       case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
       case ActShoCliAsgWrkCrs:	case ActRemCliAsgWrkCrs:
-         return Brw_ADMI_ASG_CRS;
 
       /***** Assignments of users in course *****/
       case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
@@ -1790,13 +1788,12 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
 
       /***** Documents and assessment in a project *****/
       case ActSeeOnePrj:
-         return Brw_ADMI_DOC_PRJ;
+      case ActShoCliPrj:	case ActRemCliPrj:
 
       /***** Documents in a project *****/
       case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
       case ActRemFolDocPrj:	case ActRemTreDocPrj:
       case ActCopDocPrj:	case ActPasDocPrj:
-      case ActShoCliDocPrj:	case ActRemCliDocPrj:
       case ActFrmCreDocPrj:	case ActCreFolDocPrj:	case ActCreLnkDocPrj:
       case ActRenFolDocPrj:
       case ActRcvFilDocPrjDZ:	case ActRcvFilDocPrjCla:
@@ -1810,7 +1807,6 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
       case ActRemFolAssPrj:	case ActRemTreAssPrj:
       case ActCopAssPrj:	case ActPasAssPrj:
-      case ActShoCliAssPrj:	case ActRemCliAssPrj:
       case ActFrmCreAssPrj:	case ActCreFolAssPrj:	case ActCreLnkAssPrj:
       case ActRenFolAssPrj:
       case ActRcvFilAssPrjDZ:	case ActRcvFilAssPrjCla:

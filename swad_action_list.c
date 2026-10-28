@@ -824,13 +824,14 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgPrjSco	] = {1974, 1,TabAss,NULL			,Prj_ChangeCriterionScore	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkPrj	] = {1948, 1,TabAss,NULL			,PrjRsc_GetLinkToProject	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
+   [ActShoCliPrj	] = {2222, 1,TabAss,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActRemCliPrj	] = {2240, 1,TabAss,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+
    [ActReqRemFilDocPrj	] = {1698, 1,TabAss,NULL			,Brw_ReqRemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActRemFilDocPrj	] = {1699, 1,TabAss,NULL			,Brw_RemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActRemFolDocPrj	] = {1700, 1,TabAss,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCopDocPrj	] = {1701, 1,TabAss,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPasDocPrj	] = {1702, 1,TabAss,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActShoCliDocPrj	] = {2222, 1,TabAss,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActRemCliDocPrj	] = {2243, 1,TabAss,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActRemTreDocPrj	] = {1703, 1,TabAss,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActFrmCreDocPrj	] = {1704, 1,TabAss,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCreFolDocPrj	] = {1705, 1,TabAss,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -850,8 +851,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolAssPrj	] = {1719, 1,TabAss,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCopAssPrj	] = {1720, 1,TabAss,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPasAssPrj	] = {1721, 1,TabAss,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActShoCliAssPrj	] = {2222, 1,TabAss,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActRemCliAssPrj	] = {2244, 1,TabAss,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActRemTreAssPrj	] = {1722, 1,TabAss,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActFrmCreAssPrj	] = {1723, 1,TabAss,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCreFolAssPrj	] = {1724, 1,TabAss,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1065,8 +1064,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolDocIns	] = {1319, 0,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCopDocIns	] = {1320, 0,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActPasDocIns	] = {1321, 0,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActShoCliDocIns	] = {2224, 0,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemCliDocIns	] = {2245, 0,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActShoCliDocIns	] = {2223, 0,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemCliDocIns	] = {2241, 0,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemTreDocIns	] = {1322, 0,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActFrmCreDocIns	] = {1323, 0,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCreFolDocIns	] = {1324, 0,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{0x300,0x300},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
@@ -1090,8 +1089,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolShaIns	] = {1385, 1,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCopShaIns	] = {1386, 1,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActPasShaIns	] = {1387, 1,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActShoCliShaIns	] = {2225, 1,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemCliShaIns	] = {2246, 1,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActShoCliShaIns	] = {2224, 1,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemCliShaIns	] = {2242, 1,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemTreShaIns	] = {1388, 1,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActFrmCreShaIns	] = {1389, 1,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCreFolShaIns	] = {1390, 1,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
@@ -1122,8 +1121,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolDocCtr	] = {1290, 2,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCopDocCtr	] = {1291, 2,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActPasDocCtr	] = {1292, 2,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActShoCliDocCtr	] = {2226, 2,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemCliDocCtr	] = {2247, 2,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActShoCliDocCtr	] = {2225, 2,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemCliDocCtr	] = {2243, 2,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemTreDocCtr	] = {1293, 2,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActFrmCreDocCtr	] = {1294, 2,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCreFolDocCtr	] = {1295, 2,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x380,0x380},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
@@ -1147,8 +1146,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolShaCtr	] = {1366, 3,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCopShaCtr	] = {1367, 3,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActPasShaCtr	] = {1368, 3,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActShoCliShaCtr	] = {2227, 3,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemCliShaCtr	] = {2248, 3,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActShoCliShaCtr	] = {2226, 3,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemCliShaCtr	] = {2244, 3,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemTreShaCtr	] = {1369, 3,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActFrmCreShaCtr	] = {1370, 3,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCreFolShaCtr	] = {1371, 3,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0},{    0,    0}},Act_NORM,Act_1ST},
@@ -1179,8 +1178,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolDocDeg	] = {1261, 4,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCopDocDeg	] = {1262, 4,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActPasDocDeg	] = {1263, 4,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActShoCliDocDeg	] = {2228, 4,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemCliDocDeg	] = {2249, 4,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActShoCliDocDeg	] = {2227, 4,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemCliDocDeg	] = {2245, 4,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemTreDocDeg	] = {1264, 4,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActFrmCreDocDeg	] = {1265, 4,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCreFolDocDeg	] = {1266, 4,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
@@ -1204,8 +1203,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolShaDeg	] = {1347, 5,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCopShaDeg	] = {1348, 5,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActPasShaDeg	] = {1349, 5,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActShoCliShaDeg	] = {2229, 5,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
-   [ActRemCliShaDeg	] = {2250, 5,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActShoCliShaDeg	] = {2228, 5,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
+   [ActRemCliShaDeg	] = {2246, 5,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActRemTreShaDeg	] = {1350, 5,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActFrmCreShaDeg	] = {1351, 5,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
    [ActCreFolShaDeg	] = {1352, 5,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3C0},{    0,    0}},Act_NORM,Act_1ST},
@@ -1243,8 +1242,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolDocCrs	] = { 497, 6,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCopDocCrs	] = { 470, 6,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActPasDocCrs	] = { 478, 6,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActShoCliDocCrs	] = {2230, 6,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemCliDocCrs	] = {2251, 6,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActShoCliDocCrs	] = {2229, 6,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemCliDocCrs	] = {2247, 6,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemTreDocCrs	] = { 498, 6,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmCreDocCrs	] = { 481, 6,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCreFolDocCrs	] = { 491, 6,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1267,8 +1266,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolDocGrp	] = { 484, 6,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCopDocGrp	] = { 472, 6,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActPasDocGrp	] = { 471, 6,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActShoCliDocGrp	] = {2231, 6,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemCliDocGrp	] = {2252, 6,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActShoCliDocGrp	] = {2230, 6,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemCliDocGrp	] = {2248, 6,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemTreDocGrp	] = { 485, 6,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmCreDocGrp	] = { 468, 6,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCreFolDocGrp	] = { 469, 6,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1294,8 +1293,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolTchCrs	] = {1530, 7,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActCopTchCrs	] = {1531, 7,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActPasTchCrs	] = {1532, 7,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
-   [ActShoCliTchCrs	] = {2232, 7,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
-   [ActRemCliTchCrs	] = {2253, 7,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
+   [ActShoCliTchCrs	] = {2231, 7,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
+   [ActRemCliTchCrs	] = {2249, 7,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActRemTreTchCrs	] = {1533, 7,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActFrmCreTchCrs	] = {1534, 7,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActCreFolTchCrs	] = {1535, 7,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
@@ -1315,8 +1314,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolTchGrp	] = {1549, 7,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActCopTchGrp	] = {1550, 7,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActPasTchGrp	] = {1551, 7,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
-   [ActShoCliTchGrp	] = {2233, 7,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
-   [ActRemCliTchGrp	] = {2254, 7,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
+   [ActShoCliTchGrp	] = {2232, 7,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
+   [ActRemCliTchGrp	] = {2250, 7,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActRemTreTchGrp	] = {1552, 7,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActFrmCreTchGrp	] = {1553, 7,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
    [ActCreFolTchGrp	] = {1554, 7,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x3C0,0x3F0}},Act_NORM,Act_1ST},
@@ -1340,8 +1339,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolShaCrs	] = { 325, 8,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCopShaCrs	] = { 330, 8,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPasShaCrs	] = { 331, 8,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActShoCliShaCrs	] = {2234, 8,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActRemCliShaCrs	] = {2255, 8,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActShoCliShaCrs	] = {2233, 8,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActRemCliShaCrs	] = {2251, 8,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActRemTreShaCrs	] = { 332, 8,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActFrmCreShaCrs	] = { 323, 8,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCreFolShaCrs	] = { 324, 8,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1361,8 +1360,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolShaGrp	] = { 338, 8,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCopShaGrp	] = { 336, 8,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActPasShaGrp	] = { 337, 8,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActShoCliShaGrp	] = {2235, 8,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActRemCliShaGrp	] = {2256, 8,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActShoCliShaGrp	] = {2234, 8,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
+   [ActRemCliShaGrp	] = {2252, 8,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActRemTreShaGrp	] = { 339, 8,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActFrmCreShaGrp	] = { 333, 8,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActCreFolShaGrp	] = { 334, 8,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1379,6 +1378,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // My assignments and works
    [ActAdmAsgWrkUsr	] = { 792, 9,TabFil,NULL			,Brw_ShowFileBrowserOrWorks	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActShoCliAsgWrkUsr	] = {2235, 9,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
+   [ActRemCliAsgWrkUsr	] = {2253, 9,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
 
    // My assignments
    [ActReqRemFilAsgUsr	] = { 834, 9,TabFil,NULL			,Brw_ReqRemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
@@ -1386,8 +1387,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolAsgUsr	] = { 827, 9,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActCopAsgUsr	] = { 829, 9,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActPasAsgUsr	] = { 830, 9,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActShoCliAsgUsr	] = {2236, 9,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActRemCliAsgUsr	] = {2257, 9,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActRemTreAsgUsr	] = { 828, 9,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActFrmCreAsgUsr	] = { 825, 9,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActCreFolAsgUsr	] = { 826, 9,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
@@ -1408,8 +1407,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolWrkUsr	] = { 228, 9,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActCopWrkUsr	] = { 314, 9,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActPasWrkUsr	] = { 318, 9,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActShoCliWrkUsr	] = {2237, 9,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
-   [ActRemCliWrkUsr	] = {2258, 9,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActRemTreWrkUsr	] = { 278, 9,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActFrmCreWrkUsr	] = { 150, 9,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
    [ActCreFolWrkUsr	] = { 172, 9,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,0x008}},Act_NORM,Act_1ST},
@@ -1428,8 +1425,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActReqAsgWrkCrs	] = { 899,10,TabFil,NULL			,Brw_AskEditWorksCrs		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActAdmAsgWrkCrs	] = { 139,10,TabFil,NULL			,Brw_GetSelectedUsrsAndShowWorks,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
    [ActAdmAsgWrkCrsZIP	] = {2221,10,TabFil,NULL			,Brw_GetSelectedUsrsAndShowWorks,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
-   [ActShoCliAsgWrkCrs	] = {2238,10,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActRemCliAsgWrkCrs	] = {2259,10,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActShoCliAsgWrkCrs	] = {2236,10,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActRemCliAsgWrkCrs	] = {2254,10,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
 
    // Assignments of a course
    [ActReqRemFilAsgCrs	] = { 837,10,TabFil,NULL			,Brw_ReqRemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
@@ -1492,8 +1489,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolMrkCrs	] = { 530,11,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCopMrkCrs	] = { 501,11,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActPasMrkCrs	] = { 507,11,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActShoCliMrkCrs	] = {2240,11,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemCliMrkCrs	] = {2261,11,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActShoCliMrkCrs	] = {2237,11,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemCliMrkCrs	] = {2255,11,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemTreMrkCrs	] = { 534,11,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmCreMrkCrs	] = { 596,11,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCreFolMrkCrs	] = { 506,11,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1517,8 +1514,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolMrkGrp	] = { 520,11,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCopMrkGrp	] = { 519,11,TabFil,NULL			,Brw_Copy			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActPasMrkGrp	] = { 502,11,TabFil,NULL			,Brw_Paste			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActShoCliMrkGrp	] = {2241,11,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
-   [ActRemCliMrkGrp	] = {2262,11,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActShoCliMrkGrp	] = {2238,11,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActRemCliMrkGrp	] = {2256,11,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActRemTreMrkGrp	] = { 521,11,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActFrmCreMrkGrp	] = { 601,11,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActCreFolMrkGrp	] = { 513,11,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
@@ -1543,8 +1540,8 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemFolBrf	] = { 196,12,TabFil,NULL			,Brw_TryRemFolder		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActCopBrf		] = { 311,12,TabFil,NULL			,Brw_Copy			,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
    [ActPasBrf		] = { 315,12,TabFil,NULL			,Brw_Paste			,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
-   [ActShoCliBrf	] = {2242,12,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
-   [ActRemCliBrf	] = {2263,12,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
+   [ActShoCliBrf	] = {2239,12,TabFil,NULL			,Brw_ShowMyClipboard		,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
+   [ActRemCliBrf	] = {2257,12,TabFil,NULL			,Brw_RemMyClipboard		,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
    [ActRemTreBrf	] = { 276,12,TabFil,NULL			,Brw_RemFolder			,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActFrmCreBrf	] = { 597,12,TabFil,NULL			,Brw_ShowFormFileBrowser	,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
    [ActCreFolBrf	] = { 170,12,TabFil,NULL			,Brw_CreateFolder		,{{    0,    0},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3C4},{0x3C4,0x3F8}},Act_NORM,Act_1ST},
@@ -4290,47 +4287,41 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActPrnLstUsrRub,	// #2220
 	ActAdmAsgWrkCrsZIP,	// #2221
 
-	ActShoCliDocPrj,	// #2222
-	ActShoCliAssPrj,	// #2223
-	ActShoCliDocIns,	// #2224
-	ActShoCliShaIns,	// #2225
-	ActShoCliDocCtr,	// #2226
-	ActShoCliShaCtr,	// #2227
-	ActShoCliDocDeg,	// #2228
-	ActShoCliShaDeg,	// #2229
-	ActShoCliDocCrs,	// #2230
-	ActShoCliDocGrp,	// #2231
-	ActShoCliTchCrs,	// #2232
-	ActShoCliTchGrp,	// #2233
-	ActShoCliShaCrs,	// #2234
-	ActShoCliShaGrp,	// #2235
-	ActShoCliAsgUsr,	// #2236
-	ActShoCliWrkUsr,	// #2237
-	ActShoCliAsgWrkCrs,	// #2238
-	ActUnk,			// #2239 (obsolete action)
-	ActShoCliMrkCrs,	// #2240
-	ActShoCliMrkGrp,	// #2241
-	ActShoCliBrf,		// #2242
+	ActShoCliPrj,		// #2222
+	ActShoCliDocIns,	// #2223
+	ActShoCliShaIns,	// #2224
+	ActShoCliDocCtr,	// #2225
+	ActShoCliShaCtr,	// #2226
+	ActShoCliDocDeg,	// #2227
+	ActShoCliShaDeg,	// #2228
+	ActShoCliDocCrs,	// #2229
+	ActShoCliDocGrp,	// #2230
+	ActShoCliTchCrs,	// #2231
+	ActShoCliTchGrp,	// #2232
+	ActShoCliShaCrs,	// #2233
+	ActShoCliShaGrp,	// #2234
+	ActShoCliAsgWrkUsr,	// #2235
+	ActShoCliAsgWrkCrs,	// #2236
+	ActShoCliMrkCrs,	// #2237
+	ActShoCliMrkGrp,	// #2238
+	ActShoCliBrf,		// #2239
 
-	ActRemCliDocPrj,	// #2243
-	ActRemCliAssPrj,	// #2244
-	ActRemCliDocIns,	// #2245
-	ActRemCliShaIns,	// #2246
-	ActRemCliDocCtr,	// #2247
-	ActRemCliShaCtr,	// #2248
-	ActRemCliDocDeg,	// #2249
-	ActRemCliShaDeg,	// #2250
-	ActRemCliDocCrs,	// #2251
-	ActRemCliDocGrp,	// #2252
-	ActRemCliTchCrs,	// #2253
-	ActRemCliTchGrp,	// #2254
-	ActRemCliShaCrs,	// #2255
-	ActRemCliShaGrp,	// #2256
-	ActRemCliAsgUsr,	// #2257
-	ActRemCliWrkUsr,	// #2258
-	ActRemCliAsgWrkCrs,	// #2259
-	ActUnk,			// #2260 (obsolete action)
-	ActRemCliMrkCrs,	// #2261
-	ActRemCliMrkGrp,	// #2262
-	ActRemCliBrf,		// #2263
+	ActRemCliPrj,		// #2240
+	ActRemCliDocIns,	// #2241
+	ActRemCliShaIns,	// #2242
+	ActRemCliDocCtr,	// #2243
+	ActRemCliShaCtr,	// #2244
+	ActRemCliDocDeg,	// #2245
+	ActRemCliShaDeg,	// #2246
+	ActRemCliDocCrs,	// #2247
+	ActRemCliDocGrp,	// #2248
+	ActRemCliTchCrs,	// #2249
+	ActRemCliTchGrp,	// #2250
+	ActRemCliShaCrs,	// #2251
+	ActRemCliShaGrp,	// #2252
+	ActRemCliAsgWrkUsr,	// #2253
+	ActRemCliAsgWrkCrs,	// #2254
+	ActRemCliMrkCrs,	// #2255
+	ActRemCliMrkGrp,	// #2256
+	ActRemCliBrf,		// #2257
   };

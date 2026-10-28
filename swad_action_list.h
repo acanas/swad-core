@@ -747,13 +747,14 @@ typedef enum
 	ActChgPrjSco,
 	ActReqLnkPrj,
 
+	ActShoCliPrj,
+	ActRemCliPrj,
+
 	ActReqRemFilDocPrj,
 	ActRemFilDocPrj,
 	ActRemFolDocPrj,
 	ActCopDocPrj,
 	ActPasDocPrj,
-	ActShoCliDocPrj,
-	ActRemCliDocPrj,
 	ActRemTreDocPrj,
 	ActFrmCreDocPrj,
 	ActCreFolDocPrj,
@@ -773,8 +774,6 @@ typedef enum
 	ActRemFolAssPrj,
 	ActCopAssPrj,
 	ActPasAssPrj,
-	ActShoCliAssPrj,
-	ActRemCliAssPrj,
 	ActRemTreAssPrj,
 	ActFrmCreAssPrj,
 	ActCreFolAssPrj,
@@ -1319,6 +1318,8 @@ typedef enum
    // My assignments and works ------------------------------------------------
 
 	ActAdmAsgWrkUsr,
+	ActShoCliAsgWrkUsr,
+	ActRemCliAsgWrkUsr,
 
    // My assignments ----------------------------------------------------------
 
@@ -1327,8 +1328,6 @@ typedef enum
 	ActRemFolAsgUsr,
 	ActCopAsgUsr,
 	ActPasAsgUsr,
-	ActShoCliAsgUsr,
-	ActRemCliAsgUsr,
 	ActRemTreAsgUsr,
 	ActFrmCreAsgUsr,
 	ActCreFolAsgUsr,
@@ -1350,8 +1349,6 @@ typedef enum
 	ActRemFolWrkUsr,
 	ActCopWrkUsr,
 	ActPasWrkUsr,
-	ActShoCliWrkUsr,
-	ActRemCliWrkUsr,
 	ActRemTreWrkUsr,
 	ActFrmCreWrkUsr,
 	ActCreFolWrkUsr,
@@ -2048,7 +2045,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2263
+#define ActLst_MAX_ACTION_COD		2257
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 
