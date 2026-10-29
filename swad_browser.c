@@ -1236,6 +1236,10 @@ static void Brw_GetFileNameToShow (Brw_Zone_t Zone,
 static void Brw_WriteFileSizeAndDate (const struct Brw_File *File,
 				      const char *TxtStyle);
 static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
+
+static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser);
+static void Brw_SetAskRemFile (void);
+static inline bool Brw_GetIfAskRemFile (void);
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
 						const char FolderName[NAME_MAX + 1]);
 
@@ -2577,35 +2581,41 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
    HTM_FIELDSET_Begin (NULL);
       HTM_LEGEND (Txt_Documents);
 
-      /***** Begin box *****/
-      Box_BoxBegin (Txt_Documents,
-		    Brw_PutIconsFileBrowsersPrj,FileBrowser,
-		    Hlp_ASSESSMENT_Projects_project_files,Box_NOT_CLOSABLE);
+      /***** Begin section *****/
+      HTM_SECTION_Begin ("file_browsers");
 
-	 /***** Show current clipboard and setting selector *****/
-         Brw_ShowClipboardAndSettingSelector (FileBrowser);
+	 /***** Begin box *****/
+	 Box_BoxBegin (Txt_Documents,
+		       Brw_PutIconsFileBrowsersPrj,FileBrowser,
+		       Hlp_ASSESSMENT_Projects_project_files,Box_NOT_CLOSABLE);
 
-	 if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
-	   {
-	    /***** Show the tree with the project documents *****/
-	    FileBrowser->Zone = Brw_ADMI_DOC_PRJ;
-	    Brw_InitializeFileBrowser (FileBrowser);
-	    Brw_ShowFileBrowser (FileBrowser);
-	   }
+	    /***** Show current clipboard and setting selector *****/
+	    Brw_ShowClipboardAndSettingSelector (FileBrowser);
 
-	 if (Prj_CheckIfICanViewPrjAss (PrjCod) == Usr_CAN)
-	   {
-	    /***** Show the tree with the project assessment *****/
-	    FileBrowser->Zone = Brw_ADMI_ASS_PRJ;
-	    Brw_InitializeFileBrowser (FileBrowser);
-	    Brw_ShowFileBrowser (FileBrowser);
-	   }
+	    if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
+	      {
+	       /***** Show the tree with the project documents *****/
+	       FileBrowser->Zone = Brw_ADMI_DOC_PRJ;
+	       Brw_InitializeFileBrowser (FileBrowser);
+	       Brw_ShowFileBrowser (FileBrowser);
+	      }
 
-      /***** End box *****/
-      Box_BoxEnd ();
+	    if (Prj_CheckIfICanViewPrjAss (PrjCod) == Usr_CAN)
+	      {
+	       /***** Show the tree with the project assessment *****/
+	       FileBrowser->Zone = Brw_ADMI_ASS_PRJ;
+	       Brw_InitializeFileBrowser (FileBrowser);
+	       Brw_ShowFileBrowser (FileBrowser);
+	      }
 
-      /***** Put legal notice *****/
-      Brw_PutLegalNotice ();
+	 /***** End box *****/
+	 Box_BoxEnd ();
+
+	 /***** Put legal notice *****/
+	 Brw_PutLegalNotice ();
+
+      /***** End section *****/
+      HTM_SECTION_End ();
 
    /***** End fieldset *****/
    HTM_FIELDSET_End ();
@@ -3473,6 +3483,10 @@ static void Brw_ShowClipboardAndSettingSelector (struct Brw_FileBrowser *FileBro
    if (Brw_GetIfShowClipboard ())
       Brw_ShowCurrentClipboard (FileBrowser);
 
+   /***** Button of confirmation of removing *****/
+   if (Brw_GetIfAskRemFile ())
+      Brw_AskConfirmRemoveFile (FileBrowser);
+
    /***** Setting selector *****/
    Set_BeginSettingsHead ();
       Brw_ShowFormToShowAllFiles (FileBrowser);
@@ -4260,12 +4274,12 @@ static void Brw_PutIconRemove (struct Brw_FileBrowser *FileBrowser,
 	       case Brw_IS_FILE:
 	       case Brw_IS_LINK:
 		  /***** Form to remove a file or link *****/
-		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],NULL,
+		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],"file_browsers",
 						 Brw_PutImplicitParsFileBrowser,FileBrowser);
 		  break;
 	       case Brw_IS_FOLDER:
 		  /***** Form to remove a folder *****/
-		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],NULL,
+		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],"file_browsers",
 						 Brw_PutImplicitParsFileBrowser,FileBrowser);
 		  break;
 	       default:
@@ -4971,24 +4985,47 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 
 void Brw_ReqRemFile (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
-   extern const char *Txt_You_can_not_remove_this_file_or_link;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File File;
-   char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / link
+
+   /***** Show again file browser *****/
+   Brw_SetAskRemFile ();
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static bool Brw_AskRemFile = false;
+
+static void Brw_SetAskRemFile (void)
+  {
+   Brw_AskRemFile = true;
+  }
+
+static inline bool Brw_GetIfAskRemFile (void)
+  {
+   return Brw_AskRemFile;
+  }
+
+static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
+   extern const char *Txt_You_can_not_remove_this_file_or_link;
+   struct Brw_File File;
+   char FileNameToShow[NAME_MAX + 1];
+
+   /***** Get parameters path and file in file browser *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);	// Get file / link
 
    /***** Button of confirmation of removing *****/
-   switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,&File))	// Can I remove this file?
+   switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser->Zone,&File))	// Can I remove this file?
      {
       case Usr_CAN:
 	 /***** Show question and button to remove file/link *****/
-	 Brw_GetFileNameToShow (FileBrowser.Zone,&File,FileNameToShow);
-	 Ale_ShowAlertRemove (Brw_ActRemoveFile[FileBrowser.Zone],NULL,
-			      Brw_PutImplicitParsFileBrowser,&FileBrowser,
+	 Brw_GetFileNameToShow (FileBrowser->Zone,&File,FileNameToShow);
+
+	 Ale_ShowAlertRemove (Brw_ActRemoveFile[FileBrowser->Zone],NULL,
+			      Brw_PutImplicitParsFileBrowser,FileBrowser,
 			      Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
 			      FileNameToShow);
 	 break;
@@ -4997,9 +5034,6 @@ void Brw_ReqRemFile (void)
 	 Err_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
 	 break;
      }
-
-   /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/

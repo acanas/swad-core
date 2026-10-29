@@ -43,6 +43,7 @@ void PrjRsc_GetLinkToProject (void)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Projects;
    struct Prj_Projects Prjs;
+   struct Brw_FileBrowser FileBrowser;
 
    /***** Reset projects *****/
    Prj_ResetPrjsAndReadConfig (&Prjs);
@@ -68,7 +69,7 @@ void PrjRsc_GetLinkToProject (void)
    /***** The link may point to all projects or to a given project.
           It it points to a given project, show it. *****/
    if (Prjs.Prj.PrjCod > 0)
-      Prj_ShowBoxWithOnePrj (&Prjs);
+      Prj_ShowBoxWithOnePrj (&Prjs,&FileBrowser);
 
    /***** Free memory of the project *****/
    Prj_FreeMemPrj (&Prjs.Prj);
