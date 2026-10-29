@@ -1138,6 +1138,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod);
 static void Brw_GetNewFolderLinkName (char NewName[NAME_MAX + 1]);
 static bool Brw_GetOnlyPublicFiles (Brw_Zone_t Zone);
 
+static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
 static void Brw_SetPathFileBrowser (struct Brw_FileBrowser *FileBrowser);
 static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PATH_MAX + 1],
 						    long OwnerCod);
@@ -1162,6 +1163,7 @@ static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 
 static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *FileBrowser);
+static void Brw_ShowClipboardAndSettingSelector (struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (Brw_Zone_t Zone);
 static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser);
@@ -1237,7 +1239,12 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
 						const char FolderName[NAME_MAX + 1]);
 
-static void Brw_WriteCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
+//--------------------------------- Clipboard ---------------------------------
+
+static void Brw_SetShowClipboard (void);
+static inline bool Brw_GetIfShowClipboard (void);
+
+static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsClipboard (const void *FileBrowser);
 
 static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
@@ -1250,13 +1257,15 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Z
 
 static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 				const struct Brw_File *ParentFolder);
-static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1]);
 static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBrowser,
 						 unsigned LevelOrg,
 						 const char PathOrgInServ[PATH_MAX + 1],
 						 const char PathDstInZone[PATH_MAX + 1],
 						 struct Brw_NumObjects *Pasted,
 						 long *FirstFilCod);
+
+//-----------------------------------------------------------------------------
+
 static void Brw_PutFormToCreateAFolder (struct Brw_FileBrowser *FileBrowser,
 				        const char FolderNameToShow[NAME_MAX + 1]);
 static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FileBrowser *FileBrowser,
@@ -2054,6 +2063,21 @@ void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser)
   }
 
 /*****************************************************************************/
+/****************** Compute number of levels in a path ***********************/
+/*****************************************************************************/
+
+static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1])
+  {
+   unsigned NumLevls = 0;
+
+   while (*Path)
+      if (*Path++ == '/')
+         NumLevls++;
+
+   return NumLevls;
+  }
+
+/*****************************************************************************/
 /********* Construct the paths to the top folders of file browser ************/
 /*****************************************************************************/
 
@@ -2558,10 +2582,8 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
 		    Brw_PutIconsFileBrowsersPrj,FileBrowser,
 		    Hlp_ASSESSMENT_Projects_project_files,Box_NOT_CLOSABLE);
 
-	 /***** Setting selector *****/
-	 Set_BeginSettingsHead ();
-	    Brw_ShowFormToShowAllFiles (FileBrowser);
-	 Set_EndSettingsHead ();
+	 /***** Show current clipboard and setting selector *****/
+         Brw_ShowClipboardAndSettingSelector (FileBrowser);
 
 	 if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
 	   {
@@ -2611,10 +2633,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 		 Brw_PutIconsFileBrowsersAsgWrkCrs,FileBrowser,
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
-      /***** Setting selector *****/
-      Set_BeginSettingsHead ();
-	 Brw_ShowFormToShowAllFiles (FileBrowser);
-      Set_EndSettingsHead ();
+      /***** Show current clipboard and setting selector *****/
+      Brw_ShowClipboardAndSettingSelector (FileBrowser);
 
       /***** List the assignments and works of the selected users *****/
       for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -2678,10 +2698,8 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
 		 Brw_PutIconsFileBrowsersAsgWrkUsr,FileBrowser,
 		 Hlp_FILES_Homework_for_students,Box_NOT_CLOSABLE);
 
-      /***** Setting selector *****/
-      Set_BeginSettingsHead ();
-	 Brw_ShowFormToShowAllFiles (FileBrowser);
-      Set_EndSettingsHead ();
+      /***** Show current clipboard and setting selector *****/
+      Brw_ShowClipboardAndSettingSelector (FileBrowser);
 
       /***** Show the tree with the assignments *****/
       FileBrowser->Zone = Brw_ADMI_ASG_USR;
@@ -3150,15 +3168,12 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       /***** Subtitle *****/
       Brw_WriteSubtitleOfFileBrowser (FileBrowser);
 
-      /***** Setting selector *****/
+      /***** Show clipboard or setting selector? *****/
       if (!(Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_USR_ASG_WRK |
 					       Brw_IS_ADM_CRS_ASG_WRK |
 					       Brw_IS_ADM_PRJ)))
-	{
-	 Set_BeginSettingsHead ();
-	    Brw_ShowFormToShowAllFiles (FileBrowser);
-	 Set_EndSettingsHead ();
-	}
+	 /***** Show current clipboard and setting selector *****/
+         Brw_ShowClipboardAndSettingSelector (FileBrowser);
 
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -3450,6 +3465,18 @@ static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *F
 
    /***** Get my clipboard *****/
    MyClipboardExists = Brw_GetMyClipboard (FileBrowser);
+  }
+
+static void Brw_ShowClipboardAndSettingSelector (struct Brw_FileBrowser *FileBrowser)
+  {
+   /***** If browser is editable, get and write current clipboard *****/
+   if (Brw_GetIfShowClipboard ())
+      Brw_ShowCurrentClipboard (FileBrowser);
+
+   /***** Setting selector *****/
+   Set_BeginSettingsHead ();
+      Brw_ShowFormToShowAllFiles (FileBrowser);
+   Set_EndSettingsHead ();
   }
 
 /*****************************************************************************/
@@ -5214,14 +5241,31 @@ void Brw_Copy (void)
    Brw_DB_ReplacePathInClipboard (&FileBrowser);
 
    /***** Show again file browser *****/
+   Brw_SetShowClipboard ();
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
-/********* Write a title with the content of the current clipboard ***********/
+/******************* Has the user clicked on copy icon? **********************/
 /*****************************************************************************/
 
-static void Brw_WriteCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
+static bool Brw_ShowClipboard = false;	// The user has not clicked on copy icon
+
+static void Brw_SetShowClipboard (void)
+  {
+   Brw_ShowClipboard = true;	// The user has just clicked on copy icon
+  }
+
+static inline bool Brw_GetIfShowClipboard (void)
+  {
+   return Brw_ShowClipboard;	// Has the user clicked on copy icon?
+  }
+
+/*****************************************************************************/
+/**************** Write the content of the current clipboard *****************/
+/*****************************************************************************/
+
+static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_FILES_Clipboard;
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
@@ -5737,9 +5781,13 @@ void Brw_Paste (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolder);	// Get parent folder in which to paste
 
-   switch (Brw_GetMyClipboard (&FileBrowser))
+   switch (FileBrowser.Clipboard.ZoneDB)
      {
-      case Exi_EXISTS:
+      case Brw_UNKNOWN:	// The clipboard is empty
+	 /***** Write message ******/
+	 Ale_ShowAlert (Ale_WARNING,Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_);
+	 break;
+      default:		// The clipboard is not empty
 	 /***** I source is in a group zone,
 		check if group file zones are enabled,
 		and check if I belongs to the group *****/
@@ -5761,11 +5809,6 @@ void Brw_Paste (void)
 	 Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
 					  Gbl.Usrs.Me.UsrDat.UsrCod,
 					  Gbl.Usrs.Other.UsrDat.UsrCod);
-	 break;
-      case Exi_DOES_NOT_EXIST:
-      default:
-	 /***** Write message ******/
-	 Ale_ShowAlert (Ale_WARNING,Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_);
 	 break;
      }
 
@@ -6085,12 +6128,8 @@ void Brw_ShowMyClipboard (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
-   /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_CheckIfFileBrowserIsEditable (FileBrowser.Zone) == Usr_CAN)
-      if (Brw_GetMyClipboard (&FileBrowser) == Exi_EXISTS)
-	 Brw_WriteCurrentClipboard (&FileBrowser);
-
    /***** Show again the file browser *****/
+   Brw_SetShowClipboard ();
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
@@ -6110,21 +6149,6 @@ void Brw_RemMyClipboard (void)
 
    /***** Show again the file browser *****/
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
-  }
-
-/*****************************************************************************/
-/****************** Compute number of levels in a path ***********************/
-/*****************************************************************************/
-
-static unsigned Brw_NumLevelsInPath (const char Path[PATH_MAX + 1])
-  {
-   unsigned NumLevls = 0;
-
-   while (*Path)
-      if (*Path++ == '/')
-         NumLevls++;
-
-   return NumLevls;
   }
 
 /*****************************************************************************/
@@ -6389,7 +6413,7 @@ void Brw_ShowFormFileBrowser (void)
 	 Brw_PutFormToUploadOneFileClassic (&FileBrowser,ParentFolderNameToShow);
 
 	 /***** 4. Form to paste the content of the clipboard *****/
-	 if (Brw_GetMyClipboard (&FileBrowser) == Exi_EXISTS)
+	 if (FileBrowser.Clipboard.ZoneDB != Brw_UNKNOWN)	// My clipboard is not empty
 	   {
 	    /***** Check if we can paste in this folder *****/
 	    FileBrowser.Clipboard.IsInCurrentZone = Brw_CheckIfClipboardIsInCurrentZone (&FileBrowser);
