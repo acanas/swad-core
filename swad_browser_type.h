@@ -225,6 +225,7 @@ struct Brw_Size
 struct Brw_FileBrowser
   {
    unsigned Id;		// Each file browser in the page has a unique identifier
+   char SectionId[36 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    Brw_Zone_t Zone;
    Brw_WhichFiles_t WhichFiles;	// Show files in expanded folders / all files
    bool OnlyPublicFiles;	// Show only public files?

@@ -1238,8 +1238,8 @@ static void Brw_WriteFileSizeAndDate (const struct Brw_File *File,
 static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
 
 static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser);
-static void Brw_SetAskRemFile (void);
-static inline bool Brw_GetIfAskRemFile (void);
+static void Brw_SetAskRemFile (const struct Brw_FileBrowser *FileBrowser);
+static bool Brw_GetIfAskRemFile (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
 						const char FolderName[NAME_MAX + 1]);
 
@@ -2062,8 +2062,41 @@ void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser)
    /***** Construct the relative path to the folder of file browser *****/
    Brw_SetPathFileBrowser (FileBrowser);
 
-   /***** Other initializations *****/
+   /***** Reset file browser size *****/
    BrwSiz_ResetFileBrowserSize (&FileBrowser->Size);
+
+   /***** Create section identifier *****/
+   switch (FileBrowser->Zone)
+     {
+      case Brw_ADMI_ASG_USR:
+	 Str_Copy (FileBrowser->SectionId,"file_browser_asg",
+		   sizeof (FileBrowser->SectionId) - 1);
+	 break;
+      case Brw_ADMI_WRK_USR:
+	 Str_Copy (FileBrowser->SectionId,"file_browser_wrk",
+		   sizeof (FileBrowser->SectionId) - 1);
+	 break;
+      case Brw_ADMI_ASG_CRS:
+	 snprintf (FileBrowser->SectionId,sizeof (FileBrowser->SectionId),
+		   "file_browser_asg_%s",Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 break;
+      case Brw_ADMI_WRK_CRS:
+	 snprintf (FileBrowser->SectionId,sizeof (FileBrowser->SectionId),
+		   "file_browser_wrk_%s",Gbl.Usrs.Other.UsrDat.EnUsrCod);
+	 break;
+      case Brw_ADMI_DOC_PRJ:
+	 Str_Copy (FileBrowser->SectionId,"file_browser_doc",
+		   sizeof (FileBrowser->SectionId) - 1);
+         break;
+      case Brw_ADMI_ASS_PRJ:
+	 Str_Copy (FileBrowser->SectionId,"file_browser_ass",
+		   sizeof (FileBrowser->SectionId) - 1);
+         break;
+      default:
+	 Str_Copy (FileBrowser->SectionId,"file_browser",
+		   sizeof (FileBrowser->SectionId) - 1);
+	 break;
+     }
   }
 
 /*****************************************************************************/
@@ -3140,7 +3173,6 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
    struct Brw_File RootFolder;
    struct Usr_Data UsrDat;
    struct Brw_NumObjects Removed;
-   char FileBrowserSectionId[32];
    __attribute__((unused)) Exi_Exist_t FileExists;
 
    /***** Every time user clicks in menu option to view
@@ -3164,9 +3196,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
    /***** Begin box *****/
    FileBrowser->Id++;
-   snprintf (FileBrowserSectionId,sizeof (FileBrowserSectionId),
-             "file_browser_%u",FileBrowser->Id);
-   HTM_SECTION_Begin (FileBrowserSectionId);
+   HTM_SECTION_Begin (FileBrowser->SectionId);
 
       if (Brw_TitleOfFileBrowser[FileBrowser->Zone])
 	 Box_BoxBegin (*Brw_TitleOfFileBrowser[FileBrowser->Zone],
@@ -3184,6 +3214,10 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 					       Brw_IS_ADM_PRJ)))
 	 /***** Show current clipboard and setting selector *****/
          Brw_ShowClipboardAndSettingSelector (FileBrowser);
+
+      /***** Button of confirmation of removing *****/
+      if (Brw_GetIfAskRemFile (FileBrowser))
+	 Brw_AskConfirmRemoveFile (FileBrowser);
 
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -3482,10 +3516,6 @@ static void Brw_ShowClipboardAndSettingSelector (struct Brw_FileBrowser *FileBro
    /***** If browser is editable, get and write current clipboard *****/
    if (Brw_GetIfShowClipboard ())
       Brw_ShowCurrentClipboard (FileBrowser);
-
-   /***** Button of confirmation of removing *****/
-   if (Brw_GetIfAskRemFile ())
-      Brw_AskConfirmRemoveFile (FileBrowser);
 
    /***** Setting selector *****/
    Set_BeginSettingsHead ();
@@ -4274,13 +4304,17 @@ static void Brw_PutIconRemove (struct Brw_FileBrowser *FileBrowser,
 	       case Brw_IS_FILE:
 	       case Brw_IS_LINK:
 		  /***** Form to remove a file or link *****/
-		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],"file_browsers",
-						 Brw_PutImplicitParsFileBrowser,FileBrowser);
+		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],
+						 FileBrowser->SectionId,
+						 Brw_PutImplicitParsFileBrowser,
+						 FileBrowser);
 		  break;
 	       case Brw_IS_FOLDER:
 		  /***** Form to remove a folder *****/
-		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],"file_browsers",
-						 Brw_PutImplicitParsFileBrowser,FileBrowser);
+		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],
+						 FileBrowser->SectionId,
+						 Brw_PutImplicitParsFileBrowser,
+						 FileBrowser);
 		  break;
 	       default:
 		  break;
@@ -4991,20 +5025,25 @@ void Brw_ReqRemFile (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Show again file browser *****/
-   Brw_SetAskRemFile ();
+   Brw_SetAskRemFile (&FileBrowser);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
-static bool Brw_AskRemFile = false;
+static char Brw_SectionIdRemFile[36 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1] = "";
 
-static void Brw_SetAskRemFile (void)
+static void Brw_SetAskRemFile (const struct Brw_FileBrowser *FileBrowser)
   {
-   Brw_AskRemFile = true;
+   Str_Copy (Brw_SectionIdRemFile,FileBrowser->SectionId,
+	     sizeof (Brw_SectionIdRemFile) - 1);
+
   }
 
-static inline bool Brw_GetIfAskRemFile (void)
+static bool Brw_GetIfAskRemFile (const struct Brw_FileBrowser *FileBrowser)
   {
-   return Brw_AskRemFile;
+   if (Brw_SectionIdRemFile[0] == '\0')
+      return false;
+   return strcmp (Brw_SectionIdRemFile,FileBrowser->SectionId) ? false :
+								 true;
   }
 
 static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser)
