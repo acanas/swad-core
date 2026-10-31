@@ -693,16 +693,16 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_DOC_CRS] = ActShoCliDocCrs,
    [Brw_ADMI_SHR_CRS] = ActShoCliShaCrs,
    [Brw_ADMI_SHR_GRP] = ActShoCliShaGrp,
-   [Brw_ADMI_WRK_USR] = ActShoCliAsgWrkUsr,
-   [Brw_ADMI_WRK_CRS] = ActShoCliAsgWrkCrs,
+   [Brw_ADMI_WRK_USR] = ActShoCliWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActShoCliWrkCrs,
    [Brw_ADMI_MRK_CRS] = ActShoCliMrkCrs,
    [Brw_ADMI_BRF_USR] = ActShoCliBrf,
    [Brw_SHOW_DOC_GRP] = ActUnk,
    [Brw_ADMI_DOC_GRP] = ActShoCliDocGrp,
    [Brw_SHOW_MRK_GRP] = ActUnk,
    [Brw_ADMI_MRK_GRP] = ActShoCliMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActShoCliAsgWrkUsr,
-   [Brw_ADMI_ASG_CRS] = ActShoCliAsgWrkCrs,
+   [Brw_ADMI_ASG_USR] = ActShoCliAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActShoCliAsgCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
    [Brw_ADMI_DOC_DEG] = ActShoCliDocDeg,
    [Brw_SHOW_DOC_CTR] = ActUnk,
@@ -726,16 +726,16 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_ADMI_DOC_CRS] = ActRemCliDocCrs,
    [Brw_ADMI_SHR_CRS] = ActRemCliShaCrs,
    [Brw_ADMI_SHR_GRP] = ActRemCliShaGrp,
-   [Brw_ADMI_WRK_USR] = ActRemCliAsgWrkUsr,
-   [Brw_ADMI_WRK_CRS] = ActRemCliAsgWrkCrs,
+   [Brw_ADMI_WRK_USR] = ActRemCliWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActRemCliWrkCrs,
    [Brw_ADMI_MRK_CRS] = ActRemCliMrkCrs,
    [Brw_ADMI_BRF_USR] = ActRemCliBrf,
    [Brw_SHOW_DOC_GRP] = ActUnk,
    [Brw_ADMI_DOC_GRP] = ActRemCliDocGrp,
    [Brw_SHOW_MRK_GRP] = ActUnk,
    [Brw_ADMI_MRK_GRP] = ActRemCliMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActRemCliAsgWrkUsr,
-   [Brw_ADMI_ASG_CRS] = ActRemCliAsgWrkCrs,
+   [Brw_ADMI_ASG_USR] = ActRemCliAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActRemCliAsgCrs,
    [Brw_SHOW_DOC_DEG] = ActUnk,
    [Brw_ADMI_DOC_DEG] = ActRemCliDocDeg,
    [Brw_SHOW_DOC_CTR] = ActUnk,
@@ -1146,7 +1146,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (const char PathRootFolder[PA
 static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args);
 static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser);
 static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser);
-static void Brw_PutIconsFileBrowsersAsgWrkUsr (const void *FileBrowser);
+static void Brw_PutIconsFileBrowsersAsgWrkUsr (__attribute__((unused)) const void *Args);
 static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser);
 
 static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowser);
@@ -1162,8 +1162,7 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser);
 static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 
-static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *FileBrowser);
-static void Brw_ShowClipboardAndSettingSelector (struct Brw_FileBrowser *FileBrowser);
+static void Brw_ShowSettingSelector (struct Brw_FileBrowser *FileBrowser);
 static void Brw_UpdateLastAccess (Brw_Zone_t Zone);
 static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser);
@@ -1245,13 +1244,13 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrow
 
 //--------------------------------- Clipboard ---------------------------------
 
-static void Brw_SetShowClipboard (void);
-static inline bool Brw_GetIfShowClipboard (void);
+static void Brw_SetShowClipboard (const struct Brw_FileBrowser *FileBrowser);
+static inline bool Brw_GetIfShowClipboard (const struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsClipboard (const void *FileBrowser);
 
-static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
+static void Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Brw_Zone_t Zone,
@@ -1741,12 +1740,12 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
 
       /***** My assignments and works *****/
       case ActAdmAsgWrkUsr:
-      case ActShoCliAsgWrkUsr:	case ActRemCliAsgWrkUsr:
 
       /***** My assignments *****/
       case ActReqRemFilAsgUsr:	case ActRemFilAsgUsr:
       case ActRemFolAsgUsr:	case ActRemTreAsgUsr:
       case ActCopAsgUsr:	case ActPasAsgUsr:
+      case ActShoCliAsgUsr:	case ActRemCliAsgUsr:
       case ActFrmCreAsgUsr:	case ActCreFolAsgUsr:	case ActCreLnkAsgUsr:
       case ActRenFolAsgUsr:
       case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
@@ -1760,6 +1759,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActReqRemFilWrkUsr:	case ActRemFilWrkUsr:
       case ActRemFolWrkUsr:	case ActRemTreWrkUsr:
       case ActCopWrkUsr:	case ActPasWrkUsr:
+      case ActShoCliWrkUsr:	case ActRemCliWrkUsr:
       case ActFrmCreWrkUsr:	case ActCreFolWrkUsr:	case ActCreLnkWrkUsr:
       case ActRenFolWrkUsr:
       case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
@@ -1771,12 +1771,12 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
 
       /***** Assignments and works of users in course *****/
       case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
-      case ActShoCliAsgWrkCrs:	case ActRemCliAsgWrkCrs:
 
       /***** Assignments of users in course *****/
       case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
       case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
       case ActCopAsgCrs:	case ActPasAsgCrs:
+      case ActShoCliAsgCrs:	case ActRemCliAsgCrs:
       case ActFrmCreAsgCrs:	case ActCreFolAsgCrs:	case ActCreLnkAsgCrs:
       case ActRenFolAsgCrs:
       case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
@@ -1790,6 +1790,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
       case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
       case ActCopWrkCrs:	case ActPasWrkCrs:
+      case ActShoCliWrkCrs:	case ActRemCliWrkCrs:
       case ActFrmCreWrkCrs:	case ActCreFolWrkCrs:	case ActCreLnkWrkCrs:
       case ActRenFolWrkCrs:
       case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
@@ -2587,8 +2588,8 @@ static void Brw_AskEditWorksCrsInternal (__attribute__((unused)) void *Args)
 
 void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser)
   {
-   /***** Initializations before showing one or several file browsers *****/
-   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
+   /***** Update last access to this file browser *****/
+   Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /****** Show the file browser *****/
    Brw_ShowFileBrowser (FileBrowser);
@@ -2607,8 +2608,8 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_Documents;
 
-   /***** Initializations before showing one or several file browsers *****/
-   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
+   /***** Update last access to this file browser *****/
+   Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
@@ -2619,11 +2620,11 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
 
 	 /***** Begin box *****/
 	 Box_BoxBegin (Txt_Documents,
-		       Brw_PutIconsFileBrowsersPrj,FileBrowser,
+		       Brw_PutIconsFileBrowsersPrj,NULL,
 		       Hlp_ASSESSMENT_Projects_project_files,Box_NOT_CLOSABLE);
 
-	    /***** Show current clipboard and setting selector *****/
-	    Brw_ShowClipboardAndSettingSelector (FileBrowser);
+	    /***** Show setting selector *****/
+	    Brw_ShowSettingSelector (FileBrowser);
 
 	    if (Prj_CheckIfICanViewPrjDocs (PrjCod) == Usr_CAN)
 	      {
@@ -2668,16 +2669,16 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
    if (ZIP_GetCreateZIP () == ZIP_CREATE_ZIP)
       ZIP_CreateZIPAsgWrk ();
 
-   /***** Initializations before showing one or several file browsers *****/
-   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
+   /***** Update last access to this file browser *****/
+   Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Assignments_and_other_works,
 		 Brw_PutIconsFileBrowsersAsgWrkCrs,FileBrowser,
 		 Hlp_FILES_Homework_for_teachers,Box_NOT_CLOSABLE);
 
-      /***** Show current clipboard and setting selector *****/
-      Brw_ShowClipboardAndSettingSelector (FileBrowser);
+      /***** Show setting selector *****/
+      Brw_ShowSettingSelector (FileBrowser);
 
       /***** List the assignments and works of the selected users *****/
       for (Ptr = Gbl.Usrs.Selected.List[Rol_UNK];
@@ -2733,16 +2734,16 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
    extern const char *Hlp_FILES_Homework_for_students;
    extern const char *Txt_Assignments_and_other_works;
 
-   /***** Initializations before showing one or several file browsers *****/
-   Brw_BeforeShowingOneOrSeveralFileBrowsers (FileBrowser);
+   /***** Update last access to this file browser *****/
+   Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Assignments_and_other_works,
-		 Brw_PutIconsFileBrowsersAsgWrkUsr,FileBrowser,
+		 Brw_PutIconsFileBrowsersAsgWrkUsr,NULL,
 		 Hlp_FILES_Homework_for_students,Box_NOT_CLOSABLE);
 
-      /***** Show current clipboard and setting selector *****/
-      Brw_ShowClipboardAndSettingSelector (FileBrowser);
+      /***** Show setting selector *****/
+      Brw_ShowSettingSelector (FileBrowser);
 
       /***** Show the tree with the assignments *****/
       FileBrowser->Zone = Brw_ADMI_ASG_USR;
@@ -2765,11 +2766,8 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
 /******************* Put contextual icons in file browser ********************/
 /*****************************************************************************/
 
-void Brw_PutIconsFileBrowsersPrj (const void *FileBrowser)
+void Brw_PutIconsFileBrowsersPrj (__attribute__((unused)) const void *Args)
   {
-   /***** Put icon to show clipboard *****/
-   Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
-
    /***** Put icon to show a figure *****/
    Brw_PutIconShowFigure (NULL);
   }
@@ -2783,9 +2781,6 @@ static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser)
    /***** Put icon to create ZIP file *****/
    ZIP_PutIconToCreateZIPAsgWrk ((struct Brw_FileBrowser *) FileBrowser);
 
-   /***** Put icon to show clipboard *****/
-   Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
-
    /***** Put icon to show a figure *****/
    Brw_PutIconShowFigure (NULL);
   }
@@ -2794,11 +2789,8 @@ static void Brw_PutIconsFileBrowsersAsgWrkCrs (const void *FileBrowser)
 /******************* Put contextual icons in file browser ********************/
 /*****************************************************************************/
 
-static void Brw_PutIconsFileBrowsersAsgWrkUsr (const void *FileBrowser)
+static void Brw_PutIconsFileBrowsersAsgWrkUsr (__attribute__((unused)) const void *Args)
   {
-   /***** Put icon to show clipboard *****/
-   Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
-
    /***** Put icon to show a figure *****/
    Brw_PutIconShowFigure (NULL);
   }
@@ -3032,6 +3024,10 @@ static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser)
 
 void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser)
   {
+   /***** Get my clipboard *****/
+   Brw_GetMyClipboard (FileBrowser);
+
+   /***** Show file browsers *****/
    if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_USR_ASG_WRK))
       Brw_ShowFileBrowsersAsgWrkUsr (FileBrowser);
    else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
@@ -3083,7 +3079,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_SHR_CRS] = &Txt_Shared_files_area,
       [Brw_ADMI_SHR_GRP] = &Txt_Shared_files_area,
       [Brw_ADMI_WRK_USR] = &Txt_Works_area,
-      [Brw_ADMI_WRK_CRS] = NULL,
+      [Brw_ADMI_WRK_CRS] = &Txt_Works_area,
       [Brw_ADMI_MRK_CRS] = &Txt_Marks_management_area,
       [Brw_ADMI_BRF_USR] = &Txt_Temporary_private_storage_area,
       [Brw_SHOW_DOC_GRP] = &Txt_Documents_area,
@@ -3091,7 +3087,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_SHOW_MRK_GRP] = &Txt_Marks_area,
       [Brw_ADMI_MRK_GRP] = &Txt_Marks_management_area,
       [Brw_ADMI_ASG_USR] = &Txt_Assignments_area,
-      [Brw_ADMI_ASG_CRS] = NULL,
+      [Brw_ADMI_ASG_CRS] = &Txt_Assignments_area,
       [Brw_SHOW_DOC_DEG] = &Txt_Documents_area,
       [Brw_ADMI_DOC_DEG] = &Txt_Documents_management_area,
       [Brw_SHOW_DOC_CTR] = &Txt_Documents_area,
@@ -3105,38 +3101,6 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_TCH_GRP] = &Txt_Teachers_files_area,
       [Brw_ADMI_DOC_PRJ] = &Txt_Project_documents,
       [Brw_ADMI_ASS_PRJ] = &Txt_Project_assessment,
-     };
-   static void (*FunctionToDrawContextualIcons[Brw_NUM_ZONES]) (const void *Args) =
-     {
-      [Brw_UNKNOWN     ] = NULL,
-      [Brw_SHOW_DOC_CRS] = Brw_PutIconsFileBrowser,
-      [Brw_SHOW_MRK_CRS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_DOC_CRS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_SHR_CRS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_SHR_GRP] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_WRK_USR] = NULL,
-      [Brw_ADMI_WRK_CRS] = NULL,
-      [Brw_ADMI_MRK_CRS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_BRF_USR] = Brw_PutIconsFileBrowser,
-      [Brw_SHOW_DOC_GRP] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_DOC_GRP] = Brw_PutIconsFileBrowser,
-      [Brw_SHOW_MRK_GRP] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_MRK_GRP] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_ASG_USR] = NULL,
-      [Brw_ADMI_ASG_CRS] = NULL,
-      [Brw_SHOW_DOC_DEG] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_DOC_DEG] = Brw_PutIconsFileBrowser,
-      [Brw_SHOW_DOC_CTR] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_DOC_CTR] = Brw_PutIconsFileBrowser,
-      [Brw_SHOW_DOC_INS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_DOC_INS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_SHR_DEG] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_SHR_CTR] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_SHR_INS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_TCH_CRS] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_TCH_GRP] = Brw_PutIconsFileBrowser,
-      [Brw_ADMI_DOC_PRJ] = NULL,
-      [Brw_ADMI_ASS_PRJ] = NULL,
      };
    static const char **Brw_HelpOfFileBrowser[Brw_NUM_ZONES] =
      {
@@ -3200,7 +3164,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 
       if (Brw_TitleOfFileBrowser[FileBrowser->Zone])
 	 Box_BoxBegin (*Brw_TitleOfFileBrowser[FileBrowser->Zone],
-		       FunctionToDrawContextualIcons[FileBrowser->Zone],FileBrowser,
+		       Brw_PutIconsFileBrowser,FileBrowser,
 		       Brw_HelpOfFileBrowser[FileBrowser->Zone] ? *Brw_HelpOfFileBrowser[FileBrowser->Zone] :
 								  NULL,
 		       Box_NOT_CLOSABLE);
@@ -3208,12 +3172,15 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       /***** Subtitle *****/
       Brw_WriteSubtitleOfFileBrowser (FileBrowser);
 
-      /***** Show clipboard or setting selector? *****/
+      /***** Show setting selector? *****/
       if (!(Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_USR_ASG_WRK |
-					       Brw_IS_ADM_CRS_ASG_WRK |
-					       Brw_IS_ADM_PRJ)))
-	 /***** Show current clipboard and setting selector *****/
-         Brw_ShowClipboardAndSettingSelector (FileBrowser);
+      					       Brw_IS_ADM_CRS_ASG_WRK |
+      					       Brw_IS_ADM_PRJ)))
+         Brw_ShowSettingSelector (FileBrowser);
+
+      /***** If browser is editable, get and write current clipboard *****/
+      if (Brw_GetIfShowClipboard (FileBrowser))
+	 Brw_ShowCurrentClipboard (FileBrowser);
 
       /***** Button of confirmation of removing *****/
       if (Brw_GetIfAskRemFile (FileBrowser))
@@ -3483,7 +3450,7 @@ static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser)
 
    if (NextAction != ActUnk)	// This zone allows to show clipboard
       if (FileBrowser->Clipboard.File.Path.InZone[0])	// Clipboard not empty
-	 Ico_PutContextualIconToViewClipboard (NextAction,
+	 Ico_PutContextualIconToViewClipboard (NextAction,FileBrowser->SectionId,
 					       Brw_PutImplicitParsFileBrowser,FileBrowser);
   }
 
@@ -3497,26 +3464,11 @@ static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args)
   }
 
 /*****************************************************************************/
-/******** Initializations before showing one or several file browsers ********/
+/**************************** Show setting selector **************************/
 /*****************************************************************************/
 
-static void Brw_BeforeShowingOneOrSeveralFileBrowsers (struct Brw_FileBrowser *FileBrowser)
+static void Brw_ShowSettingSelector (struct Brw_FileBrowser *FileBrowser)
   {
-   __attribute__((unused)) Exi_Exist_t MyClipboardExists;
-
-   /***** Update last access to this file browser *****/
-   Brw_UpdateLastAccess (FileBrowser->Zone);
-
-   /***** Get my clipboard *****/
-   MyClipboardExists = Brw_GetMyClipboard (FileBrowser);
-  }
-
-static void Brw_ShowClipboardAndSettingSelector (struct Brw_FileBrowser *FileBrowser)
-  {
-   /***** If browser is editable, get and write current clipboard *****/
-   if (Brw_GetIfShowClipboard ())
-      Brw_ShowCurrentClipboard (FileBrowser);
-
    /***** Setting selector *****/
    Set_BeginSettingsHead ();
       Brw_ShowFormToShowAllFiles (FileBrowser);
@@ -4338,7 +4290,7 @@ static void Brw_PutIconCopy (struct Brw_FileBrowser *FileBrowser)
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       /***** Form to copy into the clipboard *****/
-      Ico_PutContextualIconToCopy (Brw_ActCopy[FileBrowser->Zone],
+      Ico_PutContextualIconToCopy (Brw_ActCopy[FileBrowser->Zone],FileBrowser->SectionId,
 				   Brw_PutImplicitParsFileBrowser,FileBrowser);
 
    HTM_TD_End ();
@@ -5063,7 +5015,7 @@ static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser)
 	 /***** Show question and button to remove file/link *****/
 	 Brw_GetFileNameToShow (FileBrowser->Zone,&File,FileNameToShow);
 
-	 Ale_ShowAlertRemove (Brw_ActRemoveFile[FileBrowser->Zone],NULL,
+	 Ale_ShowAlertRemove (Brw_ActRemoveFile[FileBrowser->Zone],FileBrowser->SectionId,
 			      Brw_PutImplicitParsFileBrowser,FileBrowser,
 			      Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
 			      FileNameToShow);
@@ -5314,7 +5266,7 @@ void Brw_Copy (void)
    Brw_DB_ReplacePathInClipboard (&FileBrowser);
 
    /***** Show again file browser *****/
-   Brw_SetShowClipboard ();
+   Brw_SetShowClipboard (&FileBrowser);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
@@ -5322,16 +5274,20 @@ void Brw_Copy (void)
 /******************* Has the user clicked on copy icon? **********************/
 /*****************************************************************************/
 
-static bool Brw_ShowClipboard = false;	// The user has not clicked on copy icon
+static char Brw_SectionIdClipboard[36 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1] = "";
 
-static void Brw_SetShowClipboard (void)
+static void Brw_SetShowClipboard (const struct Brw_FileBrowser *FileBrowser)
   {
-   Brw_ShowClipboard = true;	// The user has just clicked on copy icon
+   Str_Copy (Brw_SectionIdClipboard,FileBrowser->SectionId,
+	     sizeof (Brw_SectionIdClipboard) - 1);
+
   }
-
-static inline bool Brw_GetIfShowClipboard (void)
+static inline bool Brw_GetIfShowClipboard (const struct Brw_FileBrowser *FileBrowser)
   {
-   return Brw_ShowClipboard;	// Has the user clicked on copy icon?
+   if (Brw_SectionIdClipboard[0] == '\0')
+      return false;
+   return strcmp (Brw_SectionIdClipboard,FileBrowser->SectionId) ? false :
+								   true;
   }
 
 /*****************************************************************************/
@@ -5362,6 +5318,14 @@ static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_folder;
    extern const char *Txt_link;
    extern const char *Txt_all_files_inside_the_root_folder;
+   extern const char *Txt_The_clipboard_is_empty;
+   static const char **TxtFileType[Brw_NUM_FILE_TYPES] =
+     {
+      [Brw_IS_UNKNOWN] = &Txt_file_folder,
+      [Brw_IS_FILE   ] = &Txt_file,
+      [Brw_IS_FOLDER ] = &Txt_folder,
+      [Brw_IS_LINK   ] = &Txt_link,
+     };
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
    long HieCod;
@@ -5376,13 +5340,7 @@ static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
 			 Usr_MAX_BYTES_FULL_NAME +
 			 Prj_MAX_BYTES_TITLE];
    char FileNameToShow[NAME_MAX + 1];
-   static const char **TxtFileType[Brw_NUM_FILE_TYPES] =
-     {
-      [Brw_IS_UNKNOWN] = &Txt_file_folder,
-      [Brw_IS_FILE   ] = &Txt_file,
-      [Brw_IS_FOLDER ] = &Txt_folder,
-      [Brw_IS_LINK   ] = &Txt_link,
-     };
+   Exi_Exist_t MyClipboardExists = Exi_EXISTS;
 
    switch (FileBrowser->Clipboard.ZoneDB)
      {
@@ -5583,29 +5541,41 @@ static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
                    Txt_temporary_private_storage_area,
                    Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
+      case Brw_UNKNOWN:	// My clipboard is empty
       default:
+         MyClipboardExists = Exi_DOES_NOT_EXIST;
          break;
      }
 
    Box_BoxBegin (Txt_Clipboard,
 		 Brw_PutIconsClipboard,FileBrowser,
 		 Hlp_FILES_Clipboard,Box_CLOSABLE);
-      if (FileBrowser->Clipboard.File.Level)		// Is the root folder?
-	{
-	 // Not the root folder
-	 Brw_GetFileNameToShow ( FileBrowser->Clipboard.ZoneDB,
-				&FileBrowser->Clipboard.File,FileNameToShow);
+      switch (MyClipboardExists)
+        {
+         case Exi_EXISTS:
+	    if (FileBrowser->Clipboard.File.Level)		// Is the root folder?
+	      {
+	       // Not the root folder
+	       Brw_GetFileNameToShow ( FileBrowser->Clipboard.ZoneDB,
+				      &FileBrowser->Clipboard.File,FileNameToShow);
 
-	 Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
-			Txt_Copy_source,TxtClipboardZone,
-			*TxtFileType[FileBrowser->Clipboard.File.Type],
-			FileNameToShow);
-	}
-      else
-	 // The root folder
-	 Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s.",
-			Txt_Copy_source,TxtClipboardZone,
-			Txt_all_files_inside_the_root_folder);
+	       Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s <strong>%s</strong>.",
+			      Txt_Copy_source,TxtClipboardZone,
+			      *TxtFileType[FileBrowser->Clipboard.File.Type],
+			      FileNameToShow);
+	      }
+	    else
+	       // The root folder
+	       Ale_ShowAlert (Ale_CLIPBOARD,"%s: %s, %s.",
+			      Txt_Copy_source,TxtClipboardZone,
+			      Txt_all_files_inside_the_root_folder);
+	    break;
+	 case Exi_DOES_NOT_EXIST:
+	 default:
+	    // The root folder
+	    Ale_ShowAlert (Ale_WARNING,Txt_The_clipboard_is_empty);
+	    break;
+        }
    Box_BoxEnd ();
   }
 
@@ -5624,10 +5594,8 @@ static void Brw_PutIconsClipboard (const void *FileBrowser)
 /*****************************************************************************/
 /********************** Get data of my current clipboard *********************/
 /*****************************************************************************/
-// Returns Exi_EXISTS if something found
-// Returns Exi_DOES_NOT_EXIST and void data if nothing found
 
-static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser)
+static void Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -5680,9 +5648,6 @@ static Exi_Exist_t Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser)
 
    if (NumRows > 1)
       Err_WrongCopySrcExit ();
-
-   return NumRows == 1 ? Exi_EXISTS :
-			 Exi_DOES_NOT_EXIST;
   }
 
 /*****************************************************************************/
@@ -5853,6 +5818,9 @@ void Brw_Paste (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
    Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolder);	// Get parent folder in which to paste
+
+   /***** Get my clipboard *****/
+   Brw_GetMyClipboard (&FileBrowser);
 
    switch (FileBrowser.Clipboard.ZoneDB)
      {
@@ -6202,7 +6170,7 @@ void Brw_ShowMyClipboard (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Show again the file browser *****/
-   Brw_SetShowClipboard ();
+   Brw_SetShowClipboard (&FileBrowser);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 

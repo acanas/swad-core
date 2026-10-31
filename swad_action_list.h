@@ -1318,8 +1318,6 @@ typedef enum
    // My assignments and works ------------------------------------------------
 
 	ActAdmAsgWrkUsr,
-	ActShoCliAsgWrkUsr,
-	ActRemCliAsgWrkUsr,
 
    // My assignments ----------------------------------------------------------
 
@@ -1328,6 +1326,8 @@ typedef enum
 	ActRemFolAsgUsr,
 	ActCopAsgUsr,
 	ActPasAsgUsr,
+	ActShoCliAsgUsr,
+	ActRemCliAsgUsr,
 	ActRemTreAsgUsr,
 	ActFrmCreAsgUsr,
 	ActCreFolAsgUsr,
@@ -1349,6 +1349,8 @@ typedef enum
 	ActRemFolWrkUsr,
 	ActCopWrkUsr,
 	ActPasWrkUsr,
+	ActShoCliWrkUsr,
+	ActRemCliWrkUsr,
 	ActRemTreWrkUsr,
 	ActFrmCreWrkUsr,
 	ActCreFolWrkUsr,
@@ -1368,8 +1370,6 @@ typedef enum
 	ActReqAsgWrkCrs,
 	ActAdmAsgWrkCrs,
 	ActAdmAsgWrkCrsZIP,
-	ActShoCliAsgWrkCrs,
-	ActRemCliAsgWrkCrs,
 
    // Assignments of a course -------------------------------------------------
 
@@ -1378,6 +1378,8 @@ typedef enum
 	ActRemFolAsgCrs,
 	ActCopAsgCrs,
 	ActPasAsgCrs,
+	ActShoCliAsgCrs,
+	ActRemCliAsgCrs,
 	ActRemTreAsgCrs,
 	ActFrmCreAsgCrs,
 	ActCreFolAsgCrs,
@@ -1399,6 +1401,8 @@ typedef enum
 	ActRemFolWrkCrs,
 	ActCopWrkCrs,
 	ActPasWrkCrs,
+	ActShoCliWrkCrs,
+	ActRemCliWrkCrs,
 	ActRemTreWrkCrs,
 	ActFrmCreWrkCrs,
 	ActCreFolWrkCrs,
@@ -2045,7 +2049,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2257
+#define ActLst_MAX_ACTION_COD		2261
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

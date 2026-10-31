@@ -139,7 +139,7 @@ void Rsc_PutIconToViewClipboard (void)
 	 break;
      }
 
-   Ico_PutContextualIconToViewClipboard (NextAction,NULL,NULL);
+   Ico_PutContextualIconToViewClipboard (NextAction,NULL,NULL,NULL);
   }
 
 /*****************************************************************************/

@@ -45539,6 +45539,29 @@ const char *Txt_The_center_X_has_been_moved_to_the_institution_Y =	// Warning: i
 	" to the institution <strong>%s</strong>.";		// Çeviri lazim!
 #endif
 
+const char *Txt_The_clipboard_is_empty =
+#if   L==1	// ca
+	"El porta-retalls &eacute;s buit.";
+#elif L==2	// de
+	"Die Zwischenablage ist leer.";
+#elif L==3	// en
+	"The clipboard is empty.";
+#elif L==4	// es
+	"El portapapeles est&aacute; vac&iacute;o.";
+#elif L==5	// fr
+	"Le presse-papiers est vide.";
+#elif L==6	// gn
+	"Pe portapapeles o&itilde; nandi.";
+#elif L==7	// it
+	"Gli appunti sono vuoti.";
+#elif L==8	// pl
+	"Schowek jest pusty.";
+#elif L==9	// pt
+	"A &aacute;rea de transfer&ecirc;ncia est&aacute; vazia.";
+#elif L==10	// tr
+	"Pano bo&scedil;.";
+#endif
+
 const char *Txt_The_contents_of_the_folder_are_too_big =
 #if   L==1	// ca
 	"El contingut de la carpeta &eacute;s massa gran.";

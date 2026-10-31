@@ -3367,13 +3367,9 @@ static void Prj_PutIconsToRemEditOnePrj (const struct Prj_Projects *Prjs,
      }
 
    if (Prj_CheckIfICanViewPrjFiles (Prjs->Prj.PrjCod) == Usr_CAN)
-     {
       /***** Icon to admin project documents *****/
       Ico_PutContextualIconToViewFiles (ActSeeOnePrj,
                                         Prj_PutCurrentPars,Prjs);
-
-      // Brw_PutIconToViewClipboard (FileBrowser);	// TODO: Icon to view clipboard
-     }
 
    /***** Icon to print project *****/
    Ico_PutContextualIconToPrint (ActPrnOnePrj,Prj_PutCurrentPars,Prjs);

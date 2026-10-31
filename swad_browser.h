@@ -61,7 +61,7 @@ void Brw_AskEditWorksCrs (void);
 
 void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser);
 void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser);
-void Brw_PutIconsFileBrowsersPrj (const void *FileBrowser);
+void Brw_PutIconsFileBrowsersPrj (__attribute__((unused)) const void *Args);
 
 void Brw_PutLegalNotice (void);
 

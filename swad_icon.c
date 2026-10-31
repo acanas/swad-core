@@ -374,17 +374,17 @@ void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
 				     "link.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
+void Ico_PutContextualIconToCopy (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncPars) (const void *Args),const void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "copy.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,
+void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,const char *Anchor,
                                            void (*FuncPars) (const void *Args),const void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "clipboard.svg",Ico_BLACK);
   }
 

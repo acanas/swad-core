@@ -111,9 +111,9 @@ void Ico_PutContextualIconToPrint (Act_Action_t NextAction,
                                    void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToGetLink (Act_Action_t NextAction,const char *Anchor,
                                      void (*FuncPars) (const void *Args),const void *Args);
-void Ico_PutContextualIconToCopy (Act_Action_t NextAction,
+void Ico_PutContextualIconToCopy (Act_Action_t NextAction,const char *Anchor,
                                   void (*FuncPars) (const void *Args),const void *Args);
-void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,
+void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,const char *Anchor,
                                            void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
                                    void (*FuncPars) (const void *Args),const void *Args);
