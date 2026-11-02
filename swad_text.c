@@ -13067,6 +13067,29 @@ const char *Txt_Folder_X_and_all_its_contents_removed =	// Warning: it is very i
 	"Folder <strong>%s</strong> and all its contents removed.";	// Çeviri lazim!
 #endif
 
+const char *Txt_Folder_not_found =
+#if   L==1	// ca
+	"Carpeta no trobada";
+#elif L==2	// de
+	"Verzeichnis nicht gefunden";
+#elif L==3	// en
+	"Folder not found";
+#elif L==4	// es
+	"Carpeta no encontrada";
+#elif L==5	// fr
+	"Dossier introuvable";
+#elif L==6	// gn
+	"Carpeta ndojejuh&uacute;i";
+#elif L==7	// it
+	"Cartella non trovata";
+#elif L==8	// pl
+	"Nie znaleziono folderu";
+#elif L==9	// pt
+	"Diret&oacute;rio n&atilde;o encontrado";
+#elif L==10	// tr
+	"Klas&ouml;r bulunamad&inodot;";
+#endif
+
 const char *Txt_Folder_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"Carpeta <strong>%s</strong> suprimida.";

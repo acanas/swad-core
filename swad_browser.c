@@ -1237,15 +1237,12 @@ static void Brw_WriteFileSizeAndDate (const struct Brw_File *File,
 static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
 
 static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser);
-static void Brw_SetAskRemFile (const struct Brw_FileBrowser *FileBrowser);
-static bool Brw_GetIfAskRemFile (const struct Brw_FileBrowser *FileBrowser);
+static void Brw_AskRemFolder (struct Brw_FileBrowser *FileBrowser);
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
 						const char FolderName[NAME_MAX + 1]);
+static void Brw_RemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser);
 
 //--------------------------------- Clipboard ---------------------------------
-
-static void Brw_SetShowClipboard (const struct Brw_FileBrowser *FileBrowser);
-static inline bool Brw_GetIfShowClipboard (const struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsClipboard (const void *FileBrowser);
@@ -1340,6 +1337,14 @@ static void Brw_RemoveFileFromDiskAndDB (Brw_Zone_t Zone,
 static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
 					  const struct Brw_File *Folder);
 
+//----------------------- Set and get section for action ----------------------
+
+static void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
+				     Brw_WhichMsgInSection_t WhichMsg);
+static Brw_WhichMsgInSection_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser);
+
+//--------------------------------- Statistics --------------------------------
+
 static void Brw_WriteStatsFileZonesTableHead1 (void);
 static void Brw_WriteStatsFileZonesTableHead2 (void);
 static void Brw_WriteStatsFileZonesTableHead3 (void);
@@ -1352,7 +1357,6 @@ static void Brw_WriteRowStatsFileBrowsers2 (const char *NameOfZones,
 static void Brw_WriteRowStatsFileBrowsers3 (const char *NameOfZones,
 					    Brw_Zone_t Zone,
                                             struct BrwSiz_SizeOfFileZone *SizeOfFileZone);
-
 static void Brw_GetNumberOfOERs (Hie_Level_t HieLvl,Brw_License_t License,
                                  unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC]);
 
@@ -3178,13 +3182,30 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       					       Brw_IS_ADM_PRJ)))
          Brw_ShowSettingSelector (FileBrowser);
 
-      /***** If browser is editable, get and write current clipboard *****/
-      if (Brw_GetIfShowClipboard (FileBrowser))
-	 Brw_ShowCurrentClipboard (FileBrowser);
+      /***** Show message *****/
+      switch (Brw_GetIfThisIsTheSectionForAction (FileBrowser))
+        {
+         case Brw_MSG_ASK_CONFIRM_REM_FILE:
+	    /***** Confirm removal *****/
+	    Brw_AskConfirmRemoveFile (FileBrowser);
+	    break;
+         case Brw_MSG_ASK_CONFIRM_REM_FOLDER:
+	    /***** Confirm removal *****/
+	    Brw_AskRemFolder (FileBrowser);
 
-      /***** Button of confirmation of removing *****/
-      if (Brw_GetIfAskRemFile (FileBrowser))
-	 Brw_AskConfirmRemoveFile (FileBrowser);
+	    break;
+	 case Brw_MSG_REM_NON_EMPTY_FOLDER:
+	    /***** Remove non empty folder *****/
+	    Brw_RemNonEmptyFolder (FileBrowser);
+	    break;
+         case Brw_MSG_CLIPBOARD:
+	    /***** Show current clipboard *****/
+	    Brw_ShowCurrentClipboard (FileBrowser);
+	    break;
+	 case Brw_MSG_NONE:
+	 default:
+	    break;
+	}
 
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -4977,25 +4998,8 @@ void Brw_ReqRemFile (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Show again file browser *****/
-   Brw_SetAskRemFile (&FileBrowser);
+   Brw_SetSectionForAction (&FileBrowser,Brw_MSG_ASK_CONFIRM_REM_FILE);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
-  }
-
-static char Brw_SectionIdRemFile[36 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1] = "";
-
-static void Brw_SetAskRemFile (const struct Brw_FileBrowser *FileBrowser)
-  {
-   Str_Copy (Brw_SectionIdRemFile,FileBrowser->SectionId,
-	     sizeof (Brw_SectionIdRemFile) - 1);
-
-  }
-
-static bool Brw_GetIfAskRemFile (const struct Brw_FileBrowser *FileBrowser)
-  {
-   if (Brw_SectionIdRemFile[0] == '\0')
-      return false;
-   return strcmp (Brw_SectionIdRemFile,FileBrowser->SectionId) ? false :
-								 true;
   }
 
 static void Brw_AskConfirmRemoveFile (struct Brw_FileBrowser *FileBrowser)
@@ -5086,53 +5090,59 @@ void Brw_RemFile (void)
 
 void Brw_TryRemFolder (void)
   {
-   extern const char *Txt_Folder_X_removed;
-   extern const char *Txt_You_can_not_remove_this_folder;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File Folder;
-   struct stat FileStatus;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&Folder);		// Get folder to remove
 
-   switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,&Folder))	// Can I remove this folder?
+   /***** Show again file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_MSG_ASK_CONFIRM_REM_FOLDER);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_AskRemFolder (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_Folder_X_removed;
+   extern const char *Txt_Folder_not_found;
+   extern const char *Txt_You_can_not_remove_this_folder;
+   struct Brw_File Folder;
+   struct stat FileStatus;
+
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&Folder);		// Get folder to remove
+
+   switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser->Zone,&Folder))	// Can I remove this folder?
      {
       case Usr_CAN:
 	 /***** Check if it's a file or a folder *****/
 	 if (lstat (Folder.Path.InServ,&FileStatus))	// On success ==> 0 is returned
 	    Err_ShowErrorAndExit ("Can not get information about a file or folder.");
 	 else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
-	    if (Brw_RemoveFolderFromDiskAndDB (FileBrowser.Zone,&Folder))
+	    if (Brw_RemoveFolderFromDiskAndDB (FileBrowser->Zone,&Folder))
 	      {
 	       if (errno == ENOTEMPTY)	// The directory is not empty
-		  Brw_AskConfirmRemoveFolderNotEmpty (&FileBrowser,
+		  Brw_AskConfirmRemoveFolderNotEmpty (FileBrowser,
 						      Folder.Path.Name);
 	       else			// The directory is empty
-		  Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
+		  Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_folder);
 	      }
 	    else
 	      {
 	       /* Remove affected clipboards */
-	       Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
+	       Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 						Gbl.Usrs.Me.UsrDat.UsrCod,
 						Gbl.Usrs.Other.UsrDat.UsrCod);
 
 	       /* Message of confirmation of successfull removing */
-	       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,
-			      Folder.Path.Name);
+	       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,Folder.Path.Name);
 	      }
 	 else		// Folder not found
-	    Err_FileFolderNotFoundExit ();
+	    Ale_ShowAlert (Ale_WARNING,Txt_Folder_not_found);
 	 break;
       case Usr_CAN_NOT:
       default:
-	 Err_ShowErrorAndExit (Txt_You_can_not_remove_this_folder);
+	 Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_folder);
 	 break;
      }
-
-   /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5145,7 +5155,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrow
    extern const char *Txt_Do_you_really_want_to_remove_the_folder_X;
 
    /***** Show question and button to remove not empty folder *****/
-   Ale_ShowAlertRemove (Brw_ActRemoveFolderNotEmpty[FileBrowser->Zone],NULL,
+   Ale_ShowAlertRemove (Brw_ActRemoveFolderNotEmpty[FileBrowser->Zone],FileBrowser->SectionId,
 			Brw_PutImplicitParsFileBrowser,FileBrowser,
 			Txt_Do_you_really_want_to_remove_the_folder_X,
                         FolderName);
@@ -5157,15 +5167,29 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrow
 
 void Brw_RemFolder (void)
   {
-   extern const char *Txt_Folder_X_and_all_its_contents_removed;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File Folder;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&Folder);	// Get folder to remove
 
-   if (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,&Folder) == Usr_CAN)	// Can I remove this subtree?
+   /***** Show again file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_MSG_REM_NON_EMPTY_FOLDER);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+/*****************************************************************************/
+/********* Complete removing of a not empty folder in a file browser *********/
+/*****************************************************************************/
+
+static void Brw_RemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_Folder_X_and_all_its_contents_removed;
+   struct Brw_File Folder;
+
+   /***** Get folder to remove *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&Folder);
+
+   if (Brw_CheckIfICanEditFileOrFolder (FileBrowser->Zone,&Folder) == Usr_CAN)	// Can I remove this subtree?
      {
       /***** Remove the whole tree *****/
       Fil_RemoveFolderAndItsContent (Folder.Path.InServ);
@@ -5173,24 +5197,21 @@ void Brw_RemFolder (void)
       /* If a folder is removed,
          it is necessary to remove it from the database
          and all files or folders under that folder */
-      Brw_RemoveOneFileOrFolderFromDB (FileBrowser.Zone,Folder.Path.InZone);
-      Brw_RemoveChildrenOfFolderFromDB (FileBrowser.Zone,Folder.Path.InZone);
+      Brw_RemoveOneFileOrFolderFromDB (FileBrowser->Zone,Folder.Path.InZone);
+      Brw_RemoveChildrenOfFolderFromDB (FileBrowser->Zone,Folder.Path.InZone);
 
       /* Remove affected clipboards */
-      Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
+      Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 				       Gbl.Usrs.Me.UsrDat.UsrCod,
 				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Remove affected expanded folders */
-      Brw_DB_RemoveAffectedExpandedFolders (FileBrowser.Zone,Folder.Path.InZone);
+      Brw_DB_RemoveAffectedExpandedFolders (FileBrowser->Zone,Folder.Path.InZone);
 
       /***** Write message of confirmation *****/
       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_and_all_its_contents_removed,
                      Folder.Path.Name);
      }
-
-   /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5266,28 +5287,8 @@ void Brw_Copy (void)
    Brw_DB_ReplacePathInClipboard (&FileBrowser);
 
    /***** Show again file browser *****/
-   Brw_SetShowClipboard (&FileBrowser);
+   Brw_SetSectionForAction (&FileBrowser,Brw_MSG_CLIPBOARD);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
-  }
-
-/*****************************************************************************/
-/******************* Has the user clicked on copy icon? **********************/
-/*****************************************************************************/
-
-static char Brw_SectionIdClipboard[36 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1] = "";
-
-static void Brw_SetShowClipboard (const struct Brw_FileBrowser *FileBrowser)
-  {
-   Str_Copy (Brw_SectionIdClipboard,FileBrowser->SectionId,
-	     sizeof (Brw_SectionIdClipboard) - 1);
-
-  }
-static inline bool Brw_GetIfShowClipboard (const struct Brw_FileBrowser *FileBrowser)
-  {
-   if (Brw_SectionIdClipboard[0] == '\0')
-      return false;
-   return strcmp (Brw_SectionIdClipboard,FileBrowser->SectionId) ? false :
-								   true;
   }
 
 /*****************************************************************************/
@@ -6170,7 +6171,7 @@ void Brw_ShowMyClipboard (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** Show again the file browser *****/
-   Brw_SetShowClipboard (&FileBrowser);
+   Brw_SetSectionForAction (&FileBrowser,Brw_MSG_CLIPBOARD);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
@@ -10062,6 +10063,37 @@ Act_Action_t Brw_GetActionExpand (Brw_Zone_t Zone)
 Act_Action_t Brw_GetActionContract (Brw_Zone_t Zone)
   {
    return Brw_ActContractFolder[Zone];
+  }
+
+/*****************************************************************************/
+/********************** Set and get section for action ***********************/
+/*****************************************************************************/
+
+static struct
+  {
+   Brw_WhichMsgInSection_t WhichMsg;
+   char Id[36 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
+  } Brw_SectionForAction =
+  {
+   Brw_MSG_NONE,
+   ""
+  };
+
+static void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
+				     Brw_WhichMsgInSection_t WhichMsg)
+  {
+   Brw_SectionForAction.WhichMsg = WhichMsg;
+   Str_Copy (Brw_SectionForAction.Id,FileBrowser->SectionId,
+	     sizeof (Brw_SectionForAction.Id) - 1);
+  }
+
+static Brw_WhichMsgInSection_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser)
+  {
+   if (Brw_SectionForAction.Id[0] == '\0')
+      return Brw_MSG_NONE;
+
+   return strcmp (Brw_SectionForAction.Id,FileBrowser->SectionId) ? Brw_MSG_NONE :
+								    Brw_SectionForAction.WhichMsg;
   }
 
 /*****************************************************************************/
