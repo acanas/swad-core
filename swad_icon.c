@@ -388,10 +388,10 @@ void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,const char *A
 				  "clipboard.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToPaste (Act_Action_t NextAction,
+void Ico_PutContextualIconToPaste (Act_Action_t NextAction,const char *Anchor,
                                    void (*FuncPars) (const void *Args),const void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "paste.svg",Ico_BLACK);
   }
 

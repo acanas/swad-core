@@ -173,14 +173,18 @@ typedef enum
    Brw_FOOTER = 1,
   } Brw_HeadOrFoot_t;
 
+/* Actions to do with a file / folder */
 typedef enum
   {
-   Brw_MSG_NONE,
-   Brw_MSG_ASK_CONFIRM_REM_FILE,
-   Brw_MSG_ASK_CONFIRM_REM_FOLDER,
-   Brw_MSG_REM_NON_EMPTY_FOLDER,
-   Brw_MSG_CLIPBOARD,
-  } Brw_WhichMsgInSection_t;
+   Brw_ACT_NONE,
+   Brw_ACT_ASK_REM_FILE,
+   Brw_ACT_REM_FILE,
+   Brw_ACT_ASK_REM_FOLDER,
+   Brw_ACT_REM_NON_EMPTY_FOLDER,
+   Brw_ACT_SHOW_CLIPBOARD,
+   Brw_ACT_COPY,
+   Brw_ACT_PASTE,
+  } Brw_Action_t;
 
 struct Brw_File
   {
