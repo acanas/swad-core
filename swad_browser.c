@@ -1236,7 +1236,7 @@ static void Brw_WriteFileSizeAndDate (const struct Brw_File *File,
 				      const char *TxtStyle);
 static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
 
-static void Brw_AskConfirmRemoveFileOrLink (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser);
 static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser);
 static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser);
 static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
@@ -1246,7 +1246,8 @@ static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser);
 //--------------------------------- Clipboard ---------------------------------
 
 static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser);
-static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser);
+static void Brw_CreateNewClipboard (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionShowMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsClipboard (const void *FileBrowser);
 
 static void Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
@@ -1260,6 +1261,7 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Z
 static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 				const struct Brw_File *ParentFolder);
+static void Brw_DoActionRemMyClipboard (__attribute__((unused)) struct Brw_FileBrowser *FileBrowser);
 static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBrowser,
 						 unsigned LevelOrg,
 						 const char PathOrgInServ[PATH_MAX + 1],
@@ -1271,6 +1273,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 static void Brw_PutFormToCreateAFolder (struct Brw_FileBrowser *FileBrowser,
 				        const char FolderNameToShow[NAME_MAX + 1]);
+static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FileBrowser *FileBrowser,
 						   const char *FileNameToShow);
 static void Brw_PutFormToUploadOneFileClassic (struct Brw_FileBrowser *FileBrowser,
@@ -3142,6 +3145,20 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ADMI_DOC_PRJ] = NULL,
       [Brw_ADMI_ASS_PRJ] = NULL,
      };
+   static void (*Brw_DoAction[Brw_NUM_ACTIONS])(struct Brw_FileBrowser *FileBrowser) =
+     {
+      [Brw_ACT_NONE			] = NULL,
+      [Brw_ACT_ASK_REM_FILE		] = Brw_DoActionAskRemFile,
+      [Brw_ACT_REM_FILE			] = Brw_DoActionRemFile,
+      [Brw_ACT_ASK_REM_FOLDER		] = Brw_DoActionAskRemFolder,
+      [Brw_ACT_REM_NON_EMPTY_FOLDER	] = Brw_DoActionRemNonEmptyFolder,
+      [Brw_ACT_COPY			] = Brw_DoActionCopy,
+      [Brw_ACT_PASTE			] = Brw_DoActionPaste,
+      [Brw_ACT_SHOW_CLIPBOARD		] = Brw_DoActionShowMyClipboard,
+      [Brw_ACT_REM_CLIPBOARD		] = Brw_DoActionRemMyClipboard,
+      [Brw_ACT_SHOW_FORM		] = Brw_DoActionShowForm,
+     };
+   Brw_Action_t Action;
    struct Brw_File RootFolder;
    struct Usr_Data UsrDat;
    struct Brw_NumObjects Removed;
@@ -3187,40 +3204,9 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
          Brw_ShowSettingSelector (FileBrowser);
 
       /***** Do action on file/folder/link and show message *****/
-      switch (Brw_GetIfThisIsTheSectionForAction (FileBrowser))
-        {
-         case Brw_ACT_ASK_REM_FILE:
-	    /* Ask to confirm removal */
-	    Brw_AskConfirmRemoveFileOrLink (FileBrowser);
-	    break;
-	 case Brw_ACT_REM_FILE:
-	    /* Remove file */
-	    Brw_DoActionRemFile (FileBrowser);
-	    break;
-         case Brw_ACT_ASK_REM_FOLDER:
-	    /* Ask to confirm removal */
-	    Brw_DoActionAskRemFolder (FileBrowser);
-	    break;
-	 case Brw_ACT_REM_NON_EMPTY_FOLDER:
-	    /* Remove non empty folder */
-	    Brw_DoActionRemNonEmptyFolder (FileBrowser);
-	    break;
-         case Brw_ACT_SHOW_CLIPBOARD:
-	    /* Show current clipboard */
-	    Brw_ShowCurrentClipboard (FileBrowser);
-	    break;
-	 case Brw_ACT_COPY:
-	    /* Copy to clipboard */
-	    Brw_DoActionCopy (FileBrowser);
-	    break;
-	 case Brw_ACT_PASTE:
-	    /* Paste current clipboard */
-	    Brw_DoActionPaste (FileBrowser);
-	    break;
-	 case Brw_ACT_NONE:
-	 default:
-	    break;
-	}
+      Action = Brw_GetIfThisIsTheSectionForAction (FileBrowser);
+      if (Brw_DoAction[Action])
+         Brw_DoAction[Action] (FileBrowser);
 
       /***** Initialize structure with publisher's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -4666,6 +4652,7 @@ static void Brw_PutIconFolderWithPlus (struct Brw_FileBrowser *FileBrowser,
 
       /***** Form and icon *****/
       Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[FileBrowser->Zone],
+					     FileBrowser->SectionId,
 					     Brw_PutImplicitParsFileBrowser,FileBrowser,
 					     ClosedOrOpen);
 
@@ -5019,7 +5006,7 @@ void Brw_ReqRemFile (void)
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
-static void Brw_AskConfirmRemoveFileOrLink (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
@@ -5063,10 +5050,6 @@ void Brw_RemFile (void)
    Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_FILE);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
-
-/*****************************************************************************/
-/************************ Remove a file of a file browser ********************/
-/*****************************************************************************/
 
 static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
   {
@@ -5291,19 +5274,24 @@ void Brw_Copy (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
+   /***** Create/replace the new clipboard *****/
+   // Creating the new clipboard must be done before showing file browser
+   // in order to display clipboard icon in left-top of file browser box
+   Brw_CreateNewClipboard (&FileBrowser);
+
    /***** Show again file browser *****/
    Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COPY);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
-static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
+static void Brw_CreateNewClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    struct Brw_File File;
 
    /***** Get file / folder / link *****/
    Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
-   /****** Update my clipboard *****/
+   /***** Update my clipboard *****/
    FileBrowser->Clipboard.ZoneDB          = Brw_DB_GetZoneDB_brw_clipboards (FileBrowser->Zone);
    FileBrowser->Clipboard.IsInCurrentZone = true;	// Copying now, so it's in current zone
    FileBrowser->Clipboard.File.HieCod     = Brw_GetCodForZone (FileBrowser->Zone);
@@ -5323,16 +5311,19 @@ static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
 
    /***** Put the path in the clipboard in database *****/
    Brw_DB_ReplacePathInClipboard (FileBrowser);
+  }
 
+static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
+  {
    /***** Show current clipboard *****/
-   Brw_ShowCurrentClipboard (FileBrowser);
+   Brw_DoActionShowMyClipboard (FileBrowser);
   }
 
 /*****************************************************************************/
 /**************** Write the content of the current clipboard *****************/
 /*****************************************************************************/
 
-static void Brw_ShowCurrentClipboard (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionShowMyClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_FILES_Clipboard;
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
@@ -5625,7 +5616,8 @@ static void Brw_PutIconsClipboard (const void *FileBrowser)
   {
    /***** Put icon to remove resource clipboard in program *****/
    if (((struct Brw_FileBrowser *) FileBrowser)->Clipboard.ZoneDB != Brw_UNKNOWN)
-      Ico_PutContextualIconToRemove (Brw_ActRemCli[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
+      Ico_PutContextualIconToRemove (Brw_ActRemCli[((struct Brw_FileBrowser *) FileBrowser)->Zone],
+				     ((struct Brw_FileBrowser *) FileBrowser)->SectionId,
 				     Brw_PutImplicitParsFileBrowser,FileBrowser);
   }
 
@@ -6231,10 +6223,21 @@ void Brw_RemMyClipboard (void)
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
    /***** If I have current clipboard, remove it *****/
+   // Removing my clipboard must be done before showing file browser
+   // in order to not display clipboard icon in left-top of file browser box
    Brw_DB_RemoveUsrClipboard (Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_CLIPBOARD);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionRemMyClipboard (__attribute__((unused)) struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_The_clipboard_is_empty;
+
+   /* Message of confirmation of removing */
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_clipboard_is_empty);
   }
 
 /*****************************************************************************/
@@ -6472,52 +6475,59 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 void Brw_ShowFormFileBrowser (void)
   {
-   extern const char *Txt_You_can_not_create_folders_files_or_links_here;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File ParentFolder;
-   char ParentFolderNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolder);	// Get parent folder
+
+   /***** Show again file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_FORM);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_You_can_not_create_folders_files_or_links_here;
+   struct Brw_File ParentFolder;
+   char ParentFolderNameToShow[NAME_MAX + 1];
+
+   // Get parent folder
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&ParentFolder);
 
    /***** Check if creating a new folder or file is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser.Zone,&ParentFolder))
+   switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,&ParentFolder))
      {
       case Usr_CAN:
 	 /***** Name of the folder to be shown ****/
-	 Brw_GetFileNameToShow (FileBrowser.Zone,&ParentFolder,
+	 Brw_GetFileNameToShow (FileBrowser->Zone,&ParentFolder,
 				ParentFolderNameToShow);
 
 	 /***** 1. Form to create a new folder *****/
-	 Brw_PutFormToCreateAFolder (&FileBrowser,ParentFolderNameToShow);
+	 Brw_PutFormToCreateAFolder (FileBrowser,ParentFolderNameToShow);
 
 	 /***** 2. Form to send a file *****/
-	 Brw_PutFormToUploadFilesUsingDropzone (&FileBrowser,ParentFolderNameToShow);
+	 Brw_PutFormToUploadFilesUsingDropzone (FileBrowser,ParentFolderNameToShow);
 
 	 /***** 3. Form to send a file *****/
-	 Brw_PutFormToUploadOneFileClassic (&FileBrowser,ParentFolderNameToShow);
+	 Brw_PutFormToUploadOneFileClassic (FileBrowser,ParentFolderNameToShow);
 
 	 /***** 4. Form to paste the content of the clipboard *****/
-	 if (FileBrowser.Clipboard.ZoneDB != Brw_UNKNOWN)	// My clipboard is not empty
+	 if (FileBrowser->Clipboard.ZoneDB != Brw_UNKNOWN)	// My clipboard is not empty
 	   {
 	    /***** Check if we can paste in this folder *****/
-	    FileBrowser.Clipboard.IsInCurrentZone = Brw_CheckIfClipboardIsInCurrentZone (&FileBrowser);
-	    if (Brw_CheckIfCanPasteIn (&FileBrowser,&ParentFolder) == Usr_CAN)
-	       Brw_PutFormToPasteAFileOrFolder (&FileBrowser,ParentFolderNameToShow);
+	    FileBrowser->Clipboard.IsInCurrentZone = Brw_CheckIfClipboardIsInCurrentZone (FileBrowser);
+	    if (Brw_CheckIfCanPasteIn (FileBrowser,&ParentFolder) == Usr_CAN)
+	       Brw_PutFormToPasteAFileOrFolder (FileBrowser,ParentFolderNameToShow);
 	   }
 
 	 /***** 5. Form to create a link *****/
-	 if (FileBrowser.Zone != Brw_ADMI_MRK_CRS &&
-	     FileBrowser.Zone != Brw_ADMI_MRK_GRP)	// Do not create links in marks
-	    Brw_PutFormToCreateALink (&FileBrowser,ParentFolderNameToShow);
+	 if (FileBrowser->Zone != Brw_ADMI_MRK_CRS &&
+	     FileBrowser->Zone != Brw_ADMI_MRK_GRP)	// Do not create links in marks
+	    Brw_PutFormToCreateALink (FileBrowser,ParentFolderNameToShow);
 	 break;
       case Usr_CAN_NOT:
       default:
-	 Err_ShowErrorAndExit (Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
-
-	 /***** Show again file browser *****/
-	 Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+	 Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
 	 break;
      }
   }
@@ -6534,7 +6544,8 @@ static void Brw_PutFormToCreateAFolder (struct Brw_FileBrowser *FileBrowser,
    extern const char *Txt_Folder;
 
    /***** Begin form *****/
-   Frm_BeginForm (Brw_ActCreateFolder[FileBrowser->Zone]);
+   Frm_BeginFormAnchor (Brw_ActCreateFolder[FileBrowser->Zone],
+			FileBrowser->SectionId);
       Brw_PutImplicitParsFileBrowser (FileBrowser);
 
       /***** Begin box *****/
@@ -6603,7 +6614,8 @@ static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FileBrowser *FileB
 	 HTM_Txt ("</form>");
 
 	 /***** Put button to refresh file browser after upload *****/
-	 Frm_BeginForm (Brw_ActRefreshAfterUploadFiles[FileBrowser->Zone]);
+	 Frm_BeginFormAnchor (Brw_ActRefreshAfterUploadFiles[FileBrowser->Zone],
+			      FileBrowser->SectionId);
 	    Brw_PutParsFileBrowser (FileBrowser);
 
 	    /***** Button to finish *****/
@@ -6694,7 +6706,8 @@ static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
    char *Label;
 
    /***** Begin form *****/
-   Frm_BeginForm (Brw_ActCreateLink[FileBrowser->Zone]);
+   Frm_BeginFormAnchor (Brw_ActCreateLink[FileBrowser->Zone],
+			FileBrowser->SectionId);
       Brw_PutImplicitParsFileBrowser (FileBrowser);
 
       /***** Begin box *****/

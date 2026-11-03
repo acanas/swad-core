@@ -2127,8 +2127,8 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	       /***** Form to reply message *****/
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("class=\"LM\"");
-		     if (Messages->TypeOfMessages == Msg_RECEIVED &&
-			 Gbl.Usrs.Me.Role.Logged >= Rol_USR)
+		     if (Messages->TypeOfMessages == Msg_RECEIVED)
+			// && Gbl.Usrs.Me.Role.Logged >= Rol_USR)	// TODO: Remove?
 			// Guests (users without courses) can read messages but not reply them
 			Msg_WriteFormToReply (MsgCod,HieCod,&UsrDat);
 		  HTM_TD_End ();

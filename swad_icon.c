@@ -395,7 +395,7 @@ void Ico_PutContextualIconToPaste (Act_Action_t NextAction,const char *Anchor,
 				  "paste.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
+void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,const char *Anchor,
                                             void (*FuncPars) (const void *Args),const void *Args,
                                             CloOpe_ClosedOrOpen_t ClosedOrOpen)
   {
@@ -405,7 +405,7 @@ void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
       [CloOpe_OPEN  ] = "folder-open-yellow-plus.png",
      };
 
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  CloOpe_Icon[ClosedOrOpen],Ico_UNCHANGED);
   }
 

@@ -13704,8 +13704,29 @@ SELECT * FROM tst_exams,tst_exam_questions WHERE tst_exams.UsrCod=255647 AND tst
 
 
 
+------------------------------------
 
+2026-11-03 Recuperar los mensajes del usuario eliminado 25858 en la nueva cuenta 45084:
+---------------------------------------------------------------------------------------
 
+SELECT * FROM usr_data WHERE UsrCod=45084;
+
+UPDATE msg_snt         SET UsrCod=45084 WHERE UsrCod=25858;
+UPDATE msg_rcv         SET UsrCod=45084 WHERE UsrCod=25858;
+UPDATE msg_snt_deleted SET UsrCod=45084 WHERE UsrCod=25858;
+UPDATE msg_rcv_deleted SET UsrCod=45084 WHERE UsrCod=25858;
+
+INSERT INTO msg_snt (SELECT MsgCod,CrsCod,UsrCod,'N',CreatTime      FROM msg_snt_deleted WHERE UsrCod=45084 AND MsgCod NOT IN (SELECT MsgCod FROM msg_snt));
+INSERT INTO msg_rcv (SELECT MsgCod,UsrCod,Notified,Open,Replied,'N' FROM msg_rcv_deleted WHERE UsrCod=45084 AND MsgCod NOT IN (SELECT MsgCod FROM msg_rcv));
+INSERT INTO msg_content (SELECT DISTINCT MsgCod,Subject,Content,MedCod FROM msg_content_deleted WHERE MsgCod IN (SELECT MsgCod FROM msg_snt WHERE UsrCod=45084) AND MsgCod NOT IN (SELECT MsgCod FROM msg_content));
+INSERT INTO msg_content (SELECT DISTINCT MsgCod,Subject,Content,MedCod FROM msg_content_deleted WHERE MsgCod IN (SELECT MsgCod FROM msg_rcv WHERE UsrCod=45084) AND MsgCod NOT IN (SELECT MsgCod FROM msg_content));
+
+DELETE FROM msg_snt_deleted     USING msg_snt_deleted,msg_snt WHERE msg_snt_deleted.UsrCod=45084 AND msg_snt_deleted.MsgCod=msg_snt.MsgCod AND msg_snt_deleted.UsrCod=msg_snt.UsrCod;
+DELETE FROM msg_rcv_deleted     USING msg_rcv_deleted,msg_rcv WHERE msg_rcv_deleted.UsrCod=45084 AND msg_rcv_deleted.MsgCod=msg_rcv.MsgCod AND msg_rcv_deleted.UsrCod=msg_rcv.UsrCod;
+DELETE FROM msg_content_deleted USING msg_content_deleted,msg_snt WHERE msg_snt.UsrCod=45084 AND msg_content_deleted.MsgCod=msg_snt.MsgCod;
+DELETE FROM msg_content_deleted USING msg_content_deleted,msg_rcv WHERE msg_rcv.UsrCod=45084 AND msg_content_deleted.MsgCod=msg_rcv.MsgCod;
+
+UPDATE usr_figures SET NumMsgSnt=(SELECT COUNT(*) FROM msg_snt WHERE UsrCod=45084) WHERE UsrCod=45084;
 
 
 

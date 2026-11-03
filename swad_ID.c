@@ -86,9 +86,9 @@ static void ID__ShowFormChangeUsrID (Usr_MeOrOther_t MeOrOther);
 static void ID__PutParsRemoveMyID (const void *ID);
 static void ID__PutParsRemoveOtherID (const void *ID);
 
-static void ID__RemoveUsrID (const struct Usr_Data *UsrDat,
+static void ID__RemoveUsrID (struct Usr_Data *UsrDat,
 			     Usr_MeOrOther_t MeOrOther);
-static void ID__ChangeUsrID (const struct Usr_Data *UsrDat,
+static void ID__ChangeUsrID (struct Usr_Data *UsrDat,
 			     Usr_MeOrOther_t MeOrOther);
 
 /*****************************************************************************/
@@ -735,7 +735,7 @@ void ID__RemoveOtherUsrID (void)
 /***************************** Remove user's ID ******************************/
 /*****************************************************************************/
 
-static void ID__RemoveUsrID (const struct Usr_Data *UsrDat,
+static void ID__RemoveUsrID (struct Usr_Data *UsrDat,
 			     Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_ID_X_removed;
@@ -771,6 +771,10 @@ static void ID__RemoveUsrID (const struct Usr_Data *UsrDat,
 	    case Usr_CAN:
 	       /***** Remove one of the user's IDs *****/
 	       ID__DB_RemoveUsrID (UsrDat->UsrCod,UsrID);
+
+	       /***** Regenerate list of IDs *****/
+	       UsrDat->ListIDsCached.Status = Cac_INVALID;	// Force to read list from database
+	       ID__GetListIDsFromUsrCod (UsrDat);
 
 	       /***** Show message *****/
 	       Ale_CreateAlert (Ale_SUCCESS,ID__SECTION,
@@ -843,7 +847,7 @@ void ID__ChangeOtherUsrID (void)
 /***************************** Change user's ID ******************************/
 /*****************************************************************************/
 
-static void ID__ChangeUsrID (const struct Usr_Data *UsrDat,
+static void ID__ChangeUsrID (struct Usr_Data *UsrDat,
 			     Usr_MeOrOther_t MeOrOther)
   {
    extern const char *Txt_The_ID_X_matches_one_of_the_existing;
@@ -911,7 +915,11 @@ static void ID__ChangeUsrID (const struct Usr_Data *UsrDat,
 		       {
 			/***** Save this new ID *****/
 			ID__DB_InsertANewUsrID (UsrDat->UsrCod,NewID,
-					       Confirmed[MeOrOther]);
+					        Confirmed[MeOrOther]);
+
+			/***** Regenerate list of IDs *****/
+			UsrDat->ListIDsCached.Status = Cac_INVALID;	// Force to read list from database
+			ID__GetListIDsFromUsrCod (UsrDat);
 
 			Ale_CreateAlert (Ale_SUCCESS,ID__SECTION,
 					 Txt_The_ID_X_has_been_registered_successfully,

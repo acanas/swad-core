@@ -174,6 +174,7 @@ typedef enum
   } Brw_HeadOrFoot_t;
 
 /* Actions to do with a file / folder */
+#define Brw_NUM_ACTIONS 10
 typedef enum
   {
    Brw_ACT_NONE,
@@ -181,9 +182,11 @@ typedef enum
    Brw_ACT_REM_FILE,
    Brw_ACT_ASK_REM_FOLDER,
    Brw_ACT_REM_NON_EMPTY_FOLDER,
-   Brw_ACT_SHOW_CLIPBOARD,
    Brw_ACT_COPY,
    Brw_ACT_PASTE,
+   Brw_ACT_SHOW_CLIPBOARD,
+   Brw_ACT_REM_CLIPBOARD,
+   Brw_ACT_SHOW_FORM,
   } Brw_Action_t;
 
 struct Brw_File

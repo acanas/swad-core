@@ -117,7 +117,7 @@ void Ico_PutContextualIconToViewClipboard (Act_Action_t NextAction,const char *A
                                            void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToPaste (Act_Action_t NextAction,const char *Anchor,
                                    void (*FuncPars) (const void *Args),const void *Args);
-void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,
+void Ico_PutContextualIconToCreateInFolder (Act_Action_t NextAction,const char *Anchor,
                                             void (*FuncPars) (const void *Args),const void *Args,
                                             CloOpe_ClosedOrOpen_t ClosedOrOpen);
 void Ico_PutContextualIconToShowResults (Act_Action_t NextAction,const char *Anchor,
