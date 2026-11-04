@@ -35,6 +35,9 @@
 
 void BrwRsc_GetLinkToDocFil (void);
 void BrwRsc_GetLinkToMrkFil (void);
+void BrwRsc_DoActionGetLinkToDocFil (struct Brw_FileBrowser *FileBrowser);
+void BrwRsc_DoActionGetLinkToMrkFil (struct Brw_FileBrowser *FileBrowser);
+
 void BrwRsc_GetFileTitle (long FilCod,char *Title,size_t TitleSize);
 
 #endif

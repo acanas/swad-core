@@ -2382,8 +2382,8 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 /******** Check if a file / folder from the documents zone is hidden *********/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
-										   const struct Brw_File *File)
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
+								     const struct Brw_File *File)
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {

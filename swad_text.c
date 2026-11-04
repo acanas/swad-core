@@ -5105,7 +5105,7 @@ const char *Txt_Change =
 #elif L==5	// fr
 	"Changer";
 #elif L==6	// gn
-	"Cambiar";	// Okoteve traducción
+	"Guerova";
 #elif L==7	// it
 	"Cambiare";
 #elif L==8	// pl
@@ -5113,7 +5113,7 @@ const char *Txt_Change =
 #elif L==9	// pt
 	"Alterar";
 #elif L==10	// tr
-	"Change";	// Çeviri lazim!
+	"De&gbreve;i&scedil;tirmek";
 #endif
 
 const char *Txt_Change_image_video =
@@ -5136,7 +5136,30 @@ const char *Txt_Change_image_video =
 #elif L==9	// pt
 	"Alterar imagem / v&iacute;deo";
 #elif L==10	// tr
-	"Change image / video";	// Çeviri lazim!
+	"G&ouml;rseli / videoyu de&gbreve;i&scedil;tir";
+#endif
+
+const char *Txt_Changes_saved =
+#if   L==1	// ca
+	"Canvis desats";
+#elif L==2	// de
+	"&Auml;nderungen gespeichert";
+#elif L==3	// en
+	"Changes saved";
+#elif L==4	// es
+	"Cambios guardados";
+#elif L==5	// fr
+	"Modifications enregistr&eacute;es";
+#elif L==6	// gn
+	"Umi &ntilde;emoambue o&ntilde;e&ntilde;ongat&uacute;va";
+#elif L==7	// it
+	"Modifiche salvate";
+#elif L==8	// pl
+	"Zmiany zapisane";
+#elif L==9	// pt
+	"Altera&ccedil;&otilde;es guardadas";
+#elif L==10	// tr
+	"De&gbreve;i&scedil;iklikler kaydedildi";
 #endif
 
 const char *Txt_CHAT_Room =

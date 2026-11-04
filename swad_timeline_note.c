@@ -557,17 +557,17 @@ static void TmlNot_PutFormGoToAction (const struct TmlNot_Note *Not,
       /* Start tab */
       [TmlNot_POST             ] = ActUnk,	// action not used
       /* Institution tab */
-      [TmlNot_INS_DOC_PUB_FILE ] = ActReqDatSeeDocIns,
-      [TmlNot_INS_SHA_PUB_FILE ] = ActReqDatShaIns,
+      [TmlNot_INS_DOC_PUB_FILE ] = ActShoDatSeeDocIns,
+      [TmlNot_INS_SHA_PUB_FILE ] = ActShoDatShaIns,
       /* Center tab */
-      [TmlNot_CTR_DOC_PUB_FILE ] = ActReqDatSeeDocCtr,
-      [TmlNot_CTR_SHA_PUB_FILE ] = ActReqDatShaCtr,
+      [TmlNot_CTR_DOC_PUB_FILE ] = ActShoDatSeeDocCtr,
+      [TmlNot_CTR_SHA_PUB_FILE ] = ActShoDatShaCtr,
       /* Degree tab */
-      [TmlNot_DEG_DOC_PUB_FILE ] = ActReqDatSeeDocDeg,
-      [TmlNot_DEG_SHA_PUB_FILE ] = ActReqDatShaDeg,
+      [TmlNot_DEG_DOC_PUB_FILE ] = ActShoDatSeeDocDeg,
+      [TmlNot_DEG_SHA_PUB_FILE ] = ActShoDatShaDeg,
       /* Course tab */
-      [TmlNot_CRS_DOC_PUB_FILE ] = ActReqDatSeeDocCrs,
-      [TmlNot_CRS_SHA_PUB_FILE ] = ActReqDatShaCrs,
+      [TmlNot_CRS_DOC_PUB_FILE ] = ActShoDatSeeDocCrs,
+      [TmlNot_CRS_SHA_PUB_FILE ] = ActShoDatShaCrs,
       /* Assessment tab */
       [TmlNot_CALL_FOR_EXAM    ] = ActSeeOneCfe,
       /* Users tab */

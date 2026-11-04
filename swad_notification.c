@@ -845,26 +845,26 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	       switch (NotifyEvent)
 		 {
 		  case Ntf_EVENT_DOCUMENT_FILE:
-		     Action = GrpCod > 0 ? ActReqDatSeeDocGrp :
-			      (HieCods[Hie_CRS] > 0 ? ActReqDatSeeDocCrs :
-			      (HieCods[Hie_DEG] > 0 ? ActReqDatSeeDocDeg :
-			      (HieCods[Hie_CTR] > 0 ? ActReqDatSeeDocCtr :
-						      ActReqDatSeeDocIns)));
+		     Action = GrpCod > 0 ? ActShoDatSeeDocGrp :
+			      (HieCods[Hie_CRS] > 0 ? ActShoDatSeeDocCrs :
+			      (HieCods[Hie_DEG] > 0 ? ActShoDatSeeDocDeg :
+			      (HieCods[Hie_CTR] > 0 ? ActShoDatSeeDocCtr :
+						      ActShoDatSeeDocIns)));
 		     break;
 		  case Ntf_EVENT_TEACHERS_FILE:
-		     Action = GrpCod > 0 ? ActReqDatTchGrp :
-					   ActReqDatTchCrs;
+		     Action = GrpCod > 0 ? ActShoDatTchGrp :
+					   ActShoDatTchCrs;
 		     break;
 		  case Ntf_EVENT_SHARED_FILE:
-		     Action = GrpCod > 0 ? ActReqDatShaGrp :
-			      (HieCods[Hie_CRS] > 0 ? ActReqDatShaCrs :
-			      (HieCods[Hie_DEG] > 0 ? ActReqDatShaDeg :
-			      (HieCods[Hie_CTR] > 0 ? ActReqDatShaCtr :
-						      ActReqDatShaIns)));
+		     Action = GrpCod > 0 ? ActShoDatShaGrp :
+			      (HieCods[Hie_CRS] > 0 ? ActShoDatShaCrs :
+			      (HieCods[Hie_DEG] > 0 ? ActShoDatShaDeg :
+			      (HieCods[Hie_CTR] > 0 ? ActShoDatShaCtr :
+						      ActShoDatShaIns)));
 		     break;
 		  case Ntf_EVENT_MARKS_FILE:
-		     Action = GrpCod > 0 ? ActReqDatSeeMrkGrp :
-					   ActReqDatSeeMrkCrs;
+		     Action = GrpCod > 0 ? ActShoDatSeeMrkGrp :
+					   ActShoDatSeeMrkCrs;
 		     break;
 		  default:	// Not aplicable here
 		     break;

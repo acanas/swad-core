@@ -143,6 +143,11 @@ void Brw_RemoveOldFilesBriefcase (void);
 Act_Action_t Brw_GetActionExpand (Brw_Zone_t Zone);
 Act_Action_t Brw_GetActionContract (Brw_Zone_t Zone);
 
+//----------------------- Set and get section for action ----------------------
+
+void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
+			      Brw_Action_t Action);
+
 //-------------------------------- Figures ------------------------------------
 void Brw_GetAndShowFileBrowsersStats (Hie_Level_t HieLvl);
 void Brw_GetAndShowOERsStats (Hie_Level_t HieLvl);

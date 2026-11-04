@@ -32,6 +32,7 @@
 #include "swad_browser.h"
 #include "swad_browser_database.h"
 #include "swad_browser_resource.h"
+#include "swad_browser_type.h"
 #include "swad_error.h"
 #include "swad_global.h"
 #include "swad_parameter_code.h"
@@ -43,14 +44,36 @@
 
 void BrwRsc_GetLinkToDocFil (void)
   {
-   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
-   extern const char *Txt_Documents;
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File File;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_GET_LINK_TO_DOC_FILE);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+void BrwRsc_GetLinkToMrkFil (void)
+  {
+   struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_GET_LINK_TO_MRK_FILE);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+void BrwRsc_DoActionGetLinkToDocFil (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
+   extern const char *Txt_Documents;
+   struct Brw_File File;
+
+   /***** Get file / folder / link *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,File.FilCod);
@@ -58,22 +81,17 @@ void BrwRsc_GetLinkToDocFil (void)
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
                   File.FilCod > 0 ? File.Path.Name :
-                		             Txt_Documents);
-
-   /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal (&FileBrowser);
+                		    Txt_Documents);
   }
 
-void BrwRsc_GetLinkToMrkFil (void)
+void BrwRsc_DoActionGetLinkToMrkFil (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Marks_area;
-   struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
+   /***** Get file / folder / link *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_MARKS,File.FilCod);
@@ -81,10 +99,7 @@ void BrwRsc_GetLinkToMrkFil (void)
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
                   File.FilCod > 0 ? File.Path.Name :
-                			     Txt_Marks_area);
-
-   /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal (&FileBrowser);
+                		    Txt_Marks_area);
   }
 
 /*****************************************************************************/

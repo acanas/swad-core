@@ -44,6 +44,7 @@
 #include "swad_box.h"
 #include "swad_browser.h"
 #include "swad_browser_database.h"
+#include "swad_browser_resource.h"
 #include "swad_browser_size.h"
 #include "swad_config.h"
 #include "swad_course_database.h"
@@ -388,39 +389,6 @@ static Act_Action_t Brw_ActChgZone[Brw_NUM_ZONES] =
    [Brw_ADMI_ASS_PRJ] = ActUnk,
   };
 
-static Act_Action_t Brw_ActReqDatFile[Brw_NUM_ZONES] =
-  {
-   [Brw_UNKNOWN     ] = ActUnk,
-   [Brw_SHOW_DOC_CRS] = ActReqDatSeeDocCrs,
-   [Brw_SHOW_MRK_CRS] = ActReqDatSeeMrkCrs,
-   [Brw_ADMI_DOC_CRS] = ActReqDatAdmDocCrs,
-   [Brw_ADMI_SHR_CRS] = ActReqDatShaCrs,
-   [Brw_ADMI_SHR_GRP] = ActReqDatShaGrp,
-   [Brw_ADMI_WRK_USR] = ActReqDatWrkUsr,
-   [Brw_ADMI_WRK_CRS] = ActReqDatWrkCrs,
-   [Brw_ADMI_MRK_CRS] = ActReqDatAdmMrkCrs,
-   [Brw_ADMI_BRF_USR] = ActReqDatBrf,
-   [Brw_SHOW_DOC_GRP] = ActReqDatSeeDocGrp,
-   [Brw_ADMI_DOC_GRP] = ActReqDatAdmDocGrp,
-   [Brw_SHOW_MRK_GRP] = ActReqDatSeeMrkGrp,
-   [Brw_ADMI_MRK_GRP] = ActReqDatAdmMrkGrp,
-   [Brw_ADMI_ASG_USR] = ActReqDatAsgUsr,
-   [Brw_ADMI_ASG_CRS] = ActReqDatAsgCrs,
-   [Brw_SHOW_DOC_DEG] = ActReqDatSeeDocDeg,
-   [Brw_ADMI_DOC_DEG] = ActReqDatAdmDocDeg,
-   [Brw_SHOW_DOC_CTR] = ActReqDatSeeDocCtr,
-   [Brw_ADMI_DOC_CTR] = ActReqDatAdmDocCtr,
-   [Brw_SHOW_DOC_INS] = ActReqDatSeeDocIns,
-   [Brw_ADMI_DOC_INS] = ActReqDatAdmDocIns,
-   [Brw_ADMI_SHR_DEG] = ActReqDatShaDeg,
-   [Brw_ADMI_SHR_CTR] = ActReqDatShaCtr,
-   [Brw_ADMI_SHR_INS] = ActReqDatShaIns,
-   [Brw_ADMI_TCH_CRS] = ActReqDatTchCrs,
-   [Brw_ADMI_TCH_GRP] = ActReqDatTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActReqDatDocPrj,
-   [Brw_ADMI_ASS_PRJ] = ActReqDatAssPrj,
-  };
-
 static Act_Action_t Brw_ActReqLnk[Brw_NUM_ZONES] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
@@ -714,8 +682,8 @@ static Act_Action_t Brw_ActShoCli[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_INS] = ActShoCliShaIns,
    [Brw_ADMI_TCH_CRS] = ActShoCliTchCrs,
    [Brw_ADMI_TCH_GRP] = ActShoCliTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActShoCliPrj,
-   [Brw_ADMI_ASS_PRJ] = ActShoCliPrj,
+   [Brw_ADMI_DOC_PRJ] = ActShoCliDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActShoCliAssPrj,
   };
 
 static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
@@ -747,8 +715,8 @@ static Act_Action_t Brw_ActRemCli[Brw_NUM_ZONES] =
    [Brw_ADMI_SHR_INS] = ActRemCliShaIns,
    [Brw_ADMI_TCH_CRS] = ActRemCliTchCrs,
    [Brw_ADMI_TCH_GRP] = ActRemCliTchGrp,
-   [Brw_ADMI_DOC_PRJ] = ActRemCliPrj,
-   [Brw_ADMI_ASS_PRJ] = ActRemCliPrj,
+   [Brw_ADMI_DOC_PRJ] = ActRemCliDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActRemCliAssPrj,
   };
 
 static Act_Action_t Brw_ActFormCreate[Brw_NUM_ZONES] =
@@ -1048,7 +1016,40 @@ static Act_Action_t Brw_ActContractFolder[Brw_NUM_ZONES] =
    [Brw_ADMI_ASS_PRJ] = ActConAssPrj,
   };
 
-static Act_Action_t Brw_ActRecDatFile[Brw_NUM_ZONES] =
+static Act_Action_t Brw_ActShoDatFile[Brw_NUM_ZONES] =
+  {
+   [Brw_UNKNOWN     ] = ActUnk,
+   [Brw_SHOW_DOC_CRS] = ActShoDatSeeDocCrs,
+   [Brw_SHOW_MRK_CRS] = ActShoDatSeeMrkCrs,
+   [Brw_ADMI_DOC_CRS] = ActShoDatAdmDocCrs,
+   [Brw_ADMI_SHR_CRS] = ActShoDatShaCrs,
+   [Brw_ADMI_SHR_GRP] = ActShoDatShaGrp,
+   [Brw_ADMI_WRK_USR] = ActShoDatWrkUsr,
+   [Brw_ADMI_WRK_CRS] = ActShoDatWrkCrs,
+   [Brw_ADMI_MRK_CRS] = ActShoDatAdmMrkCrs,
+   [Brw_ADMI_BRF_USR] = ActShoDatBrf,
+   [Brw_SHOW_DOC_GRP] = ActShoDatSeeDocGrp,
+   [Brw_ADMI_DOC_GRP] = ActShoDatAdmDocGrp,
+   [Brw_SHOW_MRK_GRP] = ActShoDatSeeMrkGrp,
+   [Brw_ADMI_MRK_GRP] = ActShoDatAdmMrkGrp,
+   [Brw_ADMI_ASG_USR] = ActShoDatAsgUsr,
+   [Brw_ADMI_ASG_CRS] = ActShoDatAsgCrs,
+   [Brw_SHOW_DOC_DEG] = ActShoDatSeeDocDeg,
+   [Brw_ADMI_DOC_DEG] = ActShoDatAdmDocDeg,
+   [Brw_SHOW_DOC_CTR] = ActShoDatSeeDocCtr,
+   [Brw_ADMI_DOC_CTR] = ActShoDatAdmDocCtr,
+   [Brw_SHOW_DOC_INS] = ActShoDatSeeDocIns,
+   [Brw_ADMI_DOC_INS] = ActShoDatAdmDocIns,
+   [Brw_ADMI_SHR_DEG] = ActShoDatShaDeg,
+   [Brw_ADMI_SHR_CTR] = ActShoDatShaCtr,
+   [Brw_ADMI_SHR_INS] = ActShoDatShaIns,
+   [Brw_ADMI_TCH_CRS] = ActShoDatTchCrs,
+   [Brw_ADMI_TCH_GRP] = ActShoDatTchGrp,
+   [Brw_ADMI_DOC_PRJ] = ActShoDatDocPrj,
+   [Brw_ADMI_ASS_PRJ] = ActShoDatAssPrj,
+  };
+
+static Act_Action_t Brw_ActChgDatFile[Brw_NUM_ZONES] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -1289,6 +1290,8 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
 							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType);
 
+static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser);
+
 static void Brw_PutIconToGetLinkToFile (const void *FileBrowser);
 static void Brw_PutParsToGetLinkToFile (const void *FileBrowser);
 
@@ -1301,6 +1304,9 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct Brw_FileBrowser *FileBrowser,
                                               const char *FileNameToShow);
+
+static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser);
+
 static Brw_License_t Brw_GetParLicense (void);
 
 static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
@@ -1345,8 +1351,6 @@ static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
 
 //----------------------- Set and get section for action ----------------------
 
-static void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
-				     Brw_Action_t Action);
 static Brw_Action_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser);
 
 //--------------------------------- Statistics --------------------------------
@@ -1515,7 +1519,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActSeeDocIns:
       case ActExpSeeDocIns:	case ActConSeeDocIns:
       case ActZIPSeeDocIns:
-      case ActReqDatSeeDocIns:
+      case ActShoDatSeeDocIns:
       case ActDowSeeDocIns:
 	 return Brw_SHOW_DOC_INS;
       case ActChgToAdmDocIns:	// Access to admin a documents zone
@@ -1530,7 +1534,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmDocIns:	case ActConAdmDocIns:
       case ActZIPAdmDocIns:
       case ActUnhDocIns:	case ActHidDocIns:
-      case ActReqDatAdmDocIns:	case ActChgDatAdmDocIns:
+      case ActShoDatAdmDocIns:	case ActChgDatAdmDocIns:
       case ActDowAdmDocIns:
 	 return Brw_ADMI_DOC_INS;
 
@@ -1545,7 +1549,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilShaInsDZ:	case ActRcvFilShaInsCla:
       case ActExpShaIns:	case ActConShaIns:
       case ActZIPShaIns:
-      case ActReqDatShaIns:	case ActChgDatShaIns:
+      case ActShoDatShaIns:	case ActChgDatShaIns:
       case ActDowShaIns:
          return Brw_ADMI_SHR_INS;
 
@@ -1555,7 +1559,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActSeeDocCtr:
       case ActExpSeeDocCtr:	case ActConSeeDocCtr:
       case ActZIPSeeDocCtr:
-      case ActReqDatSeeDocCtr:
+      case ActShoDatSeeDocCtr:
       case ActDowSeeDocCtr:
 	 return Brw_SHOW_DOC_CTR;
       case ActChgToAdmDocCtr:	// Access to admin a documents zone
@@ -1570,7 +1574,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmDocCtr:	case ActConAdmDocCtr:
       case ActZIPAdmDocCtr:
       case ActUnhDocCtr:	case ActHidDocCtr:
-      case ActReqDatAdmDocCtr:	case ActChgDatAdmDocCtr:
+      case ActShoDatAdmDocCtr:	case ActChgDatAdmDocCtr:
       case ActDowAdmDocCtr:
 	 return Brw_ADMI_DOC_CTR;
 
@@ -1585,7 +1589,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilShaCtrDZ:	case ActRcvFilShaCtrCla:
       case ActExpShaCtr:	case ActConShaCtr:
       case ActZIPShaCtr:
-      case ActReqDatShaCtr:	case ActChgDatShaCtr:
+      case ActShoDatShaCtr:	case ActChgDatShaCtr:
       case ActDowShaCtr:
          return Brw_ADMI_SHR_CTR;
 
@@ -1595,7 +1599,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActSeeDocDeg:
       case ActExpSeeDocDeg:	case ActConSeeDocDeg:
       case ActZIPSeeDocDeg:
-      case ActReqDatSeeDocDeg:
+      case ActShoDatSeeDocDeg:
       case ActDowSeeDocDeg:
 	 return Brw_SHOW_DOC_DEG;
       case ActChgToAdmDocDeg:	// Access to admin a documents zone
@@ -1610,7 +1614,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmDocDeg:	case ActConAdmDocDeg:
       case ActZIPAdmDocDeg:
       case ActUnhDocDeg:	case ActHidDocDeg:
-      case ActReqDatAdmDocDeg:	case ActChgDatAdmDocDeg:
+      case ActShoDatAdmDocDeg:	case ActChgDatAdmDocDeg:
       case ActDowAdmDocDeg:
 	 return Brw_ADMI_DOC_DEG;
 
@@ -1625,7 +1629,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilShaDegDZ:	case ActRcvFilShaDegCla:
       case ActExpShaDeg:	case ActConShaDeg:
       case ActZIPShaDeg:
-      case ActReqDatShaDeg:	case ActChgDatShaDeg:
+      case ActShoDatShaDeg:	case ActChgDatShaDeg:
       case ActDowShaDeg:
          return Brw_ADMI_SHR_DEG;
 
@@ -1638,14 +1642,14 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActSeeDocCrs:
       case ActExpSeeDocCrs:	case ActConSeeDocCrs:
       case ActZIPSeeDocCrs:
-      case ActReqDatSeeDocCrs:
+      case ActShoDatSeeDocCrs:
       case ActReqLnkSeeDocCrs:
       case ActDowSeeDocCrs:
 	 return Brw_SHOW_DOC_CRS;
       case ActSeeDocGrp:
       case ActExpSeeDocGrp:	case ActConSeeDocGrp:
       case ActZIPSeeDocGrp:
-      case ActReqDatSeeDocGrp:
+      case ActShoDatSeeDocGrp:
       case ActDowSeeDocGrp:
 	 return Brw_SHOW_DOC_GRP;
       case ActChgToAdmDocCrs:	// Access to admin a documents zone
@@ -1663,7 +1667,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmDocCrs:	case ActConAdmDocCrs:
       case ActZIPAdmDocCrs:
       case ActUnhDocCrs:	case ActHidDocCrs:
-      case ActReqDatAdmDocCrs:	case ActChgDatAdmDocCrs:
+      case ActShoDatAdmDocCrs:	case ActChgDatAdmDocCrs:
       case ActReqLnkAdmDocCrs:
       case ActDowAdmDocCrs:
 	 return Brw_ADMI_DOC_CRS;
@@ -1678,7 +1682,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmDocGrp:	case ActConAdmDocGrp:
       case ActZIPAdmDocGrp:
       case ActUnhDocGrp:	case ActHidDocGrp:
-      case ActReqDatAdmDocGrp:	case ActChgDatAdmDocGrp:
+      case ActShoDatAdmDocGrp:	case ActChgDatAdmDocGrp:
       case ActDowAdmDocGrp:
 	 return Brw_ADMI_DOC_GRP;
 
@@ -1698,7 +1702,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilTchCrsDZ:	case ActRcvFilTchCrsCla:
       case ActExpTchCrs:	case ActConTchCrs:
       case ActZIPTchCrs:
-      case ActReqDatTchCrs:	case ActChgDatTchCrs:
+      case ActShoDatTchCrs:	case ActChgDatTchCrs:
       case ActDowTchCrs:
          return Brw_ADMI_TCH_CRS;
       case ActAdmTchGrp:
@@ -1711,7 +1715,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilTchGrpDZ:	case ActRcvFilTchGrpCla:
       case ActExpTchGrp:	case ActConTchGrp:
       case ActZIPTchGrp:
-      case ActReqDatTchGrp:	case ActChgDatTchGrp:
+      case ActShoDatTchGrp:	case ActChgDatTchGrp:
       case ActDowTchGrp:
          return Brw_ADMI_TCH_GRP;
 
@@ -1731,7 +1735,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilShaCrsDZ:	case ActRcvFilShaCrsCla:
       case ActExpShaCrs:	case ActConShaCrs:
       case ActZIPShaCrs:
-      case ActReqDatShaCrs:	case ActChgDatShaCrs:
+      case ActShoDatShaCrs:	case ActChgDatShaCrs:
       case ActDowShaCrs:
          return Brw_ADMI_SHR_CRS;
       case ActAdmShaGrp:
@@ -1744,7 +1748,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilShaGrpDZ:	case ActRcvFilShaGrpCla:
       case ActExpShaGrp:	case ActConShaGrp:
       case ActZIPShaGrp:
-      case ActReqDatShaGrp:	case ActChgDatShaGrp:
+      case ActShoDatShaGrp:	case ActChgDatShaGrp:
       case ActDowShaGrp:
          return Brw_ADMI_SHR_GRP;
 
@@ -1761,7 +1765,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilAsgUsrDZ:	case ActRcvFilAsgUsrCla:
       case ActExpAsgUsr:	case ActConAsgUsr:
       case ActZIPAsgUsr:
-      case ActReqDatAsgUsr:	case ActChgDatAsgUsr:
+      case ActShoDatAsgUsr:	case ActChgDatAsgUsr:
       case ActDowAsgUsr:
          return Brw_ADMI_ASG_USR;
 
@@ -1775,14 +1779,14 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilWrkUsrDZ:	case ActRcvFilWrkUsrCla:
       case ActExpWrkUsr:	case ActConWrkUsr:
       case ActZIPWrkUsr:
-      case ActReqDatWrkUsr:	case ActChgDatWrkUsr:
+      case ActShoDatWrkUsr:	case ActChgDatWrkUsr:
       case ActDowWrkUsr:
          return Brw_ADMI_WRK_USR;
 
       /***** Assignments and works of users in course *****/
       case ActAdmAsgWrkCrs:	case ActAdmAsgWrkCrsZIP:
 
-      /***** Assignments of users in course *****/
+      /***** Assignments of another user in course *****/
       case ActReqRemFilAsgCrs:	case ActRemFilAsgCrs:
       case ActRemFolAsgCrs:	case ActRemTreAsgCrs:
       case ActCopAsgCrs:	case ActPasAsgCrs:
@@ -1792,11 +1796,11 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilAsgCrsDZ:   case ActRcvFilAsgCrsCla:
       case ActExpAsgCrs:	case ActConAsgCrs:
       case ActZIPAsgCrs:
-      case ActReqDatAsgCrs:	case ActChgDatAsgCrs:
+      case ActShoDatAsgCrs:	case ActChgDatAsgCrs:
       case ActDowAsgCrs:
          return Brw_ADMI_ASG_CRS;
 
-      /***** Works of users in course *****/
+      /***** Works of another user in course *****/
       case ActReqRemFilWrkCrs:	case ActRemFilWrkCrs:
       case ActRemFolWrkCrs:	case ActRemTreWrkCrs:
       case ActCopWrkCrs:	case ActPasWrkCrs:
@@ -1806,24 +1810,24 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilWrkCrsDZ:	case ActRcvFilWrkCrsCla:
       case ActExpWrkCrs:	case ActConWrkCrs:
       case ActZIPWrkCrs:
-      case ActReqDatWrkCrs:	case ActChgDatWrkCrs:
+      case ActShoDatWrkCrs:	case ActChgDatWrkCrs:
       case ActDowWrkCrs:
          return Brw_ADMI_WRK_CRS;
 
       /***** Documents and assessment in a project *****/
       case ActSeeOnePrj:
-      case ActShoCliPrj:	case ActRemCliPrj:
 
       /***** Documents in a project *****/
       case ActReqRemFilDocPrj:	case ActRemFilDocPrj:
       case ActRemFolDocPrj:	case ActRemTreDocPrj:
       case ActCopDocPrj:	case ActPasDocPrj:
+      case ActShoCliDocPrj:	case ActRemCliDocPrj:
       case ActFrmCreDocPrj:	case ActCreFolDocPrj:	case ActCreLnkDocPrj:
       case ActRenFolDocPrj:
       case ActRcvFilDocPrjDZ:	case ActRcvFilDocPrjCla:
       case ActExpDocPrj:	case ActConDocPrj:
       case ActZIPDocPrj:
-      case ActReqDatDocPrj:	case ActChgDatDocPrj:
+      case ActShoDatDocPrj:	case ActChgDatDocPrj:
       case ActDowDocPrj:
          return Brw_ADMI_DOC_PRJ;
 
@@ -1831,12 +1835,13 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActReqRemFilAssPrj:	case ActRemFilAssPrj:
       case ActRemFolAssPrj:	case ActRemTreAssPrj:
       case ActCopAssPrj:	case ActPasAssPrj:
+      case ActShoCliAssPrj:	case ActRemCliAssPrj:
       case ActFrmCreAssPrj:	case ActCreFolAssPrj:	case ActCreLnkAssPrj:
       case ActRenFolAssPrj:
       case ActRcvFilAssPrjDZ:	case ActRcvFilAssPrjCla:
       case ActExpAssPrj:	case ActConAssPrj:
       case ActZIPAssPrj:
-      case ActReqDatAssPrj:	case ActChgDatAssPrj:
+      case ActShoDatAssPrj:	case ActChgDatAssPrj:
       case ActDowAssPrj:
       case ActChgPrjSco:
          return Brw_ADMI_ASS_PRJ;
@@ -1865,13 +1870,13 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
                              Brw_SHOW_MRK_CRS;
       case ActSeeMrkCrs:
       case ActExpSeeMrkCrs:	case ActConSeeMrkCrs:
-      case ActReqDatSeeMrkCrs:
+      case ActShoDatSeeMrkCrs:
       case ActReqLnkSeeMrkCrs:
       case ActSeeMyMrkCrs:
          return Brw_SHOW_MRK_CRS;
       case ActSeeMrkGrp:
       case ActExpSeeMrkGrp:	case ActConSeeMrkGrp:
-      case ActReqDatSeeMrkGrp:
+      case ActShoDatSeeMrkGrp:
       case ActSeeMyMrkGrp:
          return Brw_SHOW_MRK_GRP;
       case ActChgToAdmMrk:	// Access to admin a marks zone
@@ -1889,7 +1894,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmMrkCrs:	case ActConAdmMrkCrs:
       case ActZIPAdmMrkCrs:
       case ActUnhMrkCrs:	case ActHidMrkCrs:
-      case ActReqDatAdmMrkCrs:	case ActChgDatAdmMrkCrs:
+      case ActShoDatAdmMrkCrs:	case ActChgDatAdmMrkCrs:
       case ActReqLnkAdmMrkCrs:
       case ActDowAdmMrkCrs:
       case ActChgNumRowHeaCrs:	case ActChgNumRowFooCrs:
@@ -1905,7 +1910,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActExpAdmMrkGrp:	case ActConAdmMrkGrp:
       case ActZIPAdmMrkGrp:
       case ActUnhMrkGrp:	case ActHidMrkGrp:
-      case ActReqDatAdmMrkGrp:	case ActChgDatAdmMrkGrp:
+      case ActShoDatAdmMrkGrp:	case ActChgDatAdmMrkGrp:
       case ActDowAdmMrkGrp:
       case ActChgNumRowHeaGrp:	case ActChgNumRowFooGrp:
          return Brw_ADMI_MRK_GRP;
@@ -1921,7 +1926,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActRcvFilBrfDZ:	case ActRcvFilBrfCla:
       case ActExpBrf:		case ActConBrf:
       case ActZIPBrf:
-      case ActReqDatBrf:	case ActChgDatBrf:
+      case ActShoDatBrf:	case ActChgDatBrf:
       case ActDowBrf:
       case ActReqRemOldBrf:	// Ask for removing old files in briefcase
       case ActRemOldBrf:	// Remove old files in briefcase
@@ -3157,6 +3162,10 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_SHOW_CLIPBOARD		] = Brw_DoActionShowMyClipboard,
       [Brw_ACT_REM_CLIPBOARD		] = Brw_DoActionRemMyClipboard,
       [Brw_ACT_SHOW_FORM		] = Brw_DoActionShowForm,
+      [Brw_ACT_SHOW_FILE_METADATA	] = Brw_DoActionShowFileMetadata,
+      [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChgFileMetadata,
+      [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
+      [Brw_ACT_GET_LINK_TO_MRK_FILE	] = BrwRsc_DoActionGetLinkToMrkFil,
      };
    Brw_Action_t Action;
    struct Brw_File RootFolder;
@@ -3453,7 +3462,8 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
 
    /***** Put icon to get resource link *****/
    if (Brw_ActReqLnk[Zone] != ActUnk)
-      Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Zone],NULL,
+      Ico_PutContextualIconToGetLink (Brw_ActReqLnk[Zone],
+				      ((struct Brw_FileBrowser *) FileBrowser)->SectionId,
 				      NULL,NULL);
 
    /***** Put icon to show a figure *****/
@@ -4685,7 +4695,8 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct Brw_FileBrowser *FileB
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       /***** Begin form *****/
-      Frm_BeginForm (Brw_ActReqDatFile[FileBrowser->Zone]);
+      Frm_BeginFormAnchor (Brw_ActShoDatFile[FileBrowser->Zone],
+			   FileBrowser->SectionId);
 	 Brw_PutParsFileBrowser (FileBrowser);
 
 	 /***** Icon depending on the file extension *****/
@@ -4695,7 +4706,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (struct Brw_FileBrowser *FileB
 			     Frm_PUT_FORM);	// Put link to view metadata
 	 else
 	    Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,
-	                     Brw_ActReqDatFile[FileBrowser->Zone]);
+	                     Brw_ActShoDatFile[FileBrowser->Zone]);
 
 
       /***** End form *****/
@@ -6157,8 +6168,8 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		  Err_WrongFileZoneExit ();
 
 	       /* Notify only if destination folder is visible */
-	       if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-									     &FirstFile) == HidVis_VISIBLE)
+	       if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
+							       &FirstFile) == HidVis_VISIBLE)
 		  switch (FileBrowser->Zone)
 		    {
 		     case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
@@ -7193,8 +7204,8 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  UploadSucessful = Err_SUCCESS;
 
 					  /* Notify new file */
-					  if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-													ParentFolder) == HidVis_VISIBLE)
+					  if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
+											  ParentFolder) == HidVis_VISIBLE)
 					     switch (FileBrowser->Zone)
 					       {
 						case Brw_ADMI_DOC_CRS:
@@ -7394,8 +7405,8 @@ void Brw_CreateLink (void)
 						FileName,ParentFolderNameToShow);
 
 				 /* Notify new file */
-				 if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-											       &ParentFolder) == HidVis_VISIBLE)
+				 if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+									         &ParentFolder) == HidVis_VISIBLE)
 				    switch (FileBrowser.Zone)
 				      {
 				       case Brw_ADMI_DOC_CRS:
@@ -7618,6 +7629,18 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
 
 void Brw_ShowFileMetadata (void)
   {
+   struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_FILE_METADATA);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
+  {
    extern const char *Txt_Private_available_to_certain_users_identified;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
@@ -7651,7 +7674,6 @@ void Brw_ShowFileMetadata (void)
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO15x20",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR15x20",
      };
-   struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
    struct Usr_Data PublisherUsrDat;
    char FileNameToShow[NAME_MAX + 1];
@@ -7665,9 +7687,8 @@ void Brw_ShowFileMetadata (void)
    Brw_License_t License;
    unsigned LicenseUnsigned;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / link
+   /***** Get file / link *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
    /***** Get size and date *****/
    if (Brw_GetFileTypeSizeAndDate (&File) == Exi_EXISTS)
@@ -7675,28 +7696,28 @@ void Brw_ShowFileMetadata (void)
       /***** Check if I can view this file.
 	     It could be marked as hidden or in a hidden folder *****/
       ICanView = Usr_CAN;
-      switch (FileBrowser.Zone)
+      switch (FileBrowser->Zone)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
+											       &File)];
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
+											       &File)];
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
+											       &File)];
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+               ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
+											       &File)];
 	    break;
 	 default:
 	    break;
@@ -7727,26 +7748,26 @@ void Brw_ShowFileMetadata (void)
 	       PublisherExists = Exi_DOES_NOT_EXIST;
 
 	    /***** Get link to download the file *****/
-	    if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_SEE_MRK))
+	    if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_SEE_MRK))
 	       URL[0] = '\0';
 	    else
-	       Brw_GetLinkToDownloadFile (&FileBrowser,&File,URL);
+	       Brw_GetLinkToDownloadFile (FileBrowser,&File,URL);
 
 	    /***** Can I edit the properties of the file? *****/
-	    ICanEdit = Brw_CheckIfICanEditFileMetadata (FileBrowser.Zone,
+	    ICanEdit = Brw_CheckIfICanEditFileMetadata (FileBrowser->Zone,
 							File.Metadata.PublisherCod);
 
 	    /***** Name of the file/link to be shown *****/
-	    Brw_GetFileNameToShow (FileBrowser.Zone,&File,FileNameToShow);
+	    Brw_GetFileNameToShow (FileBrowser->Zone,&File,FileNameToShow);
 
 	    /***** Begin box *****/
 	    // Put icon to get link?
-	    if ((Brw_ActReqLnk[FileBrowser.Zone] != ActUnk &&
+	    if ((Brw_ActReqLnk[FileBrowser->Zone] != ActUnk &&
 		 (File.Type == Brw_IS_FILE ||	// Only files or links
 		  File.Type == Brw_IS_LINK) &&
 		 Rsc_CheckIfICanGetLink ()) == Usr_CAN)
 	       Box_BoxShadowBegin (NULL,
-				   Brw_PutIconToGetLinkToFile,&FileBrowser,
+				   Brw_PutIconToGetLinkToFile,FileBrowser,
 				   NULL);
 	    else
 	       Box_BoxShadowBegin (NULL,NULL,NULL,NULL);
@@ -7756,7 +7777,7 @@ void Brw_ShowFileMetadata (void)
 	    if (ICanEdit == Usr_CAN)	// I can edit file properties
 	      {
 	       /* Can the file be public? */
-	       switch (FileBrowser.Zone)
+	       switch (FileBrowser->Zone)
 		 {
 		  case Brw_ADMI_DOC_INS:  case Brw_ADMI_SHR_INS:
 		  case Brw_ADMI_DOC_CTR:  case Brw_ADMI_SHR_CTR:
@@ -7769,8 +7790,10 @@ void Brw_ShowFileMetadata (void)
 		     break;
 		 }
 
-	       Frm_BeginForm (Brw_ActRecDatFile[FileBrowser.Zone]);
-		  Brw_PutParsFileBrowser (&FileBrowser);
+	       Frm_BeginFormAnchor (Brw_ActChgDatFile[FileBrowser->Zone],
+				    FileBrowser->SectionId);
+
+		  Brw_PutParsFileBrowser (FileBrowser);
 	      }
 
 	    /***** Begin table *****/
@@ -7780,7 +7803,7 @@ void Brw_ShowFileMetadata (void)
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-		     Brw_WriteBigLinkToDownloadFile (URL,&FileBrowser,&File,FileNameToShow);
+		     Brw_WriteBigLinkToDownloadFile (URL,FileBrowser,&File,FileNameToShow);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -7791,7 +7814,7 @@ void Brw_ShowFileMetadata (void)
 		  Frm_LabelColumn ("RT",NULL,Txt_Filename);
 
 		  HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-		     Brw_WriteSmallLinkToDownloadFile (URL,&FileBrowser,FileNameToShow);
+		     Brw_WriteSmallLinkToDownloadFile (URL,FileBrowser,FileNameToShow);
 		  HTM_TD_End ();
 
 	       HTM_TR_End ();
@@ -7977,7 +8000,7 @@ void Brw_ShowFileMetadata (void)
 	    Box_BoxEnd ();
 
 	    /***** Mark possible notifications as seen *****/
-	    switch (FileBrowser.Zone)
+	    switch (FileBrowser->Zone)
 	      {
 	       case Brw_SHOW_DOC_CRS:
 	       case Brw_SHOW_DOC_GRP:
@@ -8009,13 +8032,13 @@ void Brw_ShowFileMetadata (void)
 	   }
 
 	 /***** Add paths until file to table of expanded folders *****/
-	 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser.Zone,
+	 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
 							          File.Path.InZoneWithoutName);
 	 break;
       case Usr_CAN_NOT:
       default:
 	 /***** Mark possible notifications about non visible file as removed *****/
-	 switch (FileBrowser.Zone)
+	 switch (FileBrowser->Zone)
 	   {
 	    case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
 	    case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
@@ -8043,9 +8066,6 @@ void Brw_ShowFileMetadata (void)
 			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
 	 break;
      }
-
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -8054,7 +8074,8 @@ void Brw_ShowFileMetadata (void)
 
 static void Brw_PutIconToGetLinkToFile (const void *FileBrowser)
   {
-   Ico_PutContextualIconToGetLink (Brw_ActReqLnk[((struct Brw_FileBrowser *) FileBrowser)->Zone],NULL,
+   Ico_PutContextualIconToGetLink (Brw_ActReqLnk[((struct Brw_FileBrowser *) FileBrowser)->Zone],
+				   ((struct Brw_FileBrowser *) FileBrowser)->SectionId,
                                    Brw_PutParsToGetLinkToFile,FileBrowser);
   }
 
@@ -8140,24 +8161,24 @@ void Brw_DownloadFile (void)
 	{
 	 case Brw_SHOW_DOC_INS:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+											       &File)];
             break;
 	 case Brw_SHOW_DOC_CTR:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+											       &File)];
             break;
 	 case Brw_SHOW_DOC_DEG:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+	       ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+											       &File)];
             break;
 	 case Brw_SHOW_DOC_CRS:
 	 case Brw_SHOW_DOC_GRP:
 	    if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-               ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-													     &File)];
+               ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+											       &File)];
 	    break;
 	 default:
 	    break;
@@ -8420,20 +8441,31 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 void Brw_ChgFileMetadata (void)
   {
    struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CHG_FILE_METADATA);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
+  {
+  extern const char *Txt_Changes_saved;
    struct Brw_File File;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileBeforeEdition;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileAfterEdition;
    Brw_License_t License;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / link
+   /*****  Get file / link *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
    /***** Get size and date *****/
    if (Brw_GetFileTypeSizeAndDate (&File) == Exi_EXISTS)
      {
       /***** Check if I can change file metadata *****/
-      if (Brw_CheckIfICanEditFileMetadata (FileBrowser.Zone,
+      if (Brw_CheckIfICanEditFileMetadata (FileBrowser->Zone,
 					   File.Metadata.PublisherCod) == Usr_CAN_NOT)
 	 Err_NoPermissionExit ();
 
@@ -8441,7 +8473,7 @@ void Brw_ChgFileMetadata (void)
       PrivateOrPublicFileBeforeEdition = File.Metadata.PrivateOrPublic;
 
       /***** Get the new file privacy and license from form *****/
-      switch (FileBrowser.Zone)
+      switch (FileBrowser->Zone)
 	{
 	 case Brw_ADMI_DOC_INS:
 	 case Brw_ADMI_SHR_INS:
@@ -8475,60 +8507,51 @@ void Brw_ChgFileMetadata (void)
 	}
 
       /***** Change file metadata *****/
-      Brw_DB_ChangeFilePublic (FileBrowser.Zone,
+      Brw_DB_ChangeFilePublic (FileBrowser->Zone,
 			       File.FilCod,
 			       File.Path.InZone,
 			       PrivateOrPublicFileAfterEdition,License);
 
       /***** Remove the affected clipboards *****/
-      Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
+      Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 				       Gbl.Usrs.Me.UsrDat.UsrCod,
 				       Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /***** Insert file into public social activity *****/
       if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVATE &&	// Only if file has changed from private...
-	  PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)		// ...to public
-	 switch (FileBrowser.Zone)
+	  PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)	// ...to public
+	 switch (FileBrowser->Zone)
 	   {
 	    case Brw_ADMI_DOC_INS:
-	       TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_INS:
-	       TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_DOC_CTR:
-	       TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_CTR:
-	       TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_DOC_DEG:
-	       TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_DEG:
-	       TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_DOC_CRS:
-	       TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:
-	       TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,
-					   File.FilCod);
+	       TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,File.FilCod);
 	       break;
 	    default:
 	       break;
 	   }
-     }
 
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Changes_saved);
+     }
   }
 
 /*****************************************************************************/
@@ -9613,8 +9636,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    FileBrowser.Zone = ZoneDB;
 
    /***** If hidden ==> nothing to show *****/
-   if (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-								 &File) == HidVis_HIDDEN)
+   if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+						   &File) == HidVis_HIDDEN)
       return;
 
    /***** Get institution (row[2], row[3]),
@@ -9767,7 +9790,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
 
 	 /* Begin form */
-	 Action = Brw_ActReqDatFile[Brw_ZoneForFoundDocs[FileBrowser.Zone]];
+	 Action = Brw_ActShoDatFile[Brw_ZoneForFoundDocs[FileBrowser.Zone]];
 
 	 if (Hie[Hie_CRS].HieCod > 0)
 	   {
@@ -10136,8 +10159,8 @@ static struct
    ""
   };
 
-static void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
-				     Brw_Action_t Action)
+void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
+			      Brw_Action_t Action)
   {
    Brw_SectionForAction.Action = Action;
    Str_Copy (Brw_SectionForAction.Id,FileBrowser->SectionId,

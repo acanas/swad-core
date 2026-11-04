@@ -13494,52 +13494,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Copy link to project(s)"		// Çeviri lazim!
 #endif
 	,
-	[ActShoCliPrj] =
-#if   L==1	// ca
-	"Mostrar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Necessita traducció
-#elif L==2	// de
-	"Show clipboard in documents/assessment zone of a project"			// Need Übersetzung
-#elif L==3	// en
-	"Show clipboard in documents/assessment zone of a project"
-#elif L==4	// es
-	"Mostrar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"
-#elif L==5	// fr
-	"Show clipboard in documents/assessment zone of a project"			// Besoin de traduction
-#elif L==6	// gn
-	"Mostrar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Okoteve traducción
-#elif L==7	// it
-	"Show clipboard in documents/assessment zone of a project"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Show clipboard in documents/assessment zone of a project"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Show clipboard in documents/assessment zone of a project"			// Precisa de tradução
-#elif L==10	// tr
-	"Show clipboard in documents/assessment zone of a project"			// Çeviri lazim!
-#endif
-	,
-	[ActRemCliPrj] =
-#if   L==1	// ca
-	"Eliminar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Necessita traducció
-#elif L==2	// de
-	"Remove clipboard in documents/assessment zone of a project"			// Need Übersetzung
-#elif L==3	// en
-	"Remove clipboard in documents/assessment zone of a project"
-#elif L==4	// es
-	"Eliminar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"
-#elif L==5	// fr
-	"Remove clipboard in documents/assessment zone of a project"			// Besoin de traduction
-#elif L==6	// gn
-	"Eliminar portapapeles en zona de documentos/evaluaci&oacute;n de un proyecto"	// Okoteve traducción
-#elif L==7	// it
-	"Remove clipboard in documents/assessment zone of a project"			// Bisogno di traduzione
-#elif L==8	// pl
-	"Remove clipboard in documents/assessment zone of a project"			// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Remove clipboard in documents/assessment zone of a project"			// Precisa de tradução
-#elif L==10	// tr
-	"Remove clipboard in documents/assessment zone of a project"			// Çeviri lazim!
-#endif
-	,
 	[ActReqRemFilDocPrj] =
 #if   L==1	// ca
 	"Request removal of file from documents zone of a project"			// Necessita traducció
@@ -13653,6 +13607,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file into documents zone of a project"		// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file into documents zone of a project"		// Çeviri lazim!
+#endif
+	,
+	[ActShoCliDocPrj] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de documentos de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in documents zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in documents zone of a project"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de documentos de un proyecto"
+#elif L==5	// fr
+	"Show clipboard in documents zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de documentos de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in documents zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in documents zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in documents zone of a project"			// Çeviri lazim!
+#endif
+	,
+	[ActRemCliDocPrj] =
+#if   L==1	// ca
+	"Eliminar portapapeles en zona de documentos de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Remove clipboard in documents zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Remove clipboard in documents zone of a project"
+#elif L==4	// es
+	"Eliminar portapapeles en zona de documentos de un proyecto"
+#elif L==5	// fr
+	"Remove clipboard in documents zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles en zona de documentos de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Remove clipboard in documents zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove clipboard in documents zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove clipboard in documents zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove clipboard in documents zone of a project"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreDocPrj] =
@@ -13885,7 +13885,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in documents zone of a project"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatDocPrj] =
+	[ActShoDatDocPrj] =
 #if   L==1	// ca
 	"See file metadata in documents zone of a project"		// Necessita traducció
 #elif L==2	// de
@@ -14067,6 +14067,52 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Paste folder/file into assessment zone of a project"			// Precisa de tradução
 #elif L==10	// tr
 	"Paste folder/file into assessment zone of a project"			// Çeviri lazim!
+#endif
+	,
+	[ActShoCliAssPrj] =
+#if   L==1	// ca
+	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Show clipboard in assessment zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Show clipboard in assessment zone of a project"
+#elif L==4	// es
+	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"
+#elif L==5	// fr
+	"Show clipboard in assessment zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Mostrar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Show clipboard in assessment zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Show clipboard in assessment zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Show clipboard in assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Show clipboard in assessment zone of a project"			// Çeviri lazim!
+#endif
+	,
+	[ActRemCliAssPrj] =
+#if   L==1	// ca
+	"Eliminar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Necessita traducció
+#elif L==2	// de
+	"Remove clipboard in assessment zone of a project"			// Need Übersetzung
+#elif L==3	// en
+	"Remove clipboard in assessment zone of a project"
+#elif L==4	// es
+	"Eliminar portapapeles en zona de evaluaci&oacute;n de un proyecto"
+#elif L==5	// fr
+	"Remove clipboard in assessment zone of a project"			// Besoin de traduction
+#elif L==6	// gn
+	"Eliminar portapapeles en zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
+#elif L==7	// it
+	"Remove clipboard in assessment zone of a project"			// Bisogno di traduzione
+#elif L==8	// pl
+	"Remove clipboard in assessment zone of a project"			// Potrzebujesz tlumaczenie
+#elif L==9	// pt
+	"Remove clipboard in assessment zone of a project"			// Precisa de tradução
+#elif L==10	// tr
+	"Remove clipboard in assessment zone of a project"			// Çeviri lazim!
 #endif
 	,
 	[ActRemTreAssPrj] =
@@ -14299,7 +14345,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in the assessment zone of a project"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAssPrj] =
+	[ActShoDatAssPrj] =
 #if   L==1	// ca
 	"See file metadata in the assessment zone of a project"			// Necessita traducció
 #elif L==2	// de
@@ -18416,7 +18462,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in institution documents"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeDocIns] =
+	[ActShoDatSeeDocIns] =
 #if   L==1	// ca
 	"See file metadata in documents zone of institution"			// Necessita traducció
 #elif L==2	// de
@@ -18945,7 +18991,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file of documents zone of institution"					// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmDocIns] =
+	[ActShoDatAdmDocIns] =
 #if   L==1	// ca
 	"See file metadata in documents zone of institution"			// Necessita traducció
 #elif L==2	// de
@@ -19428,7 +19474,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in shared zone of institution"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatShaIns] =
+	[ActShoDatShaIns] =
 #if   L==1	// ca
 	"See file metadata in shared zone of institution"			// Necessita traducció
 #elif L==2	// de
@@ -19635,7 +19681,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in documents zone of center"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeDocCtr] =
+	[ActShoDatSeeDocCtr] =
 #if   L==1	// ca
 	"See file metadata in documents zone of center"			// Necessita traducció
 #elif L==2	// de
@@ -20164,7 +20210,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file of documents zone of center"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmDocCtr] =
+	[ActShoDatAdmDocCtr] =
 #if   L==1	// ca
 	"See file metadata in documents zone of center"			// Necessita traducció
 #elif L==2	// de
@@ -20647,7 +20693,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in shared zone of center"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatShaCtr] =
+	[ActShoDatShaCtr] =
 #if   L==1	// ca
 	"See file metadata in shared zone of center"		// Necessita traducció
 #elif L==2	// de
@@ -20854,7 +20900,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in documents zone of degree"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeDocDeg] =
+	[ActShoDatSeeDocDeg] =
 #if   L==1	// ca
 	"See file metadata in documents zone of degree"				// Necessita traducció
 #elif L==2	// de
@@ -21383,7 +21429,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file in documents zone of degree"				// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmDocDeg] =
+	[ActShoDatAdmDocDeg] =
 #if   L==1	// ca
 	"See file metadata in documents zone of degree"				// Necessita traducció
 #elif L==2	// de
@@ -21866,7 +21912,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in shared zone of degree"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatShaDeg] =
+	[ActShoDatShaDeg] =
 #if   L==1	// ca
 	"See file metadata in shared zone of degree"				// Necessita traducció
 #elif L==2	// de
@@ -22073,7 +22119,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in documents zone of course"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeDocCrs] =
+	[ActShoDatSeeDocCrs] =
 #if   L==1	// ca
 	"See file metadata in documents zone of course"			// Necessita traducció
 #elif L==2	// de
@@ -22234,7 +22280,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in documents zone of group"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeDocGrp] =
+	[ActShoDatSeeDocGrp] =
 #if   L==1	// ca
 	"See file metadata in documents zone of group"			// Necessita traducció
 #elif L==2	// de
@@ -22763,7 +22809,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file in documents zone of course"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmDocCrs] =
+	[ActShoDatAdmDocCrs] =
 #if   L==1	// ca
 	"See file metadata in documents zone of course"			// Necessita traducció
 #elif L==2	// de
@@ -23315,7 +23361,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file in documents zone of group"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmDocGrp] =
+	[ActShoDatAdmDocGrp] =
 #if   L==1	// ca
 	"See file metadata in documents zone of group"			// Necessita traducció
 #elif L==2	// de
@@ -23844,7 +23890,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in teachers' documents zone of course"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatTchCrs] =
+	[ActShoDatTchCrs] =
 #if   L==1	// ca
 	"See file metadata in teachers' documents zone of course"			// Necessita traducció
 #elif L==2	// de
@@ -24327,7 +24373,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in teachers' documents zone of group"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatTchGrp] =
+	[ActShoDatTchGrp] =
 #if   L==1	// ca
 	"See file metadata in teachers' documents zone of group"		// Necessita traducció
 #elif L==2	// de
@@ -24856,7 +24902,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in shared files zone of course"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatShaCrs] =
+	[ActShoDatShaCrs] =
 #if   L==1	// ca
 	"See file metadata in shared files zone of course"				// Necessita traducció
 #elif L==2	// de
@@ -25339,7 +25385,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in shared files zone of group"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatShaGrp] =
+	[ActShoDatShaGrp] =
 #if   L==1	// ca
 	"See file metadata in shared files zone of group"			// Necessita traducció
 #elif L==2	// de
@@ -25822,7 +25868,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in user's assignments"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAsgUsr] =
+	[ActShoDatAsgUsr] =
 #if   L==1	// ca
 	"See file metadata in user's assignments"		// Necessita traducció
 #elif L==2	// de
@@ -26282,7 +26328,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in user's works"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatWrkUsr] =
+	[ActShoDatWrkUsr] =
 #if   L==1	// ca
 	"See file metadata in user's works"			// Necessita traducció
 #elif L==2	// de
@@ -26811,7 +26857,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in assignments zone of course"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAsgCrs] =
+	[ActShoDatAsgCrs] =
 #if   L==1	// ca
 	"See file metadata in assignments zone of course"		// Necessita traducció
 #elif L==2	// de
@@ -27271,7 +27317,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in works zone of course"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatWrkCrs] =
+	[ActShoDatWrkCrs] =
 #if   L==1	// ca
 	"See file metadata in works zone of course"			// Necessita traducció
 #elif L==2	// de
@@ -27455,7 +27501,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract folder in marks zone of course"			// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeMrkCrs] =
+	[ActShoDatSeeMrkCrs] =
 #if   L==1	// ca
 	"See file metadata in marks zone of course"				// Necessita traducció
 #elif L==2	// de
@@ -27593,7 +27639,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Contract folder in marks zone of group"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatSeeMrkGrp] =
+	[ActShoDatSeeMrkGrp] =
 #if   L==1	// ca
 	"See file metadata in marks zone of group"			// Necessita traducció
 #elif L==2	// de
@@ -28099,7 +28145,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file in marks management zone of course"						// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmMrkCrs] =
+	[ActShoDatAdmMrkCrs] =
 #if   L==1	// ca
 	"See file metadata in marks management zone of course"						// Necessita traducció
 #elif L==2	// de
@@ -28674,7 +28720,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Hide folder/file of marks management zone of group"				// Çeviri lazim!
 #endif
 	,
-	[ActReqDatAdmMrkGrp] =
+	[ActShoDatAdmMrkGrp] =
 #if   L==1	// ca
 	"See file metadata in marks management zone of group"					// Necessita traducció
 #elif L==2	// de
@@ -29203,7 +29249,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Compress folder in briefcase"		// Çeviri lazim!
 #endif
 	,
-	[ActReqDatBrf] =
+	[ActShoDatBrf] =
 #if   L==1	// ca
 	"See file metadata in briefcase"		// Necessita traducció
 #elif L==2	// de
