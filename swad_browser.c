@@ -1283,9 +1283,12 @@ static void Brw_PutFormToPasteAFileOrFolder (struct Brw_FileBrowser *FileBrowser
 					     const char *FileNameToShow);
 static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 				      const char *FileNameToShow);
+static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser);
 static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBrowser,
 						  struct Brw_File *ParentFolder,
 						  Brw_UploadType_t UploadType);
+static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser);
+
 static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
 							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType);
@@ -3162,6 +3165,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_SHOW_CLIPBOARD		] = Brw_DoActionShowMyClipboard,
       [Brw_ACT_REM_CLIPBOARD		] = Brw_DoActionRemMyClipboard,
       [Brw_ACT_SHOW_FORM		] = Brw_DoActionShowForm,
+      [Brw_ACT_CREATE_FOLDER		] = Brw_DoActionCreateFolder,
+      [Brw_ACT_CREATE_LINK		] = Brw_DoActionCreateLink,
       [Brw_ACT_SHOW_FILE_METADATA	] = Brw_DoActionShowFileMetadata,
       [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChgFileMetadata,
       [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
@@ -6779,25 +6784,35 @@ static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_CreateFolder (void)
   {
+   struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CREATE_FOLDER);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
+  {
    extern const char *Txt_Can_not_create_the_folder_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
    extern const char *Txt_You_can_not_create_folders_here;
-   struct Brw_FileBrowser FileBrowser;
    struct Brw_File ParentFolder;
    struct Brw_File NewFolder;
    char ParentFolderNameToShow[NAME_MAX + 1];
    char NewFolderName[NAME_MAX + 1];	// Name of the new folder
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolder);	// Get parent folder in which to create the new folder
+   /***** Get parent folder in which to create the new folder
+	  and the name of the new folder *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&ParentFolder);
    Brw_GetNewFolderLinkName (NewFolderName);
 
    /***** Check if creating a new folder is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser.Zone,
-					    &ParentFolder))
+   switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,&ParentFolder))
      {
       case Usr_CAN:
 	 switch (Str_ConvertFilFolLnkNameToValid (NewFolderName))
@@ -6808,38 +6823,38 @@ void Brw_CreateFolder (void)
 			      ParentFolder.Path.InZone,
 			      NewFolderName);
 	       Fil_BuildPath (NewFolder.Path.InServ,"%s/%s",
-			      FileBrowser.PathRootFolderInServ.AboveRootFolder,
+			      FileBrowser->PathRootFolderInServ.AboveRootFolder,
 			      NewFolder.Path.InZone);
 
 	       /* Create the new directory */
 	       if (mkdir (NewFolder.Path.InServ,(mode_t) 0777) == 0)
 		 {
 		  /* Check if quota has been exceeded */
-		  BrwSiz_CalcSizeOfDir (&FileBrowser.Size,
-					FileBrowser.PathRootFolderInServ.WithRootFolder);
-		  BrwSiz_SetMaxQuota (FileBrowser.Zone,&FileBrowser.Size);
-		  switch (BrwSiz_CheckQuota (&FileBrowser.Size))
+		  BrwSiz_CalcSizeOfDir (&FileBrowser->Size,
+					FileBrowser->PathRootFolderInServ.WithRootFolder);
+		  BrwSiz_SetMaxQuota (FileBrowser->Zone,&FileBrowser->Size);
+		  switch (BrwSiz_CheckQuota (&FileBrowser->Size))
 		    {
 		     case Err_SUCCESS:	// Quota not exceeded
 			/* Remove affected clipboards */
-			Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
+			Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 							 Gbl.Usrs.Me.UsrDat.UsrCod,
 							 Gbl.Usrs.Other.UsrDat.UsrCod);
 
 			/* Add path where new folder is created to table of expanded folders */
-			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser.Zone,
+			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
 										 ParentFolder.Path.InZone);
 
 			/* Add entry to the table of files/folders */
-			NewFolder.Type            = Brw_IS_FOLDER;
-			NewFolder.Metadata.PublisherCod       = Gbl.Usrs.Me.UsrDat.UsrCod;
-			NewFolder.Metadata.PrivateOrPublic = PriPub_PRIVATE;
-			NewFolder.Metadata.License         = Brw_LICENSE_DEFAULT;
-			NewFolder.FilCod          = Brw_DB_AddPath (FileBrowser.Zone,
-									     &NewFolder);
+			NewFolder.Type				= Brw_IS_FOLDER;
+			NewFolder.Metadata.PublisherCod		= Gbl.Usrs.Me.UsrDat.UsrCod;
+			NewFolder.Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+			NewFolder.Metadata.License		= Brw_LICENSE_DEFAULT;
+			NewFolder.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
+										  &NewFolder);
 
 			/* The folder has been created sucessfully */
-			Brw_GetFileNameToShow (FileBrowser.Zone,
+			Brw_GetFileNameToShow (FileBrowser->Zone,
 					       &ParentFolder,
 					       ParentFolderNameToShow);
 			Ale_ShowAlert (Ale_SUCCESS,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
@@ -6879,12 +6894,9 @@ void Brw_CreateFolder (void)
       case Usr_CAN_NOT:
       default:
 	 // It's difficult, but not impossible that a user sees this message
-	 Err_ShowErrorAndExit (Txt_You_can_not_create_folders_here);
+	 Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_create_folders_here);
 	 break;
      }
-
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7277,12 +7289,23 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 
 void Brw_CreateLink (void)
   {
+   struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CREATE_LINK);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
+  {
    extern const char *Txt_Can_not_create_the_link_X_because_there_is_already_a_folder_or_a_link_with_that_name;
    extern const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y;
    extern const char *Txt_UPLOAD_FILE_Invalid_link;
    extern const char *Txt_You_can_not_create_links_here;
-   struct Brw_FileBrowser FileBrowser;
    struct Brw_File ParentFolder;	// Create link (file ending in .url) inside this folder
    struct Brw_File NewLink;		// Link (file ending in .url) to create
    char NewLinkName[NAME_MAX + 1];	// Name of the new link
@@ -7291,17 +7314,15 @@ void Brw_CreateLink (void)
    size_t LengthURL;
    char URLUntilLastFilename[PATH_MAX + 1];
    char FileName[NAME_MAX + 1];		// Link (file ending in .url)
-   // char PathInServ[PATH_MAX + 1];	// Absolute path in server of the link (file ending in .url) to create
    FILE *FileURL;
    char ParentFolderNameToShow[NAME_MAX + 1];
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolder);	// Get the parent folder in which to create the link
+   /***** Get the parent folder in which to create the link, and the link name *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&ParentFolder);
    Brw_GetNewFolderLinkName (NewLinkName);
 
    /***** Check if creating a new link is allowed *****/
-   switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser.Zone,&ParentFolder))
+   switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,&ParentFolder))
      {
       case Usr_CAN:
 	 /***** Create a new file to store URL ****/
@@ -7348,7 +7369,7 @@ void Brw_CreateLink (void)
 				 ParentFolder.Path.InZone,
 				 NewLinkName);
 		  Fil_BuildPath (NewLink.Path.InServ,"%s/%s",
-			         FileBrowser.PathRootFolderInServ.AboveRootFolder,
+			         FileBrowser->PathRootFolderInServ.AboveRootFolder,
 			         NewLink.Path.InZone);
 
 		  /* Check if the URL file exists */
@@ -7370,15 +7391,15 @@ void Brw_CreateLink (void)
 			   fclose (FileURL);
 
 			   /* Check if quota has been exceeded */
-			   BrwSiz_CalcSizeOfDir (&FileBrowser.Size,
-						 FileBrowser.PathRootFolderInServ.WithRootFolder);
-			   BrwSiz_SetMaxQuota (FileBrowser.Zone,
-					       &FileBrowser.Size);
-			   switch (BrwSiz_CheckQuota (&FileBrowser.Size))
+			   BrwSiz_CalcSizeOfDir (&FileBrowser->Size,
+						 FileBrowser->PathRootFolderInServ.WithRootFolder);
+			   BrwSiz_SetMaxQuota (FileBrowser->Zone,
+					       &FileBrowser->Size);
+			   switch (BrwSiz_CheckQuota (&FileBrowser->Size))
 			     {
 			      case Err_SUCCESS:	// Quota not exceeded
 				 /* Remove affected clipboards */
-				 Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
+				 Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 								  Gbl.Usrs.Me.UsrDat.UsrCod,
 								  Gbl.Usrs.Other.UsrDat.UsrCod);
 
@@ -7386,28 +7407,28 @@ void Brw_CreateLink (void)
 				    where the new link (file ending in .url)
 				    has been created
 				    to the table of expanded folders */
-				 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser.Zone,
+				 Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
 											  ParentFolder.Path.InZone);
 
 				 /* Add entry to the table of files/folders */
-				 NewLink.Type 		  = Brw_IS_LINK;
-				 NewLink.Metadata.PublisherCod       = Gbl.Usrs.Me.UsrDat.UsrCod;
-				 NewLink.Metadata.PrivateOrPublic = PriPub_PRIVATE;
-				 NewLink.Metadata.License         = Brw_LICENSE_DEFAULT;
-				 NewLink.FilCod          = Brw_DB_AddPath (FileBrowser.Zone,
-										    &NewLink);
+				 NewLink.Type				= Brw_IS_LINK;
+				 NewLink.Metadata.PublisherCod		= Gbl.Usrs.Me.UsrDat.UsrCod;
+				 NewLink.Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+				 NewLink.Metadata.License		= Brw_LICENSE_DEFAULT;
+				 NewLink.FilCod				= Brw_DB_AddPath (FileBrowser->Zone,
+											  &NewLink);
 
 				 /* Show message of confirmation */
-				 Brw_GetFileNameToShow (FileBrowser.Zone,
+				 Brw_GetFileNameToShow (FileBrowser->Zone,
 							&ParentFolder,
 							ParentFolderNameToShow);	// Folder name
 				 Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
 						FileName,ParentFolderNameToShow);
 
 				 /* Notify new file */
-				 if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
+				 if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
 									         &ParentFolder) == HidVis_VISIBLE)
-				    switch (FileBrowser.Zone)
+				    switch (FileBrowser->Zone)
 				      {
 				       case Brw_ADMI_DOC_CRS:
 				       case Brw_ADMI_DOC_GRP:
@@ -7456,12 +7477,9 @@ void Brw_CreateLink (void)
       case Usr_CAN_NOT:
       default:
 	 // It's difficult, but not impossible that a user sees this message
-	 Err_ShowErrorAndExit (Txt_You_can_not_create_links_here);
+	 Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_create_links_here);
 	 break;
      }
-
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -8252,21 +8270,17 @@ void Brw_DownloadFile (void)
 	   {
 	    case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
 	    case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,
-					  File.FilCod);
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,
-					  File.FilCod);
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
 	       break;
 	    case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,
-					  File.FilCod);
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE  ,File.FilCod);
 	       break;
 	    case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
 	    case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,
-					  File.FilCod);
+	       Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE   ,File.FilCod);
 	       break;
 	    default:
 	       break;
