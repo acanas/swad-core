@@ -174,7 +174,7 @@ typedef enum
   } Brw_HeadOrFoot_t;
 
 /* Actions to do with a file / folder */
-#define Brw_NUM_ACTIONS 19
+#define Brw_NUM_ACTIONS 20
 typedef enum
   {
    Brw_ACT_NONE,
@@ -195,6 +195,7 @@ typedef enum
    Brw_ACT_CHG_FILE_METADATA,
    Brw_ACT_GET_LINK_TO_DOC_FILE,
    Brw_ACT_GET_LINK_TO_MRK_FILE,
+   Brw_ACT_COMPRESS_FOLDER,
    Brw_ACT_ASK_REM_OLD_BRIEFCASE,
   } Brw_Action_t;
 

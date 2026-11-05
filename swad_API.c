@@ -5081,8 +5081,7 @@ int swad__getFile (struct soap *soap,
 	                        "Bad file code",
 	                        "File code must be a integer greater than 0");
 
-   Brw_GetFileMetadataByCod (&ZoneDB,&File);
-   if (File.FilCod <= 0)
+   if (Brw_GetFileMetadataByCod (&ZoneDB,&File) == Exi_DOES_NOT_EXIST)
       return soap_sender_fault (soap,
 	                        "File does not exist, please refresh",
 	                        "The file requested does not exists");
@@ -5224,7 +5223,10 @@ int swad__getMarks (struct soap *soap,
    /***** Get file metadata *****/
    Brw_ResetFileMetadata (&File);	// Paths are not reset
    File.FilCod = (long) fileCode;
-   Brw_GetFileMetadataByCod (&ZoneDB,&File);
+   if (Brw_GetFileMetadataByCod (&ZoneDB,&File) == Exi_DOES_NOT_EXIST)
+      return soap_sender_fault (soap,
+	                        "File does not exist, please refresh",
+	                        "The file requested does not exists");
 
    if (File.Type != Brw_IS_FILE ||
        File.Metadata.HiddenOrVisible == HidVis_HIDDEN ||

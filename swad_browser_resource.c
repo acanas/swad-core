@@ -71,17 +71,18 @@ void BrwRsc_DoActionGetLinkToDocFil (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Documents;
    struct Brw_File File;
+   Exi_Exist_t FileExistsInDB;
 
    /***** Get file / folder / link *****/
-   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_DOCUMENT,File.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  File.FilCod > 0 ? File.Path.Name :
-                		    Txt_Documents);
+                  FileExistsInDB == Exi_EXISTS ? File.Path.Name :
+                				 Txt_Documents);
   }
 
 void BrwRsc_DoActionGetLinkToMrkFil (struct Brw_FileBrowser *FileBrowser)
@@ -89,17 +90,18 @@ void BrwRsc_DoActionGetLinkToMrkFil (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Marks_area;
    struct Brw_File File;
+   Exi_Exist_t FileExistsInDB;
 
    /***** Get file / folder / link *****/
-   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
 
    /***** Copy link to file into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_MARKS,File.FilCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  File.FilCod > 0 ? File.Path.Name :
-                		    Txt_Marks_area);
+                  FileExistsInDB == Exi_EXISTS ? File.Path.Name :
+                				 Txt_Marks_area);
   }
 
 /*****************************************************************************/

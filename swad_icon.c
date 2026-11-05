@@ -437,10 +437,10 @@ void Ico_PutContextualIconToViewAttEvents (Act_Action_t NextAction,
 				  "calendar-check.svg",Ico_BLACK);
   }
 
-void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
+void Ico_PutContextualIconToZIP (Act_Action_t NextAction,const char *Anchor,
                                  void (*FuncPars) (const void *Args),const void *Args)
   {
-   Lay_PutContextualLinkOnlyIcon (NextAction,NULL,FuncPars,Args,
+   Lay_PutContextualLinkOnlyIcon (NextAction,Anchor,FuncPars,Args,
 				  "download.svg",Ico_BLACK);
   }
 

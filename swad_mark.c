@@ -207,24 +207,35 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
+   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
+   Exi_Exist_t FileExistsInDB;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
-
-   /***** Get the number of rows of the header or footer of the table of marks *****/
-   Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
-   if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
-      /***** Update properties of marks in the database *****/
-      Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser.Zone,
-					  File.Path.InZone,
-					  HeaderOrFooter,NumRows);
-   else
-      Err_WrongNumberOfRowsExit ();
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
+   switch (FileExistsInDB)
+     {
+      case Exi_EXISTS:
+	 /***** Get the number of rows of the header or footer of the table of marks *****/
+	 Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
+	 if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
+	    /***** Update properties of marks in the database *****/
+	    Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser.Zone,
+						File.Path.InZone,
+						HeaderOrFooter,NumRows);
+	 else
+	    Err_WrongNumberOfRowsExit ();
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+         break;
+     }
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -570,8 +581,10 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 
 void Mrk_ShowMyMarks (void)
   {
+   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
+   Exi_Exist_t FileExistsInDB;
    struct Mrk_Properties Marks;
    char PathUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
@@ -583,101 +596,110 @@ void Mrk_ShowMyMarks (void)
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
-
-   /***** Get the path of the file of marks *****/
-   Fil_BuildPath (PathPrivate,"%s/%s",
-		  FileBrowser.PathRootFolderInServ.AboveRootFolder,
-		  File.Path.InZone);
-
-   /***** Get number of rows of header or footer *****/
-   Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser.Zone,File.Path.InZone);
-
-   /***** Set the student whose marks will be shown *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...
-      UsrDat = &Gbl.Usrs.Me.UsrDat;		// ...use my list of IDs
-   else						// If I am logged as non-editing teacher, teacher or admin
-     {
-      ThisGrpCod = Brw_GetGrpCod ();
-
-      /* Select a random student from the course */
-      if (ThisGrpCod > 0)	// Group zone
-        {
-         if (Grp_DB_CountNumUsrsInGrp (Rol_STD,ThisGrpCod))	// If there are students in this group
-           {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (ThisGrpCod);
-            UsrDat = &Gbl.Usrs.Other.UsrDat;
-           }
-         else
-            UsrExists = Exi_DOES_NOT_EXIST;
-        }
-      else		// Course zone
-        {
-	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-				   1 << Rol_STD))	// If there are students in this course
-           {
-            Gbl.Usrs.Other.UsrDat.UsrCod = Enr_DB_GetRamdomStdFromCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-            UsrDat = &Gbl.Usrs.Other.UsrDat;
-           }
-         else
-            UsrExists = Exi_DOES_NOT_EXIST;
-        }
-     }
-
-   switch (UsrExists)
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
+   switch (FileExistsInDB)
      {
       case Exi_EXISTS:
-	 /***** Get list of user's IDs *****/
-	 Usr_GetAllUsrDataFromUsrCod (UsrDat,
-				      Usr_DONT_GET_PREFS,
-				      Usr_DONT_GET_ROLE_IN_CRS);
+	 /***** Get the path of the file of marks *****/
+	 Fil_BuildPath (PathPrivate,"%s/%s",
+			FileBrowser.PathRootFolderInServ.AboveRootFolder,
+			File.Path.InZone);
 
-	 /***** Create temporal file to store my marks (in HTML) *****/
-	 /* If the private directory does not exist, create it */
-	 Fil_CreateFolderIfNotExists (Cfg_PATH_MARK_PRIVATE);
+	 /***** Get number of rows of header or footer *****/
+	 Mrk_GetNumRowsHeaderAndFooter (&Marks,FileBrowser.Zone,File.Path.InZone);
 
-	 /* Create a new temporary file *****/
-	 Fil_BuildPath (PathUsrMarks,"%s/%s.html",
-		        Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
-	 if ((FileUsrMarks = fopen (PathUsrMarks,"wb")) == NULL)
-	    Err_ShowErrorAndExit ("Can not open file for my marks.");
-
-	 /***** Show my marks *****/
-	 switch (Mrk_GetUsrMarks (FileUsrMarks,UsrDat,PathPrivate,&Marks))
+	 /***** Set the student whose marks will be shown *****/
+	 if (Gbl.Usrs.Me.Role.Logged == Rol_STD)	// If I am logged as student...
+	    UsrDat = &Gbl.Usrs.Me.UsrDat;		// ...use my list of IDs
+	 else						// If I am logged as non-editing teacher, teacher or admin
 	   {
-	    case Err_SUCCESS:
-	       fclose (FileUsrMarks);
-	       if ((FileUsrMarks = fopen (PathUsrMarks,"rb")) == NULL)
-		  Err_ShowErrorAndExit ("Can not open file with my marks.");
+	    ThisGrpCod = Brw_GetGrpCod ();
 
-	       /* Begin HTML output */
-	       /*  Do not write charset here.
-		   Instead, delegate to the meta directive
-		   (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
-		   that is typically included in the HTML document header. */
-	       HTM_Txt ("Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
-	       Lay_SetLayoutStatus (Lay_HTML_START_WRITTEN);
-
-	       /* Copy HTML to output file */
-	       Fil_FastCopyOfOpenFiles (FileUsrMarks,Fil_GetOutputFile ());
-	       fclose (FileUsrMarks);
-
-	       Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
-	       break;
-	    case Err_ERROR:	// Problems in table of marks or user's ID not found
-	    default:
-	       fclose (FileUsrMarks);
-	       Ale_ShowAlerts (NULL);
-	       break;
+	    /* Select a random student from the course */
+	    if (ThisGrpCod > 0)	// Group zone
+	      {
+	       if (Grp_DB_CountNumUsrsInGrp (Rol_STD,ThisGrpCod))	// If there are students in this group
+		 {
+		  Gbl.Usrs.Other.UsrDat.UsrCod = Grp_DB_GetRamdomStdFromGrp (ThisGrpCod);
+		  UsrDat = &Gbl.Usrs.Other.UsrDat;
+		 }
+	       else
+		  UsrExists = Exi_DOES_NOT_EXIST;
+	      }
+	    else		// Course zone
+	      {
+	       if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+					 1 << Rol_STD))	// If there are students in this course
+		 {
+		  Gbl.Usrs.Other.UsrDat.UsrCod = Enr_DB_GetRamdomStdFromCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		  UsrDat = &Gbl.Usrs.Other.UsrDat;
+		 }
+	       else
+		  UsrExists = Exi_DOES_NOT_EXIST;
+	      }
 	   }
 
-	 unlink (PathUsrMarks);	// File with marks is no longer necessary
-	 break;
+	 switch (UsrExists)
+	   {
+	    case Exi_EXISTS:
+	       /***** Get list of user's IDs *****/
+	       Usr_GetAllUsrDataFromUsrCod (UsrDat,
+					    Usr_DONT_GET_PREFS,
+					    Usr_DONT_GET_ROLE_IN_CRS);
+
+	       /***** Create temporal file to store my marks (in HTML) *****/
+	       /* If the private directory does not exist, create it */
+	       Fil_CreateFolderIfNotExists (Cfg_PATH_MARK_PRIVATE);
+
+	       /* Create a new temporary file *****/
+	       Fil_BuildPath (PathUsrMarks,"%s/%s.html",
+			      Cfg_PATH_MARK_PRIVATE,Cry_GetUniqueNameEncrypted ());
+	       if ((FileUsrMarks = fopen (PathUsrMarks,"wb")) == NULL)
+		  Err_ShowErrorAndExit ("Can not open file for my marks.");
+
+	       /***** Show my marks *****/
+	       switch (Mrk_GetUsrMarks (FileUsrMarks,UsrDat,PathPrivate,&Marks))
+		 {
+		  case Err_SUCCESS:
+		     fclose (FileUsrMarks);
+		     if ((FileUsrMarks = fopen (PathUsrMarks,"rb")) == NULL)
+			Err_ShowErrorAndExit ("Can not open file with my marks.");
+
+		     /* Begin HTML output */
+		     /*  Do not write charset here.
+			 Instead, delegate to the meta directive
+			 (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
+			 that is typically included in the HTML document header. */
+		     HTM_Txt ("Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
+		     Lay_SetLayoutStatus (Lay_HTML_START_WRITTEN);
+
+		     /* Copy HTML to output file */
+		     Fil_FastCopyOfOpenFiles (FileUsrMarks,Fil_GetOutputFile ());
+		     fclose (FileUsrMarks);
+
+		     Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
+		     break;
+		  case Err_ERROR:	// Problems in table of marks or user's ID not found
+		  default:
+		     fclose (FileUsrMarks);
+		     Ale_ShowAlerts (NULL);
+		     break;
+		 }
+
+	       unlink (PathUsrMarks);	// File with marks is no longer necessary
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       /***** Show warning indicating no students found *****/
+	       Usr_ShowWarningNoUsersFound (Rol_STD);
+	       break;
+	   }
+         break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 /***** Show warning indicating no students found *****/
-	 Usr_ShowWarningNoUsersFound (Rol_STD);
-	 break;
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+         break;
      }
   }
 

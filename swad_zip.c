@@ -316,20 +316,38 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 /********************* Compress a folder into ZIP file ***********************/
 /*****************************************************************************/
 
-void ZIP_CompressFileTree (void)
+void ZIP_CompressFolder (void)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File Folder;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&Folder);	// Get folder
-
-   /***** Compress folder into ZIP *****/
-   ZIP_CompressFolderIntoZIP (&FileBrowser,&Folder);
 
    /***** Show again file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COMPRESS_FOLDER);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
+   struct Brw_File Folder;
+   Exi_Exist_t FolderExistsInDB;
+
+   /***** Get folder *****/
+   FolderExistsInDB = Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&Folder);
+   switch (FolderExistsInDB)
+     {
+      case Exi_EXISTS:
+	 /***** Compress folder into ZIP *****/
+	 ZIP_CompressFolderIntoZIP (FileBrowser,&Folder);
+         break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlert (Ale_WARNING,
+			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+         break;
+     }
   }
 
 /*****************************************************************************/

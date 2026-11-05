@@ -128,7 +128,7 @@ void Ico_PutContextualIconToShowCheckList (Act_Action_t NextAction,
                                                 void (*FuncPars) (const void *Args),const void *Args);
 void Ico_PutContextualIconToViewAttEvents (Act_Action_t NextAction,
                                            void (*FuncPars) (const void *Args),const void *Args);
-void Ico_PutContextualIconToZIP (Act_Action_t NextAction,
+void Ico_PutContextualIconToZIP (Act_Action_t NextAction,const char *Anchor,
                                  void (*FuncPars) (const void *Args),const void *Args);
 
 void Ico_PutDivIcon (const char *DivClass,

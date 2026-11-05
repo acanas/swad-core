@@ -44,6 +44,8 @@ ZIP_CreateZIP_t ZIP_GetCreateZIP (void);
 
 void ZIP_CreateZIPAsgWrk (void);
 
-void ZIP_CompressFileTree (void);
+void ZIP_CompressFolder (void);
+void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser);
+
 
 #endif

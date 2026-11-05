@@ -806,6 +806,7 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
    extern Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM];
    Brw_Zone_t ZoneDB;
    struct Brw_File File;
+   Exi_Exist_t FileExistsInDB;
    long HieCods[Hie_NUM_LEVELS];
    long GrpCod = -1L;
    Act_Action_t Action = ActUnk;
@@ -838,8 +839,8 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
          Brw_ResetFileMetadata (&File);	// Paths are not reset
 	 if ((File.FilCod = Cod) > 0)
 	   {
-            Brw_GetFileMetadataByCod (&ZoneDB,&File);
-            if (File.FilCod > 0)
+            FileExistsInDB = Brw_GetFileMetadataByCod (&ZoneDB,&File);
+            if (FileExistsInDB == Exi_EXISTS)
               {
 	       Brw_GetCrsGrpFromFileMetadata (ZoneDB,File.HieCod,HieCods,&GrpCod);
 	       switch (NotifyEvent)
