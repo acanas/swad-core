@@ -1160,7 +1160,7 @@ static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowse
 static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
 
 static void Brw_PutIconsFileBrowser (const void *FileBrowser);
-static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser);
+static void Brw_PutIconToViewClipboard (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconShowFigure (__attribute__((unused)) void *Args);
 
 static void Brw_ShowSettingSelector (struct Brw_FileBrowser *FileBrowser);
@@ -1247,10 +1247,10 @@ static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser);
 //--------------------------------- Clipboard ---------------------------------
 
 static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser);
-static void Brw_CreateNewClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_DoActionShowMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutIconsClipboard (const void *FileBrowser);
 
+static void Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static void Brw_GetMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *FileBrowser);
 
@@ -1262,7 +1262,7 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Z
 static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 				const struct Brw_File *ParentFolder);
-static void Brw_DoActionRemMyClipboard (__attribute__((unused)) struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRemMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBrowser,
 						 unsigned LevelOrg,
 						 const char PathOrgInServ[PATH_MAX + 1],
@@ -1284,6 +1284,8 @@ static void Brw_PutFormToPasteAFileOrFolder (struct Brw_FileBrowser *FileBrowser
 static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 				      const char *FileNameToShow);
 static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRcvFileClassic (struct Brw_FileBrowser *FileBrowser);
 static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBrowser,
 						  struct Brw_File *ParentFolder,
 						  Brw_UploadType_t UploadType);
@@ -1340,7 +1342,10 @@ static Usr_Can_t Brw_CheckIfICanModifyPrjAssFileOrFolder (Brw_Zone_t Zone,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
-static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrowser,
+//------------------------ Remove old files in briefcase ----------------------
+
+static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
+static void Brw_RemoveOldFilesInBrowser (struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
 static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
                                          const struct Brw_File *Folder,
@@ -3166,11 +3171,14 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_REM_CLIPBOARD		] = Brw_DoActionRemMyClipboard,
       [Brw_ACT_SHOW_FORM		] = Brw_DoActionShowForm,
       [Brw_ACT_CREATE_FOLDER		] = Brw_DoActionCreateFolder,
+      [Brw_ACT_REN_FOLDER		] = Brw_DoActionRenameFolder,
+      [Brw_ACT_RCV_FILE_CLASSIC		] = Brw_DoActionRcvFileClassic,
       [Brw_ACT_CREATE_LINK		] = Brw_DoActionCreateLink,
       [Brw_ACT_SHOW_FILE_METADATA	] = Brw_DoActionShowFileMetadata,
       [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChgFileMetadata,
       [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
       [Brw_ACT_GET_LINK_TO_MRK_FILE	] = BrwRsc_DoActionGetLinkToMrkFil,
+      [Brw_ACT_ASK_REM_OLD_BRIEFCASE	] = Brw_DoActionRemOldFilesBriefcase,
      };
    Brw_Action_t Action;
    struct Brw_File RootFolder;
@@ -3462,7 +3470,8 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
 
    /***** Put icon to remove old files in briefcase *****/
    if ((Brw_ZoneType[Zone] & Brw_IS_ADM_BRF))
-      Ico_PutContextualIconToReset (ActReqRemOldBrf,NULL,
+      Ico_PutContextualIconToReset (ActReqRemOldBrf,
+				    ((struct Brw_FileBrowser *) FileBrowser)->SectionId,
 				    Brw_PutParWhichFiles,&ParWhichFiles);
 
    /***** Put icon to get resource link *****/
@@ -3481,14 +3490,13 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
 /************************ Put icon to view clipboard *************************/
 /*****************************************************************************/
 
-static void Brw_PutIconToViewClipboard (struct Brw_FileBrowser *FileBrowser)
+static void Brw_PutIconToViewClipboard (const struct Brw_FileBrowser *FileBrowser)
   {
    Act_Action_t NextAction = Brw_ActShoCli[FileBrowser->Zone];
 
    if (NextAction != ActUnk)	// This zone allows to show clipboard
-      if (FileBrowser->Clipboard.File.Path.InZone[0])	// Clipboard not empty
-	 Ico_PutContextualIconToViewClipboard (NextAction,FileBrowser->SectionId,
-					       Brw_PutImplicitParsFileBrowser,FileBrowser);
+      Ico_PutContextualIconToViewClipboard (NextAction,FileBrowser->SectionId,
+					    Brw_PutImplicitParsFileBrowser,FileBrowser);
   }
 
 /*****************************************************************************/
@@ -4814,7 +4822,8 @@ static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
 		 {
 		  case Usr_CAN:
 		     /***** Form to rename folder *****/
-		     Frm_BeginForm (Brw_ActRenameFolder[FileBrowser->Zone]);
+		     Frm_BeginFormAnchor (Brw_ActRenameFolder[FileBrowser->Zone],
+					  FileBrowser->SectionId);
 			Brw_PutImplicitParsFileBrowser (FileBrowser);
 			HTM_INPUT_TEXT ("NewName",Brw_MAX_CHARS_FOLDER,
 				        File->Path.Name,
@@ -5091,10 +5100,8 @@ static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
 	       /* Remove file/link from disk and database */
 	       Brw_RemoveFileFromDiskAndDB (FileBrowser->Zone,&File);
 
-	       /* Remove affected clipboards */
-	       Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-						Gbl.Usrs.Me.UsrDat.UsrCod,
-						Gbl.Usrs.Other.UsrDat.UsrCod);
+	       /* Remove affected clipboards and update my clipboard */
+	       Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
 	       /* Message of confirmation of removing */
 	       Ale_ShowAlert (Ale_SUCCESS,Txt_FILE_X_removed,FileNameToShow);
@@ -5154,10 +5161,8 @@ static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
 	      }
 	    else
 	      {
-	       /* Remove affected clipboards */
-	       Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-						Gbl.Usrs.Me.UsrDat.UsrCod,
-						Gbl.Usrs.Other.UsrDat.UsrCod);
+	       /* Remove affected clipboards and update my clipboard */
+	       Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
 	       /* Message of confirmation of successfull removing */
 	       Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,Folder.Path.Name);
@@ -5227,10 +5232,8 @@ static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser)
       Brw_RemoveOneFileOrFolderFromDB (FileBrowser->Zone,Folder.Path.InZone);
       Brw_RemoveChildrenOfFolderFromDB (FileBrowser->Zone,Folder.Path.InZone);
 
-      /* Remove affected clipboards */
-      Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Usrs.Other.UsrDat.UsrCod);
+      /* Remove affected clipboards and update my clipboard */
+      Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
       /* Remove affected expanded folders */
       Brw_DB_RemoveAffectedExpandedFolders (FileBrowser->Zone,Folder.Path.InZone);
@@ -5290,17 +5293,12 @@ void Brw_Copy (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
-   /***** Create/replace the new clipboard *****/
-   // Creating the new clipboard must be done before showing file browser
-   // in order to display clipboard icon in left-top of file browser box
-   Brw_CreateNewClipboard (&FileBrowser);
-
    /***** Show again file browser *****/
    Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COPY);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
-static void Brw_CreateNewClipboard (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
   {
    struct Brw_File File;
 
@@ -5327,10 +5325,7 @@ static void Brw_CreateNewClipboard (struct Brw_FileBrowser *FileBrowser)
 
    /***** Put the path in the clipboard in database *****/
    Brw_DB_ReplacePathInClipboard (FileBrowser);
-  }
 
-static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
-  {
    /***** Show current clipboard *****/
    Brw_DoActionShowMyClipboard (FileBrowser);
   }
@@ -5617,8 +5612,7 @@ static void Brw_DoActionShowMyClipboard (struct Brw_FileBrowser *FileBrowser)
 	    break;
 	 case Exi_DOES_NOT_EXIST:
 	 default:
-	    // The root folder
-	    Ale_ShowAlert (Ale_WARNING,Txt_The_clipboard_is_empty);
+	    Ale_ShowAlert (Ale_INFO,Txt_The_clipboard_is_empty);
 	    break;
         }
    Box_BoxEnd ();
@@ -5635,6 +5629,18 @@ static void Brw_PutIconsClipboard (const void *FileBrowser)
       Ico_PutContextualIconToRemove (Brw_ActRemCli[((struct Brw_FileBrowser *) FileBrowser)->Zone],
 				     ((struct Brw_FileBrowser *) FileBrowser)->SectionId,
 				     Brw_PutImplicitParsFileBrowser,FileBrowser);
+  }
+
+/*****************************************************************************/
+/********************** Get data of my current clipboard *********************/
+/*****************************************************************************/
+
+static void Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (struct Brw_FileBrowser *FileBrowser)
+  {
+   Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
+				    Gbl.Usrs.Me.UsrDat.UsrCod,
+				    Gbl.Usrs.Other.UsrDat.UsrCod);
+   Brw_GetMyClipboard (FileBrowser);
   }
 
 /*****************************************************************************/
@@ -5875,9 +5881,6 @@ static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser)
    /***** Get parent folder in which to paste *****/
    Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&ParentFolder);
 
-   /***** Get my clipboard *****/
-   Brw_GetMyClipboard (FileBrowser);
-
    switch (FileBrowser->Clipboard.ZoneDB)
      {
       case Brw_UNKNOWN:	// The clipboard is empty
@@ -5902,10 +5905,8 @@ static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser)
 	 /***** Copy files recursively *****/
 	 Brw_PasteClipboard (FileBrowser,&ParentFolder);
 
-	 /***** Remove the affected clipboards *****/
-	 Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-					  Gbl.Usrs.Me.UsrDat.UsrCod,
-					  Gbl.Usrs.Other.UsrDat.UsrCod);
+	 /***** Remove the affected clipboards and update my clipboard *****/
+	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 	 break;
      }
   }
@@ -6206,7 +6207,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
       case Usr_CAN_NOT:
       default:
 	 // It's difficult, but not impossible that a user sees this message
-         Err_ShowErrorAndExit (Txt_You_can_not_paste_file_or_folder_here);
+         Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_paste_file_or_folder_here);
 	 break;
      }
   }
@@ -6238,22 +6239,23 @@ void Brw_RemMyClipboard (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
-   /***** If I have current clipboard, remove it *****/
-   // Removing my clipboard must be done before showing file browser
-   // in order to not display clipboard icon in left-top of file browser box
-   Brw_DB_RemoveUsrClipboard (Gbl.Usrs.Me.UsrDat.UsrCod);
-
    /***** Show again the file browser *****/
    Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_CLIPBOARD);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
-static void Brw_DoActionRemMyClipboard (__attribute__((unused)) struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionRemMyClipboard (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_The_clipboard_is_empty;
+   extern const char *Txt_Clipboard_removed;
 
-   /* Message of confirmation of removing */
-   Ale_ShowAlert (Ale_SUCCESS,Txt_The_clipboard_is_empty);
+   /***** If I have current clipboard, remove it *****/
+   Brw_DB_RemoveUsrClipboard (Gbl.Usrs.Me.UsrDat.UsrCod);
+
+   /***** Update my clipboard *****/
+   Brw_GetMyClipboard (FileBrowser);
+
+   /***** Show confirmation message *****/
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Clipboard_removed);
   }
 
 /*****************************************************************************/
@@ -6690,7 +6692,7 @@ static void Brw_PutFormToPasteAFileOrFolder (struct Brw_FileBrowser *FileBrowser
    extern const char *Txt_or_you_can_make_a_file_copy_to_the_folder_X;
 
    /***** Begin form *****/
-   Frm_BeginForm (Brw_ActPaste[FileBrowser->Zone]);
+   Frm_BeginFormAnchor (Brw_ActPaste[FileBrowser->Zone],FileBrowser->SectionId);
       Brw_PutImplicitParsFileBrowser (FileBrowser);
 
       /***** Begin box *****/
@@ -6836,10 +6838,8 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 		  switch (BrwSiz_CheckQuota (&FileBrowser->Size))
 		    {
 		     case Err_SUCCESS:	// Quota not exceeded
-			/* Remove affected clipboards */
-			Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-							 Gbl.Usrs.Me.UsrDat.UsrCod,
-							 Gbl.Usrs.Other.UsrDat.UsrCod);
+			/* Remove affected clipboards and update my clipboard */
+			Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
 			/* Add path where new folder is created to table of expanded folders */
 			Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
@@ -6905,10 +6905,21 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_RenFolder (void)
   {
+   struct Brw_FileBrowser FileBrowser;
+
+   /***** Get parameters related to file browser *****/
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+
+   /***** Show again file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REN_FOLDER);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser)
+  {
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
    extern const char *Txt_You_can_not_rename_this_folder;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
-   struct Brw_FileBrowser FileBrowser;
    struct Brw_File Folder;
    char OldPathInZone[PATH_MAX + 1];
    char NewPathInZone[PATH_MAX + 1];
@@ -6916,12 +6927,11 @@ void Brw_RenFolder (void)
    char NewPathInServ[PATH_MAX + 1];
    char FolderNewName[NAME_MAX + 1];	// New name of the folder
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&Folder);	// Get folder to rename
+   /***** Get folder to rename *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&Folder);
    Brw_GetNewFolderLinkName (FolderNewName);
 
-   switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser.Zone,&Folder))	// Can I rename this folder?
+   switch (Brw_CheckIfICanEditFileOrFolder (FileBrowser->Zone,&Folder))	// Can I rename this folder?
      {
       case Usr_CAN:
 	 switch (Str_ConvertFilFolLnkNameToValid (FolderNewName))
@@ -6934,7 +6944,7 @@ void Brw_RenFolder (void)
 				 Folder.Path.InZoneWithoutName,
 				 Folder.Path.Name);
 		  Fil_BuildPath (OldPathInServ,"%s/%s",
-				 FileBrowser.PathRootFolderInServ.AboveRootFolder,
+				 FileBrowser->PathRootFolderInServ.AboveRootFolder,
 				 OldPathInZone);
 
 		  /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
@@ -6942,7 +6952,7 @@ void Brw_RenFolder (void)
 			         Folder.Path.InZoneWithoutName,
 			         FolderNewName);
 		  Fil_BuildPath (NewPathInServ,"%s/%s",
-			         FileBrowser.PathRootFolderInServ.AboveRootFolder,
+			         FileBrowser->PathRootFolderInServ.AboveRootFolder,
 			         NewPathInZone);
 
 		  /* We should check here that a folder with the same name does not exist.
@@ -6973,20 +6983,18 @@ void Brw_RenFolder (void)
 		     /* If a folder is renamed,
 			it is necessary to rename all entries in the tables of files
 			that belong to the subtree starting at that folder */
-		     Brw_DB_RenameOneFolder (FileBrowser.Zone,
+		     Brw_DB_RenameOneFolder (FileBrowser->Zone,
 					     OldPathInZone,
 					     NewPathInZone);
-		     Brw_DB_RenameChildrenFilesOrFolders (FileBrowser.Zone,
+		     Brw_DB_RenameChildrenFilesOrFolders (FileBrowser->Zone,
 							  OldPathInZone,
 							  NewPathInZone);
 
-		     /* Remove affected clipboards */
-		     Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
-						      Gbl.Usrs.Me.UsrDat.UsrCod,
-						      Gbl.Usrs.Other.UsrDat.UsrCod);
+		     /* Remove affected clipboards and update my clipboard */
+		     Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
-		     /* Remove affected expanded folders */
-		     Brw_DB_RenameAffectedExpandedFolders (FileBrowser.Zone,
+		     /* Rename affected expanded folders */
+		     Brw_DB_RenameAffectedExpandedFolders (FileBrowser->Zone,
 							   Gbl.Usrs.Me.UsrDat.UsrCod,
 							   Gbl.Usrs.Other.UsrDat.UsrCod,
 							   OldPathInZone,
@@ -7003,12 +7011,9 @@ void Brw_RenFolder (void)
 	 break;
       case Usr_CAN_NOT:
       default:
-         Err_ShowErrorAndExit (Txt_You_can_not_rename_this_folder);
+         Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_rename_this_folder);
 	 break;
      }
-
-   /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7059,22 +7064,29 @@ void Brw_RcvFileDZ (void)
 void Brw_RcvFileClassic (void)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File ParentFolder;	// Folder in which to create the new file
-   __attribute__((unused)) Err_SuccessOrError_t UploadSucessful;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&ParentFolder);	// Get parent folder in which to create the new file
+
+   /***** Show again file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_RCV_FILE_CLASSIC);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionRcvFileClassic (struct Brw_FileBrowser *FileBrowser)
+  {
+   struct Brw_File ParentFolder;	// Folder in which to create the new file
+   __attribute__((unused)) Err_SuccessOrError_t UploadSucessful;
+
+   /***** Get parent folder in which to create the new file *****/
+   Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&ParentFolder);
 
    /***** Receive file and show feedback message *****/
-   UploadSucessful = Brw_RcvFileInFileBrw (&FileBrowser,&ParentFolder,
+   UploadSucessful = Brw_RcvFileInFileBrw (FileBrowser,&ParentFolder,
 					   Brw_CLASSIC_UPLOAD);
 
    /***** Show possible alert *****/
    Ale_ShowAlerts (NULL);
-
-   /***** Show again file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7181,10 +7193,8 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 				    switch (BrwSiz_CheckQuota (&FileBrowser->Size))
 				      {
 				       case Err_SUCCESS:	// Quota not exceeded
-					  /* Remove affected clipboards */
-					  Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-									   Gbl.Usrs.Me.UsrDat.UsrCod,
-									   Gbl.Usrs.Other.UsrDat.UsrCod);
+					  /* Remove affected clipboards and update my clipboard */
+					  Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
 					  /* Add path where new file is created to table of expanded folders */
 					  Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
@@ -7398,10 +7408,8 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 			   switch (BrwSiz_CheckQuota (&FileBrowser->Size))
 			     {
 			      case Err_SUCCESS:	// Quota not exceeded
-				 /* Remove affected clipboards */
-				 Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-								  Gbl.Usrs.Me.UsrDat.UsrCod,
-								  Gbl.Usrs.Other.UsrDat.UsrCod);
+				 /* Remove affected clipboards and update my clipboard */
+				 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
 				 /* Add the path of the folder
 				    where the new link (file ending in .url)
@@ -7567,10 +7575,8 @@ void Brw_SetDocumentAsVisible (void)
 				       File.Path.InZone,
 				       HidVis_VISIBLE);
 
-   /***** Remove the affected clipboards *****/
-   Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
-				    Gbl.Usrs.Me.UsrDat.UsrCod,
-				    Gbl.Usrs.Other.UsrDat.UsrCod);
+   /***** Remove the affected clipboards and update my clipboard *****/
+   Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (&FileBrowser);
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -7597,10 +7603,8 @@ void Brw_SetDocumentAsHidden (void)
 				       File.Path.InZone,
 				       HidVis_HIDDEN);
 
-   /***** Remove the affected clipboards *****/
-   Brw_DB_RemoveAffectedClipboards (FileBrowser.Zone,
-				    Gbl.Usrs.Me.UsrDat.UsrCod,
-				    Gbl.Usrs.Other.UsrDat.UsrCod);
+   /***** Remove the affected clipboards and update my clipboard *****/
+   Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (&FileBrowser);
 
    /***** Show again the file browser *****/
    Brw_ShowFileBrowserNormal (&FileBrowser);
@@ -8526,10 +8530,8 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
 			       File.Path.InZone,
 			       PrivateOrPublicFileAfterEdition,License);
 
-      /***** Remove the affected clipboards *****/
-      Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Usrs.Other.UsrDat.UsrCod);
+      /***** Remove the affected clipboards and update my clipboard *****/
+      Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
       /***** Insert file into public social activity *****/
       if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVATE &&	// Only if file has changed from private...
@@ -9876,18 +9878,26 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
 void Brw_AskRemoveOldFilesBriefcase (void)
   {
-   extern const char *Txt_Remove_old_files;
-   extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
-   extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
    struct Brw_FileBrowser FileBrowser;
-   unsigned Months;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
 
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_OLD_BRIEFCASE);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+  {
+   extern const char *Txt_Remove_old_files;
+   extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
+   extern const char *Txt_Remove_files_older_than_PART_2_OF_2;
+   unsigned Months;
+
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldBrf);
-      Brw_PutParWhichFiles (&FileBrowser.WhichFiles);
+      Brw_PutParWhichFiles (&FileBrowser->WhichFiles);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Remove_old_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
@@ -9917,9 +9927,6 @@ void Brw_AskRemoveOldFilesBriefcase (void)
 
    /***** End form *****/
    Frm_EndForm ();
-
-   /***** Show again the file browser *****/
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -9967,7 +9974,7 @@ void Brw_RemoveOldFilesBriefcase (void)
 /******************************* Remove old files ****************************/
 /*****************************************************************************/
 
-static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrowser,
+static void Brw_RemoveOldFilesInBrowser (struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed)
   {
    time_t TimeRemoveFilesOlder;
@@ -9992,13 +9999,11 @@ static void Brw_RemoveOldFilesInBrowser (const struct Brw_FileBrowser *FileBrows
 				&RootFolderMetadata,
                                 TimeRemoveFilesOlder,Removed);
 
-   /***** Remove affected clipboards *****/
+   /***** Remove affected clipboards and update my clipboard *****/
    if (Removed->NumFiles ||
        Removed->NumLinks ||
        Removed->NumFolds)	// If anything has been changed
-      Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
-				       Gbl.Usrs.Me.UsrDat.UsrCod,
-				       Gbl.Usrs.Other.UsrDat.UsrCod);
+      Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
   }
 
 /*****************************************************************************/

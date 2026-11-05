@@ -218,8 +218,8 @@ void PrgRsc_RemoveResourceClipboard (void)
    Rsc_DB_RemoveClipboard ();
    Ale_ShowAlert (Ale_SUCCESS,Txt_Clipboard_removed);
 
-   /***** View resource clipboard again *****/
-   PrgRsc_ViewResourceClipboard ();
+   /***** Edit course program *****/
+   Prg_EditTree ();
   }
 
 /*****************************************************************************/

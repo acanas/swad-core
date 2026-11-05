@@ -148,6 +148,7 @@ void Rsc_PutIconToViewClipboard (void)
 
 void Rsc_ShowClipboard (void)
   {
+   extern const char *Txt_The_clipboard_is_empty;
    MYSQL_RES *mysql_res;
    unsigned NumLink;
    unsigned NumLinks;
@@ -158,15 +159,18 @@ void Rsc_ShowClipboard (void)
 
       /***** Get links in clipboard from database and write them *****/
       NumLinks = Rsc_DB_GetClipboard (&mysql_res);
-      for (NumLink  = 1;
-	   NumLink <= NumLinks;
-	   NumLink++)
-	{
-	 Rsc_GetLinkDataFromRow (mysql_res,&Link);
-	 HTM_LI_Begin ("class=\"ITM_%s\"",The_GetSuffix ());
-	    Rsc_WriteLinkName (&Link,Frm_PUT_FORM);
-	 HTM_LI_End ();
-	}
+      if (NumLinks)
+	 for (NumLink  = 1;
+	      NumLink <= NumLinks;
+	      NumLink++)
+	   {
+	    Rsc_GetLinkDataFromRow (mysql_res,&Link);
+	    HTM_LI_Begin ("class=\"ITM_%s\"",The_GetSuffix ());
+	       Rsc_WriteLinkName (&Link,Frm_PUT_FORM);
+	    HTM_LI_End ();
+	   }
+      else
+      	 Ale_ShowAlert (Ale_INFO,Txt_The_clipboard_is_empty);
       DB_FreeMySQLResult (&mysql_res);
 
    /***** End list *****/
