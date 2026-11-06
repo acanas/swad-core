@@ -44,26 +44,12 @@
 
 void BrwRsc_GetLinkToDocFil (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_GET_LINK_TO_DOC_FILE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_GET_LINK_TO_DOC_FILE);
   }
 
 void BrwRsc_GetLinkToMrkFil (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_GET_LINK_TO_MRK_FILE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_GET_LINK_TO_MRK_FILE);
   }
 
 void BrwRsc_DoActionGetLinkToDocFil (struct Brw_FileBrowser *FileBrowser)

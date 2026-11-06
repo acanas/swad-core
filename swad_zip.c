@@ -318,14 +318,7 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 
 void ZIP_CompressFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COMPRESS_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_COMPRESS_FOLDER);
   }
 
 void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)

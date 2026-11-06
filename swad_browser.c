@@ -1154,7 +1154,7 @@ static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowse
 static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser);
-static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser);
+static void Brw_ShowOneFileBrowser (struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
@@ -1348,6 +1348,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
 //------------------------ Remove old files in briefcase ----------------------
 
+static void Brw_DoActionAskRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
 static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
 static void Brw_RemoveOldFilesInBrowser (struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
@@ -1363,7 +1364,7 @@ static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
 
 //----------------------- Set and get section for action ----------------------
 
-static Brw_Action_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser);
+static Brw_Action_t Brw_GetActionForThisSection (const struct Brw_FileBrowser *FileBrowser);
 
 //--------------------------------- Statistics --------------------------------
 
@@ -2629,7 +2630,7 @@ void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser)
    Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /****** Show the file browser *****/
-   Brw_ShowFileBrowser (FileBrowser);
+   Brw_ShowOneFileBrowser (FileBrowser);
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
@@ -2668,7 +2669,7 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
 	       /***** Show the tree with the project documents *****/
 	       FileBrowser->Zone = Brw_ADMI_DOC_PRJ;
 	       Brw_InitializeFileBrowser (FileBrowser);
-	       Brw_ShowFileBrowser (FileBrowser);
+	       Brw_ShowOneFileBrowser (FileBrowser);
 	      }
 
 	    if (Prj_CheckIfICanViewPrjAss (PrjCod) == Usr_CAN)
@@ -2676,7 +2677,7 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
 	       /***** Show the tree with the project assessment *****/
 	       FileBrowser->Zone = Brw_ADMI_ASS_PRJ;
 	       Brw_InitializeFileBrowser (FileBrowser);
-	       Brw_ShowFileBrowser (FileBrowser);
+	       Brw_ShowOneFileBrowser (FileBrowser);
 	      }
 
 	 /***** End box *****/
@@ -2741,12 +2742,12 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 		  /* File browser with the assignments */
 		  FileBrowser->Zone = Brw_ADMI_ASG_CRS;
 		  Brw_InitializeFileBrowser (FileBrowser);
-		  Brw_ShowFileBrowser (FileBrowser);
+		  Brw_ShowOneFileBrowser (FileBrowser);
 
 		  /* File browser with the works */
 		  FileBrowser->Zone = Brw_ADMI_WRK_CRS;
 		  Brw_InitializeFileBrowser (FileBrowser);
-		  Brw_ShowFileBrowser (FileBrowser);
+		  Brw_ShowOneFileBrowser (FileBrowser);
 
 	       HTM_DIV_End ();
 
@@ -2785,12 +2786,12 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
       /***** Show the tree with the assignments *****/
       FileBrowser->Zone = Brw_ADMI_ASG_USR;
       Brw_InitializeFileBrowser (FileBrowser);
-      Brw_ShowFileBrowser (FileBrowser);
+      Brw_ShowOneFileBrowser (FileBrowser);
 
       /***** Show the tree with the works *****/
       FileBrowser->Zone = Brw_ADMI_WRK_USR;
       Brw_InitializeFileBrowser (FileBrowser);
-      Brw_ShowFileBrowser (FileBrowser);
+      Brw_ShowOneFileBrowser (FileBrowser);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3028,59 +3029,52 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 
 void Brw_GetSelectedUsrsAndShowWorks (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Brw_ShowFileBrowserOrWorksInternal,&FileBrowser,	// when user(s) selected
-                                  Brw_AskEditWorksCrsInternal,NULL);			// when no user selected
+				  Brw_ShowFileBrowserOrWorksInternal,NULL,	// when user(s) selected
+                                  Brw_AskEditWorksCrsInternal,NULL);		// when no user selected
   }
 
 /*****************************************************************************/
-/******************** Show a file browser or users' works  *******************/
+/** Show file browsers (one file browser or a set of several file browsers) **/
 /*****************************************************************************/
 
-void Brw_ShowFileBrowserOrWorks (void)
+void Brw_ShowFileBrowsers (void)
+  {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_NONE);
+  }
+
+static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args)
+  {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_NONE);
+  }
+
+void Brw_ShowOneOrMoreFileBrowsers (Brw_Action_t Action)
   {
    struct Brw_FileBrowser FileBrowser;
 
-   Brw_ShowFileBrowserOrWorksInternal (&FileBrowser);
-  }
-
-static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser)
-  {
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ((struct Brw_FileBrowser *) FileBrowser);
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_SetSectionForAction (&FileBrowser,Action);
 
-   /***** Show the file browser or works *****/
-   Brw_SetSectionForAction ((struct Brw_FileBrowser *) FileBrowser,Brw_ACT_NONE);
-   Brw_ShowAgainFileBrowserOrWorks ((struct Brw_FileBrowser *) FileBrowser);
-  }
-
-/*****************************************************************************/
-/******************* Show a file browser or users' works  ********************/
-/*****************************************************************************/
-
-void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser)
-  {
    /***** Get my clipboard *****/
-   Brw_GetMyClipboard (FileBrowser);
+   Brw_GetMyClipboard (&FileBrowser);
 
    /***** Show file browsers *****/
-   if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_USR_ASG_WRK))
-      Brw_ShowFileBrowsersAsgWrkUsr (FileBrowser);
-   else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
-      Brw_ShowFileBrowsersAsgWrkCrs (FileBrowser);
-   else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_PRJ))
-      Prj_ShowOnePrj (FileBrowser);
+   if (     (Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_USR_ASG_WRK))
+      Brw_ShowFileBrowsersAsgWrkUsr (&FileBrowser);
+   else if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_CRS_ASG_WRK))
+      Brw_ShowFileBrowsersAsgWrkCrs (&FileBrowser);
+   else if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_PRJ))
+      Prj_ShowOnePrj (&FileBrowser);
    else
-      Brw_ShowFileBrowserNormal (FileBrowser);
+      Brw_ShowFileBrowserNormal (&FileBrowser);
   }
 
 /*****************************************************************************/
 /**************************** Show a file browser ****************************/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
+static void Brw_ShowOneFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_FILES_Documents;
    extern const char *Hlp_FILES_Shared;
@@ -3195,7 +3189,10 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
       [Brw_ACT_GET_LINK_TO_MRK_FILE	] = BrwRsc_DoActionGetLinkToMrkFil,
       [Brw_ACT_COMPRESS_FOLDER		] = ZIP_DoActionCompressFolder,
-      [Brw_ACT_ASK_REM_OLD_BRIEFCASE	] = Brw_DoActionRemOldFilesBriefcase,
+      [Brw_ACT_CHG_NUM_ROWS_HEADER	] = Mrk_DoActionChangeNumRowsHeader,
+      [Brw_ACT_CHG_NUM_ROWS_FOOTER	] = Mrk_DoActionChangeNumRowsFooter,
+      [Brw_ACT_ASK_REM_OLD_BRIEFCASE	] = Brw_DoActionAskRemOldFilesBriefcase,
+      [Brw_ACT_REM_OLD_BRIEFCASE	] = Brw_DoActionRemOldFilesBriefcase,
      };
    Brw_Action_t Action;
    struct Brw_File RootFolder;
@@ -3243,8 +3240,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
          Brw_ShowSettingSelector (FileBrowser);
 
       /***** Do action on file/folder/link and show message *****/
-      Action = Brw_GetIfThisIsTheSectionForAction (FileBrowser);
-      if (Brw_DoAction[Action])
+      Action = Brw_GetActionForThisSection (FileBrowser);
+      if (Action != Brw_ACT_NONE)
          Brw_DoAction[Action] (FileBrowser);
 
       /***** Initialize structure with publisher's data *****/
@@ -5068,14 +5065,7 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 
 void Brw_ReqRemFile (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_FILE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_FILE);
   }
 
 static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
@@ -5121,14 +5111,7 @@ static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_RemFile (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_FILE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_FILE);
   }
 
 static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
@@ -5187,14 +5170,7 @@ static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_TryRemFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_FOLDER);
   }
 
 static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
@@ -5270,14 +5246,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrow
 
 void Brw_RemFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_NON_EMPTY_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_NON_EMPTY_FOLDER);
   }
 
 /*****************************************************************************/
@@ -5378,14 +5347,7 @@ void Brw_ContractFolder (void)
 
 void Brw_Copy (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COPY);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_COPY);
   }
 
 static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
@@ -5736,9 +5698,12 @@ static void Brw_PutIconsClipboard (const void *FileBrowser)
 
 static void Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (struct Brw_FileBrowser *FileBrowser)
   {
+   /***** Remove affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 				    Gbl.Usrs.Me.UsrDat.UsrCod,
 				    Gbl.Usrs.Other.UsrDat.UsrCod);
+
+   /***** Update my clipboard *****/
    Brw_GetMyClipboard (FileBrowser);
   }
 
@@ -5962,14 +5927,7 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Z
 
 void Brw_Paste (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_PASTE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_PASTE);
   }
 
 static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser)
@@ -6328,14 +6286,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_ShowMyClipboard (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_CLIPBOARD);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SHOW_CLIPBOARD);
   }
 
 /*****************************************************************************/
@@ -6344,14 +6295,7 @@ void Brw_ShowMyClipboard (void)
 
 void Brw_RemMyClipboard (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_CLIPBOARD);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_CLIPBOARD);
   }
 
 static void Brw_DoActionRemMyClipboard (struct Brw_FileBrowser *FileBrowser)
@@ -6603,14 +6547,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 void Brw_ShowFormFileBrowser (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_FORM);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SHOW_FORM);
   }
 
 static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
@@ -6904,14 +6841,7 @@ static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_CreateFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CREATE_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CREATE_FOLDER);
   }
 
 static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
@@ -7031,14 +6961,7 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_RenFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REN_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REN_FOLDER);
   }
 
 static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser)
@@ -7208,14 +7131,7 @@ void Brw_RcvFileDZ (void)
 
 void Brw_RcvFileClassic (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_RCV_FILE_CLASSIC);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_RCV_FILE_CLASSIC);
   }
 
 static void Brw_DoActionRcvFileClassic (struct Brw_FileBrowser *FileBrowser)
@@ -7446,14 +7362,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 
 void Brw_CreateLink (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CREATE_LINK);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CREATE_LINK);
   }
 
 static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
@@ -7709,26 +7618,12 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
 
 void Brw_SetDocumentAsVisible (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_VISIBLE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SET_DOC_VISIBLE);
   }
 
 void Brw_SetDocumentAsHidden (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_HIDDEN);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SET_DOC_HIDDEN);
   }
 
 static void Brw_DoActionSetDocAsVisible (struct Brw_FileBrowser *FileBrowser)
@@ -7808,14 +7703,7 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
 
 void Brw_ShowFileMetadata (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_FILE_METADATA);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SHOW_FILE_METADATA);
   }
 
 static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
@@ -8612,14 +8500,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 
 void Brw_ChgFileMetadata (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CHG_FILE_METADATA);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CHG_FILE_METADATA);
   }
 
 static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
@@ -10058,17 +9939,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
 void Brw_AskRemoveOldFilesBriefcase (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_OLD_BRIEFCASE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_OLD_BRIEFCASE);
   }
 
-static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionAskRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
@@ -10115,17 +9989,18 @@ static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowse
 
 void Brw_RemoveOldFilesBriefcase (void)
   {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_OLD_BRIEFCASE);
+  }
+
+static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+  {
    extern const char *Txt_Files_removed;
    extern const char *Txt_Links_removed;
    extern const char *Txt_Folders_removed;
-   struct Brw_FileBrowser FileBrowser;
    unsigned Months;
    struct Brw_NumObjects Removed;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_CRS_ASG_WRK))
+   if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
      {
       /***** Get parameter with number of months without access *****/
       Months = (unsigned)
@@ -10135,7 +10010,7 @@ void Brw_RemoveOldFilesBriefcase (void)
                                        Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES);
 
       /***** Remove old files *****/
-      Brw_RemoveOldFilesInBrowser (&FileBrowser,Months,&Removed);
+      Brw_RemoveOldFilesInBrowser (FileBrowser,Months,&Removed);
 
       /***** Success message *****/
       Ale_ShowAlert (Ale_SUCCESS,"%s: %u<br>"
@@ -10145,9 +10020,6 @@ void Brw_RemoveOldFilesBriefcase (void)
 	             Txt_Links_removed  ,Removed.NumLinks,
 	             Txt_Folders_removed,Removed.NumFolds);
      }
-
-   /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -10366,7 +10238,7 @@ void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
 	     sizeof (Brw_SectionForAction.Id) - 1);
   }
 
-static Brw_Action_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser)
+static Brw_Action_t Brw_GetActionForThisSection (const struct Brw_FileBrowser *FileBrowser)
   {
    if (Brw_SectionForAction.Id[0] == '\0')
       return Brw_ACT_NONE;

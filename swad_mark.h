@@ -49,6 +49,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
 					    const struct Brw_File *File);
 void Mrk_ChangeNumRowsHeader (void);
 void Mrk_ChangeNumRowsFooter (void);
+void Mrk_DoActionChangeNumRowsHeader (struct Brw_FileBrowser *FileBrowser);
+void Mrk_DoActionChangeNumRowsFooter (struct Brw_FileBrowser *FileBrowser);
 
 Err_SuccessOrError_t Mrk_CheckFileOfMarks (const char *Path,struct Mrk_Properties *Marks);
 void Mrk_ShowMyMarks (void);
