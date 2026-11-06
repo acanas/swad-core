@@ -1418,7 +1418,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis_NUM_HIDDEN_VISIBLE] =
 	"Gizli etkinlikler"
 #endif
 	,
-	// HidVis_VISIBLE
+	// HidVis_VISIBL
 #if   L==1	// ca
 	"Esdeveniments visibles"
 #elif L==2	// de
@@ -31551,7 +31551,7 @@ const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE] =
 	"Hidden projects"	// Çeviri lazim!
 #endif
 	,
-	[HidVis_VISIBLE] =
+	[HidVis_VISIBL] =
 #if   L==1	// ca
 	"Projectes visibles"
 #elif L==2	// de
@@ -50879,7 +50879,7 @@ const char *Txt_TST_HIDDEN_VISIBLE[HidVis_NUM_HIDDEN_VISIBLE] =
 	"hidden"	// Çeviri lazim!
 #endif
 	,
-	[HidVis_VISIBLE] =
+	[HidVis_VISIBL] =
 #if   L==1	// ca
 	"visible"
 #elif L==2	// de

@@ -511,9 +511,9 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	    HiddenOrVisible = (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
 														      File.Path.InZone) :
-										     HidVis_VISIBLE;
+										     HidVis_VISIBL;
 
-	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
+	    if (HiddenOrVisible == HidVis_VISIBL)	// If file/folder is visible
 	       switch (File.Type)
 	         {
 		  case Brw_IS_FOLDER:

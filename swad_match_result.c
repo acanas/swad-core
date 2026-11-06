@@ -1283,7 +1283,7 @@ static void MchRes_CheckIfICanViewMatchResult (const struct Gam_Game *Game,
      {
       case Rol_STD:
 	 // Depends on visibility of game and result (eye icons)
-	 ICanView->Result = Game->Hidden == HidVis_VISIBLE &&			// The game is visible
+	 ICanView->Result = Game->Hidden == HidVis_VISIBL &&			// The game is visible
 			    Match->Status.Show.UsrResults == Lay_SHOW &&	// The results of the match are visible to users
 			    Usr_ItsMe (UsrCod) == Usr_ME ? Usr_CAN :		// The result is mine
 							   Usr_CAN_NOT;

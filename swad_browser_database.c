@@ -1485,7 +1485,7 @@ PriPub_PrivateOrPublic_t Brw_DB_GetIfFolderHasPublicFiles (Brw_Zone_t Zone,
   {
    static PriPub_PrivateOrPublic_t FolderHasPublicFiles[Exi_NUM_EXIST] =
      {
-      [Exi_DOES_NOT_EXIST] = PriPub_PRIVATE,	// All files are private
+      [Exi_DOES_NOT_EXIST] = PriPub_PRIVAT,	// All files are private
       [Exi_EXISTS        ] = PriPub_PUBLIC,	// Has any public files
      };
    Exi_Exist_t Exists;
@@ -2357,7 +2357,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenUsingPath (MYSQL_RES **mysql_res,
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {
-      [Exi_DOES_NOT_EXIST] = HidVis_VISIBLE,
+      [Exi_DOES_NOT_EXIST] = HidVis_VISIBL,
       [Exi_EXISTS        ] = HidVis_HIDDEN,
      };
    Exi_Exist_t Exists;
@@ -2387,7 +2387,7 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenUsingMetadata (Brw_Zone_t Zone,
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {
-      [Exi_DOES_NOT_EXIST] = HidVis_VISIBLE,
+      [Exi_DOES_NOT_EXIST] = HidVis_VISIBL,
       [Exi_EXISTS        ] = HidVis_HIDDEN,
      };
    Exi_Exist_t Exists;

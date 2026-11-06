@@ -96,7 +96,7 @@ unsigned Ann_DB_GetAnnouncementsForUnknownUsers (MYSQL_RES **mysql_res)
 		   " WHERE Status=%u"
 		     " AND (Roles&%u)<>0 "
 		" ORDER BY AnnCod DESC",
-		   HidVis_Hidden_01[HidVis_VISIBLE],
+		   HidVis_Hidden_01[HidVis_VISIBL],
 		   (unsigned) (1 << Rol_UNK));
   }
 
@@ -124,7 +124,7 @@ unsigned Ann_DB_GetAnnouncementsNotSeen (MYSQL_RES **mysql_res)
 			    " FROM ann_seen"
 			   " WHERE UsrCod=%ld)"
 		" ORDER BY AnnCod DESC",	// Newest first
-		   HidVis_Hidden_01[HidVis_VISIBLE],
+		   HidVis_Hidden_01[HidVis_VISIBL],
 		   (unsigned) Gbl.Usrs.Me.UsrDat.Roles.InCrss,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
  }

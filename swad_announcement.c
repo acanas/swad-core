@@ -213,13 +213,13 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
    extern const char *Txt_Do_not_show_again;
    static const char *ContainerClass[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
-      [HidVis_VISIBLE] = "NOTICE_BOX NOTICE_BOX_WIDE",
+      [HidVis_HIDDEN] = "NOTICE_BOX NOTICE_BOX_WIDE LIGHT",
+      [HidVis_VISIBL] = "NOTICE_BOX NOTICE_BOX_WIDE",
      };
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhAnn,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidAnn,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhAnn,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidAnn,	// Visible ==> action to hide
      };
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
@@ -413,7 +413,7 @@ void Ann_HideAnnouncement (void)
 
 void Ann_UnhideAnnouncement (void)
   {
-   Ann_HideUnhideAnnouncement (HidVis_VISIBLE);
+   Ann_HideUnhideAnnouncement (HidVis_VISIBL);
   }
 
 static void Ann_HideUnhideAnnouncement (HidVis_HiddenOrVisible_t HiddenOrVisible)

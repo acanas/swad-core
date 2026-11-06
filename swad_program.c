@@ -167,7 +167,7 @@ void Prg_HideNode (void)
 void Prg_UnhideNode (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      Tre_HideOrUnhideNode (Inf_PROGRAM,HidVis_VISIBLE);
+      Tre_HideOrUnhideNode (Inf_PROGRAM,HidVis_VISIBL);
    Prg_AfterTree ();
   }
 

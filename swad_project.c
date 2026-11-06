@@ -1172,7 +1172,7 @@ static unsigned Prj_GetParHidden (void)
    Par_GetParUnsignedLong (Prj_PAR_FILTER_HID_VIS_NAME,
 			   0,
 			   (1 << HidVis_HIDDEN) |
-			   (1 << HidVis_VISIBLE),
+			   (1 << HidVis_VISIBL),
 			   (unsigned) Prj_FILTER_HIDDEN_DEFAULT |
 			   (unsigned) Prj_FILTER_VISIBL_DEFAULT);
   }
@@ -3346,8 +3346,8 @@ static void Prj_PutIconsToRemEditOnePrj (const struct Prj_Projects *Prjs,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhPrj,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidPrj,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhPrj,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidPrj,	// Visible ==> action to hide
      };
 
    if (Prj_CheckIfICanEditPrj (&Prjs->Prj) == Usr_CAN)
@@ -3785,7 +3785,7 @@ void Prj_HidePrj (void)
 
 void Prj_UnhidePrj (void)
   {
-   Prj_HideUnhidePrj (HidVis_VISIBLE);
+   Prj_HideUnhidePrj (HidVis_VISIBL);
   }
 
 static void Prj_HideUnhidePrj (HidVis_HiddenOrVisible_t HiddenOrVisible)

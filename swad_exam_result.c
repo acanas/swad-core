@@ -1386,8 +1386,8 @@ static void ExaRes_CheckIfICanViewResult (const struct Exa_Exam *Exam,
       case Rol_STD:
 	 // Depends on visibility of exam, session and result (eye icons)
 	 ICanView->Result = Usr_ItsMe (UsrCod) == Usr_ME &&			// The result is mine
-			    Exam->Hidden == HidVis_VISIBLE &&			// The exam is visible
-			    Session->Hidden == HidVis_VISIBLE &&		// The session is visible
+			    Exam->Hidden == HidVis_VISIBL &&			// The exam is visible
+			    Session->Hidden == HidVis_VISIBL &&		// The session is visible
 			    Session->Show_UsrResults == Lay_SHOW ? Usr_CAN :	// The results of the session are visible to users
 							           Usr_CAN_NOT;
 	 // Whether I belong or not to groups of session is not checked here...
@@ -1804,7 +1804,7 @@ static void ExaRes_WriteQstAndAns (struct Usr_Data *UsrDat,
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Usr_NUM_CAN] =
      {
       [Usr_CAN_NOT] = HidVis_HIDDEN,
-      [Usr_CAN    ] = HidVis_VISIBLE,
+      [Usr_CAN    ] = HidVis_VISIBL,
      };
    static const char *ClassNumQst[ExaSet_NUM_VALIDITIES] =
      {

@@ -550,7 +550,7 @@ static void Rub_PutIconsToRemEditOneRubric (const struct Rub_Rubrics *Rubrics)
 
 static void Rub_WriteAuthor (const struct Rub_Rubric *Rubric)
   {
-   Usr_WriteAuthor1Line (Rubric->UsrCod,HidVis_VISIBLE);
+   Usr_WriteAuthor1Line (Rubric->UsrCod,HidVis_VISIBL);
   }
 
 /*****************************************************************************/

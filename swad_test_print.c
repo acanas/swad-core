@@ -242,7 +242,7 @@ static void TstPrn_WriteQstAndAnsToFill (struct Qst_PrintedQuestion *PrintedQst,
 	 Qst_WriteParQstCod (QstInd,Qst->QstCod);
 
 	 /* Stem */
-	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBL);
 
 	 /* Media */
 	 Med_ShowMedia (&Qst->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
@@ -375,7 +375,7 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Usr_NUM_CAN] =
      {
       [Usr_CAN_NOT] = HidVis_HIDDEN,
-      [Usr_CAN    ] = HidVis_VISIBLE,
+      [Usr_CAN    ] = HidVis_VISIBL,
      };
    bool QuestionUneditedAfterExam = false;
    Usr_Can_t ICanView[TstVis_NUM_ITEMS_VISIBILITY];

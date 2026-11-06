@@ -2573,7 +2573,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
 
    /* Is event hidden or visible? */
    Event.Hidden = hidden ? HidVis_HIDDEN :
-	                   HidVis_VISIBLE;
+	                   HidVis_VISIBL;
 
    /* User's code (really not used) */
    Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -2583,7 +2583,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Event.TimeUTC[Dat_END_TIME] = (time_t) endTime;
 
    /* Are teacher's comments hidden or visible? */
-   Event.CommentTchVisible = commentsTeachersVisible ? HidVis_VISIBLE :
+   Event.CommentTchVisible = commentsTeachersVisible ? HidVis_VISIBL :
 	                                               HidVis_HIDDEN;
 
    /* Title */
@@ -4832,7 +4832,7 @@ int swad__getDirectoryTree (struct soap *soap,
    XML_WriteStartFile (XML,"tree");
    File.Type = Brw_IS_FOLDER;
    if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-				        File.Path.InZone) == HidVis_VISIBLE)
+				        File.Path.InZone) == HidVis_VISIBL)
      {
       Str_Copy (PathRootFolderInZone,Brw_RootFolderInternalNames[FileBrowser.Zone],
 	        sizeof (PathRootFolderInZone) - 1);
@@ -4909,7 +4909,7 @@ static void API_ListDir (struct Brw_FileBrowser *FileBrowser,
 		 {
 		  /***** Write a row for the subdirectory *****/
 		  FileOrFolder->Type = Brw_IS_FOLDER;
-		  if (API_WriteRowFileBrowser (FileBrowser,FileOrFolder,XML,Level) == HidVis_VISIBLE)
+		  if (API_WriteRowFileBrowser (FileBrowser,FileOrFolder,XML,Level) == HidVis_VISIBL)
 		    {
 		     /* List subtree starting at this this directory */
 		     API_ListDir (FileBrowser,FileOrFolder,XML,Level + 1,
@@ -4980,7 +4980,7 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
         {
 	 /* Add entry to the table of files/folders */
 	 File->Metadata.PublisherCod    = -1L;
-	 File->Metadata.PrivateOrPublic = PriPub_PRIVATE;
+	 File->Metadata.PrivateOrPublic = PriPub_PRIVAT;
 	 File->Metadata.License         = Brw_LICENSE_DEFAULT;
 	 File->FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
 							  File);
@@ -5010,7 +5010,7 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
 	       Txt_NEW_LINE);
      }
 
-   return HidVis_VISIBLE;
+   return HidVis_VISIBL;
   }
 
 /*****************************************************************************/

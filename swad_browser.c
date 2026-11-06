@@ -1117,8 +1117,8 @@ static Act_Action_t Brw_ActZIPFolder[Brw_NUM_ZONES] =
 
 static Usr_Can_t Brw_ICanViewFileOrFolder[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = Usr_CAN_NOT,
-   [HidVis_VISIBLE] = Usr_CAN,
+   [HidVis_HIDDEN] = Usr_CAN_NOT,
+   [HidVis_VISIBL] = Usr_CAN,
   };
 
 /*****************************************************************************/
@@ -1202,7 +1202,6 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
                                          HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Brw_PutIconHideUnhide (const struct Brw_FileBrowser *FileBrowser,
-				   const char *Anchor,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible);
 static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (struct Brw_FileBrowser *FileBrowser,
 								   unsigned ThisLevel);
@@ -1294,6 +1293,11 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser);
 static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
 							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType);
+
+static void Brw_DoActionSetDocAsVisible (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionSetDocAsHidden (struct Brw_FileBrowser *FileBrowser);
+static void Brw_SetDocAs (struct Brw_FileBrowser *FileBrowser,
+		          HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser);
 
@@ -3186,6 +3190,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_CREATE_LINK		] = Brw_DoActionCreateLink,
       [Brw_ACT_SHOW_FILE_METADATA	] = Brw_DoActionShowFileMetadata,
       [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChgFileMetadata,
+      [Brw_ACT_SET_DOC_VISIBLE		] = Brw_DoActionSetDocAsVisible,
+      [Brw_ACT_SET_DOC_HIDDEN		] = Brw_DoActionSetDocAsHidden,
       [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
       [Brw_ACT_GET_LINK_TO_MRK_FILE	] = BrwRsc_DoActionGetLinkToMrkFil,
       [Brw_ACT_COMPRESS_FOLDER		] = ZIP_DoActionCompressFolder,
@@ -3265,7 +3271,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 				      "1",	// Row id
 				      &UsrDat,
 				      ConExp_EXPANDED,	// Folder expanded
-				      Brw_ICON_NOTHING) == HidVis_VISIBLE)
+				      Brw_ICON_NOTHING) == HidVis_VISIBL)
 	    Brw_ListDir (FileBrowser,1,"1",
 			 ConExp_EXPANDED,	// Folder expanded
 			 &UsrDat,
@@ -3681,7 +3687,7 @@ static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser)
    for (Level  = 0;
 	Level <= Brw_MAX_DIR_LEVELS;
 	Level++)
-      FileBrowser->HiddenLevels[Level] = HidVis_VISIBLE;
+      FileBrowser->HiddenLevels[Level] = HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -3915,7 +3921,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 		  if (Brw_WriteRowFileBrowser (FileBrowser,&FileOrFolder,
 					       RowId,UsrDat,
 					       FolderContractedOrExpanded,
-					       IconSubtree) == HidVis_VISIBLE)
+					       IconSubtree) == HidVis_VISIBL)
 		     if (FileOrFolder.Level < Brw_MAX_DIR_LEVELS)
 			/* List subtree starting at this this directory */
 			Brw_ListDir (FileBrowser,Level + 1,RowId,
@@ -3966,27 +3972,27 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
   {
    static const char *ClassTxtOld[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_HID",
-      [HidVis_VISIBLE] = "LST",
+      [HidVis_HIDDEN] = "LST_HID",
+      [HidVis_VISIBL] = "LST",
      };
    static const char *ClassTxtNew[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_REC_HID",
-      [HidVis_VISIBLE] = "LST_REC",
+      [HidVis_HIDDEN] = "LST_REC_HID",
+      [HidVis_VISIBL] = "LST_REC",
      };
    static const char *ClassInputOld[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_EDIT_HID",
-      [HidVis_VISIBLE] = "LST_EDIT",
+      [HidVis_HIDDEN] = "LST_EDIT_HID",
+      [HidVis_VISIBL] = "LST_EDIT",
      };
    static const char *ClassInputNew[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_EDIT_REC_HID",
-      [HidVis_VISIBLE] = "LST_EDIT_REC",
+      [HidVis_HIDDEN] = "LST_EDIT_REC_HID",
+      [HidVis_VISIBL] = "LST_EDIT_REC",
      };
    char *Anchor;
-   HidVis_HiddenOrVisible_t ThisHiddenOrVisible = HidVis_VISIBLE;
-   HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBLE;
+   HidVis_HiddenOrVisible_t ThisHiddenOrVisible = HidVis_VISIBL;
+   HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBL;
    PriPub_PrivateOrPublic_t RowPublicOrPrivate;
    Brw_BelongToClipboard_t RowBelongToClipboard = Brw_DONT_BELONG_TO_CLIPBOARD;
    bool IsOld = true;
@@ -4021,7 +4027,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	    FileBrowser->HiddenLevels[FileOrFolder->Level] = ThisHiddenOrVisible;
 	 switch (ThisHiddenOrVisible)
 	   {
-	    case HidVis_VISIBLE:	// this row is not marked as hidden
+	    case HidVis_VISIBL:	// this row is not marked as hidden
                ThisOrAncestorHiddenOrVisible = Brw_CheckIfAnyHigherLevelIsHidden (FileBrowser,
         									  FileOrFolder->Level);
 	       break;
@@ -4037,7 +4043,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
      {
       /* Add entry to the table of files/folders */
       FileOrFolder->Metadata.PublisherCod    = -1L;
-      FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVATE;
+      FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
       FileOrFolder->Metadata.License         = Brw_LICENSE_DEFAULT;
       FileOrFolder->FilCod         	     = Brw_DB_AddPath (FileBrowser->Zone,
 							       FileOrFolder);
@@ -4052,7 +4058,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 												   FileOrFolder->Path.InZone) :
 								 FileOrFolder->Metadata.PrivateOrPublic;
       if (FileBrowser->OnlyPublicFiles &&
-	  RowPublicOrPrivate == PriPub_PRIVATE)
+	  RowPublicOrPrivate == PriPub_PRIVAT)
          return HidVis_HIDDEN;
      }
 
@@ -4169,7 +4175,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	    /* Put icon to hide/unhide file or folder */
 	    if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_DOC |
 						    Brw_IS_ADM_MRK)))
-	       Brw_PutIconHideUnhide (FileBrowser,Anchor,ThisHiddenOrVisible);
+	       Brw_PutIconHideUnhide (FileBrowser,ThisHiddenOrVisible);
 
 	    /***** File or folder icon *****/
 	    switch (FileOrFolder->Type)
@@ -4249,7 +4255,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
        (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 					   Brw_IS_SEE_MRK)))
       return HidVis_HIDDEN;
-   return HidVis_VISIBLE;
+   return HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -4407,7 +4413,7 @@ static void Brw_IndentAndWriteIconExpandContract (const struct Brw_FileBrowser *
 		  case Brw_ICON_EXPAND:
 		     /***** Visible icon to expand folder *****/
 		     Brw_PutIconToExpandFolder (FileBrowser,FileBrowserId,RowId,
-						HidVis_VISIBLE);
+						HidVis_VISIBL);
 
 		     /***** Hidden icon to contract folder *****/
 		     Brw_PutIconToContractFolder (FileBrowser,FileBrowserId,RowId,
@@ -4420,7 +4426,7 @@ static void Brw_IndentAndWriteIconExpandContract (const struct Brw_FileBrowser *
 
 		     /***** Visible icon to contract folder *****/
 		     Brw_PutIconToContractFolder (FileBrowser,FileBrowserId,RowId,
-						  HidVis_VISIBLE);
+						  HidVis_VISIBL);
 		     break;
 		 }
 	    HTM_TD_End ();
@@ -4461,7 +4467,7 @@ static void Brw_PutIconToExpandFolder (const struct Brw_FileBrowser *FileBrowser
    /***** Begin container *****/
    switch (HiddenOrVisible)
      {
-      case HidVis_VISIBLE:
+      case HidVis_VISIBL:
 	 HTM_DIV_Begin ("id=\"expand_%s_%s\"",FileBrowserId,RowId);
 	 break;
       case HidVis_HIDDEN:
@@ -4499,7 +4505,7 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
    /***** Begin container *****/
    switch (HiddenOrVisible)
      {
-      case HidVis_VISIBLE:
+      case HidVis_VISIBL:
 	 HTM_DIV_Begin ("id=\"contract_%s_%s\"",
 			FileBrowserId,RowId);
 	 break;
@@ -4531,44 +4537,73 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
 /*****************************************************************************/
 
 static void Brw_PutIconHideUnhide (const struct Brw_FileBrowser *FileBrowser,
-				   const char *Anchor,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    static Act_Action_t Brw_ActHideUnhide[Brw_NUM_ZONES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Brw_UNKNOWN     ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_DOC_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_MRK_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_CRS] = {[HidVis_HIDDEN] = ActUnhDocCrs	,[HidVis_VISIBLE] = ActHidDocCrs	},
-      [Brw_ADMI_SHR_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_SHR_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_WRK_USR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_WRK_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_MRK_CRS] = {[HidVis_HIDDEN] = ActUnhMrkCrs	,[HidVis_VISIBLE] = ActHidMrkCrs	},
-      [Brw_ADMI_BRF_USR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_DOC_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_GRP] = {[HidVis_HIDDEN] = ActUnhDocGrp	,[HidVis_VISIBLE] = ActHidDocGrp	},
-      [Brw_SHOW_MRK_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_MRK_GRP] = {[HidVis_HIDDEN] = ActUnhMrkGrp	,[HidVis_VISIBLE] = ActHidMrkGrp	},
-      [Brw_ADMI_ASG_USR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_ASG_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_DOC_DEG] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_DEG] = {[HidVis_HIDDEN] = ActUnhDocDeg	,[HidVis_VISIBLE] = ActHidDocDeg	},
-      [Brw_SHOW_DOC_CTR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_CTR] = {[HidVis_HIDDEN] = ActUnhDocCtr	,[HidVis_VISIBLE] = ActHidDocCtr	},
-      [Brw_SHOW_DOC_INS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_INS] = {[HidVis_HIDDEN] = ActUnhDocIns	,[HidVis_VISIBLE] = ActHidDocIns	},
-      [Brw_ADMI_SHR_DEG] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_SHR_CTR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_SHR_INS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_TCH_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_TCH_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_PRJ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_ASS_PRJ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
+      [Brw_UNKNOWN     ] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_DOC_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_MRK_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_CRS] = {[HidVis_HIDDEN] = ActUnhDocCrs,
+			    [HidVis_VISIBL] = ActHidDocCrs},
+      [Brw_ADMI_SHR_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_SHR_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_WRK_USR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_WRK_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_MRK_CRS] = {[HidVis_HIDDEN] = ActUnhMrkCrs,
+			    [HidVis_VISIBL] = ActHidMrkCrs},
+      [Brw_ADMI_BRF_USR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_DOC_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_GRP] = {[HidVis_HIDDEN] = ActUnhDocGrp,
+			    [HidVis_VISIBL] = ActHidDocGrp},
+      [Brw_SHOW_MRK_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_MRK_GRP] = {[HidVis_HIDDEN] = ActUnhMrkGrp,
+			    [HidVis_VISIBL] = ActHidMrkGrp},
+      [Brw_ADMI_ASG_USR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_ASG_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_DOC_DEG] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_DEG] = {[HidVis_HIDDEN] = ActUnhDocDeg,
+			    [HidVis_VISIBL] = ActHidDocDeg},
+      [Brw_SHOW_DOC_CTR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_CTR] = {[HidVis_HIDDEN] = ActUnhDocCtr,
+			    [HidVis_VISIBL] = ActHidDocCtr},
+      [Brw_SHOW_DOC_INS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_INS] = {[HidVis_HIDDEN] = ActUnhDocIns,
+			    [HidVis_VISIBL] = ActHidDocIns},
+      [Brw_ADMI_SHR_DEG] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_SHR_CTR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_SHR_INS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_TCH_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_TCH_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_PRJ] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_ASS_PRJ] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
      };
 
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-      Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[FileBrowser->Zone],Anchor,
+      Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[FileBrowser->Zone],
+					 FileBrowser->SectionId,
 					 Brw_PutImplicitParsFileBrowser,FileBrowser,
 					 HiddenOrVisible);
    HTM_TD_End ();
@@ -4589,7 +4624,7 @@ static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (struct Brw_Fi
       if (FileBrowser->HiddenLevels[Level] == HidVis_HIDDEN)
          return HidVis_HIDDEN;
 
-   return HidVis_VISIBLE;	// None is hidden. All are visible.
+   return HidVis_VISIBL;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
@@ -4612,11 +4647,11 @@ static void Brw_PutIconFolder (const struct Brw_FileBrowser *FileBrowser,
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Brw_NUM_ICON_EXPAND_CONTRACT][CloOpe_NUM_CLOSED_OPEN] =
      {
       [Brw_ICON_NOTHING ][CloOpe_CLOSED] = HidVis_HIDDEN,
-      [Brw_ICON_NOTHING ][CloOpe_OPEN  ] = HidVis_VISIBLE,
-      [Brw_ICON_EXPAND  ][CloOpe_CLOSED] = HidVis_VISIBLE,
+      [Brw_ICON_NOTHING ][CloOpe_OPEN  ] = HidVis_VISIBL,
+      [Brw_ICON_EXPAND  ][CloOpe_CLOSED] = HidVis_VISIBL,
       [Brw_ICON_EXPAND  ][CloOpe_OPEN  ] = HidVis_HIDDEN,
       [Brw_ICON_CONTRACT][CloOpe_CLOSED] = HidVis_HIDDEN,
-      [Brw_ICON_CONTRACT][CloOpe_OPEN  ] = HidVis_VISIBLE,
+      [Brw_ICON_CONTRACT][CloOpe_OPEN  ] = HidVis_VISIBL,
      };
    Usr_Can_t ICanCreateIntoFolder = Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,
 								     File);
@@ -6250,7 +6285,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 
 		  /* Notify only if destination folder is visible */
 		  if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
-							 &FirstFile) == HidVis_VISIBLE)
+							 &FirstFile) == HidVis_VISIBL)
 		     switch (FileBrowser->Zone)
 		       {
 			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
@@ -6449,7 +6484,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 			      /***** Add entry to the table of files/folders *****/
 			      FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
-			      FileDst.Metadata.PrivateOrPublic = PriPub_PRIVATE;
+			      FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			      FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
 			      FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
 										 &FileDst);
@@ -6498,7 +6533,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 			   /* Add entry to the table of files/folders */
 			   FileDst.Metadata.PublisherCod       = Gbl.Usrs.Me.UsrDat.UsrCod;
-			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVATE;
+			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			   FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
 			   FileDst.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
 									     &FileDst);
@@ -6934,7 +6969,7 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 			      /* Add entry to the table of files/folders */
 			      NewFolder.Type				= Brw_IS_FOLDER;
 			      NewFolder.Metadata.PublisherCod		= Gbl.Usrs.Me.UsrDat.UsrCod;
-			      NewFolder.Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+			      NewFolder.Metadata.PrivateOrPublic	= PriPub_PRIVAT;
 			      NewFolder.Metadata.License		= Brw_LICENSE_DEFAULT;
 			      NewFolder.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
 											&NewFolder);
@@ -7323,7 +7358,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  /* Add entry to the table of files/folders */
 					  NewFile.Type            = Brw_IS_FILE;
 					  NewFile.Metadata.PublisherCod 	   = Gbl.Usrs.Me.UsrDat.UsrCod;
-					  NewFile.Metadata.PrivateOrPublic = PriPub_PRIVATE;
+					  NewFile.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 					  NewFile.Metadata.License         = Brw_LICENSE_DEFAULT;
 					  NewFile.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
 											     &NewFile);
@@ -7347,7 +7382,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 
 					  /* Notify new file */
 					  if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
-										 ParentFolder) == HidVis_VISIBLE)
+										 ParentFolder) == HidVis_VISIBL)
 					     switch (FileBrowser->Zone)
 					       {
 						case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
@@ -7537,7 +7572,7 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 				       /* Add entry to the table of files/folders */
 				       NewLink.Type			= Brw_IS_LINK;
 				       NewLink.Metadata.PublisherCod	= Gbl.Usrs.Me.UsrDat.UsrCod;
-				       NewLink.Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+				       NewLink.Metadata.PrivateOrPublic	= PriPub_PRIVAT;
 				       NewLink.Metadata.License		= Brw_LICENSE_DEFAULT;
 				       NewLink.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
 											  &NewLink);
@@ -7551,7 +7586,7 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 
 				       /* Notify new file */
 				       if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
-									      &ParentFolder) == HidVis_VISIBLE)
+									      &ParentFolder) == HidVis_VISIBL)
 					  switch (FileBrowser->Zone)
 					    {
 					     case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
@@ -7669,77 +7704,69 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
   }
 
 /*****************************************************************************/
-/******************* Show file or folder in a file browser *******************/
+/**************** Show/hide file or folder in a file browser *****************/
 /*****************************************************************************/
 
 void Brw_SetDocumentAsVisible (void)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File File;
-   Exi_Exist_t FileExistsInDB;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
-   switch (FileExistsInDB)
-     {
-      case Exi_EXISTS:
-	 /***** Change file to visible *****/
-	 if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-					      File.Path.InZone) == HidVis_HIDDEN)
-	    Brw_DB_HideOrUnhideFileOrFolder (FileBrowser.Zone,
-					     File.Path.InZone,
-					     HidVis_VISIBLE);
-
-	 /***** Remove the affected clipboards and update my clipboard *****/
-	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (&FileBrowser);
-         break;
-      case Exi_DOES_NOT_EXIST:
-      default:
-	 // Don't show warning alert if file no longer exists
-         break;
-     }
 
    /***** Show again the file browser *****/
-   // TODO: Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_VISIBLE);
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_VISIBLE);
    Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
-
-/*****************************************************************************/
-/***************** Hide file or folder in a file browser *********************/
-/*****************************************************************************/
 
 void Brw_SetDocumentAsHidden (void)
   {
    struct Brw_FileBrowser FileBrowser;
-   struct Brw_File File;
-   Exi_Exist_t FileExistsInDB;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser (&FileBrowser);
-   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
+
+   /***** Show again the file browser *****/
+   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_HIDDEN);
+   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+  }
+
+static void Brw_DoActionSetDocAsVisible (struct Brw_FileBrowser *FileBrowser)
+  {
+   Brw_SetDocAs (FileBrowser,HidVis_VISIBL);
+  }
+
+static void Brw_DoActionSetDocAsHidden (struct Brw_FileBrowser *FileBrowser)
+  {
+   Brw_SetDocAs (FileBrowser,HidVis_HIDDEN);
+  }
+
+static void Brw_SetDocAs (struct Brw_FileBrowser *FileBrowser,
+		          HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
+   struct Brw_File File;
+   Exi_Exist_t FileExistsInDB;
+
+   /***** Get file / folder / link *****/
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
    switch (FileExistsInDB)
      {
       case Exi_EXISTS:
-	 /***** Change file to hidden *****/
-	 if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-					      File.Path.InZone) == HidVis_VISIBLE)
-	    Brw_DB_HideOrUnhideFileOrFolder (FileBrowser.Zone,
+	 /***** Change file to visible *****/
+	 if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
+					      File.Path.InZone) != HiddenOrVisible)
+	    Brw_DB_HideOrUnhideFileOrFolder (FileBrowser->Zone,
 					     File.Path.InZone,
-					     HidVis_HIDDEN);
+					     HiddenOrVisible);
 
 	 /***** Remove the affected clipboards and update my clipboard *****/
-	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (&FileBrowser);
+	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 // Don't show warning alert if file no longer exists
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
-
-   /***** Show again the file browser *****/
-   // TODO: Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_HIDDEN);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7756,8 +7783,8 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
    /***** Get if a file or folder is hidden from database *****/
    switch (Brw_DB_CheckIfHiddenUsingPath (&mysql_res,Zone,PathInZone))
      {
-      case HidVis_VISIBLE:
-	 Hidden = HidVis_VISIBLE;
+      case HidVis_VISIBL:
+	 Hidden = HidVis_VISIBL;
 	 break;
       case HidVis_HIDDEN:
       default:
@@ -7810,13 +7837,13 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_users[Usr_NUM_SEXS];
    static const char **PrivatePublicLabel[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = &Txt_Private_available_to_certain_users_identified,
-      [PriPub_PUBLIC ] = &Txt_Public_open_educational_resource_OER_for_everyone
+      [PriPub_PRIVAT] = &Txt_Private_available_to_certain_users_identified,
+      [PriPub_PUBLIC] = &Txt_Public_open_educational_resource_OER_for_everyone
      };
    static const char *Public_YN[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = "N",
-      [PriPub_PUBLIC ] = "Y",
+      [PriPub_PRIVAT] = "N",
+      [PriPub_PUBLIC] = "Y",
      };
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -8637,11 +8664,11 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
 			case Brw_ADMI_WRK_USR:	case Brw_ADMI_WRK_CRS:
 			case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 			case Brw_ADMI_BRF_USR:
-			   PrivateOrPublicFileAfterEdition = PriPub_PRIVATE;	// Files in these zones can not be public
+			   PrivateOrPublicFileAfterEdition = PriPub_PRIVAT;	// Files in these zones can not be public
 			   License = Brw_GetParLicense ();
 			   break;
 			default:
-			   PrivateOrPublicFileAfterEdition = PriPub_PRIVATE;	// Files in other zones can not be public
+			   PrivateOrPublicFileAfterEdition = PriPub_PRIVAT;	// Files in other zones can not be public
 			   License = Brw_LICENSE_DEFAULT;
 			   break;
 		       }
@@ -8656,7 +8683,7 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
 		     Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
 
 		     /***** Insert file into public social activity *****/
-		     if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVATE &&	// Only if file has changed from private...
+		     if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVAT &&	// Only if file has changed from private...
 			 PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)		// ...to public
 			switch (FileBrowser->Zone)
 			  {
@@ -8797,7 +8824,7 @@ void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder)
 
    FileOrFolder->Metadata.PublisherCod		= -1L;
    FileOrFolder->Metadata.HiddenOrVisible	= HidVis_HIDDEN;
-   FileOrFolder->Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+   FileOrFolder->Metadata.PrivateOrPublic	= PriPub_PRIVAT;
    FileOrFolder->Metadata.License		= Brw_LICENSE_DEFAULT;
    FileOrFolder->Metadata.Size			= (off_t) 0;
    FileOrFolder->Metadata.Time			= (time_t) 0;
@@ -8894,7 +8921,7 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_GetPublicFromYN (row[8][0]);
 	 break;
       default:
-	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVATE;
+	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
 	 break;
      }
 
@@ -10705,8 +10732,8 @@ void Brw_GetAndShowOERsStats (Hie_Level_t HieLvl)
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    static const char **Label[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = &Txt_Number_of_private_files,
-      [PriPub_PUBLIC ] = &Txt_Number_of_public_files
+      [PriPub_PRIVAT] = &Txt_Number_of_private_files,
+      [PriPub_PUBLIC] = &Txt_Number_of_public_files
      };
    Brw_License_t License;
    unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC];

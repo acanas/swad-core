@@ -584,8 +584,8 @@ static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhAtt,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidAtt,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhAtt,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidAtt,	// Visible ==> action to hide
      };
 
    if (Att_CheckIfICanEditEvents () == Usr_CAN)
@@ -761,7 +761,7 @@ static void Att_ResetEvent (struct Att_Event *Event)
       Event->NumStdsTotal = 0;
      }
    Event->HieCod = -1L;
-   Event->Hidden = HidVis_VISIBLE;
+   Event->Hidden = HidVis_VISIBL;
    Event->UsrCod = -1L;
    Event->TimeUTC[Dat_STR_TIME] =
    Event->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -903,7 +903,7 @@ void Att_HideEvent (void)
 
 void Att_UnhideEvent (void)
   {
-   Att_HideUnhideEvent (HidVis_VISIBLE);
+   Att_HideUnhideEvent (HidVis_VISIBL);
   }
 
 static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
@@ -944,8 +944,8 @@ void Att_ReqCreatOrEditEvent (void)
      };
    static const char **CommentTchVisibleTxt[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = &Txt_Hidden_MALE_PLURAL,
-      [HidVis_VISIBLE] = &Txt_Visible_MALE_PLURAL
+      [HidVis_HIDDEN] = &Txt_Hidden_MALE_PLURAL,
+      [HidVis_VISIBL] = &Txt_Visible_MALE_PLURAL
      };
    struct Att_Events Events;
    OldNew_OldNew_t OldNewEvent;
@@ -1169,7 +1169,7 @@ void Att_ReceiveEvent (void)
 	       break;
 	    case OldNew_NEW:
 	    default:
-	       ReceivedAtt.Hidden = HidVis_VISIBLE;	// New attendance events are visible by default
+	       ReceivedAtt.Hidden = HidVis_VISIBL;	// New attendance events are visible by default
 	       Att_CreateEvent (&ReceivedAtt,Description);		// Add new attendance event to database
 	       break;
 	   }
@@ -1804,7 +1804,7 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 	       break;
 	    case Usr_CAN_NOT:			// Show without form
 	    default:
-	       if (Event->CommentTchVisible == HidVis_VISIBLE)
+	       if (Event->CommentTchVisible == HidVis_VISIBL)
 		 {
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 				    CommentTch,Cns_MAX_BYTES_TEXT,
@@ -3109,7 +3109,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 					   Lay_DONT_SHOW;
 	 ShowComment.Tch = CommentTch[0] &&
 	                   (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
-	                    Events->Event.CommentTchVisible == HidVis_VISIBLE) ? Lay_SHOW :
+	                    Events->Event.CommentTchVisible == HidVis_VISIBL) ? Lay_SHOW :
 	                							 Lay_DONT_SHOW;
 
 	 /***** Write a row for this event *****/

@@ -35,8 +35,8 @@
 /* Public in database fields */
 const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC] =
   {
-   [PriPub_PRIVATE] = 'N',
-   [PriPub_PUBLIC ] = 'Y',
+   [PriPub_PRIVAT] = 'N',
+   [PriPub_PUBLIC] = 'Y',
   };
 
 /*****************************************************************************/
@@ -46,7 +46,7 @@ const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC] =
 PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch)
   {
    return Ch == 'Y' ? PriPub_PUBLIC :
-		      PriPub_PRIVATE;
+		      PriPub_PRIVAT;
   }
 
 /*****************************************************************************/
@@ -56,5 +56,5 @@ PriPub_PrivateOrPublic_t PriPub_GetPublicFromYN (char Ch)
 PriPub_PrivateOrPublic_t PriPub_GetParPublic (void)
   {
    return Par_GetParBool ("Public") ? PriPub_PUBLIC :
-				      PriPub_PRIVATE;
+				      PriPub_PRIVAT;
   }

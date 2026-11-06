@@ -60,14 +60,14 @@ extern struct Globals Gbl;
 
 const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [Dat_PAST   ][HidVis_HIDDEN ] = "DATE_RED_LIGHT",
-   [Dat_PAST   ][HidVis_VISIBLE] = "DATE_RED",
+   [Dat_PAST   ][HidVis_HIDDEN] = "DATE_RED_LIGHT",
+   [Dat_PAST   ][HidVis_VISIBL] = "DATE_RED",
 
-   [Dat_PRESENT][HidVis_HIDDEN ] = "DATE_GREEN_LIGHT",
-   [Dat_PRESENT][HidVis_VISIBLE] = "DATE_GREEN",
+   [Dat_PRESENT][HidVis_HIDDEN] = "DATE_GREEN_LIGHT",
+   [Dat_PRESENT][HidVis_VISIBL] = "DATE_GREEN",
 
-   [Dat_FUTURE ][HidVis_HIDDEN ] = "DATE_BLUE_LIGHT",
-   [Dat_FUTURE ][HidVis_VISIBLE] = "DATE_BLUE",
+   [Dat_FUTURE ][HidVis_HIDDEN] = "DATE_BLUE_LIGHT",
+   [Dat_FUTURE ][HidVis_VISIBL] = "DATE_BLUE",
   };
 
 /*****************************************************************************/

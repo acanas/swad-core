@@ -538,7 +538,7 @@ void Qst_WriteQstStem (const char *Stem,const char *ClassStem,
    HTM_DIV_Begin ("class=\"%s_%s\"",ClassStem,The_GetSuffix ());
 
       /***** Write stem *****/
-      if (Stem && HiddenOrVisible == HidVis_VISIBLE)
+      if (Stem && HiddenOrVisible == HidVis_VISIBL)
 	{
 	 if (Stem[0])
 	   {
@@ -967,7 +967,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Qsts,unsigned QstInd)
 
 	 /* Stem (row[3]) */
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    Qst_WriteQstStem (Qsts->Qst.Stem,"Qst_TXT",HidVis_VISIBLE);
+	    Qst_WriteQstStem (Qsts->Qst.Stem,"Qst_TXT",HidVis_VISIBL);
 
 	    /***** Get and show media (row[5]) *****/
 	    Med_ShowMedia (&Qsts->Qst.Media,
@@ -1271,7 +1271,7 @@ void Qst_WriteQuestionRowForSelection (unsigned QstInd,struct Qst_Question *Qst)
 
 	 /* Write stem */
 	 HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+	    Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBL);
 
 	    /***** Get and show media *****/
 	    Med_ShowMedia (&Qst->Media,

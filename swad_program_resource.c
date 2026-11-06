@@ -291,7 +291,7 @@ void PrgRsc_HideResource (void)
 void PrgRsc_UnhideResource (void)
   {
    Prg_BeforeTree (Tre_EDIT_NODES);
-      TreSpc_HideOrUnhideItem (Inf_PROGRAM,HidVis_VISIBLE);
+      TreSpc_HideOrUnhideItem (Inf_PROGRAM,HidVis_VISIBL);
    Prg_AfterTree ();
   }
 

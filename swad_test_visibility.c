@@ -55,15 +55,15 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
      };
    static Ico_Color_t Color[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = Ico_RED,
-      [HidVis_VISIBLE] = Ico_GREEN,
+      [HidVis_HIDDEN] = Ico_RED,
+      [HidVis_VISIBL] = Ico_GREEN,
      };
    static void (*Ico_PutIcon[HidVis_NUM_HIDDEN_VISIBLE]) (const char *Icon,
 							  Ico_Color_t Color,
 							  const char *Title) =
      {
-      [HidVis_HIDDEN ] = Ico_PutIconOff,
-      [HidVis_VISIBLE] = Ico_PutIconOn,
+      [HidVis_HIDDEN] = Ico_PutIconOff,
+      [HidVis_VISIBL] = Ico_PutIconOn,
      };
    TstVis_Visibility_t Visibility;
    HidVis_HiddenOrVisible_t ItemHiddenOrVisible;
@@ -73,7 +73,7 @@ void TstVis_ShowVisibilityIcons (unsigned SelectedVisibility,
 	Visibility <= (TstVis_Visibility_t) (TstVis_NUM_ITEMS_VISIBILITY - 1);
 	Visibility++)
      {
-      ItemHiddenOrVisible = (SelectedVisibility & (1 << Visibility)) ? HidVis_VISIBLE :
+      ItemHiddenOrVisible = (SelectedVisibility & (1 << Visibility)) ? HidVis_VISIBL :
 								       HidVis_HIDDEN;
       if (asprintf (&Title,"%s: %s",
 		    Txt_TST_STR_VISIBILITY[Visibility],

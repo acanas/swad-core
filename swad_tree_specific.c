@@ -110,7 +110,7 @@ void TreSpc_ResetItem (struct Tre_Node *Node)
    /***** Reset common fields of specific item *****/
    Node->Item.Cod = -1L;
    Node->Item.Ind = 0;
-   Node->Item.Hidden = HidVis_VISIBLE;
+   Node->Item.Hidden = HidVis_VISIBL;
 
    /***** Reset specific fields of specific item *****/
    if (ResetSpcFields[Node->InfoType])
@@ -614,26 +614,26 @@ static void TreSpc_PutFormsToEditItem (struct Tre_Node *Node,
      };
    static Act_Action_t ActionHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_UNKNOWN_TYPE	][HidVis_VISIBLE] = ActUnk,
-      [Inf_INFORMATION	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_INFORMATION	][HidVis_VISIBLE] = ActUnk,
-      [Inf_PROGRAM	][HidVis_HIDDEN ] = ActUnhPrgRsc,	// Hidden ==> action to unhide
-      [Inf_PROGRAM	][HidVis_VISIBLE] = ActHidPrgRsc,	// Visible ==> action to hide
-      [Inf_TEACH_GUIDE	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_TEACH_GUIDE	][HidVis_VISIBLE] = ActUnk,
-      [Inf_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_SYLLABUS_LEC	][HidVis_VISIBLE] = ActUnk,
-      [Inf_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_SYLLABUS_PRA	][HidVis_VISIBLE] = ActUnk,
-      [Inf_BIBLIOGRAPHY	][HidVis_HIDDEN ] = ActUnhBibRef,	// Hidden ==> action to unhide
-      [Inf_BIBLIOGRAPHY	][HidVis_VISIBLE] = ActHidBibRef,	// Visible ==> action to hide
-      [Inf_FAQ		][HidVis_HIDDEN ] = ActUnhFAQQaA,	// Hidden ==> action to unhide
-      [Inf_FAQ		][HidVis_VISIBLE] = ActHidFAQQaA,	// Visible ==> action to hide
-      [Inf_LINKS	][HidVis_HIDDEN ] = ActUnhCrsLnk,	// Hidden ==> action to unhide
-      [Inf_LINKS	][HidVis_VISIBLE] = ActHidCrsLnk,	// Visible ==> action to hide
-      [Inf_ASSESSMENT	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_ASSESSMENT	][HidVis_VISIBLE] = ActUnk,
+      [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN] = ActUnk,
+      [Inf_UNKNOWN_TYPE	][HidVis_VISIBL] = ActUnk,
+      [Inf_INFORMATION	][HidVis_HIDDEN] = ActUnk,
+      [Inf_INFORMATION	][HidVis_VISIBL] = ActUnk,
+      [Inf_PROGRAM	][HidVis_HIDDEN] = ActUnhPrgRsc,	// Hidden ==> action to unhide
+      [Inf_PROGRAM	][HidVis_VISIBL] = ActHidPrgRsc,	// Visible ==> action to hide
+      [Inf_TEACH_GUIDE	][HidVis_HIDDEN] = ActUnk,
+      [Inf_TEACH_GUIDE	][HidVis_VISIBL] = ActUnk,
+      [Inf_SYLLABUS_LEC	][HidVis_HIDDEN] = ActUnk,
+      [Inf_SYLLABUS_LEC	][HidVis_VISIBL] = ActUnk,
+      [Inf_SYLLABUS_PRA	][HidVis_HIDDEN] = ActUnk,
+      [Inf_SYLLABUS_PRA	][HidVis_VISIBL] = ActUnk,
+      [Inf_BIBLIOGRAPHY	][HidVis_HIDDEN] = ActUnhBibRef,	// Hidden ==> action to unhide
+      [Inf_BIBLIOGRAPHY	][HidVis_VISIBL] = ActHidBibRef,	// Visible ==> action to hide
+      [Inf_FAQ		][HidVis_HIDDEN] = ActUnhFAQQaA,	// Hidden ==> action to unhide
+      [Inf_FAQ		][HidVis_VISIBL] = ActHidFAQQaA,	// Visible ==> action to hide
+      [Inf_LINKS	][HidVis_HIDDEN] = ActUnhCrsLnk,	// Hidden ==> action to unhide
+      [Inf_LINKS	][HidVis_VISIBL] = ActHidCrsLnk,	// Visible ==> action to hide
+      [Inf_ASSESSMENT	][HidVis_HIDDEN] = ActUnk,
+      [Inf_ASSESSMENT	][HidVis_VISIBL] = ActUnk,
      };
    static Act_Action_t ActionsFrmChg[Inf_NUM_TYPES] =
      {

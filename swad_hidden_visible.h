@@ -37,7 +37,7 @@
 typedef enum
   {
    HidVis_HIDDEN  = 0,
-   HidVis_VISIBLE = 1,
+   HidVis_VISIBL = 1,
   } HidVis_HiddenOrVisible_t;
 
 /*****************************************************************************/

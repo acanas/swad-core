@@ -74,12 +74,12 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
 
 struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] =
+   [HidVis_HIDDEN] =
      {
       .Icon  = "eye-slash.svg",
       .Color = Ico_RED
      },
-   [HidVis_VISIBLE] =
+   [HidVis_VISIBL] =
      {
       .Icon = "eye.svg",
       .Color = Ico_GREEN
@@ -88,12 +88,12 @@ struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE] =
 
 struct Ico_IconColor Ico_PrivatePublic[PriPub_NUM_PRIVATE_PUBLIC] =
   {
-   [PriPub_PRIVATE] =
+   [PriPub_PRIVAT] =
      {
       .Icon  = "lock.svg",
       .Color = Ico_RED
      },
-   [PriPub_PUBLIC ] =
+   [PriPub_PUBLIC] =
      {
       .Icon = "unlock.svg",
       .Color = Ico_GREEN
