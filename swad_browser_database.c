@@ -2351,9 +2351,9 @@ void Brw_DB_HideOrUnhideFileOrFolder (Brw_Zone_t Zone,
 /************** Check if a file / folder from is set as hidden ***************/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
-									       Brw_Zone_t Zone,
-									       const char PathInZone[PATH_MAX + 1])
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenUsingPath (MYSQL_RES **mysql_res,
+							Brw_Zone_t Zone,
+							const char PathInZone[PATH_MAX + 1])
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {
@@ -2382,8 +2382,8 @@ HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (M
 /******** Check if a file / folder from the documents zone is hidden *********/
 /*****************************************************************************/
 
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
-								     const struct Brw_File *File)
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenUsingMetadata (Brw_Zone_t Zone,
+							    const struct Brw_File *File)
   {
    static HidVis_HiddenOrVisible_t Hidden[Exi_NUM_EXIST] =
      {

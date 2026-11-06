@@ -330,7 +330,6 @@ void ZIP_CompressFolder (void)
 
 void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File Folder;
    Exi_Exist_t FolderExistsInDB;
 
@@ -344,8 +343,7 @@ void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }

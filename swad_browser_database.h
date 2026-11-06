@@ -119,11 +119,11 @@ unsigned Brw_DB_GetNumFileViewsUsr (long UsrCod);
 void Brw_DB_HideOrUnhideFileOrFolder (Brw_Zone_t Zone,
 				      const char PathInZone[PATH_MAX + 1],
 				      HidVis_HiddenOrVisible_t HiddenOrVisible);
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (MYSQL_RES **mysql_res,
-									       Brw_Zone_t Zone,
-									       const char PathInZone[PATH_MAX + 1]);
-HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (Brw_Zone_t Zone,
-								     const struct Brw_File *File);
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenUsingPath (MYSQL_RES **mysql_res,
+							Brw_Zone_t Zone,
+							const char PathInZone[PATH_MAX + 1]);
+HidVis_HiddenOrVisible_t Brw_DB_CheckIfHiddenUsingMetadata (Brw_Zone_t Zone,
+							    const struct Brw_File *File);
 
 //---------------------------- Expanded folders -------------------------------
 void Brw_DB_InsertFolderInExpandedFolders (Brw_Zone_t Zone,

@@ -207,7 +207,6 @@ void Mrk_ChangeNumRowsFooter (void)
 
 static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
@@ -232,8 +231,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
 
@@ -581,7 +579,6 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 
 void Mrk_ShowMyMarks (void)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
@@ -697,8 +694,7 @@ void Mrk_ShowMyMarks (void)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }

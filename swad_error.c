@@ -614,6 +614,17 @@ void Err_WrongUserExit (void)
 /******** Write error message when no permission to perform an action ********/
 /*****************************************************************************/
 
+void Err_NoFileOrFolderNoLongerExists (void)
+  {
+   extern const char *Txt_The_file_or_folder_no_longer_exists;
+
+   Ale_ShowAlert (Ale_ERROR,Txt_The_file_or_folder_no_longer_exists);
+  }
+
+/*****************************************************************************/
+/******** Write error message when no permission to perform an action ********/
+/*****************************************************************************/
+
 void Err_NoPermission (void)
   {
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
