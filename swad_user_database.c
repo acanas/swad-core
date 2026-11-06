@@ -1498,7 +1498,7 @@ void Usr_DB_InsertMyLastData (void)
 		   Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].HieCod,
 		   Act_GetActCod (Gbl.Action.Act),
 		   (unsigned) Gbl.Usrs.Me.Role.Logged,
-		   (long) (time_t) 0);	// The user never accessed to notifications
+		   1L);	// The user never accessed to notifications (1 because FROM_UNIXTIME(0) returns NULL in MariaDB)
   }
 
 /*****************************************************************************/

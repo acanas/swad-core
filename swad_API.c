@@ -148,6 +148,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_user_database.h"
 #include "swad_www.h"
 #include "swad_xml.h"
+#include <stdlib.h>		// For malloc and other stdlib functions
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

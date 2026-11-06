@@ -42,6 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_room_database.h"
+#include <stdlib.h>		// For malloc and other stdlib functions
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

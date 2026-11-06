@@ -34,6 +34,7 @@
 #include "swad_parameter.h"
 #include "swad_question.h"
 #include "swad_test_print.h"
+#include <stdlib.h>		// For malloc and other stdlib functions
 
 /*****************************************************************************/
 /***************************** Public constants ******************************/

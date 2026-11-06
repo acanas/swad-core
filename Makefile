@@ -125,6 +125,19 @@ LIBS = -lssl -lcrypto -lpthread -lrt -lmysqlclient -lz -L/usr/lib64/mysql -lm -l
 # CFLAGS = -Wall -Wextra -mtune=native -O2 -s
 CFLAGS = -Wall -Wextra -mtune=native -O2
 
+# Local development build (user-space, no root):
+#   make LOCAL_DEV=1
+# Uses swad_config.h LOCAL_DEV block; paths live under LOCAL_DEV_ROOT.
+ifdef LOCAL_DEV
+LOCAL_DEV_ROOT ?= $(CURDIR)/local-dev/root
+LOCAL_DEV_PORT ?= 8000
+GSOAP_PREFIX   ?= $(CURDIR)/local-dev/root/deps/gsoap
+CFLAGS += -DLOCAL_DEV -DLOCAL_DEV_ROOT=\"$(LOCAL_DEV_ROOT)\" \
+          -DLOCAL_DEV_PORT=\"$(LOCAL_DEV_PORT)\" \
+          -I$(GSOAP_PREFIX)/usr/include
+LIBS := -L$(GSOAP_PREFIX)/usr/lib -Wl,-rpath,$(GSOAP_PREFIX)/usr/lib $(LIBS)
+endif
+
 all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt swad_tr
 
 swad_ca: $(OBJS) $(SOAPOBJS) $(SHAOBJS)
