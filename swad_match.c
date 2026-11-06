@@ -199,7 +199,7 @@ static void Mch_ShowMatchTitleStd (const struct Mch_Match *Match);
 
 static void Mch_PutCheckboxResult (const struct Mch_Match *Match);
 static void Mch_PutIfAnswered (const struct Mch_Match *Match,
-			       Mch_AnsAnswered_t Answered);
+			       Mch_AnsAnswered_t Answered,int NumOpt);
 static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
@@ -2355,7 +2355,7 @@ static void Mch_ShowLeftColumnStd (const struct Mch_Match *Match,
 	    break;
 	 default:
 	    /***** Write whether question is answered or not *****/
-	    Mch_PutIfAnswered (Match,Answered);
+	    Mch_PutIfAnswered (Match,Answered,UsrAnswer->NumOpt);
 
 	    if (Match->Status.Playing &&		// Match is being played
 		Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
@@ -2630,9 +2630,10 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 /*****************************************************************************/
 
 static void Mch_PutIfAnswered (const struct Mch_Match *Match,
-			       Mch_AnsAnswered_t Answered)
+			       Mch_AnsAnswered_t Answered,int NumOpt)
   {
    extern const char *Txt_MATCH_QUESTION_Answered;
+   extern const char *Txt_MATCH_QUESTION_AnsweredOption;
    extern const char *Txt_MATCH_QUESTION_Unanswered;
    static struct
      {
@@ -2663,7 +2664,7 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,
 	                             The_GetSuffix ());
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
 	       HTM_NBSP ();
-	       HTM_Txt (Txt_MATCH_QUESTION_Answered);
+	       HTM_TxtF (Txt_MATCH_QUESTION_AnsweredOption,'A' + NumOpt);
 	    HTM_BUTTON_End ();
 
 	 /* End form */
@@ -2676,7 +2677,10 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,
 	    HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
 		      Options[Answered].ClassI,*Options[Answered].Txt);
 	    HTM_NBSP ();
-	    HTM_Txt (*Options[Answered].Txt);
+	    if (Answered == Mch_ANS_ANSWERED)
+	       HTM_TxtF (Txt_MATCH_QUESTION_AnsweredOption,'A' + NumOpt);
+	    else
+	       HTM_Txt (*Options[Answered].Txt);
 	 HTM_DIV_End ();
 	}
 

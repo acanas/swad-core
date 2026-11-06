@@ -35,6 +35,7 @@
 #include "swad_timeline_notification.h"
 #include "swad_timeline_post.h"
 #include "swad_timeline_publication.h"
+#include <stdlib.h>		// For malloc and other stdlib functions
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

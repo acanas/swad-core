@@ -29,6 +29,7 @@
 /*****************************************************************************/
 
 #define LOCALHOST_UBUNTU	// Comment this line if not applicable
+//#define LOCAL_DEV		// Comment this line if not applicable (user-space dev, no root needed)
 //#define OPENSWAD_ORG		// Comment this line if not applicable
 //#define SWAD_UGR_ES		// Comment this line if not applicable
 //#define SWADBERRY_UGR_ES	// Comment this line if not applicable
@@ -40,7 +41,49 @@
 /* IMPORTANT:
    - If one of the following paths does not exist, it should be created during installation!
 */
-#if defined LOCALHOST_UBUNTU			// localhost (Ubuntu) ******************
+#if defined LOCAL_DEV				// Local development *********************
+
+#ifndef LOCAL_DEV_ROOT
+#define LOCAL_DEV_ROOT			"/tmp/swad-dev"			// Root dir for cgi-bin/, www/, private/, db/
+#endif
+#ifndef LOCAL_DEV_PORT
+#define LOCAL_DEV_PORT			"8000"				// TCP port for the local web server
+#endif
+
+#define Cfg_PLATFORM_SHORT_NAME			"SWAD dev"
+#define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
+#define Cfg_PLATFORM_SERVER			"localhost:" LOCAL_DEV_PORT	// Server name (main part of the URL)
+#define Cfg_URL_SWAD_SERVER			"http://localhost:" LOCAL_DEV_PORT "/"		// With ending slash
+#define Cfg_URL_SWAD_CGI			"http://localhost:" LOCAL_DEV_PORT		// Without ending slash
+#define Cfg_URL_SWAD_PUBLIC			"http://localhost:" LOCAL_DEV_PORT "/swad"	// Without ending slash
+#define Cfg_PATH_CGI_BIN			LOCAL_DEV_ROOT "/cgi-bin"	// Directory for this CGI and other commands called by it
+#define Cfg_PATH_SWAD_PUBLIC			LOCAL_DEV_ROOT "/www/swad"	// Main public directory for public SWAD pages, icons, etc.
+#define Cfg_PATH_SWAD_PRIVATE			LOCAL_DEV_ROOT "/private"	// Main private directory for SWAD private data
+
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad64x64.png"			// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_CLASS		"ICO40x40"
+#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad140x40.png"
+#define Cfg_PLATFORM_LOGO_BIG_CLASS		"ICO140x40"
+
+#define Cfg_PLATFORM_RESPONSIBLE_NAME		"Local developer"		// Main responsible for the platform
+#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"dev@localhost"			// Main responsible for the platform
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"localhost"			// SMTP server for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"25"				// SMTP port for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_FROM		"swad@localhost"			// Email address from where automatic emails will be sent
+#define Cfg_DATABASE_HOST			"127.0.0.1"			// Database host
+#define Cfg_DEFAULT_LANGUAGE			Lan_LANGUAGE_EN			// Default language
+#define Cfg_LOG_START_YEAR			2026				// Year when the log started in the database
+
+// Footer of page with info about the institution where this platform is installed
+#define Cfg_ABOUT_NAME				"Fictional University"
+#define Cfg_ABOUT_URL				"http://localhost:"
+#define Cfg_ABOUT_LOGO				"swad32x32.gif"
+#define Cfg_ABOUT_LOGO_WIDTH			32
+#define Cfg_ABOUT_LOGO_HEIGHT			32
+
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all pending notifications are sent by email
+
+#elif defined LOCALHOST_UBUNTU			// localhost (Ubuntu) ******************
 
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD local"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"

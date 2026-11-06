@@ -19576,6 +19576,29 @@ const char *Txt_MATCH_QUESTION_Answered =
 	"Cevapland&inodot;";
 #endif
 
+const char *Txt_MATCH_QUESTION_AnsweredOption =
+#if   L==1	// ca
+	"Respostada l'opci&oacute; %c";
+#elif L==2	// de
+	"Option %c beantwortet";
+#elif L==3	// en
+	"Answered option %c";
+#elif L==4	// es
+	"Opci&oacute;n respondida: %c";
+#elif L==5	// fr
+	"Option %c r&eacute;pondue";
+#elif L==6	// gn
+	"Echa&#225;a opci&#243;n %c";	// Traducci&#243;n aproximada
+#elif L==7	// it
+	"Opzione %c risposta";
+#elif L==8	// pl
+	"Wybrana opcja: %c";
+#elif L==9	// pt
+	"Op&ccedil;&atilde;o respondida: %c";
+#elif L==10	// tr
+	"Cevaplanan se&ccedil;enek: %c";	// &#199;eviri laz&#305;m!
+#endif
+
 const char *Txt_MATCH_QUESTION_Unanswered =
 #if   L==1	// ca
 	"No resposta";
