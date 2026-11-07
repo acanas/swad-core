@@ -1115,6 +1115,39 @@ static Act_Action_t Brw_ActZIPFolder[Brw_NUM_ZONES] =
    [Brw_ADMI_ASS_PRJ] = ActZIPAssPrj,
   };
 
+static Ntf_NotifyEvent_t Brw_NotifyEvents[Brw_NUM_ZONES] =
+  {
+   [Brw_UNKNOWN     ] = Ntf_EVENT_UNKNOWN,
+   [Brw_SHOW_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
+   [Brw_SHOW_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
+   [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
+   [Brw_ADMI_SHR_CRS] = Ntf_EVENT_SHARED_FILE,
+   [Brw_ADMI_SHR_GRP] = Ntf_EVENT_SHARED_FILE,
+   [Brw_ADMI_WRK_USR] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_WRK_CRS] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
+   [Brw_ADMI_BRF_USR] = Ntf_EVENT_UNKNOWN,
+   [Brw_SHOW_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
+   [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
+   [Brw_SHOW_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
+   [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
+   [Brw_ADMI_ASG_USR] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_ASG_CRS] = Ntf_EVENT_UNKNOWN,
+   [Brw_SHOW_DOC_DEG] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_DOC_DEG] = Ntf_EVENT_UNKNOWN,
+   [Brw_SHOW_DOC_CTR] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_DOC_CTR] = Ntf_EVENT_UNKNOWN,
+   [Brw_SHOW_DOC_INS] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_DOC_INS] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_SHR_DEG] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_SHR_CTR] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_SHR_INS] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_TCH_CRS] = Ntf_EVENT_TEACHERS_FILE,
+   [Brw_ADMI_TCH_GRP] = Ntf_EVENT_TEACHERS_FILE,
+   [Brw_ADMI_DOC_PRJ] = Ntf_EVENT_UNKNOWN,
+   [Brw_ADMI_ASS_PRJ] = Ntf_EVENT_UNKNOWN,
+  };
+
 static Usr_Can_t Brw_ICanViewFileOrFolder[HidVis_NUM_HIDDEN_VISIBLE] =
   {
    [HidVis_HIDDEN] = Usr_CAN_NOT,
@@ -3422,8 +3455,8 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
      } PutContextualIconToViewEdit[3] =
      {
       [Brw_ICON_NONE] = {.Func = NULL				,.Actions = NULL			},
-      [Brw_ICON_VIEW] = {.Func = Ico_PutContextualIconToEdit	,.Actions = &Brw_ActFromAdmToSee	},
-      [Brw_ICON_EDIT] = {.Func = Ico_PutContextualIconToView	,.Actions = &Brw_ActFromSeeToAdm	},
+      [Brw_ICON_VIEW] = {.Func = Ico_PutContextualIconToView	,.Actions = &Brw_ActFromAdmToSee	},
+      [Brw_ICON_EDIT] = {.Func = Ico_PutContextualIconToEdit	,.Actions = &Brw_ActFromSeeToAdm	},
      };
    Brw_Zone_t Zone = ((struct Brw_FileBrowser *) FileBrowser)->Zone;
    Brw_WhichFiles_t ParWhichFiles = ((struct Brw_FileBrowser *) FileBrowser)->WhichFiles;
@@ -5964,38 +5997,6 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
    extern const char *Txt_Files_copied;
    extern const char *Txt_Links_copied;
    extern const char *Txt_Folders_copied;
-   static Ntf_NotifyEvent_t NotifyEvents[Brw_NUM_ZONES] =
-     {
-      [Brw_UNKNOWN     ] = Ntf_EVENT_UNKNOWN,
-      [Brw_SHOW_DOC_CRS] = Ntf_EVENT_UNKNOWN,
-      [Brw_SHOW_MRK_CRS] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
-      [Brw_ADMI_SHR_CRS] = Ntf_EVENT_SHARED_FILE,
-      [Brw_ADMI_SHR_GRP] = Ntf_EVENT_SHARED_FILE,
-      [Brw_ADMI_WRK_USR] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_WRK_CRS] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
-      [Brw_ADMI_BRF_USR] = Ntf_EVENT_UNKNOWN,
-      [Brw_SHOW_DOC_GRP] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
-      [Brw_SHOW_MRK_GRP] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
-      [Brw_ADMI_ASG_USR] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_ASG_CRS] = Ntf_EVENT_UNKNOWN,
-      [Brw_SHOW_DOC_DEG] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_DOC_DEG] = Ntf_EVENT_UNKNOWN,
-      [Brw_SHOW_DOC_CTR] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_DOC_CTR] = Ntf_EVENT_UNKNOWN,
-      [Brw_SHOW_DOC_INS] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_DOC_INS] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_SHR_DEG] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_SHR_CTR] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_SHR_INS] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_TCH_CRS] = Ntf_EVENT_TEACHERS_FILE,
-      [Brw_ADMI_TCH_GRP] = Ntf_EVENT_TEACHERS_FILE,
-      [Brw_ADMI_DOC_PRJ] = Ntf_EVENT_UNKNOWN,
-      [Brw_ADMI_ASS_PRJ] = Ntf_EVENT_UNKNOWN,
-     };
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    struct GroupType GrpTyp;
    struct Group Grp;
@@ -6222,9 +6223,10 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     Err_WrongFileZoneExit ();
 
 		  /* Notify only if destination folder is visible */
-		  if (NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
-		     if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&FirstFile) == HidVis_VISIBL)
-			Ntf_StoreNotifyEventsToAllUsrs (NotifyEvents[FileBrowser->Zone],
+		  if (Brw_NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+		     if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
+							    &FirstFile) == HidVis_VISIBL)
+			Ntf_StoreNotifyEventsToAllUsrs (Brw_NotifyEvents[FileBrowser->Zone],
 							FirstFile.FilCod);
 		  }
 	      }
@@ -6611,14 +6613,14 @@ static void Brw_PutFormToCreateAFolder (struct Brw_FileBrowser *FileBrowser,
 static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FileBrowser *FileBrowser,
 						   const char *FileNameToShow)
   {
-   extern const char *Txt_Upload;
+   extern const char *Txt_Upload_files;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
    extern const char *Lan_STR_LANG_ID[1 + Lan_NUM_LANGUAGES];
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"dropzone-upload\"");
-      Box_BoxBegin (Txt_Upload,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Upload_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_new_files_to_the_folder_X,
@@ -6670,12 +6672,12 @@ static void Brw_PutFormToUploadFilesUsingDropzone (struct Brw_FileBrowser *FileB
 static void Brw_PutFormToUploadOneFileClassic (struct Brw_FileBrowser *FileBrowser,
 					       const char *FileNameToShow)
   {
-   extern const char *Txt_Upload;
+   extern const char *Txt_Upload_file;
    extern const char *Txt_or_you_can_upload_a_new_file_to_the_folder_X;
 
    /***** Begin box *****/
    HTM_DIV_Begin ("id=\"classic-upload\" style=\"display:none;\"");
-      Box_BoxBegin (Txt_Upload,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      Box_BoxBegin (Txt_Upload_file,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Help message *****/
 	 Ale_ShowAlert (Ale_INFO,Txt_or_you_can_upload_a_new_file_to_the_folder_X,
@@ -7258,25 +7260,11 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  UploadSucessful = Err_SUCCESS;
 
 					  /* Notify new file */
-					  if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
-										 ParentFolder) == HidVis_VISIBL)
-					     switch (FileBrowser->Zone)
-					       {
-						case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,NewFile.FilCod);
-						   break;
-						case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,NewFile.FilCod);
-						   break;
-						case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE  ,NewFile.FilCod);
-						   break;
-						case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE   ,NewFile.FilCod);
-						   break;
-						default:
-						   break;
-					       }
+					  if (Brw_NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+					     if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
+										    ParentFolder) == HidVis_VISIBL)
+						Ntf_StoreNotifyEventsToAllUsrs (Brw_NotifyEvents[FileBrowser->Zone],
+										NewFile.FilCod);
 					  break;
 				       case Err_ERROR:	// Qupta exceeded
 				       default:
@@ -7454,26 +7442,12 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 				       Ale_ShowAlert (Ale_SUCCESS,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
 						      FileName,ParentFolderNameToShow);
 
-				       /* Notify new file */
-				       if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
-									      &ParentFolder) == HidVis_VISIBL)
-					  switch (FileBrowser->Zone)
-					    {
-					     case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,NewLink.FilCod);
-						break;
-					     case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,NewLink.FilCod);
-						break;
-					     case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE  ,NewLink.FilCod);
-						break;
-					     case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE   ,NewLink.FilCod);
-						break;
-					     default:
-						break;
-					    }
+				       /* Notify new link */
+				       if (Brw_NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+					  if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
+										 &ParentFolder) == HidVis_VISIBL)
+					     Ntf_StoreNotifyEventsToAllUsrs (Brw_NotifyEvents[FileBrowser->Zone],
+									     NewLink.FilCod);
 				       break;
 				    case Err_ERROR:	// Quota exceeded
 				    default:
@@ -8029,25 +8003,9 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 			Box_BoxEnd ();
 
 			/***** Mark possible notifications as seen *****/
-			switch (FileBrowser->Zone)
-			  {
-			   case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-			   case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,File.FilCod);
-			      break;
-			   case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-			   case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,File.FilCod);
-			      break;
-			   default:
-			      break;
-			  }
+			if (Brw_NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+			   Ntf_DB_MarkNotifAsSeenUsingCod (Brw_NotifyEvents[FileBrowser->Zone],
+							   File.FilCod);
 		       }
 
 		     /***** Add paths until file to table of expanded folders *****/
@@ -8057,25 +8015,9 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 		  case Usr_CAN_NOT:
 		  default:
 		     /***** Mark possible notifications about non visible file as removed *****/
-		     switch (FileBrowser->Zone)
-		       {
-			case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
-			   break;
-			case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
-			   break;
-			case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,File.FilCod);
-			   break;
-			case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-			case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,File.FilCod);
-			   break;
-			default:
-			   break;
-		       }
+		     if (Brw_NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+			Ntf_DB_MarkNotifAsRemoved (Brw_NotifyEvents[FileBrowser->Zone],
+						   File.FilCod);
 		     Err_NoPermission ();
 		     break;
 		 }
@@ -8228,25 +8170,9 @@ void Brw_DownloadFile (void)
 			   Brw_GetLinkToDownloadFile (&FileBrowser,&File,URL);
 
 			/***** Mark possible notifications as seen *****/
-			switch (FileBrowser.Zone)
-			  {
-			   case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-			   case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE  ,File.FilCod);
-			      break;
-			   case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-			   case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE   ,File.FilCod);
-			      break;
-			   default:
-			      break;
-			  }
+			if (Brw_NotifyEvents[FileBrowser.Zone] != Ntf_EVENT_UNKNOWN)
+			   Ntf_DB_MarkNotifAsSeenUsingCod (Brw_NotifyEvents[FileBrowser.Zone],
+							   File.FilCod);
 		       }
 
 		     /***** Add paths until file to table of expanded folders *****/
@@ -8265,25 +8191,9 @@ void Brw_DownloadFile (void)
 		  case Usr_CAN_NOT:
 		  default:
 		     /***** Mark possible notifications about non visible file as removed *****/
-		     switch (FileBrowser.Zone)
-		       {
-			case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,FileBrowser.FilCod);
-			   break;
-			case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,FileBrowser.FilCod);
-			   break;
-			case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE  ,FileBrowser.FilCod);
-			   break;
-			case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-			case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE   ,FileBrowser.FilCod);
-			   break;
-			default:
-			   break;
-		       }
+		     if (Brw_NotifyEvents[FileBrowser.Zone] != Ntf_EVENT_UNKNOWN)
+			Ntf_DB_MarkNotifAsRemoved (Brw_NotifyEvents[FileBrowser.Zone],
+						   File.FilCod);
 		     Err_NoPermission ();
 		     break;
 		 }
