@@ -70,7 +70,7 @@ extern const char *Txt_Similar_users;
 extern const char *Txt_Skip_this_step;
 extern const char *Txt_Unfollow;
 extern const char *Txt_Unlock_editing;
-extern const char *Txt_Upload;
+extern const char *Txt_Upload_file;
 extern const char *Txt_Use_this;
 extern const char *Txt_View_results;
 
@@ -98,7 +98,7 @@ static struct
    [Btn_ITS_ME			] = {"BT_CREATE"	,&Txt_Its_me		},
    [Btn_LOCK_EDITING		] = {"BT_REMOVE"	,&Txt_Lock_editing	},
    [Btn_NOT_DUPLICATED		] = {"BT_CONFIRM"	,&Txt_Not_duplicated	},
-   [Btn_PASTE			] = {"BT_CONFIRM"	,&Txt_Paste		},
+   [Btn_PASTE			] = {"BT_CREATE"	,&Txt_Paste		},
    [Btn_REJECT			] = {"BT_REMOVE"	,&Txt_Reject		},
    [Btn_REMOVE			] = {"BT_REMOVE"	,&Txt_Remove		},
    [Btn_RESET			] = {"BT_REMOVE"	,&Txt_Reset		},
@@ -112,7 +112,7 @@ static struct
    [Btn_SKIP_THIS_STEP		] = {"BT_CONFIRM"	,&Txt_Skip_this_step	},
    [Btn_UNFOLLOW		] = {"BT_REMOVE"	,&Txt_Unfollow		},
    [Btn_UNLOCK_EDITING		] = {"BT_CREATE"	,&Txt_Unlock_editing	},
-   [Btn_UPLOAD			] = {"BT_CREATE"	,&Txt_Upload		},
+   [Btn_UPLOAD			] = {"BT_CREATE"	,&Txt_Upload_file	},
    [Btn_USE_THIS		] = {"BT_CONFIRM"	,&Txt_Use_this		},
    [Btn_VIEW_RESULTS		] = {"BT_CONFIRM"	,&Txt_View_results	},
   };

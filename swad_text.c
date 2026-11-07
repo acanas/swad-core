@@ -52276,27 +52276,50 @@ const char *Txt_UPLOAD_FILE_Invalid_name =
 	"Invalid name.";		// Çeviri lazim!
 #endif
 
-const char *Txt_Upload =
+const char *Txt_Upload_file =
 #if   L==1	// ca
-	"Enviar";
+	"Pujar arxiu";
 #elif L==2	// de
-	"Upload";
+	"Datei hochladen";
 #elif L==3	// en
-	"Upload";
+	"Upload file";
 #elif L==4	// es
-	"Enviar";
+	"Subir archivo";
 #elif L==5	// fr
-	"T&eacute;l&eacute;charger";
+	"T&eacute;l&eacute;verser fichier";
 #elif L==6	// gn
-	"Enviar";	// Okoteve traducción
+	"Emboguejy archivo";
 #elif L==7	// it
-	"Caricare";
+	"Carica file";
 #elif L==8	// pl
-	"Przesy&lstrok;anie";
+	"Prze&sacute;lij plik";
 #elif L==9	// pt
-	"Fazer upload";
+	"Carregar ficheiro";
 #elif L==10	// tr
-	"Upload";		// Çeviri lazim!
+	"Dosya y&uuml;kle";
+#endif
+
+const char *Txt_Upload_files =
+#if   L==1	// ca
+	"Pujar arxius";
+#elif L==2	// de
+	"Dateien hochladen";
+#elif L==3	// en
+	"Upload files";
+#elif L==4	// es
+	"Subir archivos";
+#elif L==5	// fr
+	"T&eacute;l&eacute;verser fichiers";
+#elif L==6	// gn
+	"Emboguejy umi archivo";
+#elif L==7	// it
+	"Carica file";
+#elif L==8	// pl
+	"Prze&sacute;lij pliki";
+#elif L==9	// pt
+	"Carregar ficheiros";
+#elif L==10	// tr
+	"Dosya y&uuml;kle";
 #endif
 
 const char *Txt_Upload_my_picture =
