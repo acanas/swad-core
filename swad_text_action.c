@@ -13542,25 +13542,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolDocPrj] =
 #if   L==1	// ca
-	"Remove empty folder from documents zone of a project"			// Necessita traducció
+	"Remove folder from documents zone of a project"	// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from documents zone of a project"			// Need Übersetzung
+	"Remove folder from documents zone of a project"	// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from documents zone of a project"
+	"Remove folder from documents zone of a project"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de un proyecto"
+	"Eliminar carpeta de zona de documentos de un proyecto"
 #elif L==5	// fr
-	"Remove empty folder from documents zone of a project"			// Besoin de traduction
+	"Remove folder from documents zone of a project"	// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de un proyecto"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de un proyecto"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from documents zone of a project"			// Bisogno di traduzione
+	"Remove folder from documents zone of a project"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from documents zone of a project"			// Potrzebujesz tlumaczenie
+	"Remove folder from documents zone of a project"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from documents zone of a project"			// Precisa de tradução
+	"Remove folder from documents zone of a project"	// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from documents zone of a project"			// Çeviri lazim!
+	"Remove folder from documents zone of a project"	// Çeviri lazim!
 #endif
 	,
 	[ActCopDocPrj] =
@@ -14002,25 +14002,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolAssPrj] =
 #if   L==1	// ca
-	"Remove empty folder from assessment zone of a project"				// Necessita traducció
+	"Remove folder from assessment zone of a project"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from assessment zone of a project"				// Need Übersetzung
+	"Remove folder from assessment zone of a project"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from assessment zone of a project"
+	"Remove folder from assessment zone of a project"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de evaluaci&oacute;n de un proyecto"
+	"Eliminar carpeta de zona de evaluaci&oacute;n de un proyecto"
 #elif L==5	// fr
-	"Remove empty folder from assessment zone of a project"				// Besoin de traduction
+	"Remove folder from assessment zone of a project"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
+	"Eliminar carpeta de zona de evaluaci&oacute;n de un proyecto"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from assessment zone of a project"				// Bisogno di traduzione
+	"Remove folder from assessment zone of a project"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from assessment zone of a project"				// Potrzebujesz tlumaczenie
+	"Remove folder from assessment zone of a project"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from assessment zone of a project"				// Precisa de tradução
+	"Remove folder from assessment zone of a project"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from assessment zone of a project"				// Çeviri lazim!
+	"Remove folder from assessment zone of a project"		// Çeviri lazim!
 #endif
 	,
 	[ActCopAssPrj] =
@@ -18602,25 +18602,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolDocIns] =
 #if   L==1	// ca
-	"Remove empty folder documents zone of institution"				// Necessita traducció
+	"Remove folder documents zone of institution"			// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder documents zone of institution"				// Need Übersetzung
+	"Remove folder documents zone of institution"			// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder documents zone of institution"
+	"Remove folder documents zone of institution"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de instituci&oacute;n"
+	"Eliminar carpeta de zona de documentos de instituci&oacute;n"
 #elif L==5	// fr
-	"Remove empty folder documents zone of institution"				// Besoin de traduction
+	"Remove folder documents zone of institution"			// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de instituci&oacute;n"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder documents zone of institution"				// Bisogno di traduzione
+	"Remove folder documents zone of institution"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder documents zone of institution"				// Potrzebujesz tlumaczenie
+	"Remove folder documents zone of institution"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder documents zone of institution"				// Precisa de tradução
+	"Remove folder documents zone of institution"			// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder documents zone of institution"				// Çeviri lazim!
+	"Remove folder documents zone of institution"			// Çeviri lazim!
 #endif
 	,
 	[ActCopDocIns] =
@@ -19131,25 +19131,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolShaIns] =
 #if   L==1	// ca
-	"Remove empty folder from shared zone of institution"	// Necessita traducció
+	"Remove folder from shared zone of institution"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from shared zone of institution"	// Need Übersetzung
+	"Remove folder from shared zone of institution"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from shared zone of institution"
+	"Remove folder from shared zone of institution"
 #elif L==4	// es
 	"Eliminar carpeta compartida de instituci&oacute;n"
 #elif L==5	// fr
-	"Remove empty folder from shared zone of institution"	// Besoin de traduction
+	"Remove folder from shared zone of institution"		// Besoin de traduction
 #elif L==6	// gn
 	"Eliminar carpeta compartida de instituci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from shared zone of institution"	// Bisogno di traduzione
+	"Remove folder from shared zone of institution"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from shared zone of institution"	// Potrzebujesz tlumaczenie
+	"Remove folder from shared zone of institution"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from shared zone of institution"	// Precisa de tradução
+	"Remove folder from shared zone of institution"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from shared zone of institution"	// Çeviri lazim!
+	"Remove folder from shared zone of institution"		// Çeviri lazim!
 #endif
 	,
 	[ActCopShaIns] =
@@ -19821,25 +19821,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolDocCtr] =
 #if   L==1	// ca
-	"Remove empty folder documents zone of center"			// Necessita traducció
+	"Remove folder documents zone of center"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder documents zone of center"			// Need Übersetzung
+	"Remove folder documents zone of center"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder documents zone of center"
+	"Remove folder documents zone of center"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de centro"
+	"Eliminar carpeta de zona de documentos de centro"
 #elif L==5	// fr
-	"Remove empty folder documents zone of center"			// Besoin de traduction
+	"Remove folder documents zone of center"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de centro"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de centro"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder documents zone of center"			// Bisogno di traduzione
+	"Remove folder documents zone of center"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder documents zone of center"			// Potrzebujesz tlumaczenie
+	"Remove folder documents zone of center"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder documents zone of center"			// Precisa de tradução
+	"Remove folder documents zone of center"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder documents zone of center"			// Çeviri lazim!
+	"Remove folder documents zone of center"		// Çeviri lazim!
 #endif
 	,
 	[ActCopDocCtr] =
@@ -20350,25 +20350,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolShaCtr] =
 #if   L==1	// ca
-	"Remove empty folder from shared zone of center"		// Necessita traducció
+	"Remove folder from shared zone of center"	// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from shared zone of center"		// Need Übersetzung
+	"Remove folder from shared zone of center"	// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from shared zone of center"
+	"Remove folder from shared zone of center"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona compartida de centro"
+	"Eliminar carpeta de zona compartida de centro"
 #elif L==5	// fr
-	"Remove empty folder from shared zone of center"		// Besoin de traduction
+	"Remove folder from shared zone of center"	// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona compartida de centro"	// Okoteve traducción
+	"Eliminar carpeta de zona compartida de centro"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from shared zone of center"		// Bisogno di traduzione
+	"Remove folder from shared zone of center"	// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from shared zone of center"		// Potrzebujesz tlumaczenie
+	"Remove folder from shared zone of center"	// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from shared zone of center"		// Precisa de tradução
+	"Remove folder from shared zone of center"	// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from shared zone of center"		// Çeviri lazim!
+	"Remove folder from shared zone of center"	// Çeviri lazim!
 #endif
 	,
 	[ActCopShaCtr] =
@@ -21040,25 +21040,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolDocDeg] =
 #if   L==1	// ca
-	"Remove empty folder from documents zone of degree"				// Necessita traducció
+	"Remove folder from documents zone of degree"			// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from documents zone of degree"				// Need Übersetzung
+	"Remove folder from documents zone of degree"			// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from documents zone of degree"
+	"Remove folder from documents zone of degree"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de titulaci&oacute;n"
+	"Eliminar carpeta de zona de documentos de titulaci&oacute;n"
 #elif L==5	// fr
-	"Remove empty folder from documents zone of degree"				// Besoin de traduction
+	"Remove folder from documents zone of degree"			// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de titulaci&oacute;n"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from documents zone of degree"				// Bisogno di traduzione
+	"Remove folder from documents zone of degree"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from documents zone of degree"				// Potrzebujesz tlumaczenie
+	"Remove folder from documents zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from documents zone of degree"				// Precisa de tradução
+	"Remove folder from documents zone of degree"			// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from documents zone of degree"				// Çeviri lazim!
+	"Remove folder from documents zone of degree"			// Çeviri lazim!
 #endif
 	,
 	[ActCopDocDeg] =
@@ -21569,25 +21569,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolShaDeg] =
 #if   L==1	// ca
-	"Remove empty folder from shared zone of degree"			// Necessita traducció
+	"Remove folder from shared zone of degree"			// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from shared zone of degree"			// Need Übersetzung
+	"Remove folder from shared zone of degree"			// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from shared zone of degree"
+	"Remove folder from shared zone of degree"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona compartida de titulaci&oacute;n"
+	"Eliminar carpeta de zona compartida de titulaci&oacute;n"
 #elif L==5	// fr
-	"Remove empty folder from shared zone of degree"			// Besoin de traduction
+	"Remove folder from shared zone of degree"			// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona compartida de titulaci&oacute;n"	// Okoteve traducción
+	"Eliminar carpeta de zona compartida de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from shared zone of degree"			// Bisogno di traduzione
+	"Remove folder from shared zone of degree"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from shared zone of degree"			// Potrzebujesz tlumaczenie
+	"Remove folder from shared zone of degree"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from shared zone of degree"			// Precisa de tradução
+	"Remove folder from shared zone of degree"			// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from shared zone of degree"			// Çeviri lazim!
+	"Remove folder from shared zone of degree"			// Çeviri lazim!
 #endif
 	,
 	[ActCopShaDeg] =
@@ -22420,25 +22420,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolDocCrs] =
 #if   L==1	// ca
-	"Remove empty folder from documents zone of course"			// Necessita traducció
+	"Remove folder from documents zone of course"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from documents zone of course"			// Need Übersetzung
+	"Remove folder from documents zone of course"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from documents zone of course"
+	"Remove folder from documents zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de asignatura"
+	"Eliminar carpeta de zona de documentos de asignatura"
 #elif L==5	// fr
-	"Remove empty folder from documents zone of course"			// Besoin de traduction
+	"Remove folder from documents zone of course"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from documents zone of course"			// Bisogno di traduzione
+	"Remove folder from documents zone of course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from documents zone of course"			// Potrzebujesz tlumaczenie
+	"Remove folder from documents zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from documents zone of course"			// Precisa de tradução
+	"Remove folder from documents zone of course"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from documents zone of course"			// Çeviri lazim!
+	"Remove folder from documents zone of course"		// Çeviri lazim!
 #endif
 	,
 	[ActCopDocCrs] =
@@ -22972,25 +22972,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolDocGrp] =
 #if   L==1	// ca
-	"Remove empty folder from documents zone of group"		// Necessita traducció
+	"Remove folder from documents zone of group"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from documents zone of group"		// Need Übersetzung
+	"Remove folder from documents zone of group"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from documents zone of group"
+	"Remove folder from documents zone of group"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de grupo"
+	"Eliminar carpeta de zona de documentos de grupo"
 #elif L==5	// fr
-	"Remove empty folder from documents zone of group"		// Besoin de traduction
+	"Remove folder from documents zone of group"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de grupo"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from documents zone of group"		// Bisogno di traduzione
+	"Remove folder from documents zone of group"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from documents zone of group"		// Potrzebujesz tlumaczenie
+	"Remove folder from documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from documents zone of group"		// Precisa de tradução
+	"Remove folder from documents zone of group"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from documents zone of group"		// Çeviri lazim!
+	"Remove folder from documents zone of group"		// Çeviri lazim!
 #endif
 	,
 	[ActCopDocGrp] =
@@ -23547,25 +23547,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolTchCrs] =
 #if   L==1	// ca
-	"Remove empty folder from teachers' documents zone of course"				// Necessita traducció
+	"Remove folder from teachers' documents zone of course"			// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from teachers' documents zone of course"				// Need Übersetzung
+	"Remove folder from teachers' documents zone of course"			// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from teachers' documents zone of course"
+	"Remove folder from teachers' documents zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de profesores de asignatura"
+	"Eliminar carpeta de zona de documentos de profesores de asignatura"
 #elif L==5	// fr
-	"Remove empty folder from teachers' documents zone of course"				// Besoin de traduction
+	"Remove folder from teachers' documents zone of course"			// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de profesores de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de profesores de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from teachers' documents zone of course"				// Bisogno di traduzione
+	"Remove folder from teachers' documents zone of course"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from teachers' documents zone of course"				// Potrzebujesz tlumaczenie
+	"Remove folder from teachers' documents zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from teachers' documents zone of course"				// Precisa de tradução
+	"Remove folder from teachers' documents zone of course"			// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from teachers' documents zone of course"				// Çeviri lazim!
+	"Remove folder from teachers' documents zone of course"			// Çeviri lazim!
 #endif
 	,
 	[ActCopTchCrs] =
@@ -24030,25 +24030,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolTchGrp] =
 #if   L==1	// ca
-	"Remove empty folder of teachers' documents zone of group"			// Necessita traducció
+	"Remove folder of teachers' documents zone of group"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder of teachers' documents zone of group"			// Need Übersetzung
+	"Remove folder of teachers' documents zone of group"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder of teachers' documents zone of group"
+	"Remove folder of teachers' documents zone of group"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de documentos de profesores de grupo"
+	"Eliminar carpeta de zona de documentos de profesores de grupo"
 #elif L==5	// fr
-	"Remove empty folder of teachers' documents zone of group"			// Besoin de traduction
+	"Remove folder of teachers' documents zone of group"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de documentos de profesores de grupo"	// Okoteve traducción
+	"Eliminar carpeta de zona de documentos de profesores de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder of teachers' documents zone of group"			// Bisogno di traduzione
+	"Remove folder of teachers' documents zone of group"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder of teachers' documents zone of group"			// Potrzebujesz tlumaczenie
+	"Remove folder of teachers' documents zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder of teachers' documents zone of group"			// Precisa de tradução
+	"Remove folder of teachers' documents zone of group"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder of teachers' documents zone of group"			// Çeviri lazim!
+	"Remove folder of teachers' documents zone of group"		// Çeviri lazim!
 #endif
 	,
 	[ActCopTchGrp] =
@@ -24559,25 +24559,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolShaCrs] =
 #if   L==1	// ca
-	"Remove empty folder from shared files zone of course"				// Necessita traducció
+	"Remove folder from shared files zone of course"			// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from shared files zone of course"				// Need Übersetzung
+	"Remove folder from shared files zone of course"			// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from shared files zone of course"
+	"Remove folder from shared files zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de archivos compartidos de asignatura"
+	"Eliminar carpeta de zona de archivos compartidos de asignatura"
 #elif L==5	// fr
-	"Remove empty folder from shared files zone of course"				// Besoin de traduction
+	"Remove folder from shared files zone of course"			// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de archivos compartidos de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de zona de archivos compartidos de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from shared files zone of course"				// Bisogno di traduzione
+	"Remove folder from shared files zone of course"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from shared files zone of course"				// Potrzebujesz tlumaczenie
+	"Remove folder from shared files zone of course"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from shared files zone of course"				// Precisa de tradução
+	"Remove folder from shared files zone of course"			// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from shared files zone of course"				// Çeviri lazim!
+	"Remove folder from shared files zone of course"			// Çeviri lazim!
 #endif
 	,
 	[ActCopShaCrs] =
@@ -24674,25 +24674,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemTreShaCrs] =
 #if   L==1	// ca
-	"Remove non-empty folder from shared files zone of course"			// Necessita traducció
+	"Remove non-empty folder from shared files zone of course"		// Necessita traducció
 #elif L==2	// de
-	"Remove non-empty folder from shared files zone of course"			// Need Übersetzung
+	"Remove non-empty folder from shared files zone of course"		// Need Übersetzung
 #elif L==3	// en
 	"Remove non-empty folder from shared files zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de archivos compartidos de asignatura"
+	"Eliminar carpeta de zona de archivos compartidos de asignatura"
 #elif L==5	// fr
-	"Remove non-empty folder from shared files zone of course"			// Besoin de traduction
+	"Remove non-empty folder from shared files zone of course"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de archivos compartidos de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de zona de archivos compartidos de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove non-empty folder from shared files zone of course"			// Bisogno di traduzione
+	"Remove non-empty folder from shared files zone of course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove non-empty folder from shared files zone of course"			// Potrzebujesz tlumaczenie
+	"Remove non-empty folder from shared files zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove non-empty folder from shared files zone of course"			// Precisa de tradução
+	"Remove non-empty folder from shared files zone of course"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove non-empty folder from shared files zone of course"			// Çeviri lazim!
+	"Remove non-empty folder from shared files zone of course"		// Çeviri lazim!
 #endif
 	,
 	[ActFrmCreShaCrs] =
@@ -25042,25 +25042,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolShaGrp] =
 #if   L==1	// ca
-	"Remove empty folder from shared files zone of group"				// Necessita traducció
+	"Remove folder from shared files zone of group"			// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from shared files zone of group"				// Need Übersetzung
+	"Remove folder from shared files zone of group"			// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from shared files zone of group"
+	"Remove folder from shared files zone of group"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de archivos compartidos de grupo"
+	"Eliminar carpeta de zona de archivos compartidos de grupo"
 #elif L==5	// fr
-	"Remove empty folder from shared files zone of group"				// Besoin de traduction
+	"Remove folder from shared files zone of group"			// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de archivos compartidos de grupo"	// Okoteve traducción
+	"Eliminar carpeta de zona de archivos compartidos de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from shared files zone of group"				// Bisogno di traduzione
+	"Remove folder from shared files zone of group"			// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from shared files zone of group"				// Potrzebujesz tlumaczenie
+	"Remove folder from shared files zone of group"			// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from shared files zone of group"				// Precisa de tradução
+	"Remove folder from shared files zone of group"			// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from shared files zone of group"				// Çeviri lazim!
+	"Remove folder from shared files zone of group"			// Çeviri lazim!
 #endif
 	,
 	[ActCopShaGrp] =
@@ -25525,25 +25525,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolAsgUsr] =
 #if   L==1	// ca
-	"Remove empty folder from user's assignments"			// Necessita traducció
+	"Remove folder from user's assignments"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from user's assignments"			// Need Übersetzung
+	"Remove folder from user's assignments"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from user's assignments"
+	"Remove folder from user's assignments"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de actividades de usuario"
+	"Eliminar carpeta de actividades de usuario"
 #elif L==5	// fr
-	"Remove empty folder from user's assignments"			// Besoin de traduction
+	"Remove folder from user's assignments"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de actividades de usuario"	// Okoteve traducción
+	"Eliminar carpeta de actividades de usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from user's assignments"			// Bisogno di traduzione
+	"Remove folder from user's assignments"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from user's assignments"			// Potrzebujesz tlumaczenie
+	"Remove folder from user's assignments"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from user's assignments"			// Precisa de tradução
+	"Remove folder from user's assignments"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from user's assignments"			// Çeviri lazim!
+	"Remove folder from user's assignments"		// Çeviri lazim!
 #endif
 	,
 	[ActCopAsgUsr] =
@@ -25985,25 +25985,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolWrkUsr] =
 #if   L==1	// ca
-	"Remove empty folder from user's works"			// Necessita traducció
+	"Remove folder from user's works"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from user's works"			// Need Übersetzung
+	"Remove folder from user's works"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from user's works"
+	"Remove folder from user's works"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de trabajos de usuario"
+	"Eliminar carpeta de trabajos de usuario"
 #elif L==5	// fr
-	"Remove empty folder from user's works"			// Besoin de traduction
+	"Remove folder from user's works"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de trabajos de usuario"	// Okoteve traducción
+	"Eliminar carpeta de trabajos de usuario"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from user's works"			// Bisogno di traduzione
+	"Remove folder from user's works"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from user's works"			// Potrzebujesz tlumaczenie
+	"Remove folder from user's works"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from user's works"			// Precisa de tradução
+	"Remove folder from user's works"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from user's works"			// Çeviri lazim!
+	"Remove folder from user's works"		// Çeviri lazim!
 #endif
 	,
 	[ActCopWrkUsr] =
@@ -26514,25 +26514,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolAsgCrs] =
 #if   L==1	// ca
-	"Remove empty folder from assignments zone of course"			// Necessita traducció
+	"Remove folder from assignments zone of course"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from assignments zone of course"			// Need Übersetzung
+	"Remove folder from assignments zone of course"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from assignments zone of course"
+	"Remove folder from assignments zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&acute;a de zona de actividades de asignatura"
+	"Eliminar carpeta de zona de actividades de asignatura"
 #elif L==5	// fr
-	"Remove empty folder from assignments zone of course"			// Besoin de traduction
+	"Remove folder from assignments zone of course"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&acute;a de zona de actividades de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de zona de actividades de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from assignments zone of course"			// Bisogno di traduzione
+	"Remove folder from assignments zone of course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from assignments zone of course"			// Potrzebujesz tlumaczenie
+	"Remove folder from assignments zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from assignments zone of course"			// Precisa de tradução
+	"Remove folder from assignments zone of course"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from assignments zone of course"			// Çeviri lazim!
+	"Remove folder from assignments zone of course"		// Çeviri lazim!
 #endif
 	,
 	[ActCopAsgCrs] =
@@ -26974,25 +26974,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolWrkCrs] =
 #if   L==1	// ca
-	"Remove empty folder from works zone of course"				// Necessita traducció
+	"Remove folder from works zone of course"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from works zone of course"				// Need Übersetzung
+	"Remove folder from works zone of course"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from works zone of course"
+	"Remove folder from works zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de trabajos de asignatura"
+	"Eliminar carpeta de zona de trabajos de asignatura"
 #elif L==5	// fr
-	"Remove empty folder from works zone of course"				// Besoin de traduction
+	"Remove folder from works zone of course"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de trabajos de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de zona de trabajos de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from works zone of course"				// Bisogno di traduzione
+	"Remove folder from works zone of course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from works zone of course"				// Potrzebujesz tlumaczenie
+	"Remove folder from works zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from works zone of course"				// Precisa de tradução
+	"Remove folder from works zone of course"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from works zone of course"				// Çeviri lazim!
+	"Remove folder from works zone of course"		// Çeviri lazim!
 #endif
 	,
 	[ActCopWrkCrs] =
@@ -27779,48 +27779,48 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolMrkCrs] =
 #if   L==1	// ca
-	"Remove empty folder from marks zone of course"			// Necessita traducció
+	"Remove folder from marks zone of course"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from marks zone of course"			// Need Übersetzung
+	"Remove folder from marks zone of course"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from marks zone of course"
+	"Remove folder from marks zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de calificaciones de asignatura"
+	"Eliminar carpeta de calificaciones de asignatura"
 #elif L==5	// fr
-	"Remove empty folder from marks zone of course"			// Besoin de traduction
+	"Remove folder from marks zone of course"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de calificaciones de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de calificaciones de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from marks zone of course"			// Bisogno di traduzione
+	"Remove folder from marks zone of course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from marks zone of course"			// Potrzebujesz tlumaczenie
+	"Remove folder from marks zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from marks zone of course"			// Precisa de tradução
+	"Remove folder from marks zone of course"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from marks zone of course"			// Çeviri lazim!
+	"Remove folder from marks zone of course"		// Çeviri lazim!
 #endif
 	,
 	[ActCopMrkCrs] =
 #if   L==1	// ca
-	"Set source of copy in marks zone of course"			// Necessita traducció
+	"Set source of copy in marks zone of course"		// Necessita traducció
 #elif L==2	// de
-	"Set source of copy in marks zone of course"			// Need Übersetzung
+	"Set source of copy in marks zone of course"		// Need Übersetzung
 #elif L==3	// en
 	"Set source of copy in marks zone of course"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de calificaciones de asignatura"
+	"Eliminar carpeta de calificaciones de asignatura"
 #elif L==5	// fr
-	"Set source of copy in marks zone of course"			// Besoin de traduction
+	"Set source of copy in marks zone of course"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de calificaciones de asignatura"	// Okoteve traducción
+	"Eliminar carpeta de calificaciones de asignatura"	// Okoteve traducción
 #elif L==7	// it
-	"Set source of copy in marks zone of course"			// Bisogno di traduzione
+	"Set source of copy in marks zone of course"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Set source of copy in marks zone of course"			// Potrzebujesz tlumaczenie
+	"Set source of copy in marks zone of course"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Set source of copy in marks zone of course"			// Precisa de tradução
+	"Set source of copy in marks zone of course"		// Precisa de tradução
 #elif L==10	// tr
-	"Set source of copy in marks zone of course"			// Çeviri lazim!
+	"Set source of copy in marks zone of course"		// Çeviri lazim!
 #endif
 	,
 	[ActPasMrkCrs] =
@@ -28354,25 +28354,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolMrkGrp] =
 #if   L==1	// ca
-	"Remove empty folder from marks zone of group"				// Necessita traducció
+	"Remove folder from marks zone of group"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from marks zone of group"				// Need Übersetzung
+	"Remove folder from marks zone of group"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from marks zone of group"
+	"Remove folder from marks zone of group"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de zona de calificaciones de grupo"
+	"Eliminar carpeta de zona de calificaciones de grupo"
 #elif L==5	// fr
-	"Remove empty folder from marks zone of group"				// Besoin de traduction
+	"Remove folder from marks zone of group"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de zona de calificaciones de grupo"	// Okoteve traducción
+	"Eliminar carpeta de zona de calificaciones de grupo"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from marks zone of group"				// Bisogno di traduzione
+	"Remove folder from marks zone of group"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from marks zone of group"				// Potrzebujesz tlumaczenie
+	"Remove folder from marks zone of group"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from marks zone of group"				// Precisa de tradução
+	"Remove folder from marks zone of group"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from marks zone of group"				// Çeviri lazim!
+	"Remove folder from marks zone of group"		// Çeviri lazim!
 #endif
 	,
 	[ActCopMrkGrp] =
@@ -28906,25 +28906,25 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	,
 	[ActRemFolBrf] =
 #if   L==1	// ca
-	"Remove empty folder from briefcase"			// Necessita traducció
+	"Remove folder from briefcase"		// Necessita traducció
 #elif L==2	// de
-	"Remove empty folder from briefcase"			// Need Übersetzung
+	"Remove folder from briefcase"		// Need Übersetzung
 #elif L==3	// en
-	"Remove empty folder from briefcase"
+	"Remove folder from briefcase"
 #elif L==4	// es
-	"Eliminar carpeta vac&iacute;a de malet&iacute;n"
+	"Eliminar carpeta de malet&iacute;n"
 #elif L==5	// fr
-	"Remove empty folder from briefcase"			// Besoin de traduction
+	"Remove folder from briefcase"		// Besoin de traduction
 #elif L==6	// gn
-	"Eliminar carpeta vac&iacute;a de malet&iacute;n"	// Okoteve traducción
+	"Eliminar carpeta de malet&iacute;n"	// Okoteve traducción
 #elif L==7	// it
-	"Remove empty folder from briefcase"			// Bisogno di traduzione
+	"Remove folder from briefcase"		// Bisogno di traduzione
 #elif L==8	// pl
-	"Remove empty folder from briefcase"			// Potrzebujesz tlumaczenie
+	"Remove folder from briefcase"		// Potrzebujesz tlumaczenie
 #elif L==9	// pt
-	"Remove empty folder from briefcase"			// Precisa de tradução
+	"Remove folder from briefcase"		// Precisa de tradução
 #elif L==10	// tr
-	"Remove empty folder from briefcase"			// Çeviri lazim!
+	"Remove folder from briefcase"		// Çeviri lazim!
 #endif
 	,
 	[ActCopBrf] =

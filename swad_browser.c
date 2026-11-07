@@ -3414,6 +3414,17 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
       Brw_ICON_VIEW,
       Brw_ICON_EDIT
      } IconViewEdit = Brw_ICON_NONE;
+   static struct
+     {
+      void (*Func) (Act_Action_t NextAction,const char *Anchor,
+                    void (*FuncPars) (const void *Args),const void *Args);
+      Act_Action_t (*Actions)[Brw_NUM_ZONES];
+     } PutContextualIconToViewEdit[3] =
+     {
+      [Brw_ICON_NONE] = {.Func = NULL				,.Actions = NULL			},
+      [Brw_ICON_VIEW] = {.Func = Ico_PutContextualIconToEdit	,.Actions = &Brw_ActFromAdmToSee	},
+      [Brw_ICON_EDIT] = {.Func = Ico_PutContextualIconToView	,.Actions = &Brw_ActFromSeeToAdm	},
+     };
    Brw_Zone_t Zone = ((struct Brw_FileBrowser *) FileBrowser)->Zone;
    Brw_WhichFiles_t ParWhichFiles = ((struct Brw_FileBrowser *) FileBrowser)->WhichFiles;
 
@@ -3465,19 +3476,9 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
      }
 
    /***** Put icon to view / edit file browser *****/
-   switch (IconViewEdit)
-     {
-      case Brw_ICON_NONE:
-	 break;
-      case Brw_ICON_VIEW:
-	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Zone],NULL,
-				      Brw_PutParWhichFiles,&ParWhichFiles);
-	 break;
-      case Brw_ICON_EDIT:
-	 Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Zone],NULL,
-				      Brw_PutParWhichFiles,&ParWhichFiles);
-	 break;
-     }
+   if (IconViewEdit != Brw_ICON_NONE)
+      PutContextualIconToViewEdit[IconViewEdit].Func ((*PutContextualIconToViewEdit[IconViewEdit].Actions)[Zone],NULL,
+						      Brw_PutParWhichFiles,&ParWhichFiles);
 
    /***** Put icon to show clipboard *****/
    Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
@@ -3544,17 +3545,13 @@ static void Brw_UpdateLastAccess (Brw_Zone_t Zone)
    Brw_GetAndUpdateDateLastAccFileBrowser (Zone);
    switch (Zone)
      {
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastDowGrpCod",-1L);
 	 break;
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
+      case Brw_SHOW_DOC_GRP:	case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
@@ -3568,14 +3565,12 @@ static void Brw_UpdateLastAccess (Brw_Zone_t Zone)
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastComGrpCod",Brw_GetGrpCod ());
 	 break;
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
+      case Brw_SHOW_MRK_CRS:	case Brw_ADMI_MRK_CRS:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",-1L);
 	 break;
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_SHOW_MRK_GRP:	case Brw_ADMI_MRK_GRP:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",Brw_GetGrpCod ());
@@ -3646,18 +3641,12 @@ static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBr
    /***** Form to change zone (course and group browsers) *****/
    switch (FileBrowser->Zone)
      {
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:
+      case Brw_SHOW_DOC_GRP:	case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+      case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+      case Brw_SHOW_MRK_CRS:	case Brw_ADMI_MRK_CRS:
+      case Brw_SHOW_MRK_GRP:	case Brw_ADMI_MRK_GRP:
          Brw_FormToChangeCrsGrpZone (FileBrowser);
 	 break;
       default:
@@ -4305,31 +4294,25 @@ static Usr_Can_t Brw_CheckIfCanPasteIn (const struct Brw_FileBrowser *FileBrowse
 static void Brw_PutIconRemove (const struct Brw_FileBrowser *FileBrowser,
 			       Brw_FileType_t FileType)
   {
+   static Act_Action_t (*Actions[Brw_NUM_FILE_TYPES])[Brw_NUM_ZONES] =
+     {
+      [Brw_IS_UNKNOWN] = NULL,
+      [Brw_IS_FILE   ] = &Brw_ActAskRemoveFile,
+      [Brw_IS_LINK   ] = &Brw_ActAskRemoveFile,
+      [Brw_IS_FOLDER ] = &Brw_ActRemoveFolder,
+     };
+
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       switch (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
 	{
 	 case Usr_CAN:
-	    switch (FileType)
-	      {
-	       case Brw_IS_FILE:
-	       case Brw_IS_LINK:
-		  /***** Form to remove a file or link *****/
-		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],
-						 FileBrowser->SectionId,
-						 Brw_PutImplicitParsFileBrowser,
-						 FileBrowser);
-		  break;
-	       case Brw_IS_FOLDER:
-		  /***** Form to remove a folder *****/
-		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],
-						 FileBrowser->SectionId,
-						 Brw_PutImplicitParsFileBrowser,
-						 FileBrowser);
-		  break;
-	       default:
-		  break;
-	      }
+	    if (FileType != Brw_IS_UNKNOWN)
+	       /***** Form to remove file/link/folder *****/
+	       Ico_PutContextualIconToRemove ((*Actions[FileType])[FileBrowser->Zone],
+					      FileBrowser->SectionId,
+					      Brw_PutImplicitParsFileBrowser,
+					      FileBrowser);
 	    break;
 	 case Usr_CAN_NOT:
 	 default:
@@ -5775,40 +5758,30 @@ static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *F
    if (FileBrowser->Clipboard.ZoneDB == Brw_DB_GetZoneDB_brw_clipboards (FileBrowser->Zone))
       switch (FileBrowser->Clipboard.ZoneDB)
         {
-	 case Brw_ADMI_DOC_INS:
-         case Brw_ADMI_SHR_INS:
+	 case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
             // Am I in the institution of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod;
-	 case Brw_ADMI_DOC_CTR:
-         case Brw_ADMI_SHR_CTR:
+	 case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
             // Am I in the center of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-	 case Brw_ADMI_DOC_DEG:
-         case Brw_ADMI_SHR_DEG:
+	 case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
             // Am I in the degree of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-         case Brw_ADMI_DOC_CRS:
-         case Brw_ADMI_TCH_CRS:
-         case Brw_ADMI_SHR_CRS:
-         case Brw_ADMI_MRK_CRS:
-         case Brw_ADMI_ASG_USR:
-         case Brw_ADMI_WRK_USR:
+         case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
+         case Brw_ADMI_SHR_CRS:	case Brw_ADMI_MRK_CRS:
+         case Brw_ADMI_ASG_USR:	case Brw_ADMI_WRK_USR:
             // Am I in the course of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-	 case Brw_ADMI_ASG_CRS:
-	 case Brw_ADMI_WRK_CRS:
+	 case Brw_ADMI_ASG_CRS:	case Brw_ADMI_WRK_CRS:
 	    // Am I in the course of the clipboard and...
 	    // ...am I in the student's works of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod &&
 	           FileBrowser->Clipboard.File.OwnerCod == Gbl.Usrs.Other.UsrDat.UsrCod;
-	 case Brw_ADMI_DOC_GRP:
-	 case Brw_ADMI_TCH_GRP:
-	 case Brw_ADMI_SHR_GRP:
-	 case Brw_ADMI_MRK_GRP:
+	 case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
+	 case Brw_ADMI_SHR_GRP:	case Brw_ADMI_MRK_GRP:
 	    // Am I in the group of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Brw_GetGrpCod ();
-	 case Brw_ADMI_DOC_PRJ:
-	 case Brw_ADMI_ASS_PRJ:
+	 case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	    // Am I in the project of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Prj_GetPrjCod ();
 	 case Brw_ADMI_BRF_USR:
@@ -5827,38 +5800,23 @@ long Brw_GetCodForZone (Brw_Zone_t Zone)
   {
    switch (Zone)
      {
-      case Brw_SHOW_DOC_INS:
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
+      case Brw_SHOW_DOC_INS:	case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
 	 return Gbl.Hierarchy.Node[Hie_INS].HieCod;
-      case Brw_SHOW_DOC_CTR:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
+      case Brw_SHOW_DOC_CTR:	case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
 	 return Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-      case Brw_SHOW_DOC_DEG:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
+      case Brw_SHOW_DOC_DEG:	case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
 	 return Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_WRK_CRS:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_TCH_CRS:	case Brw_ADMI_SHR_CRS:
+      case Brw_SHOW_MRK_CRS:	case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_ASG_USR:	case Brw_ADMI_ASG_CRS:
+      case Brw_ADMI_WRK_USR:	case Brw_ADMI_WRK_CRS:
 	 return Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_SHOW_DOC_GRP:	case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_TCH_GRP:	case Brw_ADMI_SHR_GRP:
+      case Brw_SHOW_MRK_GRP:	case Brw_ADMI_MRK_GRP:
 	 return Brw_GetGrpCod ();
-      case Brw_ADMI_DOC_PRJ:
-      case Brw_ADMI_ASS_PRJ:
+      case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	 return Prj_GetPrjCod ();
       case Brw_ADMI_BRF_USR:
       default:
@@ -6006,6 +5964,38 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
    extern const char *Txt_Files_copied;
    extern const char *Txt_Links_copied;
    extern const char *Txt_Folders_copied;
+   static Ntf_NotifyEvent_t NotifyEvents[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_MRK_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_ADMI_SHR_CRS] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_SHR_GRP] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_WRK_USR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_WRK_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
+      [Brw_ADMI_BRF_USR] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_GRP] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_SHOW_MRK_GRP] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
+      [Brw_ADMI_ASG_USR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_ASG_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_DEG] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_DEG] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_CTR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_CTR] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_INS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_INS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_SHR_DEG] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_SHR_CTR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_SHR_INS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_TCH_CRS] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_TCH_GRP] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_DOC_PRJ] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_ASS_PRJ] = Ntf_EVENT_UNKNOWN,
+     };
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    struct GroupType GrpTyp;
    struct Group Grp;
@@ -6030,8 +6020,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 	 /***** Construct the relative path of the origin file or folder *****/
 	 switch (FileBrowser->Clipboard.ZoneDB)
 	   {
-	    case Brw_ADMI_DOC_INS:
-	    case Brw_ADMI_SHR_INS:
+	    case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
 	       Hie[Hie_INS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
 	         {
@@ -6048,8 +6037,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_CTR:
-	    case Brw_ADMI_SHR_CTR:
+	    case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
 	       Hie[Hie_CTR].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
   	         {
@@ -6066,8 +6054,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_DEG:
-	    case Brw_ADMI_SHR_DEG:
+	    case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
 	       Hie[Hie_DEG].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
   	         {
@@ -6084,10 +6071,8 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_CRS:
-	    case Brw_ADMI_TCH_CRS:
-	    case Brw_ADMI_SHR_CRS:
-	    case Brw_ADMI_MRK_CRS:
+	    case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:	case Brw_ADMI_MRK_CRS:
 	       Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
@@ -6103,10 +6088,8 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_GRP:
-	    case Brw_ADMI_TCH_GRP:
-	    case Brw_ADMI_SHR_GRP:
-	    case Brw_ADMI_MRK_GRP:
+	    case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:	case Brw_ADMI_MRK_GRP:
 	       Grp.GrpCod = FileBrowser->Clipboard.File.HieCod;
 	       Grp_GetGroupDataByCod (&Hie[Hie_CRS].HieCod,&GrpTyp.GrpTypCod,&Grp);
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
@@ -6125,8 +6108,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_ASG_CRS:
-	    case Brw_ADMI_WRK_CRS:
+	    case Brw_ADMI_ASG_CRS:	case Brw_ADMI_WRK_CRS:
 	       Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
@@ -6160,8 +6142,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_ASG_USR:
-	    case Brw_ADMI_WRK_USR:
+	    case Brw_ADMI_ASG_USR:	case Brw_ADMI_WRK_USR:
 	       Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
@@ -6180,8 +6161,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_PRJ:
-	    case Brw_ADMI_ASS_PRJ:
+	    case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	       PrjCod = FileBrowser->Clipboard.File.HieCod;
 	       Hie[Hie_CRS].HieCod = Prj_DB_GetCrsOfPrj (PrjCod);
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
@@ -6242,29 +6222,10 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     Err_WrongFileZoneExit ();
 
 		  /* Notify only if destination folder is visible */
-		  if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
-							 &FirstFile) == HidVis_VISIBL)
-		     switch (FileBrowser->Zone)
-		       {
-			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
-							   FirstFile.FilCod);
-			   break;
-			case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
-							   FirstFile.FilCod);
-			   break;
-			case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
-							   FirstFile.FilCod);
-			   break;
-			case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
-							   FirstFile.FilCod);
-			   break;
-			default:
-			   break;
-		       }
+		  if (NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+		     if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&FirstFile) == HidVis_VISIBL)
+			Ntf_StoreNotifyEventsToAllUsrs (NotifyEvents[FileBrowser->Zone],
+							FirstFile.FilCod);
 		  }
 	      }
 	   }
@@ -6476,10 +6437,10 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 			      Err_ShowErrorAndExit ("Can not create folder.");
 
 			   /* Add entry to the table of files/folders */
-			   FileDst.Metadata.PublisherCod       = Gbl.Usrs.Me.UsrDat.UsrCod;
+			   FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
 			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			   FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
-			   FileDst.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+			   FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
 									     &FileDst);
 			   break;
 			case Err_ERROR:		// Quota exceeded
@@ -6898,11 +6859,11 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 
 			      /* Add entry to the table of files/folders */
 			      NewFolder.Type				= Brw_IS_FOLDER;
-			      NewFolder.Metadata.PublisherCod		= Gbl.Usrs.Me.UsrDat.UsrCod;
-			      NewFolder.Metadata.PrivateOrPublic	= PriPub_PRIVAT;
-			      NewFolder.Metadata.License		= Brw_LICENSE_DEFAULT;
-			      NewFolder.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
-											&NewFolder);
+			      NewFolder.Metadata.PublisherCod	 = Gbl.Usrs.Me.UsrDat.UsrCod;
+			      NewFolder.Metadata.PrivateOrPublic = PriPub_PRIVAT;
+			      NewFolder.Metadata.License	 = Brw_LICENSE_DEFAULT;
+			      NewFolder.FilCod			 = Brw_DB_AddPath (FileBrowser->Zone,
+										   &NewFolder);
 
 			      /* The folder has been created sucessfully */
 			      Brw_GetFileNameToShow (FileBrowser->Zone,
@@ -7272,11 +7233,11 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 												   ParentFolder->Path.InZone);
 
 					  /* Add entry to the table of files/folders */
-					  NewFile.Type            = Brw_IS_FILE;
-					  NewFile.Metadata.PublisherCod 	   = Gbl.Usrs.Me.UsrDat.UsrCod;
+					  NewFile.Type            	   = Brw_IS_FILE;
+					  NewFile.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
 					  NewFile.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 					  NewFile.Metadata.License         = Brw_LICENSE_DEFAULT;
-					  NewFile.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+					  NewFile.FilCod         	   = Brw_DB_AddPath (FileBrowser->Zone,
 											     &NewFile);
 
 					  /* Add a new entry of marks into database */

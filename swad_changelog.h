@@ -641,10 +641,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.32 (2026-11-06)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.32.1 (2026-11-07)"
 #define Chl_CSS_FILE		"swad26.23.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.32.1:  Nov 07, 2026	Code refactoring in file browsers. (349288 lines)
 	Version 26.32:    Nov 06, 2026	Code refactoring in file browsers. (349327 lines)
 	Version 26.31.1:  Nov 06, 2026	Changes in file browsers. (349426 lines)
 	Version 26.31:    Nov 06, 2026	Changes in file browsers. (349399 lines)
