@@ -1418,7 +1418,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis_NUM_HIDDEN_VISIBLE] =
 	"Gizli etkinlikler"
 #endif
 	,
-	// HidVis_VISIBLE
+	// HidVis_VISIBL
 #if   L==1	// ca
 	"Esdeveniments visibles"
 #elif L==2	// de
@@ -13088,29 +13088,6 @@ const char *Txt_Folder_X_and_all_its_contents_removed =	// Warning: it is very i
 	"Diret&oacute;rio <strong>%s</strong> e todo o seu conte&uacute;do removidos.";
 #elif L==10	// tr
 	"Folder <strong>%s</strong> and all its contents removed.";	// Çeviri lazim!
-#endif
-
-const char *Txt_Folder_not_found =
-#if   L==1	// ca
-	"Carpeta no trobada";
-#elif L==2	// de
-	"Verzeichnis nicht gefunden";
-#elif L==3	// en
-	"Folder not found";
-#elif L==4	// es
-	"Carpeta no encontrada";
-#elif L==5	// fr
-	"Dossier introuvable";
-#elif L==6	// gn
-	"Carpeta ndojejuh&uacute;i";
-#elif L==7	// it
-	"Cartella non trovata";
-#elif L==8	// pl
-	"Nie znaleziono folderu";
-#elif L==9	// pt
-	"Diret&oacute;rio n&atilde;o encontrado";
-#elif L==10	// tr
-	"Klas&ouml;r bulunamad&inodot;";
 #endif
 
 const char *Txt_Folder_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -31597,7 +31574,7 @@ const char *Txt_PROJECT_HIDDEN_VISIBL_PROJECTS[HidVis_NUM_HIDDEN_VISIBLE] =
 	"Hidden projects"	// Çeviri lazim!
 #endif
 	,
-	[HidVis_VISIBLE] =
+	[HidVis_VISIBL] =
 #if   L==1	// ca
 	"Projectes visibles"
 #elif L==2	// de
@@ -46178,27 +46155,27 @@ const char *Txt_The_file_is_not_X =	// Warning: it is very important to include 
 	"The file is not <em>%s</em>.";		// Çeviri lazim!
 #endif
 
-const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden =
+const char *Txt_The_file_or_folder_no_longer_exists =
 #if   L==1	// ca
-	"L'arxiu o carpeta ja no existeix o est&agrave; ara ocult.";
+	"L'arxiu o carpeta ja no existeix.";
 #elif L==2	// de
-	"Die Datei oder Ordner existiert nicht mehr oder ist jetzt versteckt.";
+	"Die Datei oder Ordner existiert.";
 #elif L==3	// en
-	"The file or folder no longer exists or is now hidden.";
+	"The file or folder no longer exists.";
 #elif L==4	// es
-	"El archivo o carpeta ya no existe o est&aacute; ahora oculto.";
+	"El archivo o carpeta ya no existe.";
 #elif L==5	// fr
-	"Le fichier ou r&eacute;pertoire n'existe plus ou est maintenant cach&eacute;.";
+	"Le fichier ou r&eacute;pertoire n'existe plus.";
 #elif L==6	// gn
-	"El archivo o carpeta ya no existe o est&aacute; ahora oculto.";	// Okoteve traducción
+	"Pe vore t&eacute;r&atilde; kundaha ndoikov&eacute;ima.";
 #elif L==7	// it
-	"Il file o cartella non esiste pi&ugrave; o &egrave; nascosta.";
+	"Il file o cartella non esiste pi&ugrave;.";
 #elif L==8	// pl
-	"Plik lub folder ju&zdot; nie istnieje lub jest ukryte.";
+	"Plik lub folder ju&zdot; nie istnieje.";
 #elif L==9	// pt
-	"O arquivo ou diret&oacute;rio n&atilde;o existe mais ou est&aacute; escondido.";
+	"O arquivo ou diret&oacute;rio n&atilde;o existe mais.";
 #elif L==10	// tr
-	"The file or folder no longer exists or is now hidden.";		// Çeviri lazim!
+	"Dosya veya klas&ouml;r art&inodot;k mevcut de&gbreve;il.";
 #endif
 
 const char *Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP =	// Warning: it is very important to include %s in the following sentences
@@ -50925,7 +50902,7 @@ const char *Txt_TST_HIDDEN_VISIBLE[HidVis_NUM_HIDDEN_VISIBLE] =
 	"hidden"	// Çeviri lazim!
 #endif
 	,
-	[HidVis_VISIBLE] =
+	[HidVis_VISIBL] =
 #if   L==1	// ca
 	"visible"
 #elif L==2	// de
@@ -54915,75 +54892,6 @@ const char *Txt_You_can_create_a_new_folder_inside_the_folder_X =	// Warning: it
 	" inside the folder <strong>%s</strong>:";	// Çeviri lazim!
 #endif
 
-const char *Txt_You_can_not_create_folders_files_or_links_here =
-#if   L==1	// ca
-	"No podeu crear carpetes, arxius o enlla&ccedil;os aqu&iacute;.";
-#elif L==2	// de
-	"Sie k&ouml;nnen hier keine Ordner, Dateien oder Links erstellen.";
-#elif L==3	// en
-	"You can not create folders, files or links here.";
-#elif L==4	// es
-	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";
-#elif L==5	// fr
-	"Vous ne pouvez pas cr&eacute;er de dossiers, de fichiers ou de liens ici.";
-#elif L==6	// gn
-	"No puede crear carpetas, archivos o enlaces aqu&iacute;.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi creare cartelle, file o linki qui.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz tutaj tworzy&cacute; folder&oacute;w, plik&oacute;w ani link&oacute;w.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode criar pastas, arquivos ou links aqui.";
-#elif L==10	// tr
-	"You can not create folders, files or links here.";		// Çeviri lazim!
-#endif
-
-const char *Txt_You_can_not_create_folders_here =
-#if   L==1	// ca
-	"No podeu crear carpetes aqu&iacute;.";
-#elif L==2	// de
-	"Sie k&ouml;nnen hier keine Ordner erstellen.";
-#elif L==3	// en
-	"You can not create folders here.";
-#elif L==4	// es
-	"No puede crear carpetas aqu&iacute;.";
-#elif L==5	// fr
-	"Vous ne pouvez pas cr&eacute;er de r&eacute;pertoires ici.";
-#elif L==6	// gn
-	"No puede crear carpetas aqu&iacute;.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi creare cartelle qui.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz tutaj tworzy&cacute; folder&oacute;w.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode criar pastas aqui.";
-#elif L==10	// tr
-	"You can not create folders here.";	// Çeviri lazim!
-#endif
-
-const char *Txt_You_can_not_create_links_here =
-#if   L==1	// ca
-	"No podeu crear enlla&ccedil;os aqu&iacute;.";
-#elif L==2	// de
-	"Sie k&ouml;nnen hier keine Links erstellen.";
-#elif L==3	// en
-	"You can not create links here.";
-#elif L==4	// es
-	"No puede crear enlaces aqu&iacute;.";
-#elif L==5	// fr
-	"Vous ne pouvez pas cr&eacute;er de liens ici.";
-#elif L==6	// gn
-	"No puede crear enlaces aqu&iacute;.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi creare linki qui.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz tutaj tworzy&cacute; link&oacute;w..";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode criar links aqui.";
-#elif L==10	// tr
-	"You can not create links here.";	// Çeviri lazim!
-#endif
-
 const char *Txt_You_can_not_delete_your_current_nickname =
 #if   L==1	// ca
 	"No podeu suprimir el sobrenom actual.";
@@ -55109,75 +55017,6 @@ const char *Txt_You_can_not_leave_the_field_empty =
 	"You can not leave the field empty.";		// Çeviri lazim!
 #endif
 
-const char *Txt_You_can_not_paste_file_or_folder_here =
-#if   L==1	// ca
-	"No podeu enganxar un arxiu o una carpeta aqu&iacute;.";
-#elif L==2	// de
-	"Sie k&ouml;nnen hier keine Dateien oder Ordner einf&uuml;gen.";
-#elif L==3	// en
-	"You can not paste file or folder here.";
-#elif L==4	// es
-	"No puede pegar un archivo o carpeta aqu&iacute;.";
-#elif L==5	// fr
-	"Vous ne pouvez pas coller de fichier ou de r&eacute;pertoire ici.";
-#elif L==6	// gn
-	"No puede pegar un archivo o carpeta aqu&iacute;.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi copiare file o cartella qui.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz tutaj wklei&cacute; pliku lub folderu.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode colar arquivos ou pastas aqui.";
-#elif L==10	// tr
-	"You can not paste file or folder here.";		// Çeviri lazim!
-#endif
-
-const char *Txt_You_can_not_remove_this_file_or_link =
-#if   L==1	// ca
-	"No podeu eliminar aquest arxiu o enlla&ccedil;.";
-#elif L==2	// de
-	"Sie k&ouml;nnen diese Datei oder diesen Link nicht entfernen.";
-#elif L==3	// en
-	"You can not remove this file or link.";
-#elif L==4	// es
-	"No puede eliminar este archivo o enlace.";
-#elif L==5	// fr
-	"Vous ne pouvez pas supprimer ce fichier ou ce lien.";
-#elif L==6	// gn
-	"No puede eliminar este archivo o enlace.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi rimuovere questo file o link.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz usun&aogon;&cacute; tego pliku lub linku.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode remover este arquivo ou link.";
-#elif L==10	// tr
-	"You can not remove this file or link.";	// Çeviri lazim!
-#endif
-
-const char *Txt_You_can_not_remove_this_folder =
-#if   L==1	// ca
-	"No podeu eliminar aquesta carpeta.";
-#elif L==2	// de
-	"Sie k&ouml;nnen diesen Ordner nicht entfernen.";
-#elif L==3	// en
-	"You can not remove this folder.";
-#elif L==4	// es
-	"No puede eliminar esta carpeta.";
-#elif L==5	// fr
-	"Vous ne pouvez pas supprimer ce r&eacute;pertoire.";
-#elif L==6	// gn
-	"No puede eliminar esta carpeta.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi rimuovere questa cartella.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz usun&aogon;&cacute; tego folderu.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode remover esta pasta.";
-#elif L==10	// tr
-	"ou can not remove this folder.";	// Çeviri lazim!
-#endif
-
 const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 #if   L==1	// ca
 	"No pots eliminar un pa&iacute;s amb institucions o usuaris.";
@@ -55199,29 +55038,6 @@ const char *Txt_You_can_not_remove_a_country_with_institutions_or_users =
 	"Voc&ecirc; n&atilde;o pode remover um pa&iacute;s com instituciones ou usu&aacute;rios.";
 #elif L==10	// tr
 	"You can not remove a country with institutions or users.";		// Çeviri lazim!
-#endif
-
-const char *Txt_You_can_not_rename_this_folder =
-#if   L==1	// ca
-	"No podeu canviar el nom d'aquesta carpeta.";
-#elif L==2	// de
-	"Sie k&ouml;nnen diesen Ordner nicht umbenennen.";
-#elif L==3	// en
-	"You can not rename this folder.";
-#elif L==4	// es
-	"No puede cambiar el nombre de esta carpeta.";
-#elif L==5	// fr
-	"Vous ne pouvez pas renommer ce r&eacute;pertoire.";
-#elif L==6	// gn
-	"No puede cambiar el nombre de esta carpeta.";	// Okoteve traducción
-#elif L==7	// it
-	"Non puoi rinominare questa cartella.";
-#elif L==8	// pl
-	"Nie mo&zdot;esz zmieni&cacute; nazwy tego folderu.";
-#elif L==9	// pt
-	"Voc&ecirc; n&atilde;o pode renomear esta pasta.";
-#elif L==10	// tr
-	"You can not rename this folder.";		// Çeviri lazim!
 #endif
 
 const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =

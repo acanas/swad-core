@@ -1117,8 +1117,8 @@ static Act_Action_t Brw_ActZIPFolder[Brw_NUM_ZONES] =
 
 static Usr_Can_t Brw_ICanViewFileOrFolder[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = Usr_CAN_NOT,
-   [HidVis_VISIBLE] = Usr_CAN,
+   [HidVis_HIDDEN] = Usr_CAN_NOT,
+   [HidVis_VISIBL] = Usr_CAN,
   };
 
 /*****************************************************************************/
@@ -1154,7 +1154,7 @@ static void Brw_FormToChangeCrsGrpZone (const struct Brw_FileBrowser *FileBrowse
 static Usr_Can_t Brw_CheckIfICanAccessToGrpFilezone (long GrpCod);
 static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat);
 static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser);
-static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser);
+static void Brw_ShowOneFileBrowser (struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_ShowFormToShowAllFiles (const struct Brw_FileBrowser *FileBrowser);
 static void Brw_PutParsWhichFiles (Brw_Zone_t Zone);
@@ -1202,7 +1202,6 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
                                          HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Brw_PutIconHideUnhide (const struct Brw_FileBrowser *FileBrowser,
-				   const char *Anchor,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible);
 static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (struct Brw_FileBrowser *FileBrowser,
 								   unsigned ThisLevel);
@@ -1295,6 +1294,11 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
 							const char NewFileName[NAME_MAX + 1],
 						        const char *MIMEType);
 
+static void Brw_DoActionSetDocAsVisible (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionSetDocAsHidden (struct Brw_FileBrowser *FileBrowser);
+static void Brw_SetDocAs (struct Brw_FileBrowser *FileBrowser,
+		          HidVis_HiddenOrVisible_t HiddenOrVisible);
+
 static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser);
 
 static void Brw_PutIconToGetLinkToFile (const void *FileBrowser);
@@ -1344,6 +1348,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
 //------------------------ Remove old files in briefcase ----------------------
 
+static void Brw_DoActionAskRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
 static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
 static void Brw_RemoveOldFilesInBrowser (struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
@@ -1359,7 +1364,7 @@ static int Brw_RemoveFolderFromDiskAndDB (Brw_Zone_t Zone,
 
 //----------------------- Set and get section for action ----------------------
 
-static Brw_Action_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser);
+static Brw_Action_t Brw_GetActionForThisSection (const struct Brw_FileBrowser *FileBrowser);
 
 //--------------------------------- Statistics --------------------------------
 
@@ -2625,7 +2630,7 @@ void Brw_ShowFileBrowserNormal (struct Brw_FileBrowser *FileBrowser)
    Brw_UpdateLastAccess (FileBrowser->Zone);
 
    /****** Show the file browser *****/
-   Brw_ShowFileBrowser (FileBrowser);
+   Brw_ShowOneFileBrowser (FileBrowser);
 
    /***** Put legal notice *****/
    Brw_PutLegalNotice ();
@@ -2664,7 +2669,7 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
 	       /***** Show the tree with the project documents *****/
 	       FileBrowser->Zone = Brw_ADMI_DOC_PRJ;
 	       Brw_InitializeFileBrowser (FileBrowser);
-	       Brw_ShowFileBrowser (FileBrowser);
+	       Brw_ShowOneFileBrowser (FileBrowser);
 	      }
 
 	    if (Prj_CheckIfICanViewPrjAss (PrjCod) == Usr_CAN)
@@ -2672,7 +2677,7 @@ void Brw_ShowFileBrowserProject (long PrjCod,struct Brw_FileBrowser *FileBrowser
 	       /***** Show the tree with the project assessment *****/
 	       FileBrowser->Zone = Brw_ADMI_ASS_PRJ;
 	       Brw_InitializeFileBrowser (FileBrowser);
-	       Brw_ShowFileBrowser (FileBrowser);
+	       Brw_ShowOneFileBrowser (FileBrowser);
 	      }
 
 	 /***** End box *****/
@@ -2737,12 +2742,12 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 		  /* File browser with the assignments */
 		  FileBrowser->Zone = Brw_ADMI_ASG_CRS;
 		  Brw_InitializeFileBrowser (FileBrowser);
-		  Brw_ShowFileBrowser (FileBrowser);
+		  Brw_ShowOneFileBrowser (FileBrowser);
 
 		  /* File browser with the works */
 		  FileBrowser->Zone = Brw_ADMI_WRK_CRS;
 		  Brw_InitializeFileBrowser (FileBrowser);
-		  Brw_ShowFileBrowser (FileBrowser);
+		  Brw_ShowOneFileBrowser (FileBrowser);
 
 	       HTM_DIV_End ();
 
@@ -2781,12 +2786,12 @@ static void Brw_ShowFileBrowsersAsgWrkUsr (struct Brw_FileBrowser *FileBrowser)
       /***** Show the tree with the assignments *****/
       FileBrowser->Zone = Brw_ADMI_ASG_USR;
       Brw_InitializeFileBrowser (FileBrowser);
-      Brw_ShowFileBrowser (FileBrowser);
+      Brw_ShowOneFileBrowser (FileBrowser);
 
       /***** Show the tree with the works *****/
       FileBrowser->Zone = Brw_ADMI_WRK_USR;
       Brw_InitializeFileBrowser (FileBrowser);
-      Brw_ShowFileBrowser (FileBrowser);
+      Brw_ShowOneFileBrowser (FileBrowser);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3024,59 +3029,52 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 
 void Brw_GetSelectedUsrsAndShowWorks (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
    Usr_GetSelectedUsrsAndGoToAct (&Gbl.Usrs.Selected,
-				  Brw_ShowFileBrowserOrWorksInternal,&FileBrowser,	// when user(s) selected
-                                  Brw_AskEditWorksCrsInternal,NULL);			// when no user selected
+				  Brw_ShowFileBrowserOrWorksInternal,NULL,	// when user(s) selected
+                                  Brw_AskEditWorksCrsInternal,NULL);		// when no user selected
   }
 
 /*****************************************************************************/
-/******************** Show a file browser or users' works  *******************/
+/** Show file browsers (one file browser or a set of several file browsers) **/
 /*****************************************************************************/
 
-void Brw_ShowFileBrowserOrWorks (void)
+void Brw_ShowFileBrowsers (void)
+  {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_NONE);
+  }
+
+static void Brw_ShowFileBrowserOrWorksInternal (__attribute__((unused)) void *Args)
+  {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_NONE);
+  }
+
+void Brw_ShowOneOrMoreFileBrowsers (Brw_Action_t Action)
   {
    struct Brw_FileBrowser FileBrowser;
 
-   Brw_ShowFileBrowserOrWorksInternal (&FileBrowser);
-  }
-
-static void Brw_ShowFileBrowserOrWorksInternal (void *FileBrowser)
-  {
    /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser ((struct Brw_FileBrowser *) FileBrowser);
+   Brw_GetParAndInitFileBrowser (&FileBrowser);
+   Brw_SetSectionForAction (&FileBrowser,Action);
 
-   /***** Show the file browser or works *****/
-   Brw_SetSectionForAction ((struct Brw_FileBrowser *) FileBrowser,Brw_ACT_NONE);
-   Brw_ShowAgainFileBrowserOrWorks ((struct Brw_FileBrowser *) FileBrowser);
-  }
-
-/*****************************************************************************/
-/******************* Show a file browser or users' works  ********************/
-/*****************************************************************************/
-
-void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser)
-  {
    /***** Get my clipboard *****/
-   Brw_GetMyClipboard (FileBrowser);
+   Brw_GetMyClipboard (&FileBrowser);
 
    /***** Show file browsers *****/
-   if (     (Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_USR_ASG_WRK))
-      Brw_ShowFileBrowsersAsgWrkUsr (FileBrowser);
-   else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
-      Brw_ShowFileBrowsersAsgWrkCrs (FileBrowser);
-   else if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_PRJ))
-      Prj_ShowOnePrj (FileBrowser);
+   if (     (Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_USR_ASG_WRK))
+      Brw_ShowFileBrowsersAsgWrkUsr (&FileBrowser);
+   else if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_CRS_ASG_WRK))
+      Brw_ShowFileBrowsersAsgWrkCrs (&FileBrowser);
+   else if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_PRJ))
+      Prj_ShowOnePrj (&FileBrowser);
    else
-      Brw_ShowFileBrowserNormal (FileBrowser);
+      Brw_ShowFileBrowserNormal (&FileBrowser);
   }
 
 /*****************************************************************************/
 /**************************** Show a file browser ****************************/
 /*****************************************************************************/
 
-static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
+static void Brw_ShowOneFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Hlp_FILES_Documents;
    extern const char *Hlp_FILES_Shared;
@@ -3186,10 +3184,15 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_CREATE_LINK		] = Brw_DoActionCreateLink,
       [Brw_ACT_SHOW_FILE_METADATA	] = Brw_DoActionShowFileMetadata,
       [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChgFileMetadata,
+      [Brw_ACT_SET_DOC_VISIBLE		] = Brw_DoActionSetDocAsVisible,
+      [Brw_ACT_SET_DOC_HIDDEN		] = Brw_DoActionSetDocAsHidden,
       [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
       [Brw_ACT_GET_LINK_TO_MRK_FILE	] = BrwRsc_DoActionGetLinkToMrkFil,
       [Brw_ACT_COMPRESS_FOLDER		] = ZIP_DoActionCompressFolder,
-      [Brw_ACT_ASK_REM_OLD_BRIEFCASE	] = Brw_DoActionRemOldFilesBriefcase,
+      [Brw_ACT_CHG_NUM_ROWS_HEADER	] = Mrk_DoActionChangeNumRowsHeader,
+      [Brw_ACT_CHG_NUM_ROWS_FOOTER	] = Mrk_DoActionChangeNumRowsFooter,
+      [Brw_ACT_ASK_REM_OLD_BRIEFCASE	] = Brw_DoActionAskRemOldFilesBriefcase,
+      [Brw_ACT_REM_OLD_BRIEFCASE	] = Brw_DoActionRemOldFilesBriefcase,
      };
    Brw_Action_t Action;
    struct Brw_File RootFolder;
@@ -3237,8 +3240,8 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
          Brw_ShowSettingSelector (FileBrowser);
 
       /***** Do action on file/folder/link and show message *****/
-      Action = Brw_GetIfThisIsTheSectionForAction (FileBrowser);
-      if (Brw_DoAction[Action])
+      Action = Brw_GetActionForThisSection (FileBrowser);
+      if (Action != Brw_ACT_NONE)
          Brw_DoAction[Action] (FileBrowser);
 
       /***** Initialize structure with publisher's data *****/
@@ -3265,7 +3268,7 @@ static void Brw_ShowFileBrowser (struct Brw_FileBrowser *FileBrowser)
 				      "1",	// Row id
 				      &UsrDat,
 				      ConExp_EXPANDED,	// Folder expanded
-				      Brw_ICON_NOTHING) == HidVis_VISIBLE)
+				      Brw_ICON_NOTHING) == HidVis_VISIBL)
 	    Brw_ListDir (FileBrowser,1,"1",
 			 ConExp_EXPANDED,	// Folder expanded
 			 &UsrDat,
@@ -3411,6 +3414,17 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
       Brw_ICON_VIEW,
       Brw_ICON_EDIT
      } IconViewEdit = Brw_ICON_NONE;
+   static struct
+     {
+      void (*Func) (Act_Action_t NextAction,const char *Anchor,
+                    void (*FuncPars) (const void *Args),const void *Args);
+      Act_Action_t (*Actions)[Brw_NUM_ZONES];
+     } PutContextualIconToViewEdit[3] =
+     {
+      [Brw_ICON_NONE] = {.Func = NULL				,.Actions = NULL			},
+      [Brw_ICON_VIEW] = {.Func = Ico_PutContextualIconToEdit	,.Actions = &Brw_ActFromAdmToSee	},
+      [Brw_ICON_EDIT] = {.Func = Ico_PutContextualIconToView	,.Actions = &Brw_ActFromSeeToAdm	},
+     };
    Brw_Zone_t Zone = ((struct Brw_FileBrowser *) FileBrowser)->Zone;
    Brw_WhichFiles_t ParWhichFiles = ((struct Brw_FileBrowser *) FileBrowser)->WhichFiles;
 
@@ -3462,19 +3476,9 @@ static void Brw_PutIconsFileBrowser (const void *FileBrowser)
      }
 
    /***** Put icon to view / edit file browser *****/
-   switch (IconViewEdit)
-     {
-      case Brw_ICON_NONE:
-	 break;
-      case Brw_ICON_VIEW:
-	 Ico_PutContextualIconToView (Brw_ActFromAdmToSee[Zone],NULL,
-				      Brw_PutParWhichFiles,&ParWhichFiles);
-	 break;
-      case Brw_ICON_EDIT:
-	 Ico_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Zone],NULL,
-				      Brw_PutParWhichFiles,&ParWhichFiles);
-	 break;
-     }
+   if (IconViewEdit != Brw_ICON_NONE)
+      PutContextualIconToViewEdit[IconViewEdit].Func ((*PutContextualIconToViewEdit[IconViewEdit].Actions)[Zone],NULL,
+						      Brw_PutParWhichFiles,&ParWhichFiles);
 
    /***** Put icon to show clipboard *****/
    Brw_PutIconToViewClipboard ((struct Brw_FileBrowser *) FileBrowser);
@@ -3541,17 +3545,13 @@ static void Brw_UpdateLastAccess (Brw_Zone_t Zone)
    Brw_GetAndUpdateDateLastAccFileBrowser (Zone);
    switch (Zone)
      {
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastDowGrpCod",-1L);
 	 break;
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
+      case Brw_SHOW_DOC_GRP:	case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
          if (Gbl.Action.Act == ActChgToSeeDocCrs ||
              Gbl.Action.Act == ActChgToAdmDocCrs ||
              Gbl.Action.Act == ActChgToAdmTch)	// Update group of last access to a documents/teachers zone only when user changes zone
@@ -3565,14 +3565,12 @@ static void Brw_UpdateLastAccess (Brw_Zone_t Zone)
          if (Gbl.Action.Act == ActChgToAdmSha) 	// Update group of last access to a shared files zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastComGrpCod",Brw_GetGrpCod ());
 	 break;
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
+      case Brw_SHOW_MRK_CRS:	case Brw_ADMI_MRK_CRS:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",-1L);
 	 break;
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_SHOW_MRK_GRP:	case Brw_ADMI_MRK_GRP:
          if (Gbl.Action.Act == ActChgToSeeMrk ||
              Gbl.Action.Act == ActChgToAdmMrk)	// Update group of last access to a marks zone only when user changes zone
             Set_DB_UpdateGrpMyLastAccZone ("LastAssGrpCod",Brw_GetGrpCod ());
@@ -3643,18 +3641,12 @@ static void Brw_WriteSubtitleOfFileBrowser (const struct Brw_FileBrowser *FileBr
    /***** Form to change zone (course and group browsers) *****/
    switch (FileBrowser->Zone)
      {
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:
+      case Brw_SHOW_DOC_GRP:	case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+      case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+      case Brw_SHOW_MRK_CRS:	case Brw_ADMI_MRK_CRS:
+      case Brw_SHOW_MRK_GRP:	case Brw_ADMI_MRK_GRP:
          Brw_FormToChangeCrsGrpZone (FileBrowser);
 	 break;
       default:
@@ -3681,7 +3673,7 @@ static void Brw_InitHiddenLevels (struct Brw_FileBrowser *FileBrowser)
    for (Level  = 0;
 	Level <= Brw_MAX_DIR_LEVELS;
 	Level++)
-      FileBrowser->HiddenLevels[Level] = HidVis_VISIBLE;
+      FileBrowser->HiddenLevels[Level] = HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -3915,7 +3907,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 		  if (Brw_WriteRowFileBrowser (FileBrowser,&FileOrFolder,
 					       RowId,UsrDat,
 					       FolderContractedOrExpanded,
-					       IconSubtree) == HidVis_VISIBLE)
+					       IconSubtree) == HidVis_VISIBL)
 		     if (FileOrFolder.Level < Brw_MAX_DIR_LEVELS)
 			/* List subtree starting at this this directory */
 			Brw_ListDir (FileBrowser,Level + 1,RowId,
@@ -3966,27 +3958,27 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
   {
    static const char *ClassTxtOld[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_HID",
-      [HidVis_VISIBLE] = "LST",
+      [HidVis_HIDDEN] = "LST_HID",
+      [HidVis_VISIBL] = "LST",
      };
    static const char *ClassTxtNew[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_REC_HID",
-      [HidVis_VISIBLE] = "LST_REC",
+      [HidVis_HIDDEN] = "LST_REC_HID",
+      [HidVis_VISIBL] = "LST_REC",
      };
    static const char *ClassInputOld[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_EDIT_HID",
-      [HidVis_VISIBLE] = "LST_EDIT",
+      [HidVis_HIDDEN] = "LST_EDIT_HID",
+      [HidVis_VISIBL] = "LST_EDIT",
      };
    static const char *ClassInputNew[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "LST_EDIT_REC_HID",
-      [HidVis_VISIBLE] = "LST_EDIT_REC",
+      [HidVis_HIDDEN] = "LST_EDIT_REC_HID",
+      [HidVis_VISIBL] = "LST_EDIT_REC",
      };
    char *Anchor;
-   HidVis_HiddenOrVisible_t ThisHiddenOrVisible = HidVis_VISIBLE;
-   HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBLE;
+   HidVis_HiddenOrVisible_t ThisHiddenOrVisible = HidVis_VISIBL;
+   HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBL;
    PriPub_PrivateOrPublic_t RowPublicOrPrivate;
    Brw_BelongToClipboard_t RowBelongToClipboard = Brw_DONT_BELONG_TO_CLIPBOARD;
    bool IsOld = true;
@@ -4021,7 +4013,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	    FileBrowser->HiddenLevels[FileOrFolder->Level] = ThisHiddenOrVisible;
 	 switch (ThisHiddenOrVisible)
 	   {
-	    case HidVis_VISIBLE:	// this row is not marked as hidden
+	    case HidVis_VISIBL:	// this row is not marked as hidden
                ThisOrAncestorHiddenOrVisible = Brw_CheckIfAnyHigherLevelIsHidden (FileBrowser,
         									  FileOrFolder->Level);
 	       break;
@@ -4037,7 +4029,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
      {
       /* Add entry to the table of files/folders */
       FileOrFolder->Metadata.PublisherCod    = -1L;
-      FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVATE;
+      FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
       FileOrFolder->Metadata.License         = Brw_LICENSE_DEFAULT;
       FileOrFolder->FilCod         	     = Brw_DB_AddPath (FileBrowser->Zone,
 							       FileOrFolder);
@@ -4052,7 +4044,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 												   FileOrFolder->Path.InZone) :
 								 FileOrFolder->Metadata.PrivateOrPublic;
       if (FileBrowser->OnlyPublicFiles &&
-	  RowPublicOrPrivate == PriPub_PRIVATE)
+	  RowPublicOrPrivate == PriPub_PRIVAT)
          return HidVis_HIDDEN;
      }
 
@@ -4169,7 +4161,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	    /* Put icon to hide/unhide file or folder */
 	    if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_DOC |
 						    Brw_IS_ADM_MRK)))
-	       Brw_PutIconHideUnhide (FileBrowser,Anchor,ThisHiddenOrVisible);
+	       Brw_PutIconHideUnhide (FileBrowser,ThisHiddenOrVisible);
 
 	    /***** File or folder icon *****/
 	    switch (FileOrFolder->Type)
@@ -4249,7 +4241,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
        (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 					   Brw_IS_SEE_MRK)))
       return HidVis_HIDDEN;
-   return HidVis_VISIBLE;
+   return HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -4302,31 +4294,25 @@ static Usr_Can_t Brw_CheckIfCanPasteIn (const struct Brw_FileBrowser *FileBrowse
 static void Brw_PutIconRemove (const struct Brw_FileBrowser *FileBrowser,
 			       Brw_FileType_t FileType)
   {
+   static Act_Action_t (*Actions[Brw_NUM_FILE_TYPES])[Brw_NUM_ZONES] =
+     {
+      [Brw_IS_UNKNOWN] = NULL,
+      [Brw_IS_FILE   ] = &Brw_ActAskRemoveFile,
+      [Brw_IS_LINK   ] = &Brw_ActAskRemoveFile,
+      [Brw_IS_FOLDER ] = &Brw_ActRemoveFolder,
+     };
+
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
 
       switch (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
 	{
 	 case Usr_CAN:
-	    switch (FileType)
-	      {
-	       case Brw_IS_FILE:
-	       case Brw_IS_LINK:
-		  /***** Form to remove a file or link *****/
-		  Ico_PutContextualIconToRemove (Brw_ActAskRemoveFile[FileBrowser->Zone],
-						 FileBrowser->SectionId,
-						 Brw_PutImplicitParsFileBrowser,
-						 FileBrowser);
-		  break;
-	       case Brw_IS_FOLDER:
-		  /***** Form to remove a folder *****/
-		  Ico_PutContextualIconToRemove (Brw_ActRemoveFolder[FileBrowser->Zone],
-						 FileBrowser->SectionId,
-						 Brw_PutImplicitParsFileBrowser,
-						 FileBrowser);
-		  break;
-	       default:
-		  break;
-	      }
+	    if (FileType != Brw_IS_UNKNOWN)
+	       /***** Form to remove file/link/folder *****/
+	       Ico_PutContextualIconToRemove ((*Actions[FileType])[FileBrowser->Zone],
+					      FileBrowser->SectionId,
+					      Brw_PutImplicitParsFileBrowser,
+					      FileBrowser);
 	    break;
 	 case Usr_CAN_NOT:
 	 default:
@@ -4407,7 +4393,7 @@ static void Brw_IndentAndWriteIconExpandContract (const struct Brw_FileBrowser *
 		  case Brw_ICON_EXPAND:
 		     /***** Visible icon to expand folder *****/
 		     Brw_PutIconToExpandFolder (FileBrowser,FileBrowserId,RowId,
-						HidVis_VISIBLE);
+						HidVis_VISIBL);
 
 		     /***** Hidden icon to contract folder *****/
 		     Brw_PutIconToContractFolder (FileBrowser,FileBrowserId,RowId,
@@ -4420,7 +4406,7 @@ static void Brw_IndentAndWriteIconExpandContract (const struct Brw_FileBrowser *
 
 		     /***** Visible icon to contract folder *****/
 		     Brw_PutIconToContractFolder (FileBrowser,FileBrowserId,RowId,
-						  HidVis_VISIBLE);
+						  HidVis_VISIBL);
 		     break;
 		 }
 	    HTM_TD_End ();
@@ -4461,7 +4447,7 @@ static void Brw_PutIconToExpandFolder (const struct Brw_FileBrowser *FileBrowser
    /***** Begin container *****/
    switch (HiddenOrVisible)
      {
-      case HidVis_VISIBLE:
+      case HidVis_VISIBL:
 	 HTM_DIV_Begin ("id=\"expand_%s_%s\"",FileBrowserId,RowId);
 	 break;
       case HidVis_HIDDEN:
@@ -4499,7 +4485,7 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
    /***** Begin container *****/
    switch (HiddenOrVisible)
      {
-      case HidVis_VISIBLE:
+      case HidVis_VISIBL:
 	 HTM_DIV_Begin ("id=\"contract_%s_%s\"",
 			FileBrowserId,RowId);
 	 break;
@@ -4531,44 +4517,73 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
 /*****************************************************************************/
 
 static void Brw_PutIconHideUnhide (const struct Brw_FileBrowser *FileBrowser,
-				   const char *Anchor,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    static Act_Action_t Brw_ActHideUnhide[Brw_NUM_ZONES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Brw_UNKNOWN     ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_DOC_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_MRK_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_CRS] = {[HidVis_HIDDEN] = ActUnhDocCrs	,[HidVis_VISIBLE] = ActHidDocCrs	},
-      [Brw_ADMI_SHR_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_SHR_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_WRK_USR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_WRK_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_MRK_CRS] = {[HidVis_HIDDEN] = ActUnhMrkCrs	,[HidVis_VISIBLE] = ActHidMrkCrs	},
-      [Brw_ADMI_BRF_USR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_DOC_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_GRP] = {[HidVis_HIDDEN] = ActUnhDocGrp	,[HidVis_VISIBLE] = ActHidDocGrp	},
-      [Brw_SHOW_MRK_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_MRK_GRP] = {[HidVis_HIDDEN] = ActUnhMrkGrp	,[HidVis_VISIBLE] = ActHidMrkGrp	},
-      [Brw_ADMI_ASG_USR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_ASG_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_SHOW_DOC_DEG] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_DEG] = {[HidVis_HIDDEN] = ActUnhDocDeg	,[HidVis_VISIBLE] = ActHidDocDeg	},
-      [Brw_SHOW_DOC_CTR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_CTR] = {[HidVis_HIDDEN] = ActUnhDocCtr	,[HidVis_VISIBLE] = ActHidDocCtr	},
-      [Brw_SHOW_DOC_INS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_INS] = {[HidVis_HIDDEN] = ActUnhDocIns	,[HidVis_VISIBLE] = ActHidDocIns	},
-      [Brw_ADMI_SHR_DEG] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_SHR_CTR] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_SHR_INS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_TCH_CRS] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_TCH_GRP] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_DOC_PRJ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
-      [Brw_ADMI_ASS_PRJ] = {[HidVis_HIDDEN] = ActUnk		,[HidVis_VISIBLE] = ActUnk		},
+      [Brw_UNKNOWN     ] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_DOC_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_MRK_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_CRS] = {[HidVis_HIDDEN] = ActUnhDocCrs,
+			    [HidVis_VISIBL] = ActHidDocCrs},
+      [Brw_ADMI_SHR_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_SHR_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_WRK_USR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_WRK_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_MRK_CRS] = {[HidVis_HIDDEN] = ActUnhMrkCrs,
+			    [HidVis_VISIBL] = ActHidMrkCrs},
+      [Brw_ADMI_BRF_USR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_DOC_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_GRP] = {[HidVis_HIDDEN] = ActUnhDocGrp,
+			    [HidVis_VISIBL] = ActHidDocGrp},
+      [Brw_SHOW_MRK_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_MRK_GRP] = {[HidVis_HIDDEN] = ActUnhMrkGrp,
+			    [HidVis_VISIBL] = ActHidMrkGrp},
+      [Brw_ADMI_ASG_USR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_ASG_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_SHOW_DOC_DEG] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_DEG] = {[HidVis_HIDDEN] = ActUnhDocDeg,
+			    [HidVis_VISIBL] = ActHidDocDeg},
+      [Brw_SHOW_DOC_CTR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_CTR] = {[HidVis_HIDDEN] = ActUnhDocCtr,
+			    [HidVis_VISIBL] = ActHidDocCtr},
+      [Brw_SHOW_DOC_INS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_INS] = {[HidVis_HIDDEN] = ActUnhDocIns,
+			    [HidVis_VISIBL] = ActHidDocIns},
+      [Brw_ADMI_SHR_DEG] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_SHR_CTR] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_SHR_INS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_TCH_CRS] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_TCH_GRP] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_DOC_PRJ] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
+      [Brw_ADMI_ASS_PRJ] = {[HidVis_HIDDEN] = ActUnk,
+			    [HidVis_VISIBL] = ActUnk},
      };
 
    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
-      Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[FileBrowser->Zone],Anchor,
+      Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[FileBrowser->Zone],
+					 FileBrowser->SectionId,
 					 Brw_PutImplicitParsFileBrowser,FileBrowser,
 					 HiddenOrVisible);
    HTM_TD_End ();
@@ -4589,7 +4604,7 @@ static HidVis_HiddenOrVisible_t Brw_CheckIfAnyHigherLevelIsHidden (struct Brw_Fi
       if (FileBrowser->HiddenLevels[Level] == HidVis_HIDDEN)
          return HidVis_HIDDEN;
 
-   return HidVis_VISIBLE;	// None is hidden. All are visible.
+   return HidVis_VISIBL;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
@@ -4612,11 +4627,11 @@ static void Brw_PutIconFolder (const struct Brw_FileBrowser *FileBrowser,
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Brw_NUM_ICON_EXPAND_CONTRACT][CloOpe_NUM_CLOSED_OPEN] =
      {
       [Brw_ICON_NOTHING ][CloOpe_CLOSED] = HidVis_HIDDEN,
-      [Brw_ICON_NOTHING ][CloOpe_OPEN  ] = HidVis_VISIBLE,
-      [Brw_ICON_EXPAND  ][CloOpe_CLOSED] = HidVis_VISIBLE,
+      [Brw_ICON_NOTHING ][CloOpe_OPEN  ] = HidVis_VISIBL,
+      [Brw_ICON_EXPAND  ][CloOpe_CLOSED] = HidVis_VISIBL,
       [Brw_ICON_EXPAND  ][CloOpe_OPEN  ] = HidVis_HIDDEN,
       [Brw_ICON_CONTRACT][CloOpe_CLOSED] = HidVis_HIDDEN,
-      [Brw_ICON_CONTRACT][CloOpe_OPEN  ] = HidVis_VISIBLE,
+      [Brw_ICON_CONTRACT][CloOpe_OPEN  ] = HidVis_VISIBL,
      };
    Usr_Can_t ICanCreateIntoFolder = Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,
 								     File);
@@ -5033,21 +5048,12 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 
 void Brw_ReqRemFile (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_FILE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_FILE);
   }
 
 static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
-   extern const char *Txt_You_can_not_remove_this_file_or_link;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
    char FileNameToShow[NAME_MAX + 1];
@@ -5071,14 +5077,13 @@ static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_file_or_link);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5089,21 +5094,12 @@ static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_RemFile (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_FILE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_FILE);
   }
 
 static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_FILE_X_removed;
-   extern const char *Txt_You_can_not_remove_this_file_or_link;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
    char FileNameToShow[NAME_MAX + 1];
@@ -5140,14 +5136,13 @@ static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_file_or_link);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5158,22 +5153,12 @@ static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_TryRemFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_FOLDER);
   }
 
 static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Folder_X_removed;
-   extern const char *Txt_Folder_not_found;
-   extern const char *Txt_You_can_not_remove_this_folder;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File Folder;
    Exi_Exist_t FolderExistsInDB;
    struct stat FileStatus;
@@ -5196,7 +5181,7 @@ static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
 			Brw_AskConfirmRemoveFolderNotEmpty (FileBrowser,
 							    Folder.Path.Name);
 		     else			// The directory is empty
-			Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_folder);
+			Err_NoPermission ();
 		    }
 		  else
 		    {
@@ -5207,18 +5192,17 @@ static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
 		     Ale_ShowAlert (Ale_SUCCESS,Txt_Folder_X_removed,Folder.Path.Name);
 		    }
 	       else		// Folder not found
-		  Ale_ShowAlert (Ale_WARNING,Txt_Folder_not_found);
+	          Err_NoPermission ();
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_folder);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5245,14 +5229,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrow
 
 void Brw_RemFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_NON_EMPTY_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_NON_EMPTY_FOLDER);
   }
 
 /*****************************************************************************/
@@ -5262,8 +5239,6 @@ void Brw_RemFolder (void)
 static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
-   extern const char *Txt_You_can_not_remove_this_folder;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File Folder;
    Exi_Exist_t FolderExistsInDB;
 
@@ -5296,14 +5271,13 @@ static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_remove_this_folder);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5356,19 +5330,11 @@ void Brw_ContractFolder (void)
 
 void Brw_Copy (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COPY);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_COPY);
   }
 
 static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
 
@@ -5403,8 +5369,7 @@ static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5716,9 +5681,12 @@ static void Brw_PutIconsClipboard (const void *FileBrowser)
 
 static void Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (struct Brw_FileBrowser *FileBrowser)
   {
+   /***** Remove affected clipboards *****/
    Brw_DB_RemoveAffectedClipboards (FileBrowser->Zone,
 				    Gbl.Usrs.Me.UsrDat.UsrCod,
 				    Gbl.Usrs.Other.UsrDat.UsrCod);
+
+   /***** Update my clipboard *****/
    Brw_GetMyClipboard (FileBrowser);
   }
 
@@ -5790,40 +5758,30 @@ static bool Brw_CheckIfClipboardIsInCurrentZone (const struct Brw_FileBrowser *F
    if (FileBrowser->Clipboard.ZoneDB == Brw_DB_GetZoneDB_brw_clipboards (FileBrowser->Zone))
       switch (FileBrowser->Clipboard.ZoneDB)
         {
-	 case Brw_ADMI_DOC_INS:
-         case Brw_ADMI_SHR_INS:
+	 case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
             // Am I in the institution of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod;
-	 case Brw_ADMI_DOC_CTR:
-         case Brw_ADMI_SHR_CTR:
+	 case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
             // Am I in the center of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-	 case Brw_ADMI_DOC_DEG:
-         case Brw_ADMI_SHR_DEG:
+	 case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
             // Am I in the degree of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-         case Brw_ADMI_DOC_CRS:
-         case Brw_ADMI_TCH_CRS:
-         case Brw_ADMI_SHR_CRS:
-         case Brw_ADMI_MRK_CRS:
-         case Brw_ADMI_ASG_USR:
-         case Brw_ADMI_WRK_USR:
+         case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
+         case Brw_ADMI_SHR_CRS:	case Brw_ADMI_MRK_CRS:
+         case Brw_ADMI_ASG_USR:	case Brw_ADMI_WRK_USR:
             // Am I in the course of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-	 case Brw_ADMI_ASG_CRS:
-	 case Brw_ADMI_WRK_CRS:
+	 case Brw_ADMI_ASG_CRS:	case Brw_ADMI_WRK_CRS:
 	    // Am I in the course of the clipboard and...
 	    // ...am I in the student's works of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod &&
 	           FileBrowser->Clipboard.File.OwnerCod == Gbl.Usrs.Other.UsrDat.UsrCod;
-	 case Brw_ADMI_DOC_GRP:
-	 case Brw_ADMI_TCH_GRP:
-	 case Brw_ADMI_SHR_GRP:
-	 case Brw_ADMI_MRK_GRP:
+	 case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
+	 case Brw_ADMI_SHR_GRP:	case Brw_ADMI_MRK_GRP:
 	    // Am I in the group of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Brw_GetGrpCod ();
-	 case Brw_ADMI_DOC_PRJ:
-	 case Brw_ADMI_ASS_PRJ:
+	 case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	    // Am I in the project of the clipboard?
             return FileBrowser->Clipboard.File.HieCod == Prj_GetPrjCod ();
 	 case Brw_ADMI_BRF_USR:
@@ -5842,38 +5800,23 @@ long Brw_GetCodForZone (Brw_Zone_t Zone)
   {
    switch (Zone)
      {
-      case Brw_SHOW_DOC_INS:
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
+      case Brw_SHOW_DOC_INS:	case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
 	 return Gbl.Hierarchy.Node[Hie_INS].HieCod;
-      case Brw_SHOW_DOC_CTR:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
+      case Brw_SHOW_DOC_CTR:	case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
 	 return Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-      case Brw_SHOW_DOC_DEG:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
+      case Brw_SHOW_DOC_DEG:	case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
 	 return Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_SHOW_MRK_CRS:
-      case Brw_ADMI_MRK_CRS:
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_ASG_CRS:
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_WRK_CRS:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:
+      case Brw_ADMI_TCH_CRS:	case Brw_ADMI_SHR_CRS:
+      case Brw_SHOW_MRK_CRS:	case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_ASG_USR:	case Brw_ADMI_ASG_CRS:
+      case Brw_ADMI_WRK_USR:	case Brw_ADMI_WRK_CRS:
 	 return Gbl.Hierarchy.Node[Hie_CRS].HieCod;
-      case Brw_SHOW_DOC_GRP:
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_SHOW_MRK_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_SHOW_DOC_GRP:	case Brw_ADMI_DOC_GRP:
+      case Brw_ADMI_TCH_GRP:	case Brw_ADMI_SHR_GRP:
+      case Brw_SHOW_MRK_GRP:	case Brw_ADMI_MRK_GRP:
 	 return Brw_GetGrpCod ();
-      case Brw_ADMI_DOC_PRJ:
-      case Brw_ADMI_ASS_PRJ:
+      case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	 return Prj_GetPrjCod ();
       case Brw_ADMI_BRF_USR:
       default:
@@ -5942,20 +5885,12 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Z
 
 void Brw_Paste (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_PASTE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_PASTE);
   }
 
 static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Nothing_has_been_pasted_because_the_clipboard_is_empty_;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File ParentFolder;
    Exi_Exist_t FolderExistsInDB;
 
@@ -5995,8 +5930,7 @@ static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -6030,7 +5964,38 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
    extern const char *Txt_Files_copied;
    extern const char *Txt_Links_copied;
    extern const char *Txt_Folders_copied;
-   extern const char *Txt_You_can_not_paste_file_or_folder_here;
+   static Ntf_NotifyEvent_t NotifyEvents[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_MRK_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_CRS] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_ADMI_SHR_CRS] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_SHR_GRP] = Ntf_EVENT_SHARED_FILE,
+      [Brw_ADMI_WRK_USR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_WRK_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_MRK_CRS] = Ntf_EVENT_MARKS_FILE,
+      [Brw_ADMI_BRF_USR] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_GRP] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_GRP] = Ntf_EVENT_DOCUMENT_FILE,
+      [Brw_SHOW_MRK_GRP] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_MRK_GRP] = Ntf_EVENT_MARKS_FILE,
+      [Brw_ADMI_ASG_USR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_ASG_CRS] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_DEG] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_DEG] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_CTR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_CTR] = Ntf_EVENT_UNKNOWN,
+      [Brw_SHOW_DOC_INS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_DOC_INS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_SHR_DEG] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_SHR_CTR] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_SHR_INS] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_TCH_CRS] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_TCH_GRP] = Ntf_EVENT_TEACHERS_FILE,
+      [Brw_ADMI_DOC_PRJ] = Ntf_EVENT_UNKNOWN,
+      [Brw_ADMI_ASS_PRJ] = Ntf_EVENT_UNKNOWN,
+     };
    struct Hie_Node Hie[Hie_NUM_LEVELS];
    struct GroupType GrpTyp;
    struct Group Grp;
@@ -6055,8 +6020,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 	 /***** Construct the relative path of the origin file or folder *****/
 	 switch (FileBrowser->Clipboard.ZoneDB)
 	   {
-	    case Brw_ADMI_DOC_INS:
-	    case Brw_ADMI_SHR_INS:
+	    case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
 	       Hie[Hie_INS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_INS] (&Hie[Hie_INS]))
 	         {
@@ -6073,8 +6037,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_CTR:
-	    case Brw_ADMI_SHR_CTR:
+	    case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
 	       Hie[Hie_CTR].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CTR] (&Hie[Hie_CTR]))
   	         {
@@ -6091,8 +6054,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_DEG:
-	    case Brw_ADMI_SHR_DEG:
+	    case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
 	       Hie[Hie_DEG].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_DEG] (&Hie[Hie_DEG]))
   	         {
@@ -6109,10 +6071,8 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_CRS:
-	    case Brw_ADMI_TCH_CRS:
-	    case Brw_ADMI_SHR_CRS:
-	    case Brw_ADMI_MRK_CRS:
+	    case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
+	    case Brw_ADMI_SHR_CRS:	case Brw_ADMI_MRK_CRS:
 	       Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
@@ -6128,10 +6088,8 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_GRP:
-	    case Brw_ADMI_TCH_GRP:
-	    case Brw_ADMI_SHR_GRP:
-	    case Brw_ADMI_MRK_GRP:
+	    case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
+	    case Brw_ADMI_SHR_GRP:	case Brw_ADMI_MRK_GRP:
 	       Grp.GrpCod = FileBrowser->Clipboard.File.HieCod;
 	       Grp_GetGroupDataByCod (&Hie[Hie_CRS].HieCod,&GrpTyp.GrpTypCod,&Grp);
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
@@ -6150,8 +6108,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_ASG_CRS:
-	    case Brw_ADMI_WRK_CRS:
+	    case Brw_ADMI_ASG_CRS:	case Brw_ADMI_WRK_CRS:
 	       Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
@@ -6185,8 +6142,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_ASG_USR:
-	    case Brw_ADMI_WRK_USR:
+	    case Brw_ADMI_ASG_USR:	case Brw_ADMI_WRK_USR:
 	       Hie[Hie_CRS].HieCod = FileBrowser->Clipboard.File.HieCod;
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
   	         {
@@ -6205,8 +6161,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     break;
 	         }
 	       break;
-	    case Brw_ADMI_DOC_PRJ:
-	    case Brw_ADMI_ASS_PRJ:
+	    case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	       PrjCod = FileBrowser->Clipboard.File.HieCod;
 	       Hie[Hie_CRS].HieCod = Prj_DB_GetCrsOfPrj (PrjCod);
 	       switch (Hie_GetDataByCod[Hie_CRS] (&Hie[Hie_CRS]))
@@ -6267,29 +6222,10 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 		     Err_WrongFileZoneExit ();
 
 		  /* Notify only if destination folder is visible */
-		  if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-								  &FirstFile) == HidVis_VISIBLE)
-		     switch (FileBrowser->Zone)
-		       {
-			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
-							   FirstFile.FilCod);
-			   break;
-			case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
-							   FirstFile.FilCod);
-			   break;
-			case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
-							   FirstFile.FilCod);
-			   break;
-			case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
-							   FirstFile.FilCod);
-			   break;
-			default:
-			   break;
-		       }
+		  if (NotifyEvents[FileBrowser->Zone] != Ntf_EVENT_UNKNOWN)
+		     if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&FirstFile) == HidVis_VISIBL)
+			Ntf_StoreNotifyEventsToAllUsrs (NotifyEvents[FileBrowser->Zone],
+							FirstFile.FilCod);
 		  }
 	      }
 	   }
@@ -6300,8 +6236,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 	 break;
       case Usr_CAN_NOT:
       default:
-	 // It's difficult, but not impossible that a user sees this message
-         Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_paste_file_or_folder_here);
+         Err_NoPermission ();
 	 break;
      }
   }
@@ -6312,14 +6247,7 @@ static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_ShowMyClipboard (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_CLIPBOARD);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SHOW_CLIPBOARD);
   }
 
 /*****************************************************************************/
@@ -6328,14 +6256,7 @@ void Brw_ShowMyClipboard (void)
 
 void Brw_RemMyClipboard (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REM_CLIPBOARD);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_CLIPBOARD);
   }
 
 static void Brw_DoActionRemMyClipboard (struct Brw_FileBrowser *FileBrowser)
@@ -6468,7 +6389,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 			      /***** Add entry to the table of files/folders *****/
 			      FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
-			      FileDst.Metadata.PrivateOrPublic = PriPub_PRIVATE;
+			      FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			      FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
 			      FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
 										 &FileDst);
@@ -6516,10 +6437,10 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 			      Err_ShowErrorAndExit ("Can not create folder.");
 
 			   /* Add entry to the table of files/folders */
-			   FileDst.Metadata.PublisherCod       = Gbl.Usrs.Me.UsrDat.UsrCod;
-			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVATE;
+			   FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
+			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			   FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
-			   FileDst.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+			   FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
 									     &FileDst);
 			   break;
 			case Err_ERROR:		// Quota exceeded
@@ -6587,20 +6508,11 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 
 void Brw_ShowFormFileBrowser (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_FORM);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SHOW_FORM);
   }
 
 static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_You_can_not_create_folders_files_or_links_here;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File ParentFolder;
    Exi_Exist_t ParentFolderExistsInDB;
    char ParentFolderNameToShow[NAME_MAX + 1];
@@ -6643,14 +6555,13 @@ static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_create_folders_files_or_links_here);	// It's difficult, but not impossible that a user sees this message
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -6891,14 +6802,7 @@ static void Brw_PutFormToCreateALink (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_CreateFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CREATE_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CREATE_FOLDER);
   }
 
 static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
@@ -6907,8 +6811,6 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
-   extern const char *Txt_You_can_not_create_folders_here;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File ParentFolder;
    Exi_Exist_t ParentFolderExistsInDB;
    struct Brw_File NewFolder;
@@ -6957,11 +6859,11 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 
 			      /* Add entry to the table of files/folders */
 			      NewFolder.Type				= Brw_IS_FOLDER;
-			      NewFolder.Metadata.PublisherCod		= Gbl.Usrs.Me.UsrDat.UsrCod;
-			      NewFolder.Metadata.PrivateOrPublic	= PriPub_PRIVATE;
-			      NewFolder.Metadata.License		= Brw_LICENSE_DEFAULT;
-			      NewFolder.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
-											&NewFolder);
+			      NewFolder.Metadata.PublisherCod	 = Gbl.Usrs.Me.UsrDat.UsrCod;
+			      NewFolder.Metadata.PrivateOrPublic = PriPub_PRIVAT;
+			      NewFolder.Metadata.License	 = Brw_LICENSE_DEFAULT;
+			      NewFolder.FilCod			 = Brw_DB_AddPath (FileBrowser->Zone,
+										   &NewFolder);
 
 			      /* The folder has been created sucessfully */
 			      Brw_GetFileNameToShow (FileBrowser->Zone,
@@ -7003,15 +6905,13 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       // It's difficult, but not impossible that a user sees this message
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_create_folders_here);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -7022,22 +6922,13 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_RenFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_REN_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REN_FOLDER);
   }
 
 static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
-   extern const char *Txt_You_can_not_rename_this_folder;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File Folder;
    Exi_Exist_t FolderExistsInDB;
    char OldPathInZone[PATH_MAX + 1];
@@ -7133,14 +7024,13 @@ static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_rename_this_folder);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -7151,7 +7041,7 @@ static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_RcvFileDZ (void)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
+   extern const char *Txt_The_file_or_folder_no_longer_exists;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File ParentFolder;	// Folder in which to create the new file
    Exi_Exist_t ParentFolderExistsInDB;
@@ -7170,8 +7060,7 @@ void Brw_RcvFileDZ (void)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-			  Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Ale_CreateAlert (Ale_WARNING,NULL,Txt_The_file_or_folder_no_longer_exists);
          break;
      }
 
@@ -7192,8 +7081,7 @@ void Brw_RcvFileDZ (void)
       case Err_ERROR:
       default:
 	 fprintf (stdout,"Status: 501 Not Implemented\r\n\r\n"
-			 "%s\n",
-		  Ale_GetTextOfLastAlert ());
+			 "%s\n",Ale_GetTextOfLastAlert ());
 	 break;
      }
   }
@@ -7204,19 +7092,12 @@ void Brw_RcvFileDZ (void)
 
 void Brw_RcvFileClassic (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_RCV_FILE_CLASSIC);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_RCV_FILE_CLASSIC);
   }
 
 static void Brw_DoActionRcvFileClassic (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
+   extern const char *Txt_The_file_or_folder_no_longer_exists;
    struct Brw_File ParentFolder;	// Folder in which to create the new file
    Exi_Exist_t ParentFolderExistsInDB;
    __attribute__((unused)) Err_SuccessOrError_t UploadSucessful;
@@ -7232,8 +7113,7 @@ static void Brw_DoActionRcvFileClassic (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_CreateAlert (Ale_WARNING,NULL,
-			  Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Ale_CreateAlert (Ale_WARNING,NULL,Txt_The_file_or_folder_no_longer_exists);
          break;
      }
 
@@ -7353,11 +7233,11 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 												   ParentFolder->Path.InZone);
 
 					  /* Add entry to the table of files/folders */
-					  NewFile.Type            = Brw_IS_FILE;
-					  NewFile.Metadata.PublisherCod 	   = Gbl.Usrs.Me.UsrDat.UsrCod;
-					  NewFile.Metadata.PrivateOrPublic = PriPub_PRIVATE;
+					  NewFile.Type            	   = Brw_IS_FILE;
+					  NewFile.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
+					  NewFile.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 					  NewFile.Metadata.License         = Brw_LICENSE_DEFAULT;
-					  NewFile.FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+					  NewFile.FilCod         	   = Brw_DB_AddPath (FileBrowser->Zone,
 											     &NewFile);
 
 					  /* Add a new entry of marks into database */
@@ -7378,29 +7258,21 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  UploadSucessful = Err_SUCCESS;
 
 					  /* Notify new file */
-					  if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-											  ParentFolder) == HidVis_VISIBLE)
+					  if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
+										 ParentFolder) == HidVis_VISIBL)
 					     switch (FileBrowser->Zone)
 					       {
-						case Brw_ADMI_DOC_CRS:
-						case Brw_ADMI_DOC_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
-										   NewFile.FilCod);
+						case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,NewFile.FilCod);
 						   break;
-						case Brw_ADMI_TCH_CRS:
-						case Brw_ADMI_TCH_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
-										   NewFile.FilCod);
+						case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,NewFile.FilCod);
 						   break;
-						case Brw_ADMI_SHR_CRS:
-						case Brw_ADMI_SHR_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
-										   NewFile.FilCod);
+						case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE  ,NewFile.FilCod);
 						   break;
-						case Brw_ADMI_MRK_CRS:
-						case Brw_ADMI_MRK_GRP:
-						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
-										   NewFile.FilCod);
+						case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+						   Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE   ,NewFile.FilCod);
 						   break;
 						default:
 						   break;
@@ -7451,14 +7323,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 
 void Brw_CreateLink (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CREATE_LINK);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CREATE_LINK);
   }
 
 static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
@@ -7467,8 +7332,6 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_Can_not_create_the_link_X_because_it_would_exceed_the_disk_quota;
    extern const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y;
    extern const char *Txt_UPLOAD_FILE_Invalid_link;
-   extern const char *Txt_You_can_not_create_links_here;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File ParentFolder;	// Create link (file ending in .url) inside this folder
    Exi_Exist_t ParentFolderExistsInDB;
    struct Brw_File NewLink;		// Link (file ending in .url) to create
@@ -7577,12 +7440,12 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 												ParentFolder.Path.InZone);
 
 				       /* Add entry to the table of files/folders */
-				       NewLink.Type				= Brw_IS_LINK;
-				       NewLink.Metadata.PublisherCod		= Gbl.Usrs.Me.UsrDat.UsrCod;
-				       NewLink.Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+				       NewLink.Type			= Brw_IS_LINK;
+				       NewLink.Metadata.PublisherCod	= Gbl.Usrs.Me.UsrDat.UsrCod;
+				       NewLink.Metadata.PrivateOrPublic	= PriPub_PRIVAT;
 				       NewLink.Metadata.License		= Brw_LICENSE_DEFAULT;
-				       NewLink.FilCod				= Brw_DB_AddPath (FileBrowser->Zone,
-												&NewLink);
+				       NewLink.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
+											  &NewLink);
 
 				       /* Show message of confirmation */
 				       Brw_GetFileNameToShow (FileBrowser->Zone,
@@ -7592,29 +7455,21 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 						      FileName,ParentFolderNameToShow);
 
 				       /* Notify new file */
-				       if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-										       &ParentFolder) == HidVis_VISIBLE)
+				       if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,
+									      &ParentFolder) == HidVis_VISIBL)
 					  switch (FileBrowser->Zone)
 					    {
-					     case Brw_ADMI_DOC_CRS:
-					     case Brw_ADMI_DOC_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,
-										NewLink.FilCod);
+					     case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,NewLink.FilCod);
 						break;
-					     case Brw_ADMI_TCH_CRS:
-					     case Brw_ADMI_TCH_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,
-										NewLink.FilCod);
+					     case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,NewLink.FilCod);
 						break;
-					     case Brw_ADMI_SHR_CRS:
-					     case Brw_ADMI_SHR_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,
-										NewLink.FilCod);
+					     case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE  ,NewLink.FilCod);
 						break;
-					     case Brw_ADMI_MRK_CRS:
-					     case Brw_ADMI_MRK_GRP:
-						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,
-										NewLink.FilCod);
+					     case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+						Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE   ,NewLink.FilCod);
 						break;
 					     default:
 						break;
@@ -7642,15 +7497,13 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       // It's difficult, but not impossible that a user sees this message
-	       Ale_ShowAlert (Ale_ERROR,Txt_You_can_not_create_links_here);
+	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -7721,77 +7574,55 @@ static Err_SuccessOrError_t Brw_CheckIfUploadIsAllowed (Brw_Zone_t Zone,
   }
 
 /*****************************************************************************/
-/******************* Show file or folder in a file browser *******************/
+/**************** Show/hide file or folder in a file browser *****************/
 /*****************************************************************************/
 
 void Brw_SetDocumentAsVisible (void)
   {
-   struct Brw_FileBrowser FileBrowser;
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SET_DOC_VISIBLE);
+  }
+
+void Brw_SetDocumentAsHidden (void)
+  {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SET_DOC_HIDDEN);
+  }
+
+static void Brw_DoActionSetDocAsVisible (struct Brw_FileBrowser *FileBrowser)
+  {
+   Brw_SetDocAs (FileBrowser,HidVis_VISIBL);
+  }
+
+static void Brw_DoActionSetDocAsHidden (struct Brw_FileBrowser *FileBrowser)
+  {
+   Brw_SetDocAs (FileBrowser,HidVis_HIDDEN);
+  }
+
+static void Brw_SetDocAs (struct Brw_FileBrowser *FileBrowser,
+		          HidVis_HiddenOrVisible_t HiddenOrVisible)
+  {
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
+   /***** Get file / folder / link *****/
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
    switch (FileExistsInDB)
      {
       case Exi_EXISTS:
 	 /***** Change file to visible *****/
-	 if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-					      File.Path.InZone) == HidVis_HIDDEN)
-	    Brw_DB_HideOrUnhideFileOrFolder (FileBrowser.Zone,
+	 if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
+					      File.Path.InZone) != HiddenOrVisible)
+	    Brw_DB_HideOrUnhideFileOrFolder (FileBrowser->Zone,
 					     File.Path.InZone,
-					     HidVis_VISIBLE);
+					     HiddenOrVisible);
 
 	 /***** Remove the affected clipboards and update my clipboard *****/
-	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (&FileBrowser);
+	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 // Don't show warning alert if file no longer exists
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
-
-   /***** Show again the file browser *****/
-   // TODO: Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_VISIBLE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
-  }
-
-/*****************************************************************************/
-/***************** Hide file or folder in a file browser *********************/
-/*****************************************************************************/
-
-void Brw_SetDocumentAsHidden (void)
-  {
-   struct Brw_FileBrowser FileBrowser;
-   struct Brw_File File;
-   Exi_Exist_t FileExistsInDB;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file / folder / link
-   switch (FileExistsInDB)
-     {
-      case Exi_EXISTS:
-	 /***** Change file to hidden *****/
-	 if (Brw_CheckIfFileOrFolderIsHidden (FileBrowser.Zone,
-					      File.Path.InZone) == HidVis_VISIBLE)
-	    Brw_DB_HideOrUnhideFileOrFolder (FileBrowser.Zone,
-					     File.Path.InZone,
-					     HidVis_HIDDEN);
-
-	 /***** Remove the affected clipboards and update my clipboard *****/
-	 Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (&FileBrowser);
-         break;
-      case Exi_DOES_NOT_EXIST:
-      default:
-	 // Don't show warning alert if file no longer exists
-         break;
-     }
-
-   /***** Show again the file browser *****/
-   // TODO: Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SET_DOC_HIDDEN);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -7806,12 +7637,10 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
    HidVis_HiddenOrVisible_t Hidden;
 
    /***** Get if a file or folder is hidden from database *****/
-   switch (Brw_DB_CheckIfFileOrFolderIsHiddenOrVisibleUsingPath (&mysql_res,
-								 Zone,
-								 PathInZone))
+   switch (Brw_DB_CheckIfHiddenUsingPath (&mysql_res,Zone,PathInZone))
      {
-      case HidVis_VISIBLE:
-	 Hidden = HidVis_VISIBLE;
+      case HidVis_VISIBL:
+	 Hidden = HidVis_VISIBL;
 	 break;
       case HidVis_HIDDEN:
       default:
@@ -7835,21 +7664,13 @@ HidVis_HiddenOrVisible_t Brw_CheckIfFileOrFolderIsHidden (Brw_Zone_t Zone,
 
 void Brw_ShowFileMetadata (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_SHOW_FILE_METADATA);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_SHOW_FILE_METADATA);
   }
 
 static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Private_available_to_certain_users_identified;
    extern const char *Txt_Public_open_educational_resource_OER_for_everyone;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
    extern const char *Txt_Uploaded_by;
@@ -7865,13 +7686,13 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_users[Usr_NUM_SEXS];
    static const char **PrivatePublicLabel[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = &Txt_Private_available_to_certain_users_identified,
-      [PriPub_PUBLIC ] = &Txt_Public_open_educational_resource_OER_for_everyone
+      [PriPub_PRIVAT] = &Txt_Private_available_to_certain_users_identified,
+      [PriPub_PUBLIC] = &Txt_Public_open_educational_resource_OER_for_everyone
      };
    static const char *Public_YN[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = "N",
-      [PriPub_PUBLIC ] = "Y",
+      [PriPub_PRIVAT] = "N",
+      [PriPub_PUBLIC] = "Y",
      };
    static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
      {
@@ -7900,372 +7721,374 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
      {
       case Exi_EXISTS:
 	 /***** Get size and date *****/
-	 if (Brw_GetFileTypeSizeAndDate (&File) == Exi_EXISTS)
+	 switch (Brw_GetFileTypeSizeAndDate (&File))
 	   {
-	    /***** Check if I can view this file.
-		   It could be marked as hidden or in a hidden folder *****/
-	    ICanView = Usr_CAN;
-	    switch (FileBrowser->Zone)
-	      {
-	       case Brw_SHOW_DOC_INS:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-												     &File)];
-		  break;
-	       case Brw_SHOW_DOC_CTR:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-												     &File)];
-		  break;
-	       case Brw_SHOW_DOC_DEG:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-												     &File)];
-		  break;
-	       case Brw_SHOW_DOC_CRS:
-	       case Brw_SHOW_DOC_GRP:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser->Zone,
-												     &File)];
-		  break;
-	       default:
-		  break;
-	      }
-	   }
-
-	 switch (ICanView)
-	   {
-	    case Usr_CAN:
-	       if (File.Type == Brw_IS_FILE ||
-		   File.Type == Brw_IS_LINK)
-		 {
-		  /***** Update number of views *****/
-		  Brw_GetAndUpdateFileViews (&File);
-
-		  /***** Get data of file/folder publisher *****/
-		  if (File.Metadata.PublisherCod > 0)
-		    {
-		     /***** Initialize structure with publisher's data *****/
-		     Usr_UsrDataConstructor (&PublisherUsrDat);
-
-		     PublisherUsrDat.UsrCod = File.Metadata.PublisherCod;
-		     PublisherExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
-										Usr_DONT_GET_PREFS,
-										Usr_DONT_GET_ROLE_IN_CRS);
-		    }
-		  else
-		     PublisherExists = Exi_DOES_NOT_EXIST;
-
-		  /***** Get link to download the file *****/
-		  if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_SEE_MRK))
-		     URL[0] = '\0';
-		  else
-		     Brw_GetLinkToDownloadFile (FileBrowser,&File,URL);
-
-		  /***** Can I edit the properties of the file? *****/
-		  ICanEdit = Brw_CheckIfICanEditFileMetadata (FileBrowser->Zone,
-							      File.Metadata.PublisherCod);
-
-		  /***** Name of the file/link to be shown *****/
-		  Brw_GetFileNameToShow (FileBrowser->Zone,&File,FileNameToShow);
-
-		  /***** Begin box *****/
-		  // Put icon to get link?
-		  if ((Brw_ActReqLnk[FileBrowser->Zone] != ActUnk &&
-		       (File.Type == Brw_IS_FILE ||	// Only files or links
-			File.Type == Brw_IS_LINK) &&
-		       Rsc_CheckIfICanGetLink ()) == Usr_CAN)
-		     Box_BoxShadowBegin (NULL,
-					 Brw_PutIconToGetLinkToFile,FileBrowser,
-					 NULL);
-		  else
-		     Box_BoxShadowBegin (NULL,NULL,NULL,NULL);
-
-
-		  /***** Begin form to update the metadata of a file *****/
-		  if (ICanEdit == Usr_CAN)	// I can edit file properties
-		    {
-		     /* Can the file be public? */
-		     switch (FileBrowser->Zone)
-		       {
-			case Brw_ADMI_DOC_INS:  case Brw_ADMI_SHR_INS:
-			case Brw_ADMI_DOC_CTR:  case Brw_ADMI_SHR_CTR:
-			case Brw_ADMI_DOC_DEG:  case Brw_ADMI_SHR_DEG:
-			case Brw_ADMI_DOC_CRS:  case Brw_ADMI_SHR_CRS:
-			   ICanChangePublic = Usr_CAN;
-			   break;
-			default:
-			   ICanChangePublic = Usr_CAN_NOT;
-			   break;
-		       }
-
-		     Frm_BeginFormAnchor (Brw_ActChgDatFile[FileBrowser->Zone],
-					  FileBrowser->SectionId);
-
-			Brw_PutParsFileBrowser (FileBrowser);
-		    }
-
-		  /***** Begin table *****/
-		  HTM_TABLE_BeginWidePadding (2);
-
-		     /***** Link to download the file *****/
-		     HTM_TR_Begin (NULL);
-
-			HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-			   Brw_WriteBigLinkToDownloadFile (URL,FileBrowser,&File,FileNameToShow);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Filename *****/
-		     HTM_TR_Begin (NULL);
-
-			Frm_LabelColumn ("RT",NULL,Txt_Filename);
-
-			HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-			   Brw_WriteSmallLinkToDownloadFile (URL,FileBrowser,FileNameToShow);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Publisher's data *****/
-		     HTM_TR_Begin (NULL);
-
-			Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
-
-			HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-			   switch (PublisherExists)
-			     {
-			      case Exi_EXISTS:
-				 /* Show photo */
-				 Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-							    ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-
-				 /* Write name */
-				 HTM_NBSP ();
-				 HTM_Txt (PublisherUsrDat.FullName);
-				 break;
-			      case Exi_DOES_NOT_EXIST:
-			      default:
-				 /* Unknown publisher */
-				 HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-				 break;
-			     }
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Free memory used for publisher's data *****/
-		     if (File.Metadata.PublisherCod > 0)
-			Usr_UsrDataDestructor (&PublisherUsrDat);
-
-		     /***** Write the file size *****/
-		     Fil_WriteFileSizeFull ((double) File.Metadata.Size,FileSizeStr);
-		     HTM_TR_Begin (NULL);
-
-			Frm_LabelColumn ("RT",NULL,Txt_File_size);
-
-			HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-			   HTM_Txt (FileSizeStr);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Write the date *****/
-		     HTM_TR_Begin (NULL);
-
-			Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
-
-			HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
-				      The_GetSuffix ());
-			   Dat_WriteLocalDateHMSFromUTC ("filedate",File.Metadata.Time,
-							 Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-							 Dat_WRITE_TODAY |
-							 Dat_WRITE_DATE_ON_SAME_DAY |
-							 Dat_WRITE_WEEK_DAY |
-							 Dat_WRITE_HOUR |
-							 Dat_WRITE_MINUTE |
-							 Dat_WRITE_SECOND);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Private or public? *****/
-		     HTM_TR_Begin (NULL);
-
-			/* Label */
-			Frm_LabelColumn ("RT",ICanChangePublic == Usr_CAN ? "Public" :
-									    NULL,
-					 Txt_Availability);
-
-			/* Data */
-			HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
-			   if (ICanChangePublic == Usr_CAN)	// I can change file to public
-			     {
-			      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-						"id=\"Public\" name=\"Public\""
-						" class=\"PUBLIC_FILE\"");
-				 for (PrivateOrPublic  = (PriPub_PrivateOrPublic_t) 0;
-				      PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
-				      PrivateOrPublic++)
-				    HTM_OPTION (HTM_Type_STRING,Public_YN[PrivateOrPublic],
-						File.Metadata.PrivateOrPublic == PrivateOrPublic ? HTM_SELECTED :
-												   HTM_NO_ATTR,
-						"%s",*PrivatePublicLabel[PrivateOrPublic]);
-			      HTM_SELECT_End ();
-			     }
-			   else		// I can not edit file properties
-			      HTM_Txt (*PrivatePublicLabel[File.Metadata.PrivateOrPublic]);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** License *****/
-		     HTM_TR_Begin (NULL);
-
-			/* Label */
-			Frm_LabelColumn ("RT",ICanEdit == Usr_CAN ? "License" :
-								    NULL,
-					 Txt_License);
-
-			/* Data */
-			HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
-			   if (ICanEdit == Usr_CAN)	// I can edit file properties
-			     {
-			      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-						"id=\"License\" name=\"License\""
-						" class=\"LICENSE\"");
-				 for (License  = (Brw_License_t) 0;
-				      License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
-				      License++)
-				   {
-				    LicenseUnsigned = (unsigned) License;
-				    HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
-						License == File.Metadata.License ? HTM_SELECTED :
-										   HTM_NO_ATTR,
-						"%s",Txt_LICENSES[License]);
-				   }
-			      HTM_SELECT_End ();
-			     }
-			   else		// I can not edit file properties
-			      HTM_Txt (Txt_LICENSES[File.Metadata.License]);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Write my number of views *****/
-		     if (Gbl.Usrs.Me.Logged)
-		       {
-			HTM_TR_Begin (NULL);
-
-			   Frm_LabelColumn ("RT",NULL,Txt_My_views);
-
-			   HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-			      HTM_Unsigned (File.Stats.MyViews);
-			   HTM_TD_End ();
-
-			HTM_TR_End ();
-		       }
-
-		     /***** Write number of identificated views *****/
-		     HTM_TR_Begin (NULL);
-
-			Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
-
-			HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-			   HTM_Unsigned (File.Stats.ViewsFromLoggedUsrs);
-			   HTM_NBSP ();
-			   HTM_OpenParenthesis ();
-			      HTM_UnsignedTxt (File.Stats.LoggedUsrs,
-					       Txt_user[Usr_SEX_UNKNOWN],
-					       Txt_users[Usr_SEX_UNKNOWN]);
-			   HTM_CloseParenthesis ();
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		     /***** Write number of public views *****/
-		     HTM_TR_Begin (NULL);
-
-			Frm_LabelColumn ("RT",NULL,Txt_Public_views);
-
-			HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-			   HTM_Unsigned (File.Stats.PublicViews);
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		  /***** End table *****/
-		  HTM_TABLE_End ();
-
-		  /***** End form *****/
-		  if (ICanEdit == Usr_CAN)	// I can edit file properties
-		    {
-			Btn_PutButton (Btn_SAVE_CHANGES,NULL);
-		     Frm_EndForm ();
-		    }
-
-		  /***** End box *****/
-		  Box_BoxEnd ();
-
-		  /***** Mark possible notifications as seen *****/
-		  switch (FileBrowser->Zone)
-		    {
-		     case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-		     case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
-			break;
-		     case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
-			break;
-		     case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,File.FilCod);
-			break;
-		     case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-		     case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,File.FilCod);
-			break;
-		     default:
-			break;
-		    }
-		 }
-
-	       /***** Add paths until file to table of expanded folders *****/
-	       Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
-									File.Path.InZoneWithoutName);
-	       break;
-	    case Usr_CAN_NOT:
-	    default:
-	       /***** Mark possible notifications about non visible file as removed *****/
+	    case Exi_EXISTS:
+	       /***** Check if I can view this file.
+		      It could be marked as hidden or in a hidden folder *****/
+	       ICanView = Usr_CAN;
 	       switch (FileBrowser->Zone)
 		 {
-		  case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-		  case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
+		  case Brw_SHOW_DOC_INS:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
+			ICanView = Brw_ICanViewFileOrFolder[
+			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
 		     break;
-		  case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
+		  case Brw_SHOW_DOC_CTR:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
+			ICanView = Brw_ICanViewFileOrFolder[
+			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
 		     break;
-		  case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,File.FilCod);
+		  case Brw_SHOW_DOC_DEG:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
+			ICanView = Brw_ICanViewFileOrFolder[
+			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
 		     break;
-		  case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-		  case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,File.FilCod);
+		  case Brw_SHOW_DOC_CRS:
+		  case Brw_SHOW_DOC_GRP:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
+			ICanView = Brw_ICanViewFileOrFolder[
+			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
 		     break;
 		  default:
 		     break;
 		 }
+	       switch (ICanView)
+		 {
+		  case Usr_CAN:
+		     if (File.Type == Brw_IS_FILE ||
+			 File.Type == Brw_IS_LINK)
+		       {
+			/***** Update number of views *****/
+			Brw_GetAndUpdateFileViews (&File);
 
-	       Ale_ShowAlert (Ale_WARNING,
-			      Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+			/***** Get data of file/folder publisher *****/
+			if (File.Metadata.PublisherCod > 0)
+			  {
+			   /***** Initialize structure with publisher's data *****/
+			   Usr_UsrDataConstructor (&PublisherUsrDat);
+
+			   PublisherUsrDat.UsrCod = File.Metadata.PublisherCod;
+			   PublisherExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&PublisherUsrDat,
+										      Usr_DONT_GET_PREFS,
+										      Usr_DONT_GET_ROLE_IN_CRS);
+			  }
+			else
+			   PublisherExists = Exi_DOES_NOT_EXIST;
+
+			/***** Get link to download the file *****/
+			if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_SEE_MRK))
+			   URL[0] = '\0';
+			else
+			   Brw_GetLinkToDownloadFile (FileBrowser,&File,URL);
+
+			/***** Can I edit the properties of the file? *****/
+			ICanEdit = Brw_CheckIfICanEditFileMetadata (FileBrowser->Zone,
+								    File.Metadata.PublisherCod);
+
+			/***** Name of the file/link to be shown *****/
+			Brw_GetFileNameToShow (FileBrowser->Zone,&File,FileNameToShow);
+
+			/***** Begin box *****/
+			// Put icon to get link?
+			if ((Brw_ActReqLnk[FileBrowser->Zone] != ActUnk &&
+			     (File.Type == Brw_IS_FILE ||	// Only files or links
+			      File.Type == Brw_IS_LINK) &&
+			     Rsc_CheckIfICanGetLink ()) == Usr_CAN)
+			   Box_BoxShadowBegin (NULL,
+					       Brw_PutIconToGetLinkToFile,FileBrowser,
+					       NULL);
+			else
+			   Box_BoxShadowBegin (NULL,NULL,NULL,NULL);
+
+
+			/***** Begin form to update the metadata of a file *****/
+			if (ICanEdit == Usr_CAN)	// I can edit file properties
+			  {
+			   /* Can the file be public? */
+			   switch (FileBrowser->Zone)
+			     {
+			      case Brw_ADMI_DOC_INS:  case Brw_ADMI_SHR_INS:
+			      case Brw_ADMI_DOC_CTR:  case Brw_ADMI_SHR_CTR:
+			      case Brw_ADMI_DOC_DEG:  case Brw_ADMI_SHR_DEG:
+			      case Brw_ADMI_DOC_CRS:  case Brw_ADMI_SHR_CRS:
+				 ICanChangePublic = Usr_CAN;
+				 break;
+			      default:
+				 ICanChangePublic = Usr_CAN_NOT;
+				 break;
+			     }
+
+			   Frm_BeginFormAnchor (Brw_ActChgDatFile[FileBrowser->Zone],
+						FileBrowser->SectionId);
+
+			      Brw_PutParsFileBrowser (FileBrowser);
+			  }
+
+			/***** Begin table *****/
+			HTM_TABLE_BeginWidePadding (2);
+
+			   /***** Link to download the file *****/
+			   HTM_TR_Begin (NULL);
+
+			      HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
+				 Brw_WriteBigLinkToDownloadFile (URL,FileBrowser,&File,FileNameToShow);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Filename *****/
+			   HTM_TR_Begin (NULL);
+
+			      Frm_LabelColumn ("RT",NULL,Txt_Filename);
+
+			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				 Brw_WriteSmallLinkToDownloadFile (URL,FileBrowser,FileNameToShow);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Publisher's data *****/
+			   HTM_TR_Begin (NULL);
+
+			      Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
+
+			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				 switch (PublisherExists)
+				   {
+				    case Exi_EXISTS:
+				       /* Show photo */
+				       Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
+								  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+
+				       /* Write name */
+				       HTM_NBSP ();
+				       HTM_Txt (PublisherUsrDat.FullName);
+				       break;
+				    case Exi_DOES_NOT_EXIST:
+				    default:
+				       /* Unknown publisher */
+				       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+				       break;
+				   }
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Free memory used for publisher's data *****/
+			   if (File.Metadata.PublisherCod > 0)
+			      Usr_UsrDataDestructor (&PublisherUsrDat);
+
+			   /***** Write the file size *****/
+			   Fil_WriteFileSizeFull ((double) File.Metadata.Size,FileSizeStr);
+			   HTM_TR_Begin (NULL);
+
+			      Frm_LabelColumn ("RT",NULL,Txt_File_size);
+
+			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				 HTM_Txt (FileSizeStr);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Write the date *****/
+			   HTM_TR_Begin (NULL);
+
+			      Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
+
+			      HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
+					    The_GetSuffix ());
+				 Dat_WriteLocalDateHMSFromUTC ("filedate",File.Metadata.Time,
+							       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+							       Dat_WRITE_TODAY |
+							       Dat_WRITE_DATE_ON_SAME_DAY |
+							       Dat_WRITE_WEEK_DAY |
+							       Dat_WRITE_HOUR |
+							       Dat_WRITE_MINUTE |
+							       Dat_WRITE_SECOND);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Private or public? *****/
+			   HTM_TR_Begin (NULL);
+
+			      /* Label */
+			      Frm_LabelColumn ("RT",ICanChangePublic == Usr_CAN ? "Public" :
+										  NULL,
+					       Txt_Availability);
+
+			      /* Data */
+			      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
+				 if (ICanChangePublic == Usr_CAN)	// I can change file to public
+				   {
+				    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+						      "id=\"Public\" name=\"Public\""
+						      " class=\"PUBLIC_FILE\"");
+				       for (PrivateOrPublic  = (PriPub_PrivateOrPublic_t) 0;
+					    PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
+					    PrivateOrPublic++)
+					  HTM_OPTION (HTM_Type_STRING,Public_YN[PrivateOrPublic],
+						      File.Metadata.PrivateOrPublic == PrivateOrPublic ? HTM_SELECTED :
+													 HTM_NO_ATTR,
+						      "%s",*PrivatePublicLabel[PrivateOrPublic]);
+				    HTM_SELECT_End ();
+				   }
+				 else		// I can not edit file properties
+				    HTM_Txt (*PrivatePublicLabel[File.Metadata.PrivateOrPublic]);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** License *****/
+			   HTM_TR_Begin (NULL);
+
+			      /* Label */
+			      Frm_LabelColumn ("RT",ICanEdit == Usr_CAN ? "License" :
+									  NULL,
+					       Txt_License);
+
+			      /* Data */
+			      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
+				 if (ICanEdit == Usr_CAN)	// I can edit file properties
+				   {
+				    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+						      "id=\"License\" name=\"License\""
+						      " class=\"LICENSE\"");
+				       for (License  = (Brw_License_t) 0;
+					    License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
+					    License++)
+					 {
+					  LicenseUnsigned = (unsigned) License;
+					  HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
+						      License == File.Metadata.License ? HTM_SELECTED :
+											 HTM_NO_ATTR,
+						      "%s",Txt_LICENSES[License]);
+					 }
+				    HTM_SELECT_End ();
+				   }
+				 else		// I can not edit file properties
+				    HTM_Txt (Txt_LICENSES[File.Metadata.License]);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Write my number of views *****/
+			   if (Gbl.Usrs.Me.Logged)
+			     {
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_My_views);
+
+				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				    HTM_Unsigned (File.Stats.MyViews);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+			     }
+
+			   /***** Write number of identificated views *****/
+			   HTM_TR_Begin (NULL);
+
+			      Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
+
+			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				 HTM_Unsigned (File.Stats.ViewsFromLoggedUsrs);
+				 HTM_NBSP ();
+				 HTM_OpenParenthesis ();
+				    HTM_UnsignedTxt (File.Stats.LoggedUsrs,
+						     Txt_user[Usr_SEX_UNKNOWN],
+						     Txt_users[Usr_SEX_UNKNOWN]);
+				 HTM_CloseParenthesis ();
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			   /***** Write number of public views *****/
+			   HTM_TR_Begin (NULL);
+
+			      Frm_LabelColumn ("RT",NULL,Txt_Public_views);
+
+			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				 HTM_Unsigned (File.Stats.PublicViews);
+			      HTM_TD_End ();
+
+			   HTM_TR_End ();
+
+			/***** End table *****/
+			HTM_TABLE_End ();
+
+			/***** End form *****/
+			if (ICanEdit == Usr_CAN)	// I can edit file properties
+			  {
+			      Btn_PutButton (Btn_SAVE_CHANGES,NULL);
+			   Frm_EndForm ();
+			  }
+
+			/***** End box *****/
+			Box_BoxEnd ();
+
+			/***** Mark possible notifications as seen *****/
+			switch (FileBrowser->Zone)
+			  {
+			   case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
+			   case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,File.FilCod);
+			      break;
+			   case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
+			   case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,File.FilCod);
+			      break;
+			   default:
+			      break;
+			  }
+		       }
+
+		     /***** Add paths until file to table of expanded folders *****/
+		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser->Zone,
+									      File.Path.InZoneWithoutName);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     /***** Mark possible notifications about non visible file as removed *****/
+		     switch (FileBrowser->Zone)
+		       {
+			case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
+			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
+			   break;
+			case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
+			   break;
+			case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE,File.FilCod);
+			   break;
+			case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
+			case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE,File.FilCod);
+			   break;
+			default:
+			   break;
+		       }
+		     Err_NoPermission ();
+		     break;
+		 }
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Err_NoFileOrFolderNoLongerExists ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -8343,7 +8166,6 @@ void Brw_GetLinkToDownloadFile (struct Brw_FileBrowser *FileBrowser,
 
 void Brw_DownloadFile (void)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
@@ -8358,133 +8180,123 @@ void Brw_DownloadFile (void)
      {
       case Exi_EXISTS:
 	 /***** Get size and date *****/
-	 if (Brw_GetFileTypeSizeAndDate (&File) == Exi_EXISTS)
+	 switch (Brw_GetFileTypeSizeAndDate (&File))
 	   {
-	    /***** Check if I can view this file.
-		   It could be marked as hidden or in a hidden folder *****/
-	    ICanView = Usr_CAN;
-	    switch (FileBrowser.Zone)
-	      {
-	       case Brw_SHOW_DOC_INS:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-												     &File)];
-		  break;
-	       case Brw_SHOW_DOC_CTR:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-												     &File)];
-		  break;
-	       case Brw_SHOW_DOC_DEG:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-												     &File)];
-		  break;
-	       case Brw_SHOW_DOC_CRS:
-	       case Brw_SHOW_DOC_GRP:
-		  if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-		     ICanView = Brw_ICanViewFileOrFolder[Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-												     &File)];
-		  break;
-	       default:
-		  break;
-	      }
-	   }
-
-	 switch (ICanView)
-	   {
-	    case Usr_CAN:
-	       if (File.Type == Brw_IS_FILE ||
-		   File.Type == Brw_IS_LINK)
-		 {
-		  /***** Update number of views *****/
-		  Brw_GetAndUpdateFileViews (&File);
-
-		  /***** Get link to download the file *****/
-		  if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_SEE_MRK))
-		     URL[0] = '\0';
-		  else
-		     Brw_GetLinkToDownloadFile (&FileBrowser,&File,URL);
-
-		  /***** Mark possible notifications as seen *****/
-		  switch (FileBrowser.Zone)
-		    {
-		     case Brw_SHOW_DOC_CRS:
-		     case Brw_SHOW_DOC_GRP:
-		     case Brw_ADMI_DOC_CRS:
-		     case Brw_ADMI_DOC_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,
-							File.FilCod);
-			break;
-		     case Brw_ADMI_TCH_CRS:
-		     case Brw_ADMI_TCH_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,
-							File.FilCod);
-			break;
-		     case Brw_ADMI_SHR_CRS:
-		     case Brw_ADMI_SHR_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE,
-							File.FilCod);
-			break;
-		     case Brw_SHOW_MRK_CRS:
-		     case Brw_SHOW_MRK_GRP:
-		     case Brw_ADMI_MRK_CRS:
-		     case Brw_ADMI_MRK_GRP:
-			Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE,
-							File.FilCod);
-			break;
-		     default:
-			break;
-		    }
-		 }
-
-	       /***** Add paths until file to table of expanded folders *****/
-	       Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser.Zone,
-									File.Path.InZoneWithoutName);
-
-	       /***** Download the file *****/
-	       fprintf (stdout,"Location: %s\n\n",URL);
-	       // TODO: Put headers Content-type and Content-disposition:
-	       // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
-	       // http://elouai.com/force-download.php
-
-	       /***** Don't write HTML at all *****/
-	       Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
-	       break;
-	    case Usr_CAN_NOT:
-	    default:
-	       /***** Mark possible notifications about non visible file as removed *****/
+	    case Exi_EXISTS:
+	       /***** Check if I can view this file.
+		      It could be marked as hidden or in a hidden folder *****/
+	       ICanView = Usr_CAN;
 	       switch (FileBrowser.Zone)
 		 {
-		  case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
-		  case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,FileBrowser.FilCod);
+		  case Brw_SHOW_DOC_INS:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
+			ICanView = Brw_ICanViewFileOrFolder[
+				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
 		     break;
-		  case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,FileBrowser.FilCod);
+		  case Brw_SHOW_DOC_CTR:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
+			ICanView = Brw_ICanViewFileOrFolder[
+				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
 		     break;
-		  case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE  ,FileBrowser.FilCod);
+		  case Brw_SHOW_DOC_DEG:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
+			ICanView = Brw_ICanViewFileOrFolder[
+				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
 		     break;
-		  case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
-		  case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
-		     Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE   ,FileBrowser.FilCod);
+		  case Brw_SHOW_DOC_CRS:
+		  case Brw_SHOW_DOC_GRP:
+		     if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
+			ICanView = Brw_ICanViewFileOrFolder[
+				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
 		     break;
 		  default:
 		     break;
 		 }
+	       switch (ICanView)
+		 {
+		  case Usr_CAN:
+		     if (File.Type == Brw_IS_FILE ||
+			 File.Type == Brw_IS_LINK)
+		       {
+			/***** Update number of views *****/
+			Brw_GetAndUpdateFileViews (&File);
 
-	       /****** Show warning message *****/
-	       Ale_ShowAlert (Ale_WARNING,
-			      Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+			/***** Get link to download the file *****/
+			if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_SEE_MRK))
+			   URL[0] = '\0';
+			else
+			   Brw_GetLinkToDownloadFile (&FileBrowser,&File,URL);
+
+			/***** Mark possible notifications as seen *****/
+			switch (FileBrowser.Zone)
+			  {
+			   case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
+			   case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_DOCUMENT_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_TEACHERS_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_SHARED_FILE  ,File.FilCod);
+			      break;
+			   case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
+			   case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+			      Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_MARKS_FILE   ,File.FilCod);
+			      break;
+			   default:
+			      break;
+			  }
+		       }
+
+		     /***** Add paths until file to table of expanded folders *****/
+		     Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (FileBrowser.Zone,
+									      File.Path.InZoneWithoutName);
+
+		     /***** Download the file *****/
+		     fprintf (stdout,"Location: %s\n\n",URL);
+		     // TODO: Put headers Content-type and Content-disposition:
+		     // See: http://stackoverflow.com/questions/381954/how-do-i-fix-firefox-trying-to-save-image-as-htm
+		     // http://elouai.com/force-download.php
+
+		     /***** Don't write HTML at all *****/
+		     Lay_SetLayoutStatus (Lay_HTML_END_WRITTEN);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     /***** Mark possible notifications about non visible file as removed *****/
+		     switch (FileBrowser.Zone)
+		       {
+			case Brw_SHOW_DOC_CRS:	case Brw_SHOW_DOC_GRP:
+			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_DOC_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_DOCUMENT_FILE,FileBrowser.FilCod);
+			   break;
+			case Brw_ADMI_TCH_CRS:	case Brw_ADMI_TCH_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_TEACHERS_FILE,FileBrowser.FilCod);
+			   break;
+			case Brw_ADMI_SHR_CRS:	case Brw_ADMI_SHR_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_SHARED_FILE  ,FileBrowser.FilCod);
+			   break;
+			case Brw_SHOW_MRK_CRS:	case Brw_SHOW_MRK_GRP:
+			case Brw_ADMI_MRK_CRS:	case Brw_ADMI_MRK_GRP:
+			   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_MARKS_FILE   ,FileBrowser.FilCod);
+			   break;
+			default:
+			   break;
+		       }
+		     Err_NoPermission ();
+		     break;
+		 }
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Err_NoFileOrFolderNoLongerExists ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 /****** Show warning message *****/
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -8649,20 +8461,12 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 
 void Brw_ChgFileMetadata (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_CHG_FILE_METADATA);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CHG_FILE_METADATA);
   }
 
 static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Changes_saved;
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileBeforeEdition;
@@ -8675,99 +8479,100 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
      {
       case Exi_EXISTS:
 	 /***** Get size and date *****/
-	 if (Brw_GetFileTypeSizeAndDate (&File) == Exi_EXISTS)
+	 switch (Brw_GetFileTypeSizeAndDate (&File))
 	   {
-	    /***** Check if I can change file metadata *****/
-	    if (Brw_CheckIfICanEditFileMetadata (FileBrowser->Zone,
-						 File.Metadata.PublisherCod) == Usr_CAN_NOT)
-	       Err_NoPermissionExit ();
-
-	    /***** Check if the file was public before the edition *****/
-	    PrivateOrPublicFileBeforeEdition = File.Metadata.PrivateOrPublic;
-
-	    /***** Get the new file privacy and license from form *****/
-	    switch (FileBrowser->Zone)
-	      {
-	       case Brw_ADMI_DOC_INS:
-	       case Brw_ADMI_SHR_INS:
-	       case Brw_ADMI_DOC_CTR:
-	       case Brw_ADMI_SHR_CTR:
-	       case Brw_ADMI_DOC_DEG:
-	       case Brw_ADMI_SHR_DEG:
-	       case Brw_ADMI_DOC_CRS:
-	       case Brw_ADMI_SHR_CRS:
-		  PrivateOrPublicFileAfterEdition = PriPub_GetParPublic ();
-		  License = Brw_GetParLicense ();
-		  break;
-	       case Brw_ADMI_DOC_GRP:
-	       case Brw_ADMI_TCH_CRS:
-	       case Brw_ADMI_TCH_GRP:
-	       case Brw_ADMI_SHR_GRP:
-	       case Brw_ADMI_ASG_USR:
-	       case Brw_ADMI_ASG_CRS:
-	       case Brw_ADMI_WRK_USR:
-	       case Brw_ADMI_WRK_CRS:
-	       case Brw_ADMI_DOC_PRJ:
-	       case Brw_ADMI_ASS_PRJ:
-	       case Brw_ADMI_BRF_USR:
-		  PrivateOrPublicFileAfterEdition = PriPub_PRIVATE;	// Files in these zones can not be public
-		  License = Brw_GetParLicense ();
-		  break;
-	       default:
-		  PrivateOrPublicFileAfterEdition = PriPub_PRIVATE;	// Files in other zones can not be public
-		  License = Brw_LICENSE_DEFAULT;
-		  break;
-	      }
-
-	    /***** Change file metadata *****/
-	    Brw_DB_ChangeFilePublic (FileBrowser->Zone,
-				     File.FilCod,
-				     File.Path.InZone,
-				     PrivateOrPublicFileAfterEdition,License);
-
-	    /***** Remove the affected clipboards and update my clipboard *****/
-	    Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
-
-	    /***** Insert file into public social activity *****/
-	    if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVATE &&	// Only if file has changed from private...
-		PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)	// ...to public
-	       switch (FileBrowser->Zone)
+	    case Exi_EXISTS:
+	       /***** Check if I can change file metadata *****/
+	       switch (Brw_CheckIfICanEditFileMetadata (FileBrowser->Zone,
+						        File.Metadata.PublisherCod))
 		 {
-		  case Brw_ADMI_DOC_INS:
-		     TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_SHR_INS:
-		     TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_DOC_CTR:
-		     TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_SHR_CTR:
-		     TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_DOC_DEG:
-		     TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_SHR_DEG:
-		     TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_DOC_CRS:
-		     TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,File.FilCod);
-		     break;
-		  case Brw_ADMI_SHR_CRS:
-		     TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,File.FilCod);
-		     break;
-		  default:
-		     break;
-		 }
+		  case Usr_CAN:
+		     /***** Check if the file was public before the edition *****/
+		     PrivateOrPublicFileBeforeEdition = File.Metadata.PrivateOrPublic;
 
-	    Ale_ShowAlert (Ale_SUCCESS,Txt_Changes_saved);
+		     /***** Get the new file privacy and license from form *****/
+		     switch (FileBrowser->Zone)
+		       {
+			case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
+			case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
+			case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
+			case Brw_ADMI_DOC_CRS:	case Brw_ADMI_SHR_CRS:
+			   PrivateOrPublicFileAfterEdition = PriPub_GetParPublic ();
+			   License = Brw_GetParLicense ();
+			   break;
+			case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_CRS:
+			case Brw_ADMI_TCH_GRP:	case Brw_ADMI_SHR_GRP:
+			case Brw_ADMI_ASG_USR:	case Brw_ADMI_ASG_CRS:
+			case Brw_ADMI_WRK_USR:	case Brw_ADMI_WRK_CRS:
+			case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
+			case Brw_ADMI_BRF_USR:
+			   PrivateOrPublicFileAfterEdition = PriPub_PRIVAT;	// Files in these zones can not be public
+			   License = Brw_GetParLicense ();
+			   break;
+			default:
+			   PrivateOrPublicFileAfterEdition = PriPub_PRIVAT;	// Files in other zones can not be public
+			   License = Brw_LICENSE_DEFAULT;
+			   break;
+		       }
+
+		     /***** Change file metadata *****/
+		     Brw_DB_ChangeFilePublic (FileBrowser->Zone,
+					      File.FilCod,
+					      File.Path.InZone,
+					      PrivateOrPublicFileAfterEdition,License);
+
+		     /***** Remove the affected clipboards and update my clipboard *****/
+		     Brw_RemoveAffectedClipboardsAndUpdateMyClipboard (FileBrowser);
+
+		     /***** Insert file into public social activity *****/
+		     if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVAT &&	// Only if file has changed from private...
+			 PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)		// ...to public
+			switch (FileBrowser->Zone)
+			  {
+			   case Brw_ADMI_DOC_INS:
+			      TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_SHR_INS:
+			      TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_DOC_CTR:
+			      TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_SHR_CTR:
+			      TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_DOC_DEG:
+			      TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_SHR_DEG:
+			      TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_DOC_CRS:
+			      TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,File.FilCod);
+			      break;
+			   case Brw_ADMI_SHR_CRS:
+			      TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,File.FilCod);
+			      break;
+			   default:
+			      break;
+			  }
+
+		     Ale_ShowAlert (Ale_SUCCESS,Txt_Changes_saved);
+		     break;
+		  case Usr_CAN_NOT:
+		  default:
+		     Err_NoPermission ();
+		 }
+	       break;
+	    case Exi_DOES_NOT_EXIST:
+	    default:
+	       Err_NoFileOrFolderNoLongerExists ();
+	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -8861,7 +8666,7 @@ void Brw_ResetFileMetadata (struct Brw_File *FileOrFolder)
 
    FileOrFolder->Metadata.PublisherCod		= -1L;
    FileOrFolder->Metadata.HiddenOrVisible	= HidVis_HIDDEN;
-   FileOrFolder->Metadata.PrivateOrPublic	= PriPub_PRIVATE;
+   FileOrFolder->Metadata.PrivateOrPublic	= PriPub_PRIVAT;
    FileOrFolder->Metadata.License		= Brw_LICENSE_DEFAULT;
    FileOrFolder->Metadata.Size			= (off_t) 0;
    FileOrFolder->Metadata.Time			= (time_t) 0;
@@ -8958,7 +8763,7 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
 	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_GetPublicFromYN (row[8][0]);
 	 break;
       default:
-	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVATE;
+	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
 	 break;
      }
 
@@ -9870,8 +9675,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    FileBrowser.Zone = ZoneDB;
 
    /***** If hidden ==> nothing to show *****/
-   if (Brw_DB_CheckIfHiddenOrVisibleUsingMetadata (FileBrowser.Zone,
-						   &File) == HidVis_HIDDEN)
+   if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File) == HidVis_HIDDEN)
       return;
 
    /***** Get institution (row[2], row[3]),
@@ -10096,17 +9900,10 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 
 void Brw_AskRemoveOldFilesBriefcase (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again the file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_ASK_REM_OLD_BRIEFCASE);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_OLD_BRIEFCASE);
   }
 
-static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionAskRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
@@ -10153,17 +9950,18 @@ static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowse
 
 void Brw_RemoveOldFilesBriefcase (void)
   {
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_OLD_BRIEFCASE);
+  }
+
+static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+  {
    extern const char *Txt_Files_removed;
    extern const char *Txt_Links_removed;
    extern const char *Txt_Folders_removed;
-   struct Brw_FileBrowser FileBrowser;
    unsigned Months;
    struct Brw_NumObjects Removed;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   if ((Brw_ZoneType[FileBrowser.Zone] & Brw_IS_ADM_CRS_ASG_WRK))
+   if ((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_ADM_CRS_ASG_WRK))
      {
       /***** Get parameter with number of months without access *****/
       Months = (unsigned)
@@ -10173,7 +9971,7 @@ void Brw_RemoveOldFilesBriefcase (void)
                                        Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES);
 
       /***** Remove old files *****/
-      Brw_RemoveOldFilesInBrowser (&FileBrowser,Months,&Removed);
+      Brw_RemoveOldFilesInBrowser (FileBrowser,Months,&Removed);
 
       /***** Success message *****/
       Ale_ShowAlert (Ale_SUCCESS,"%s: %u<br>"
@@ -10183,9 +9981,6 @@ void Brw_RemoveOldFilesBriefcase (void)
 	             Txt_Links_removed  ,Removed.NumLinks,
 	             Txt_Folders_removed,Removed.NumFolds);
      }
-
-   /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -10404,7 +10199,7 @@ void Brw_SetSectionForAction (const struct Brw_FileBrowser *FileBrowser,
 	     sizeof (Brw_SectionForAction.Id) - 1);
   }
 
-static Brw_Action_t Brw_GetIfThisIsTheSectionForAction (const struct Brw_FileBrowser *FileBrowser)
+static Brw_Action_t Brw_GetActionForThisSection (const struct Brw_FileBrowser *FileBrowser)
   {
    if (Brw_SectionForAction.Id[0] == '\0')
       return Brw_ACT_NONE;
@@ -10770,8 +10565,8 @@ void Brw_GetAndShowOERsStats (Hie_Level_t HieLvl)
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    static const char **Label[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = &Txt_Number_of_private_files,
-      [PriPub_PUBLIC ] = &Txt_Number_of_public_files
+      [PriPub_PRIVAT] = &Txt_Number_of_private_files,
+      [PriPub_PUBLIC] = &Txt_Number_of_public_files
      };
    Brw_License_t License;
    unsigned long NumFiles[PriPub_NUM_PRIVATE_PUBLIC];

@@ -36,7 +36,7 @@
 
 typedef enum
   {
-   PriPub_PRIVATE,
+   PriPub_PRIVAT,
    PriPub_PUBLIC,
   } PriPub_PrivateOrPublic_t;
 

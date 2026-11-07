@@ -293,7 +293,7 @@ void Ban_GetBannerDataByCod (struct Ban_Banner *Ban)
    MYSQL_RES *mysql_res;
 
    /***** Clear data *****/
-   Ban->Hidden = HidVis_VISIBLE;
+   Ban->Hidden = HidVis_VISIBL;
    Ban->ShrtName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
@@ -381,8 +381,8 @@ static void Ban_ListBannersForEdition (struct Ban_Banners *Banners)
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhBan,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidBan,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhBan,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidBan,	// Visible ==> action to hide
      };
    static Act_Action_t ActionRename[Nam_NUM_SHRT_FULL_NAMES] =
      {
@@ -524,7 +524,7 @@ void Ban_UnhideBanner (void)
    Ban_ResetBanner (Ban);
 
    /***** Set banner as visible *****/
-   Ban_ShowOrHideBanner (Ban,HidVis_VISIBLE);
+   Ban_ShowOrHideBanner (Ban,HidVis_VISIBL);
   }
 
 /*****************************************************************************/

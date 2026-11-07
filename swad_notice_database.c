@@ -56,7 +56,7 @@ long Not_DB_InsertNotice (const char *Content,PriPub_PrivateOrPublic_t PrivateOr
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,
 				PriPub_Public_YN[PrivateOrPublic],
-				HidVis_Hidden_01[HidVis_VISIBLE]);	// 0: Visible, 1: Hidden
+				HidVis_Hidden_01[HidVis_VISIBL]);	// 0: Visible, 1: Hidden
   }
 
 /*****************************************************************************/

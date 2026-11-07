@@ -191,7 +191,7 @@ void Exa_ResetExam (struct Exa_Exam *Exam)
    Exam->TimeUTC[Dat_STR_TIME] = (time_t) 0;
    Exam->TimeUTC[Dat_END_TIME]	= (time_t) 0;
    Exam->Title[0]		= '\0';
-   Exam->Hidden			= HidVis_VISIBLE;
+   Exam->Hidden			= HidVis_VISIBL;
    Exam->NumSets		= 0;
    Exam->NumQsts		= 0;
    Exam->NumSess		= 0;
@@ -696,8 +696,8 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhExa,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidExa,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhExa,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidExa,	// Visible ==> action to hide
      };
    static Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
@@ -1217,7 +1217,7 @@ void Exa_HideExam (void)
 
 void Exa_UnhideExam (void)
   {
-   Exa_HideUnhideExam (HidVis_VISIBLE);
+   Exa_HideUnhideExam (HidVis_VISIBL);
   }
 
 static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)

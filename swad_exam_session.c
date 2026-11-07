@@ -184,7 +184,7 @@ void ExaSes_ResetSession (struct ExaSes_Session *Session)
 	StartEndTime++)
       Session->TimeUTC[StartEndTime] = (time_t) 0;
    Session->Title[0]		= '\0';
-   Session->Hidden		= HidVis_VISIBLE;
+   Session->Hidden		= HidVis_VISIBL;
    Session->Open		= CloOpe_CLOSED;
    Session->Show_UsrResults	= Lay_DONT_SHOW;
    Session->NumCols		= ExaSes_NUM_COLS_DEFAULT;
@@ -1029,8 +1029,8 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhExaSes,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidExaSes,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhExaSes,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidExaSes,	// Visible ==> action to hide
      };
 
    /***** Begin cell *****/
@@ -1601,7 +1601,7 @@ void ExaSes_HideSession (void)
 
 void ExaSes_UnhideSession (void)
   {
-   ExaSes_HideUnhideSession (HidVis_VISIBLE);
+   ExaSes_HideUnhideSession (HidVis_VISIBL);
   }
 
 static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)

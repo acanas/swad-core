@@ -107,7 +107,7 @@ void Tag_EnableTag (void)
    long TagCod = ParCod_GetAndCheckPar (ParCod_Tag);
 
    /***** Change tag status to enabled *****/
-   Tag_DB_EnableOrDisableTag (TagCod,HidVis_VISIBLE);
+   Tag_DB_EnableOrDisableTag (TagCod,HidVis_VISIBL);
 
    /***** Show again the form to edit tags *****/
    Tag_ShowFormEditTags ();
@@ -245,8 +245,8 @@ void Tag_ShowFormSelTags (const struct Tag_Tags *Tags,MYSQL_RES *mysql_res,
    extern const char *Txt_Tag_allowed;
    static const char **Title[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = &Txt_Tag_not_allowed,
-      [HidVis_VISIBLE] = &Txt_Tag_allowed
+      [HidVis_HIDDEN] = &Txt_Tag_not_allowed,
+      [HidVis_VISIBL] = &Txt_Tag_allowed
      };
    unsigned NumTag;
    unsigned NumSelTag;
@@ -445,8 +445,8 @@ static void Tag_PutIconEnableDisable (long TagCod,HidVis_HiddenOrVisible_t TagHi
    extern struct Ico_IconColor Ico_HiddenVisible[HidVis_NUM_HIDDEN_VISIBLE];
    static Act_Action_t NextAction[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActEnaTag,	// Disabled ==> click to enable
-      [HidVis_VISIBLE] = ActDisTag	// Enabled  ==> click to disable
+      [HidVis_HIDDEN] = ActEnaTag,	// Disabled ==> click to enable
+      [HidVis_VISIBL] = ActDisTag	// Enabled  ==> click to disable
      };
 
    HTM_TD_Begin ("class=\"BM\"");

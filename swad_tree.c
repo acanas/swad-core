@@ -453,7 +453,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    Tre_SetHiddenLevel (Node->Hierarchy.Level,Node->Hierarchy.Hidden);
    switch (Node->Hierarchy.Hidden)
      {
-      case HidVis_VISIBLE:	// this node is not marked as hidden
+      case HidVis_VISIBL:	// this node is not marked as hidden
          HiddenOrVisible = Tre_CheckIfAnyHigherLevelIsHidden (Node->Hierarchy.Level);
 	 break;
       case HidVis_HIDDEN:	// this node is marked as hidden
@@ -463,7 +463,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
      }
 
    if (ViewingOrEditingProgram[ListingType] == Vie_EDIT ||
-       HiddenOrVisible == HidVis_VISIBLE)
+       HiddenOrVisible == HidVis_VISIBL)
      {
       /***** Increase number in level *****/
       Tre_IncreaseNumberInLevel (Node->Hierarchy.Level);
@@ -576,7 +576,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 		  Err_NotEnoughMemoryExit ();
 	       HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
 			      Id,
-			      CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBLE],The_GetSuffix (),
+			      CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBL],The_GetSuffix (),
 			      HidVis_TreeClass[HiddenOrVisible]);
 		  Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
@@ -952,12 +952,12 @@ static HidVis_HiddenOrVisible_t Tre_GetHiddenLevel (unsigned Level)
   {
    /* Level 0 (root) is always visible */
    if (Level == 0)
-      return HidVis_VISIBLE;
+      return HidVis_VISIBL;
 
    if (Tre_Gbl.Levels)
       return Tre_Gbl.Levels[Level].HiddenOrVisible;
 
-   return HidVis_VISIBLE;
+   return HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -987,7 +987,7 @@ static HidVis_HiddenOrVisible_t Tre_CheckIfAnyHigherLevelIsHidden (unsigned Curr
       if (Tre_GetHiddenLevel (Level) == HidVis_HIDDEN)
          return HidVis_HIDDEN;
 
-   return HidVis_VISIBLE;	// None is hidden. All are visible.
+   return HidVis_VISIBL;	// None is hidden. All are visible.
   }
 
 /*****************************************************************************/
@@ -1015,26 +1015,26 @@ static void Tre_PutFormsToRemEditOneNode (Tre_ListingType_t ListingType,
      };
    static Act_Action_t ActionsHideUnhide[Inf_NUM_TYPES][HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN ] = ActUnk,
-      [Inf_UNKNOWN_TYPE	][HidVis_VISIBLE] = ActUnk,
-      [Inf_INFORMATION	][HidVis_HIDDEN ] = ActUnhTreNodInf,	// Hidden ==> action to unhide
-      [Inf_INFORMATION	][HidVis_VISIBLE] = ActHidTreNodInf,	// Visible ==> action to hide
-      [Inf_PROGRAM	][HidVis_HIDDEN ] = ActUnhTreNodPrg,	// Hidden ==> action to unhide
-      [Inf_PROGRAM	][HidVis_VISIBLE] = ActHidTreNodPrg,	// Visible ==> action to hide
-      [Inf_TEACH_GUIDE	][HidVis_HIDDEN ] = ActUnhTreNodGui,	// Hidden ==> action to unhide
-      [Inf_TEACH_GUIDE	][HidVis_VISIBLE] = ActHidTreNodGui,	// Visible ==> action to hide
-      [Inf_SYLLABUS_LEC	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
-      [Inf_SYLLABUS_LEC	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
-      [Inf_SYLLABUS_PRA	][HidVis_HIDDEN ] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
-      [Inf_SYLLABUS_PRA	][HidVis_VISIBLE] = ActHidTreNodSyl,	// Visible ==> action to hide
-      [Inf_BIBLIOGRAPHY	][HidVis_HIDDEN ] = ActUnhTreNodBib,	// Hidden ==> action to unhide
-      [Inf_BIBLIOGRAPHY	][HidVis_VISIBLE] = ActHidTreNodBib,	// Visible ==> action to hide
-      [Inf_FAQ		][HidVis_HIDDEN ] = ActUnhTreNodFAQ,	// Hidden ==> action to unhide
-      [Inf_FAQ		][HidVis_VISIBLE] = ActHidTreNodFAQ,	// Visible ==> action to hide
-      [Inf_LINKS	][HidVis_HIDDEN ] = ActUnhTreNodLnk,	// Hidden ==> action to unhide
-      [Inf_LINKS	][HidVis_VISIBLE] = ActHidTreNodLnk,	// Visible ==> action to hide
-      [Inf_ASSESSMENT	][HidVis_HIDDEN ] = ActUnhTreNodAss,	// Hidden ==> action to unhide
-      [Inf_ASSESSMENT	][HidVis_VISIBLE] = ActHidTreNodAss,	// Visible ==> action to hide
+      [Inf_UNKNOWN_TYPE	][HidVis_HIDDEN] = ActUnk,
+      [Inf_UNKNOWN_TYPE	][HidVis_VISIBL] = ActUnk,
+      [Inf_INFORMATION	][HidVis_HIDDEN] = ActUnhTreNodInf,	// Hidden ==> action to unhide
+      [Inf_INFORMATION	][HidVis_VISIBL] = ActHidTreNodInf,	// Visible ==> action to hide
+      [Inf_PROGRAM	][HidVis_HIDDEN] = ActUnhTreNodPrg,	// Hidden ==> action to unhide
+      [Inf_PROGRAM	][HidVis_VISIBL] = ActHidTreNodPrg,	// Visible ==> action to hide
+      [Inf_TEACH_GUIDE	][HidVis_HIDDEN] = ActUnhTreNodGui,	// Hidden ==> action to unhide
+      [Inf_TEACH_GUIDE	][HidVis_VISIBL] = ActHidTreNodGui,	// Visible ==> action to hide
+      [Inf_SYLLABUS_LEC	][HidVis_HIDDEN] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
+      [Inf_SYLLABUS_LEC	][HidVis_VISIBL] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Inf_SYLLABUS_PRA	][HidVis_HIDDEN] = ActUnhTreNodSyl,	// Hidden ==> action to unhide
+      [Inf_SYLLABUS_PRA	][HidVis_VISIBL] = ActHidTreNodSyl,	// Visible ==> action to hide
+      [Inf_BIBLIOGRAPHY	][HidVis_HIDDEN] = ActUnhTreNodBib,	// Hidden ==> action to unhide
+      [Inf_BIBLIOGRAPHY	][HidVis_VISIBL] = ActHidTreNodBib,	// Visible ==> action to hide
+      [Inf_FAQ		][HidVis_HIDDEN] = ActUnhTreNodFAQ,	// Hidden ==> action to unhide
+      [Inf_FAQ		][HidVis_VISIBL] = ActHidTreNodFAQ,	// Visible ==> action to hide
+      [Inf_LINKS	][HidVis_HIDDEN] = ActUnhTreNodLnk,	// Hidden ==> action to unhide
+      [Inf_LINKS	][HidVis_VISIBL] = ActHidTreNodLnk,	// Visible ==> action to hide
+      [Inf_ASSESSMENT	][HidVis_HIDDEN] = ActUnhTreNodAss,	// Hidden ==> action to unhide
+      [Inf_ASSESSMENT	][HidVis_VISIBL] = ActHidTreNodAss,	// Visible ==> action to hide
      };
    static Act_Action_t ActionsSee[Inf_NUM_TYPES] =
      {
@@ -1462,7 +1462,7 @@ void Tre_ResetNode (struct Tre_Node *Node)
    Node->Hierarchy.NodCod = -1L;
    Node->Hierarchy.NodInd = 0;
    Node->Hierarchy.Level  = 0;
-   Node->Hierarchy.Hidden = HidVis_VISIBLE;
+   Node->Hierarchy.Hidden = HidVis_VISIBL;
    Node->UsrCod = -1L;
    Node->TimeUTC[Dat_STR_TIME] =
    Node->TimeUTC[Dat_END_TIME] = (time_t) 0;

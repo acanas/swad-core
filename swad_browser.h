@@ -46,8 +46,8 @@ Err_SuccessOrError_t Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char Ol
 void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char FolderName[NAME_MAX + 1]);
 
 void Brw_GetSelectedUsrsAndShowWorks (void);
-void Brw_ShowFileBrowserOrWorks (void);
-void Brw_ShowAgainFileBrowserOrWorks (struct Brw_FileBrowser *FileBrowser);
+void Brw_ShowFileBrowsers (void);
+void Brw_ShowOneOrMoreFileBrowsers (Brw_Action_t Action);
 
 void Brw_BuildFullPathFromPathAndName (const struct Brw_FileBrowser *FileBrowser,
 				       struct Brw_File *File);

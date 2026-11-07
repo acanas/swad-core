@@ -738,13 +738,13 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
    extern const char *Txt_SURVEY_You_have_not_answered;
    static const char *HiddenOrVisibleClass[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "DATE_RED_LIGHT",
-      [HidVis_VISIBLE] = "DATE_GREEN",
+      [HidVis_HIDDEN] = "DATE_RED_LIGHT",
+      [HidVis_VISIBL] = "DATE_GREEN",
      };
    static const char **HiddenOrVisibleTxt[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = &Txt_Hidden_survey,
-      [HidVis_VISIBLE] = &Txt_Visible_survey,
+      [HidVis_HIDDEN] = &Txt_Hidden_survey,
+      [HidVis_VISIBL] = &Txt_Visible_survey,
      };
    static const char **ClosedOrOpenTxt[CloOpe_NUM_CLOSED_OPEN] =
      {
@@ -858,8 +858,8 @@ static void Svy_PutFormsToRemEditOneSvy (struct Svy_Surveys *Svys,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhSvy,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidSvy,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhSvy,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidSvy,	// Visible ==> action to hide
      };
 
    if (Svys->Svy.Status.ICanEdit == Usr_CAN)
@@ -1195,7 +1195,7 @@ void Svy_GetSvyDataByCod (struct Svy_Survey *Svy)
 
 	 /* Can I answer survey? */
 	 Svy->Status.ICanAnswer = Svy->NumQsts &&
-				  Svy->Status.Hidden == HidVis_VISIBLE &&
+				  Svy->Status.Hidden == HidVis_VISIBL &&
 				  Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
 				  Svy->Status.ValidRoleToAnswer == Err_SUCCESS &&
 				  Svy->Status.IBelongToScope == Usr_BELONG &&
@@ -1214,7 +1214,7 @@ void Svy_GetSvyDataByCod (struct Svy_Survey *Svy)
 					       Svy->HieLvl == Hie_CTY ||
 					       Svy->HieLvl == Hie_SYS) &&
 					       Svy->NumQsts &&
-					       Svy->Status.Hidden == HidVis_VISIBLE &&
+					       Svy->Status.Hidden == HidVis_VISIBL &&
 					       Svy->Status.ClosedOrOpen == CloOpe_OPEN &&
 					       Svy->Status.ValidRoleToAnswer == Err_SUCCESS &&
 					       Svy->Status.IBelongToScope == Usr_BELONG &&
@@ -1314,7 +1314,7 @@ void Svy_GetSvyDataByCod (struct Svy_Survey *Svy)
 	 Svy->Title[0]			= '\0';
 	 Svy->NumQsts			= 0;
 	 Svy->NumUsrs			= 0;
-	 Svy->Status.Hidden		= HidVis_VISIBLE;
+	 Svy->Status.Hidden		= HidVis_VISIBL;
 	 Svy->Status.ClosedOrOpen	= CloOpe_CLOSED;
 	 Svy->Status.ValidRoleToAnswer	= Err_ERROR;
 	 Svy->Status.IBelongToScope	= Usr_DONT_BELONG;
@@ -1558,7 +1558,7 @@ void Svy_HideSvy (void)
 
 void Svy_UnhideSvy (void)
   {
-   Svy_HideUnhideSvy (HidVis_VISIBLE);
+   Svy_HideUnhideSvy (HidVis_VISIBL);
   }
 
 static void Svy_HideUnhideSvy (HidVis_HiddenOrVisible_t HiddenOrVisible)
@@ -1656,7 +1656,7 @@ void Svy_ReqCreatOrEditSvy (void)
 	 Svys.Svy.Title[0] = '\0';
 	 Svys.Svy.NumQsts = 0;
 	 Svys.Svy.NumUsrs = 0;
-	 Svys.Svy.Status.Hidden  = HidVis_VISIBLE;
+	 Svys.Svy.Status.Hidden  = HidVis_VISIBL;
 	 Svys.Svy.Status.ClosedOrOpen	= CloOpe_OPEN;
 	 Svys.Svy.Status.ValidRoleToAnswer	= Err_ERROR;
 	 Svys.Svy.Status.IBelongToScope	= Usr_DONT_BELONG;

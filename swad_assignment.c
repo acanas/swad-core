@@ -709,7 +709,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File Folder;
    Act_Action_t NextAction;
-   Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBLE &&		// It's visible (not hidden)
+   Usr_Can_t ICanSendFiles = Asg->Hidden == HidVis_VISIBL &&		// It's visible (not hidden)
 			     Asg->ClosedOrOpen == CloOpe_OPEN &&	// It's open (inside dates)
 			     Asg->ICanDo == Usr_CAN ? Usr_CAN :		// I can do (I belong to course/group)
 						      Usr_CAN_NOT;
@@ -800,8 +800,8 @@ static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignmen
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhAsg,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidAsg,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhAsg,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidAsg,	// Visible ==> action to hide
      };
 
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -1014,7 +1014,7 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
   {
    if (Asg->AsgCod <= 0)	// If > 0 ==> keep value
       Asg->AsgCod = -1L;
-   Asg->Hidden	      = HidVis_VISIBLE;
+   Asg->Hidden	      = HidVis_VISIBL;
    Asg->UsrCod		      = -1L;
    Asg->TimeUTC[Dat_STR_TIME] =
    Asg->TimeUTC[Dat_END_TIME] = (time_t) 0;
@@ -1168,7 +1168,7 @@ void Asg_HideAssignment (void)
 
 void Asg_UnhideAssignment (void)
   {
-   Asg_HideUnhideAssignment (HidVis_VISIBLE);
+   Asg_HideUnhideAssignment (HidVis_VISIBL);
   }
 
 static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)

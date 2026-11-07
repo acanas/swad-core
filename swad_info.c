@@ -548,7 +548,7 @@ void Inf_UnhideNode (void)
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      Tre_HideOrUnhideNode (Info.Type,HidVis_VISIBLE);
+      Tre_HideOrUnhideNode (Info.Type,HidVis_VISIBL);
    Inf_AfterTree ();
   }
 
@@ -719,7 +719,7 @@ void Inf_UnhideItem (void)
    struct Inf_Info Info;
 
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_EDITOR);
-      TreSpc_HideOrUnhideItem (Info.Type,HidVis_VISIBLE);
+      TreSpc_HideOrUnhideItem (Info.Type,HidVis_VISIBL);
    Inf_AfterTree ();
   }
 

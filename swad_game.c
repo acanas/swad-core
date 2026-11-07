@@ -206,7 +206,7 @@ void Gam_ResetGame (struct Gam_Game *Game)
    Game->NumQsts                 = 0;
    Game->NumMchs                 = 0;
    Game->NumUnfinishedMchs       = 0;
-   Game->Hidden         = HidVis_VISIBLE;
+   Game->Hidden         = HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -754,8 +754,8 @@ static void Gam_PutIconsToRemEditOneGame (const struct Gam_Games *Games,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhGam,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidGam,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhGam,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidGam,	// Visible ==> action to hide
      };
    static Act_Action_t ActionShowResults[Rol_NUM_ROLES] =
      {
@@ -1180,7 +1180,7 @@ void Gam_HideGame (void)
 
 void Gam_UnhideGame (void)
   {
-   Gam_HideUnhideGame (HidVis_VISIBLE);
+   Gam_HideUnhideGame (HidVis_VISIBL);
   }
 
 static void Gam_HideUnhideGame (HidVis_HiddenOrVisible_t HiddenOrVisible)
@@ -1855,7 +1855,7 @@ static void Gam_ListQuestionForEdition (struct Qst_Question *Qst,
 	   {
 	    case Exi_EXISTS:
 	       /* Write stem */
-	       Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+	       Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBL);
 
 	       /* Show media */
 	       Med_ShowMedia (&Qst->Media,

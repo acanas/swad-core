@@ -1006,7 +1006,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 
       /***** Write the stem and the answers *****/
       HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	 Qst_WriteQstStem (Stem,ClassStem,HidVis_VISIBLE);
+	 Qst_WriteQstStem (Stem,ClassStem,HidVis_VISIBL);
 	 Qst_WriteQstFeedback (Feedback,"Qst_TXT_LIGHT");
 	 switch (Qst->Answer.Type)
 	   {

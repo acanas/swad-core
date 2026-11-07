@@ -1006,7 +1006,7 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Qst,
 
 	 /* Write stem */
 	 Qst_WriteQstStem (Qst->Stem,ClassTxt[Qst->Validity],
-			   HidVis_VISIBLE);
+			   HidVis_VISIBL);
 
 	 /* Show media */
 	 Med_ShowMedia (&Qst->Media,

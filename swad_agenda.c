@@ -316,7 +316,7 @@ static void Agd_ShowFormToSelHiddenVisiblEvents (const struct Agd_Agenda *Agenda
 
    Set_BeginOneSettingSelector ();
       for (HiddenOrVisible  = HidVis_HIDDEN;
-	   HiddenOrVisible <= HidVis_VISIBLE;
+	   HiddenOrVisible <= HidVis_VISIBL;
 	   HiddenOrVisible++)
 	{
 	 Set_BeginPref ((Agenda->HiddenVisiblEvents & (1 << HiddenOrVisible)));
@@ -384,7 +384,7 @@ static unsigned Agd_GetParsHiddenVisiblEvents (void)
    return (unsigned) Par_GetParUnsignedLong (ParHiddenVisiblName,
 					     0,
 					     (1 << HidVis_HIDDEN) |
-					     (1 << HidVis_VISIBLE),
+					     (1 << HidVis_VISIBL),
 					     Agd_DEFAULT_HIDDEN_EVENTS |
 					     Agd_DEFAULT_VISIBL_EVENTS);
   }
@@ -891,13 +891,13 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhEvtMyAgd,	// Hidden  ==> action to unhide
-      [HidVis_VISIBLE] = ActHidEvtMyAgd,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhEvtMyAgd,	// Hidden  ==> action to unhide
+      [HidVis_VISIBL] = ActHidEvtMyAgd,	// Visible ==> action to hide
      };
    static Act_Action_t ActionPrivatePublic[PriPub_NUM_PRIVATE_PUBLIC] =
      {
-      [PriPub_PRIVATE] = ActPubEvtMyAgd,	// Private ==> action to make public
-      [PriPub_PUBLIC ] = ActPrvEvtMyAgd,	// Public  ==> action to make private
+      [PriPub_PRIVAT] = ActPubEvtMyAgd,	// Private ==> action to make public
+      [PriPub_PUBLIC] = ActPrvEvtMyAgd,	// Public  ==> action to make private
      };
 
    Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
@@ -1128,8 +1128,8 @@ static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
       default:
 	 /***** Clear all event data *****/
 	 AgdEvent->AgdCod		 = -1L;
-	 AgdEvent->Public		 = PriPub_PRIVATE;
-	 AgdEvent->Hidden		 = HidVis_VISIBLE;
+	 AgdEvent->Public		 = PriPub_PRIVAT;
+	 AgdEvent->Hidden		 = HidVis_VISIBL;
 	 AgdEvent->TimeUTC[Dat_STR_TIME] =
 	 AgdEvent->TimeUTC[Dat_END_TIME] = (time_t) 0;
 	 AgdEvent->TimeStatus		 = Dat_FUTURE;
@@ -1237,7 +1237,7 @@ void Agd_HideEvent (void)
 
 void Agd_UnhideEvent (void)
   {
-   Agd_HideUnhideEvent (HidVis_VISIBLE);
+   Agd_HideUnhideEvent (HidVis_VISIBL);
   }
 
 static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)

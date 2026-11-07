@@ -318,19 +318,11 @@ static void ZIP_CreateDirCompressionUsr (struct Usr_Data *UsrDat)
 
 void ZIP_CompressFolder (void)
   {
-   struct Brw_FileBrowser FileBrowser;
-
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-
-   /***** Show again file browser *****/
-   Brw_SetSectionForAction (&FileBrowser,Brw_ACT_COMPRESS_FOLDER);
-   Brw_ShowAgainFileBrowserOrWorks (&FileBrowser);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_COMPRESS_FOLDER);
   }
 
 void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_File Folder;
    Exi_Exist_t FolderExistsInDB;
 
@@ -344,8 +336,7 @@ void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -513,9 +504,9 @@ static unsigned long long ZIP_CloneDir (struct Brw_FileBrowser *FileBrowser,
 	    HiddenOrVisible = (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
 								  Brw_IS_SEE_MRK)) ? Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
 														      File.Path.InZone) :
-										     HidVis_VISIBLE;
+										     HidVis_VISIBL;
 
-	    if (HiddenOrVisible == HidVis_VISIBLE)	// If file/folder is visible
+	    if (HiddenOrVisible == HidVis_VISIBL)	// If file/folder is visible
 	       switch (File.Type)
 	         {
 		  case Brw_IS_FOLDER:

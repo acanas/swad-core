@@ -119,7 +119,7 @@ unsigned Agd_DB_GetListEvents (MYSQL_RES **mysql_res,
 	       Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='Y'",
 			 sizeof (HiddenVisiblEventsSubQuery) - 1);	// Hidden events
 	       break;
-	    case (1 << HidVis_VISIBLE):
+	    case (1 << HidVis_VISIBL):
 	       Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
 			 sizeof (HiddenVisiblEventsSubQuery) - 1);	// Visible events
 	       break;

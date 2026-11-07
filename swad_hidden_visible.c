@@ -35,62 +35,62 @@
 /* Hidden in database fields */
 const char HidVis_Hidden_YN[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = 'Y',
-   [HidVis_VISIBLE] = 'N',
+   [HidVis_HIDDEN] = 'Y',
+   [HidVis_VISIBL] = 'N',
   };
 
 const unsigned HidVis_Hidden_01[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = 1,
-   [HidVis_VISIBLE] = 0,
+   [HidVis_HIDDEN] = 1,
+   [HidVis_VISIBL] = 0,
   };
 
 /* Visible in database fields */
 const char HidVis_Visible_YN[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = 'N',
-   [HidVis_VISIBLE] = 'Y',
+   [HidVis_HIDDEN] = 'N',
+   [HidVis_VISIBL] = 'Y',
   };
 
 const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = "DATE_BLUE_LIGHT",
-   [HidVis_VISIBLE] = "DATE_BLUE",
+   [HidVis_HIDDEN] = "DATE_BLUE_LIGHT",
+   [HidVis_VISIBL] = "DATE_BLUE",
   };
 const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = "ASG_TITLE_LIGHT",
-   [HidVis_VISIBLE] = "ASG_TITLE",
+   [HidVis_HIDDEN] = "ASG_TITLE_LIGHT",
+   [HidVis_VISIBL] = "ASG_TITLE",
   };
 const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = "ASG_GRP_LIGHT",
-   [HidVis_VISIBLE] = "ASG_GRP",
+   [HidVis_HIDDEN] = "ASG_GRP_LIGHT",
+   [HidVis_VISIBL] = "ASG_GRP",
   };
 const char *HidVis_LabelClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = "ASG_LABEL_LIGHT",
-   [HidVis_VISIBLE] = "ASG_LABEL",
+   [HidVis_HIDDEN] = "ASG_LABEL_LIGHT",
+   [HidVis_VISIBL] = "ASG_LABEL",
   };
 const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = "DAT_LIGHT",
-   [HidVis_VISIBLE] = "DAT",
+   [HidVis_HIDDEN] = "DAT_LIGHT",
+   [HidVis_VISIBL] = "DAT",
   };
 const char *HidVis_MsgClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = "MSG_AUT_LIGHT",
-   [HidVis_VISIBLE] = "MSG_AUT",
+   [HidVis_HIDDEN] = "MSG_AUT_LIGHT",
+   [HidVis_VISIBL] = "MSG_AUT",
   };
 const char *HidVis_TreeClass[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = " TRE_HIDDEN",
-   [HidVis_VISIBLE] = "",
+   [HidVis_HIDDEN] = " TRE_HIDDEN",
+   [HidVis_VISIBL] = "",
   };
 const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [HidVis_HIDDEN ] = " style=\"display:none;\"",
-   [HidVis_VISIBLE] = "",
+   [HidVis_HIDDEN] = " style=\"display:none;\"",
+   [HidVis_VISIBL] = "",
   };
 
 /*****************************************************************************/
@@ -100,7 +100,7 @@ const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE] =
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch)
   {
    return Ch == 'Y' ? HidVis_HIDDEN :
-		      HidVis_VISIBLE;
+		      HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -110,7 +110,7 @@ HidVis_HiddenOrVisible_t HidVis_GetHiddenFromYN (char Ch)
 HidVis_HiddenOrVisible_t HidVis_GetHiddenFrom01 (char Ch)
   {
    return Ch == '1' ? HidVis_HIDDEN :
-		      HidVis_VISIBLE;
+		      HidVis_VISIBL;
   }
 
 /*****************************************************************************/
@@ -119,7 +119,7 @@ HidVis_HiddenOrVisible_t HidVis_GetHiddenFrom01 (char Ch)
 
 HidVis_HiddenOrVisible_t HidVis_GetVisibleFromYN (char Ch)
   {
-   return Ch == 'Y' ? HidVis_VISIBLE :
+   return Ch == 'Y' ? HidVis_VISIBL :
 		      HidVis_HIDDEN;
   }
 
@@ -133,6 +133,6 @@ HidVis_HiddenOrVisible_t HidVis_GetParVisible (const char *ParName)
 
    /***** Get parameter "Y"/"N" and convert to boolean *****/
    Par_GetParText (ParName,YN,1);
-   return Str_ConvertToUpperLetter (YN[0]) == 'Y' ? HidVis_VISIBLE :
+   return Str_ConvertToUpperLetter (YN[0]) == 'Y' ? HidVis_VISIBL :
 						    HidVis_HIDDEN;
   }

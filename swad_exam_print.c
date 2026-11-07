@@ -689,7 +689,7 @@ static void ExaPrn_WriteQstAndAnsToFill (const struct ExaPrn_Print *Print,
       HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
 
 	 /* Stem */
-	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBL);
 
 	 /* Media */
 	 Med_ShowMedia (&Qst->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");

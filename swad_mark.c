@@ -78,7 +78,9 @@ static const char *Mrk_HeadOrFootStr[Brw_NUM_HEAD_FOOT] =	// Names of fields in 
 static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
 					   Brw_Zone_t Zone,
 					   const char PathInZone[PATH_MAX + 1]);
-static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter);
+static void Mrk_DoActionChangeNumRowsHeaderOrFooter (struct Brw_FileBrowser *FileBrowser,
+						     Brw_HeadOrFoot_t HeaderOrFooter);
+
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent);
 static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 					     struct Usr_Data *UsrDat,
@@ -185,39 +187,39 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct Mrk_Properties *Marks,
   }
 
 /*****************************************************************************/
-/********* Change the number of rows of header of a file of marks ************/
+/***** Change the number of rows of header or footer of a file of marks ******/
 /*****************************************************************************/
 
 void Mrk_ChangeNumRowsHeader (void)
   {
-   Mrk_ChangeNumRowsHeaderOrFooter (Brw_HEADER);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CHG_NUM_ROWS_HEADER);
   }
-
-/*****************************************************************************/
-/********** Change the number of rows of footer of a file of marks ***********/
-/*****************************************************************************/
 
 void Mrk_ChangeNumRowsFooter (void)
   {
-   Mrk_ChangeNumRowsHeaderOrFooter (Brw_FOOTER);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CHG_NUM_ROWS_FOOTER);
   }
 
-/*****************************************************************************/
-/***** Change the number of rows of header or footer of a file of marks ******/
-/*****************************************************************************/
-
-static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
+void Mrk_DoActionChangeNumRowsHeader (struct Brw_FileBrowser *FileBrowser)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
-   struct Brw_FileBrowser FileBrowser;
+   Mrk_DoActionChangeNumRowsHeaderOrFooter (FileBrowser,Brw_HEADER);
+  }
+
+void Mrk_DoActionChangeNumRowsFooter (struct Brw_FileBrowser *FileBrowser)
+  {
+   Mrk_DoActionChangeNumRowsHeaderOrFooter (FileBrowser,Brw_FOOTER);
+  }
+
+static void Mrk_DoActionChangeNumRowsHeaderOrFooter (struct Brw_FileBrowser *FileBrowser,
+						     Brw_HeadOrFoot_t HeaderOrFooter)
+  {
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
    char UnsignedStr[Cns_MAX_DIGITS_UINT + 1];
    unsigned NumRows;
 
-   /***** Get parameters related to file browser *****/
-   Brw_GetParAndInitFileBrowser (&FileBrowser);
-   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (&FileBrowser,&File);	// Get file
+   /***** Get file *****/
+   FileExistsInDB = Brw_GetParFilCodAndGetFileMetadata (FileBrowser,&File);
    switch (FileExistsInDB)
      {
       case Exi_EXISTS:
@@ -225,7 +227,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 	 Par_GetParText (Mrk_HeadOrFootStr[HeaderOrFooter],UnsignedStr,Cns_MAX_DIGITS_UINT);
 	 if (sscanf (UnsignedStr,"%u",&NumRows) == 1)
 	    /***** Update properties of marks in the database *****/
-	    Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser.Zone,
+	    Mrk_DB_ChangeNumRowsHeaderOrFooter (FileBrowser->Zone,
 						File.Path.InZone,
 						HeaderOrFooter,NumRows);
 	 else
@@ -233,13 +235,9 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
-
-   /***** Show again the file browser *****/
-   Brw_ShowFileBrowserNormal (&FileBrowser);
   }
 
 /*****************************************************************************/
@@ -582,7 +580,6 @@ static Err_SuccessOrError_t Mrk_GetUsrMarks (FILE *FileUsrMarks,
 
 void Mrk_ShowMyMarks (void)
   {
-   extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
@@ -698,8 +695,7 @@ void Mrk_ShowMyMarks (void)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Ale_ShowAlert (Ale_WARNING,
-			Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden);
+	 Err_NoFileOrFolderNoLongerExists ();
          break;
      }
   }

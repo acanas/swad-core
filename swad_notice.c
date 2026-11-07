@@ -211,7 +211,7 @@ static void Not_PutVisibility (void)
 	       HTM_LABEL_Begin (NULL);
 		  HTM_INPUT_RADIO ("Public",HTM_NO_ATTR,
 				   " value=\"%c\"",
-				   PriPub_Public_YN[PriPub_PRIVATE]);
+				   PriPub_Public_YN[PriPub_PRIVAT]);
 		  HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]); HTM_Colon ();
 		  HTM_SP (); HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
 	       HTM_LABEL_End ();
@@ -317,7 +317,7 @@ void Not_HideNotice (void)
 
 void Not_UnhideNotice (void)
   {
-   Not_HideUnhideNotice (HidVis_VISIBLE);
+   Not_HideUnhideNotice (HidVis_VISIBL);
   }
 
 static void Not_HideUnhideNotice (HidVis_HiddenOrVisible_t HiddenOrVisible)
@@ -605,13 +605,13 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_See_full_notice;
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhNot,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidNot,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhNot,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidNot,	// Visible ==> action to hide
      };
    static const char *ContainerClass[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = "NOTICE_BOX LIGHT",
-      [HidVis_VISIBLE] = "NOTICE_BOX",
+      [HidVis_HIDDEN] = "NOTICE_BOX LIGHT",
+      [HidVis_VISIBL] = "NOTICE_BOX",
      };
    static const char *ContainerWidthClass[Not_NUM_TYPES_LISTING] =
      {
@@ -923,8 +923,8 @@ void Not_GetAndShowNoticesStats (Hie_Level_t HieLvl)
 
       /***** Write number of notices *****/
       HTM_TR_Begin (NULL);
-	 HTM_TD_Unsigned (NumNotices[HidVis_VISIBLE]);
-	 HTM_TD_Unsigned (NumNotices[HidVis_HIDDEN ]);
+	 HTM_TD_Unsigned (NumNotices[HidVis_VISIBL]);
+	 HTM_TD_Unsigned (NumNotices[HidVis_HIDDEN]);
 	 HTM_TD_Unsigned (NumNoticesDeleted);
 	 HTM_TD_Unsigned (NumTotalNotices);
 	 HTM_TD_Unsigned (NumTotalNotifications);

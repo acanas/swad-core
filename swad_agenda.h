@@ -72,7 +72,7 @@ typedef enum
 #define Agd_DEFAULT_PUBLIC_EVENTS	(1 << Agd_PUBLIC_EVENTS)	// on
 
 #define Agd_DEFAULT_HIDDEN_EVENTS	(0 << HidVis_HIDDEN)	// off
-#define Agd_DEFAULT_VISIBL_EVENTS	(1 << HidVis_VISIBLE)	// on
+#define Agd_DEFAULT_VISIBL_EVENTS	(1 << HidVis_VISIBL)	// on
 
 #define Agd_ORDER_DEFAULT Dat_STR_TIME
 

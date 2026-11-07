@@ -1469,14 +1469,14 @@ static void Cfe_PutIconsCallForExam (const void *CallsForExams)
   {
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Cfe_NUM_STATUS] =
      {
-      [Cfe_VISIBLE_CALL_FOR_EXAM] = HidVis_VISIBLE,
+      [Cfe_VISIBLE_CALL_FOR_EXAM] = HidVis_VISIBL,
       [Cfe_HIDDEN_CALL_FOR_EXAM ] = HidVis_HIDDEN,
       [Cfe_DELETED_CALL_FOR_EXAM] = HidVis_HIDDEN,
      };
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
      {
-      [HidVis_HIDDEN ] = ActUnhCfe,	// Hidden ==> action to unhide
-      [HidVis_VISIBLE] = ActHidCfe,	// Visible ==> action to hide
+      [HidVis_HIDDEN] = ActUnhCfe,	// Hidden ==> action to unhide
+      [HidVis_VISIBL] = ActHidCfe,	// Visible ==> action to hide
      };
 
    if (CallsForExams)

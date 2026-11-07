@@ -334,7 +334,7 @@ unsigned Prj_DB_GetListProjects (MYSQL_RES **mysql_res,
 	       if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='Y'") < 0)
 		  Err_NotEnoughMemoryExit ();
 	       break;
-	    case (1 << HidVis_VISIBLE):	// Visible projects
+	    case (1 << HidVis_VISIBL):	// Visible projects
 	       if (asprintf (&HidVisSubQuery," AND prj_projects.Hidden='N'") < 0)
 		  Err_NotEnoughMemoryExit ();
 	       break;

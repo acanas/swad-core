@@ -40,10 +40,10 @@ const char *CloOpe_Txt[CloOpe_NUM_CLOSED_OPEN] =
 
 const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE] =
   {
-   [CloOpe_CLOSED][HidVis_HIDDEN ] = "DATE_RED_LIGHT",
-   [CloOpe_CLOSED][HidVis_VISIBLE] = "DATE_RED",
-   [CloOpe_OPEN  ][HidVis_HIDDEN ] = "DATE_GREEN_LIGHT",
-   [CloOpe_OPEN  ][HidVis_VISIBLE] = "DATE_GREEN",
+   [CloOpe_CLOSED][HidVis_HIDDEN] = "DATE_RED_LIGHT",
+   [CloOpe_CLOSED][HidVis_VISIBL] = "DATE_RED",
+   [CloOpe_OPEN  ][HidVis_HIDDEN] = "DATE_GREEN_LIGHT",
+   [CloOpe_OPEN  ][HidVis_VISIBL] = "DATE_GREEN",
   };
 
 /*****************************************************************************/

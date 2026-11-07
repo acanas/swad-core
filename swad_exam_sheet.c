@@ -419,7 +419,7 @@ static void ExaShe_WriteQst (const struct ExaPrn_Print *Print,
 
       /***** Stem, media and answers *****/
       HTM_DIV_Begin ("class=\"Exa_RIGHT\"");
-	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBLE);
+	 Qst_WriteQstStem (Qst->Stem,"Qst_TXT",HidVis_VISIBL);
 	 Med_ShowMedia (&Qst->Media,"Tst_MED_SHOW_CONT","Tst_MED_SHOW");
 	 ExaShe_WriteOptions (Print,QstInd,Qst);
       HTM_DIV_End ();
