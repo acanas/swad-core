@@ -8378,6 +8378,38 @@ void Brw_ChgFileMetadata (void)
 static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Changes_saved;
+   static TmlNot_Type_t NoteTypes[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = TmlNot_UNKNOWN,
+      [Brw_SHOW_DOC_CRS] = TmlNot_UNKNOWN,
+      [Brw_SHOW_MRK_CRS] = TmlNot_UNKNOWN,
+      [Brw_ADMI_DOC_CRS] = TmlNot_CRS_DOC_PUB_FILE,
+      [Brw_ADMI_SHR_CRS] = TmlNot_CRS_SHA_PUB_FILE,
+      [Brw_ADMI_SHR_GRP] = TmlNot_UNKNOWN,
+      [Brw_ADMI_WRK_USR] = TmlNot_UNKNOWN,
+      [Brw_ADMI_WRK_CRS] = TmlNot_UNKNOWN,
+      [Brw_ADMI_MRK_CRS] = TmlNot_UNKNOWN,
+      [Brw_ADMI_BRF_USR] = TmlNot_UNKNOWN,
+      [Brw_SHOW_DOC_GRP] = TmlNot_UNKNOWN,
+      [Brw_ADMI_DOC_GRP] = TmlNot_UNKNOWN,
+      [Brw_SHOW_MRK_GRP] = TmlNot_UNKNOWN,
+      [Brw_ADMI_MRK_GRP] = TmlNot_UNKNOWN,
+      [Brw_ADMI_ASG_USR] = TmlNot_UNKNOWN,
+      [Brw_ADMI_ASG_CRS] = TmlNot_UNKNOWN,
+      [Brw_SHOW_DOC_DEG] = TmlNot_UNKNOWN,
+      [Brw_ADMI_DOC_DEG] = TmlNot_DEG_DOC_PUB_FILE,
+      [Brw_SHOW_DOC_CTR] = TmlNot_UNKNOWN,
+      [Brw_ADMI_DOC_CTR] = TmlNot_CTR_DOC_PUB_FILE,
+      [Brw_SHOW_DOC_INS] = TmlNot_UNKNOWN,
+      [Brw_ADMI_DOC_INS] = TmlNot_INS_DOC_PUB_FILE,
+      [Brw_ADMI_SHR_DEG] = TmlNot_DEG_SHA_PUB_FILE,
+      [Brw_ADMI_SHR_CTR] = TmlNot_CTR_SHA_PUB_FILE,
+      [Brw_ADMI_SHR_INS] = TmlNot_INS_SHA_PUB_FILE,
+      [Brw_ADMI_TCH_CRS] = TmlNot_UNKNOWN,
+      [Brw_ADMI_TCH_GRP] = TmlNot_UNKNOWN,
+      [Brw_ADMI_DOC_PRJ] = TmlNot_UNKNOWN,
+      [Brw_ADMI_ASS_PRJ] = TmlNot_UNKNOWN,
+     };
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
    PriPub_PrivateOrPublic_t PrivateOrPublicFileBeforeEdition;
@@ -8437,36 +8469,10 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
 
 		     /***** Insert file into public social activity *****/
 		     if (PrivateOrPublicFileBeforeEdition == PriPub_PRIVAT &&	// Only if file has changed from private...
-			 PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)		// ...to public
-			switch (FileBrowser->Zone)
-			  {
-			   case Brw_ADMI_DOC_INS:
-			      TmlNot_StoreAndPublishNote (TmlNot_INS_DOC_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_SHR_INS:
-			      TmlNot_StoreAndPublishNote (TmlNot_INS_SHA_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_DOC_CTR:
-			      TmlNot_StoreAndPublishNote (TmlNot_CTR_DOC_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_SHR_CTR:
-			      TmlNot_StoreAndPublishNote (TmlNot_CTR_SHA_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_DOC_DEG:
-			      TmlNot_StoreAndPublishNote (TmlNot_DEG_DOC_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_SHR_DEG:
-			      TmlNot_StoreAndPublishNote (TmlNot_DEG_SHA_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_DOC_CRS:
-			      TmlNot_StoreAndPublishNote (TmlNot_CRS_DOC_PUB_FILE,File.FilCod);
-			      break;
-			   case Brw_ADMI_SHR_CRS:
-			      TmlNot_StoreAndPublishNote (TmlNot_CRS_SHA_PUB_FILE,File.FilCod);
-			      break;
-			   default:
-			      break;
-			  }
+			 PrivateOrPublicFileAfterEdition  == PriPub_PUBLIC)	// ...to public
+			if (NoteTypes[FileBrowser->Zone] != TmlNot_UNKNOWN)
+			   TmlNot_StoreAndPublishNote (NoteTypes[FileBrowser->Zone],
+						       File.FilCod);
 
 		     Ale_ShowAlert (Ale_SUCCESS,Txt_Changes_saved);
 		     break;
@@ -8641,14 +8647,10 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
    /***** File is hidden? (row[7]) *****/
    switch (*ZoneDB)
      {
-      case Brw_SHOW_DOC_INS:
-      case Brw_ADMI_DOC_INS:
-      case Brw_SHOW_DOC_CTR:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_SHOW_DOC_DEG:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
+      case Brw_SHOW_DOC_INS:	case Brw_ADMI_DOC_INS:
+      case Brw_SHOW_DOC_CTR:	case Brw_ADMI_DOC_CTR:
+      case Brw_SHOW_DOC_DEG:	case Brw_ADMI_DOC_DEG:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:
 	 FileOrFolder->Metadata.HiddenOrVisible = HidVis_GetHiddenFromYN (row[7][0]);
 	 break;
       default:
@@ -8659,18 +8661,10 @@ static void Brw_GetFileMetadataFromRow (MYSQL_RES *mysql_res,
    /***** Is a public file? (row[8]) *****/
    switch (*ZoneDB)
      {
-      case Brw_SHOW_DOC_INS:
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
-      case Brw_SHOW_DOC_CTR:
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
-      case Brw_SHOW_DOC_DEG:
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
-      case Brw_SHOW_DOC_CRS:
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_SHR_CRS:
+      case Brw_SHOW_DOC_INS:	case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
+      case Brw_SHOW_DOC_CTR:	case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
+      case Brw_SHOW_DOC_DEG:	case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
+      case Brw_SHOW_DOC_CRS:	case Brw_ADMI_DOC_CRS:	case Brw_ADMI_SHR_CRS:
 	 FileOrFolder->Metadata.PrivateOrPublic = PriPub_GetPublicFromYN (row[8][0]);
 	 break;
       default:
@@ -8873,8 +8867,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
 
    switch (Zone)
      {
-      case Brw_ADMI_DOC_INS:
-      case Brw_ADMI_SHR_INS:
+      case Brw_ADMI_DOC_INS:	case Brw_ADMI_SHR_INS:
 	 /* Cod stores the institution code */
 	 *GrpCod =
 	 HieCods[Hie_CRS] =
@@ -8882,8 +8875,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
 	 HieCods[Hie_CTR] = -1L;
 	 HieCods[Hie_INS] = HieCod;
          break;
-      case Brw_ADMI_DOC_CTR:
-      case Brw_ADMI_SHR_CTR:
+      case Brw_ADMI_DOC_CTR:	case Brw_ADMI_SHR_CTR:
 	 /* Cod stores the center code */
 	 *GrpCod =
 	 HieCods[Hie_CRS] =
@@ -8892,8 +8884,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 HieCods[Hie_INS] = Ctr.PrtCod;
          break;
-      case Brw_ADMI_DOC_DEG:
-      case Brw_ADMI_SHR_DEG:
+      case Brw_ADMI_DOC_DEG:	case Brw_ADMI_SHR_DEG:
 	 /* Cod stores the degree code */
 	 *GrpCod =
 	 HieCods[Hie_CRS] = -1L;
@@ -8903,12 +8894,9 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 HieCods[Hie_INS] = Ctr.PrtCod;
          break;
-      case Brw_ADMI_DOC_CRS:
-      case Brw_ADMI_TCH_CRS:
-      case Brw_ADMI_SHR_CRS:
-      case Brw_ADMI_ASG_USR:
-      case Brw_ADMI_WRK_USR:
-      case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_DOC_CRS:	case Brw_ADMI_TCH_CRS:
+      case Brw_ADMI_SHR_CRS:	case Brw_ADMI_MRK_CRS:
+      case Brw_ADMI_ASG_USR:	case Brw_ADMI_WRK_USR:
 	 /* Cod stores the course code */
 	 *GrpCod = -1L;
 	 HieCods[Hie_CRS] = Crs.HieCod = HieCod;
@@ -8919,10 +8907,8 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 HieCods[Hie_INS] = Ctr.PrtCod;
 	 break;
-      case Brw_ADMI_DOC_GRP:
-      case Brw_ADMI_TCH_GRP:
-      case Brw_ADMI_SHR_GRP:
-      case Brw_ADMI_MRK_GRP:
+      case Brw_ADMI_DOC_GRP:	case Brw_ADMI_TCH_GRP:
+      case Brw_ADMI_SHR_GRP:	case Brw_ADMI_MRK_GRP:
 	 /* Cod stores the group code */
 	 *GrpCod = Grp.GrpCod = HieCod;
 	 Grp_GetGroupDataByCod (&Crs.HieCod,&GrpTyp.GrpTypCod,&Grp);
@@ -8934,8 +8920,7 @@ void Brw_GetCrsGrpFromFileMetadata (Brw_Zone_t Zone,long HieCod,
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	 HieCods[Hie_INS] = Ctr.PrtCod;
 	 break;
-      case Brw_ADMI_DOC_PRJ:
-      case Brw_ADMI_ASS_PRJ:
+      case Brw_ADMI_DOC_PRJ:	case Brw_ADMI_ASS_PRJ:
 	 /* Cod stores the project code */
 	 *GrpCod = -1L;
 	 HieCods[Hie_CRS] = Crs.HieCod = Prj_DB_GetCrsOfPrj (HieCod);
