@@ -1,3 +1,4 @@
+# SWAD binaries and building process files
 local-dev/root/
 soap/soapC.c
 soap/soapServer.c
@@ -19,3 +20,23 @@ swad_it
 swad_pl
 swad_pt
 swad_tr
+
+# IDE / editor files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-*
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+nbproject/
+*.iml
+.clangd/
+compile_commands.json
+.ccls-cache/
+.cache/
+.tags
+TAGS

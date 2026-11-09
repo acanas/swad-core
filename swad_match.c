@@ -50,6 +50,7 @@
 #include "swad_parameter_code.h"
 #include "swad_question_database.h"
 #include "swad_role.h"
+#include "swad_session_database.h"
 #include "swad_setting.h"
 #include "swad_test.h"
 
@@ -73,6 +74,13 @@ extern struct Globals Gbl;
 #define Mch_COUNTDOWN_SECONDS_LARGE  60
 #define Mch_COUNTDOWN_SECONDS_MEDIUM 30
 #define Mch_COUNTDOWN_SECONDS_SMALL  10
+
+#define Mch_SECONDS_TO_SEE_MY_ANSWER   5
+
+#define Mch_PAR_SEE_MY_ANSWER		"MchSeeAns"
+#define Mch_SEE_ANS_NEVER		0
+#define Mch_SEE_ANS_REVEALED		1
+#define Mch_SEE_ANS_EXPIRED		2
 
 /*****************************************************************************/
 /******************************* Private types *******************************/
@@ -200,6 +208,11 @@ static void Mch_ShowMatchTitleStd (const struct Mch_Match *Match);
 static void Mch_PutCheckboxResult (const struct Mch_Match *Match);
 static void Mch_PutIfAnswered (const struct Mch_Match *Match,
 			       Mch_AnsAnswered_t Answered,int NumOpt);
+static int Mch_GetSeeMyAnswerState (const struct Mch_Match *Match,int NumOpt);
+static void Mch_RecordSeeMyAnswer (const struct Mch_Match *Match,int NumOpt);
+static void Mch_RemoveSeeMyAnswerPar (void);
+static void Mch_PutSeeMyAnswerButton (const struct Mch_Match *Match,int SeeAnsState);
+static void Mch_PutSeeMyAnswerDisclaimer (void);
 static void Mch_PutIconToRemoveMyAnswer (const struct Mch_Match *Match);
 static void Mch_ShowQuestionAndAnswersTch (const struct Mch_Match *Match);
 static void Mch_WriteAnswersMatchResult (const struct Mch_Match *Match,
@@ -1994,6 +2007,10 @@ static void Mch_ShowMatchStatusForStd (struct Mch_Match *Match,Mch_Update_t Upda
 			Match->Status.QstInd,
 			&UsrAnswer);
 
+   /***** Record the time when the student presses "See my answer" *****/
+   if (Gbl.Action.Act == ActSeeMchAnsQstStd)
+      Mch_RecordSeeMyAnswer (Match,UsrAnswer.NumOpt);
+
    /***** Left column *****/
    Mch_ShowLeftColumnStd (Match,&UsrAnswer);
 
@@ -2654,21 +2671,27 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,
 	  Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
 	  Answered == Mch_ANS_ANSWERED)			// I have answered this question
 	{
-	 /* Begin form */
-	 Frm_BeginForm (ActSeeMchAnsQstStd);
-	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
+	 int SeeAnsState = Mch_GetSeeMyAnswerState (Match,NumOpt);
 
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),NULL,
-	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
-	                             " onmousedown=\"this.form.submit();return false;\"",
-	                             The_GetSuffix ());
+	 if (SeeAnsState == Mch_SEE_ANS_REVEALED)
+	   {
+	    /***** Show the answer chosen by the student for a few seconds *****/
+	    HTM_DIV_Begin ("class=\"DAT_SMALL_GREEN_%s\"",The_GetSuffix ());
 	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
 	       HTM_NBSP ();
 	       HTM_TxtF (Txt_MATCH_QUESTION_AnsweredOption,'A' + NumOpt);
-	    HTM_BUTTON_End ();
+	    HTM_DIV_End ();
+	   }
+	 else
+	   {
+	    /***** Button to see my answer (disabled if already seen) *****/
+	    Mch_PutSeeMyAnswerButton (Match,SeeAnsState);
 
-	 /* End form */
-	 Frm_EndForm ();
+	    /***** Disclaimer in grey, split in two lines *****/
+	    HTM_DIV_Begin ("class=\"MCH_SEE_ANS_DISCLAIMER\"");
+	       Mch_PutSeeMyAnswerDisclaimer ();
+	    HTM_DIV_End ();
+	   }
 	}
       else
 	{
@@ -2677,15 +2700,111 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,
 	    HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
 		      Options[Answered].ClassI,*Options[Answered].Txt);
 	    HTM_NBSP ();
-	    if (Answered == Mch_ANS_ANSWERED)
-	       HTM_TxtF (Txt_MATCH_QUESTION_AnsweredOption,'A' + NumOpt);
-	    else
-	       HTM_Txt (*Options[Answered].Txt);
+	    HTM_Txt (*Options[Answered].Txt);
 	 HTM_DIV_End ();
 	}
 
    /***** End container *****/
    HTM_DIV_End ();
+  }
+
+/*****************************************************************************/
+/********* Get state of "See my answer" for the current question *************/
+/*****************************************************************************/
+
+static int Mch_GetSeeMyAnswerState (const struct Mch_Match *Match,int NumOpt)
+  {
+   char ParValue[128];
+   long SeeMchCod,SeeQstInd,SeeTime;
+   int SeeNumOpt;
+
+   /***** Get session parameter with the last time the student saw his/her answer *****/
+   Ses_DB_GetPar (Mch_PAR_SEE_MY_ANSWER,ParValue,sizeof (ParValue) - 1);
+   if (sscanf (ParValue,"%ld|%ld|%d|%ld",&SeeMchCod,&SeeQstInd,&SeeNumOpt,&SeeTime) != 4)
+      return Mch_SEE_ANS_NEVER;
+
+   /***** Check that it is for this match, question and answer *****/
+   if (SeeMchCod != Match->MchCod ||
+       SeeQstInd != (long) Match->Status.QstInd ||
+       SeeNumOpt != NumOpt)
+      return Mch_SEE_ANS_NEVER;
+
+   /***** Check if the time to see the answer has already passed *****/
+   return (long) time (NULL) - SeeTime < Mch_SECONDS_TO_SEE_MY_ANSWER ?
+	  Mch_SEE_ANS_REVEALED : Mch_SEE_ANS_EXPIRED;
+  }
+
+/*****************************************************************************/
+/********* Record the time when the student presses "See my answer" **********/
+/*****************************************************************************/
+
+static void Mch_RecordSeeMyAnswer (const struct Mch_Match *Match,int NumOpt)
+  {
+   char ParValue[128];
+
+   /***** Trivial checks: session must be open and question answered *****/
+   if (Gbl.Session.Status != Ses_OPEN ||
+       NumOpt < 0)
+      return;
+
+   /***** Remove previous parameter and store a new one *****/
+   Ses_DB_RemoveParByName (Mch_PAR_SEE_MY_ANSWER);
+   snprintf (ParValue,sizeof (ParValue),"%ld|%u|%d|%ld",
+	     Match->MchCod,Match->Status.QstInd,NumOpt,(long) time (NULL));
+   Ses_DB_InsertPar (Mch_PAR_SEE_MY_ANSWER,ParValue);
+  }
+
+/*****************************************************************************/
+/*********** Remove "See my answer" parameter (when answer changes) **********/
+/*****************************************************************************/
+
+static void Mch_RemoveSeeMyAnswerPar (void)
+  {
+   Ses_DB_RemoveParByName (Mch_PAR_SEE_MY_ANSWER);
+  }
+
+/*****************************************************************************/
+/************** Put button to see the answer chosen by the student ************/
+/*****************************************************************************/
+
+static void Mch_PutSeeMyAnswerButton (const struct Mch_Match *Match,int SeeAnsState)
+  {
+   extern const char *Txt_MATCH_QUESTION_SeeMyAnswer;
+
+   /***** Begin form *****/
+   Frm_BeginForm (ActSeeMchAnsQstStd);
+      ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
+
+      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),NULL,
+			       "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
+			       "%s onmousedown=\"this.form.submit();return false;\"",
+			       The_GetSuffix (),
+			       SeeAnsState == Mch_SEE_ANS_EXPIRED ? " disabled" : "");
+	 HTM_TxtF ("<i class=\"%s\"></i>","fas fa-eye");
+	 HTM_NBSP ();
+	 HTM_Txt (Txt_MATCH_QUESTION_SeeMyAnswer);
+      HTM_BUTTON_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/********* Put disclaimer about "See my answer" in small grey text **********/
+/*****************************************************************************/
+
+static void Mch_PutSeeMyAnswerDisclaimer (void)
+  {
+   extern const char *Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer1;
+   extern const char *Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer2;
+   extern const char *Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer3;
+
+   HTM_TxtF (Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer1,
+	     Mch_SECONDS_TO_SEE_MY_ANSWER);
+   HTM_BR ();
+   HTM_Txt (Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer2);
+   HTM_BR ();
+   HTM_Txt (Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer3);
   }
 
 /*****************************************************************************/
@@ -3377,6 +3496,9 @@ void Mch_RemoveMyQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd)
 
       /***** Compute score and update my match result *****/
       MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match->MchCod);
+
+      /***** Allow the student to see his/her new answer *****/
+      Mch_RemoveSeeMyAnswerPar ();
      }
   }
 
@@ -3615,6 +3737,9 @@ void Mch_StoreQuestionAnswer (const struct Mch_Match *Match,unsigned QstInd,
 
 	 /***** Compute score and update my match result *****/
 	 MchPrn_ComputeScoreAndUpdateMyMatchPrintInDB (Match->MchCod);
+
+	 /***** Allow the student to see his/her new answer *****/
+	 Mch_RemoveSeeMyAnswerPar ();
 	}
      }
   }

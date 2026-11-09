@@ -55,6 +55,7 @@ Exi_Exist_t Ses_DB_CheckIfParIsAlreadyStored (const char *ParName);
 void Ses_DB_GetPar (const char *ParName,char *ParValue,size_t StrSize);
 
 void Ses_DB_RemovePar (void);
+void Ses_DB_RemoveParByName (const char *ParName);
 void Ses_DB_RemoveParsFromExpiredSessions (void);
 
 #endif
