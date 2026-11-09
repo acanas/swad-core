@@ -19553,6 +19553,121 @@ const char *Txt_MATCH_QUESTION_Answered =
 	"Cevapland&inodot;";
 #endif
 
+const char *Txt_MATCH_QUESTION_AnsweredOption =
+#if   L==1	// ca
+	"Respostada l'opci&oacute; %c";
+#elif L==2	// de
+	"Option %c beantwortet";
+#elif L==3	// en
+	"Answered option %c";
+#elif L==4	// es
+	"Opci&oacute;n respondida: %c";
+#elif L==5	// fr
+	"Option %c r&eacute;pondue";
+#elif L==6	// gn
+	"Echa&#225;a opci&#243;n %c";	// Traducci&#243;n aproximada
+#elif L==7	// it
+	"Opzione %c risposta";
+#elif L==8	// pl
+	"Wybrana opcja: %c";
+#elif L==9	// pt
+	"Op&ccedil;&atilde;o respondida: %c";
+#elif L==10	// tr
+	"Cevaplanan se&ccedil;enek: %c";	// &#199;eviri laz&#305;m!
+#endif
+
+const char *Txt_MATCH_QUESTION_SeeMyAnswer =
+#if   L==1	// ca
+	"Veure la meva resposta";
+#elif L==2	// de
+	"Meine Antwort anzeigen";
+#elif L==3	// en
+	"See my answer";
+#elif L==4	// es
+	"Ver mi respuesta";
+#elif L==5	// fr
+	"Voir ma r&eacute;ponse";
+#elif L==6	// gn
+	"Jehecha che respuesta";	// Traducci&#243;n aproximada
+#elif L==7	// it
+	"Vedi la mia risposta";
+#elif L==8	// pl
+	"Zobacz moj&#261; odpowied&#378;";
+#elif L==9	// pt
+	"Ver a minha resposta";
+#elif L==10	// tr
+	"Cevab&#305;m&#305; g&ouml;r";	// &#199;eviri laz&#305;m!
+#endif
+
+const char *Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer1 =
+#if   L==1	// ca
+	"La resposta nom&eacute;s es mostrar&agrave; durant %d segons.";
+#elif L==2	// de
+	"Die Antwort wird nur f&uuml;r %d Sekunden angezeigt.";
+#elif L==3	// en
+	"The answer will only be shown for %d seconds.";
+#elif L==4	// es
+	"La respuesta solo se mostrar&aacute; durante %d segundos.";
+#elif L==5	// fr
+	"La r&eacute;ponse ne sera affich&eacute;e que pendant %d secondes.";
+#elif L==6	// gn
+	"Che respuesta %d segundo p&oacute;peicha ojehechauka.";	// Traducci&#243;n aproximada
+#elif L==7	// it
+	"La risposta verr&agrave; mostrata solo per %d secondi.";
+#elif L==8	// pl
+	"Odpowied&#378; b&#281;dzie widoczna tylko przez %d sekund.";
+#elif L==9	// pt
+	"A resposta s&oacute; ser&aacute; mostrada durante %d segundos.";
+#elif L==10	// tr
+	"Yan&#305;t yaln&#305;zca %d saniye boyunca g&ouml;sterilecektir.";	// &#199;eviri laz&#305;m!
+#endif
+
+const char *Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer2 =
+#if   L==1	// ca
+	"Si no canvies la teva resposta, no podr&#224;s tornar a";
+#elif L==2	// de
+	"Wenn Sie Ihre Antwort nicht &auml;ndern, k&ouml;nnen Sie diese Schaltfl&auml;che";
+#elif L==3	// en
+	"Unless you change your answer, you will not be";
+#elif L==4	// es
+	"Si no cambias tu respuesta, no podr&aacute;s volver a";
+#elif L==5	// fr
+	"Si vous ne modifiez pas votre r&eacute;ponse, vous ne pourrez plus";
+#elif L==6	// gn
+	"Eme&#241;e&#297;ramo nde respuesta,";	// Traducci&#243;n aproximada
+#elif L==7	// it
+	"Se non cambi la tua risposta, non potrai";
+#elif L==8	// pl
+	"Je&#347;li nie zmienisz swojej odpowiedzi, nie b&#281;dziesz";
+#elif L==9	// pt
+	"Se voc&ecirc; n&atilde;o alterar a sua resposta,";
+#elif L==10	// tr
+	"Cevab&#305;n&#305;z&#305; de&#287;i&#351;tirmezseniz,";	// &#199;eviri laz&#305;m!
+#endif
+
+const char *Txt_MATCH_QUESTION_SeeMyAnswerDisclaimer3 =
+#if   L==1	// ca
+	"pr&#233;mer aquest bot&#243; per a aquesta pregunta.";
+#elif L==2	// de
+	"f&uuml;r diese Frage nicht erneut bet&auml;tigen.";
+#elif L==3	// en
+	"able to press this button again for this question.";
+#elif L==4	// es
+	"pulsar este bot&oacute;n para esta pregunta.";
+#elif L==5	// fr
+	"appuyer sur ce bouton pour cette question.";
+#elif L==6	// gn
+	"ko t&atilde; piramboype na&#241;epok&otilde;.";	// Traducci&#243;n aproximada
+#elif L==7	// it
+	"premere di nuovo questo pulsante per questa domanda.";
+#elif L==8	// pl
+	"m&oacute;g&#322; ponownie nacisn&#261;&#263; tego przycisku dla tego pytania.";
+#elif L==9	// pt
+	"n&atilde;o poder&aacute; pressionar este bot&atilde;o novamente para esta pergunta.";
+#elif L==10	// tr
+	"bu soru i&ccedil;in bu d&uuml;&#287;meye tekrar basamayacaks&#305;n&#305;z.";	// &#199;eviri laz&#305;m!
+#endif
+
 const char *Txt_MATCH_QUESTION_Unanswered =
 #if   L==1	// ca
 	"No resposta";

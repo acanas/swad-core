@@ -63,6 +63,7 @@
 #include "swad_role.h"
 #include "swad_timeline.h"
 #include "swad_timeline_database.h"
+#include <stdlib.h>		// For malloc and other stdlib functions
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/

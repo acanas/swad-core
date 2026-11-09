@@ -45,6 +45,7 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_user.h"
+#include <stdlib.h>		// For malloc
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/

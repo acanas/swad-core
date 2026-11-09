@@ -311,6 +311,22 @@ void Ses_DB_GetPar (const char *ParName,char *ParValue,size_t StrSize)
   }
 
 /*****************************************************************************/
+/******************************************************************************/
+/*********** Remove a session parameter by name from current session *********/
+/******************************************************************************/
+
+void Ses_DB_RemoveParByName (const char *ParName)
+  {
+   /***** Trivial check: if no current session, don't do anything *****/
+   if (Gbl.Session.Status != Ses_OPEN)
+      return;
+
+   DB_QueryDELETE ("can not remove session parameter",
+		   "DELETE FROM ses_params"
+		   " WHERE SessionId='%s' AND ParamName='%s'",
+		   Gbl.Session.Id,ParName);
+  }
+
 /************ Remove session parameters of a session from database ***********/
 /*****************************************************************************/
 

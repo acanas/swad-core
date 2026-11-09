@@ -4087,6 +4087,16 @@ legend {font-size: 12pt; font-weight: bold;}
 	text-align: center;
 	padding: 16pt 0;
 	}
+.MCH_SEE_ANS_DISCLAIMER
+	{
+	color: #808080;
+	font-size: 8pt;
+	line-height: 1.25;
+	text-align: center;
+	max-width: 14em;
+	margin: 2pt auto 0 auto;
+	padding: 0 4pt;
+	}
 .MCH_NUM_ANSWERERS
 	{
 	text-align: center;

@@ -51,6 +51,7 @@
 #include "swad_parameter.h"
 #include "swad_string.h"
 #include "swad_user.h"
+#include <stdlib.h>		// For malloc and other stdlib functions
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
