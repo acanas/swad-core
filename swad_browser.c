@@ -4954,6 +4954,7 @@ static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
 /*****************************************************************************/
 /*********************** Which filename must be shown? ***********************/
 /*****************************************************************************/
+// The file level must have been calculated before calling this function
 
 static void Brw_GetFileNameToShow (Brw_Zone_t Zone,
 				   const struct Brw_File *File,
@@ -9495,7 +9496,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,
 	 HTM_TR_Begin (NULL);
 	    HTM_TH_Span (NULL,HTM_HEAD_CENTER,1,1,"BT");
 	    for (HieLvl  = Hie_INS;
-		 HieLvl >= Hie_CRS;
+		 HieLvl <= Hie_CRS;
 		 HieLvl++)
                HTM_TH (Txt_HIERARCHY_SINGUL_Abc[HieLvl],HTM_HEAD_LEFT);
             HTM_TH (Txt_File_zone,HTM_HEAD_LEFT);
@@ -9553,6 +9554,38 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    extern const char *Txt_Temporary_private_storage_area;
    extern const char *Txt_Folder;
    extern const char *Txt_Link;
+   static const char **Titles[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = NULL,
+      [Brw_SHOW_DOC_CRS] = NULL,
+      [Brw_SHOW_MRK_CRS] = NULL,
+      [Brw_ADMI_DOC_CRS] = &Txt_Documents_area,
+      [Brw_ADMI_SHR_CRS] = &Txt_Shared_files_area,
+      [Brw_ADMI_SHR_GRP] = &Txt_Shared_files_area,
+      [Brw_ADMI_WRK_USR] = &Txt_Works_area,
+      [Brw_ADMI_WRK_CRS] = NULL,
+      [Brw_ADMI_MRK_CRS] = &Txt_Marks_area,
+      [Brw_ADMI_BRF_USR] = &Txt_Temporary_private_storage_area,
+      [Brw_SHOW_DOC_GRP] = NULL,
+      [Brw_ADMI_DOC_GRP] = &Txt_Documents_area,
+      [Brw_SHOW_MRK_GRP] = NULL,
+      [Brw_ADMI_MRK_GRP] = &Txt_Marks_area,
+      [Brw_ADMI_ASG_USR] = &Txt_Assignments_area,
+      [Brw_ADMI_ASG_CRS] = NULL,
+      [Brw_SHOW_DOC_DEG] = NULL,
+      [Brw_ADMI_DOC_DEG] = &Txt_Documents_area,
+      [Brw_SHOW_DOC_CTR] = NULL,
+      [Brw_ADMI_DOC_CTR] = &Txt_Documents_area,
+      [Brw_SHOW_DOC_INS] = NULL,
+      [Brw_ADMI_DOC_INS] = &Txt_Documents_area,
+      [Brw_ADMI_SHR_DEG] = &Txt_Shared_files_area,
+      [Brw_ADMI_SHR_CTR] = &Txt_Shared_files_area,
+      [Brw_ADMI_SHR_INS] = &Txt_Shared_files_area,
+      [Brw_ADMI_TCH_CRS] = &Txt_Teachers_files_area,
+      [Brw_ADMI_TCH_GRP] = &Txt_Teachers_files_area,
+      [Brw_ADMI_DOC_PRJ] = &Txt_Project_documents,
+      [Brw_ADMI_ASS_PRJ] = &Txt_Project_assessment,
+     };
    Brw_Zone_t ZoneDB;
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
@@ -9561,7 +9594,6 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    long GrpCod;
    Act_Action_t Action;
    const char *BgColor;
-   const char *Title;
    char FileNameToShow[NAME_MAX + 1];
 /*
    row[ 0] = FilCod
@@ -9583,6 +9615,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    if (FileExistsInDB == Exi_DOES_NOT_EXIST)
       return;
    FileBrowser.Zone = ZoneDB;
+
+   /***** Set level of this file or folder inside file browser *****/
+   File.Level = Brw_NumLevelsInPath (File.Path.InZone);
 
    /***** If hidden ==> nothing to show *****/
    if (Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File) == HidVis_HIDDEN)
@@ -9683,52 +9718,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       HTM_TD_End ();
 
       /***** Write file zone *****/
-      switch (FileBrowser.Zone)
-	{
-	 case Brw_ADMI_DOC_INS:
-	 case Brw_ADMI_DOC_CTR:
-	 case Brw_ADMI_DOC_DEG:
-	 case Brw_ADMI_DOC_CRS:
-	 case Brw_ADMI_DOC_GRP:
-	    Title = Txt_Documents_area;
-	    break;
-	 case Brw_ADMI_TCH_CRS:
-	 case Brw_ADMI_TCH_GRP:
-	    Title = Txt_Teachers_files_area;
-	    break;
-	 case Brw_ADMI_SHR_INS:
-	 case Brw_ADMI_SHR_CTR:
-	 case Brw_ADMI_SHR_DEG:
-	 case Brw_ADMI_SHR_CRS:
-	 case Brw_ADMI_SHR_GRP:
-	    Title = Txt_Shared_files_area;
-	    break;
-	 case Brw_ADMI_ASG_USR:
-	    Title = Txt_Assignments_area;
-	    break;
-	 case Brw_ADMI_WRK_USR:
-	    Title = Txt_Works_area;
-	    break;
-	 case Brw_ADMI_DOC_PRJ:
-	    Title = Txt_Project_documents;
-	    break;
-	 case Brw_ADMI_ASS_PRJ:
-	    Title = Txt_Project_assessment;
-	    break;
-	 case Brw_ADMI_MRK_CRS:
-	 case Brw_ADMI_MRK_GRP:
-	    Title = Txt_Marks_area;
-	    break;
-	 case Brw_ADMI_BRF_USR:
-	    Title = Txt_Temporary_private_storage_area;
-	    break;
-	 default:
-	    Title = "";
-	    break;
-	}
-
       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 HTM_Txt (Title);
+	 if (Titles[FileBrowser.Zone])
+	    HTM_Txt (*Titles[FileBrowser.Zone]);
       HTM_TD_End ();
 
       /***** Get the name of the file to show *****/
