@@ -99,6 +99,16 @@ Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node)
    [Hie_CRS] = Crs_GetCourseDataByCod,
   };
 
+Act_Action_t Hie_ActionsSeeInfo[Hie_NUM_LEVELS] =
+  {
+   [Hie_SYS] = ActSeeSysInf,
+   [Hie_CTY] = ActSeeCtyInf,
+   [Hie_INS] = ActSeeInsInf,
+   [Hie_CTR] = ActSeeCtrInf,
+   [Hie_DEG] = ActSeeDegInf,
+   [Hie_CRS] = ActSeeCrsInf,
+  };
+
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -1750,22 +1760,13 @@ static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				     Lay_Last_t IsLastItemInLevel[1 + 6])
   {
    extern const char *Lay_HighlightClass[Lay_NUM_HIGHLIGHT];
-   static Act_Action_t Actions[Hie_NUM_LEVELS] =
-     {
-      [Hie_SYS] = ActSeeSysInf,
-      [Hie_CTY] = ActSeeCtyInf,
-      [Hie_INS] = ActSeeInsInf,
-      [Hie_CTR] = ActSeeCtrInf,
-      [Hie_DEG] = ActSeeDegInf,
-      [Hie_CRS] = ActSeeCrsInf,
-     };
 
    HTM_LI_Begin (Lay_HighlightClass[Highlight]);
       Lay_IndentDependingOnLevel (HieLvl,IsLastItemInLevel,
 				  Lay_HORIZONTAL_LINE_AT_RIGHT);
       Frm_BeginForm (ActMyCrs);
 	 ParCod_PutPar (Hie_ParCod[HieLvl],Hie[HieLvl].HieCod);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Actions[HieLvl]),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Hie_ActionsSeeInfo[HieLvl]),NULL,
 				  "class=\"BT_LINK FORM_IN_%s\"",
 				  The_GetSuffix ());
 

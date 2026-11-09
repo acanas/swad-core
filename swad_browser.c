@@ -9543,6 +9543,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
   {
+   extern Act_Action_t Hie_ActionsSeeInfo[Hie_NUM_LEVELS];
    extern const char *Txt_Documents_area;
    extern const char *Txt_Teachers_files_area;
    extern const char *Txt_Shared_files_area;
@@ -9590,7 +9591,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    struct Brw_FileBrowser FileBrowser;
    struct Brw_File File;
    Exi_Exist_t FileExistsInDB;
+   Hie_Level_t HieLvl;
    struct Hie_Node Hie[Hie_NUM_LEVELS];
+   unsigned NumRow;
    long GrpCod;
    Act_Action_t Action;
    const char *BgColor;
@@ -9627,14 +9630,14 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
               center code (row[4], row[5]),
               degree code (row[6], row[7]),
               course code (row[8], row[9]) *****/
-   Hie[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[2]);
-   Str_Copy (Hie[Hie_INS].ShrtName,row[3],sizeof (Hie[Hie_INS].ShrtName) - 1);
-   Hie[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-   Str_Copy (Hie[Hie_CTR].ShrtName,row[5],sizeof (Hie[Hie_CTR].ShrtName) - 1);
-   Hie[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[6]);
-   Str_Copy (Hie[Hie_DEG].ShrtName,row[7],sizeof (Hie[Hie_DEG].ShrtName) - 1);
-   Hie[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[8]);
-   Str_Copy (Hie[Hie_CRS].ShrtName,row[9],sizeof (Hie[Hie_CRS].ShrtName) - 1);
+   for (HieLvl  = Hie_INS;
+	HieLvl <= Hie_CRS;
+	HieLvl++)
+     {
+      NumRow =  2 + (unsigned) (HieLvl - Hie_INS) * 2;
+      Hie[HieLvl].HieCod = Str_ConvertStrCodToLongCod (row[NumRow]);
+      Str_Copy (Hie[HieLvl].ShrtName,row[NumRow + 1],sizeof (Hie[HieLvl].ShrtName) - 1);
+     }
 
    /***** Get group code (row[8]) *****/
    GrpCod = Str_ConvertStrCodToLongCod (row[10]);
@@ -9651,71 +9654,33 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 HTM_Unsigned (++(*NumDocsNotHidden));
       HTM_TD_End ();
 
-      /***** Write institution logo, institution short name *****/
-      HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 if (Hie[Hie_INS].HieCod > 0)
-	   {
-	    Frm_BeginFormGoTo (ActSeeInsInf);
-	       ParCod_PutPar (ParCod_Ins,Hie[Hie_INS].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_INS].ShrtName),NULL,
-					"class=\"LT BT_LINK\"");
-	       Str_FreeGoToTitle ();
-		  Lgo_DrawLogo (Hie_INS,&Hie[Hie_INS],"LT BT_LINK ICO20x20");
-		  HTM_NBSP ();
-                  HTM_Txt (Hie[Hie_INS].ShrtName);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
-      HTM_TD_End ();
-
-      /***** Write center logo, center short name *****/
-      HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 if (Hie[Hie_CTR].HieCod > 0)
-	   {
-	    Frm_BeginFormGoTo (ActSeeCtrInf);
-	       ParCod_PutPar (ParCod_Ctr,Hie[Hie_CTR].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CTR].ShrtName),NULL,
-					"class=\"LT BT_LINK\"");
-	       Str_FreeGoToTitle ();
-		  Lgo_DrawLogo (Hie_CTR,&Hie[Hie_CTR],"LT ICO20x20");
-		  HTM_NBSP ();
-		  HTM_Txt (Hie[Hie_CTR].ShrtName);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
-      HTM_TD_End ();
-
-      /***** Write degree logo, degree short name *****/
-      HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 if (Hie[Hie_DEG].HieCod > 0)
-	   {
-	    Frm_BeginFormGoTo (ActSeeDegInf);
-	       ParCod_PutPar (ParCod_Deg,Hie[Hie_DEG].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_DEG].ShrtName),NULL,
-					"class=\"LT BT_LINK\"");
-	       Str_FreeGoToTitle ();
-		  Lgo_DrawLogo (Hie_DEG,&Hie[Hie_DEG],"LT ICO20x20");
-		  HTM_NBSP ();
-		  HTM_Txt (Hie[Hie_DEG].ShrtName);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
-      HTM_TD_End ();
-
-      /***** Write course short name *****/
-      HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
-	 if (Hie[Hie_CRS].HieCod > 0)
-	   {
-	    Frm_BeginFormGoTo (ActSeeCrsInf);
-	       ParCod_PutPar (ParCod_Crs,Hie[Hie_CRS].HieCod);
-	       HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[Hie_CRS].ShrtName),NULL,
-					"class=\"LT BT_LINK\"");
-	       Str_FreeGoToTitle ();
-		  HTM_Txt (Hie[Hie_CRS].ShrtName);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	   }
-      HTM_TD_End ();
+      /***** Write institution, center, degree and course *****/
+      for (HieLvl  = Hie_INS;
+	   HieLvl <= Hie_CRS;
+	   HieLvl++)
+	{
+	 /***** Write institution logo, institution short name *****/
+	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
+	    if (Hie[HieLvl].HieCod > 0)
+	      {
+	       Frm_BeginFormGoTo (Hie_ActionsSeeInfo[HieLvl]);
+		  ParCod_PutPar (ParCod_Ins,Hie[HieLvl].HieCod);
+		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Hie[HieLvl].ShrtName),NULL,
+					   "class=\"LT BT_LINK\"");
+		  Str_FreeGoToTitle ();
+		     /* Logo */
+		     if (HieLvl != Hie_CRS)
+		       {
+		        Lgo_DrawLogo (HieLvl,&Hie[HieLvl],"LT ICO20x20");
+		        HTM_NBSP ();
+		       }
+		     /* Short name */
+		     HTM_Txt (Hie[HieLvl].ShrtName);
+		  HTM_BUTTON_End ();
+	       Frm_EndForm ();
+	      }
+	 HTM_TD_End ();
+	}
 
       /***** Write file zone *****/
       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
