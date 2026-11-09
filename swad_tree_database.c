@@ -548,7 +548,7 @@ ConExp_ContractedOrExpanded_t Tre_DB_GetIfContractedOrExpandedNode (long NodCod)
   {
    static ConExp_ContractedOrExpanded_t ConExp[Exi_NUM_EXIST] =
      {
-      [Exi_DOES_NOT_EXIST] = ConExp_CONTRACTED,
+      [Exi_DOES_NOT_EXIST] = ConExp_CONTRTED,
       [Exi_EXISTS        ] = ConExp_EXPANDED,
      };
    Exi_Exist_t Exists;

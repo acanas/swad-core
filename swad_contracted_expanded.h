@@ -36,7 +36,7 @@
 
 typedef enum
   {
-   ConExp_CONTRACTED = 0,
+   ConExp_CONTRTED = 0,
    ConExp_EXPANDED   = 1,
   } ConExp_ContractedOrExpanded_t;
 

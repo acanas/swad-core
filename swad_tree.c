@@ -643,55 +643,55 @@ static void Tre_PutIconToContractOrExpandNode (struct Tre_Node *Node,
   {
    static Act_Action_t Actions[Inf_NUM_TYPES][ConExp_NUM_CONTRACTED_EXPANDED][Vie_NUM_VIEW_TYPES] =
      {
-      [Inf_INFORMATION	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodInf,	// Contracted, Not editing ==> action to expand
-      [Inf_INFORMATION	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodInf,	// Contracted,     Editing ==> action to expand
+      [Inf_INFORMATION	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodInf,	// Contracted, Not editing ==> action to expand
+      [Inf_INFORMATION	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodInf,	// Contracted,     Editing ==> action to expand
       [Inf_INFORMATION	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodInf,	// Expanded  , Not editing ==> action to contract
       [Inf_INFORMATION	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodInf,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_PROGRAM	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodPrg,	// Contracted, Not editing ==> action to expand
-      [Inf_PROGRAM	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodPrg,	// Contracted,     Editing ==> action to expand
+      [Inf_PROGRAM	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodPrg,	// Contracted, Not editing ==> action to expand
+      [Inf_PROGRAM	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodPrg,	// Contracted,     Editing ==> action to expand
       [Inf_PROGRAM	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodPrg,	// Expanded  , Not editing ==> action to contract
       [Inf_PROGRAM	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodPrg,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_TEACH_GUIDE	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodGui,	// Contracted, Not editing ==> action to expand
-      [Inf_TEACH_GUIDE	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodGui,	// Contracted,     Editing ==> action to expand
+      [Inf_TEACH_GUIDE	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodGui,	// Contracted, Not editing ==> action to expand
+      [Inf_TEACH_GUIDE	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodGui,	// Contracted,     Editing ==> action to expand
       [Inf_TEACH_GUIDE	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodGui,	// Expanded  , Not editing ==> action to contract
       [Inf_TEACH_GUIDE	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodGui,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Inf_SYLLABUS_LEC	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Inf_SYLLABUS_LEC	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Inf_SYLLABUS_LEC	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
       [Inf_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
       [Inf_SYLLABUS_LEC	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
-      [Inf_SYLLABUS_PRA	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
+      [Inf_SYLLABUS_PRA	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodSyl,	// Contracted, Not editing ==> action to expand
+      [Inf_SYLLABUS_PRA	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodSyl,	// Contracted,     Editing ==> action to expand
       [Inf_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodSyl,	// Expanded  , Not editing ==> action to contract
       [Inf_SYLLABUS_PRA	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodSyl,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_BIBLIOGRAPHY	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodBib,	// Contracted, Not editing ==> action to expand
-      [Inf_BIBLIOGRAPHY	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodBib,	// Contracted,     Editing ==> action to expand
+      [Inf_BIBLIOGRAPHY	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodBib,	// Contracted, Not editing ==> action to expand
+      [Inf_BIBLIOGRAPHY	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodBib,	// Contracted,     Editing ==> action to expand
       [Inf_BIBLIOGRAPHY	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodBib,	// Expanded  , Not editing ==> action to contract
       [Inf_BIBLIOGRAPHY	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodBib,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_FAQ		][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodFAQ,	// Contracted, Not editing ==> action to expand
-      [Inf_FAQ		][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodFAQ,	// Contracted,     Editing ==> action to expand
+      [Inf_FAQ		][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodFAQ,	// Contracted, Not editing ==> action to expand
+      [Inf_FAQ		][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodFAQ,	// Contracted,     Editing ==> action to expand
       [Inf_FAQ		][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodFAQ,	// Expanded  , Not editing ==> action to contract
       [Inf_FAQ		][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodFAQ,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_LINKS	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodLnk,	// Contracted, Not editing ==> action to expand
-      [Inf_LINKS	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodLnk,	// Contracted,     Editing ==> action to expand
+      [Inf_LINKS	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodLnk,	// Contracted, Not editing ==> action to expand
+      [Inf_LINKS	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodLnk,	// Contracted,     Editing ==> action to expand
       [Inf_LINKS	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodLnk,	// Expanded  , Not editing ==> action to contract
       [Inf_LINKS	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodLnk,	// Expanded  ,     Editing ==> action to contract
 
-      [Inf_ASSESSMENT	][ConExp_CONTRACTED][Vie_VIEW	] = ActExpSeeTreNodAss,	// Contracted, Not editing ==> action to expand
-      [Inf_ASSESSMENT	][ConExp_CONTRACTED][Vie_EDIT	] = ActExpEdiTreNodAss,	// Contracted,     Editing ==> action to expand
+      [Inf_ASSESSMENT	][ConExp_CONTRTED][Vie_VIEW	] = ActExpSeeTreNodAss,	// Contracted, Not editing ==> action to expand
+      [Inf_ASSESSMENT	][ConExp_CONTRTED][Vie_EDIT	] = ActExpEdiTreNodAss,	// Contracted,     Editing ==> action to expand
       [Inf_ASSESSMENT	][ConExp_EXPANDED  ][Vie_VIEW	] = ActConSeeTreNodAss,	// Expanded  , Not editing ==> action to contract
       [Inf_ASSESSMENT	][ConExp_EXPANDED  ][Vie_EDIT	] = ActConEdiTreNodAss,	// Expanded  ,     Editing ==> action to contract
      };
    static void (*PutContextualIcon[ConExp_NUM_CONTRACTED_EXPANDED]) (Act_Action_t Actions,const char *Anchor,
 								     void (*FuncPars) (const void *Args),const void *Args) =
      {
-      [ConExp_CONTRACTED] = Ico_PutContextualIconToExpand,	// Contracted ==> function to expand
+      [ConExp_CONTRTED] = Ico_PutContextualIconToExpand,	// Contracted ==> function to expand
       [ConExp_EXPANDED  ] = Ico_PutContextualIconToContract,	// Expanded   ==> function to contract
      };
 
@@ -945,7 +945,7 @@ static ConExp_ContractedOrExpanded_t Tre_GetExpandedLevel (unsigned Level)
    if (Tre_Gbl.Levels)
       return Tre_Gbl.Levels[Level].ContractedOrExpanded;
 
-   return ConExp_CONTRACTED;
+   return ConExp_CONTRTED;
   }
 
 static HidVis_HiddenOrVisible_t Tre_GetHiddenLevel (unsigned Level)
@@ -971,8 +971,8 @@ static ConExp_ContractedOrExpanded_t Tre_CheckIfAllHigherLevelsAreExpanded (unsi
    for (Level = 1;
 	Level < CurrentLevel;
 	Level++)
-      if (Tre_GetExpandedLevel (Level) == ConExp_CONTRACTED)	// Contracted?
-         return ConExp_CONTRACTED;	// A level is contracted. Not all are expanded
+      if (Tre_GetExpandedLevel (Level) == ConExp_CONTRTED)	// Contracted?
+         return ConExp_CONTRTED;	// A level is contracted. Not all are expanded
 
    return ConExp_EXPANDED;	// None is contracted. All are expanded
   }
@@ -1561,7 +1561,7 @@ void Tre_ReqChangeNode (Inf_Type_t InfoType)
    Tre_GetPars (&Node);
 
    /***** If node is contracted ==> expand it *****/
-   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRACTED)	// If contracted...
+   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRTED)	// If contracted...
       Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
 
    /***** Show current tree nodes, if any *****/
@@ -1589,7 +1589,7 @@ void Tre_ReqCreateNode (Inf_Type_t InfoType)
 
    /***** Add node to table of expanded nodes
           to ensure that child items are displayed *****/
-   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRACTED)	// If contracted...
+   if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRTED)	// If contracted...
       Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
 
    /***** Show current tree nodes, if any *****/

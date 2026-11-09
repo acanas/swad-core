@@ -2044,7 +2044,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
      {
       .ClosedOrOpen	    = CloOpe_OPEN,
       .Replied		    = Msg_NOT_REPLIED,
-      .ContractedOrExpanded = ConExp_CONTRACTED
+      .ContractedOrExpanded = ConExp_CONTRTED
      };
 
    /***** Initialize structure with user's data *****/
@@ -2264,16 +2264,16 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    extern const char *Txt_no_subject;
    static Act_Action_t Action[Msg_NUM_TYPES_OF_MSGS][ConExp_NUM_CONTRACTED_EXPANDED] =
      {
-      [Msg_WRITING ][ConExp_CONTRACTED] = ActUnk,
+      [Msg_WRITING ][ConExp_CONTRTED] = ActUnk,
       [Msg_WRITING ][ConExp_EXPANDED  ] = ActUnk,
-      [Msg_RECEIVED][ConExp_CONTRACTED] = ActExpRcvMsg,
+      [Msg_RECEIVED][ConExp_CONTRTED] = ActExpRcvMsg,
       [Msg_RECEIVED][ConExp_EXPANDED  ] = ActConRcvMsg,
-      [Msg_SENT    ][ConExp_CONTRACTED] = ActExpSntMsg,
+      [Msg_SENT    ][ConExp_CONTRTED] = ActExpSntMsg,
       [Msg_SENT    ][ConExp_EXPANDED  ] = ActConSntMsg,
      };
    static const char **Title[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
-      [ConExp_CONTRACTED] = &Txt_See_message,
+      [ConExp_CONTRTED] = &Txt_See_message,
       [ConExp_EXPANDED  ] = &Txt_Hide_message,
      };
 

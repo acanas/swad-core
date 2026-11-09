@@ -2492,7 +2492,7 @@ ConExp_ContractedOrExpanded_t Brw_DB_GetIfContractedOrExpandedFolder (Brw_Zone_t
   {
    static ConExp_ContractedOrExpanded_t ContractedOrExpanded[Exi_NUM_EXIST] =
      {
-      [Exi_DOES_NOT_EXIST] = ConExp_CONTRACTED,
+      [Exi_DOES_NOT_EXIST] = ConExp_CONTRTED,
       [Exi_EXISTS        ] = ConExp_EXPANDED,
      };
    long Cod = Brw_GetCodForZone (Zone);

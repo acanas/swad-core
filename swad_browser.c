@@ -99,7 +99,7 @@ typedef enum
   {
    Brw_ICON_NOTHING,	// No icon to expand/contract
    Brw_ICON_EXPAND,	// Icon to expand a contracted folder
-   Brw_ICON_CONTRACT,	// Icon to contract a expanded folder
+   Brw_ICON_CONTRC,	// Icon to contract a expanded folder
   } Brw_IconExpandContract_t;
 
 struct Brw_NumObjects
@@ -1230,9 +1230,9 @@ static void Brw_IndentDependingOnLevel (unsigned Level);
 static void Brw_PutIconToExpandFolder (const struct Brw_FileBrowser *FileBrowser,
 				       const char *FileBrowserId,const char *RowId,
                                        HidVis_HiddenOrVisible_t HiddenOrVisible);
-static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrowser,
-				         const char *FileBrowserId,const char *RowId,
-                                         HidVis_HiddenOrVisible_t HiddenOrVisible);
+static void Brw_PutIconToContrcFolder (const struct Brw_FileBrowser *FileBrowser,
+				       const char *FileBrowserId,const char *RowId,
+                                       HidVis_HiddenOrVisible_t HiddenOrVisible);
 
 static void Brw_PutIconHideUnhide (const struct Brw_FileBrowser *FileBrowser,
                                    HidVis_HiddenOrVisible_t HiddenOrVisible);
@@ -3861,8 +3861,8 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
    ConExp_ContractedOrExpanded_t ContractedOrExpandedSubtree;
    Brw_IconExpandContract_t IconsSubtree[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
-      [ConExp_CONTRACTED] = Brw_ICON_EXPAND,
-      [ConExp_EXPANDED  ] = Brw_ICON_CONTRACT,
+      [ConExp_CONTRTED] = Brw_ICON_EXPAND,
+      [ConExp_EXPANDED] = Brw_ICON_CONTRC,
      };
    Brw_IconExpandContract_t IconSubtree = Brw_ICON_NOTHING;	// Initialized to avoid warning
    __attribute__((unused)) Exi_Exist_t FileExists;
@@ -3914,7 +3914,7 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 			break;
 		     case Brw_EXPANDED_FOLDERS:	// Show only files in expanded folders
 		     default:
-			ContractedOrExpandedSubtree = ConExp_CONTRACTED;
+			ContractedOrExpandedSubtree = ConExp_CONTRTED;
 			/***** Check if this subdirectory has files or folders in it *****/
 			if ((NumFilesInSubdir = scandir (PathFileInServ,&SubdirFileList,NULL,NULL)) >= 0)	// No error
 			  {
@@ -3944,8 +3944,8 @@ static void Brw_ListDir (struct Brw_FileBrowser *FileBrowser,
 		     if (FileOrFolder.Level < Brw_MAX_DIR_LEVELS)
 			/* List subtree starting at this this directory */
 			Brw_ListDir (FileBrowser,Level + 1,RowId,
-				     ContractedOrExpandedSubtree == ConExp_CONTRACTED ? ConExp_CONTRACTED :
-											FolderContractedOrExpanded,
+				     ContractedOrExpandedSubtree == ConExp_CONTRTED ? ConExp_CONTRTED :
+										      FolderContractedOrExpanded,
 				     UsrDat,
 				     PathFileInServ,PathFileInZone);
 	          break;
@@ -4118,7 +4118,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       case Brw_ICON_NOTHING:
 	 switch (FolderContractedOrExpanded)
 	   {
-	    case ConExp_CONTRACTED:	// This row is inside a contracted subtree
+	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
 	       break;
 	    case ConExp_EXPANDED:
@@ -4129,7 +4129,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       case Brw_ICON_EXPAND:
 	 switch (FolderContractedOrExpanded)
 	   {
-	    case ConExp_CONTRACTED:	// This row is inside a contracted subtree
+	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
 			     " style=\"display:none;\"",Anchor);
 	       break;
@@ -4138,10 +4138,10 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	       break;
 	   }
 	 break;
-      case Brw_ICON_CONTRACT:
+      case Brw_ICON_CONTRC:
 	 switch (FolderContractedOrExpanded)
 	   {
-	    case ConExp_CONTRACTED:	// This row is inside a contracted subtree
+	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
 			     " style=\"display:none;\"",Anchor);
 	       break;
@@ -4429,17 +4429,17 @@ static void Brw_IndentAndWriteIconExpandContract (const struct Brw_FileBrowser *
 						HidVis_VISIBL);
 
 		     /***** Hidden icon to contract folder *****/
-		     Brw_PutIconToContractFolder (FileBrowser,FileBrowserId,RowId,
-						  HidVis_HIDDEN);
+		     Brw_PutIconToContrcFolder (FileBrowser,FileBrowserId,RowId,
+						HidVis_HIDDEN);
 		     break;
-		  case Brw_ICON_CONTRACT:
+		  case Brw_ICON_CONTRC:
 		     /***** Hidden icon to expand folder *****/
 		     Brw_PutIconToExpandFolder (FileBrowser,FileBrowserId,RowId,
 						HidVis_HIDDEN);
 
 		     /***** Visible icon to contract folder *****/
-		     Brw_PutIconToContractFolder (FileBrowser,FileBrowserId,RowId,
-						  HidVis_VISIBL);
+		     Brw_PutIconToContrcFolder (FileBrowser,FileBrowserId,RowId,
+						HidVis_VISIBL);
 		     break;
 		 }
 	    HTM_TD_End ();
@@ -4509,9 +4509,9 @@ static void Brw_PutIconToExpandFolder (const struct Brw_FileBrowser *FileBrowser
 /*********************** Put icon to contract a folder ***********************/
 /*****************************************************************************/
 
-static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrowser,
-				         const char *FileBrowserId,const char *RowId,
-                                         HidVis_HiddenOrVisible_t HiddenOrVisible)
+static void Brw_PutIconToContrcFolder (const struct Brw_FileBrowser *FileBrowser,
+				       const char *FileBrowserId,const char *RowId,
+                                       HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
    char JavaScriptFuncToContractFolder[256 + Brw_MAX_ROW_ID];
 
@@ -4519,13 +4519,12 @@ static void Brw_PutIconToContractFolder (const struct Brw_FileBrowser *FileBrows
    switch (HiddenOrVisible)
      {
       case HidVis_VISIBL:
-	 HTM_DIV_Begin ("id=\"contract_%s_%s\"",
-			FileBrowserId,RowId);
+	 HTM_DIV_Begin ("id=\"contract_%s_%s\"",FileBrowserId,RowId);
 	 break;
       case HidVis_HIDDEN:
       default:
-	 HTM_DIV_Begin ("id=\"contract_%s_%s\" style=\"display:none;\"",
-			FileBrowserId,RowId);
+	 HTM_DIV_Begin ("id=\"contract_%s_%s\""
+			" style=\"display:none;\"",FileBrowserId,RowId);
 	 break;
      }
 
@@ -4659,12 +4658,12 @@ static void Brw_PutIconFolder (const struct Brw_FileBrowser *FileBrowser,
      };
    static HidVis_HiddenOrVisible_t HiddenOrVisible[Brw_NUM_ICON_EXPAND_CONTRACT][CloOpe_NUM_CLOSED_OPEN] =
      {
-      [Brw_ICON_NOTHING ][CloOpe_CLOSED] = HidVis_HIDDEN,
-      [Brw_ICON_NOTHING ][CloOpe_OPEN  ] = HidVis_VISIBL,
-      [Brw_ICON_EXPAND  ][CloOpe_CLOSED] = HidVis_VISIBL,
-      [Brw_ICON_EXPAND  ][CloOpe_OPEN  ] = HidVis_HIDDEN,
-      [Brw_ICON_CONTRACT][CloOpe_CLOSED] = HidVis_HIDDEN,
-      [Brw_ICON_CONTRACT][CloOpe_OPEN  ] = HidVis_VISIBL,
+      [Brw_ICON_NOTHING][CloOpe_CLOSED] = HidVis_HIDDEN,
+      [Brw_ICON_NOTHING][CloOpe_OPEN  ] = HidVis_VISIBL,
+      [Brw_ICON_EXPAND ][CloOpe_CLOSED] = HidVis_VISIBL,
+      [Brw_ICON_EXPAND ][CloOpe_OPEN  ] = HidVis_HIDDEN,
+      [Brw_ICON_CONTRC ][CloOpe_CLOSED] = HidVis_HIDDEN,
+      [Brw_ICON_CONTRC ][CloOpe_OPEN  ] = HidVis_VISIBL,
      };
    Usr_Can_t ICanCreateIntoFolder = Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,
 								     File);
@@ -5886,7 +5885,7 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (Brw_Zone_t 
      {
       if ((Ptr = strrchr (CopyOfPathOfFolderInZone,'/')))	// If '/' found (backwards from the end)
 	{
-	 if (Brw_DB_GetIfContractedOrExpandedFolder (Zone,CopyOfPathOfFolderInZone) == ConExp_CONTRACTED)
+	 if (Brw_DB_GetIfContractedOrExpandedFolder (Zone,CopyOfPathOfFolderInZone) == ConExp_CONTRTED)
 	    Brw_DB_InsertFolderInExpandedFolders (Zone,CopyOfPathOfFolderInZone);
 	 // Now Ptr points to the last '/' in SubPath
 	 *Ptr = '\0';	// Substitute '/' for '\0' to shorten CopyOfPath
@@ -6444,7 +6443,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			   FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
 			   FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
-									     &FileDst);
+									      &FileDst);
 			   break;
 			case Err_ERROR:		// Quota exceeded
 			default:
@@ -6861,7 +6860,7 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 										       ParentFolder.Path.InZone);
 
 			      /* Add entry to the table of files/folders */
-			      NewFolder.Type				= Brw_IS_FOLDER;
+			      NewFolder.Type			 = Brw_IS_FOLDER;
 			      NewFolder.Metadata.PublisherCod	 = Gbl.Usrs.Me.UsrDat.UsrCod;
 			      NewFolder.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			      NewFolder.Metadata.License	 = Brw_LICENSE_DEFAULT;
@@ -7659,6 +7658,38 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
    extern const char *Txt_Public_views;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
+   static Usr_Can_t ICanChangePublics[Brw_NUM_ZONES] =
+     {
+      [Brw_UNKNOWN     ] = Usr_CAN_NOT,
+      [Brw_SHOW_DOC_CRS] = Usr_CAN_NOT,
+      [Brw_SHOW_MRK_CRS] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_CRS] = Usr_CAN,
+      [Brw_ADMI_SHR_CRS] = Usr_CAN,
+      [Brw_ADMI_SHR_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_WRK_USR] = Usr_CAN_NOT,
+      [Brw_ADMI_WRK_CRS] = Usr_CAN_NOT,
+      [Brw_ADMI_MRK_CRS] = Usr_CAN_NOT,
+      [Brw_ADMI_BRF_USR] = Usr_CAN_NOT,
+      [Brw_SHOW_DOC_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_GRP] = Usr_CAN_NOT,
+      [Brw_SHOW_MRK_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_MRK_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_ASG_USR] = Usr_CAN_NOT,
+      [Brw_ADMI_ASG_CRS] = Usr_CAN_NOT,
+      [Brw_SHOW_DOC_DEG] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_DEG] = Usr_CAN,
+      [Brw_SHOW_DOC_CTR] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_CTR] = Usr_CAN,
+      [Brw_SHOW_DOC_INS] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_INS] = Usr_CAN,
+      [Brw_ADMI_SHR_DEG] = Usr_CAN,
+      [Brw_ADMI_SHR_CTR] = Usr_CAN,
+      [Brw_ADMI_SHR_INS] = Usr_CAN,
+      [Brw_ADMI_TCH_CRS] = Usr_CAN_NOT,
+      [Brw_ADMI_TCH_GRP] = Usr_CAN_NOT,
+      [Brw_ADMI_DOC_PRJ] = Usr_CAN_NOT,
+      [Brw_ADMI_ASS_PRJ] = Usr_CAN_NOT,
+     };
    static const char **PrivatePublicLabel[PriPub_NUM_PRIVATE_PUBLIC] =
      {
       [PriPub_PRIVAT] = &Txt_Private_available_to_certain_users_identified,
@@ -7701,33 +7732,33 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 	    case Exi_EXISTS:
 	       /***** Check if I can view this file.
 		      It could be marked as hidden or in a hidden folder *****/
-	       ICanView = Usr_CAN;
+	       ICanView = Usr_CAN_NOT;
 	       switch (FileBrowser->Zone)
 		 {
 		  case Brw_SHOW_DOC_INS:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-			ICanView = Brw_ICanViewFileOrFolder[
-			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+		        ICanView = Usr_CAN;
 		     break;
 		  case Brw_SHOW_DOC_CTR:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-			ICanView = Brw_ICanViewFileOrFolder[
-			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+		        ICanView = Usr_CAN;
 		     break;
 		  case Brw_SHOW_DOC_DEG:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-			ICanView = Brw_ICanViewFileOrFolder[
-			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+		        ICanView = Usr_CAN;
 		     break;
 		  case Brw_SHOW_DOC_CRS:
 		  case Brw_SHOW_DOC_GRP:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-			ICanView = Brw_ICanViewFileOrFolder[
-			           Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
+		        ICanView = Usr_CAN;
 		     break;
 		  default:
+		     ICanView = Usr_CAN;
 		     break;
 		 }
+	       if (ICanView == Usr_CAN_NOT)
+		  ICanView = Brw_ICanViewFileOrFolder[
+			     Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser->Zone,&File)];
 	       switch (ICanView)
 		 {
 		  case Usr_CAN:
@@ -7776,27 +7807,14 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 			else
 			   Box_BoxShadowBegin (NULL,NULL,NULL,NULL);
 
-
 			/***** Begin form to update the metadata of a file *****/
 			if (ICanEdit == Usr_CAN)	// I can edit file properties
 			  {
 			   /* Can the file be public? */
-			   switch (FileBrowser->Zone)
-			     {
-			      case Brw_ADMI_DOC_INS:  case Brw_ADMI_SHR_INS:
-			      case Brw_ADMI_DOC_CTR:  case Brw_ADMI_SHR_CTR:
-			      case Brw_ADMI_DOC_DEG:  case Brw_ADMI_SHR_DEG:
-			      case Brw_ADMI_DOC_CRS:  case Brw_ADMI_SHR_CRS:
-				 ICanChangePublic = Usr_CAN;
-				 break;
-			      default:
-				 ICanChangePublic = Usr_CAN_NOT;
-				 break;
-			     }
+			   ICanChangePublic = ICanChangePublics[FileBrowser->Zone];
 
 			   Frm_BeginFormAnchor (Brw_ActChgDatFile[FileBrowser->Zone],
 						FileBrowser->SectionId);
-
 			      Brw_PutParsFileBrowser (FileBrowser);
 			  }
 
@@ -7895,7 +7913,7 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 
 			      /* Data */
 			      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
-				 if (ICanChangePublic == Usr_CAN)	// I can change file to public
+				 if (ICanChangePublic == Usr_CAN)	// I can change file to public/private
 				   {
 				    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
 						      "id=\"Public\" name=\"Public\""
@@ -8128,33 +8146,33 @@ void Brw_DownloadFile (void)
 	    case Exi_EXISTS:
 	       /***** Check if I can view this file.
 		      It could be marked as hidden or in a hidden folder *****/
-	       ICanView = Usr_CAN;
+	       ICanView = Usr_CAN_NOT;
 	       switch (FileBrowser.Zone)
 		 {
 		  case Brw_SHOW_DOC_INS:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_INS_ADM)
-			ICanView = Brw_ICanViewFileOrFolder[
-				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM)
+		        ICanView = Usr_CAN;
 		     break;
 		  case Brw_SHOW_DOC_CTR:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_CTR_ADM)
-			ICanView = Brw_ICanViewFileOrFolder[
-				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_CTR_ADM)
+		        ICanView = Usr_CAN;
 		     break;
 		  case Brw_SHOW_DOC_DEG:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_DEG_ADM)
-			ICanView = Brw_ICanViewFileOrFolder[
-				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
+		        ICanView = Usr_CAN;
 		     break;
 		  case Brw_SHOW_DOC_CRS:
 		  case Brw_SHOW_DOC_GRP:
-		     if (Gbl.Usrs.Me.Role.Logged < Rol_TCH)
-			ICanView = Brw_ICanViewFileOrFolder[
-				   Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
+		     if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH)
+		        ICanView = Usr_CAN;
 		     break;
 		  default:
+		     ICanView = Usr_CAN;
 		     break;
 		 }
+	       if (ICanView == Usr_CAN_NOT)
+		  ICanView = Brw_ICanViewFileOrFolder[
+			     Brw_DB_CheckIfHiddenUsingMetadata (FileBrowser.Zone,&File)];
 	       switch (ICanView)
 		 {
 		  case Usr_CAN:

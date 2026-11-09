@@ -34,5 +34,5 @@
 ConExp_ContractedOrExpanded_t CloOpe_GetExpandedFromYN (char Ch)
   {
    return Ch == 'Y' ? ConExp_EXPANDED :
-		      ConExp_CONTRACTED;
+		      ConExp_CONTRTED;
   }

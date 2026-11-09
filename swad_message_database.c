@@ -695,7 +695,7 @@ ConExp_ContractedOrExpanded_t Msg_DB_GetStatusOfSntMsg (long MsgCod)
 
    /***** Get if message is expanded *****/
    return StrExpanded[0] == 'Y' ? ConExp_EXPANDED :
-				  ConExp_CONTRACTED;
+				  ConExp_CONTRTED;
   }
 
 /*****************************************************************************/
