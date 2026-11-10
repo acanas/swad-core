@@ -2645,42 +2645,35 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,
       [Mch_ANS_ANSWERED    ] = {"DAT_SMALL_GREEN","fas fa-check-circle"      ,&Txt_MATCH_QUESTION_Answered  },
      };
 
-   /***** Begin container *****/
-   HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED\"");
+   /***** Put icon with link *****/
+   /* Begin container */
+   HTM_DIV_Begin ("class=\"MCH_SHOW_ANSWERED %s_%s\"",
+		  Options[Answered].ClassDiv,The_GetSuffix ());
 
-      /***** Put icon with link *****/
       if (Match->Status.Playing &&			// Match is being played
 	  Match->Status.Showing == Mch_ANSWERS &&	// Teacher's screen is showing question answers
 	  Answered == Mch_ANS_ANSWERED)			// I have answered this question
 	{
-	 /* Begin form */
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
 	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
-
 	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),NULL,
-	                             "class=\"BT_LINK DAT_SMALL_GREEN_%s\""
-	                             " onmousedown=\"this.form.submit();return false;\"",
-	                             The_GetSuffix ());
-	       HTM_TxtF ("<i class=\"%s\"></i>","fas fa-check-circle");
+				     "class=\"BT_LINK\""
+				     " onmousedown=\"this.form.submit();return false;\"");
+	       HTM_Txt ("<i class=\"fas fa-check-circle\"></i>");
 	       HTM_NBSP ();
-	       HTM_Txt (Txt_MATCH_QUESTION_Answered);
+	       HTM_Txt (Act_GetActionText (ActSeeMchAnsQstStd));
 	    HTM_BUTTON_End ();
-
-	 /* End form */
 	 Frm_EndForm ();
 	}
       else
 	{
-	 HTM_DIV_Begin ("class=\"%s_%s\"",
-	                Options[Answered].ClassDiv,The_GetSuffix ());
-	    HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
-		      Options[Answered].ClassI,*Options[Answered].Txt);
-	    HTM_NBSP ();
-	    HTM_Txt (*Options[Answered].Txt);
-	 HTM_DIV_End ();
+	 HTM_TxtF ("<i class=\"%s\" title=\"%s\"></i>",
+		   Options[Answered].ClassI,*Options[Answered].Txt);
+	 HTM_NBSP ();
+	 HTM_Txt (*Options[Answered].Txt);
 	}
 
-   /***** End container *****/
+   /* End container */
    HTM_DIV_End ();
   }
 

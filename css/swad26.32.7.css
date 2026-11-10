@@ -87,7 +87,6 @@ form
 	margin: 0;
 	}
 li	{text-align: left;}
-
 address	{font-style: normal;}
 
 /*********************** Text decoration of links ****************************/
@@ -4085,7 +4084,11 @@ legend {font-size: 12pt; font-weight: bold;}
 .MCH_SHOW_HOURGLASS, .MCH_SHOW_ANSWERED, .MCH_REM_MY_ANS, .MCH_SHOW_RESULTS
 	{
 	text-align: center;
-	padding: 16pt 0;
+	padding: 20px 0;
+	}
+.MCH_SHOW_ANSWERED form
+	{
+	display: inline;
 	}
 .MCH_NUM_ANSWERERS
 	{

@@ -17025,7 +17025,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==5	// fr
 	"Voir ma r&eacute;ponse"
 #elif L==6	// gn
-	"Ver mi respuesta"	// Okoteve traducción
+	"Ehecha che &ntilde;embohov&aacute;i"
 #elif L==7	// it
 	"Vedi la mia risposta"
 #elif L==8	// pl
@@ -17033,7 +17033,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==9	// pt
 	"Ver minha resposta"
 #elif L==10	// tr
-	"View my answer"	// Çeviri lazim!
+	"Cevab&inodot;m&inodot; g&ouml;r&uuml;nt&uuml;le"
 #endif
 	,
 	[ActRemMchAnsQstStd] =
