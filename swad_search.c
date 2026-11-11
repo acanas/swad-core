@@ -394,23 +394,23 @@ static void Sch_SearchInDB (Hie_Level_t HieLvl)
          break;
       case Hie_CTY:
          sprintf (RangeQuery," AND cty_countrs.CtyCod=%ld",
-                  Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+                  Gbl.Hie.Node[Hie_CTY].HieCod);
          break;
       case Hie_INS:
          sprintf (RangeQuery," AND ins_instits.InsCod=%ld",
-                  Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                  Gbl.Hie.Node[Hie_INS].HieCod);
          break;
       case Hie_CTR:
          sprintf (RangeQuery," AND ctr_centers.CtrCod=%ld",
-                  Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                  Gbl.Hie.Node[Hie_CTR].HieCod);
          break;
       case Hie_DEG:
          sprintf (RangeQuery," AND deg_degrees.DegCod=%ld",
-                  Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                  Gbl.Hie.Node[Hie_DEG].HieCod);
          break;
       case Hie_CRS:
          sprintf (RangeQuery," AND crs_courses.CrsCod=%ld",
-                  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                  Gbl.Hie.Node[Hie_CRS].HieCod);
          break;
      }
 

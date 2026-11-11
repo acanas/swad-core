@@ -1510,7 +1510,7 @@ static void ExaSet_ChangeValidityQst (ExaSet_Validity_t Validity)
 
    /***** Validate/unvalidate question *****/
    Exa_DB_ChangeValidityQst (QstCod,Set.SetCod,Exams.Exam.ExaCod,
-			     Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			     Gbl.Hie.Node[Hie_CRS].HieCod,
                              Validity);
 
    /***** Show current exam and its sets *****/
@@ -1531,7 +1531,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams->Exam);
-   if (Exams->Exam.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Exams->Exam.HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get set data from database *****/

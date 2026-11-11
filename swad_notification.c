@@ -935,22 +935,22 @@ static Act_Action_t Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
      {
       if (HieCods[Hie_CRS] > 0)		// Course specified
 	{
-	 if (HieCods[Hie_CRS] != Gbl.Hierarchy.Node[Hie_CRS].HieCod)	// Not the current course
+	 if (HieCods[Hie_CRS] != Gbl.Hie.Node[Hie_CRS].HieCod)	// Not the current course
 	    ParCod_PutPar (ParCod_Crs,HieCods[Hie_CRS]);		// Go to another course
 	}
       else if (HieCods[Hie_DEG] > 0)	// Degree specified
 	{
-	 if (HieCods[Hie_DEG] != Gbl.Hierarchy.Node[Hie_DEG].HieCod)	// Not the current degree
+	 if (HieCods[Hie_DEG] != Gbl.Hie.Node[Hie_DEG].HieCod)	// Not the current degree
 	    ParCod_PutPar (ParCod_Deg,HieCods[Hie_DEG]);		// Go to another degree
 	}
       else if (HieCods[Hie_CTR] > 0)	// Center specified
 	{
-	 if (HieCods[Hie_CTR] != Gbl.Hierarchy.Node[Hie_CTR].HieCod)	// Not the current center
+	 if (HieCods[Hie_CTR] != Gbl.Hie.Node[Hie_CTR].HieCod)	// Not the current center
 	    ParCod_PutPar (ParCod_Ctr,HieCods[Hie_CTR]);		// Go to another center
 	}
       else if (HieCods[Hie_INS] > 0)	// Institution specified
 	{
-	 if (HieCods[Hie_INS] != Gbl.Hierarchy.Node[Hie_INS].HieCod)	// Not the current institution
+	 if (HieCods[Hie_INS] != Gbl.Hie.Node[Hie_INS].HieCod)	// Not the current institution
 	    ParCod_PutPar (ParCod_Ins,HieCods[Hie_INS]);		// Go to another institution
 	}
      }
@@ -1157,28 +1157,28 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_MARKS_FILE:
          GrpCod = Brw_GetGrpCod ();
 	 NumUsrs = GrpCod > 0 ? Grp_DB_GetUsrsFromGrpExceptMe (&mysql_res,GrpCod) :
-				Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+				Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_TEACHERS_FILE:
          GrpCod = Brw_GetGrpCod ();
 	 NumUsrs = GrpCod > 0 ? Grp_DB_GetTchsFromGrpExceptMe (&mysql_res,GrpCod) :
-				Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+				Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod);
 	 break;
       case Ntf_EVENT_ASSIGNMENT:
          NumUsrs = Asg_DB_GetUsrsFromAssignmentExceptMe (&mysql_res,Cod);
          break;
       case Ntf_EVENT_CALL_FOR_EXAM:
       case Ntf_EVENT_NOTICE:
-         NumUsrs = Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+         NumUsrs = Enr_DB_GetUsrsFromCrsExceptMe (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod);
          break;
       case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_NET:	// This function should not be called in this case
       case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,1 << Rol_TCH))
+	 if (Enr_GetNumUsrsInCrss (Hie_CRS,Gbl.Hie.Node[Hie_CRS].HieCod,1 << Rol_TCH))
 	    // If this course has teachers ==> send notification to teachers
-            NumUsrs = Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+            NumUsrs = Enr_DB_GetTchsFromCrsExceptMe (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod);
 	 else	// Course without teachers
 	    // If this course has no teachers
 	    // and I want to be a teacher (checked before calling this function
@@ -1200,7 +1200,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 // Check if forum is for users or for all users in the course
 	 For_GetThreadForumTypeAndHieCodOfAPost (Cod,&ForumSelected);
 	 if (GetUsrsForum[ForumSelected.Type])
-            NumUsrs = GetUsrsForum[ForumSelected.Type] (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+            NumUsrs = GetUsrsForum[ForumSelected.Type] (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod);
 	 else
 	    return 0;
          break;
@@ -1246,10 +1246,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
      }
    else
      {
-      HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
-      HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-      HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-      HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+      HieCods[Hie_INS] = Gbl.Hie.Node[Hie_INS].HieCod;
+      HieCods[Hie_CTR] = Gbl.Hie.Node[Hie_CTR].HieCod;
+      HieCods[Hie_DEG] = Gbl.Hie.Node[Hie_DEG].HieCod;
+      HieCods[Hie_CRS] = Gbl.Hie.Node[Hie_CRS].HieCod;
      }
 
    if (NumUsrs) // Users found

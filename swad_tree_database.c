@@ -92,7 +92,7 @@ long Tre_DB_InsertNode (const struct Tre_Node *Node,const char *Txt)
 			        " (%ld,'%s',%u,%u,%ld,"
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s')",
-			        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			        Gbl.Hie.Node[Hie_CRS].HieCod,
 				Tre_DB_Types[Node->InfoType],
 			        Node->Hierarchy.NodInd,
 			        Node->Hierarchy.Level,
@@ -123,7 +123,7 @@ void Tre_DB_UpdateNode (const struct Tre_Node *Node,const char *Txt)
                    Node->Title,
                    Txt,
                    Node->Hierarchy.NodCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
 
@@ -144,7 +144,7 @@ void Tre_DB_HideOrUnhideNode (const struct Tre_Node *Node,
 		     " AND Type='%s'",	// Extra check
 		   HidVis_Hidden_YN[HiddenOrVisible],
 		   Node->Hierarchy.NodCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
 
@@ -162,7 +162,7 @@ void Tre_DB_UpdateIndexRange (Inf_Type_t InfoType,long Diff,long Begin,long End)
 		     " AND NodInd>=%ld"
 		     " AND NodInd<=%ld",
 		   Diff,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType],
 		   Begin,
 		   End);
@@ -192,7 +192,7 @@ void Tre_DB_MoveDownNodes (Inf_Type_t InfoType,unsigned Index)
 		     " AND Type='%s'"
 		     " AND NodInd>=%u"
 		" ORDER BY NodInd DESC",	// Necessary to not create duplicate key (CrsCod,NodInd)
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType],
 		   Index);
   }
@@ -225,7 +225,7 @@ void Tre_DB_MoveLeftRightNodeRange (Inf_Type_t InfoType,
 		     " AND NodInd>=%u"
 		     " AND NodInd<=%u",
 		   IncDec[Movement],
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType],
 		   ToMove->Begin,
 		   ToMove->End);
@@ -247,7 +247,7 @@ unsigned Tre_DB_GetListNodes (Inf_Type_t InfoType,MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND Type='%s'"
 		" ORDER BY NodInd",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[InfoType]);
   }
 
@@ -274,7 +274,7 @@ Exi_Exist_t Tre_DB_GetNodeDataByCod (const struct Tre_Node *Node,
 			   " AND CrsCod=%ld"	// Extra check
 			   " AND Type='%s'",	// Extra check
 			 Node->Hierarchy.NodCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Gbl.Hie.Node[Hie_CRS].HieCod,
 			 Tre_DB_Types[Node->InfoType]);
   }
 
@@ -294,7 +294,7 @@ Exi_Exist_t Tre_DB_CheckIfNodeHasTxt (const struct Tre_Node *Node)
 		      " AND Type='%s'"	// Extra check
 		      " AND Txt<>'')",
 		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
 
@@ -312,7 +312,7 @@ void Tre_DB_GetNodeTxt (const struct Tre_Node *Node,
 			   " AND CrsCod=%ld"	// Extra check
 			   " AND Type='%s'",	// Extra check
 		         Node->Hierarchy.NodCod,
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		         Gbl.Hie.Node[Hie_CRS].HieCod,
 		         Tre_DB_Types[Node->InfoType]);
   }
 
@@ -350,7 +350,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+                        Gbl.Hie.Node[Hie_CTY].HieCod,
 			Tre_DB_Types[InfoType]);
        case Hie_INS:
          return (unsigned)
@@ -365,7 +365,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+                        Gbl.Hie.Node[Hie_INS].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_CTR:
          return (unsigned)
@@ -378,7 +378,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+                        Gbl.Hie.Node[Hie_CTR].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_DEG:
          return (unsigned)
@@ -389,7 +389,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+                        Gbl.Hie.Node[Hie_DEG].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_CRS:
          return (unsigned)
@@ -398,7 +398,7 @@ unsigned Tre_DB_GetNumCoursesWithNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			  " FROM tre_nodes"
 			 " WHERE CrsCod=%ld"
 			   " AND Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                        Gbl.Hie.Node[Hie_CRS].HieCod,
 			Tre_DB_Types[InfoType]);
       default:
 	 return 0;
@@ -437,7 +437,7 @@ unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+                        Gbl.Hie.Node[Hie_CTY].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_INS:
          return (unsigned)
@@ -452,7 +452,7 @@ unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+                        Gbl.Hie.Node[Hie_INS].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_CTR:
          return (unsigned)
@@ -465,7 +465,7 @@ unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+                        Gbl.Hie.Node[Hie_CTR].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_DEG:
          return (unsigned)
@@ -476,7 +476,7 @@ unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=tre_nodes.CrsCod"
 			   " AND tre_nodes.Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+                        Gbl.Hie.Node[Hie_DEG].HieCod,
 			Tre_DB_Types[InfoType]);
       case Hie_CRS:
          return (unsigned)
@@ -485,7 +485,7 @@ unsigned Tre_DB_GetNumNodes (Inf_Type_t InfoType,Hie_Level_t HieLvl)
 			  " FROM tre_nodes"
 			 " WHERE CrsCod=%ld"
 			   " AND Type='%s'",
-                        Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                        Gbl.Hie.Node[Hie_CRS].HieCod,
 			Tre_DB_Types[InfoType]);
       default:
          Err_WrongHierarchyLevelExit ();
@@ -506,7 +506,7 @@ void Tre_DB_RemoveNodeRange (Inf_Type_t InfoType,
 		     " AND Type='%s'"
 		     " AND NodInd>=%u"
 		     " AND NodInd<=%u",
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                   Gbl.Hie.Node[Hie_CRS].HieCod,
                    Tre_DB_Types[InfoType],
 		   ToRemove->Begin,
 		   ToRemove->End);
@@ -626,7 +626,7 @@ Exi_Exist_t Tre_DB_CheckListItems (const struct Tre_Node *Node,
 		   Table,Node->Hierarchy.NodCod,
 		   HiddenSubQuery,
 		   Table,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
 
    /***** Free subquery *****/
@@ -728,7 +728,7 @@ void Tre_DB_UpdateItmInd (const struct Tre_Node *Node,long ItmCod,int ItmInd)
 		   Table,ItmCod,
 		   Table,Node->Hierarchy.NodCod,
 		   Table,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
 
@@ -756,7 +756,7 @@ void Tre_DB_HideOrUnhideItem (const struct Tre_Node *Node,
 		   Table,Node->Item.Cod,
 		   Table,Node->Hierarchy.NodCod,
 		   Table,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }
 
@@ -782,6 +782,6 @@ void Tre_DB_RemoveItem (const struct Tre_Node *Node)
 		   Table,Node->Item.Cod,
 		   Table,Node->Hierarchy.NodCod,
 		   Table,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Node->InfoType]);
   }

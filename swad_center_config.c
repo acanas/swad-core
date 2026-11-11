@@ -134,15 +134,15 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
    Exi_Exist_t PhotoExists;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)	// No center selected
+   if (Gbl.Hie.Node[Hie_CTR].HieCod <= 0)	// No center selected
       return;
 
    /***** Get coordinates of center *****/
-   Ctr_GetCoordByCod (Gbl.Hierarchy.Node[Hie_CTR].HieCod,&Coord);
+   Ctr_GetCoordByCod (Gbl.Hie.Node[Hie_CTR].HieCod,&Coord);
 
    /***** Initializations *****/
    PutLink      = ViewType == Vie_VIEW &&
-		  Gbl.Hierarchy.Node[Hie_CTR].WWW[0] ? Hie_PUT_LINK :
+		  Gbl.Hie.Node[Hie_CTR].WWW[0] ? Hie_PUT_LINK :
 						       Hie_DONT_PUT_LINK;
    PutFormIns   = ViewType == Vie_VIEW &&
 		  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Frm_PUT_FORM :
@@ -192,10 +192,10 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 	      }
 
 	    /***** Center WWW *****/
-	    HieCfg_WWW (ViewType,PutFormWWW,ActChgCtrWWWCfg,Gbl.Hierarchy.Node[Hie_CTR].WWW);
+	    HieCfg_WWW (ViewType,PutFormWWW,ActChgCtrWWWCfg,Gbl.Hie.Node[Hie_CTR].WWW);
 
 	    /***** Shortcut to the center *****/
-	    HieCfg_Shortcut (ViewType,ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+	    HieCfg_Shortcut (ViewType,ParCod_Ctr,Gbl.Hie.Node[Hie_CTR].HieCod);
 
 	    switch (ViewType)
 	      {
@@ -208,14 +208,14 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
 		  CtrCfg_NumCrss ();
 
 		  /***** Number of users in courses of this center *****/
-		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_TCH);
-		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_NET);
-		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_STD);
-		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hierarchy.Node[Hie_CTR].HieCod,Rol_UNK);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hie.Node[Hie_CTR].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hie.Node[Hie_CTR].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hie.Node[Hie_CTR].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_CTR,Gbl.Hie.Node[Hie_CTR].HieCod,Rol_UNK);
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the center *****/
-		  HieCfg_QR (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		  HieCfg_QR (ParCod_Ctr,Gbl.Hie.Node[Hie_CTR].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -235,9 +235,9 @@ static void CtrCfg_Configuration (Vie_ViewType_t ViewType)
       /***** Check photo *****/
       Fil_BuildPath (PathPhoto,"%s/%02u/%lu/%lu.jpg",
 		     Cfg_PATH_CTR_PUBLIC,
-		     (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-		     (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		     (unsigned) ((unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod % 100),
+		     (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod,
+		     (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod);
       PhotoExists = Fil_CheckIfPathExists (PathPhoto);
 
       if (MapExists   == Exi_EXISTS ||
@@ -326,8 +326,8 @@ static void CtrCfg_Map (const struct Map_Coordinates *Coord)
       Map_AddMarker (Coord);
 
       /* Add popup */
-      Map_AddPopup (Gbl.Hierarchy.Node[Hie_CTR].ShrtName,
-		    Gbl.Hierarchy.Node[Hie_INS].ShrtName,
+      Map_AddPopup (Gbl.Hie.Node[Hie_CTR].ShrtName,
+		    Gbl.Hie.Node[Hie_INS].ShrtName,
 		    CloOpe_OPEN);
 
    HTM_SCRIPT_End ();
@@ -434,21 +434,21 @@ static void CtrCfg_Photo (Vie_ViewType_t ViewType,
       return;
 
    /***** Get photo attribution *****/
-   CtrCfg_GetPhotoAttr (Gbl.Hierarchy.Node[Hie_CTR].HieCod,&PhotoAttribution);
+   CtrCfg_GetPhotoAttr (Gbl.Hie.Node[Hie_CTR].HieCod,&PhotoAttribution);
 
    /***** Photo image *****/
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-		      Gbl.Hierarchy.Node[Hie_CTR].WWW);
+		      Gbl.Hie.Node[Hie_CTR].WWW);
       WWW_BuildURL (URL,"%s/%02u/%lu",
 		    Cfg_URL_CTR_PUBLIC,
-		    (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		    (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		    (unsigned) ((unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod % 100),
+		    (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod);
       if (asprintf (&Icon,"%lu.jpg",
-		    (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod) < 0)
+		    (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_IMG (URL,Icon,Gbl.Hierarchy.Node[Hie_CTR].FullName,
+      HTM_IMG (URL,Icon,Gbl.Hie.Node[Hie_CTR].FullName,
 	       "class=\"%s\"",ViewType == Vie_VIEW ? "CENTER_PHOTO_SHOW CENTER_PHOTO_WIDTH" :
 						     "CENTER_PHOTO_PRINT CENTER_PHOTO_WIDTH");
       free (Icon);
@@ -563,15 +563,15 @@ static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       if (ViewType == Vie_VIEW)
 		 {
 		  Frm_BeginFormGoTo (ActSeeInsInf);
-		     ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_INS].ShrtName),NULL,
+		     ParCod_PutPar (ParCod_Ins,Gbl.Hie.Node[Hie_INS].HieCod);
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hie.Node[Hie_INS].ShrtName),NULL,
 					      "class=\"LT BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
 
-	       Lgo_DrawLogo (Hie_INS,&Gbl.Hierarchy.Node[Hie_INS],"LM ICO20x20");
+	       Lgo_DrawLogo (Hie_INS,&Gbl.Hie.Node[Hie_INS],"LM ICO20x20");
 	       HTM_NBSP ();
-	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
+	       HTM_Txt (Gbl.Hie.Node[Hie_INS].FullName);
 
 	       if (ViewType == Vie_VIEW)
 		 {
@@ -581,7 +581,7 @@ static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
                break;
             case Frm_PUT_FORM:
 	       /* Get list of institutions of the current country */
-	       Ins_GetBasicListOfInss (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	       Ins_GetBasicListOfInss (Gbl.Hie.Node[Hie_CTY].HieCod);
 
 	       /* Put form to select institution */
 	       Frm_BeginForm (ActChgCtrInsCfg);
@@ -590,12 +590,12 @@ static void CtrCfg_Ins (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (NumIns = 0;
-			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+			  NumIns < Gbl.Hie.List[Hie_CTY].Num;
 			  NumIns++)
 		       {
-			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			Ins = &Gbl.Hie.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
-				    Ins->HieCod == Gbl.Hierarchy.Node[Hie_INS].HieCod ? HTM_SELECTED :
+				    Ins->HieCod == Gbl.Hie.Node[Hie_INS].HieCod ? HTM_SELECTED :
 											HTM_NO_ATTR,
 				    "%s",Ins->ShrtName);
 		       }
@@ -645,7 +645,7 @@ static void CtrCfg_Plc (Frm_PutForm_t PutForm)
            {
             case Frm_DONT_PUT_FORM:	// I can not change center place
 	       /* Text with the place name */
-	       Plc.PlcCod = Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod;
+	       Plc.PlcCod = Gbl.Hie.Node[Hie_CTR].Specific.PlcCod;
 	       Plc_GetPlcDataByCod (&Plc);
 	       HTM_Txt (Plc.FullName);
                break;
@@ -661,7 +661,7 @@ static void CtrCfg_Plc (Frm_PutForm_t PutForm)
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     HTM_OPTION (HTM_Type_STRING,"0",
-				 Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_SELECTED :
+				 Gbl.Hie.Node[Hie_CTR].Specific.PlcCod == 0 ? HTM_SELECTED :
 										    HTM_NO_ATTR,
 				 "%s",Txt_Another_place);
 		     for (NumPlc = 0;
@@ -669,7 +669,7 @@ static void CtrCfg_Plc (Frm_PutForm_t PutForm)
 			  NumPlc++)
 			HTM_OPTION (HTM_Type_LONG,&Places.Lst[NumPlc].PlcCod,
 				    Places.Lst[NumPlc].PlcCod ==
-				    Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod ? HTM_SELECTED :
+				    Gbl.Hie.Node[Hie_CTR].Specific.PlcCod ? HTM_SELECTED :
 										  HTM_NO_ATTR,
 				    "%s",Places.Lst[NumPlc].ShrtName);
 		  HTM_SELECT_End ();
@@ -702,7 +702,7 @@ static void CtrCfg_NumUsrs (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTR,
-							       &Gbl.Hierarchy.Node[Hie_CTR]));
+							       &Gbl.Hie.Node[Hie_CTR]));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -727,15 +727,15 @@ static void CtrCfg_NumDegs (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDeg);
-	    ParCod_PutPar (ParCod_Ctr,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+	    ParCod_PutPar (ParCod_Ctr,Gbl.Hie.Node[Hie_CTR].HieCod);
 	    if (asprintf (&Title,Txt_Degrees_of_CENTER_X,
-			  Gbl.Hierarchy.Node[Hie_CTR].ShrtName) < 0)
+			  Gbl.Hie.Node[Hie_CTR].ShrtName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LB BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						            Hie_CTR,	// ...in center
-						            Gbl.Hierarchy.Node[Hie_CTR].HieCod));
+						            Gbl.Hie.Node[Hie_CTR].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -761,7 +761,7 @@ static void CtrCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTR,	// ...in center
-						      Gbl.Hierarchy.Node[Hie_CTR].HieCod));
+						      Gbl.Hie.Node[Hie_CTR].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -910,20 +910,20 @@ void CtrCfg_ReceivePhoto (void)
    Fil_CreateFolderIfNotExists (Cfg_PATH_CTR_PUBLIC);
    Fil_BuildPath (Path,"%s/%02u",
 		  Cfg_PATH_CTR_PUBLIC,
-		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100));
+		  (unsigned) ((unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod % 100));
    Fil_CreateFolderIfNotExists (Path);
    Fil_BuildPath (Path,"%s/%02u/%lu",
 		  Cfg_PATH_CTR_PUBLIC,
-		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		  (unsigned) ((unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod % 100),
+		  (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod);
    Fil_CreateFolderIfNotExists (Path);
 
    /***** Convert temporary file to public JPEG file *****/
    Fil_BuildPath (PathFileImg,"%s/%02u/%lu/%lu.jpg",
 		  Cfg_PATH_CTR_PUBLIC,
-		  (unsigned) ((unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod % 100),
-		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-		  (unsigned long) Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+		  (unsigned) ((unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod % 100),
+		  (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod,
+		  (unsigned long) Gbl.Hie.Node[Hie_CTR].HieCod);
 
    /* Call to program that makes the conversion */
    snprintf (Command,sizeof (Command),
@@ -968,7 +968,7 @@ void CtrCfg_ChangeCtrPhotoAttr (void)
    Par_GetParText ("Attribution",NewPhotoAttribution,Med_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
-   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   Ctr_DB_UpdateCtrPhotoAttribution (Gbl.Hie.Node[Hie_CTR].HieCod,
 				     NewPhotoAttribution);
 
    /***** Show the center information again *****/
@@ -991,24 +991,24 @@ void CtrCfg_ChangeCtrIns (void)
    NewIns.HieCod = ParCod_GetAndCheckPar (ParCod_OthIns);
 
    /***** Check if institution has changed *****/
-   if (NewIns.HieCod != Gbl.Hierarchy.Node[Hie_CTR].PrtCod)
+   if (NewIns.HieCod != Gbl.Hie.Node[Hie_CTR].PrtCod)
      {
       /***** Get data of new institution *****/
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&NewIns);
 
       /***** Check if it already exists a center with the same name in the new institution *****/
-      Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_CTR].ShrtName;
-      Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_CTR].FullName;
+      Names[Nam_SHRT_NAME] = Gbl.Hie.Node[Hie_CTR].ShrtName;
+      Names[Nam_FULL_NAME] = Gbl.Hie.Node[Hie_CTR].FullName;
       if (Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,
 			         Names,
-				 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				 Gbl.Hie.Node[Hie_CTR].HieCod,
 				 NewIns.HieCod,
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
 	{
 	 /***** Update institution in table of centers *****/
-	 Ctr_DB_UpdateCtrIns (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewIns.HieCod);
-	 Gbl.Hierarchy.Node[Hie_CTR].PrtCod =
-	 Gbl.Hierarchy.Node[Hie_INS].HieCod = NewIns.HieCod;
+	 Ctr_DB_UpdateCtrIns (Gbl.Hie.Node[Hie_CTR].HieCod,NewIns.HieCod);
+	 Gbl.Hie.Node[Hie_CTR].PrtCod =
+	 Gbl.Hie.Node[Hie_INS].HieCod = NewIns.HieCod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
@@ -1016,7 +1016,7 @@ void CtrCfg_ChangeCtrIns (void)
 	 /***** Create message to show the change made *****/
          Ale_CreateAlert (Ale_SUCCESS,NULL,
                           Txt_The_center_X_has_been_moved_to_the_institution_Y,
-		          Gbl.Hierarchy.Node[Hie_CTR].FullName,NewIns.FullName);
+		          Gbl.Hie.Node[Hie_CTR].FullName,NewIns.FullName);
 	}
      }
   }
@@ -1033,8 +1033,8 @@ void CtrCfg_ChangeCtrPlc (void)
    NewPlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
 
    /***** Update place in table of centers *****/
-   Ctr_DB_UpdateCtrPlc (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewPlcCod);
-   Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod = NewPlcCod;
+   Ctr_DB_UpdateCtrPlc (Gbl.Hie.Node[Hie_CTR].HieCod,NewPlcCod);
+   Gbl.Hie.Node[Hie_CTR].Specific.PlcCod = NewPlcCod;
 
    /***** Show the form again *****/
    CtrCfg_ShowConfiguration ();
@@ -1046,12 +1046,12 @@ void CtrCfg_ChangeCtrPlc (void)
 
 void CtrCfg_RenameCtrShrt (void)
   {
-   Ctr_RenameCtr (&Gbl.Hierarchy.Node[Hie_CTR],Nam_SHRT_NAME);
+   Ctr_RenameCtr (&Gbl.Hie.Node[Hie_CTR],Nam_SHRT_NAME);
   }
 
 void CtrCfg_RenameCtrFull (void)
   {
-   Ctr_RenameCtr (&Gbl.Hierarchy.Node[Hie_CTR],Nam_FULL_NAME);
+   Ctr_RenameCtr (&Gbl.Hie.Node[Hie_CTR],Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1068,7 +1068,7 @@ void CtrCfg_ChangeCtrLatitude (void)
    NewLatitude = Map_GetLatitudeFromStr (LatitudeStr);
 
    /***** Update database changing old latitude by new latitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hie.Node[Hie_CTR].HieCod,
 			       "Latitude",NewLatitude);
 
    /***** Show the form again *****/
@@ -1089,7 +1089,7 @@ void CtrCfg_ChangeCtrLongitude (void)
    NewLongitude = Map_GetLongitudeFromStr (LongitudeStr);
 
    /***** Update database changing old longitude by new longitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hie.Node[Hie_CTR].HieCod,
 			       "Longitude",NewLongitude);
 
    /***** Show the form again *****/
@@ -1110,7 +1110,7 @@ void CtrCfg_ChangeCtrAltitude (void)
    NewAltitude = Map_GetAltitudeFromStr (AltitudeStr);
 
    /***** Update database changing old altitude by new altitude *****/
-   Ctr_DB_UpdateCtrCoordinate (Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   Ctr_DB_UpdateCtrCoordinate (Gbl.Hie.Node[Hie_CTR].HieCod,
 			       "Altitude",NewAltitude);
 
    /***** Show the form again *****/
@@ -1133,9 +1133,9 @@ void CtrCfg_ChangeCtrWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_DB_UpdateCtrWWW (Gbl.Hierarchy.Node[Hie_CTR].HieCod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Node[Hie_CTR].WWW,NewWWW,
-		sizeof (Gbl.Hierarchy.Node[Hie_CTR].WWW) - 1);
+      Ctr_DB_UpdateCtrWWW (Gbl.Hie.Node[Hie_CTR].HieCod,NewWWW);
+      Str_Copy (Gbl.Hie.Node[Hie_CTR].WWW,NewWWW,
+		sizeof (Gbl.Hie.Node[Hie_CTR].WWW) - 1);
      }
    else
       Ale_CreateAlertYouCanNotLeaveFieldEmpty ();

@@ -83,7 +83,7 @@ unsigned Ctr_DB_GetBasicListOfCtrsInThisIns (MYSQL_RES **mysql_res)
 		    " FROM ctr_centers"
 		   " WHERE InsCod=%ld"
 		" ORDER BY ShortName",
-		   Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		   Gbl.Hie.Node[Hie_INS].HieCod);
   }
 
 /*****************************************************************************/
@@ -154,9 +154,9 @@ unsigned Ctr_DB_GetFullListOfCtrsInThisInsWithNumUsrs (MYSQL_RES **mysql_res)
 		                  "CtrCod"
 			    " FROM usr_data))"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
-		   Gbl.Hierarchy.Node[Hie_INS].HieCod,
-		   OrderBySubQuery[Gbl.Hierarchy.List[Hie_INS].SelectedOrder]);
+		   Gbl.Hie.Node[Hie_INS].HieCod,
+		   Gbl.Hie.Node[Hie_INS].HieCod,
+		   OrderBySubQuery[Gbl.Hie.List[Hie_INS].SelectedOrder]);
   }
 
 /*****************************************************************************/
@@ -389,7 +389,7 @@ unsigned Ctr_DB_GetNumCtrsInPlc (long PlcCod)
 		   " FROM ctr_centers"
 		  " WHERE InsCod=%ld"
 		    " AND PlcCod=%ld",
-		  Gbl.Hierarchy.Node[Hie_INS].HieCod,
+		  Gbl.Hie.Node[Hie_INS].HieCod,
 		  PlcCod);
   }
 
@@ -684,7 +684,7 @@ void Ctr_DB_GetAvgCoordAndZoomInThisIns (struct Map_Coordinates *Coord,
 		 " WHERE InsCod=%ld"
 		   " AND Latitude<>0"
 		   " AND Longitude<>0",
-		 Gbl.Hierarchy.Node[Hie_INS].HieCod) < 0)
+		 Gbl.Hie.Node[Hie_INS].HieCod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -717,7 +717,7 @@ unsigned Ctr_DB_GetCtrsWithCoordsInThisIns (MYSQL_RES **mysql_res)
 		   " WHERE InsCod=%ld"
 		     " AND Latitude<>0"
 		     " AND Longitude<>0",
-		   Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		   Gbl.Hie.Node[Hie_INS].HieCod);
   }
 
 /*****************************************************************************/

@@ -207,7 +207,7 @@ void Rec_ReqEditRecordFields (void)
 	 Rec_ListFieldsRecordsForEdition ();
       else	// No fields of records found for current course in the database
 	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_record_fields_in_the_course_X,
-			Gbl.Hierarchy.Node[Hie_CRS].FullName);
+			Gbl.Hie.Node[Hie_CRS].FullName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -231,7 +231,7 @@ void Rec_GetListRecordFieldsCrs (void)
       return;
 
    /***** Get the fields of records *****/
-   if ((Gbl.Crs.Records.LstFields.Num = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
+   if ((Gbl.Crs.Records.LstFields.Num = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod)))
      {
       /***** Create a list of fields *****/
       if ((Gbl.Crs.Records.LstFields.Lst = calloc ((size_t) Gbl.Crs.Records.LstFields.Num,
@@ -509,7 +509,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName)
    unsigned NumRow;
 
    /* Query database */
-   if ((NumRows = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod)) > 0)	// If fields found...
+   if ((NumRows = Rec_DB_GetAllFieldsInCrs (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod)) > 0)	// If fields found...
       for (NumRow = 0;
 	   NumRow < NumRows;
 	   NumRow++)
@@ -537,7 +537,7 @@ bool Rec_CheckIfRecordFieldIsRepeated (const char *FldName)
 
 void Rec_CreateRecordField (void)
   {
-   Rec_DB_CreateField (Gbl.Hierarchy.Node[Hie_CRS].HieCod,&Gbl.Crs.Records.Field);
+   Rec_DB_CreateField (Gbl.Hie.Node[Hie_CRS].HieCod,&Gbl.Crs.Records.Field);
   }
 
 /*****************************************************************************/
@@ -630,7 +630,7 @@ static void Rec_GetFieldByCod (long FldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 
    unsigned Vis;
 
    /***** Get a field of a record in a course from database *****/
-   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+   if (Rec_DB_GetFieldByCod (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod,
 			     FldCod) == Exi_DOES_NOT_EXIST)
       Err_WrongRecordFieldExit ();
 
@@ -1633,14 +1633,14 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	       HTM_TR_Begin (NULL);
 
 		  HTM_TD_Begin ("class=\"LM\" style=\"width:%upx;\"",Rec_DEGREE_LOGO_SIZE);
-		     Lgo_DrawLogo (Hie_DEG,&Gbl.Hierarchy.Node[Hie_DEG],
+		     Lgo_DrawLogo (Hie_DEG,&Gbl.Hie.Node[Hie_DEG],
 				   "ICO64x64");
 		  HTM_TD_End ();
 
 		  HTM_TD_Begin ("class=\"REC_HEAD CM\"");
-		     HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
+		     HTM_Txt (Gbl.Hie.Node[Hie_DEG].FullName);
 		     HTM_BR ();
-		     HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].FullName);
+		     HTM_Txt (Gbl.Hie.Node[Hie_CRS].FullName);
 		     HTM_BR ();
 		     HTM_Txt (UsrDat->FullName);
 		  HTM_TD_End ();
@@ -1905,7 +1905,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
    /* In this case UsrDat->Roles.InThisCrs
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
-   UsrDat->Roles.InThisCrs = Gbl.Hierarchy.HieLvl == Hie_CRS ? DefaultRole :	// Course selected
+   UsrDat->Roles.InThisCrs = Gbl.Hie.Lvl == Hie_CRS ? DefaultRole :	// Course selected
 	                                                          Rol_UNK;	// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_FORM,UsrDat,NULL);
   }
@@ -2373,7 +2373,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) const void *Args)
 					   Rec_PutParUsrCodEncrypted,NULL,
 					   "user-gear.svg",Ico_BLACK);
 
-	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+	 if (Gbl.Hie.Lvl == Hie_CRS)	// Course selected
 	   {
 	    if (Rec_Record.UsrDat->Roles.InThisCrs == Rol_STD)	// He/she is a student in current course
 	      {
@@ -2730,7 +2730,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 	      {
 	       case Rec_SHA_SIGN_UP_IN_CRS_FORM:		// I want to apply for enrolment
 		  /***** Set default role *****/
-		  if (UsrDat->UsrCod == Gbl.Hierarchy.Node[Hie_CRS].RequesterUsrCod ||	// Creator of the course
+		  if (UsrDat->UsrCod == Gbl.Hie.Node[Hie_CRS].ReqUsrCod ||	// Creator of the course
 		      (UsrDat->Roles.InCrss & (1 << Rol_TCH)))			// Teacher in other courses
 		     DefaultRoleInForm = Rol_TCH;	// Request sign up as a teacher
 		  else if ((UsrDat->Roles.InCrss & (1 << Rol_NET)))		// Non-editing teacher in other courses
@@ -2755,7 +2755,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		  HTM_SELECT_End ();
 		  break;
 	       case Rec_SHA_OTHER_ADMIN_FORM:		// The other user already exists in the platform
-		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+		  if (Gbl.Hie.Lvl == Hie_CRS)	// Course selected
 		    {
 		     /***** Set default role *****/
 		     switch (UsrDat->Roles.InThisCrs)
@@ -2767,7 +2767,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 			   break;
 			default:	// User does not belong to current course
 			   /* If there is a request of this user, default role is the requested role */
-			   DefaultRoleInForm = Rol_DB_GetRequestedRole (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			   DefaultRoleInForm = Rol_DB_GetRequestedRole (Gbl.Hie.Node[Hie_CRS].HieCod,
 			                                                UsrDat->UsrCod);
 
 			   switch (DefaultRoleInForm)
@@ -2855,7 +2855,7 @@ static void Rec_ShowRole (struct Usr_Data *UsrDat,
 		    }
 		  break;
 	       case Rec_SHA_OTHER_NEW_FORM:	// The user does not exist in platform
-		  if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+		  if (Gbl.Hie.Lvl == Hie_CRS)	// Course selected
 		    {
 		     if (Adm_CheckIfICanAdminOtherUsrs () == Usr_CAN)
 		       {
@@ -3178,10 +3178,10 @@ static void Rec_ShowCountry (struct Usr_Data *UsrDat,Vie_ViewType_t ViewType)
 	                		                HTM_NO_ATTR,
 			"%s",Txt_Another_country);
 	    for (NumCty = 0;
-		 NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+		 NumCty < Gbl.Hie.List[Hie_SYS].Num;
 		 NumCty++)
 	      {
-	       Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+	       Cty = &Gbl.Hie.List[Hie_SYS].Lst[NumCty];
 	       HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
 			   Cty->HieCod == UsrDat->HieCods[Hie_CTY] ? HTM_SELECTED :
 							             HTM_NO_ATTR,
@@ -3600,7 +3600,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 if ( Role == Rol_STD ||
 	      Role == Rol_NET ||
 	      Role == Rol_TCH ||
-	     (Role == Rol_GST && Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0))
+	     (Role == Rol_GST && Gbl.Hie.Node[Hie_CRS].HieCod <= 0))
 	    RoleOK = Err_SUCCESS;
 	 break;
       default:
@@ -3756,10 +3756,10 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 							   HTM_NO_ATTR) | HTM_DISABLED,
 				 NULL);
 		     for (NumCty = 0;
-			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+			  NumCty < Gbl.Hie.List[Hie_SYS].Num;
 			  NumCty++)
 		       {
-			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+			Cty = &Gbl.Hie.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
 				    Cty->HieCod == UsrDat->InsCtyCod ? HTM_SELECTED :
 								       HTM_NO_ATTR,
@@ -3814,10 +3814,10 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 								 HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
-			  NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+			  NumIns < Gbl.Hie.List[Hie_CTY].Num;
 			  NumIns++)
 		       {
-			Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+			Ins = &Gbl.Hie.List[Hie_CTY].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 				    Ins->HieCod == UsrDat->HieCods[Hie_INS] ? HTM_SELECTED :
 									      HTM_NO_ATTR,
@@ -3873,10 +3873,10 @@ void Rec_ShowFormInsCtrDpt (struct Usr_Data *UsrDat)
 								    HTM_NO_ATTR,
 				    Txt_Another_center);
 			for (NumCtr = 0;
-			     NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+			     NumCtr < Gbl.Hie.List[Hie_INS].Num;
 			     NumCtr++)
 			  {
-			   Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
+			   Ctr = &Gbl.Hie.List[Hie_INS].Lst[NumCtr];
 			   HTM_OPTION (HTM_Type_LONG,&Ctr->HieCod,
 				       Ctr->HieCod == UsrDat->HieCods[Hie_CTR] ? HTM_SELECTED :
 										 HTM_NO_ATTR,

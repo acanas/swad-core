@@ -118,12 +118,12 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
    unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_CTY].HieCod <= 0)		// No country selected
+   if (Gbl.Hie.Node[Hie_CTY].HieCod <= 0)		// No country selected
       return;
 
    /***** Initializations *****/
    PutLink = ViewType == Vie_VIEW &&
-	     Gbl.Hierarchy.Node[Hie_CTY].WWW[0] ? Hie_PUT_LINK :
+	     Gbl.Hie.Node[Hie_CTY].WWW[0] ? Hie_PUT_LINK :
 						  Hie_DONT_PUT_LINK;
 
    /***** Begin box *****/
@@ -146,15 +146,15 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 	    CtyCfg_Name (PutLink);
 
 	    /* Shortcut to the country */
-	    HieCfg_Shortcut (ViewType,ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	    HieCfg_Shortcut (ViewType,ParCod_Cty,Gbl.Hie.Node[Hie_CTY].HieCod);
 
-	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInCty (Gbl.Hie.Node[Hie_CTY].HieCod);
 	    switch (ViewType)
 	      {
 	       case Vie_VIEW:
 		  NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 							   Hie_CTY,	// ...in country
-							   Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+							   Gbl.Hie.Node[Hie_CTY].HieCod);
 
 		  /* Number of users who claim to belong to this country,
 		     number of institutions,
@@ -169,14 +169,14 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 		  CtyCfg_NumCrss ();
 
 		  /* Number of users in courses of this country */
-		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_TCH);
-		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_NET);
-		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_STD);
-		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hierarchy.Node[Hie_CTY].HieCod,Rol_UNK);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hie.Node[Hie_CTY].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hie.Node[Hie_CTY].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hie.Node[Hie_CTY].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_CTY,Gbl.Hie.Node[Hie_CTY].HieCod,Rol_UNK);
 		  break;
 	       case Vie_PRINT:
 		  /* QR code with link to the country */
-		  HieCfg_QR (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+		  HieCfg_QR (ParCod_Cty,Gbl.Hie.Node[Hie_CTY].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -191,7 +191,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 
       /**************************** Right part **********************************/
       /* Check country map */
-      MapImageExists = Cty_CheckIfCtyPhotoExists (&Gbl.Hierarchy.Node[Hie_CTY]);
+      MapImageExists = Cty_CheckIfCtyPhotoExists (&Gbl.Hie.Node[Hie_CTY]);
 
       if (NumCtrsWithMap || MapImageExists == Exi_EXISTS)
 	{
@@ -237,11 +237,11 @@ static void CtyCfg_Title (Hie_PutLink_t PutLink)
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
-		      Gbl.Hierarchy.Node[Hie_CTY].WWW,
-		      Gbl.Hierarchy.Node[Hie_CTY].FullName,The_GetSuffix ());
+		      Gbl.Hie.Node[Hie_CTY].WWW,
+		      Gbl.Hie.Node[Hie_CTY].FullName,The_GetSuffix ());
 
       /* Country name */
-      HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
+      HTM_Txt (Gbl.Hie.Node[Hie_CTY].FullName);
 
       /* End link */
       if (PutLink == Hie_PUT_LINK)
@@ -340,14 +340,14 @@ static void CtyCfg_MapImage (Vie_ViewType_t ViewType,Hie_PutLink_t PutLink)
    char *MapAttribution = NULL;
 
    /***** Get map attribution *****/
-   CtyCfg_GetMapAttr (Gbl.Hierarchy.Node[Hie_CTY].HieCod,&MapAttribution);
+   CtyCfg_GetMapAttr (Gbl.Hie.Node[Hie_CTY].HieCod,&MapAttribution);
 
    /***** Map image *****/
    HTM_DIV_Begin ("class=\"CM\"");
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\"",
-	              Gbl.Hierarchy.Node[Hie_CTY].WWW);
-      Cty_DrawCtyMap (&Gbl.Hierarchy.Node[Hie_CTY],Class[ViewType]);
+	              Gbl.Hie.Node[Hie_CTY].WWW);
+      Cty_DrawCtyMap (&Gbl.Hie.Node[Hie_CTY],Class[ViewType]);
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_End ();
    HTM_DIV_End ();
@@ -432,8 +432,8 @@ static void CtyCfg_Name (Hie_PutLink_t PutLink)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_STRONG_%s\"",The_GetSuffix ());
 	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"DAT_STRONG_%s\"",
-			 Gbl.Hierarchy.Node[Hie_CTY].WWW,The_GetSuffix ());
-	 HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
+			 Gbl.Hie.Node[Hie_CTY].WWW,The_GetSuffix ());
+	 HTM_Txt (Gbl.Hie.Node[Hie_CTY].FullName);
 	 if (PutLink == Hie_PUT_LINK)
 	    HTM_A_End ();
       HTM_TD_End ();
@@ -458,7 +458,7 @@ static void CtyCfg_NumUsrs (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,
-							       &Gbl.Hierarchy.Node[Hie_CTY]));
+							       &Gbl.Hie.Node[Hie_CTY]));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -483,15 +483,15 @@ static void CtyCfg_NumInss (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LT DAT_%s\"",The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeIns);
-	    ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	    ParCod_PutPar (ParCod_Cty,Gbl.Hie.Node[Hie_CTY].HieCod);
 	    if (asprintf (&Title,Txt_Institutions_of_COUNTRY_X,
-	                  Gbl.Hierarchy.Node[Hie_CTY].FullName) < 0)
+	                  Gbl.Hie.Node[Hie_CTY].FullName) < 0)
 	       Err_NotEnoughMemoryExit ();
 	    HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LT BT_LINK\"");
 	    free (Title);
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 							    Hie_CTY,	// ...in country
-							    Gbl.Hierarchy.Node[Hie_CTY].HieCod));
+							    Gbl.Hie.Node[Hie_CTY].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -517,7 +517,7 @@ static void CtyCfg_NumDegs (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_CTY,	// ...in country
-						      Gbl.Hierarchy.Node[Hie_CTY].HieCod));
+						      Gbl.Hie.Node[Hie_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -541,7 +541,7 @@ static void CtyCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTY,	// ...in country
-						      Gbl.Hierarchy.Node[Hie_CTY].HieCod));
+						      Gbl.Hie.Node[Hie_CTY].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();

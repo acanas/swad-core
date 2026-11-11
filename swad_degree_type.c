@@ -317,7 +317,7 @@ static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes
 	NumDegTyp++, The_ChangeRowColor ())
      {
       BgColor = DegTypes->Lst[NumDegTyp].DegTypCod ==
-	        Gbl.Hierarchy.Node[Hie_DEG].Specific.TypCod ? "BG_HIGHLIGHT" :
+	        Gbl.Hie.Node[Hie_DEG].Specific.TypCod ? "BG_HIGHLIGHT" :
 							      The_GetColorRows ();
 
       /* Begin table row */
@@ -365,7 +365,7 @@ static void DegTyp_PutIconsListingDegTypes (__attribute__((unused)) const void *
 
 static void DegTyp_PutIconToEditDegTypes (__attribute__((unused)) const void *Args)
   {
-   if (Gbl.Hierarchy.HieLvl == Hie_CTR &&	// Only editable if center tab is visible
+   if (Gbl.Hie.Lvl == Hie_CTR &&	// Only editable if center tab is visible
        DegTyp_CheckIfICanCreateDegTypes () == Usr_CAN)
       Ico_PutContextualIconToEdit (ActEdiDegTyp,NULL,NULL,NULL);
   }

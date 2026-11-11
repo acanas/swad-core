@@ -5336,7 +5336,6 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color: #707070;}
 	padding: 0;
 	margin: 0;
 	text-align: left;
-	vertical-align: middle;
 	}
 .PRF_FIG_LI
 	{
@@ -5347,7 +5346,7 @@ button.PAG_DARK:hover,		.PAG_CUR_DARK		{background-color: #707070;}
 	display: inline-block;
 	width: 30px;
 	text-align: center;
-	vertical-align: middle;
+	vertical-align: text-bottom;
 	}
 
 #following_side

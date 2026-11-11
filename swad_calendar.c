@@ -215,7 +215,7 @@ void Cal_DrawCurrentMonth (void)
       HTM_TxtF ("\tDrawCurrentMonth ('CurrentMonth',%u,%ld,%ld,'%s','%s/%s',",
 		Gbl.Prefs.FirstDayOfWeek,
 		(long) Dat_GetStartExecutionTimeUTC (),
-		Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
+		Gbl.Hie.Node[Hie_CTR].Specific.PlcCod,
 		The_GetSuffix (),
 		Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
       Frm_SetParsForm (ParsStr,ActSeeCal,Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
@@ -299,7 +299,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 	 HTM_TxtF ("\tCal_DrawCalendar('calendar',%u,%ld,%ld,%s,'%s','%s/%s',",
 		   Gbl.Prefs.FirstDayOfWeek,
 		   (long) Dat_GetStartExecutionTimeUTC (),
-		   Gbl.Hierarchy.Node[Hie_CTR].Specific.PlcCod,
+		   Gbl.Hie.Node[Hie_CTR].Specific.PlcCod,
 		   Print[ViewType],The_GetSuffix (),
 		   Cfg_URL_SWAD_CGI,Lan_STR_LANG_ID[Gbl.Prefs.Language]);
 	 Frm_SetParsForm (ParsStr,ActionSeeCalendar,Frm_PUT_PAR_LOCATION_IF_NO_SESSION);
@@ -322,7 +322,7 @@ static void Cal_PutIconsCalendar (__attribute__((unused)) const void *Args)
    Ico_PutContextualIconToPrint (ActPrnCal,NULL,NULL);
 
    /***** View holidays *****/
-   if (Gbl.Hierarchy.HieLvl == Hie_INS)		// Institution selected
+   if (Gbl.Hie.Lvl == Hie_INS)		// Institution selected
       Hld_PutIconToSeeHlds ();
   }
 

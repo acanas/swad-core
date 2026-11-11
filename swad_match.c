@@ -1196,7 +1196,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
       Err_WrongGameExit ();
    Grp_GetParMyAllGrps ();
    Gam_GetGameDataByCod (&Games->Game);
-   if (Games->Game.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Games->Game.HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();
 
    /* Get match code */

@@ -116,7 +116,7 @@ unsigned Att_DB_GetListEventsMyGrps (MYSQL_RES **mysql_res,
 			    " WHERE grp_users.UsrCod=%ld"
 			      " AND att_groups.GrpCod=grp_users.GrpCod))"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Att_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Att_DB_OrderBySubQuery[SelectedOrder][OrderNewestOldest]);
@@ -136,7 +136,7 @@ unsigned Att_DB_GetListEventsAllGrps (MYSQL_RES **mysql_res,
 		    " FROM att_events"
 		   " WHERE CrsCod=%ld%s"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Att_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Att_DB_OrderBySubQuery[SelectedOrder][OrderNewestOldest]);
   }
@@ -201,7 +201,7 @@ void Att_DB_GetEventTitle (long AttCod,char *Title,size_t TitleSize)
 		         " WHERE AttCod=%ld"
 		           " AND CrsCod=%ld",	// Extra check
 			 AttCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -216,7 +216,7 @@ void Att_DB_GetEventDescription (long AttCod,char Description[Cns_MAX_BYTES_TEXT
 		         " WHERE AttCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 		         AttCod,
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		         Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -233,7 +233,7 @@ Exi_Exist_t Att_DB_CheckIfSimilarEventExists (const char *Field,const char *Valu
 		    " WHERE CrsCod=%ld"
 		      " AND %s='%s'"
 		      " AND AttCod<>%ld)",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Field,Value,
 		   AttCod);
   }
@@ -257,7 +257,7 @@ long Att_DB_CreateEvent (const struct Att_Event *Event,const char *Description)
 				" (%ld,'%c',%ld,"
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%c','%s','%s')",
-				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				Gbl.Hie.Node[Hie_CRS].HieCod,
 				HidVis_Hidden_YN[Event->Hidden],
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Event->TimeUTC[Dat_STR_TIME],
@@ -293,7 +293,7 @@ void Att_DB_UpdateEvent (const struct Att_Event *Event,const char *Description)
                    Event->Title,
                    Description,
                    Event->AttCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -312,7 +312,7 @@ void Att_DB_HideOrUnhideEvent (long AttCod,
 		     " AND CrsCod=%ld",
 		   HidVis_Hidden_YN[HiddenOrVisible],
                    AttCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -803,7 +803,7 @@ void Att_DB_RemoveEventFromThisCrs (long AttCod)
    DB_QueryDELETE ("can not remove attendance event",
 		   "DELETE FROM att_events"
 		   " WHERE AttCod=%ld AND CrsCod=%ld",
-                   AttCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   AttCod,Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -891,7 +891,7 @@ unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			       Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
@@ -901,7 +901,7 @@ unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl)
 			       " WHERE deg_degrees.CtrCod=%ld"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			       Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT att_events.CrsCod)"
@@ -909,13 +909,13 @@ unsigned Att_DB_GetNumCoursesWithEvents (Hie_Level_t HieLvl)
 				      "att_events"
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			       Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return DB_QueryCOUNT ("can not get number of courses with attendance events",
 			       "SELECT COUNT(DISTINCT CrsCod)"
 				" FROM att_events"
 			       " WHERE CrsCod=%ld",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			       Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -950,7 +950,7 @@ Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			       Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
@@ -962,7 +962,7 @@ Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			       " WHERE deg_degrees.CtrCod=%ld"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			       Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
@@ -972,7 +972,7 @@ Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 				      "att_events"
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=att_events.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			       Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of attendance events",
@@ -980,7 +980,7 @@ Exi_Exist_t Att_DB_GetNumEvents (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 				      "SUM(NumNotif)"			// row[1]
 				" FROM att_events"
 			       " WHERE CrsCod=%ld",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			       Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return Exi_DOES_NOT_EXIST;	// Not reached

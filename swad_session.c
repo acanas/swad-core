@@ -171,11 +171,11 @@ Exi_Exist_t Ses_GetSessionData (void)
                  center code (row[5]),
                  degree code (row[6]),
              and course code (row[7]) *****/
-      Gbl.Hierarchy.Node[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (row[3]);
-      Gbl.Hierarchy.Node[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[4]);
-      Gbl.Hierarchy.Node[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[5]);
-      Gbl.Hierarchy.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[6]);
-      Gbl.Hierarchy.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[7]);
+      Gbl.Hie.Node[Hie_CTY].HieCod = Str_ConvertStrCodToLongCod (row[3]);
+      Gbl.Hie.Node[Hie_INS].HieCod = Str_ConvertStrCodToLongCod (row[4]);
+      Gbl.Hie.Node[Hie_CTR].HieCod = Str_ConvertStrCodToLongCod (row[5]);
+      Gbl.Hie.Node[Hie_DEG].HieCod = Str_ConvertStrCodToLongCod (row[6]);
+      Gbl.Hie.Node[Hie_CRS].HieCod = Str_ConvertStrCodToLongCod (row[7]);
 
       /***** Get last search *****/
       if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed

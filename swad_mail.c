@@ -864,7 +864,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		     Err_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 		  Str_Concat (StrAddresses,UsrDat.Email,sizeof (StrAddresses) - 1);
 		  HTM_A_Begin ("href=\"mailto:%s?subject=%s\"",
-			       UsrDat.Email,Gbl.Hierarchy.Node[Hie_CRS].FullName);
+			       UsrDat.Email,Gbl.Hie.Node[Hie_CRS].FullName);
 		     HTM_Txt (UsrDat.Email);
 		  HTM_A_End ();
 
@@ -897,7 +897,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 	 HTM_A_Begin ("href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
 		      " title=\"%s\" class=\"FORM_OUT_%s BOLD\"",
 		      Gbl.Usrs.Me.UsrDat.Email,
-		      Gbl.Hierarchy.Node[Hie_CRS].FullName,
+		      Gbl.Hie.Node[Hie_CRS].FullName,
 		      Gbl.Usrs.Me.UsrDat.Email,
 		      StrAddresses,
 		      Txt_Create_email_message,
@@ -1700,7 +1700,7 @@ Usr_Can_t Mai_ICanSeeOtherUsrEmail (const struct Usr_Data *UsrDat)
 	    I only can see the user's email of users from current level */
 	 Level = Adm_LevelAdmin[Gbl.Usrs.Me.Role.Logged];
 	 return ICanSee[Hie_CheckIfUsrBelongsTo (Level,UsrDat->UsrCod,
-						 Gbl.Hierarchy.Node[Level].HieCod,
+						 Gbl.Hie.Node[Level].HieCod,
 						 Hie_DB_ONLY_ACCEPTED_COURSES)];	// count only accepted courses
       case Rol_SYS_ADM:
 	 return Usr_CAN;

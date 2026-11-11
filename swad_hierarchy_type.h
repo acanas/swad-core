@@ -83,16 +83,16 @@ struct Hie_MyNode
 
 struct Hie_Node
   {
-   long HieCod;			// Course/degree/center/institution/country code
-   long PrtCod;			// Parent code
+   long HieCod;		// Country/institution/center/degree/course code
+   long PrtCod;		// Parent code
    struct
      {
-      long PlcCod;		// Center place code
-      long TypCod;		// Degree type code
-      unsigned Year;		// Course year: 0 (optatives), 1, 2, 3...
+      long PlcCod;	// Center place code
+      long TypCod;	// Degree type code
+      unsigned Year;	// Course year: 0 (optatives), 1, 2, 3...
      } Specific;
-   Hie_Status_t Status;		// Node status
-   long RequesterUsrCod;	// User code of the person who requested the creation of this node
+   Hie_Status_t Status;	// Node status
+   long ReqUsrCod;	// User code of the person who requested the creation of this node
    char InstitutionalCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];	// Institutional code of the node
    char ShrtName[Nam_MAX_BYTES_SHRT_NAME + 1];	// Short name of the node
    char FullName[Nam_MAX_BYTES_FULL_NAME + 1];	// Full name of the node

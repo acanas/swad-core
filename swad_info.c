@@ -871,7 +871,7 @@ static Exi_Exist_t Inf_CheckPage (Inf_Type_t InfoType)
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+   Inf_BuildPathPage (Gbl.Hie.Node[Hie_CRS].HieCod,
 		      InfoType,PathRelDirHTML);
 
    /***** Open file with web page *****/
@@ -903,7 +903,7 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
 
    /***** Build path of directory containing web page *****/
-   Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+   Inf_BuildPathPage (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
 		      PathRelDirHTML);
 
    /***** Open file with web page *****/
@@ -913,7 +913,7 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
      {
       WWW_BuildURL (URL,"%s/%lu/%s/index.html",
 	            Cfg_URL_CRS_PUBLIC,
-	            (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	            (unsigned long) Gbl.Hie.Node[Hie_CRS].HieCod,
 	            Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
@@ -926,7 +926,7 @@ static Exi_Exist_t Inf_CheckAndShowPage (Inf_Type_t InfoType)
      {
       WWW_BuildURL (URL,"%s/%lu/%s/index.htm",
 	            Cfg_URL_CRS_PUBLIC,
-	            (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	            (unsigned long) Gbl.Hie.Node[Hie_CRS].HieCod,
 	            Inf_FileNamesForInfoType[InfoType]);
       Inf_ShowPage (URL);
 
@@ -960,7 +960,7 @@ static Exi_Exist_t Inf_CheckURL (Inf_Type_t InfoType)
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,PathFile);
+   Inf_BuildPathURL (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
@@ -989,7 +989,7 @@ static Exi_Exist_t Inf_CheckAndShowURL (Inf_Type_t InfoType)
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,PathFile);
+   Inf_BuildPathURL (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,PathFile);
 
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
@@ -1037,7 +1037,7 @@ void Inf_WriteURLIntoTxtBuffer (Inf_Type_t InfoType,
    TxtBuffer[0] = '\0';
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+   Inf_BuildPathURL (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
 		     PathFile);
 
    /***** Check if file with URL exists *****/
@@ -1677,7 +1677,7 @@ void Inf_GetAndCheckInfoSrcFromDB (struct Inf_Info *Info)
 
    /***** Get info source for a specific type of info from database *****/
    if (Inf_DB_GetInfoSrcAndMustBeRead (&mysql_res,
-				       Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				       Gbl.Hie.Node[Hie_CRS].HieCod,
 				       Info->Type) == Exi_EXISTS)
      {
       /* Get row */
@@ -1743,7 +1743,7 @@ static Exi_Exist_t Inf_CheckPlainTxt (Inf_Type_t InfoType)
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,TxtHTML,NULL);
+   Inf_GetInfoTxtFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,TxtHTML,NULL);
 
    return TxtHTML[0] != '\0' ? Exi_EXISTS :
 			       Exi_DOES_NOT_EXIST;
@@ -1760,7 +1760,7 @@ static Exi_Exist_t Inf_CheckAndShowPlainTxt (Inf_Type_t InfoType)
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+   Inf_GetInfoTxtFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,NULL);
 
    if (TxtHTML[0])
@@ -1805,7 +1805,7 @@ static Exi_Exist_t Inf_CheckRichTxt (Inf_Type_t InfoType)
    char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+   Inf_GetInfoTxtFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,TxtMD);
 
    return TxtMD[0] != '\0' ? Exi_EXISTS :
@@ -1832,7 +1832,7 @@ static Exi_Exist_t Inf_CheckAndShowRichTxt (Inf_Type_t InfoType)
    int ReturnCode;
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+   Inf_GetInfoTxtFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
                          TxtHTML,TxtMD);
 
    if (TxtMD[0])
@@ -2023,7 +2023,7 @@ void Inf_EditPlainTxtInfo (void)
 	   }
 
 	 /***** Get info text from database *****/
-	 Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+	 Inf_GetInfoTxtFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
 			       TxtHTML,NULL);
 
 	 /***** Edition area *****/
@@ -2106,7 +2106,7 @@ void Inf_EditRichTxtInfo (void)
 	}
 
       /***** Get info text from database *****/
-      Inf_GetInfoTxtFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+      Inf_GetInfoTxtFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
 			    TxtHTML,NULL);
 
       /***** Edition area *****/
@@ -2288,7 +2288,7 @@ void Inf_ReceivePagInfo (void)
      {
       case Err_SUCCESS:
 	 /***** Build path of directory containing web page *****/
-	 Inf_BuildPathPage (Gbl.Hierarchy.Node[Hie_CRS].HieCod,InfoType,
+	 Inf_BuildPathPage (Gbl.Hie.Node[Hie_CRS].HieCod,InfoType,
 			    PathRelDirHTML);
 
 	 /***** End the reception of the data *****/
@@ -2433,7 +2433,7 @@ void Inf_EditURLInfo (void)
    Inf_BeforeTree (&Info,Vie_EDIT,Inf_URL);
 
       /***** Build path to file containing URL *****/
-      Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info.Type,
+      Inf_BuildPathURL (Gbl.Hie.Node[Hie_CRS].HieCod,Info.Type,
 			PathFile);
 
       /***** Begin form *****/
@@ -2485,7 +2485,7 @@ void Inf_ReceiveURLInfo (void)
    Par_GetParText ("InfoSrcURL",URL,WWW_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
-   Inf_BuildPathURL (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Info.Type,PathFile);
+   Inf_BuildPathURL (Gbl.Hie.Node[Hie_CRS].HieCod,Info.Type,PathFile);
 
    /***** Open file with URL *****/
    if ((FileURL = fopen (PathFile,"wb")) != NULL)

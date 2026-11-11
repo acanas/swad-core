@@ -108,7 +108,7 @@ unsigned Asg_DB_GetListAssignmentsMyGrps (MYSQL_RES **mysql_res,
 			      " AND asg_groups.GrpCod=grp_users.GrpCod)"
 			  ")"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Asg_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   Asg_DB_OrderSubQuery[SelectedOrder]);
@@ -127,7 +127,7 @@ unsigned Asg_DB_GetListAssignmentsAllGrps (MYSQL_RES **mysql_res,
 		    " FROM asg_assignments"
 		   " WHERE CrsCod=%ld%s"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Asg_DB_HiddenSubQuery[Gbl.Usrs.Me.Role.Logged],
 		   Asg_DB_OrderSubQuery[SelectedOrder]);
   }
@@ -152,7 +152,7 @@ Exi_Exist_t Asg_DB_GetAssignmentDataByCod (MYSQL_RES **mysql_res,long AsgCod)
 			 " WHERE AsgCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 			 AsgCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -175,7 +175,7 @@ Exi_Exist_t Asg_DB_GetAssignmentDataByFolder (MYSQL_RES **mysql_res,
 			  " FROM asg_assignments"
 			 " WHERE CrsCod=%ld"	// Extra check
 			   " AND Folder='%s'",
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Gbl.Hie.Node[Hie_CRS].HieCod,
 			 FolderName);
   }
 
@@ -206,7 +206,7 @@ void Asg_DB_GetAssignmentTitle (long AsgCod,char *Title,size_t TitleSize)
 		         " WHERE AsgCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 		         AsgCod,
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		         Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -221,7 +221,7 @@ void Asg_DB_GetAssignmentTxt (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
 		         " WHERE AsgCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 		         AsgCod,
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		         Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -239,7 +239,7 @@ Exi_Exist_t Asg_DB_CheckIfSimilarAssignmentExists (const char *Field,const char 
 		    " WHERE CrsCod=%ld"
 		      " AND %s='%s'"
 		      " AND AsgCod<>%ld)",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Field,Value,
 		   AsgCod);
   }
@@ -260,7 +260,7 @@ long Asg_DB_CreateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
 				" (%ld,%ld,"
 				  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
 				  "'%s','%s','%s')",
-				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				Gbl.Hie.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Asg->TimeUTC[Dat_STR_TIME],
 				Asg->TimeUTC[Dat_END_TIME],
@@ -291,7 +291,7 @@ void Asg_DB_UpdateAssignment (const struct Asg_Assignment *Asg,const char *Txt)
                    Asg->FolderName,
                    Txt,
                    Asg->AsgCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -310,7 +310,7 @@ void Asg_DB_HideOrUnhideAssignment (long AsgCod,
 		     " AND CrsCod=%ld",
 		   HidVis_Hidden_YN[HiddenOrVisible],
                    AsgCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -324,7 +324,7 @@ void Asg_DB_RemoveAssignment (long AsgCod)
 		   " WHERE AsgCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
                    AsgCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -341,7 +341,7 @@ long Asg_DB_GetAssignmentRubCod (long AsgCod)
 				" AND asg_rubrics.RubCod=rub_rubrics.RubCod"
 			        " AND rub_rubrics.CrsCod=%ld",	// Extra check
 			      AsgCod,
-			      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			      Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -365,7 +365,7 @@ void Asg_DB_UpdateRubCod (long AsgCod,long RubCod)
 			   " WHERE RubCod=%ld"
 			     " AND CrsCod=%ld)",
 			  RubCod,
-			  Gbl.Hierarchy.Node[Hie_CRS].HieCod) == Exi_EXISTS)
+			  Gbl.Hie.Node[Hie_CRS].HieCod) == Exi_EXISTS)
          /* Update the rubric of the assignment */
 	 DB_QueryREPLACE ("can not update assignment rubric",
 			  "REPLACE INTO asg_rubrics"
@@ -608,7 +608,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+                        Gbl.Hie.Node[Hie_CTY].HieCod);
        case Hie_INS:
 	 return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
@@ -621,7 +621,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl)
 			  " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                        Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
@@ -632,7 +632,7 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl)
 			" WHERE deg_degrees.CtrCod=%ld"
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                        Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
@@ -641,14 +641,14 @@ unsigned Asg_DB_GetNumCoursesWithAssignments (Hie_Level_t HieLvl)
 			       "asg_assignments"
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-                        Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                        Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of courses with assignments",
                         "SELECT COUNT(DISTINCT CrsCod)"
 			 " FROM asg_assignments"
 			" WHERE CrsCod=%ld",
-                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                        Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -685,7 +685,7 @@ Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			       Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of assignments",
@@ -699,7 +699,7 @@ Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			      " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			      " AND deg_degrees.DegCod=crs_courses.DegCod"
 			      " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-			    Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			    Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of assignments",
@@ -711,7 +711,7 @@ Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			       " WHERE deg_degrees.CtrCod=%ld"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			       Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of assignments",
@@ -721,7 +721,7 @@ Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 				      "asg_assignments"
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=asg_assignments.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			       Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return
          DB_QuerySELECTunique (mysql_res,"can not get number of assignments",
@@ -729,7 +729,7 @@ Exi_Exist_t Asg_DB_GetNumAssignments (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 				      "SUM(NumNotif)"			// row[1]
 				" FROM asg_assignments"
 			       " WHERE CrsCod=%ld",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			       Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
          return Exi_DOES_NOT_EXIST;	// Not reached

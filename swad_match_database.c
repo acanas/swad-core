@@ -131,7 +131,7 @@ void Mch_DB_UpdateMatchStatus (const struct Mch_Match *Match)
 		   Lay_Show_YN[Match->Status.Show.QstResults],
 		   Lay_Show_YN[Match->Status.Show.UsrResults],
 		   Match->MchCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
    free (MchSubQuery);
   }
 
@@ -194,7 +194,7 @@ Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod)
 				  " FROM gam_games"
 				 " WHERE CrsCod=%ld)",
 		       MchCod,
-		       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		       Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1047,7 +1047,7 @@ Exi_Exist_t Mch_DB_GetMatchPrintData (MYSQL_RES **mysql_res,
 			   " AND gam_games.CrsCod=%ld",		// Extra check
 			 Print->MchCod,
 			 Print->UsrCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1107,7 +1107,7 @@ unsigned Mch_DB_GetUsrsWhoHavePlayedMch (MYSQL_RES **mysql_res,long MchCod)
 			  "usr_data.Surname2,"
 			  "usr_data.FirstName",
 		   MchCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1134,7 +1134,7 @@ unsigned Mch_DB_GetUsrsWhoHavePlayedGam (MYSQL_RES **mysql_res,long GamCod)
 			  "usr_data.Surname2,"
 			  "usr_data.FirstName",
 		   GamCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1226,7 +1226,7 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
 		   MchSubQuery,
 		   GamSubQuery,
 		   HidGamSubQuery,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
 
    /***** Free subqueries *****/
    free (HidGamSubQuery);

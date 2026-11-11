@@ -279,7 +279,7 @@ void TstCfg_GetConfig (void)
    MYSQL_RES *mysql_res;
 
    /***** Get configuration of test for current course from database *****/
-   switch (Tst_DB_GetConfig (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod))
+   switch (Tst_DB_GetConfig (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod))
      {
       case Exi_EXISTS:
 	 TstCfg_GetConfigDataFromRow (mysql_res);

@@ -274,7 +274,7 @@ void Set_DB_UpdateGrpMyLastAccZone (const char *FieldNameDB,long GrpCod)
 		     " AND CrsCod=%ld",
                    FieldNameDB,GrpCod,
                    Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -290,7 +290,7 @@ void Set_DB_UpdateMyUsrListType (void)
                      " AND CrsCod=%ld",
 		   Set_DB_StringsUsrListTypes[Gbl.Usrs.Me.ListType],
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -302,7 +302,7 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (Pho_ShowPhotos_t ShowPhotos)
    extern const char Pho_DB_ShowPhotos[Pho_NUM_PHOTOS];
 
    if (Gbl.Usrs.Me.Logged &&
-       Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+       Gbl.Hie.Lvl == Hie_CRS)	// Course selected
       /***** Update number of colums in class photo for current course *****/
       DB_QueryUPDATE ("can not update your preference about photos in listing",
 		      "UPDATE crs_user_settings"
@@ -311,7 +311,7 @@ void Set_DB_UpdateMyPrefAboutListWithPhotosPhoto (Pho_ShowPhotos_t ShowPhotos)
                         " AND CrsCod=%ld",
 		      Pho_DB_ShowPhotos[ShowPhotos],
 		      Gbl.Usrs.Me.UsrDat.UsrCod,
-		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		      Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -327,7 +327,7 @@ Exi_Exist_t Set_DB_GetMyUsrListType (MYSQL_RES **mysql_res)
 			 " WHERE UsrCod=%ld"
 			   " AND CrsCod=%ld",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -344,7 +344,7 @@ Exi_Exist_t Set_DB_GetMyPrefAboutListWithPhotosPhoto (MYSQL_RES **mysql_res)
 			 " WHERE UsrCod=%ld"
 			   " AND CrsCod=%ld",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

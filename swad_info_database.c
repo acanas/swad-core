@@ -97,7 +97,7 @@ void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 		       " FROM crs_info_src"
 		      " WHERE CrsCod=%ld"
 		        " AND InfoType='%s'",
-		      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		      Gbl.Hie.Node[Hie_CRS].HieCod,
 		      Inf_DB_NamesForInfoType[InfoType]))
       // Info is already stored in database, so update it
      {	// Update info source
@@ -109,7 +109,7 @@ void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 			 " WHERE CrsCod=%ld"
 			   " AND InfoType='%s'",
                          Inf_DB_NamesForInfoSrc[Inf_SRC_NONE],
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                         Gbl.Hie.Node[Hie_CRS].HieCod,
                          Inf_DB_NamesForInfoType[InfoType]);
       else	// MustBeRead remains unchanged
          DB_QueryUPDATE ("can not update info source",
@@ -118,7 +118,7 @@ void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 		         " WHERE CrsCod=%ld"
 		           " AND InfoType='%s'",
 		         Inf_DB_NamesForInfoSrc[InfoSrc],
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		         Gbl.Hie.Node[Hie_CRS].HieCod,
 		         Inf_DB_NamesForInfoType[InfoType]);
      }
    else		// Info is not stored in database, so insert it
@@ -127,7 +127,7 @@ void Inf_DB_SetInfoSrc (Inf_Type_t InfoType,Inf_Src_t InfoSrc)
 		      " (CrsCod,InfoType,InfoSrc,MustBeRead)"
 		      " VALUES"
 		      " (%ld,'%s','%s','N')",
-		      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		      Gbl.Hie.Node[Hie_CRS].HieCod,
 		      Inf_DB_NamesForInfoType[InfoType],
 		      Inf_DB_NamesForInfoSrc[InfoSrc]);
   }
@@ -197,7 +197,7 @@ void Inf_DB_SetInfoTxt (Inf_Type_t InfoType,
 		    " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
 		    " VALUES"
 		    " (%ld,'%s','%s','%s')",
-		    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		    Gbl.Hie.Node[Hie_CRS].HieCod,
 		    Inf_DB_NamesForInfoType[InfoType],
 		    InfoTxtHTML,
 		    InfoTxtMD);
@@ -239,7 +239,7 @@ void Inf_DB_SetForceRead (Inf_Type_t InfoType,Inf_MustBeRead_t MustBeRead)
 		   " WHERE CrsCod=%ld"
 		     " AND InfoType='%s'",
                    MustBeReadYN[MustBeRead],
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Inf_DB_NamesForInfoType[InfoType]);
   }
 
@@ -259,7 +259,7 @@ void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,Inf_IHaveRead_t IHaveRead)
 			  " VALUES"
 			  " (%ld,%ld,'%s')",
 			  Gbl.Usrs.Me.UsrDat.UsrCod,
-			  Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			  Gbl.Hie.Node[Hie_CRS].HieCod,
 			  Inf_DB_NamesForInfoType[InfoType]);
 	 break;
       case Inf_I_DONT_HAVE_READ:
@@ -271,7 +271,7 @@ void Inf_DB_SetIHaveRead (Inf_Type_t InfoType,Inf_IHaveRead_t IHaveRead)
 			   " AND CrsCod=%ld"
 			   " AND InfoType='%s'",
 			 Gbl.Usrs.Me.UsrDat.UsrCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Gbl.Hie.Node[Hie_CRS].HieCod,
 			 Inf_DB_NamesForInfoType[InfoType]);
 	 break;
      }
@@ -298,7 +298,7 @@ Inf_IHaveRead_t Inf_DB_CheckIfIHaveReadInfo (Inf_Type_t InfoType)
 			       " AND CrsCod=%ld"
 			       " AND InfoType='%s')",
 			    Gbl.Usrs.Me.UsrDat.UsrCod,
-			    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			    Gbl.Hie.Node[Hie_CRS].HieCod,
 			    Inf_DB_NamesForInfoType[InfoType]);
    return Read[Exists];
   }
@@ -320,9 +320,9 @@ unsigned Inf_DB_GetInfoTypesfIMustReadInfo (MYSQL_RES **mysql_res)
 			    " FROM crs_info_read"
 			   " WHERE UsrCod=%ld"
 			     " AND CrsCod=%ld)",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

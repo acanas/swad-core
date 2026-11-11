@@ -81,7 +81,7 @@ void Rsc_DB_CopyToClipboard (Rsc_Type_t Type,long Cod)
 		    " VALUES"
 		    " (%ld,%ld,'%s',%ld,NOW())",
 		    Gbl.Usrs.Me.UsrDat.UsrCod,
-		    Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		    Gbl.Hie.Node[Hie_CRS].HieCod,
 		    Rsc_DB_Types[Type],
 		    Cod);
   }
@@ -99,7 +99,7 @@ unsigned Rsc_DB_GetNumResourcesInClipboard (void)
 		  " WHERE UsrCod=%ld"
 		    " AND CrsCod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		  Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -117,7 +117,7 @@ unsigned Rsc_DB_GetClipboard (MYSQL_RES **mysql_res)
 		     " AND CrsCod=%ld"
 		" ORDER BY CopyTime",
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -131,7 +131,7 @@ void Rsc_DB_RemoveClipboard (void)
 		   " WHERE UsrCod=%ld"
 		     " AND CrsCod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -147,7 +147,7 @@ void Rsc_DB_RemoveLinkFromClipboard (struct Rsc_Link *Link)
 		     " AND Type='%s'"
 		     " AND Cod=%ld",
  		   Gbl.Usrs.Me.UsrDat.UsrCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Rsc_DB_Types[Link->Type],
 		   Link->Cod);
   }
@@ -205,7 +205,7 @@ unsigned Rsc_DB_GetListRscs (MYSQL_RES **mysql_res,long NodCod,
 		" ORDER BY prg_resources.ItmInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenResources],
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);
   }
 
@@ -233,7 +233,7 @@ Exi_Exist_t Rsc_DB_GetRscDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 			   " AND tre_nodes.CrsCod=%ld"	// Extra check
 			   " AND tre_nodes.Type='%s'",	// Extra check
 			 ItmCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Gbl.Hie.Node[Hie_CRS].HieCod,
 			 Tre_DB_Types[Inf_PROGRAM]);
   }
 
@@ -262,6 +262,6 @@ void Rsc_DB_UpdateRsc (const struct Tre_Node *Node)
 		   Node->Item.Rsc.Title,
 		   Node->Item.Cod,
 		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_PROGRAM]);
   }

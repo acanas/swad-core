@@ -81,7 +81,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 	       case Hie_CTR:
 	       case Hie_DEG:
 	       case Hie_CRS:
-		  if (Gbl.Hierarchy.Node[L].HieCod > 0)
+		  if (Gbl.Hie.Node[L].HieCod > 0)
 		     ShowScope = Lay_SHOW;
 		  break;
 	       default:
@@ -97,7 +97,7 @@ void Sco_PutSelectorScope (const char *ParName,HTM_Attributes_t Attributes,
 					 HTM_NO_ATTR,
 			   "%s: %s",
 			   Txt_HIERARCHY_SINGUL_Abc[L],
-			   Gbl.Hierarchy.Node[L].ShrtName);
+			   Gbl.Hie.Node[L].ShrtName);
 	      }
 	   }
 
@@ -157,7 +157,7 @@ static void Sco_AdjustScope (Hie_Level_t *HieLvl,
    for (Lvl  = Hie_CRS;
 	Lvl >= Hie_CTY;
 	Lvl--)
-      if (*HieLvl == Lvl && Gbl.Hierarchy.Node[Lvl].HieCod <= 0)
+      if (*HieLvl == Lvl && Gbl.Hie.Node[Lvl].HieCod <= 0)
 	 *HieLvl = Lvl - 1;	// Go up to parent level
 
    /***** Avoid forbidden scopes *****/

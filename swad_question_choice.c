@@ -91,7 +91,7 @@ void QstCho_GetAnsFromForm (struct Qst_Question *Qst)
       Qst->Answer.Options[NumOpt].Media.Width   = Qst_IMAGE_SAVED_MAX_WIDTH;
       Qst->Answer.Options[NumOpt].Media.Height  = Qst_IMAGE_SAVED_MAX_HEIGHT;
       Qst->Answer.Options[NumOpt].Media.Quality = Qst_IMAGE_SAVED_QUALITY;
-      Med_GetMediaFromForm (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Qst->QstCod,
+      Med_GetMediaFromForm (Gbl.Hie.Node[Hie_CRS].HieCod,Qst->QstCod,
 			    (int) NumOpt,	// >= 0 ==> the image associated to an answer
 			    &Qst->Answer.Options[NumOpt].Media,
 			    Qst_GetMediaFromDB,

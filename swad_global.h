@@ -86,10 +86,11 @@ struct Globals
 
    struct
      {
-      Hie_Level_t HieLvl;		// Current level in the hierarchy: system, country, institution, center, degree or course
+      Hie_Level_t Lvl;				// Current level in the hierarchy:
+						// system, country, institution, center, degree or course
       struct Hie_List List[Hie_NUM_LEVELS];	// List of child nodes of current node
       struct Hie_Node Node[Hie_NUM_LEVELS];	// Current node
-     } Hierarchy;
+     } Hie;					// Hierarchy
 
    struct
      {

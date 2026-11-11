@@ -251,7 +251,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
-                 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
+                 Gbl.Hie.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (Title,NULL,NULL,
                  Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
@@ -548,7 +548,7 @@ void Sta_PutLinkToCourseHits (void)
   {
    extern const char *Txt_Visits_to_course;
 
-   if (Gbl.Hierarchy.HieLvl == Hie_CRS)		// Course selected
+   if (Gbl.Hie.Lvl == Hie_CRS)		// Course selected
       switch (Gbl.Usrs.Me.Role.Logged)
         {
 	 case Rol_NET:

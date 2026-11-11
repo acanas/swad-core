@@ -80,7 +80,7 @@ long Tim_StopGlobalTiming (void)
    piece of code to time
    local_nsec += Tim_StopPartialTiming ();
 
-   global_nsec = Tim_StopGlobalTiming ();
+   globl_nsec = Tim_StopGlobalTiming ();
 
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {

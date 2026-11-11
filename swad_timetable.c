@@ -604,7 +604,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
       switch (Timetable->Type)
         {
          case Tmt_COURSE_TIMETABLE:
-            Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+            Tmt_WriteCrsTimeTableIntoDB (Timetable,Gbl.Hie.Node[Hie_CRS].HieCod);
 	    break;
          case Tmt_TUTORING_TIMETABLE:
             Tmt_WriteUsrTimeTableIntoDB (Timetable,UsrCod);
@@ -904,7 +904,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
 			/* Course code (row[6]) */
 			Tmt_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].HieCod =
 			   (Timetable->Type == Tmt_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[6]) :
-								  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+								  Gbl.Hie.Node[Hie_CRS].HieCod);
 			/* falls through */
 			/* no break */
 		     case Tmt_TUTORING_TIMETABLE:

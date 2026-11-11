@@ -146,7 +146,7 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	    /* Get country code (row[0]) */
 	    Cty.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = Cty.HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
+	    BgColor = Cty.HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
 									 The_GetColorRows ();
 
 	    /* Get data of country */
@@ -198,7 +198,7 @@ void Cty_ListCtys (void)
 void Cty_ListCtys1 (void)
   {
    /***** Get parameter with the type of order in the list of countries *****/
-   Gbl.Hierarchy.List[Hie_CTY].SelectedOrder = Hie_GetParHieOrder ();
+   Gbl.Hie.List[Hie_CTY].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of countries *****/
    Cty_GetFullListOfCtys ();
@@ -234,9 +234,9 @@ void Cty_ListCtys2 (void)
 
 	 /***** Write all countries and their number of users and institutions *****/
 	 for (NumCty = 0;
-	      NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	      NumCty < Gbl.Hie.List[Hie_SYS].Num;
 	      NumCty++)
-	    Cty_ListOneCtyForSeeing (&Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty],NumCty + 1);
+	    Cty_ListOneCtyForSeeing (&Gbl.Hie.List[Hie_SYS].Lst[NumCty],NumCty + 1);
 
 	 /***** Separation row *****/
 	 HTM_TR_Begin (NULL);
@@ -333,13 +333,13 @@ static void Cty_PutHeadCtysForSeeing (Hie_OrderSelectable_t OrderSelectable)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_COUNTRIES_HELP_ORDER[Order],NULL,
 					   "class=\"BT_LINK\"");
-		     if (Order == Gbl.Hierarchy.List[Hie_SYS].SelectedOrder)
+		     if (Order == Gbl.Hie.List[Hie_SYS].SelectedOrder)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_COUNTRIES_ORDER[Order]);
 	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
-		     if (Order == Gbl.Hierarchy.List[Hie_SYS].SelectedOrder)
+		     if (Order == Gbl.Hie.List[Hie_SYS].SelectedOrder)
 			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -364,7 +364,7 @@ static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty)
    const char *BgColor;
    Hie_Level_t HieLvl;
 
-   BgColor = Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
+   BgColor = Cty->HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
 							         The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
@@ -559,20 +559,20 @@ void Cty_WriteScriptGoogleGeochart (void)
 
       /***** Write all countries and their number of users and institutions *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	   NumCty < Gbl.Hie.List[Hie_SYS].Num;
 	   NumCty++)
 	{
 	 NumUsrsCty = Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,
-							      &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty]);
+							      &Gbl.Hie.List[Hie_SYS].Lst[NumCty]);
 	 if (NumUsrsCty)
 	   {
 	    NumInss = Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 						     Hie_CTY,	// ...in country
-						     Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty].HieCod);
+						     Gbl.Hie.List[Hie_SYS].Lst[NumCty].HieCod);
 
 	    /* Write data of this country */
 	    HTM_TxtF ("	['%s', %u, %u],\n",
-		      Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty].ShrtName,
+		      Gbl.Hie.List[Hie_SYS].Lst[NumCty].ShrtName,
 		      NumUsrsCty,NumInss);
 	    if (NumUsrsCty > MaxUsrsInCountry)
 	       MaxUsrsInCountry = NumUsrsCty;
@@ -617,7 +617,7 @@ static void Cty_EditCtysInternal (void)
    extern const char *Txt_HIERARCHY_PLURAL_Abc[Hie_NUM_LEVELS];
 
    /***** Get list of countries *****/
-   Gbl.Hierarchy.List[Hie_SYS].SelectedOrder = Hie_ORDER_BY_NAME;
+   Gbl.Hie.List[Hie_SYS].SelectedOrder = Hie_ORDER_BY_NAME;
    Cty_GetFullListOfCtys ();
 
    /***** Write menu to select country *****/
@@ -632,7 +632,7 @@ static void Cty_EditCtysInternal (void)
       Cty_PutFormToCreateCty ();
 
       /***** Forms to edit current countries *****/
-      if (Gbl.Hierarchy.List[Hie_SYS].Num)
+      if (Gbl.Hie.List[Hie_SYS].Num)
 	 Cty_ListCtysForEdition ();
 
    /***** End box *****/
@@ -668,23 +668,23 @@ void Cty_GetBasicListOfCtys (void)
    // Lan_Language_t Lan;
 
    /***** Trivial check: if list is already got, nothing to do *****/
-   if (Gbl.Hierarchy.List[Hie_SYS].Num)
+   if (Gbl.Hie.List[Hie_SYS].Num)
       return;
 
    /***** Get countries from database *****/
-   if ((Gbl.Hierarchy.List[Hie_SYS].Num = Cty_DB_GetCtysBasic (&mysql_res))) // Countries found...
+   if ((Gbl.Hie.List[Hie_SYS].Num = Cty_DB_GetCtysBasic (&mysql_res))) // Countries found...
      {
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_SYS].Num,
-						     sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
+      if ((Gbl.Hie.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hie.List[Hie_SYS].Num,
+						     sizeof (*Gbl.Hie.List[Hie_SYS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	   NumCty < Gbl.Hie.List[Hie_SYS].Num;
 	   NumCty++)
         {
-         Cty = &(Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty]);
+         Cty = &(Gbl.Hie.List[Hie_SYS].Lst[NumCty]);
 
          /* Get next country */
          row = mysql_fetch_row (mysql_res);
@@ -718,23 +718,23 @@ static void Cty_GetFullListOfCtys (void)
    struct Hie_Node *Cty;
 
    /***** Trivial check: if list is already got, nothing to do *****/
-   if (Gbl.Hierarchy.List[Hie_SYS].Num)
+   if (Gbl.Hie.List[Hie_SYS].Num)
       return;
 
    /***** Get countries from database *****/
-   if ((Gbl.Hierarchy.List[Hie_SYS].Num = Cty_DB_GetCtysFull (&mysql_res))) // Countries found...
+   if ((Gbl.Hie.List[Hie_SYS].Num = Cty_DB_GetCtysFull (&mysql_res))) // Countries found...
      {
       /***** Create list with countries *****/
-      if ((Gbl.Hierarchy.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_SYS].Num,
-						     sizeof (*Gbl.Hierarchy.List[Hie_SYS].Lst))) == NULL)
+      if ((Gbl.Hie.List[Hie_SYS].Lst = calloc ((size_t) Gbl.Hie.List[Hie_SYS].Num,
+						     sizeof (*Gbl.Hie.List[Hie_SYS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	   NumCty < Gbl.Hie.List[Hie_SYS].Num;
 	   NumCty++)
         {
-         Cty = &(Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty]);
+         Cty = &(Gbl.Hie.List[Hie_SYS].Lst[NumCty]);
 
          /* Get next country */
          row = mysql_fetch_row (mysql_res);
@@ -785,18 +785,18 @@ void Cty_WriteSelectorOfCty (void)
 
          /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-	             (Gbl.Hierarchy.Node[Hie_CTY].HieCod < 0 ? HTM_SELECTED :
+	             (Gbl.Hie.Node[Hie_CTY].HieCod < 0 ? HTM_SELECTED :
 	        					       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTY]);
 
 	 /***** List countries *****/
 	 for (NumCty = 0;
-	      NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	      NumCty < Gbl.Hie.List[Hie_SYS].Num;
 	      NumCty++)
 	   {
-	    Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+	    Cty = &Gbl.Hie.List[Hie_SYS].Lst[NumCty];
 	    HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-			Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_SELECTED :
+			Cty->HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? HTM_SELECTED :
 									    HTM_NO_ATTR,
 			"%s",Cty->FullName);
 	   }
@@ -1004,10 +1004,10 @@ static void Cty_ListCtysForEdition (void)
 
       /***** Write all countries *****/
       for (NumCty = 0;
-	   NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+	   NumCty < Gbl.Hie.List[Hie_SYS].Num;
 	   NumCty++)
 	{
-	 Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+	 Cty = &Gbl.Hie.List[Hie_SYS].Lst[NumCty];
 	 NumInss = Hie_GetNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 					    Hie_CTY,	// ...in country
 					    Cty->HieCod);
@@ -1307,7 +1307,7 @@ void Cty_ContEditAfterChgCty (void)
 static void Cty_ShowAlertAndButtonToGoToCty (void)
   {
    // If the country being edited is different to the current one...
-   if (Cty_EditingCty->HieCod != Gbl.Hierarchy.Node[Hie_CTY].HieCod)
+   if (Cty_EditingCty->HieCod != Gbl.Hie.Node[Hie_CTY].HieCod)
       /***** Alert with button to go to couuntry *****/
       Ale_ShowLastAlertAndButtonGo (ActSeeIns,
                                     Cty_PutParGoToCty,&Cty_EditingCty->HieCod,

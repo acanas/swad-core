@@ -349,7 +349,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			Fol_FieldDB[Fol],
-			Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			Gbl.Hie.Node[Hie_CTY].HieCod,
 			Fol_FieldDB[Fol]);
       case Hie_INS:
 	 return (unsigned)
@@ -366,7 +366,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			Fol_FieldDB[Fol],
-			Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			Gbl.Hie.Node[Hie_INS].HieCod,
 			Fol_FieldDB[Fol]);
       case Hie_CTR:
 	 return (unsigned)
@@ -381,7 +381,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			Fol_FieldDB[Fol],
-			Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			Gbl.Hie.Node[Hie_CTR].HieCod,
 			Fol_FieldDB[Fol]);
       case Hie_DEG:
 	 return (unsigned)
@@ -394,7 +394,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			Fol_FieldDB[Fol],
-			Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+			Gbl.Hie.Node[Hie_DEG].HieCod,
 			Fol_FieldDB[Fol]);
       case Hie_CRS:
 	 return (unsigned)
@@ -405,7 +405,7 @@ unsigned Fol_DB_GetNumFollowinFollowers (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 			" WHERE crs_users.CrsCod=%ld"
 			  " AND crs_users.UsrCod=usr_follow.%s",
 			Fol_FieldDB[Fol],
-			Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			Gbl.Hie.Node[Hie_CRS].HieCod,
 			Fol_FieldDB[Fol]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -453,7 +453,7 @@ double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      Fol_FieldDB[Fol],
-				      Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+				      Gbl.Hie.Node[Hie_CTY].HieCod,
 				      Fol_FieldDB[Fol],
 				      Fol_FieldDB[Toggle[Fol]]);
       case Hie_INS:
@@ -472,7 +472,7 @@ double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      Fol_FieldDB[Fol],
-				      Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				      Gbl.Hie.Node[Hie_INS].HieCod,
 				      Fol_FieldDB[Fol],
 				      Fol_FieldDB[Toggle[Fol]]);
       case Hie_CTR:
@@ -489,7 +489,7 @@ double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      Fol_FieldDB[Fol],
-				      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				      Gbl.Hie.Node[Hie_CTR].HieCod,
 				      Fol_FieldDB[Fol],
 				      Fol_FieldDB[Toggle[Fol]]);
       case Hie_DEG:
@@ -504,7 +504,7 @@ double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      Fol_FieldDB[Fol],
-				      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+				      Gbl.Hie.Node[Hie_DEG].HieCod,
 				      Fol_FieldDB[Fol],
 				      Fol_FieldDB[Toggle[Fol]]);
       case Hie_CRS:
@@ -517,7 +517,7 @@ double Fol_DB_GetNumFollowedPerFollower (Hie_Level_t HieLvl,Fol_Follow_t Fol)
 						" AND crs_users.UsrCod=usr_follow.%s"
 					   " GROUP BY %s) AS F",
 				      Fol_FieldDB[Fol],
-				      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				      Gbl.Hie.Node[Hie_CRS].HieCod,
 				      Fol_FieldDB[Fol],
 				      Fol_FieldDB[Toggle[Fol]]);
       default:
@@ -605,7 +605,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			 Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -625,7 +625,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			 Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -643,7 +643,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 		      " ORDER BY N DESC,"
 		                "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			 Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -659,7 +659,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			 Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get ranking",
@@ -673,7 +673,7 @@ unsigned Fol_DB_GetRankingFollowers (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 		      " ORDER BY N DESC,"
 			        "usr_follow.FollowedCod"
 			 " LIMIT 100",
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
          break;
       default:
          Err_WrongHierarchyLevelExit ();

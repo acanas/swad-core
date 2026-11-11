@@ -1553,7 +1553,7 @@ Pho_ShowPhotos_t Pho_GetMyPrefAboutListWithPhotosFromDB (void)
    Pho_ShowPhotos_t ShowPhotos = Pho_PHOTOS_DEFAULT;
 
    /***** If no user logged or not course selected... *****/
-   if (Gbl.Usrs.Me.Logged && Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Gbl.Usrs.Me.Logged && Gbl.Hie.Node[Hie_CRS].HieCod)
      {
       /***** Get if listing of users must show photos from database *****/
       if (Set_DB_GetMyPrefAboutListWithPhotosPhoto (&mysql_res) == Exi_EXISTS)

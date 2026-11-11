@@ -90,7 +90,7 @@ unsigned Lnk_DB_GetListLnks (MYSQL_RES **mysql_res,long NodCod,
 		" ORDER BY crs_links.ItmInd",
 		   NodCod,
 		   HiddenSubQuery[ShowHiddenCrsLinks],
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_LINKS]);
   }
 
@@ -118,7 +118,7 @@ Exi_Exist_t Lnk_DB_GetLnkDataByCod (MYSQL_RES **mysql_res,long ItmCod)
 			   " AND tre_nodes.CrsCod=%ld"	// Extra check
 			   " AND tre_nodes.Type='%s'",	// Extra check
 			 ItmCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Gbl.Hie.Node[Hie_CRS].HieCod,
 			 Tre_DB_Types[Inf_LINKS]);
   }
 
@@ -146,6 +146,6 @@ void Lnk_DB_UpdateLnk (const struct Tre_Node *Node)
 		   Node->Item.Lnk.WWW,
 		   Node->Item.Cod,
 		   Node->Hierarchy.NodCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Tre_DB_Types[Inf_LINKS]);
   }

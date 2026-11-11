@@ -111,10 +111,10 @@ Usr_Can_t Act_CheckIfICanExecuteAction (Act_Action_t Action)
    if ((unsigned) Action >= ActLst_NUM_ACTIONS)
       return Usr_CAN_NOT;
 
-   if (Gbl.Hierarchy.HieLvl == Hie_UNK)
+   if (Gbl.Hie.Lvl == Hie_UNK)
       return Usr_CAN_NOT;
 
-   return (ActLst_Actions[Action].Permission[Gbl.Hierarchy.HieLvl][Gbl.Usrs.Me.IBelongToThis[Gbl.Hierarchy.HieLvl]]
+   return (ActLst_Actions[Action].Permission[Gbl.Hie.Lvl][Gbl.Usrs.Me.IBelongToThis[Gbl.Hie.Lvl]]
            & (1 << Gbl.Usrs.Me.Role.Logged)) != 0 ? Usr_CAN :
 						    Usr_CAN_NOT;
   }
@@ -230,10 +230,10 @@ void Act_AdjustActionWhenNoUsrLogged (void)
       [Hie_CRS] = ActSeeCrsInf,	// Course
      };
 
-   if (Gbl.Hierarchy.HieLvl >= Hie_NUM_LEVELS)
-      Gbl.Hierarchy.HieLvl = Hie_UNK;
+   if (Gbl.Hie.Lvl >= Hie_NUM_LEVELS)
+      Gbl.Hie.Lvl = Hie_UNK;
 
-   Gbl.Action.Act = Actions[Gbl.Hierarchy.HieLvl];
+   Gbl.Action.Act = Actions[Gbl.Hie.Lvl];
   }
 
 /*****************************************************************************/

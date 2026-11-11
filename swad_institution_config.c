@@ -104,12 +104,12 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
    unsigned NumCtrsWithMap;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)	// No institution selected
+   if (Gbl.Hie.Node[Hie_INS].HieCod <= 0)	// No institution selected
       return;
 
    /***** Initializations *****/
    PutLink     = ViewType == Vie_VIEW &&
-		 Gbl.Hierarchy.Node[Hie_INS].WWW[0] ? Hie_PUT_LINK :
+		 Gbl.Hie.Node[Hie_INS].WWW[0] ? Hie_PUT_LINK :
 						      Hie_DONT_PUT_LINK;
    PutFormCty  =
    PutFormName = ViewType == Vie_VIEW &&
@@ -143,19 +143,19 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 	    HieCfg_Name (PutFormName,Hie_INS,Nam_SHRT_NAME);
 
 	    /***** Institution WWW *****/
-	    HieCfg_WWW (ViewType,PutFormWWW,ActChgInsWWWCfg,Gbl.Hierarchy.Node[Hie_INS].WWW);
+	    HieCfg_WWW (ViewType,PutFormWWW,ActChgInsWWWCfg,Gbl.Hie.Node[Hie_INS].WWW);
 
 	    /***** Shortcut to the institution *****/
-	    HieCfg_Shortcut (ViewType,ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	    HieCfg_Shortcut (ViewType,ParCod_Ins,Gbl.Hie.Node[Hie_INS].HieCod);
 
-	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	    NumCtrsWithMap = Ctr_GetCachedNumCtrsWithMapInIns (Gbl.Hie.Node[Hie_INS].HieCod);
 
 	    switch (ViewType)
 	      {
 	       case Vie_VIEW:
 		  NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 							   Hie_INS,	// ...in institution
-							   Gbl.Hierarchy.Node[Hie_INS].HieCod);
+							   Gbl.Hie.Node[Hie_INS].HieCod);
 
 		  /***** Number of users who claim to belong to this institution,
 			 number of centers,
@@ -170,14 +170,14 @@ static void InsCfg_Configuration (Vie_ViewType_t ViewType)
 		  InsCfg_NumDpts ();
 
 		  /***** Number of users in courses of this institution *****/
-		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_TCH);
-		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_NET);
-		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_STD);
-		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hierarchy.Node[Hie_INS].HieCod,Rol_UNK);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hie.Node[Hie_INS].HieCod,Rol_TCH);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hie.Node[Hie_INS].HieCod,Rol_NET);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hie.Node[Hie_INS].HieCod,Rol_STD);
+		  HieCfg_NumUsrsInCrss (Hie_INS,Gbl.Hie.Node[Hie_INS].HieCod,Rol_UNK);
 		  break;
 	       case Vie_PRINT:
 		  /***** QR code with link to the institution *****/
-		  HieCfg_QR (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+		  HieCfg_QR (ParCod_Ins,Gbl.Hie.Node[Hie_INS].HieCod);
 		  break;
 	       default:
 		  Err_WrongTypeExit ();
@@ -281,7 +281,7 @@ static void InsCfg_Map (void)
       Map_AddMarker (&Coord);
 
       /* Add popup */
-      Map_AddPopup (Ctr.ShrtName,Gbl.Hierarchy.Node[Hie_INS].ShrtName,
+      Map_AddPopup (Ctr.ShrtName,Gbl.Hie.Node[Hie_INS].ShrtName,
 		    CloOpe_CLOSED);
      }
 
@@ -324,14 +324,14 @@ static void InsCfg_Cty (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 	       if (ViewType == Vie_VIEW)
 		 {
 		  Frm_BeginFormGoTo (ActSeeCtyInf);
-		     ParCod_PutPar (ParCod_Cty,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
-		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hierarchy.Node[Hie_CTY].FullName),NULL,
+		     ParCod_PutPar (ParCod_Cty,Gbl.Hie.Node[Hie_CTY].HieCod);
+		     HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Gbl.Hie.Node[Hie_CTY].FullName),NULL,
 					      "class=\"BT_LINK\"");
 		     Str_FreeGoToTitle ();
 		 }
-	       Cty_DrawCtyMap (&Gbl.Hierarchy.Node[Hie_CTY],"COUNTRY_MAP_TINY");
+	       Cty_DrawCtyMap (&Gbl.Hie.Node[Hie_CTY],"COUNTRY_MAP_TINY");
 	       HTM_NBSP ();
-	       HTM_Txt (Gbl.Hierarchy.Node[Hie_CTY].FullName);
+	       HTM_Txt (Gbl.Hie.Node[Hie_CTY].FullName);
 	       if (ViewType == Vie_VIEW)
 		 {
 		     HTM_BUTTON_End ();
@@ -346,12 +346,12 @@ static void InsCfg_Cty (Vie_ViewType_t ViewType,Frm_PutForm_t PutForm)
 				    " class=\"Frm_C2_INPUT INPUT_%s\"",
 				    The_GetSuffix ());
 		     for (NumCty = 0;
-			  NumCty < Gbl.Hierarchy.List[Hie_SYS].Num;
+			  NumCty < Gbl.Hie.List[Hie_SYS].Num;
 			  NumCty++)
 		       {
-			Cty = &Gbl.Hierarchy.List[Hie_SYS].Lst[NumCty];
+			Cty = &Gbl.Hie.List[Hie_SYS].Lst[NumCty];
 			HTM_OPTION (HTM_Type_LONG,&Cty->HieCod,
-				    Cty->HieCod == Gbl.Hierarchy.Node[Hie_CTY].HieCod ? HTM_SELECTED :
+				    Cty->HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? HTM_SELECTED :
 											HTM_NO_ATTR,
 				    "%s",Cty->FullName);
 		       }
@@ -383,7 +383,7 @@ static void InsCfg_NumUsrs (void)
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_INS,
-							       &Gbl.Hierarchy.Node[Hie_INS]));
+							       &Gbl.Hie.Node[Hie_INS]));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -407,7 +407,7 @@ static void InsCfg_NumDegs (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_INS,	// ...in institution
-						      Gbl.Hierarchy.Node[Hie_INS].HieCod));
+						      Gbl.Hie.Node[Hie_INS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -431,7 +431,7 @@ static void InsCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_INS,	// ...in institution
-						      Gbl.Hierarchy.Node[Hie_INS].HieCod));
+						      Gbl.Hie.Node[Hie_INS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -453,7 +453,7 @@ static void InsCfg_NumDpts (void)
 
       /* Data */
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hierarchy.Node[Hie_INS].HieCod));
+	 HTM_Unsigned (Dpt_GetNumDptsInIns (Gbl.Hie.Node[Hie_INS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -502,14 +502,14 @@ void InsCfg_ChangeInsCty (void)
    NewCty.HieCod = ParCod_GetAndCheckPar (ParCod_OthCty);
 
    /***** Check if country has changed *****/
-   if (NewCty.HieCod != Gbl.Hierarchy.Node[Hie_INS].PrtCod)
+   if (NewCty.HieCod != Gbl.Hie.Node[Hie_INS].PrtCod)
      {
       /***** Get data of the country from database *****/
       SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&NewCty);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      Names[Nam_SHRT_NAME] = Gbl.Hierarchy.Node[Hie_INS].ShrtName;
-      Names[Nam_FULL_NAME] = Gbl.Hierarchy.Node[Hie_INS].FullName;
+      Names[Nam_SHRT_NAME] = Gbl.Hie.Node[Hie_INS].ShrtName;
+      Names[Nam_FULL_NAME] = Gbl.Hie.Node[Hie_INS].FullName;
       if (Nam_CheckIfNameExists (Ins_DB_CheckIfInsNameExistsInCty,
 				 Names,
 				 -1L,
@@ -518,10 +518,10 @@ void InsCfg_ChangeInsCty (void)
 	{
 	 /***** Update the table changing the country of the institution *****/
 	 HieCods[Hie_CTY] = NewCty.HieCod;
-	 HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+	 HieCods[Hie_INS] = Gbl.Hie.Node[Hie_INS].HieCod;
 	 Ins_DB_UpdateInsCty (HieCods);
-         Gbl.Hierarchy.Node[Hie_INS].PrtCod =
-         Gbl.Hierarchy.Node[Hie_CTY].HieCod = NewCty.HieCod;
+         Gbl.Hie.Node[Hie_INS].PrtCod =
+         Gbl.Hie.Node[Hie_CTY].HieCod = NewCty.HieCod;
 
 	 /***** Initialize again current course, degree, center... *****/
 	 Hie_InitHierarchy ();
@@ -535,12 +535,12 @@ void InsCfg_ChangeInsCty (void)
 
 void InsCfg_RenameInsShort (void)
   {
-   Ins_RenameIns (&Gbl.Hierarchy.Node[Hie_INS],Nam_SHRT_NAME);
+   Ins_RenameIns (&Gbl.Hie.Node[Hie_INS],Nam_SHRT_NAME);
   }
 
 void InsCfg_RenameInsFull (void)
   {
-   Ins_RenameIns (&Gbl.Hierarchy.Node[Hie_INS],Nam_FULL_NAME);
+   Ins_RenameIns (&Gbl.Hie.Node[Hie_INS],Nam_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -559,9 +559,9 @@ void InsCfg_ChangeInsWWW (void)
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ins_DB_UpdateInsWWW (Gbl.Hierarchy.Node[Hie_INS].HieCod,NewWWW);
-      Str_Copy (Gbl.Hierarchy.Node[Hie_INS].WWW,NewWWW,
-	        sizeof (Gbl.Hierarchy.Node[Hie_INS].WWW) - 1);
+      Ins_DB_UpdateInsWWW (Gbl.Hie.Node[Hie_INS].HieCod,NewWWW);
+      Str_Copy (Gbl.Hie.Node[Hie_INS].WWW,NewWWW,
+	        sizeof (Gbl.Hie.Node[Hie_INS].WWW) - 1);
      }
    else
       Ale_ShowAlertYouCanNotLeaveFieldEmpty ();

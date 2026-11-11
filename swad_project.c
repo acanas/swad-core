@@ -935,7 +935,7 @@ static void Prj_ShowFormToFilterByDepartment (const struct Prj_Projects *Prjs)
       /***** Write selector with departments *****/
       if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",The_GetSuffix ()) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Dpt_WriteSelectorDpt (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
+      Dpt_WriteSelectorDpt (Gbl.Hie.Node[Hie_INS].HieCod,	// Departments in current institution
 				   Prjs->Filter.DptCod,			// Selected department
 				   Prj_PAR_FILTER_DPT_COD_NAME,		// Parameter name
 				   SelectClass,				// Selector class
@@ -3987,7 +3987,7 @@ static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
 		     if (asprintf (&SelectClass,"Frm_C2_INPUT INPUT_%s",
 				   The_GetSuffix ()) < 0)
 			Err_NotEnoughMemoryExit ();
-		     Dpt_WriteSelectorDpt (Gbl.Hierarchy.Node[Hie_INS].HieCod,	// Departments in current institution
+		     Dpt_WriteSelectorDpt (Gbl.Hie.Node[Hie_INS].HieCod,	// Departments in current institution
 						  Prjs->Prj.DptCod,			// Selected department
 						  Par_CodeStr[ParCod_Dpt],		// Parameter name
 						  SelectClass,				// Selector class

@@ -174,7 +174,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!CallsForExams->CallForExam.CrsFullName[0])
       Str_Copy (CallsForExams->CallForExam.CrsFullName,
-	        Gbl.Hierarchy.Node[Hie_CRS].FullName,
+	        Gbl.Hie.Node[Hie_CRS].FullName,
                 sizeof (CallsForExams->CallForExam.CrsFullName) - 1);
 
    /***** Get the year *****/
@@ -182,7 +182,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
    Par_GetParUnsignedLong ("Year",
 			   0,	// N.A.
 			   Deg_MAX_YEARS_PER_DEGREE,
-			   (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].Specific.Year);
+			   (unsigned long) Gbl.Hie.Node[Hie_CRS].Specific.Year);
 
    /***** Get the type of call for exam *****/
    Par_GetParText ("ExamSession",CallsForExams->CallForExam.Session,Cfe_MAX_BYTES_SESSION);
@@ -355,7 +355,7 @@ void Cfe_ReceiveCallForExam2 (void)
    TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->Highlight.ExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
 
    /***** Show calls for exams *****/
    Cfe_ListCallsForExamsEdit ();
@@ -449,7 +449,7 @@ void Cfe_RemoveCallForExam1 (void)
    Tml_DB_MarkNoteAsUnavailable (TmlNot_CALL_FOR_EXAM,ExaCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
   }
 
 void Cfe_RemoveCallForExam2 (void)
@@ -663,7 +663,7 @@ static void Cfe_ListCallsForExams (struct Cfe_CallsForExams *CallsForExams,
 	   }
       else
 	 Ale_ShowAlert (Ale_INFO,Txt_No_calls_for_exams_of_X,
-			Gbl.Hierarchy.Node[Hie_CRS].FullName);
+			Gbl.Hie.Node[Hie_CRS].FullName);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -964,10 +964,10 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Gbl.Hierarchy.Node[Hie_INS].WWW,The_GetSuffix ());
-	       Lgo_DrawLogo (Hie_INS,&Gbl.Hierarchy.Node[Hie_INS],"ICO64x64");
+			       Gbl.Hie.Node[Hie_INS].WWW,The_GetSuffix ());
+	       Lgo_DrawLogo (Hie_INS,&Gbl.Hie.Node[Hie_INS],"ICO64x64");
 	       HTM_BR ();
-	       HTM_Txt (Gbl.Hierarchy.Node[Hie_INS].FullName);
+	       HTM_Txt (Gbl.Hie.Node[Hie_INS].FullName);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();
@@ -978,8 +978,8 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	    HTM_TD_Begin ("colspan=\"2\" class=\"CM EXAM_TIT_%s\"",The_GetSuffix ());
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"EXAM_TIT_%s\"",
-			       Gbl.Hierarchy.Node[Hie_DEG].WWW,The_GetSuffix ());
-	       HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].FullName);
+			       Gbl.Hie.Node[Hie_DEG].WWW,The_GetSuffix ());
+	       HTM_Txt (Gbl.Hie.Node[Hie_DEG].FullName);
 	       if (ViewType == Vie_VIEW)
 		  HTM_A_End ();
 	    HTM_TD_End ();

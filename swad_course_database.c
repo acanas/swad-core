@@ -107,7 +107,7 @@ unsigned Crs_DB_GetCrssInThisDegBasic (MYSQL_RES **mysql_res)
 		    " FROM crs_courses"
 		   " WHERE DegCod=%ld"
 		" ORDER BY ShortName",
-		   Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+		   Gbl.Hie.Node[Hie_DEG].HieCod);
   }
 
 /*****************************************************************************/
@@ -131,7 +131,7 @@ unsigned Crs_DB_GetCrssInThisDegFull (MYSQL_RES **mysql_res)
 		     " AND (Status & %u)=0"
 		" ORDER BY Year,"
 			  "ShortName",
-		   Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+		   Gbl.Hie.Node[Hie_DEG].HieCod,
 		   (unsigned) Hie_STATUS_BIT_REMOVED);	// All courses except those removed
   }
 
@@ -549,7 +549,7 @@ void Crs_DB_UpdateDegOfThisCrs (long HieCod)
 		     " SET DegCod=%ld"
 		   " WHERE CrsCod=%ld",
 	           HieCod,
-	           Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	           Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -578,7 +578,7 @@ void Crs_DB_UpdateCrsLastClick (void)
 		    " (CrsCod,LastTime)"
 		    " VALUES"
 		    " (%ld,NOW())",
-		    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		    Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

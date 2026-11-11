@@ -178,7 +178,7 @@ void QR_ExamAnnnouncement (void)
       WWW_BuildURL (URL,"https://api.qrserver.com/v1/create-qr-code/"
 			"?size=%ux%u&amp;data=%s/?crs=%ld%%26act=%ld",
 		    300,300,
-		    Cfg_URL_SWAD_CGI,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		    Cfg_URL_SWAD_CGI,Gbl.Hie.Node[Hie_CRS].HieCod,
 		    Act_GetActCod (ActSeeAllCfe));
       HTM_IMG (URL,NULL,Txt_Link_to_call_for_exam,
 	       "style=\"width:250px;height:250px;\"");

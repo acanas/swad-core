@@ -194,7 +194,7 @@ void Crs_WriteSelectorOfCourse (void)
    Frm_BeginFormGoTo (ActSeeCrsInf);
 
       /***** Begin selector of course *****/
-      HTM_SELECT_Begin (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
+      HTM_SELECT_Begin (Gbl.Hie.Node[Hie_DEG].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
 								 HTM_DISABLED,
 			NULL,
 			"id=\"crs\" name=\"crs\" class=\"HIE_SEL INPUT_%s\"",
@@ -202,11 +202,11 @@ void Crs_WriteSelectorOfCourse (void)
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     (Gbl.Hierarchy.Node[Hie_CRS].HieCod < 0 ? HTM_SELECTED :
+		     (Gbl.Hie.Node[Hie_CRS].HieCod < 0 ? HTM_SELECTED :
 							       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
 
-	 if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
+	 if (Gbl.Hie.Node[Hie_DEG].HieCod > 0)
 	   {
 	    /***** Get courses belonging to the current degree from database *****/
 	    NumCrss = Crs_DB_GetCrssInThisDegBasic (&mysql_res);
@@ -223,8 +223,8 @@ void Crs_WriteSelectorOfCourse (void)
 
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&HieCod,
-			   Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
-			   HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
+			   Gbl.Hie.Lvl == Hie_CRS &&	// Course selected
+			   HieCod == Gbl.Hie.Node[Hie_CRS].HieCod ? HTM_SELECTED :
 									  HTM_NO_ATTR,
 			   "%s",row[1]);	// Short name (row[1])
 	      }
@@ -247,7 +247,7 @@ void Crs_WriteSelectorOfCourse (void)
 void Crs_ShowCrssOfThisDeg (void)
   {
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_DEG].HieCod <= 0)	// No degree selected
+   if (Gbl.Hie.Node[Hie_DEG].HieCod <= 0)	// No degree selected
       return;
 
    /***** Get list of courses in this degree *****/
@@ -277,8 +277,8 @@ static void Crs_GetListCrssInThisDeg (void)
    if ((NumCrss = Crs_DB_GetCrssInThisDegFull (&mysql_res))) // Courses found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.List[Hie_DEG].Lst = calloc ((size_t) NumCrss,
-	                                             sizeof (*Gbl.Hierarchy.List[Hie_DEG].Lst))) == NULL)
+      if ((Gbl.Hie.List[Hie_DEG].Lst = calloc ((size_t) NumCrss,
+	                                             sizeof (*Gbl.Hie.List[Hie_DEG].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the courses in degree *****/
@@ -286,10 +286,10 @@ static void Crs_GetListCrssInThisDeg (void)
 	   NumCrs < NumCrss;
 	   NumCrs++)
          /* Get data of next course */
-         Crs_GetCrsDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
+         Crs_GetCrsDataFromRow (mysql_res,&Gbl.Hie.List[Hie_DEG].Lst[NumCrs]);
      }
 
-   Gbl.Hierarchy.List[Hie_DEG].Num = NumCrss;
+   Gbl.Hie.List[Hie_DEG].Num = NumCrss;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -322,7 +322,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 			The_GetSuffix ());
 
 	 /***** Write an option when no course selected *****/
-	 if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)	// No course selected
+	 if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)	// No course selected
 	    HTM_OPTION (HTM_Type_STRING,"-1",
 	                HTM_SELECTED | HTM_DISABLED,
 			"%s",Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]);
@@ -348,7 +348,7 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 		 }
 
 	       HTM_OPTION (HTM_Type_LONG,&HieCods[Hie_CRS],
-			   HieCods[Hie_CRS] == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? HTM_SELECTED :
+			   HieCods[Hie_CRS] == Gbl.Hie.Node[Hie_CRS].HieCod ? HTM_SELECTED :
 										    HTM_NO_ATTR,
 			   "%s",CrsShortName);
 	      }
@@ -359,11 +359,11 @@ void Crs_WriteSelectorMyCoursesInBreadcrumb (void)
 
 	 /***** Write an option with the current course
 		when I don't belong to it *****/
-	 if (Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
+	 if (Gbl.Hie.Lvl == Hie_CRS &&				// Course selected
 	     Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)	// I do not belong to it
-	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	    HTM_OPTION (HTM_Type_LONG,&Gbl.Hie.Node[Hie_CRS].HieCod,
 	                HTM_SELECTED | HTM_DISABLED,
-			"%s",Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			"%s",Gbl.Hie.Node[Hie_CRS].ShrtName);
 
       /***** End selector of courses *****/
       HTM_SELECT_End ();
@@ -386,13 +386,13 @@ static void Crs_ListCrss (void)
    Exi_Exist_t YearWithCourses;
 
    /***** Begin box *****/
-   if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
+   if (asprintf (&Title,Txt_Courses_of_DEGREE_X,Gbl.Hie.Node[Hie_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (Title,Crs_PutIconsListCrss,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.Hierarchy.List[Hie_DEG].Num)	// There are courses in the current degree
+      if (Gbl.Hie.List[Hie_DEG].Num)	// There are courses in the current degree
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");
@@ -465,10 +465,10 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
 
    /***** Write all courses of this year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.Hierarchy.List[Hie_DEG].Num;
+	NumCrs < Gbl.Hie.List[Hie_DEG].Num;
 	NumCrs++)
      {
-      Crs = &(Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
+      Crs = &(Gbl.Hie.List[Hie_DEG].Lst[NumCrs]);
       if (Crs->Specific.Year == Year)	// The year of the course is this?
 	{
 	 ThisYearHasCourses = Exi_EXISTS;
@@ -589,7 +589,7 @@ static void Crs_EditCrssInternal (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Courses_of_DEGREE_X,
-		 Gbl.Hierarchy.Node[Hie_DEG].ShrtName) < 0)
+		 Gbl.Hie.Node[Hie_DEG].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (Title,Crs_PutIconsEditingCrss,NULL,
                  Hlp_DEGREE_Courses,Box_NOT_CLOSABLE);
@@ -599,7 +599,7 @@ static void Crs_EditCrssInternal (void)
       Crs_PutFormToCreateCrs ();
 
       /***** Forms to edit current courses *****/
-      if (Gbl.Hierarchy.List[Hie_DEG].Num)
+      if (Gbl.Hie.List[Hie_DEG].Num)
 	 Crs_ListCrssForEdition ();
 
    /***** End box *****/
@@ -682,10 +682,10 @@ static void Crs_ListCrssOfAYearForEdition (unsigned Year)
 
    /***** List courses of a given year *****/
    for (NumCrs = 0;
-	NumCrs < Gbl.Hierarchy.List[Hie_DEG].Num;
+	NumCrs < Gbl.Hie.List[Hie_DEG].Num;
 	NumCrs++)
      {
-      Crs = &(Gbl.Hierarchy.List[Hie_DEG].Lst[NumCrs]);
+      Crs = &(Gbl.Hie.List[Hie_DEG].Lst[NumCrs]);
 
       if (Crs->Specific.Year == Year)
 	{
@@ -782,7 +782,7 @@ static void Crs_ListCrssOfAYearForEdition (unsigned Year)
 	    HTM_TD_Unsigned (NumUsrs[Rol_STD]);
 
 	    /* Course requester */
-	    UsrDat.UsrCod = Crs->RequesterUsrCod;
+	    UsrDat.UsrCod = Crs->ReqUsrCod;
 	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 								 Usr_DONT_GET_PREFS,
 								 Usr_DONT_GET_ROLE_IN_CRS);
@@ -813,7 +813,7 @@ static Usr_Can_t Crs_CheckIfICanEdit (struct Hie_Node *Crs)
   {
    return Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM ||	// I am a degree administrator or higher
           ((Crs->Status & Hie_STATUS_BIT_PENDING) &&	// Course is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Crs->RequesterUsrCod) ? Usr_CAN :	// I am the requester
+           Gbl.Usrs.Me.UsrDat.UsrCod == Crs->ReqUsrCod) ? Usr_CAN :	// I am the requester
         						        Usr_CAN_NOT;
   }
 
@@ -996,7 +996,7 @@ static void Crs_ReceiveRequestOrCreateCrs (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set course degree */
-   Crs_EditingCrs->PrtCod = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
+   Crs_EditingCrs->PrtCod = Gbl.Hie.Node[Hie_DEG].HieCod;
 
    /* Get parameters of the new course */
    Crs_GetParsNewCrs (Crs_EditingCrs);
@@ -1103,7 +1103,7 @@ Err_SuccessOrError_t Crs_GetCourseDataByCod (struct Hie_Node *Node)
    Node->PrtCod 	 = -1L;
    Node->Specific.Year   = 0;
    Node->Status          = (Hie_Status_t) 0;
-   Node->RequesterUsrCod = -1L;
+   Node->ReqUsrCod = -1L;
    Node->ShrtName[0]     = '\0';
    Node->FullName[0]     = '\0';
 
@@ -1153,7 +1153,7 @@ static void Crs_GetCrsDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Crs)
       Err_WrongStatusExit ();
 
    /***** Get requester user'code (row[5]) *****/
-   Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
+   Crs->ReqUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get institutional course code (row[3]) *****/
    Str_Copy (Crs->InstitutionalCod,row[3],sizeof (Crs->InstitutionalCod) - 1);
@@ -1535,7 +1535,7 @@ void Crs_ContEditAfterChgCrs (void)
       case Rol_STD:
       case Rol_NET:
       case Rol_TCH:
-	 if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+	 if (Crs_EditingCrs->HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
 	    ShowButtonToRequestRegistration = Show[Hie_CheckIfUsrBelongsTo (Hie_CRS,
 									    Gbl.Usrs.Me.UsrDat.UsrCod,
 									    Crs_EditingCrs->HieCod,
@@ -1590,7 +1590,7 @@ static void Crs_PutButtonToRegisterInCrs (void)
    Frm_BeginForm (ActReqSignUp);
 
       // If the course being edited is different to the current one...
-      if (Crs_EditingCrs->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+      if (Crs_EditingCrs->HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
 	 ParCod_PutPar (ParCod_Crs,Crs_EditingCrs->HieCod);
 
       Btn_PutButton (Btn_ENROL,NULL);
@@ -1780,7 +1780,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    NumUsrs = NumStds + NumNETs + NumTchs;
    ClassTxt = NumUsrs ? "DAT_STRONG" :
 	                "DAT";
-   BgColor = HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
+   BgColor = HieCod == Gbl.Hie.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
 							    The_GetColorRows ();
 
    /***** Begin row *****/
@@ -1861,7 +1861,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
 
 void Crs_UpdateCrsLast (void)
   {
-   if (Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
+   if (Gbl.Hie.Lvl == Hie_CRS &&	// Course selected
        Gbl.Usrs.Me.Role.Logged >= Rol_STD)
       /***** Update last access to current course *****/
       Crs_DB_UpdateCrsLastClick ();

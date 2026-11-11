@@ -120,7 +120,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	 if (Gbl.Usrs.Me.Logged)		// I am logged
 	   {
-	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+	    if (Gbl.Hie.Lvl == Hie_CRS)	// Course selected
 	      {
 	       switch (Gbl.Usrs.Me.IBelongToThis[Hie_CRS])
 	         {
@@ -132,7 +132,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 			  {
 			   /***** Request my removing from this course *****/
 			   if (asprintf (&Description,Txt_Remove_me_from_THE_COURSE_X,
-					 Gbl.Hierarchy.Node[Hie_CRS].ShrtName) < 0)
+					 Gbl.Hie.Node[Hie_CRS].ShrtName) < 0)
 			      Err_NotEnoughMemoryExit ();
 			   Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
 								ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.Roles.InThisCrs],
@@ -152,9 +152,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	    if (Gbl.Usrs.Me.Hierarchy[Hie_CRS].Num)	// I am enroled in some courses
 	      {
-	       if (Gbl.Hierarchy.HieLvl == Hie_CRS &&				// Course selected
+	       if (Gbl.Hie.Lvl == Hie_CRS &&				// Course selected
 		   Gbl.Usrs.Me.UsrDat.Roles.InThisCrs == Rol_TCH)	// I am a teacher in current course
-		  if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		  if (!Enr_GetCachedNumUsrsInCrss (Hie_CRS,Gbl.Hie.Node[Hie_CRS].HieCod,
 						   1 << Rol_STD))		// Current course probably has no students
 		     /***** Request students enrolment *****/
 		     Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Enrol_students,
@@ -170,14 +170,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 	    /***** Go to list of hierarchy subnodes
 		   to select or create a new one *****/
-	    if (Gbl.Hierarchy.HieLvl >= Hie_SYS &&
-		Gbl.Hierarchy.HieLvl <= Hie_DEG)
+	    if (Gbl.Hie.Lvl >= Hie_SYS &&
+		Gbl.Hie.Lvl <= Hie_DEG)
 	      {
-	       if (asprintf (&Description,*(SelectOrCreate[Gbl.Hierarchy.HieLvl].Description),
-			     Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].ShrtName) < 0)
+	       if (asprintf (&Description,*(SelectOrCreate[Gbl.Hie.Lvl].Description),
+			     Gbl.Hie.Node[Gbl.Hie.Lvl].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Description,
-						    SelectOrCreate[Gbl.Hierarchy.HieLvl].Action,
+						    SelectOrCreate[Gbl.Hie.Lvl].Action,
 						    Btn_GO);
 	       free (Description);
 	      }

@@ -1279,13 +1279,13 @@ void For_ShowForumList (struct For_Forums *Forums)
 	 switch (Forums->ForumSet)
 	   {
 	    case For_ONLY_CURRENT_FORUMS:
-	       if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
+	       if (Gbl.Hie.Node[Hie_INS].HieCod > 0)
 		 {
 		  if (Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)
 		     ICanSeeInsForum = Usr_CAN;
 		  else
 		     ICanSeeInsForum = ICanSee[Hie_CheckIfIBelongTo (Hie_INS,
-								     Gbl.Hierarchy.Node[Hie_INS].HieCod)];
+								     Gbl.Hie.Node[Hie_INS].HieCod)];
 		 }
 	       else
 		  ICanSeeInsForum = Usr_CAN_NOT;
@@ -1299,11 +1299,11 @@ void For_ShowForumList (struct For_Forums *Forums)
 		     ICanSeeCtrForum = Usr_CAN;
 		  else
 		     ICanSeeCtrForum = ICanSee[Hie_CheckIfIBelongTo (Hie_CTR,
-								     Gbl.Hierarchy.Node[Hie_CTR].HieCod)];
+								     Gbl.Hie.Node[Hie_CTR].HieCod)];
 
 		  /***** Links to forums of current institution *****/
 		  if (For_WriteLinksToInsForums (Forums,
-						 Gbl.Hierarchy.Node[Hie_INS].HieCod,Lay_LAST,			// Last institution
+						 Gbl.Hie.Node[Hie_INS].HieCod,Lay_LAST,			// Last institution
 						 IsLastItemInLevel) > 0)
 		     if (ICanSeeCtrForum == Usr_CAN)
 		       {
@@ -1311,22 +1311,22 @@ void For_ShowForumList (struct For_Forums *Forums)
 			   ICanSeeDegForum = Usr_CAN;
 			else
 			   ICanSeeDegForum = ICanSee[Hie_CheckIfIBelongTo (Hie_DEG,
-									   Gbl.Hierarchy.Node[Hie_DEG].HieCod)];
+									   Gbl.Hie.Node[Hie_DEG].HieCod)];
 
 			/***** Links to forums of current center *****/
 			if (For_WriteLinksToCtrForums (Forums,
-						       Gbl.Hierarchy.Node[Hie_CTR].HieCod,Lay_LAST,		// Last center
+						       Gbl.Hie.Node[Hie_CTR].HieCod,Lay_LAST,		// Last center
 						       IsLastItemInLevel) > 0)
 			   if (ICanSeeDegForum == Usr_CAN)
 			      /***** Links to forums of current degree *****/
 			      if (For_WriteLinksToDegForums (Forums,
-							     Gbl.Hierarchy.Node[Hie_DEG].HieCod,Lay_LAST,	// Last degree
+							     Gbl.Hie.Node[Hie_DEG].HieCod,Lay_LAST,	// Last degree
 							     IsLastItemInLevel) > 0)
 				 if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG ||
 				     Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
 				    /***** Links to forums of current degree *****/
 				    For_WriteLinksToCrsForums (Forums,
-							       Gbl.Hierarchy.Node[Hie_CRS].HieCod,Lay_LAST,	// Last course
+							       Gbl.Hie.Node[Hie_CRS].HieCod,Lay_LAST,	// Last course
 							       IsLastItemInLevel);
 		       }
 		 }
@@ -2620,7 +2620,7 @@ void For_GetParsForums (struct For_Forums *Forums)
      {
       if ((Forums->Forum.HieCod = ParCod_GetPar (ParCod_OthHie)) <= 0)
 	 // If no institution specified ==> go to current institution forum
-	 Forums->Forum.HieCod = Gbl.Hierarchy.Node[HieLvl[Forums->Forum.Type]].HieCod;
+	 Forums->Forum.HieCod = Gbl.Hie.Node[HieLvl[Forums->Forum.Type]].HieCod;
      }
 
    /***** Get which forums I want to see *****/
@@ -3410,7 +3410,7 @@ void For_GetAndShowForumStats (Hie_Level_t HieLvl)
       [Hie_CRS] = -1L,
      };
 
-   HieCod[HieLvl] = Gbl.Hierarchy.Node[HieLvl].HieCod;
+   HieCod[HieLvl] = Gbl.Hie.Node[HieLvl].HieCod;
 
    /***** Reset total stats *****/
    FiguresForum.NumFors  = 0;

@@ -165,7 +165,7 @@ unsigned Cty_DB_GetCtysFull (MYSQL_RES **mysql_res)
    /***** Get countries from database *****/
    /* Build order subquery */
    if (asprintf (&OrderBySubQuery,
-		 OrderBySubQueryFmt[Gbl.Hierarchy.List[Hie_SYS].SelectedOrder],
+		 OrderBySubQueryFmt[Gbl.Hie.List[Hie_SYS].SelectedOrder],
 		 Lan_STR_LANG_ID[Gbl.Prefs.Language]) < 0)
       Err_NotEnoughMemoryExit ();
 
@@ -508,7 +508,7 @@ void Cty_DB_GetAvgCoordAndZoom (struct Map_Coordinates *Coord,unsigned *Zoom)
 		   " AND ins_instits.InsCod=ctr_centers.InsCod"
 		   " AND ctr_centers.Latitude<>0"
 		   " AND ctr_centers.Longitude<>0",
-		 Gbl.Hierarchy.Node[Hie_CTY].HieCod) < 0)
+		 Gbl.Hie.Node[Hie_CTY].HieCod) < 0)
       Err_NotEnoughMemoryExit ();
    Map_GetCoordAndZoom (Coord,Zoom,Query);
    free (Query);
@@ -529,7 +529,7 @@ unsigned Cty_DB_GetCtrsWithCoordsInThisCty (MYSQL_RES **mysql_res)
 		     " AND ins_instits.InsCod=ctr_centers.InsCod"
 		     " AND ctr_centers.Latitude<>0"
 		     " AND ctr_centers.Longitude<>0",
-		   Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+		   Gbl.Hie.Node[Hie_CTY].HieCod);
   }
 
 /*****************************************************************************/
@@ -592,7 +592,7 @@ void Cty_DB_UpdateCtyMapAttr (const char NewMapAttribution[Med_MAX_BYTES_ATTRIBU
 		     " SET MapAttribution='%s'"
 		   " WHERE CtyCod='%03ld'",
 	           NewMapAttribution,
-	           Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+	           Gbl.Hie.Node[Hie_CTY].HieCod);
   }
 
 /*****************************************************************************/

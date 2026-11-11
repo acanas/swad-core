@@ -270,6 +270,12 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 /*************************** Show a user's profile ***************************/
 /*****************************************************************************/
 // Return Err_ERROR on error
+#include "swad_time.h"
+
+   static long global_nsec = 0L;
+   static long record_nsec = 0L;
+   static long detail_nsec = 0L;
+   static long follow_nsec = 0L;
 
 Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
   {
@@ -281,43 +287,61 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Check if I can see the public profile *****/
-   if (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_CAN)
+   if (Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat) == Usr_CAN_NOT)
+      return Err_ERROR;
+
+   /***** Contextual menu *****/
+   if (Gbl.Usrs.Me.Logged)
      {
-      if (Gbl.Usrs.Me.Logged)
-	{
-	 /***** Contextual menu *****/
-	 Mnu_ContextMenuBegin ();
-	    PutLinkToUsrProfile[MeOrOther] ();	// Public profile
-	    Fol_PutLinkWhoToFollow ();		// Users to follow
-	 Mnu_ContextMenuEnd ();
-	}
-
-      /***** Shared record card *****/
-      if (MeOrOther == Usr_OTHER &&		// If not me...
-	  Gbl.Hierarchy.HieLvl == Hie_CRS)	// ...and a course is selected
-	{
-	 /* Get user's role in current course */
-	 UsrDat->Roles.InThisCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-	                                                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
-
-	 /* Get if user has accepted enrolment in current course */
-	 UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
-	}
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
-
-      /***** Extended profile *****/
-      if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_CAN)
-        {
-         /***** Show details of user's profile *****/
-         Prf_ShowDetailsUserProfile (UsrDat);
-
-	 /***** Show following and followers *****/
-	 Fol_ShowFollowingAndFollowers (UsrDat);
-        }
-
-      return Err_SUCCESS;
+      Mnu_ContextMenuBegin ();
+	 PutLinkToUsrProfile[MeOrOther] ();	// Public profile
+	 Fol_PutLinkWhoToFollow ();		// Users to follow
+      Mnu_ContextMenuEnd ();
      }
-   return Err_ERROR;
+
+   /***** Shared record card *****/
+   if (MeOrOther == Usr_OTHER &&	// If not me...
+       Gbl.Hie.Lvl == Hie_CRS)		// ...and a course is selected
+     {
+      /* Get user's role in current course */
+      UsrDat->Roles.InThisCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
+						     Gbl.Hie.Node[Hie_CRS].HieCod);
+
+      /* Get if user has accepted enrolment in current course */
+      UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
+     }
+
+   Tim_StartGlobalTiming ();
+
+   Tim_StartPartialTiming ();
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
+   record_nsec += Tim_StopPartialTiming ();
+
+   /***** Extended profile *****/
+   if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_CAN)
+     {
+      /* Show details of user's profile */
+      Tim_StartPartialTiming ();
+      Prf_ShowDetailsUserProfile (UsrDat);
+      detail_nsec += Tim_StopPartialTiming ();
+
+      /* Show following and followers */
+      Tim_StartPartialTiming ();
+      Fol_ShowFollowingAndFollowers (UsrDat);
+      follow_nsec += Tim_StopPartialTiming ();
+     }
+
+   global_nsec = Tim_StopGlobalTiming ();
+
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+     {
+      Ale_ShowAlert (Ale_DEBUG,"record nsec = %ld ms",record_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"detail nsec = %ld ms",detail_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"follow nsec = %ld ms",follow_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"global nsec = %ld ms",global_nsec / 1000000);
+     }
+
+   return Err_SUCCESS;
   }
 
 /*****************************************************************************/

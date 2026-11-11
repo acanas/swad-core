@@ -138,7 +138,7 @@ void Tag_DB_SimplexRenameTag (const char OldTagTxt[Tag_MAX_BYTES_TAG + 1],
 		   " WHERE tst_tags.CrsCod=%ld"
 		     " AND tst_tags.TagTxt='%s'",
 		   NewTagTxt,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   OldTagTxt);
   }
 
@@ -159,7 +159,7 @@ void Tag_DB_EnableOrDisableTag (long TagCod,HidVis_HiddenOrVisible_t TagHidden)
                      " AND CrsCod=%ld",
 		   HidVis_Hidden_YN[TagHidden],
 		   TagCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -178,7 +178,7 @@ unsigned Tag_DB_GetTagsQst (MYSQL_RES **mysql_res,long QstCod)
 		     " AND tst_tags.CrsCod=%ld"
 		" ORDER BY tst_question_tags.TagInd",
 		   QstCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -197,7 +197,7 @@ unsigned Tag_DB_GetAllTagsFromThisCrs (MYSQL_RES **mysql_res)
 		    " FROM tst_tags"
 		   " WHERE CrsCod=%ld"
 		" ORDER BY TagTxt",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -244,7 +244,7 @@ Exi_Exist_t Tag_DB_CheckIfTagsExistInThisCrs (void)
 		   "(SELECT *"
 		     " FROM tst_tags"
 		    " WHERE CrsCod=%ld)",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -259,7 +259,7 @@ long Tag_DB_GetTagCodFromTagTxt (const char *TagTxt)
 			       " FROM tst_tags"
 			      " WHERE CrsCod=%ld"
 			        " AND TagTxt='%s'",
-			      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			      Gbl.Hie.Node[Hie_CRS].HieCod,
 			      TagTxt);
   }
 
@@ -275,7 +275,7 @@ void Tag_DB_GetTagTitle (long TagCod,char *Title,size_t TitleSize)
 		         " WHERE TagCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 		         TagCod,
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		         Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/

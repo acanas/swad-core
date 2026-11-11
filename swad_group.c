@@ -379,7 +379,7 @@ static void Grp_EditGroupTypes (const struct GroupType *GrpTyp)
 	 Grp_ListGroupTypesForEdition ();
       else	// No group types found in this course
 	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_types_of_group_in_the_course_X,
-			Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			Gbl.Hie.Node[Hie_CRS].ShrtName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -409,7 +409,7 @@ static void Grp_EditGroups (const struct GroupType *GrpTyp,
 	 Grp_ListGroupsForEdition (Rooms);
       else	// There are group types, but there aren't groups
 	 Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-			Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+			Gbl.Hie.Node[Hie_CRS].ShrtName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -1789,7 +1789,7 @@ void Grp_WriteTheWholeCourse (void)
 
    HTM_Txt (Txt_The_whole_course);
    HTM_SP ();
-   HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+   HTM_Txt (Gbl.Hie.Node[Hie_CRS].ShrtName);
   }
 
 /*****************************************************************************/
@@ -2016,7 +2016,7 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	}
       else	// This course has no groups
 	 Ale_ShowAlert (Ale_INFO,Txt_No_groups_have_been_created_in_the_course_X,
-			Gbl.Hierarchy.Node[Hie_CRS].FullName);
+			Gbl.Hie.Node[Hie_CRS].FullName);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -3139,7 +3139,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGrpTypes_t WhichGrpTypes)
    /***** Get group types from database *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpTypes =
    Grp_DB_GetGrpTypesInCrs[WhichGrpTypes] (&mysql_res,
-					   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+					   Gbl.Hie.Node[Hie_CRS].HieCod);
 
    /***** Get group types *****/
    Gbl.Crs.Grps.GrpTypes.NumGrpsTotal = 0;
@@ -3598,7 +3598,7 @@ Usr_Share_t Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (const struct Usr_Data *Usr
       return Usr_DONT_SHARE;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
       return Usr_DONT_SHARE;
 
    /***** 4. Fast check: Do I belong to the current course? *****/
@@ -4074,7 +4074,7 @@ static void Grp_RemoveGroupTypeCompletely (long GrpTypCod)
 static void Grp_RemoveGroupCompletely (long GrpCod)
   {
    /***** Remove file zones of this group *****/
-   Brw_RemoveGrpZones (Gbl.Hierarchy.Node[Hie_CRS].HieCod,GrpCod);
+   Brw_RemoveGrpZones (Gbl.Hie.Node[Hie_CRS].HieCod,GrpCod);
 
    /***** Remove this group from all assignments *****/
    Asg_DB_RemoveGroup (GrpCod);

@@ -163,7 +163,7 @@ void Ntf_DB_MarkNotifsInCrsAsSeen (Ntf_NotifyEvent_t NotifyEvent)
 		   (unsigned) Ntf_STATUS_BIT_READ,
 		   Gbl.Usrs.Me.UsrDat.UsrCod,
 		   (unsigned) NotifyEvent,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -211,7 +211,7 @@ void Ntf_DB_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,l
 	              (unsigned) Ntf_STATUS_BIT_REMOVED,
 	              ToUsrCod,
 	              (unsigned) NotifyEvent,
-		      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		      Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -545,7 +545,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
 			   " AND sta_notifications.NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			 Gbl.Hie.Node[Hie_CTY].HieCod,
 			 (unsigned) NotifyEvent);
       case Hie_INS:
 	 return (unsigned)
@@ -560,7 +560,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
 			   " AND sta_notifications.NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			 Gbl.Hie.Node[Hie_INS].HieCod,
 			 (unsigned) NotifyEvent);
       case Hie_CTR:
 	 return (unsigned)
@@ -573,7 +573,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
 			 " WHERE deg_degrees.CtrCod=%ld"
 			   " AND deg_degrees.DegCod=sta_notifications.DegCod"
 			   " AND sta_notifications.NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			 Gbl.Hie.Node[Hie_CTR].HieCod,
 			 (unsigned) NotifyEvent);
       case Hie_DEG:
 	 return (unsigned)
@@ -584,7 +584,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
 			  " FROM sta_notifications"
 			 " WHERE DegCod=%ld"
 			   " AND NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+			 Gbl.Hie.Node[Hie_DEG].HieCod,
 			 (unsigned) NotifyEvent);
       case Hie_CRS:
 	 return (unsigned)
@@ -595,7 +595,7 @@ unsigned Ntf_DB_GetNumNotifs (MYSQL_RES **mysql_res,
 			  " FROM sta_notifications"
 			 " WHERE CrsCod=%ld"
 			   " AND NotifyEvent=%u",
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			 Gbl.Hie.Node[Hie_CRS].HieCod,
 			 (unsigned) NotifyEvent);
       default:
 	 Err_WrongHierarchyLevelExit ();

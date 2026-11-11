@@ -461,15 +461,15 @@ static void Lay_WritePageTitle (void)
    HTM_TITLE_Begin ();
 
       if (Par_GetMethod () == Par_METHOD_GET &&
-	  Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
+	  Gbl.Hie.Node[Hie_DEG].HieCod > 0)
 	{
 	 HTM_Txt (Cfg_PLATFORM_SHORT_NAME);
 	 HTM_SP (); HTM_GT (); HTM_SP ();
-	 HTM_Txt (Gbl.Hierarchy.Node[Hie_DEG].ShrtName);
-	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)
+	 HTM_Txt (Gbl.Hie.Node[Hie_DEG].ShrtName);
+	 if (Gbl.Hie.Lvl == Hie_CRS)
 	   {
 	    HTM_SP (); HTM_GT (); HTM_SP ();
-	    HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+	    HTM_Txt (Gbl.Hie.Node[Hie_CRS].ShrtName);
 	   }
 	}
       else
@@ -557,7 +557,7 @@ static void Lay_WriteScripts (void)
       HTM_SCRIPT_Begin (NULL,NULL);
 
 	 HTM_Txt ("\tconst STR_EXAM = '");
-	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hierarchy.Node[Hie_CRS].FullName);
+	 HTM_TxtF (Txt_Exam_of_X,Gbl.Hie.Node[Hie_CRS].FullName);
 	 HTM_Txt ("';\n");
 
 	 HTM_Txt ("\tvar Hlds = [];\n");
@@ -875,7 +875,7 @@ static void Lay_WriteScriptParsAJAX (void)
       HTM_TxtF ("const refreshParamIdSes = \"ses=%s\";\n"
 		"const refreshParamCrsCod = \"crs=%ld\";\n",
 		Gbl.Session.Id,
-		Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		Gbl.Hie.Node[Hie_CRS].HieCod);
 
       /***** Parameter to refresh connected users *****/
       if (Act_GetBrowserTab (Gbl.Action.Act) == Act_1ST)
@@ -1138,7 +1138,7 @@ static void Lay_ShowLeftColumn (void)
    Cal_DrawCurrentMonth ();
 
    /***** Notices (yellow notes) *****/
-   if (Gbl.Hierarchy.HieLvl == Hie_CRS)
+   if (Gbl.Hie.Lvl == Hie_CRS)
       Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
 		       -1L);	// No notice highlighted
   }
@@ -1168,7 +1168,7 @@ static void Lay_ShowRightColumn (void)
      }
 
    /***** Number of connected users in the current course *****/
-   if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// There is a course selected
+   if (Gbl.Hie.Lvl == Hie_CRS)	// There is a course selected
      {
       HTM_FIELDSET_Begin ("class=\"CON CON_%s\"",The_GetSuffix ());
 	 HTM_LEGEND (Txt_Connected_PLURAL);
@@ -1459,11 +1459,11 @@ void Lay_WriteHeaderClassPhoto (Hie_Level_t HieLvl,Vie_ViewType_t ViewType)
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Initialize institution, degree and course to show in header *****/
-   Hie[Hie_INS].HieCod = HieLvl >= Hie_INS ? Gbl.Hierarchy.Node[Hie_INS].HieCod :
+   Hie[Hie_INS].HieCod = HieLvl >= Hie_INS ? Gbl.Hie.Node[Hie_INS].HieCod :
 					     -1L;
-   Hie[Hie_DEG].HieCod = HieLvl >= Hie_DEG ? Gbl.Hierarchy.Node[Hie_DEG].HieCod :
+   Hie[Hie_DEG].HieCod = HieLvl >= Hie_DEG ? Gbl.Hie.Node[Hie_DEG].HieCod :
 					     -1L;
-   Hie[Hie_CRS].HieCod = HieLvl == Hie_CRS ? Gbl.Hierarchy.Node[Hie_CRS].HieCod :
+   Hie[Hie_CRS].HieCod = HieLvl == Hie_CRS ? Gbl.Hie.Node[Hie_CRS].HieCod :
 					     -1L;
 
    /***** Get data of institution, degree and course *****/

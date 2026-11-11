@@ -162,7 +162,7 @@ void Roo_SeeRooms (void)
    char StrCapacity[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_CTR].HieCod <= 0)		// No center selected
+   if (Gbl.Hie.Node[Hie_CTR].HieCod <= 0)		// No center selected
       return;
 
    /***** Reset rooms context *****/
@@ -466,7 +466,7 @@ void Roo_GetListRooms (struct Roo_Rooms *Rooms,Roo_WhichData_t WhichData)
    unsigned NumRoom;
 
    /***** Get rooms from database *****/
-   if ((Rooms->Num = Roo_DB_GetListRooms (&mysql_res,Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+   if ((Rooms->Num = Roo_DB_GetListRooms (&mysql_res,Gbl.Hie.Node[Hie_CTR].HieCod,
                                           WhichData,Rooms->SelectedOrder))) // Rooms found...
      {
       /***** Create list with courses in center *****/
@@ -1022,7 +1022,7 @@ static void Roo_RenameRoom (Nam_ShrtOrFullName_t ShrtOrFull)
          /***** If room was in database... *****/
          switch (Roo_DB_CheckIfRoomNameExists (Nam_Fields[ShrtOrFull],
 					       NewName,Roo_EditingRoom->RooCod,
-					       Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+					       Gbl.Hie.Node[Hie_CTR].HieCod,
 					       0))	// Unused
 	   {
 	    case Exi_EXISTS:
@@ -1252,7 +1252,7 @@ void Roo_ReceiveNewRoom (void)
       if (Nam_CheckIfNameExists (Roo_DB_CheckIfRoomNameExists,
 				 (const char **) Names,
 				 -1L,
-				 Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				 Gbl.Hie.Node[Hie_CTR].HieCod,
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
          Roo_CreateRoom (Roo_EditingRoom);
      }
@@ -1271,7 +1271,7 @@ static void Roo_CreateRoom (struct Roo_Room *Room)
       Room->Type = Roo_NO_TYPE;
 
    /***** Create a new room *****/
-   Room->RooCod = Roo_DB_CreateRoom (Gbl.Hierarchy.Node[Hie_CTR].HieCod,Room);
+   Room->RooCod = Roo_DB_CreateRoom (Gbl.Hie.Node[Hie_CTR].HieCod,Room);
 
    /***** Create MAC address *****/
    if (Room->MACnum)

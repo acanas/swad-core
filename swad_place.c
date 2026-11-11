@@ -127,7 +127,7 @@ void Plc_SeeAllPlcs (void)
    unsigned NumCtrsWithPlc = 0;
    unsigned NumCtrsInOtherPlcs;
 
-   if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
+   if (Gbl.Hie.Node[Hie_INS].HieCod > 0)
      {
       /***** Reset places context *****/
       Plc_ResetPlcs (&Places);
@@ -203,7 +203,7 @@ void Plc_SeeAllPlcs (void)
 	       HTM_TD_Txt_Left (Txt_Place_unspecified);
 	       HTM_TD_Unsigned (Hie_GetNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 							 Hie_INS,	// ...in institution
-							 Gbl.Hierarchy.Node[Hie_INS].HieCod) -
+							 Gbl.Hie.Node[Hie_INS].HieCod) -
 				NumCtrsWithPlc);
 	    HTM_TR_End ();
 
@@ -313,7 +313,7 @@ static void Plc_PutIconsEditingPlcs (__attribute__((unused)) const void *Args)
 void Plc_PutIconToViewPlcs (void)
   {
    Lay_PutContextualLinkOnlyIcon (ActSeePlc,NULL,
-                                  Ins_PutParInsCod,&Gbl.Hierarchy.Node[Hie_INS].HieCod,
+                                  Ins_PutParInsCod,&Gbl.Hie.Node[Hie_INS].HieCod,
 				  "map-marker-alt.svg",Ico_BLACK);
   }
 
@@ -586,7 +586,7 @@ static void Plc_RenamePlc (Nam_ShrtOrFullName_t ShrtOrFull)
          /***** If place was in database... *****/
          switch (Plc_DB_CheckIfPlcNameExists (Nam_Fields[ShrtOrFull],
 					        NewName,Plc_EditingPlc->PlcCod,
-					        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+					        Gbl.Hie.Node[Hie_INS].HieCod,
 					        0))	// Unused
 	   {
 	    case Exi_EXISTS:
@@ -705,7 +705,7 @@ void Plc_ReceiveNewPlc (void)
       if (Nam_CheckIfNameExists (Plc_DB_CheckIfPlcNameExists,
 				 (const char **) Names,
 				 -1L,
-				 Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				 Gbl.Hie.Node[Hie_INS].HieCod,
 				 0) == Exi_DOES_NOT_EXIST)	// Unused
          Plc_DB_CreatePlc (Plc_EditingPlc);
      }

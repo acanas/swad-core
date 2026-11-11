@@ -353,10 +353,10 @@ void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const char *T
 		    {
 		     NotifyByEmail = (UsrDat.NtfEvents.SendEmail & (1 << Ntf_EVENT_TML_MENTION)) ? Ntf_NOTIFY_BY_EMAIL :
 												   Ntf_DONT_NOTIFY_BY_EMAIL;
-		     HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
-		     HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-		     HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-		     HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+		     HieCods[Hie_INS] = Gbl.Hie.Node[Hie_INS].HieCod;
+		     HieCods[Hie_CTR] = Gbl.Hie.Node[Hie_CTR].HieCod;
+		     HieCods[Hie_DEG] = Gbl.Hie.Node[Hie_DEG].HieCod;
+		     HieCods[Hie_CRS] = Gbl.Hie.Node[Hie_CRS].HieCod;
 		     Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_TML_MENTION,
 						   UsrDat.UsrCod,PubCod,
 						   Ntf_Status[NotifyByEmail],

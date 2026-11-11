@@ -132,7 +132,7 @@ void Not_ShowFormNotice (void)
 
    /***** Help message *****/
    Ale_ShowAlert (Ale_INFO,Txt_The_notice_will_appear_as_a_yellow_note_,
-                  Gbl.Hierarchy.Node[Hie_CRS].FullName);
+                  Gbl.Hie.Node[Hie_CRS].FullName);
 
    /***** Begin form *****/
    Frm_BeginForm (ActNewNot);
@@ -213,7 +213,7 @@ static void Not_PutVisibility (void)
 				   " value=\"%c\"",
 				   PriPub_Public_YN[PriPub_PRIVAT]);
 		  HTM_Txt (Txt_HIERARCHY_SINGUL_Abc[Hie_CRS]); HTM_Colon ();
-		  HTM_SP (); HTM_Txt (Gbl.Hierarchy.Node[Hie_CRS].ShrtName);
+		  HTM_SP (); HTM_Txt (Gbl.Hie.Node[Hie_CRS].ShrtName);
 	       HTM_LABEL_End ();
 	    HTM_LI_End ();
 
@@ -258,7 +258,7 @@ void Not_ReceiveNotice (void)
    NotCod = Not_DB_InsertNotice (Content,PrivateOrPublic);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
 
    /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
@@ -331,7 +331,7 @@ static void Not_HideUnhideNotice (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Not_DB_ChangeNoticeStatus (NotCod,HiddenOrVisible);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
 
    /***** Set notice to be highlighted *****/
    Not_SetHighlightNotCod (NotCod);
@@ -392,7 +392,7 @@ void Not_RemoveNotice (void)
    Tml_DB_MarkNoteAsUnavailable (TmlNot_NOTICE,NotCod);
 
    /***** Update RSS of current course *****/
-   RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+   RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
   }
 
 /*****************************************************************************/
@@ -410,11 +410,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,long HighlightNotCod)
    unsigned NumNotices = 0;	// Initialized to avoid warning
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.HieLvl != Hie_CRS)	// No course selected
+   if (Gbl.Hie.Lvl != Hie_CRS)	// No course selected
       return;
 
    /***** Get notices from database *****/
-   NumNotices = Not_DB_GetNotices (&mysql_res,Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+   NumNotices = Not_DB_GetNotices (&mysql_res,Gbl.Hie.Node[Hie_CRS].HieCod,
 				   TypeNoticesListing);
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
@@ -470,15 +470,15 @@ static void Not_PutLinkToRSSFile (void)
    /***** Create RSS file if not exists *****/
    Fil_BuildPath (PathRelRSSFile,"%s/%lu/%s/%s",
 		  Cfg_PATH_CRS_PUBLIC,
-		  (unsigned long) Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		  (unsigned long) Gbl.Hie.Node[Hie_CRS].HieCod,
 		  Cfg_RSS_FOLDER,
 		  Cfg_RSS_FILE);
    if (Fil_CheckIfPathExists (PathRelRSSFile) == Exi_DOES_NOT_EXIST)
-      RSS_UpdateRSSFileForACrs (&Gbl.Hierarchy.Node[Hie_CRS]);
+      RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
 
    /***** Put a link to the RSS file *****/
    HTM_DIV_Begin ("class=\"CM\"");
-      RSS_BuildRSSLink (RSSLink,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      RSS_BuildRSSLink (RSSLink,Gbl.Hie.Node[Hie_CRS].HieCod);
       HTM_A_Begin ("href=\"%s\" target=\"_blank\"",RSSLink);
 	 Ico_PutIcon ("rss-square.svg",Ico_BLACK,"RSS","ICO16x16");
       HTM_A_End ();

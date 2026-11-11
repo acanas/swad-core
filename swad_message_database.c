@@ -960,7 +960,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 		          " AND deg_degrees.DegCod=crs_courses.DegCod"
 		          " AND crs_courses.CrsCod=%s.CrsCod",
 		        Table[MsgStatus],
-		        Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+		        Gbl.Hie.Node[Hie_CTY].HieCod,
 		        Table[MsgStatus]);
       case Hie_INS:
          return (unsigned)
@@ -975,7 +975,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 		          " AND deg_degrees.DegCod=crs_courses.DegCod"
 		          " AND crs_courses.CrsCod=%s.CrsCod",
 		        Table[MsgStatus],
-		        Gbl.Hierarchy.Node[Hie_INS].HieCod,
+		        Gbl.Hie.Node[Hie_INS].HieCod,
 		        Table[MsgStatus]);
       case Hie_CTR:
          return (unsigned)
@@ -988,7 +988,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 		          " AND deg_degrees.DegCod=crs_courses.DegCod"
 		          " AND crs_courses.CrsCod=%s.CrsCod",
 		        Table[MsgStatus],
-		        Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+		        Gbl.Hie.Node[Hie_CTR].HieCod,
 		        Table[MsgStatus]);
       case Hie_DEG:
          return (unsigned)
@@ -999,7 +999,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 		        " WHERE crs_courses.DegCod=%ld"
 		          " AND crs_courses.CrsCod=%s.CrsCod",
 		        Table[MsgStatus],
-		        Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+		        Gbl.Hie.Node[Hie_DEG].HieCod,
 		        Table[MsgStatus]);
       case Hie_CRS:
          return (unsigned)
@@ -1008,7 +1008,7 @@ unsigned Msg_DB_GetNumSntMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 		         " FROM %s"
 		        " WHERE CrsCod=%ld",
 		        Table[MsgStatus],
-		        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		        Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 return 0;
      }
@@ -1055,7 +1055,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			        " AND msg_snt.MsgCod=%s.MsgCod",
 			      Table[MsgStatus],
-			      Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+			      Gbl.Hie.Node[Hie_CTY].HieCod,
 			      Table[MsgStatus]);
             case Hie_INS:
                return (unsigned)
@@ -1072,7 +1072,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			        " AND msg_snt.MsgCod=%s.MsgCod",
 			      Table[MsgStatus],
-			      Gbl.Hierarchy.Node[Hie_INS].HieCod,
+			      Gbl.Hie.Node[Hie_INS].HieCod,
 			      Table[MsgStatus]);
             case Hie_CTR:
                return (unsigned)
@@ -1087,7 +1087,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			        " AND msg_snt.MsgCod=%s.MsgCod",
 			      Table[MsgStatus],
-			      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+			      Gbl.Hie.Node[Hie_CTR].HieCod,
 			      Table[MsgStatus]);
             case Hie_DEG:
                return (unsigned)
@@ -1100,7 +1100,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			        " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			        " AND msg_snt.MsgCod=%s.MsgCod",
 			      Table[MsgStatus],
-			      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+			      Gbl.Hie.Node[Hie_DEG].HieCod,
 			      Table[MsgStatus]);
             case Hie_CRS:
                return (unsigned)
@@ -1111,7 +1111,7 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			      " WHERE msg_snt.CrsCod=%ld"
 			        " AND msg_snt.MsgCod=%s.MsgCod",
 			      Table[MsgStatus],
-			      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+			      Gbl.Hie.Node[Hie_CRS].HieCod,
 			      Table[MsgStatus]);
             case Hie_UNK:
 	    default:
@@ -1165,8 +1165,8 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 			         " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.Hierarchy.Node[Hie_CTY].HieCod,
-			      Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			      Gbl.Hie.Node[Hie_CTY].HieCod,
+			      Gbl.Hie.Node[Hie_CTY].HieCod);
             case Hie_INS:
                return (unsigned)
                DB_QueryCOUNT ("can not get number of received messages",
@@ -1196,8 +1196,8 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 			         " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.Hierarchy.Node[Hie_INS].HieCod,
-			      Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			      Gbl.Hie.Node[Hie_INS].HieCod,
+			      Gbl.Hie.Node[Hie_INS].HieCod);
             case Hie_CTR:
                return (unsigned)
                DB_QueryCOUNT ("can not get number of received messages",
@@ -1223,8 +1223,8 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 			         " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
-			      Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			      Gbl.Hie.Node[Hie_CTR].HieCod,
+			      Gbl.Hie.Node[Hie_CTR].HieCod);
             case Hie_DEG:
                return (unsigned)
                DB_QueryCOUNT ("can not get number of received messages",
@@ -1246,8 +1246,8 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			         " AND crs_courses.CrsCod=msg_snt.CrsCod"
 			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 			         " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
-			      Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			      Gbl.Hie.Node[Hie_DEG].HieCod,
+			      Gbl.Hie.Node[Hie_DEG].HieCod);
             case Hie_CRS:
                return (unsigned)
                DB_QueryCOUNT ("can not get number of received messages",
@@ -1265,8 +1265,8 @@ unsigned Msg_DB_GetNumRcvMsgs (Hie_Level_t HieLvl,Msg_Status_t MsgStatus)
 			       " WHERE msg_snt.CrsCod=%ld"
 			         " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
 			         " AND msg_rcv_deleted.Notified='Y')",
-			      Gbl.Hierarchy.Node[Hie_CRS].HieCod,
-			      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			      Gbl.Hie.Node[Hie_CRS].HieCod,
+			      Gbl.Hie.Node[Hie_CRS].HieCod);
             case Hie_UNK:
 	    default:
 	       return 0;

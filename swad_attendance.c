@@ -702,7 +702,7 @@ static void Att_GetEventDataByCodAndCheckCrs (struct Att_Event *Event)
    switch (Att_GetEventDataByCod (Event))
      {
       case Exi_EXISTS:
-	 if (Event->HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+	 if (Event->HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
 	    Err_WrongEventExit ();
 	 break;
       case Exi_DOES_NOT_EXIST:	// Attendance event not found
@@ -982,7 +982,7 @@ void Att_ReqCreatOrEditEvent (void)
 	 Att_ResetEvent (&Events.Event);
 
 	 /* Initialize some fields */
-	 Events.Event.HieCod = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+	 Events.Event.HieCod = Gbl.Hie.Node[Hie_CRS].HieCod;
 	 Events.Event.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	 Events.Event.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
 	 Events.Event.TimeUTC[Dat_END_TIME] = Events.Event.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours

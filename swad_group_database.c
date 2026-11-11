@@ -88,7 +88,7 @@ long Grp_DB_CreateGroupType (const struct GroupType *GrpTyp)
 				" VALUES"
 				" (%ld,'%s',"
 				  "'%c','%c','%c',FROM_UNIXTIME(%ld))",
-				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				Gbl.Hie.Node[Hie_CRS].HieCod,
 				GrpTyp->Name,
 				OptionalMandatoryYN[GrpTyp->Enrolment.OptionalMandatory],
 				SingleMultipleYN[GrpTyp->Enrolment.SingleMultiple],
@@ -126,7 +126,7 @@ void Grp_DB_GetGrpTypTitle (long GrpTypCod,char *Title,size_t TitleSize)
 		         " WHERE GrpTypCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 		         GrpTypCod,
-		         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		         Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -252,7 +252,7 @@ Exi_Exist_t Grp_DB_CheckIfGrpTypNameExistsInThisCrs (const char *GrpTypName,long
 		    " WHERE CrsCod=%ld"
 		      " AND GrpTypName='%s'"
 		      " AND GrpTypCod<>%ld)",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   GrpTypName,
 		   GrpTypCod);
   }
@@ -321,7 +321,7 @@ unsigned Grp_DB_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
 			         "grp_users"
 			  " WHERE grp_groups.GrpTypCod=%ld"
 			    " AND grp_groups.GrpCod=grp_users.GrpCod)",
-		  Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		  Gbl.Hie.Node[Hie_CRS].HieCod,
 		  (unsigned) Role,
 		  GrpTypCod);
   }
@@ -466,7 +466,7 @@ Usr_Share_t Grp_DB_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (long UsrCod)
 				       " AND grp_types.CrsCod=%ld))",
 			    UsrCod,
 			    Gbl.Usrs.Me.UsrDat.UsrCod,
-			    Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			    Gbl.Hie.Node[Hie_CRS].HieCod);
    return UsrShares[Exists];
   }
 
@@ -546,7 +546,7 @@ unsigned Grp_DB_GetGrpTypesInThisCrsToBeOpened (MYSQL_RES **mysql_res)
 		   " WHERE CrsCod=%ld"
 		     " AND MustBeOpened='Y'"
 		     " AND OpenTime<=NOW()",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -562,7 +562,7 @@ unsigned Grp_DB_CountNumGrpsInThisCrs (void)
 			 "grp_groups"
 		  " WHERE grp_types.CrsCod=%ld"
 		    " AND grp_types.GrpTypCod=grp_groups.GrpTypCod",
-		  Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		  Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -641,7 +641,7 @@ unsigned Grp_DB_GetLstCodGrpsOfAnyTypeInThisCrsUsrBelongs (MYSQL_RES **mysql_res
 		     " AND grp_users.UsrCod=%ld"
 		" ORDER BY grp_types.GrpTypName,"
 			  "grp_groups.GrpName",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   ClosedOpenGroupsTxt[ClosedOpenGroups],
 		   UsrCod);
   }
@@ -666,7 +666,7 @@ unsigned Grp_DB_GetLstCodGrpsOfATypeInThisCrsUsrBelongs (MYSQL_RES **mysql_res,
 		     " AND grp_groups.GrpCod=grp_users.GrpCod"
 		     " AND grp_users.UsrCod=%ld"
 	        " ORDER BY grp_groups.GrpName",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   GrpTypCod,
 		   UsrCod);
   }
@@ -690,7 +690,7 @@ unsigned Grp_DB_GetLstCodGrpsWithFileZonesInThisCrsIBelong (MYSQL_RES **mysql_re
 		     " AND grp_users.UsrCod=%ld"
 		" ORDER BY grp_types.GrpTypName,"
 			  "grp_groups.GrpName",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
@@ -1017,7 +1017,7 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
      {
       if (asprintf (&SubQueryGrpTypes,"grp_types.CrsCod=%ld"
 	                         " AND grp_types.Mandatory='Y'",
-	            Gbl.Hierarchy.Node[Hie_CRS].HieCod) < 0)
+	            Gbl.Hie.Node[Hie_CRS].HieCod) < 0)
 	 Err_NotEnoughMemoryExit ();
      }
 
@@ -1084,7 +1084,7 @@ bool Grp_DB_CheckIfAvailableGrpTyp (long GrpTypCod)
 
 		  SubQueryGrpTypes,(unsigned) Rol_STD,
 		  SubQueryGrpTypes,
-		  Gbl.Hierarchy.Node[Hie_CRS].HieCod,(unsigned) Rol_STD,
+		  Gbl.Hie.Node[Hie_CRS].HieCod,(unsigned) Rol_STD,
 		  SubQueryGrpTypes,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Free allocated memory for subquery *****/

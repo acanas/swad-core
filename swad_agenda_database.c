@@ -372,7 +372,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t HieLvl)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-		        Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+		        Gbl.Hie.Node[Hie_CTY].HieCod);
        case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
@@ -387,7 +387,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t HieLvl)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                        Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
@@ -400,7 +400,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t HieLvl)
 			  " AND deg_degrees.DegCod=crs_courses.DegCod"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                        Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
@@ -411,7 +411,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t HieLvl)
 			" WHERE crs_courses.DegCod=%ld"
 			  " AND crs_courses.CrsCod=crs_users.CrsCod"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                        Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of users with events",
@@ -420,7 +420,7 @@ unsigned Agd_DB_GetNumUsrsWithEvents (Hie_Level_t HieLvl)
 			       "agd_agendas"
 			" WHERE crs_users.CrsCod=%ld"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                        Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -461,7 +461,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Level_t HieLvl)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+                        Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
@@ -478,7 +478,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Level_t HieLvl)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                        Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
@@ -493,7 +493,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Level_t HieLvl)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                        Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
@@ -506,7 +506,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Level_t HieLvl)
 			          " AND crs_courses.CrsCod=crs_users.CrsCod) AS users,"
 			       "agd_agendas"
 			" WHERE users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                        Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return (unsigned)
          DB_QueryCOUNT ("can not get number of events",
@@ -515,7 +515,7 @@ unsigned Agd_DB_GetNumEvents (Hie_Level_t HieLvl)
 			       "agd_agendas"
 			" WHERE crs_users.CrsCod=%ld"
 			  " AND crs_users.UsrCod=agd_agendas.UsrCod",
-                        Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                        Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached

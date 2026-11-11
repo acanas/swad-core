@@ -283,42 +283,42 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	    case Hie_SYS:
                break;
 	    case Hie_CTY:
-               if (Gbl.Hierarchy.Node[Hie_CTY].HieCod > 0)
+               if (Gbl.Hie.Node[Hie_CTY].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.CtyCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			   LogTable,Gbl.Hie.Node[Hie_CTY].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
                break;
 	    case Hie_INS:
-	       if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
+	       if (Gbl.Hie.Node[Hie_INS].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.InsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			   LogTable,Gbl.Hie.Node[Hie_INS].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
 	    case Hie_CTR:
-               if (Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0)
+               if (Gbl.Hie.Node[Hie_CTR].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.CtrCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			   LogTable,Gbl.Hie.Node[Hie_CTR].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
                break;
 	    case Hie_DEG:
-	       if (Gbl.Hierarchy.Node[Hie_DEG].HieCod > 0)
+	       if (Gbl.Hie.Node[Hie_DEG].HieCod > 0)
 		 {
 		  sprintf (SubQuery," AND %s.DegCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			   LogTable,Gbl.Hie.Node[Hie_DEG].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
 	    case Hie_CRS:
-	       if (Gbl.Hierarchy.HieLvl == Hie_CRS)
+	       if (Gbl.Hie.Lvl == Hie_CRS)
 		 {
 		  sprintf (SubQuery," AND %s.CrsCod=%ld",
-			   LogTable,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			   LogTable,Gbl.Hie.Node[Hie_CRS].HieCod);
 		  Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 		 }
 	       break;
@@ -408,7 +408,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (SubQuery," AND %s.CrsCod=%ld",
-                  LogTable,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                  LogTable,Gbl.Hie.Node[Hie_CRS].HieCod);
 	 Str_Concat (Query,SubQuery,Sta_DB_MAX_BYTES_QUERY);
 
 	 if (ListCods->NumUsrs)

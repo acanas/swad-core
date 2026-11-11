@@ -62,14 +62,14 @@ void HieCfg_Title (Hie_PutLink_t PutLink,Hie_Level_t HieLvl)
       if (PutLink == Hie_PUT_LINK)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" title=\"%s\""
 		      " class=\"FRAME_TITLE_BIG FRAME_TITLE_%s\"",
-		      Gbl.Hierarchy.Node[HieLvlLogo].WWW,
-		      Gbl.Hierarchy.Node[HieLvlLogo].FullName,
+		      Gbl.Hie.Node[HieLvlLogo].WWW,
+		      Gbl.Hie.Node[HieLvlLogo].FullName,
 		      The_GetSuffix ());
 
       /* Logo and name */
-      Lgo_DrawLogo (HieLvlLogo,&Gbl.Hierarchy.Node[HieLvlLogo],"ICO64x64");
+      Lgo_DrawLogo (HieLvlLogo,&Gbl.Hie.Node[HieLvlLogo],"ICO64x64");
       HTM_BR ();
-      HTM_Txt (Gbl.Hierarchy.Node[HieLvl].FullName);
+      HTM_Txt (Gbl.Hie.Node[HieLvl].FullName);
 
       /* End link */
       if (PutLink == Hie_PUT_LINK)
@@ -108,8 +108,8 @@ void HieCfg_Name (Frm_PutForm_t PutForm,Hie_Level_t HieLvl,
      };
    const char *Name[Nam_NUM_SHRT_FULL_NAMES] =
      {
-      [Nam_SHRT_NAME] = Gbl.Hierarchy.Node[HieLvl].ShrtName,
-      [Nam_FULL_NAME] = Gbl.Hierarchy.Node[HieLvl].FullName,
+      [Nam_SHRT_NAME] = Gbl.Hie.Node[HieLvl].ShrtName,
+      [Nam_FULL_NAME] = Gbl.Hie.Node[HieLvl].FullName,
      };
 
    /***** Full name *****/
@@ -259,9 +259,9 @@ void HieCfg_NumCtrs (unsigned NumCtrs,Frm_PutForm_t PutForm)
 	 if (PutForm == Frm_PUT_FORM)
 	   {
 	    Frm_BeginFormGoTo (ActSeeCtr);
-	       ParCod_PutPar (ParCod_Ins,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+	       ParCod_PutPar (ParCod_Ins,Gbl.Hie.Node[Hie_INS].HieCod);
 	       if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
-	                     Gbl.Hierarchy.Node[Hie_INS].ShrtName) < 0)
+	                     Gbl.Hie.Node[Hie_INS].ShrtName) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_BUTTON_Submit_Begin (Title,NULL,"class=\"LB BT_LINK\"");
 	       free (Title);

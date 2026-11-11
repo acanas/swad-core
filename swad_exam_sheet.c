@@ -496,7 +496,7 @@ void ExaShe_ReceiveAnswer (void)
    Exa_GetExamDataByCod (&Exams.Exam);
    if (Exams.Exam.ExaCod <= 0)
       Err_WrongExamExit ();
-   if (Exams.Exam.HieCod != Gbl.Hierarchy.Node[Hie_CRS].HieCod)
+   if (Exams.Exam.HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
       Err_WrongExamExit ();
 
    /***** Get question index from form *****/

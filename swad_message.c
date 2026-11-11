@@ -907,10 +907,10 @@ static void Msg_CreateRcvMsgForEachRecipient (struct Msg_Messages *Messages)
 			/* Create notification for this recipient.
 			   If this recipient wants to receive notifications by -mail,
 			   activate the sending of a notification */
-			HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
-			HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-			HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-			HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+			HieCods[Hie_INS] = Gbl.Hie.Node[Hie_INS].HieCod;
+			HieCods[Hie_CTR] = Gbl.Hie.Node[Hie_CTR].HieCod;
+			HieCods[Hie_DEG] = Gbl.Hie.Node[Hie_DEG].HieCod;
+			HieCods[Hie_CRS] = Gbl.Hie.Node[Hie_CRS].HieCod;
 			Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_MESSAGE,
 						      UsrDstData.UsrCod,NewMsgCod,
 						      Ntf_Status[NotifyByEmail],
@@ -1304,7 +1304,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    MsgCod = Msg_DB_CreateNewMsg (Subject,Content,Media->MedCod);
 
    /***** Insert message in sent messages *****/
-   Msg_DB_CreateSntMsg (MsgCod,Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+   Msg_DB_CreateSntMsg (MsgCod,Gbl.Hie.Node[Hie_CRS].HieCod);
 
    /***** Increment number of messages sent by me *****/
    Prf_DB_IncrementNumMsgSntUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2330,7 +2330,7 @@ static void Msg_WriteCrsOrgMsg (long HieCod)
       if (Hie_GetDataByCod[Hie_CRS] (&Crs) == Err_SUCCESS)
         {
          OrgCrsExists = Exi_EXISTS;
-         if (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)	// Message sent from current course
+         if (HieCod == Gbl.Hie.Node[Hie_CRS].HieCod)	// Message sent from current course
            {
             HTM_DIV_Begin ("class=\"MSG_AUT_%s\"",The_GetSuffix ());
 	       HTM_ParTxtPar (Txt_from_this_course);
@@ -2370,7 +2370,7 @@ static void Msg_WriteFormToReply (long MsgCod,long HieCod,
 				  const struct Usr_Data *UsrDat)
   {
    /***** Begin form and parameters *****/
-   if (HieCod == Gbl.Hierarchy.Node[Hie_CRS].HieCod)	// Message sent from current course
+   if (HieCod == Gbl.Hie.Node[Hie_CRS].HieCod)	// Message sent from current course
       Frm_BeginForm (ActReqMsgUsr);
    else	// Not the current course ==> go to another course
      {

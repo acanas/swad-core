@@ -307,9 +307,9 @@ static void Usr_FormToSelectUsrListType (void (*FuncPars) (const void *Args),con
 					 const char *OnSubmit,
 					 Set_ShowUsrsType_t ListType,
 					 Pho_ShowPhotos_t ShowPhotos);
-static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
+static void Usr_ListUsersByRoleToSelect (const struct Usr_SelectedUsrs *SelectedUsrs,
 					 Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos);
-static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
+static void Usr_ListUsrsForSelection (const struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos);
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 
@@ -348,7 +348,7 @@ static void Usr_ShowGstsAllDataPars (const void *ShowPhotos);
 static void Usr_ShowStdsAllDataPars (const void *ShowPhotos);
 static void Usr_ShowTchsAllDataPars (const void *ListingPars);
 
-static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
+static void Usr_DrawClassPhoto (const struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
@@ -624,7 +624,7 @@ void Usr_GetUsrDataFromUsrCod (struct Usr_Data *UsrDat,
 	       break;
 	    case Usr_GET_ROLE_IN_CRS:
 	       UsrDat->Roles.InThisCrs = Rol_GetRoleUsrInCrs (UsrDat->UsrCod,
-								 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+							      Gbl.Hie.Node[Hie_CRS].HieCod);
 	       UsrDat->Roles.InCrss = -1;	// Force roles to be got from database
 	       break;
 	   }
@@ -974,7 +974,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 	 /* If I am an administrator of current degree,
 	    I only can edit users from current degree who have accepted */
 	 if (Hie_CheckIfUsrBelongsTo (Hie_DEG,UsrDat->UsrCod,
-				      Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+				      Gbl.Hie.Node[Hie_DEG].HieCod,
 				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Degree admins can't edit superusers' data
 	    if (Usr_CheckIfUsrExistsAsSuperuser (UsrDat->UsrCod) == Exi_DOES_NOT_EXIST)
@@ -984,7 +984,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 	 /* If I am an administrator of current center,
 	    I only can edit from current center who have accepted */
 	 if (Hie_CheckIfUsrBelongsTo (Hie_CTR,UsrDat->UsrCod,
-				      Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+				      Gbl.Hie.Node[Hie_CTR].HieCod,
 				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Center admins can't edit superusers' data
 	    if (Usr_CheckIfUsrExistsAsSuperuser (UsrDat->UsrCod) == Exi_DOES_NOT_EXIST)
@@ -994,7 +994,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat)
 	 /* If I am an administrator of current institution,
 	    I only can edit from current institution who have accepted */
 	 if (Hie_CheckIfUsrBelongsTo (Hie_INS,UsrDat->UsrCod,
-				      Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				      Gbl.Hie.Node[Hie_INS].HieCod,
 				      Hie_DB_ONLY_ACCEPTED_COURSES) == Usr_BELONG)	// count only accepted courses
 	    // Institution admins can't edit superusers' data
 	    if (Usr_CheckIfUsrExistsAsSuperuser (UsrDat->UsrCod) == Exi_DOES_NOT_EXIST)
@@ -1028,7 +1028,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a student? *****/
@@ -1082,7 +1082,7 @@ Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
@@ -1112,7 +1112,7 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -1164,7 +1164,7 @@ Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Does he/she belong to the current course? *****/
@@ -1217,7 +1217,7 @@ Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Am I a system admin? *****/
@@ -2121,14 +2121,14 @@ static void Usr_SetMyPrefsAndRoles (void)
 
       /***** Location in hierarchy and role are stored in session,
              but in login the are got from user's last data *****/
-      if (Gbl.Hierarchy.HieLvl == Hie_SYS)	// No country selected
+      if (Gbl.Hie.Lvl == Hie_SYS)	// No country selected
         {
 	 /***** Copy last hierarchy to current hierarchy *****/
 	 Hie_SetHierarchyFromUsrLastHierarchy ();
 
 	 /* Course may have changed ==> get my role in current course again */
-	 if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
-	    Gbl.Usrs.Me.UsrDat.Roles.InThisCrs = Rol_GetMyRoleInCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	 if (Gbl.Hie.Lvl == Hie_CRS)	// Course selected
+	    Gbl.Usrs.Me.UsrDat.Roles.InThisCrs = Rol_GetMyRoleInCrs (Gbl.Hie.Node[Hie_CRS].HieCod);
 
 	 // role and action will be got from last data
          GetRoleAndActionFromLastData = true;
@@ -2137,8 +2137,8 @@ static void Usr_SetMyPrefsAndRoles (void)
 	 // Role and action will be got from last data
 	 // only if I am in the same hierarchy location that the stored one
 	 GetRoleAndActionFromLastData =
-	    (Gbl.Hierarchy.HieLvl == Gbl.Usrs.Me.UsrLast.LastHie.HieLvl &&	// The same scope...
-	     Gbl.Hierarchy.Node[Gbl.Hierarchy.HieLvl].HieCod ==
+	    (Gbl.Hie.Lvl == Gbl.Usrs.Me.UsrLast.LastHie.HieLvl &&	// The same scope...
+	     Gbl.Hie.Node[Gbl.Hie.Lvl].HieCod ==
 	     Gbl.Usrs.Me.UsrLast.LastHie.HieCod);				// ...and code in hierarchy
 
       /***** Get role and action from last data *****/
@@ -2318,7 +2318,7 @@ void Usr_UpdateMyLastData (void)
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
                               Rol_Role_t Role,
-			      struct Usr_SelectedUsrs *SelectedUsrs,
+			      const struct Usr_SelectedUsrs *SelectedUsrs,
 			      Pho_ShowPhotos_t ShowPhotos)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
@@ -3524,7 +3524,7 @@ Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Ver
 // Returns Err_EXISTS if EncryptedUsrCodToFind is in list
 
 Exi_Exist_t Usr_FindEncUsrCodInList (const char *EncryptedUsrCodToFind,
-				     struct Usr_SelectedUsrs *SelectedUsrs)
+				     const struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
@@ -3546,7 +3546,7 @@ Exi_Exist_t Usr_FindEncUsrCodInList (const char *EncryptedUsrCodToFind,
 /******* Check if there are valid users in list of encrypted user codes ******/
 /*****************************************************************************/
 
-Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
+Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (const struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    struct Usr_Data UsrDat;
@@ -3569,7 +3569,7 @@ Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_
 /******** Count number of valid users in list of encrypted user codes ********/
 /*****************************************************************************/
 
-unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs)
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (const struct Usr_SelectedUsrs *SelectedUsrs)
   {
    const char *Ptr;
    unsigned NumUsrs;
@@ -3984,6 +3984,8 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 			    Pho_ShowPhotos_t ShowPhotos)
   {
+   Rol_Role_t Role;
+
    switch (Gbl.Usrs.Me.ListType)
      {
       case Set_USR_LIST_AS_CLASS_PHOTO:
@@ -3996,9 +3998,8 @@ void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 	 break;
      }
 
-   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_TCH,ShowPhotos);
-   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_NET,ShowPhotos);
-   Usr_ListUsersByRoleToSelect (SelectedUsrs,Rol_STD,ShowPhotos);
+   for (Role = Rol_TCH; Role >= Rol_STD; Role--)
+      Usr_ListUsersByRoleToSelect (SelectedUsrs,Role,ShowPhotos);
 
    switch (Gbl.Usrs.Me.ListType)
      {
@@ -4017,7 +4018,7 @@ void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 /*********** List users with a given role to select some of them *************/
 /*****************************************************************************/
 
-static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
+static void Usr_ListUsersByRoleToSelect (const struct Usr_SelectedUsrs *SelectedUsrs,
 					 Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos)
   {
    /***** If there are no users, don't list anything *****/
@@ -4043,7 +4044,7 @@ static void Usr_ListUsersByRoleToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 /*************** List users (of current course) for selection ****************/
 /*****************************************************************************/
 
-static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
+static void Usr_ListUsrsForSelection (const struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role,Pho_ShowPhotos_t ShowPhotos)
   {
    unsigned NumUsr;
@@ -4089,7 +4090,7 @@ static void Usr_ListUsrsForSelection (struct Usr_SelectedUsrs *SelectedUsrs,
 /******** Put a row, in a classphoto or a list, to select all users **********/
 /*****************************************************************************/
 
-void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
+void Usr_PutCheckboxToSelectAllUsers (const struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role)
   {
    char *ParName;
@@ -4182,7 +4183,7 @@ unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos)
 
 void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 				  const struct Usr_Data *UsrDat,
-				  struct Usr_SelectedUsrs *SelectedUsrs)
+				  const struct Usr_SelectedUsrs *SelectedUsrs)
   {
    static HTM_Attributes_t AttributesIfExists[Exi_NUM_EXIST] =
      {
@@ -4803,7 +4804,7 @@ void Usr_ListAllDataTchs (void)
       NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
-      NumUsrs = Enr_GetNumUsrsInCrss (HieLvl,Gbl.Hierarchy.Node[HieLvl].HieCod,
+      NumUsrs = Enr_GetNumUsrsInCrss (HieLvl,Gbl.Hie.Node[HieLvl].HieCod,
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -5323,7 +5324,7 @@ void Usr_ListStudents (void)
 	 /***** Contextual menu *****/
          Mnu_ContextMenuBegin ();
 	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfStd);	// Admin one user in listing of students
-	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)	// Course selected
+	    if (Gbl.Hie.Lvl == Hie_CRS)	// Course selected
 	      {
 	       Enr_PutLinkToAdminSeveralUsrs (Rol_STD);	// Admin several students
 	       Rec_PutLinkToEditRecordFields ();	// Edit record fields
@@ -5491,7 +5492,7 @@ void Usr_ListTeachers (void)
 	 /***** Contextual menu *****/
 	 Mnu_ContextMenuBegin ();
 	    Enr_PutLinkToAdminOneUsr (ActReqID_MdfTch);		// Admin one teacher
-	    if (Gbl.Hierarchy.HieLvl == Hie_CRS)		// Course selected
+	    if (Gbl.Hie.Lvl == Hie_CRS)		// Course selected
 	      {
 	       if (Gbl.Usrs.Me.Role.Logged >= Rol_TCH)		// I am logged as teacher
 	          Enr_PutLinkToAdminSeveralUsrs (Rol_NET);	// Admin several non-editing teachers
@@ -5530,7 +5531,7 @@ void Usr_ListTeachers (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (ListingPars.HieLvl,
-				      Gbl.Hierarchy.Node[ListingPars.HieLvl].HieCod,
+				      Gbl.Hie.Node[ListingPars.HieLvl].HieCod,
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -6289,7 +6290,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
    else
       NumUsrs = Enr_GetNumUsrsInCrss (ListingPars.HieLvl,
-				      Gbl.Hierarchy.Node[ListingPars.HieLvl].HieCod,
+				      Gbl.Hie.Node[ListingPars.HieLvl].HieCod,
 				      1 << Rol_NET |
 				      1 << Rol_TCH);
 
@@ -6322,7 +6323,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 /****************** Draw class photo with students or teachers ***************/
 /*****************************************************************************/
 
-static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
+static void Usr_DrawClassPhoto (const struct Usr_SelectedUsrs *SelectedUsrs,
                                 Rol_Role_t Role,
 				Usr_ClassPhotoType_t ClassPhotoType,
 				Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
@@ -6330,18 +6331,18 @@ static void Usr_DrawClassPhoto (struct Usr_SelectedUsrs *SelectedUsrs,
   {
    static const char *ClassPhoto[Usr_NUM_CLASS_PHOTO_TYPE][PhoSha_NUM_SHAPES] =
      {
-      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
-      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
-      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
-      [Usr_CLASS_PHOTO_SEL_SMALL    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
-      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_SEL_BIG][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
-      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
-      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
-      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
-      [Usr_CLASS_PHOTO_PRN    ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_SEL_SMALL][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [Usr_CLASS_PHOTO_SEL_SMALL][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [Usr_CLASS_PHOTO_SEL_SMALL][PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [Usr_CLASS_PHOTO_SEL_SMALL][PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
+      [Usr_CLASS_PHOTO_SEL_BIG  ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_SEL_BIG  ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_SEL_BIG  ][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_SEL_BIG  ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
+      [Usr_CLASS_PHOTO_PRN      ][PhoSha_SHAPE_CIRCLE   ] = "PHOTOC45x60",
+      [Usr_CLASS_PHOTO_PRN      ][PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE45x60",
+      [Usr_CLASS_PHOTO_PRN      ][PhoSha_SHAPE_OVAL     ] = "PHOTOO45x60",
+      [Usr_CLASS_PHOTO_PRN      ][PhoSha_SHAPE_RECTANGLE] = "PHOTOR45x60",
      };
    unsigned NumUsr;
    struct Usr_Data UsrDat;
@@ -6460,7 +6461,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 
    else if (Gbl.Crs.Grps.AllGrpsSel &&			// All groups selected
             Role == Rol_TCH &&				// No teachers found
-            Gbl.Hierarchy.HieLvl == Hie_CRS &&		// Course selected
+            Gbl.Hie.Lvl == Hie_CRS &&		// Course selected
             Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol teachers *****/
       Ale_ShowAlertAndButton (ActReqID_MdfTch,NULL,NULL,
@@ -6491,7 +6492,7 @@ unsigned Usr_GetTotalNumberOfUsers (Hie_Level_t HieLvl)
       case Hie_CTR:
       case Hie_DEG:
       case Hie_CRS:
-         Cod = Gbl.Hierarchy.Node[HieLvl].HieCod;
+         Cod = Gbl.Hie.Node[HieLvl].HieCod;
          Roles = (1 << Rol_STD) |
 	         (1 << Rol_NET) |
 	         (1 << Rol_TCH);

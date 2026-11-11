@@ -131,7 +131,7 @@ void Dpt_SeeAllDepts (void)
    unsigned NumDpt;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)	// No institution selected
+   if (Gbl.Hie.Node[Hie_INS].HieCod <= 0)	// No institution selected
       return;
 
    /***** Reset departments context *****/
@@ -141,11 +141,11 @@ void Dpt_SeeAllDepts (void)
    Departments.SelectedOrder = Dpt_GetParDptOrder ();
 
    /***** Get list of departments *****/
-   Dpt_GetListDptsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Dpt_GetListDptsInIns (&Departments,Gbl.Hie.Node[Hie_INS].HieCod);
 
    /***** Begin box and table *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
-		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
+		 Gbl.Hie.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxTableBegin (Title,Dpt_PutIconToEditDpts,NULL,
 		      Hlp_INSTITUTION_Departments,Box_NOT_CLOSABLE,2);
@@ -276,21 +276,21 @@ static void Dpt_EditDptsInternal (void)
    char *Title;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)	// An institution must be selected
+   if (Gbl.Hie.Node[Hie_INS].HieCod <= 0)	// An institution must be selected
       return;
 
    /***** Reset departments context *****/
    Dpt_ResetDpts (&Departments);
 
    /***** Get list of institutions *****/
-   Ins_GetBasicListOfInss (Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+   Ins_GetBasicListOfInss (Gbl.Hie.Node[Hie_CTY].HieCod);
 
    /***** Get list of departments *****/
-   Dpt_GetListDptsInIns (&Departments,Gbl.Hierarchy.Node[Hie_INS].HieCod);
+   Dpt_GetListDptsInIns (&Departments,Gbl.Hie.Node[Hie_INS].HieCod);
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Departments_of_INSTITUTION_X,
-		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
+		 Gbl.Hie.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (Title,Dpt_PutIconToViewDpts,NULL,
                  Hlp_INSTITUTION_Departments_edit,Box_NOT_CLOSABLE);
@@ -489,10 +489,10 @@ static void Dpt_ListDptsForEdition (const struct Dpt_Departments *Dpts)
 						    HTM_NO_ATTR,
 				 "%s",Txt_Another_institution);
 		     for (NumIns = 0;
-			  NumIns < Gbl.Hierarchy.List[Hie_INS].Num;
+			  NumIns < Gbl.Hie.List[Hie_INS].Num;
 			  NumIns++)
 		       {
-			Ins = &Gbl.Hierarchy.List[Hie_INS].Lst[NumIns];
+			Ins = &Gbl.Hie.List[Hie_INS].Lst[NumIns];
 			HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 				    Ins->HieCod == Dpt->HieCod ? HTM_SELECTED :
 								 HTM_NO_ATTR,
@@ -765,10 +765,10 @@ static void Dpt_PutFormToCreateDpt (void)
 							 HTM_NO_ATTR,
 			   "%s",Txt_Another_institution);
 	       for (NumIns = 0;
-		    NumIns < Gbl.Hierarchy.List[Hie_CTY].Num;
+		    NumIns < Gbl.Hie.List[Hie_CTY].Num;
 		    NumIns++)
 		 {
-		  Ins = &Gbl.Hierarchy.List[Hie_CTY].Lst[NumIns];
+		  Ins = &Gbl.Hie.List[Hie_CTY].Lst[NumIns];
 		  HTM_OPTION (HTM_Type_LONG,&Ins->HieCod,
 			      Ins->HieCod == Dpt_EditingDpt->HieCod ? HTM_SELECTED :
 								      HTM_NO_ATTR,

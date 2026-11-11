@@ -1126,10 +1126,10 @@ static void Fol_FollowUsr (const struct Usr_Data *UsrDat)
      {
       NotifyByEmail = (UsrDat->NtfEvents.SendEmail & (1 << Ntf_EVENT_FOLLOWER)) ? Ntf_NOTIFY_BY_EMAIL :
 										  Ntf_DONT_NOTIFY_BY_EMAIL;
-      HieCods[Hie_INS] = Gbl.Hierarchy.Node[Hie_INS].HieCod;
-      HieCods[Hie_CTR] = Gbl.Hierarchy.Node[Hie_CTR].HieCod;
-      HieCods[Hie_DEG] = Gbl.Hierarchy.Node[Hie_DEG].HieCod;
-      HieCods[Hie_CRS] = Gbl.Hierarchy.Node[Hie_CRS].HieCod;
+      HieCods[Hie_INS] = Gbl.Hie.Node[Hie_INS].HieCod;
+      HieCods[Hie_CTR] = Gbl.Hie.Node[Hie_CTR].HieCod;
+      HieCods[Hie_DEG] = Gbl.Hie.Node[Hie_DEG].HieCod;
+      HieCods[Hie_CRS] = Gbl.Hie.Node[Hie_CRS].HieCod;
       Ntf_DB_StoreNotifyEventToUsr (Ntf_EVENT_FOLLOWER,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
 				    Ntf_Status[NotifyByEmail],HieCods);
      }

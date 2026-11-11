@@ -137,7 +137,7 @@ void Con_RefreshConnected (void)
   {
    unsigned NumUsr;
    Lay_Show_t ShowConnected = (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) != 0 &&	// Right column visible
-                              Gbl.Hierarchy.HieLvl == Hie_CRS ? Lay_SHOW :		// There is a course selected
+                              Gbl.Hie.Lvl == Hie_CRS ? Lay_SHOW :		// There is a course selected
                         					Lay_DONT_SHOW;
 
    /***** Refresh time *****/
@@ -320,7 +320,7 @@ static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
 void Con_ComputeConnectedUsrsBelongingToThisCrs (void)
   {
    if ((Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN) &&		// Right column visible
-       Gbl.Hierarchy.HieLvl == Hie_CRS &&			// Course selected
+       Gbl.Hie.Lvl == Hie_CRS &&			// Course selected
        (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_BELONG ||	// I can view users
         Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM))
      {
@@ -396,7 +396,7 @@ void Con_ShowConnectedUsrsBelongingToThisCrs (void)
    unsigned NumUsr = 0;
 
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_CRS].HieCod <= 0)	// No course selected
+   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)	// No course selected
       return;
 
    /***** Number of connected users who belong to course *****/
@@ -404,7 +404,7 @@ void Con_ShowConnectedUsrsBelongingToThisCrs (void)
    Frm_BeginForm (ActLstCon);
       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),NULL,
 			       "class=\"BT_LINK\"");
-	 Str_Copy (CourseName,Gbl.Hierarchy.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
+	 Str_Copy (CourseName,Gbl.Hie.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARole (Hie_CRS,Rol_UNK,&Usrs);
 	 HTM_Unsigned (Usrs.NumUsrs); HTM_SP ();
 	 HTM_Txt (Txt_from); HTM_SP (); HTM_Txt (CourseName);
@@ -590,7 +590,7 @@ static void Con_ComputeConnectedUsrsWithARoleInThisCrsOneByOne (Rol_Role_t Role,
 
       /* Get course code (row[1]) */
       Con_Connected.Lst[NumUsr].ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) ==
-	                                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	                                   Gbl.Hie.Node[Hie_CRS].HieCod);
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&Con_Connected.Lst[NumUsr].TimeDiff) != 1)
@@ -744,7 +744,7 @@ static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t Hie
    time_t TimeDiff;
    const char *ClassTxt;
    struct Usr_Data UsrDat;
-   Frm_PutForm_t PutFormRecord = Gbl.Hierarchy.HieLvl == Hie_CRS &&	// Course selected
+   Frm_PutForm_t PutFormRecord = Gbl.Hie.Lvl == Hie_CRS &&	// Course selected
 	                         HieLvl == Hie_CRS &&			// Scope is current course
 	                         (Role == Rol_STD ||			// Role is student,...
 	                          Role == Rol_NET ||			// ...non-editing teacher...
@@ -771,7 +771,7 @@ static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t Hie
                                                       Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
            {
 	    /* Get course code (row[1]) */
-	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.Hie.Node[Hie_CRS].HieCod);
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)

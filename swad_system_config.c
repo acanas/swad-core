@@ -124,7 +124,7 @@ static void SysCfg_Configuration (Vie_ViewType_t ViewType)
 		  /***** Get number of centers *****/
 		  NumCtrs = Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 							   Hie_SYS,	// ...in system
-							   Gbl.Hierarchy.Node[Hie_SYS].HieCod);
+							   Gbl.Hie.Node[Hie_SYS].HieCod);
 
 		  /***** Number of countries,
 			 number of institutions,
@@ -299,7 +299,7 @@ static void SysCfg_NumCtys (void)
 				     "class=\"LB BT_LINK\"");
 	       HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTY,	// Number of countries...
 						            Hie_SYS,	// ...in system
-						            Gbl.Hierarchy.Node[Hie_SYS].HieCod));
+						            Gbl.Hie.Node[Hie_SYS].HieCod));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
       HTM_TD_End ();
@@ -325,7 +325,7 @@ static void SysCfg_NumInss (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_INS,	// Number of institutions...
 						      Hie_SYS,	// ...in system
-						      Gbl.Hierarchy.Node[Hie_SYS].HieCod));
+						      Gbl.Hie.Node[Hie_SYS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -349,7 +349,7 @@ static void SysCfg_NumDegs (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_SYS,	// ...in system
-						      Gbl.Hierarchy.Node[Hie_SYS].HieCod));
+						      Gbl.Hie.Node[Hie_SYS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -373,7 +373,7 @@ static void SysCfg_NumCrss (void)
       HTM_TD_Begin ("class=\"Frm_C2 LB DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_SYS,	// ...in system
-						      Gbl.Hierarchy.Node[Hie_SYS].HieCod));
+						      Gbl.Hie.Node[Hie_SYS].HieCod));
       HTM_TD_End ();
 
    HTM_TR_End ();

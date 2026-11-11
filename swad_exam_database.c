@@ -83,7 +83,7 @@ long Exa_DB_CreateExam (const struct Exa_Exam *Exam,const char *Txt)
 				" VALUES"
 				" (%ld,'N',%ld,%.15lg,%u,"
 				  "'%s','%s')",
-				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				Gbl.Hie.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Exam->MaxGrade,
 				Exam->Visibility,
@@ -109,7 +109,7 @@ void Exa_DB_UpdateExam (const struct Exa_Exam *Exam,const char *Txt)
 		          "Title='%s',"
 		          "Txt='%s'"
 		   " WHERE ExaCod=%ld",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   Exam->MaxGrade,
 		   Exam->Visibility,
 	           Exam->Title,
@@ -188,7 +188,7 @@ unsigned Exa_DB_GetListExams (MYSQL_RES **mysql_res,Exa_Order_t SelectedOrder)
 		       "%s"
 		" GROUP BY exa_exams.ExaCod"
 		" ORDER BY %s",
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+		   Gbl.Hie.Node[Hie_CRS].HieCod,
 		   HiddenSubQuery,
 		   OrderBySubQuery[SelectedOrder]);
 
@@ -245,7 +245,7 @@ void Exa_DB_GetExamTitle (long ExaCod,char *Title,size_t TitleSize)
 		         " WHERE ExaCod=%ld"
 		           " AND CrsCod=%ld",	// Extra check
 			 ExaCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -308,7 +308,7 @@ unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			       Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
@@ -320,7 +320,7 @@ unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			       Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
@@ -330,7 +330,7 @@ unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl)
 			       " WHERE deg_degrees.CtrCod=%ld"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			       Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT exa_exams.CrsCod)"
@@ -338,13 +338,13 @@ unsigned Exa_DB_GetNumCoursesWithExams (Hie_Level_t HieLvl)
 				      "exa_exams"
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			       Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return DB_QueryCOUNT ("can not get number of courses with exams",
 			       "SELECT COUNT(DISTINCT CrsCod)"
 				" FROM exa_exams"
 			       " WHERE CrsCod=%ld",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			       Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -378,7 +378,7 @@ unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+			       Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
@@ -390,7 +390,7 @@ unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl)
 				 " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_INS].HieCod);
+			       Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
@@ -400,7 +400,7 @@ unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl)
 			       " WHERE deg_degrees.CtrCod=%ld"
 				 " AND deg_degrees.DegCod=crs_courses.DegCod"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+			       Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
@@ -408,13 +408,13 @@ unsigned Exa_DB_GetNumExams (Hie_Level_t HieLvl)
 				      "exa_exams"
 			       " WHERE crs_courses.DegCod=%ld"
 				 " AND crs_courses.CrsCod=exa_exams.CrsCod",
-			       Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+			       Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return DB_QueryCOUNT ("can not get number of exams",
 			       "SELECT COUNT(*)"
 				" FROM exa_exams"
 			       " WHERE CrsCod=%ld",
-			       Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			       Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -455,7 +455,7 @@ double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl)
 						 " AND crs_courses.CrsCod=exa_exams.CrsCod"
 						 " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					    " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+				      Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
@@ -471,7 +471,7 @@ double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl)
 					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Node[Hie_INS].HieCod);
+				      Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
@@ -485,7 +485,7 @@ double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl)
 					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+				      Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
@@ -497,7 +497,7 @@ double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl)
 					        " AND crs_courses.CrsCod=exa_exams.CrsCod"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+				      Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
          return DB_QuerySELECTDouble ("can not get number of questions per exam",
 				      "SELECT AVG(NumQsts)"
@@ -507,7 +507,7 @@ double Exa_DB_GetNumQstsPerCrsExam (Hie_Level_t HieLvl)
 					      " WHERE exa_exams.Cod=%ld"
 					        " AND exa_exams.ExaCod=exa_set_questions.ExaCod"
 					   " GROUP BY exa_set_questions.ExaCod) AS NumQstsTable",
-				      Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+				      Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0.0;	// Not reached
@@ -716,7 +716,7 @@ Exi_Exist_t Exa_DB_CheckIfSimilarSetExists (const struct ExaSet_Set *Set,
 		      " AND exa_exams.CrsCod=%ld)",	// Extra check
 		   Set->ExaCod,Title,
 		   Set->SetCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1350,7 +1350,7 @@ void Exa_DB_UpdateSession (const struct ExaSes_Session *Session)
 		   Pho_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos?
 		   Session->SesCod,
 		   Session->ExaCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1499,7 +1499,7 @@ Exi_Exist_t Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod)
 				  " FROM exa_exams"
 				 " WHERE CrsCod=%ld)",
 			 SesCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1517,7 +1517,7 @@ void Exa_DB_GetSessionTitle (long SesCod,char Title[ExaSes_MAX_BYTES_TITLE + 1])
 				  " FROM exa_exams"
 				 " WHERE CrsCod=%ld)",
 			 SesCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1540,7 +1540,7 @@ void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session)
 		   Lay_Show_YN[Session->Show_UsrResults],
 		   Session->SesCod,
 		   Session->ExaCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1563,7 +1563,7 @@ void Exa_DB_HideUnhideSession (const struct ExaSes_Session *Session,
 		   HidVis_Hidden_YN[HiddenOrVisible],
 		   Session->SesCod,
 		   Session->ExaCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1583,7 +1583,7 @@ void Exa_DB_UpdateNumCols (const struct ExaSes_Session *Session)
 		   Session->NumCols,
 		   Session->SesCod,
 		   Session->ExaCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -1605,7 +1605,7 @@ void Exa_DB_UpdateShowPhotos (const struct ExaSes_Session *Session)
 		   Pho_DB_ShowPhotos[Session->ShowPhotos],	// Show users' photos
 		   Session->SesCod,
 		   Session->ExaCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -2345,7 +2345,7 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeExam (MYSQL_RES **mysql_res,long ExaCod)
 			  "usr_data.Surname2,"
 			  "usr_data.FirstName",
 		   ExaCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -2371,7 +2371,7 @@ unsigned Exa_DB_GetAllUsrsWhoHaveMadeSession (MYSQL_RES **mysql_res,long SesCod)
 			  "usr_data.Surname2,"
 			  "usr_data.FirstName",
 		   SesCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -2391,7 +2391,7 @@ unsigned Exa_DB_GetNumPrintsInSes (long SesCod)
 		    " AND exa_sessions.ExaCod=exa_exams.ExaCod"
 		    " AND exa_exams.CrsCod=%ld",	// Extra check
 		   SesCod,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -2506,7 +2506,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 		   HidSesSubQuery,
 		   ExaSubQuery,
 		   HidExaSubQuery,
-		   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+		   Gbl.Hie.Node[Hie_CRS].HieCod);
    free (HidExaSubQuery);
    free (ExaSubQuery);
    free (HidSesSubQuery);

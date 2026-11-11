@@ -2381,7 +2381,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Qst)
    Qst->Media.Width   = Qst_IMAGE_SAVED_MAX_WIDTH;
    Qst->Media.Height  = Qst_IMAGE_SAVED_MAX_HEIGHT;
    Qst->Media.Quality = Qst_IMAGE_SAVED_QUALITY;
-   Med_GetMediaFromForm (Gbl.Hierarchy.Node[Hie_CRS].HieCod,Qst->QstCod,
+   Med_GetMediaFromForm (Gbl.Hie.Node[Hie_CRS].HieCod,Qst->QstCod,
                          -1,	// < 0 ==> the image associated to the stem
                          &Qst->Media,
                          Qst_GetMediaFromDB,
@@ -2509,7 +2509,7 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst)
    long CurrentMedCodInDB;
 
    /***** Media associated to question stem *****/
-   CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+   CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,
 					    Qst->QstCod,
                                             -1);	// Get current media code associated to stem
    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,&Qst->Media);
@@ -2523,7 +2523,7 @@ void Qst_MoveMediaToDefinitiveDirectories (struct Qst_Question *Qst)
 	      NumOpt < Qst->Answer.NumOpts;
 	      NumOpt++)
 	   {
-	    CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+	    CurrentMedCodInDB = Qst_GetMedCodFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,
 						     Qst->QstCod,
 						     (int) NumOpt);	// Get current media code associated to this option
 	    Med_RemoveKeepOrStoreMedia (CurrentMedCodInDB,
@@ -2603,7 +2603,7 @@ void Qst_RemoveSelectedQsts (void)
 	       Err_WrongQuestionExit ();
 
 	    /* Remove test question from database */
-	    Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,QstCod);
+	    Qst_RemoveOneQstFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,QstCod);
 	   }
 
 	 /***** Free structure that stores the query result *****/
@@ -2705,7 +2705,7 @@ void Qst_RemoveOneQst (void)
    EditingOnlyThisQst = Par_GetParBool ("OnlyThisQst");
 
    /***** Remove test question from database *****/
-   Qst_RemoveOneQstFromDB (Gbl.Hierarchy.Node[Hie_CRS].HieCod,QstCod);
+   Qst_RemoveOneQstFromDB (Gbl.Hie.Node[Hie_CRS].HieCod,QstCod);
 
    /***** Write message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Question_removed);
@@ -2807,7 +2807,7 @@ void Qst_InsertOrUpdateQstTagsAnsIntoDB (struct Qst_Question *Qst)
       Tag_InsertTagsIntoDB (Qst->QstCod,&Qst->Tags);
 
       /***** Remove unused tags in current course *****/
-      Tag_DB_RemoveUnusedTagsFromCrs (Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+      Tag_DB_RemoveUnusedTagsFromCrs (Gbl.Hie.Node[Hie_CRS].HieCod);
 
       /***** Insert answers in the answers table *****/
       Qst_InsertAnswersIntoDB (Qst);

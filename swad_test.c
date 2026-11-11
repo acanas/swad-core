@@ -137,7 +137,7 @@ static void Tst_ShowFormRequestTest (struct Qst_Questions *Qsts)
       /***** Get tags *****/
       if ((Qsts->Tags.Num = Tag_DB_GetEnabledTagsFromCrs (&mysql_res,
                                                                Qsts->Tags.PreselectedTagCod,
-                                                               Gbl.Hierarchy.Node[Hie_CRS].HieCod)))
+                                                               Gbl.Hie.Node[Hie_CRS].HieCod)))
 	{
 	 /***** Check if minimum date-time of next access to test is older than now *****/
 	 if (Tst_CheckIfNextTstAllowed () == Err_SUCCESS)

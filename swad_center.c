@@ -148,7 +148,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	    /* Get center code (row[0]) */
 	    Ctr.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = Ctr.HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
+	    BgColor = Ctr.HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
 									 The_GetColorRows ();
 
 	    /* Get data of center */
@@ -217,11 +217,11 @@ void Ctr_DrawCtrLogoAndNameWithLink (struct Hie_Node *Ctr,Act_Action_t Action,
 void Ctr_ShowCtrsOfThisIns (void)
   {
    /***** Trivial check *****/
-   if (Gbl.Hierarchy.Node[Hie_INS].HieCod <= 0)		// No institution selected
+   if (Gbl.Hie.Node[Hie_INS].HieCod <= 0)		// No institution selected
       return;
 
    /***** Get parameter with the type of order in the list of centers *****/
-   Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_GetParHieOrder ();
+   Gbl.Hie.List[Hie_INS].SelectedOrder = Hie_GetParHieOrder ();
 
    /***** Get list of centers *****/
    Ctr_GetFullListOfCtrsInThisIns ();
@@ -250,13 +250,13 @@ static void Ctr_ListCtrs (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
-		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
+		 Gbl.Hie.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (Title,Ctr_PutIconsListingCtrs,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
    free (Title);
 
-      if (Gbl.Hierarchy.List[Hie_INS].Num)	// There are centers in the current institution
+      if (Gbl.Hie.List[Hie_INS].Num)	// There are centers in the current institution
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");
@@ -266,9 +266,9 @@ static void Ctr_ListCtrs (void)
 
 	    /***** Write all centers and their nuber of teachers *****/
 	    for (NumCtr = 0;
-		 NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+		 NumCtr < Gbl.Hie.List[Hie_INS].Num;
 		 NumCtr++)
-	       Ctr_ListOneCtrForSeeing (&(Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr]),
+	       Ctr_ListOneCtrForSeeing (&(Gbl.Hie.List[Hie_INS].Lst[NumCtr]),
 					   NumCtr + 1);
 
 	 /***** End table *****/
@@ -326,7 +326,7 @@ static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = Ctr->HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
+   BgColor = Ctr->HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
 								 The_GetColorRows ();
 
    HTM_TR_Begin (NULL);
@@ -412,7 +412,7 @@ static void Ctr_EditCtrsInternal (void)
    Plc_GetListPlcs (&Places);
 
    /***** Get list of centers *****/
-   Gbl.Hierarchy.List[Hie_INS].SelectedOrder = Hie_ORDER_BY_NAME;
+   Gbl.Hie.List[Hie_INS].SelectedOrder = Hie_ORDER_BY_NAME;
    Ctr_GetFullListOfCtrsInThisIns ();
 
    /***** Write menu to select country and institution *****/
@@ -420,7 +420,7 @@ static void Ctr_EditCtrsInternal (void)
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Centers_of_INSTITUTION_X,
-		 Gbl.Hierarchy.Node[Hie_INS].FullName) < 0)
+		 Gbl.Hie.Node[Hie_INS].FullName) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxBegin (Title,Ctr_PutIconsEditingCtrs,NULL,
                  Hlp_INSTITUTION_Centers,Box_NOT_CLOSABLE);
@@ -430,7 +430,7 @@ static void Ctr_EditCtrsInternal (void)
       Ctr_PutFormToCreateCtr (&Places);
 
       /***** List current centers *****/
-      if (Gbl.Hierarchy.List[Hie_INS].Num)
+      if (Gbl.Hie.List[Hie_INS].Num)
 	 Ctr_ListCtrsForEdition (&Places);
 
    /***** End box *****/
@@ -466,21 +466,21 @@ void Ctr_GetBasicListOfCtrsInIns (long HieCod)
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInIns (&mysql_res,HieCod);
+   Gbl.Hie.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInIns (&mysql_res,HieCod);
 
-   if (Gbl.Hierarchy.List[Hie_INS].Num) // Centers found...
+   if (Gbl.Hie.List[Hie_INS].Num) // Centers found...
      {
       /***** Create list with centers in institution *****/
-      if ((Gbl.Hierarchy.List[Hie_INS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_INS].Num,
-						     sizeof (*Gbl.Hierarchy.List[Hie_INS].Lst))) == NULL)
+      if ((Gbl.Hie.List[Hie_INS].Lst = calloc ((size_t) Gbl.Hie.List[Hie_INS].Num,
+						     sizeof (*Gbl.Hie.List[Hie_INS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+	   NumCtr < Gbl.Hie.List[Hie_INS].Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCtrDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
+         Ctr_GetCtrDataFromRow (mysql_res,&Gbl.Hie.List[Hie_INS].Lst[NumCtr],
                                    Usr_DONT_GET_NUM_USRS);	// Don't get number of users
 								// who claim to belong to this center
      }
@@ -500,21 +500,21 @@ static void Ctr_GetFullListOfCtrsInThisIns (void)
    unsigned NumCtr;
 
    /***** Get centers from database *****/
-   Gbl.Hierarchy.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInThisInsWithNumUsrs (&mysql_res);
+   Gbl.Hie.List[Hie_INS].Num = Ctr_DB_GetFullListOfCtrsInThisInsWithNumUsrs (&mysql_res);
 
-   if (Gbl.Hierarchy.List[Hie_INS].Num) // Centers found...
+   if (Gbl.Hie.List[Hie_INS].Num) // Centers found...
      {
       /***** Create list with courses in degree *****/
-      if ((Gbl.Hierarchy.List[Hie_INS].Lst = calloc ((size_t) Gbl.Hierarchy.List[Hie_INS].Num,
-						     sizeof (*Gbl.Hierarchy.List[Hie_INS].Lst))) == NULL)
+      if ((Gbl.Hie.List[Hie_INS].Lst = calloc ((size_t) Gbl.Hie.List[Hie_INS].Num,
+						     sizeof (*Gbl.Hie.List[Hie_INS].Lst))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the centers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+	   NumCtr < Gbl.Hie.List[Hie_INS].Num;
 	   NumCtr++)
          /* Get center data */
-         Ctr_GetCtrDataFromRow (mysql_res,&Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr],
+         Ctr_GetCtrDataFromRow (mysql_res,&Gbl.Hie.List[Hie_INS].Lst[NumCtr],
                                    Usr_GET_NUM_USRS);	// Get number of users
 							// who claim to belong to this center
      }
@@ -536,7 +536,7 @@ Err_SuccessOrError_t Ctr_GetCtrDataByCod (struct Hie_Node *Node)
    Node->PrtCod          = -1L;
    Node->Specific.PlcCod = -1L;
    Node->Status          = (Hie_Status_t) 0;
-   Node->RequesterUsrCod = -1L;
+   Node->ReqUsrCod = -1L;
    Node->ShrtName[0]     = '\0';
    Node->FullName[0]     = '\0';
    Node->WWW[0]          = '\0';
@@ -615,7 +615,7 @@ static void Ctr_GetCtrDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Ctr,
       Err_WrongStatusExit ();
 
    /***** Get requester user's code (row[4]) *****/
-   Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
+   Ctr->ReqUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get short name (row[5]), full name (row[6])
           and URL (row[7]) of the center *****/
@@ -665,7 +665,7 @@ void Ctr_WriteSelectorOfCtr (void)
    Frm_BeginFormGoTo (ActSeeDeg);
 
       /***** Begin selector *****/
-      HTM_SELECT_Begin (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
+      HTM_SELECT_Begin (Gbl.Hie.Node[Hie_INS].HieCod > 0 ? HTM_SUBMIT_ON_CHANGE :
 								 HTM_DISABLED,
 			NULL,
 			"id=\"ctr\" name=\"ctr\" class=\"HIE_SEL INPUT_%s\"",
@@ -673,11 +673,11 @@ void Ctr_WriteSelectorOfCtr (void)
 
 	 /***** Initial disabled option *****/
 	 HTM_OPTION (HTM_Type_STRING,"",
-		     (Gbl.Hierarchy.Node[Hie_CTR].HieCod < 0 ? HTM_SELECTED :
+		     (Gbl.Hie.Node[Hie_CTR].HieCod < 0 ? HTM_SELECTED :
 							       HTM_NO_ATTR) | HTM_DISABLED,
 		     "[%s]",Txt_HIERARCHY_SINGUL_Abc[Hie_CTR]);
 
-	 if (Gbl.Hierarchy.Node[Hie_INS].HieCod > 0)
+	 if (Gbl.Hie.Node[Hie_INS].HieCod > 0)
 	   {
 	    /***** Get centers in current institution from database *****/
 	    NumCtrs = Ctr_DB_GetBasicListOfCtrsInThisIns (&mysql_res);
@@ -694,8 +694,8 @@ void Ctr_WriteSelectorOfCtr (void)
 
 	       /* Write option */
 	       HTM_OPTION (HTM_Type_LONG,&HieCod,
-			   Gbl.Hierarchy.Node[Hie_CTR].HieCod > 0 &&
-			   HieCod == Gbl.Hierarchy.Node[Hie_CTR].HieCod ? HTM_SELECTED :
+			   Gbl.Hie.Node[Hie_CTR].HieCod > 0 &&
+			   HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? HTM_SELECTED :
 									  HTM_NO_ATTR,
 			   "%s",row[1]);
 	      }
@@ -753,10 +753,10 @@ static void Ctr_ListCtrsForEdition (const struct Plc_Places *Places)
 
       /***** Write all centers *****/
       for (NumCtr = 0;
-	   NumCtr < Gbl.Hierarchy.List[Hie_INS].Num;
+	   NumCtr < Gbl.Hie.List[Hie_INS].Num;
 	   NumCtr++)
 	{
-	 Ctr = &Gbl.Hierarchy.List[Hie_INS].Lst[NumCtr];
+	 Ctr = &Gbl.Hie.List[Hie_INS].Lst[NumCtr];
 
 	 ICanEdit = Ctr_CheckIfICanEditACtr (Ctr);
 	 NumDegs = Hie_GetNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
@@ -875,7 +875,7 @@ static void Ctr_ListCtrsForEdition (const struct Plc_Places *Places)
 	    HTM_TD_Unsigned (NumUsrsInCrssOfCtr);
 
 	    /* Center requester */
-	    UsrDat.UsrCod = Ctr->RequesterUsrCod;
+	    UsrDat.UsrCod = Ctr->ReqUsrCod;
 	    UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 								 Usr_DONT_GET_PREFS,
 								 Usr_DONT_GET_ROLE_IN_CRS);
@@ -907,7 +907,7 @@ static Usr_Can_t Ctr_CheckIfICanEditACtr (struct Hie_Node *Ctr)
   {
    return Gbl.Usrs.Me.Role.Logged >= Rol_INS_ADM ||	// I am an institution administrator or higher
           ((Ctr->Status & Hie_STATUS_BIT_PENDING) &&	// Center is not yet activated
-           Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod) ? Usr_CAN :	// I am the requester
+           Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->ReqUsrCod) ? Usr_CAN :	// I am the requester
         							Usr_CAN_NOT;
   }
 
@@ -1074,7 +1074,7 @@ void Ctr_RenameCtr (struct Hie_Node *Ctr,Nam_ShrtOrFullName_t ShrtOrFull)
          /***** If degree was in database... *****/
          switch (Ctr_DB_CheckIfCtrNameExistsInIns (Nam_Fields[ShrtOrFull],
 					           NewName,Ctr->HieCod,
-					           Gbl.Hierarchy.Node[Hie_INS].HieCod,
+					           Gbl.Hie.Node[Hie_INS].HieCod,
 					           0))	// Unused
            {
             case Exi_EXISTS:
@@ -1178,7 +1178,7 @@ void Ctr_ContEditAfterChgCtr (void)
 static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    // If the center being edited is different to the current one...
-   if (Ctr_EditingCtr->HieCod != Gbl.Hierarchy.Node[Hie_CTR].HieCod)
+   if (Ctr_EditingCtr->HieCod != Gbl.Hie.Node[Hie_CTR].HieCod)
       /***** Alert with button to go to center *****/
       Ale_ShowLastAlertAndButtonGo (ActSeeDeg,
                                     Ctr_PutParCtrCod,&Ctr_EditingCtr->HieCod,
@@ -1320,13 +1320,13 @@ static void Ctr_PutHeadCtrsForSeeing (Hie_OrderSelectable_t OrderSelectable)
 		  Par_PutParUnsigned (NULL,"Order",(unsigned) Order);
 		  HTM_BUTTON_Submit_Begin (Txt_CENTERS_HELP_ORDER[Order],NULL,
 					   "class=\"BT_LINK RT\"");
-		     if (Order == Gbl.Hierarchy.List[Hie_INS].SelectedOrder)
+		     if (Order == Gbl.Hie.List[Hie_INS].SelectedOrder)
 			HTM_U_Begin ();
 	      }
 	    HTM_Txt (Txt_CENTERS_ORDER[Order]);
 	    if (OrderSelectable == Hie_ORDER_SELECTABLE)
 	      {
-		     if (Order == Gbl.Hierarchy.List[Hie_INS].SelectedOrder)
+		     if (Order == Gbl.Hie.List[Hie_INS].SelectedOrder)
 			HTM_U_End ();
 		  HTM_BUTTON_End ();
 	       Frm_EndForm ();
@@ -1412,7 +1412,7 @@ static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
 
    /***** Get parameters from form *****/
    /* Set center institution */
-   Ctr_EditingCtr->PrtCod = Gbl.Hierarchy.Node[Hie_INS].HieCod;
+   Ctr_EditingCtr->PrtCod = Gbl.Hie.Node[Hie_INS].HieCod;
 
    /* Get place */
    Ctr_EditingCtr->Specific.PlcCod = ParCod_GetAndCheckParMin (ParCod_Plc,0);	// 0 (another place) is allowed here
@@ -1434,7 +1434,7 @@ static void Ctr_ReceiveRequestOrCreateCtr (Hie_Status_t Status)
 	 if (Nam_CheckIfNameExists (Ctr_DB_CheckIfCtrNameExistsInIns,
 				    (const char **) Names,
 				    -1L,
-				    Gbl.Hierarchy.Node[Hie_INS].HieCod,
+				    Gbl.Hie.Node[Hie_INS].HieCod,
 				    0) == Exi_DOES_NOT_EXIST)	// Unused
             Ctr_EditingCtr->HieCod = Ctr_DB_CreateCenter (Ctr_EditingCtr,Status);
         }
@@ -1610,7 +1610,7 @@ static void Ctr_EditingCtrConstructor (void)
    Ctr_EditingCtr->PrtCod          = -1L;
    Ctr_EditingCtr->Specific.PlcCod = -1L;
    Ctr_EditingCtr->Status          = (Hie_Status_t) 0;
-   Ctr_EditingCtr->RequesterUsrCod = -1L;
+   Ctr_EditingCtr->ReqUsrCod = -1L;
    Ctr_EditingCtr->ShrtName[0]     = '\0';
    Ctr_EditingCtr->FullName[0]     = '\0';
    Ctr_EditingCtr->WWW[0]          = '\0';

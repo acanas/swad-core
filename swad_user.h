@@ -120,7 +120,7 @@ void Usr_InsertMyLastCrsTabAndTime (void);
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
                               Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
                               Rol_Role_t Role,
-                              struct Usr_SelectedUsrs *SelectedUsrs,
+                              const struct Usr_SelectedUsrs *SelectedUsrs,
 			      Pho_ShowPhotos_t ShowPhotos);
 
 void Usr_GetListUsrs (Hie_Level_t HieLvl,Rol_Role_t Role);
@@ -149,9 +149,9 @@ void Usr_GetListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsr
 Err_SuccessOrError_t Usr_GetListMsgRecipientsWrittenExplicitelyBySender (Cns_Verbose_t Verbose);
 
 Exi_Exist_t Usr_FindEncUsrCodInList (const char *EncryptedUsrCodToFind,
-				     struct Usr_SelectedUsrs *SelectedUsrs);
-Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
-unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs);
+				     const struct Usr_SelectedUsrs *SelectedUsrs);
+Exi_Exist_t Usr_CheckIfThereAreUsrsInListOfSelectedEncryptedUsrCods (const struct Usr_SelectedUsrs *SelectedUsrs);
+unsigned Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (const struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_FreeListsSelectedEncryptedUsrsCods (struct Usr_SelectedUsrs *SelectedUsrs);
 
 void Usr_GetListSelectedUsrCods (struct Usr_SelectedUsrs *SelectedUsrs,
@@ -170,7 +170,7 @@ void Usr_ShowFormsToSelectUsrListType (void (*FuncPars) (const void *Args),const
 unsigned Usr_GetColumnsForSelectUsrs (Pho_ShowPhotos_t ShowPhotos);
 void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
 				  const struct Usr_Data *UsrDat,
-				  struct Usr_SelectedUsrs *SelectedUsrs);
+				  const struct Usr_SelectedUsrs *SelectedUsrs);
 void Usr_WriteHeaderFieldsUsrDat (Usr_PutCheckBox_t PutCheckBoxToSelectUsr,
 				  Pho_ShowPhotos_t ShowPhotos);
 
@@ -186,7 +186,7 @@ void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
                                     void (*FuncWhenNoUsrsSelected) (void *ArgsNoSelected),void *ArgsNoSelected);
 void Usr_ListUsersToSelect (struct Usr_SelectedUsrs *SelectedUsrs,
 			    Pho_ShowPhotos_t ShowPhotos);
-void Usr_PutCheckboxToSelectAllUsers (struct Usr_SelectedUsrs *SelectedUsrs,
+void Usr_PutCheckboxToSelectAllUsers (const struct Usr_SelectedUsrs *SelectedUsrs,
 				      Rol_Role_t Role);
 void Usr_WriteNumUsrsInList (Rol_Role_t Role);
 

@@ -1518,7 +1518,7 @@ static Err_SuccessOrError_t Exa_CheckExamFieldsReceivedFromForm (const struct Ex
    if (Exam->Title[0])	// If there's an exam title
      {
       /* If title of exam was in database... */
-      if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+      if (Exa_DB_CheckIfSimilarExamExists (Gbl.Hie.Node[Hie_CRS].HieCod,
                                            Exam->ExaCod,Exam->Title) == Exi_EXISTS)
 	{
 	 SuccessOrError = Err_ERROR;

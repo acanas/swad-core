@@ -52,7 +52,7 @@ long Not_DB_InsertNotice (const char *Content,PriPub_PrivateOrPublic_t PrivateOr
 				" (CrsCod,UsrCod,CreatTime,Content,Public,Status)"
 				" VALUES"
 				" (%ld,%ld,NOW(),'%s','%c',%u)",
-				Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+				Gbl.Hie.Node[Hie_CRS].HieCod,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Content,
 				PriPub_Public_YN[PrivateOrPublic],
@@ -74,7 +74,7 @@ void Not_DB_ChangeNoticeStatus (long NotCod,HidVis_HiddenOrVisible_t HiddenOrVis
 		     " AND CrsCod=%ld",
 	           HidVis_Hidden_01[HiddenOrVisible],
 	           NotCod,
-	           Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+	           Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -97,7 +97,7 @@ void Not_DB_CopyNoticeToDeleted (long NotCod)
 		    " WHERE NotCod=%ld"
 		      " AND CrsCod=%ld",	// Extra check
                    NotCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -133,7 +133,7 @@ Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod)
 			 " WHERE NotCod=%ld"
 			   " AND CrsCod=%ld",	// Extra check
 			 NotCod,
-			 Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+			 Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
@@ -222,7 +222,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
-                         Gbl.Hierarchy.Node[Hie_CTY].HieCod,
+                         Gbl.Hie.Node[Hie_CTY].HieCod,
                          HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_INS:
 	 return (unsigned)
@@ -238,7 +238,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod,
+                         Gbl.Hie.Node[Hie_INS].HieCod,
                          HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_CTR:
 	 return (unsigned)
@@ -252,7 +252,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod,
+                         Gbl.Hie.Node[Hie_CTR].HieCod,
                          HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_DEG:
 	 return (unsigned)
@@ -264,7 +264,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_notices.CrsCod"
 			   " AND not_notices.Status=%u",	// 0: Visible, 1: Hidden
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod,
+                         Gbl.Hie.Node[Hie_DEG].HieCod,
                          HidVis_Hidden_01[HiddenOrVisible]);
       case Hie_CRS:
 	 return (unsigned)
@@ -274,7 +274,7 @@ unsigned Not_DB_GetNumNotices (MYSQL_RES **mysql_res,
 			  " FROM not_notices"
 			 " WHERE CrsCod=%ld"
 			   " AND Status=%u",			// 0: Visible, 1: Hidden
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod,
+                         Gbl.Hie.Node[Hie_CRS].HieCod,
                          HidVis_Hidden_01[HiddenOrVisible]);
       default:
 	 Err_WrongHierarchyLevelExit ();
@@ -311,7 +311,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTY].HieCod);
+                         Gbl.Hie.Node[Hie_CTY].HieCod);
       case Hie_INS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -325,7 +325,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			   " AND ctr_centers.CtrCod=deg_degrees.CtrCod"
 			   " AND deg_degrees.DegCod=crs_courses.DegCod"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_INS].HieCod);
+                         Gbl.Hie.Node[Hie_INS].HieCod);
       case Hie_CTR:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -337,7 +337,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			 " WHERE deg_degrees.CtrCod=%ld"
 			 " AND deg_degrees.DegCod=crs_courses.DegCod"
 			 " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_CTR].HieCod);
+                         Gbl.Hie.Node[Hie_CTR].HieCod);
       case Hie_DEG:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -347,7 +347,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			        "not_deleted"
 			 " WHERE crs_courses.DegCod=%ld"
 			   " AND crs_courses.CrsCod=not_deleted.CrsCod",
-                         Gbl.Hierarchy.Node[Hie_DEG].HieCod);
+                         Gbl.Hie.Node[Hie_DEG].HieCod);
       case Hie_CRS:
 	 return (unsigned)
          DB_QuerySELECT (mysql_res,"can not get number of deleted notices",
@@ -355,7 +355,7 @@ unsigned Not_DB_GetNumNoticesDeleted (MYSQL_RES **mysql_res,Hie_Level_t HieLvl)
 			        "SUM(NumNotif)"			// row[1]
 			  " FROM not_deleted"
 			 " WHERE CrsCod=%ld",
-                         Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                         Gbl.Hie.Node[Hie_CRS].HieCod);
       default:
 	 Err_WrongHierarchyLevelExit ();
 	 return 0;	// Not reached
@@ -373,7 +373,7 @@ void Not_DB_RemoveNotice (long NotCod)
 		   " WHERE NotCod=%ld"
 		     " AND CrsCod=%ld",	// Extra check
                    NotCod,
-                   Gbl.Hierarchy.Node[Hie_CRS].HieCod);
+                   Gbl.Hie.Node[Hie_CRS].HieCod);
   }
 
 /*****************************************************************************/
