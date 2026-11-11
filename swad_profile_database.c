@@ -587,18 +587,26 @@ unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod)
   {
    /***** Select number of rows with number of clicks per day
           greater than the clicks per day of this user *****/
+   /*
+   NC      = Number of Clicks of a user
+   ND      = Number of Days   of a user
+   NC_this = Number of Clicks of user whose ranking is computed
+   ND_this = Number of Days   of user whose ranking is computed
+   Count number of users with NC / ND > NC_this / ND_this
+   In order to avoid divisions:
+   NC / ND > NC_this / ND_this <==> NC*ND_this > NC_this*ND
+   */
    return (unsigned)
    DB_QueryCOUNT ("can not get ranking using number of clicks per day",
 		  "SELECT COUNT(*)+1"
-		   " FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
-			   " FROM usr_figures"
-			  " WHERE FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
-		  " WHERE NumClicksPerDay>"
-		         "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
-			   " FROM usr_figures"
-			  " WHERE UsrCod=%ld"
-			    " AND FirstClickTime>FROM_UNIXTIME(0))",
-		  UsrCod,
+		   " FROM usr_figures"
+	     " CROSS JOIN (SELECT NumClicks,"
+	                         "DATEDIFF(NOW(),FirstClickTime)+1 AS NumDays"
+	                   " FROM usr_figures"
+	                  " WHERE UsrCod=%ld) AS this_usr"	// Number of clicks and number of days for this user
+	          " WHERE usr_figures.FirstClickTime>FROM_UNIXTIME(0)"	// Only if first click is computed
+	            " AND usr_figures.NumClicks*this_usr.NumDays>"
+	                    "this_usr.NumClicks*(DATEDIFF(NOW(),usr_figures.FirstClickTime)+1)",
 		  UsrCod);
   }
 

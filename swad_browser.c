@@ -6542,9 +6542,6 @@ static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
 	 switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,&ParentFolder))
 	   {
 	    case Usr_CAN:
-	       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-		  Ale_ShowAlert (Ale_DEBUG,"Brw_DoActionShowForm CAN");
-
 	       /***** Name of the folder to be shown ****/
 	       Brw_GetFileNameToShow (FileBrowser->Zone,&ParentFolder,
 				      ParentFolderNameToShow);
@@ -6574,8 +6571,6 @@ static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
-	       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-		  Ale_ShowAlert (Ale_DEBUG,"Brw_DoActionShowForm CAN NOT");
 	       Err_NoPermission ();
 	       break;
 	   }
@@ -9091,26 +9086,17 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (Brw_Zone_t Zone,
       [Usr_BELONG     ] = Usr_CAN,
      };
 
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 1");
-
    /***** If not in a folder... *****/
    if (Folder->Type != Brw_IS_FOLDER)
       return Usr_CAN_NOT;
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 2");
 
    /***** I must be student, teacher, admin or superuser to edit *****/
    if (Gbl.Usrs.Me.Role.Max < Rol_STD)
       return Usr_CAN_NOT;
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 3");
 
    /***** If maximum level is reached, I can not create/paste *****/
    if (Folder->Level >= Brw_MAX_DIR_LEVELS)
       return Usr_CAN_NOT;
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 4");
 
    /***** Have I permission to create/paste a new file or folder into the folder? *****/
    switch (Zone)

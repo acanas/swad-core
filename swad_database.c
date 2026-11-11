@@ -4080,7 +4080,7 @@ mysql> DESCRIBE usr_figures;
 			"NumForPst INT NOT NULL DEFAULT -1,"
 			"NumMsgSnt INT NOT NULL DEFAULT -1,"
 		   "PRIMARY KEY(UsrCod),"
-		   "INDEX(FirstClickTime),"
+		   "INDEX(FirstClickTime,NumClicks),"
 		   "INDEX(NumClicks),"
 		   "INDEX(NumSocPub),"
 		   "INDEX(NumFileViews),"

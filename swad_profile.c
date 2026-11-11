@@ -275,20 +275,6 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 /*************************** Show a user's profile ***************************/
 /*****************************************************************************/
 // Return Err_ERROR on error
-#include "swad_time.h"
-
-   static long global_nsec = 0L;
-   static long record_nsec = 0L;
-   static long first_click_nsec = 0L;
-   static long courses_nsec = 0L;
-   static long files_nsec = 0L;
-   static long right1_nsec = 0L;
-   static long right2_nsec = 0L;
-   static long right3_nsec = 0L;
-   static long right4_nsec = 0L;
-   static long right5_nsec = 0L;
-   static long follow_nsec = 0L;
-
 Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
   {
    static void (*PutLinkToUsrProfile[Usr_NUM_ME_OR_OTHER]) (void) =
@@ -323,11 +309,7 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
       UsrDat->Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (UsrDat);
      }
 
-   Tim_StartGlobalTiming ();
-
-   Tim_StartPartialTiming ();
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
-   record_nsec += Tim_StopPartialTiming ();
 
    /***** Extended profile *****/
    if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_CAN)
@@ -336,26 +318,7 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
       Prf_ShowDetailsUserProfile (UsrDat);
 
       /* Show following and followers */
-      Tim_StartPartialTiming ();
       Fol_ShowFollowingAndFollowers (UsrDat);
-      follow_nsec += Tim_StopPartialTiming ();
-     }
-
-   global_nsec = Tim_StopGlobalTiming ();
-
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-     {
-      Ale_ShowAlert (Ale_DEBUG,"record nsec = %ld ms",record_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"first click nsec = %ld ms",first_click_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"courses nsec = %ld ms",courses_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"files nsec = %ld ms",files_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"right1 nsec = %ld ms",right1_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"right2 nsec = %ld ms",right2_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"right3 nsec = %ld ms",right3_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"right4 nsec = %ld ms",right4_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"right5 nsec = %ld ms",right5_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"follow nsec = %ld ms",follow_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"global nsec = %ld ms",global_nsec / 1000000);
      }
 
    return Err_SUCCESS;
@@ -397,6 +360,18 @@ void Prf_ChangeExtendedProfileVis (void)
 
 void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
   {
+   #define NUM_FIGURES_RIGHT 5
+   static void (*Funcs[NUM_FIGURES_RIGHT]) (const struct Usr_Data *UsrDat,
+					    const struct Prf_UsrFigures *UsrFigures,
+					    unsigned NumUsrsWithFigures) =
+     {
+      Prf_ShowNumClicks,	// Number of clicks
+      Prf_ShowNumFileViews,	// Number of file views
+      Prf_ShowNumTimelinePubs,	// Number of timeline publications
+      Prf_ShowNumForumPosts,	// Number of posts in forums
+      Prf_ShowNumMessagesSent,	// Number of messages sent
+     };
+   unsigned NumFig;
    bool UsrIsBannedFromRanking;
    struct Prf_UsrFigures UsrFigures;
    unsigned NumUsrsWithFigures;
@@ -416,22 +391,16 @@ void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
 		       The_GetSuffix ());
 
 	    /* Time since first click */
-	    Tim_StartPartialTiming ();
 	    Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
-	    first_click_nsec += Tim_StopPartialTiming ();
 
 	    /* Number of courses in which the user has a role */
-	    Tim_StartPartialTiming ();
 	    for (Role  = Rol_TCH;
 		 Role >= Rol_STD;
 		 Role--)
 	       Prf_ShowNumCrssWithRole (UsrDat,Role);
-	    courses_nsec += Tim_StopPartialTiming ();
 
 	    /* Number of files currently published */
-	    Tim_StartPartialTiming ();
 	    Prf_ShowNumFilesCurrentlyPublished (UsrDat);
-	    files_nsec += Tim_StopPartialTiming ();
 
 	 /* End left list */
 	 HTM_UL_End ();
@@ -447,31 +416,10 @@ void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
 	    HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
 			  The_GetSuffix ());
 
-
-	       /* Number of clicks */
-	       Tim_StartPartialTiming ();
-	       Prf_ShowNumClicks (UsrDat,&UsrFigures,NumUsrsWithFigures);
-	       right1_nsec += Tim_StopPartialTiming ();
-
-	       /* Number of file views */
-	       Tim_StartPartialTiming ();
-	       Prf_ShowNumFileViews (UsrDat,&UsrFigures,NumUsrsWithFigures);
-	       right2_nsec += Tim_StopPartialTiming ();
-
-	       /* Number of timeline publications */
-	       Tim_StartPartialTiming ();
-	       Prf_ShowNumTimelinePubs (UsrDat,&UsrFigures,NumUsrsWithFigures);
-	       right3_nsec += Tim_StopPartialTiming ();
-
-	       /* Number of posts in forums */
-	       Tim_StartPartialTiming ();
-	       Prf_ShowNumForumPosts (UsrDat,&UsrFigures,NumUsrsWithFigures);
-	       right4_nsec += Tim_StopPartialTiming ();
-
-	       /* Number of messages sent */
-	       Tim_StartPartialTiming ();
-	       Prf_ShowNumMessagesSent (UsrDat,&UsrFigures,NumUsrsWithFigures);
-	       right5_nsec += Tim_StopPartialTiming ();
+	       for (NumFig = 0;
+	            NumFig < NUM_FIGURES_RIGHT;
+	            NumFig++)
+	          Funcs[NumFig] (UsrDat,&UsrFigures,NumUsrsWithFigures);
 
 	    /* End right list */
 	    HTM_UL_End ();
