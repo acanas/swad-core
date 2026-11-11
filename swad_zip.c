@@ -336,7 +336,7 @@ void ZIP_DoActionCompressFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }

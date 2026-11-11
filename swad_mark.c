@@ -234,7 +234,7 @@ static void Mrk_DoActionChangeNumRowsHeaderOrFooter (struct Brw_FileBrowser *Fil
 	 break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -694,7 +694,7 @@ void Mrk_ShowMyMarks (void)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }

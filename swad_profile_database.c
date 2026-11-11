@@ -99,7 +99,7 @@ void Prf_DB_UpdateNumClicksUsr (long UsrCod,int NumClicks)
 		   "UPDATE usr_figures"
 		     " SET NumClicks=%d"
 		   " WHERE UsrCod=%ld",
-		   NumClicks,	// -1 ==> unknown number of clicks
+		   NumClicks,		// -1 ==> unknown number of clicks
 		   UsrCod);
   }
 
@@ -113,7 +113,7 @@ void Prf_DB_UpdateNumTimelinePubsUsr (long UsrCod,int NumTimelinePubs)
 		   "UPDATE usr_figures"
 		     " SET NumSocPub=%d"
 		   " WHERE UsrCod=%ld",
-		   NumTimelinePubs,		// -1 ==> unknown number of timeline publications
+		   NumTimelinePubs,	// -1 ==> unknown number of timeline publications
 		   UsrCod);
   }
 
@@ -127,7 +127,7 @@ void Prf_DB_UpdateNumFileViewsUsr (long UsrCod,int NumFileViews)
 		   "UPDATE usr_figures"
 		     " SET NumFileViews=%d"
 		   " WHERE UsrCod=%ld",
-		   NumFileViews,		// -1 ==> unknown number of file views
+		   NumFileViews,	// -1 ==> unknown number of file views
 		   UsrCod);
   }
 
@@ -141,7 +141,7 @@ void Prf_DB_UpdateNumForumPostsUsr (long UsrCod,int NumForumPosts)
 		   "UPDATE usr_figures"
 		     " SET NumForPst=%d"
 		   " WHERE UsrCod=%ld",
-		   NumForumPosts,		// -1 ==> unknown number of forum posts
+		   NumForumPosts,	// -1 ==> unknown number of forum posts
 		   UsrCod);
   }
 
@@ -155,7 +155,7 @@ void Prf_DB_UpdateNumMessagesSentUsr (long UsrCod,int NumMessagesSent)
 		   "UPDATE usr_figures"
 		     " SET NumMsgSnt=%d"
 		   " WHERE UsrCod=%ld",
-		   NumMessagesSent,
+		   NumMessagesSent,	// -1 ==> unknown number of forum posts
 		   UsrCod);
   }
 
@@ -247,15 +247,15 @@ unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FldName)
   {
    /***** Select number of rows with figure
           greater than the figure of this user *****/
+   // UsrCod<>... is unnecessary: the user cannot be included in this ranking
+   // Also, checking UsrCod<>... makes the query slower
    return (unsigned)
    DB_QueryCOUNT ("can not get ranking using a figure",
-		  "SELECT COUNT(*)+1"
+		  "SELECT COUNT(*)+1"	// If there are n users with greater figure, this user is the #n+1
 		   " FROM usr_figures"
-		  " WHERE UsrCod<>%ld"	// Really not necessary here
-		    " AND %s>(SELECT %s"
+		  " WHERE %s>(SELECT %s"
 			      " FROM usr_figures"
 			     " WHERE UsrCod=%ld)",
-		  UsrCod,
 		  FldName,
 		  FldName,
 		  UsrCod);
@@ -570,15 +570,13 @@ unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res,Hie_Level_t HieLvl
 /********************* Get number of users with a figure *********************/
 /*****************************************************************************/
 
-unsigned Prf_DB_GetNumUsrsWithFigure (const char *FldName)
+unsigned Prf_DB_GetNumUsrsWithFigures (void)
   {
    /***** Select number of rows with values already calculated *****/
    return (unsigned)
    DB_QueryCOUNT ("can not get number of users with a figure",
 		  "SELECT COUNT(*)"
-		   " FROM usr_figures"
-		  " WHERE %s>=0",
-		  FldName);
+		   " FROM usr_figures");
   }
 
 /*****************************************************************************/
@@ -594,14 +592,11 @@ unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod)
 		  "SELECT COUNT(*)+1"
 		   " FROM (SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1) AS NumClicksPerDay"
 			   " FROM usr_figures"
-			  " WHERE UsrCod<>%ld"	// Necessary because the following comparison is not exact in floating point
-			    " AND NumClicks>0"
-			    " AND FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
+			  " WHERE FirstClickTime>FROM_UNIXTIME(0)) AS TableNumClicksPerDay"
 		  " WHERE NumClicksPerDay>"
 		         "(SELECT NumClicks/(DATEDIFF(NOW(),FirstClickTime)+1)"
 			   " FROM usr_figures"
 			  " WHERE UsrCod=%ld"
-			    " AND NumClicks>0"
 			    " AND FirstClickTime>FROM_UNIXTIME(0))",
 		  UsrCod,
 		  UsrCod);
@@ -618,8 +613,7 @@ unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void)
    DB_QueryCOUNT ("can not get number of users with number of clicks per day",
 		  "SELECT COUNT(*)"
 		   " FROM usr_figures"
-		  " WHERE NumClicks>0"
-		    " AND FirstClickTime>FROM_UNIXTIME(0)");
+		  " WHERE FirstClickTime>FROM_UNIXTIME(0)");
   }
 
 /*****************************************************************************/

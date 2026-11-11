@@ -85,15 +85,20 @@ static void Prf_ShowNumCrssWithRole (const struct Usr_Data *UsrDat,
 				     Rol_Role_t Role);
 static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat);
 static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
-                               const struct Prf_UsrFigures *UsrFigures);
+                               const struct Prf_UsrFigures *UsrFigures,
+                               unsigned NumUsrsWithFigures);
 static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
-                                  const struct Prf_UsrFigures *UsrFigures);
+                                  const struct Prf_UsrFigures *UsrFigures,
+                                  unsigned NumUsrsWithFigures);
 static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
-                                     const struct Prf_UsrFigures *UsrFigures);
+                                     const struct Prf_UsrFigures *UsrFigures,
+                                     unsigned NumUsrsWithFigures);
 static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
-                                   const struct Prf_UsrFigures *UsrFigures);
+                                   const struct Prf_UsrFigures *UsrFigures,
+                                   unsigned NumUsrsWithFigures);
 static void Prf_ShowNumMessagesSent (const struct Usr_Data *UsrDat,
-                                     const struct Prf_UsrFigures *UsrFigures);
+                                     const struct Prf_UsrFigures *UsrFigures,
+                                     unsigned NumUsrsWithFigures);
 static void Prf_BeginListItem (const char *Title,const char *Icon);
 static void Prf_EndListItem (void);
 static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod);
@@ -274,7 +279,14 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 
    static long global_nsec = 0L;
    static long record_nsec = 0L;
-   static long detail_nsec = 0L;
+   static long first_click_nsec = 0L;
+   static long courses_nsec = 0L;
+   static long files_nsec = 0L;
+   static long right1_nsec = 0L;
+   static long right2_nsec = 0L;
+   static long right3_nsec = 0L;
+   static long right4_nsec = 0L;
+   static long right5_nsec = 0L;
    static long follow_nsec = 0L;
 
 Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
@@ -321,9 +333,7 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
    if (Pri_CheckIfICanView (UsrDat->ExPrfVisibility,UsrDat) == Usr_CAN)
      {
       /* Show details of user's profile */
-      Tim_StartPartialTiming ();
       Prf_ShowDetailsUserProfile (UsrDat);
-      detail_nsec += Tim_StopPartialTiming ();
 
       /* Show following and followers */
       Tim_StartPartialTiming ();
@@ -336,7 +346,14 @@ Err_SuccessOrError_t Prf_ShowUsrProfile (struct Usr_Data *UsrDat)
    if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
      {
       Ale_ShowAlert (Ale_DEBUG,"record nsec = %ld ms",record_nsec / 1000000);
-      Ale_ShowAlert (Ale_DEBUG,"detail nsec = %ld ms",detail_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"first click nsec = %ld ms",first_click_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"courses nsec = %ld ms",courses_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"files nsec = %ld ms",files_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"right1 nsec = %ld ms",right1_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"right2 nsec = %ld ms",right2_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"right3 nsec = %ld ms",right3_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"right4 nsec = %ld ms",right4_nsec / 1000000);
+      Ale_ShowAlert (Ale_DEBUG,"right5 nsec = %ld ms",right5_nsec / 1000000);
       Ale_ShowAlert (Ale_DEBUG,"follow nsec = %ld ms",follow_nsec / 1000000);
       Ale_ShowAlert (Ale_DEBUG,"global nsec = %ld ms",global_nsec / 1000000);
      }
@@ -382,10 +399,12 @@ void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
   {
    bool UsrIsBannedFromRanking;
    struct Prf_UsrFigures UsrFigures;
+   unsigned NumUsrsWithFigures;
    Rol_Role_t Role;
 
    /***** Get figures *****/
    Prf_GetUsrFigures (UsrDat->UsrCod,&UsrFigures);
+   NumUsrsWithFigures = Prf_DB_GetNumUsrsWithFigures ();
 
    /***** Container *****/
    HTM_DIV_Begin ("class=\"PRF_FIG_CONT\"");
@@ -397,16 +416,22 @@ void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
 		       The_GetSuffix ());
 
 	    /* Time since first click */
+	    Tim_StartPartialTiming ();
 	    Prf_ShowTimeSinceFirstClick (UsrDat,&UsrFigures);
+	    first_click_nsec += Tim_StopPartialTiming ();
 
 	    /* Number of courses in which the user has a role */
+	    Tim_StartPartialTiming ();
 	    for (Role  = Rol_TCH;
 		 Role >= Rol_STD;
 		 Role--)
 	       Prf_ShowNumCrssWithRole (UsrDat,Role);
+	    courses_nsec += Tim_StopPartialTiming ();
 
 	    /* Number of files currently published */
+	    Tim_StartPartialTiming ();
 	    Prf_ShowNumFilesCurrentlyPublished (UsrDat);
+	    files_nsec += Tim_StopPartialTiming ();
 
 	 /* End left list */
 	 HTM_UL_End ();
@@ -422,20 +447,31 @@ void Prf_ShowDetailsUserProfile (const struct Usr_Data *UsrDat)
 	    HTM_UL_Begin ("class=\"PRF_FIG_UL DAT_STRONG_%s NOWRAP\"",
 			  The_GetSuffix ());
 
+
 	       /* Number of clicks */
-	       Prf_ShowNumClicks (UsrDat,&UsrFigures);
+	       Tim_StartPartialTiming ();
+	       Prf_ShowNumClicks (UsrDat,&UsrFigures,NumUsrsWithFigures);
+	       right1_nsec += Tim_StopPartialTiming ();
 
 	       /* Number of file views */
-	       Prf_ShowNumFileViews (UsrDat,&UsrFigures);
+	       Tim_StartPartialTiming ();
+	       Prf_ShowNumFileViews (UsrDat,&UsrFigures,NumUsrsWithFigures);
+	       right2_nsec += Tim_StopPartialTiming ();
 
 	       /* Number of timeline publications */
-	       Prf_ShowNumTimelinePubs (UsrDat,&UsrFigures);
+	       Tim_StartPartialTiming ();
+	       Prf_ShowNumTimelinePubs (UsrDat,&UsrFigures,NumUsrsWithFigures);
+	       right3_nsec += Tim_StopPartialTiming ();
 
 	       /* Number of posts in forums */
-	       Prf_ShowNumForumPosts (UsrDat,&UsrFigures);
+	       Tim_StartPartialTiming ();
+	       Prf_ShowNumForumPosts (UsrDat,&UsrFigures,NumUsrsWithFigures);
+	       right4_nsec += Tim_StopPartialTiming ();
 
 	       /* Number of messages sent */
-	       Prf_ShowNumMessagesSent (UsrDat,&UsrFigures);
+	       Tim_StartPartialTiming ();
+	       Prf_ShowNumMessagesSent (UsrDat,&UsrFigures,NumUsrsWithFigures);
+	       right5_nsec += Tim_StopPartialTiming ();
 
 	    /* End right list */
 	    HTM_UL_End ();
@@ -592,7 +628,8 @@ static void Prf_ShowNumFilesCurrentlyPublished (const struct Usr_Data *UsrDat)
 /*****************************************************************************/
 
 static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
-                               const struct Prf_UsrFigures *UsrFigures)
+                               const struct Prf_UsrFigures *UsrFigures,
+                               unsigned NumUsrsWithFigures)
   {
    extern const char *Txt_Clicks;
    extern const char *Txt_clicks;
@@ -606,7 +643,7 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
 	 HTM_Long (UsrFigures->NumClicks); HTM_NBSP ();
          HTM_Txt (Txt_clicks); HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumClicks"),
-			  Prf_DB_GetNumUsrsWithFigure ("NumClicks"));
+			  NumUsrsWithFigures);
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_NBSP ();
@@ -631,7 +668,8 @@ static void Prf_ShowNumClicks (const struct Usr_Data *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
-                                  const struct Prf_UsrFigures *UsrFigures)
+                                  const struct Prf_UsrFigures *UsrFigures,
+                                  unsigned NumUsrsWithFigures)
   {
    extern const char *Txt_Downloads;
    extern const char *Txt_download;
@@ -649,7 +687,7 @@ static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
 						  Txt_downloads);
 	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumFileViews"),
-			  Prf_DB_GetNumUsrsWithFigure ("NumFileViews"));
+			  NumUsrsWithFigures);
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_NBSP ();
@@ -673,7 +711,8 @@ static void Prf_ShowNumFileViews (const struct Usr_Data *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
-                                     const struct Prf_UsrFigures *UsrFigures)
+                                     const struct Prf_UsrFigures *UsrFigures,
+                                     unsigned NumUsrsWithFigures)
   {
    extern const char *Txt_Timeline;
    extern const char *Txt_TIMELINE_post;
@@ -691,7 +730,7 @@ static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
 						     Txt_TIMELINE_posts);
 	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumSocPub"),
-			  Prf_DB_GetNumUsrsWithFigure ("NumSocPub"));
+			  NumUsrsWithFigures);
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_NBSP ();
@@ -715,7 +754,8 @@ static void Prf_ShowNumTimelinePubs (const struct Usr_Data *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
-                                   const struct Prf_UsrFigures *UsrFigures)
+                                   const struct Prf_UsrFigures *UsrFigures,
+                                   unsigned NumUsrsWithFigures)
   {
    extern const char *Txt_Forums;
    extern const char *Txt_FORUM_post;
@@ -733,7 +773,7 @@ static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
 						   Txt_FORUM_posts);
 	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumForPst"),
-			  Prf_DB_GetNumUsrsWithFigure ("NumForPst"));
+			  NumUsrsWithFigures);
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_NBSP ();
@@ -757,7 +797,8 @@ static void Prf_ShowNumForumPosts (const struct Usr_Data *UsrDat,
 /*****************************************************************************/
 
 static void Prf_ShowNumMessagesSent (const struct Usr_Data *UsrDat,
-                                     const struct Prf_UsrFigures *UsrFigures)
+                                     const struct Prf_UsrFigures *UsrFigures,
+                                     unsigned NumUsrsWithFigures)
   {
    extern const char *Txt_Messages;
    extern const char *Txt_message;
@@ -775,7 +816,7 @@ static void Prf_ShowNumMessagesSent (const struct Usr_Data *UsrDat,
 						     Txt_messages);
 	 HTM_NBSP ();
 	 Prf_ShowRanking (Prf_DB_GetUsrRankingFigure (UsrDat->UsrCod,"NumMsgSnt"),
-			  Prf_DB_GetNumUsrsWithFigure ("NumMsgSnt"));
+			  NumUsrsWithFigures);
 	 if (UsrFigures->NumDays > 0)
 	   {
 	    HTM_NBSP ();
@@ -895,7 +936,7 @@ void Prf_GetUsrFigures (long UsrCod,struct Prf_UsrFigures *UsrFigures)
 /************************* Show position in ranking **************************/
 /*****************************************************************************/
 
-static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
+static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrsWithFigures)
   {
    extern const char *Txt_of_PART_OF_A_TOTAL;
    char *Title;
@@ -904,7 +945,8 @@ static void Prf_ShowRanking (unsigned Rank,unsigned NumUsrs)
    Frm_BeginForm (ActSeeUseGbl);
       Sco_PutParScope ("ScopeSta",Hie_SYS);
       Par_PutParUnsigned (NULL,"FigureType",(unsigned) Fig_USERS_RANKING);
-      if (asprintf (&Title,"#%u %s %u",Rank,Txt_of_PART_OF_A_TOTAL,NumUsrs) < 0)
+      if (asprintf (&Title,"#%u %s %u",
+		    Rank,Txt_of_PART_OF_A_TOTAL,NumUsrsWithFigures) < 0)
 	 Err_NotEnoughMemoryExit ();
       HTM_BUTTON_Submit_Begin (Title,NULL,
                                "class=\"BT_LINK FORM_OUT_%s\"",

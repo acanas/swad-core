@@ -4982,7 +4982,7 @@ static HidVis_HiddenOrVisible_t API_WriteRowFileBrowser (struct Brw_FileBrowser 
 	 File->Metadata.PublisherCod    = -1L;
 	 File->Metadata.PrivateOrPublic = PriPub_PRIVAT;
 	 File->Metadata.License         = Brw_LICENSE_DEFAULT;
-	 File->FilCod          = Brw_DB_AddPath (FileBrowser->Zone,
+	 File->FilCod          = Brw_DB_AddFile (FileBrowser->Zone,
 							  File);
 	}
 

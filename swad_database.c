@@ -4061,27 +4061,31 @@ mysql> DESCRIBE usr_figures;
 +----------------+----------+------+-----+---------+-------+
 | Field          | Type     | Null | Key | Default | Extra |
 +----------------+----------+------+-----+---------+-------+
-| UsrCod         | int(11)  | NO   | PRI | NULL    |       |
+| UsrCod         | int      | NO   | PRI | NULL    |       |
 | FirstClickTime | datetime | NO   | MUL | NULL    |       |
-| NumClicks      | int(11)  | NO   | MUL | -1      |       |
-| NumSocPub      | int(11)  | NO   |     | -1      |       |
-| NumFileViews   | int(11)  | NO   |     | -1      |       |
-| NumForPst      | int(11)  | NO   |     | -1      |       |
-| NumMsgSnt      | int(11)  | NO   |     | -1      |       |
+| NumClicks      | int      | NO   | MUL | -1      |       |
+| NumSocPub      | int      | NO   | MUL | -1      |       |
+| NumFileViews   | int      | NO   | MUL | -1      |       |
+| NumForPst      | int      | NO   | MUL | -1      |       |
+| NumMsgSnt      | int      | NO   | MUL | -1      |       |
 +----------------+----------+------+-----+---------+-------+
-7 rows in set (0.01 sec)
+7 rows in set (0,00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_figures ("
 			"UsrCod INT NOT NULL,"
 			"FirstClickTime DATETIME NOT NULL,"
 			"NumClicks INT NOT NULL DEFAULT -1,"
-			"NumSocPub INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumTimelinePubs
-			"NumFileViews INT NOT NULL DEFAULT -1,"
-			"NumForPst INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumForumPosts
-			"NumMsgSnt INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumMessagesSent
+			"NumSocPub INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumTmlPub ?
+			"NumFileViews INT NOT NULL DEFAULT -1,"	// TODO: Rename to NumFilVie ?
+			"NumForPst INT NOT NULL DEFAULT -1,"
+			"NumMsgSnt INT NOT NULL DEFAULT -1,"
 		   "PRIMARY KEY(UsrCod),"
 		   "INDEX(FirstClickTime),"
-		   "INDEX(NumClicks)"
+		   "INDEX(NumClicks),"
+		   "INDEX(NumSocPub),"
+		   "INDEX(NumFileViews),"
+		   "INDEX(NumForPst),"
+		   "INDEX(NumMsgSnt)"
 		   ") ENGINE=MyISAM");
 
    /***** Table usr_follow *****/

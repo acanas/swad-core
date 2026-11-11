@@ -641,11 +641,16 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.32.8 (2026-11-10)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.32.10 (2026-11-11)"
 #define Chl_CSS_FILE		"swad26.32.7.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
-	Version 26.32.8:  Nov 10, 2026	Time measurement for user profile optimization. (349208 lines)
+	Version 26.32.10: Nov 11, 2026	Fixed bug in files. Reported by Antonio Manuel Fernández Pérez. (349289 lines)
+	Version 26.32.9:  Nov 11, 2026	Optimization on database related to user figures. (349243 lines)
+					1 change necessary in database:
+ALTER TABLE usr_figures ADD INDEX (NumSocPub),ADD INDEX (NumFileViews),ADD INDEX (NumForPst),ADD INDEX (NumMsgSnt);
+
+	Version 26.32.8:  Nov 11, 2026	Time measurement for user profile optimization. (349208 lines)
 	Version 26.32.7:  Nov 10, 2026	Changed text for answered text in matches. Inspired by the comment from Alejandro Rega Sánchez. (349189 lines)
 	Version 26.32.6:  Nov 10, 2026	Code refactoring in file browsers. (349189 lines)
 	Version 26.32.5:  Nov 09, 2026	Code refactoring in file browsers. (349168 lines)

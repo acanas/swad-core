@@ -51,7 +51,7 @@ unsigned Prf_DB_GetUsrRankingFigure (long UsrCod,const char *FldName);
 unsigned Prf_DB_GetRankingFigure (MYSQL_RES **mysql_res,
 				  Hie_Level_t HieLvl,const char *FldName);
 unsigned Prf_DB_GetRankingClicksPerDay (MYSQL_RES **mysql_res,Hie_Level_t HieLvl);
-unsigned Prf_DB_GetNumUsrsWithFigure (const char *FldName);
+unsigned Prf_DB_GetNumUsrsWithFigures (void);
 unsigned Prf_DB_GetRankingNumClicksPerDay (long UsrCod);
 unsigned Prf_DB_GetNumUsrsWithNumClicksPerDay (void);
 Exi_Exist_t Prf_DB_CheckIfUsrFiguresExists (long UsrCod);

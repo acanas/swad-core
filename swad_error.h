@@ -117,7 +117,7 @@ void Err_WrongMailDomainExit (void);
 void Err_WrongRoleExit (void);
 void Err_WrongUserExit (void);
 
-void Err_NoFileOrFolderNoLongerExists (void);
+void Err_FileOrFolderNoLongerExists (void);
 void Err_NoPermission (void);
 void Err_NoPermissionExit (void);
 void Err_ShowErrorAndExit (const char *Txt);

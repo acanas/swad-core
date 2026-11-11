@@ -2083,7 +2083,7 @@ Exi_Exist_t Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrow
    switch (FileExistsInDB)
      {
       case Exi_EXISTS:
-	 /***** Check if file exists *****/
+	 /***** Check if file zone is the current zone *****/
 	 if (ZoneDB != Brw_DB_GetZoneDB_brw_files (FileBrowser->Zone))
 	    Err_WrongFileZoneExit ();
 
@@ -2091,6 +2091,20 @@ Exi_Exist_t Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrow
 	 Fil_BuildPath (File->Path.InServ,"%s/%s",
 			FileBrowser->PathRootFolderInServ.AboveRootFolder,
 			File->Path.InZone);
+
+	 /***** File type from database could be unknown due to legacy reasons
+	        ==> if unknown, get file type from disk and update in database *****/
+	 if (File->Type == Brw_IS_UNKNOWN)
+	    switch (Brw_GetFileTypeSizeAndDate (File))
+	      {
+	       case Exi_EXISTS:
+	          Brw_DB_UpdateFileType (File);
+	          break;
+	       case Exi_DOES_NOT_EXIST:
+	       default:
+		  Err_FileOrFolderNoLongerExists ();
+		  break;
+	      }
 
 	 /***** Set level of this file or folder inside file browser *****/
 	 File->Level = Brw_NumLevelsInPath (File->Path.InZone);
@@ -4064,7 +4078,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       FileOrFolder->Metadata.PublisherCod    = -1L;
       FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
       FileOrFolder->Metadata.License         = Brw_LICENSE_DEFAULT;
-      FileOrFolder->FilCod         	     = Brw_DB_AddPath (FileBrowser->Zone,
+      FileOrFolder->FilCod         	     = Brw_DB_AddFile (FileBrowser->Zone,
 							       FileOrFolder);
      }
 
@@ -5116,7 +5130,7 @@ static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5175,7 +5189,7 @@ static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5235,7 +5249,7 @@ static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5310,7 +5324,7 @@ static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5402,7 +5416,7 @@ static void Brw_DoActionCopy (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -5963,7 +5977,7 @@ static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -6393,7 +6407,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 			      FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
 			      FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			      FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
-			      FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
+			      FileDst.FilCod                   = Brw_DB_AddFile (FileBrowser->Zone,
 										 &FileDst);
 			      if (*FirstFilCod <= 0)
 				 *FirstFilCod = FileDst.FilCod;
@@ -6442,7 +6456,7 @@ static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBro
 			   FileDst.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
 			   FileDst.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			   FileDst.Metadata.License         = Brw_LICENSE_DEFAULT;
-			   FileDst.FilCod                   = Brw_DB_AddPath (FileBrowser->Zone,
+			   FileDst.FilCod                   = Brw_DB_AddFile (FileBrowser->Zone,
 									      &FileDst);
 			   break;
 			case Err_ERROR:		// Quota exceeded
@@ -6528,6 +6542,9 @@ static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
 	 switch (Brw_CheckIfICanCreateIntoFolder (FileBrowser->Zone,&ParentFolder))
 	   {
 	    case Usr_CAN:
+	       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+		  Ale_ShowAlert (Ale_DEBUG,"Brw_DoActionShowForm CAN");
+
 	       /***** Name of the folder to be shown ****/
 	       Brw_GetFileNameToShow (FileBrowser->Zone,&ParentFolder,
 				      ParentFolderNameToShow);
@@ -6557,13 +6574,15 @@ static void Brw_DoActionShowForm (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Usr_CAN_NOT:
 	    default:
+	       if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+		  Ale_ShowAlert (Ale_DEBUG,"Brw_DoActionShowForm CAN NOT");
 	       Err_NoPermission ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -6864,7 +6883,7 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
 			      NewFolder.Metadata.PublisherCod	 = Gbl.Usrs.Me.UsrDat.UsrCod;
 			      NewFolder.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 			      NewFolder.Metadata.License	 = Brw_LICENSE_DEFAULT;
-			      NewFolder.FilCod			 = Brw_DB_AddPath (FileBrowser->Zone,
+			      NewFolder.FilCod			 = Brw_DB_AddFile (FileBrowser->Zone,
 										   &NewFolder);
 
 			      /* The folder has been created sucessfully */
@@ -6913,7 +6932,7 @@ static void Brw_DoActionCreateFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -7032,7 +7051,7 @@ static void Brw_DoActionRenameFolder (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -7239,7 +7258,7 @@ static Err_SuccessOrError_t Brw_RcvFileInFileBrw (struct Brw_FileBrowser *FileBr
 					  NewFile.Metadata.PublisherCod    = Gbl.Usrs.Me.UsrDat.UsrCod;
 					  NewFile.Metadata.PrivateOrPublic = PriPub_PRIVAT;
 					  NewFile.Metadata.License         = Brw_LICENSE_DEFAULT;
-					  NewFile.FilCod         	   = Brw_DB_AddPath (FileBrowser->Zone,
+					  NewFile.FilCod         	   = Brw_DB_AddFile (FileBrowser->Zone,
 											     &NewFile);
 
 					  /* Add a new entry of marks into database */
@@ -7432,7 +7451,7 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
 				       NewLink.Metadata.PublisherCod	= Gbl.Usrs.Me.UsrDat.UsrCod;
 				       NewLink.Metadata.PrivateOrPublic	= PriPub_PRIVAT;
 				       NewLink.Metadata.License		= Brw_LICENSE_DEFAULT;
-				       NewLink.FilCod			= Brw_DB_AddPath (FileBrowser->Zone,
+				       NewLink.FilCod			= Brw_DB_AddFile (FileBrowser->Zone,
 											  &NewLink);
 
 				       /* Show message of confirmation */
@@ -7477,7 +7496,7 @@ static void Brw_DoActionCreateLink (struct Brw_FileBrowser *FileBrowser)
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -7594,7 +7613,7 @@ static void Brw_SetDocAs (struct Brw_FileBrowser *FileBrowser,
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -8043,13 +8062,13 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Exi_DOES_NOT_EXIST:
 	    default:
-	       Err_NoFileOrFolderNoLongerExists ();
+	       Err_FileOrFolderNoLongerExists ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -8219,13 +8238,13 @@ void Brw_DownloadFile (void)
 	       break;
 	    case Exi_DOES_NOT_EXIST:
 	    default:
-	       Err_NoFileOrFolderNoLongerExists ();
+	       Err_FileOrFolderNoLongerExists ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -8501,13 +8520,13 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
 	       break;
 	    case Exi_DOES_NOT_EXIST:
 	    default:
-	       Err_NoFileOrFolderNoLongerExists ();
+	       Err_FileOrFolderNoLongerExists ();
 	       break;
 	   }
          break;
       case Exi_DOES_NOT_EXIST:
       default:
-	 Err_NoFileOrFolderNoLongerExists ();
+	 Err_FileOrFolderNoLongerExists ();
          break;
      }
   }
@@ -9072,17 +9091,26 @@ static Usr_Can_t Brw_CheckIfICanCreateIntoFolder (Brw_Zone_t Zone,
       [Usr_BELONG     ] = Usr_CAN,
      };
 
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 1");
+
    /***** If not in a folder... *****/
    if (Folder->Type != Brw_IS_FOLDER)
       return Usr_CAN_NOT;
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 2");
 
    /***** I must be student, teacher, admin or superuser to edit *****/
    if (Gbl.Usrs.Me.Role.Max < Rol_STD)
       return Usr_CAN_NOT;
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 3");
 
    /***** If maximum level is reached, I can not create/paste *****/
    if (Folder->Level >= Brw_MAX_DIR_LEVELS)
       return Usr_CAN_NOT;
+   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
+      Ale_ShowAlert (Ale_DEBUG,"Brw_CheckIfICanCreateIntoFolder 4");
 
    /***** Have I permission to create/paste a new file or folder into the folder? *****/
    switch (Zone)

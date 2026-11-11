@@ -43,7 +43,8 @@ Brw_Zone_t Brw_DB_GetZoneDB_brw_files (Brw_Zone_t Zone);
 Brw_Zone_t Brw_DB_GetZoneDB_brw_clipboards (Brw_Zone_t Zone);
 
 //---------------------------------- Files ------------------------------------
-long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_File *File);
+long Brw_DB_AddFile (Brw_Zone_t Zone,const struct Brw_File *File);
+void Brw_DB_UpdateFileType (const struct Brw_File *File);
 void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
 			     const char OldPathInZone[PATH_MAX + 1],
                              const char NewPathInZone[PATH_MAX + 1]);

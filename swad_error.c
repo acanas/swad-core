@@ -614,7 +614,7 @@ void Err_WrongUserExit (void)
 /******** Write error message when no permission to perform an action ********/
 /*****************************************************************************/
 
-void Err_NoFileOrFolderNoLongerExists (void)
+void Err_FileOrFolderNoLongerExists (void)
   {
    extern const char *Txt_The_file_or_folder_no_longer_exists;
 

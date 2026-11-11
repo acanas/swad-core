@@ -213,10 +213,10 @@ static Brw_Zone_t Brw_DB_GetZoneDB_brw_expanded (Brw_Zone_t Zone)
   }
 
 /*****************************************************************************/
-/**************** Add a path of file/folder to the database ******************/
+/********************* Add a file/folder to the database *********************/
 /*****************************************************************************/
 
-long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_File *File)
+long Brw_DB_AddFile (Brw_Zone_t Zone,const struct Brw_File *File)
   {
    extern const char PriPub_Public_YN[PriPub_NUM_PRIVATE_PUBLIC];
 
@@ -240,6 +240,20 @@ long Brw_DB_AddPath (Brw_Zone_t Zone,const struct Brw_File *File)
   }
 
 /*****************************************************************************/
+/************************ Update file type in database ***********************/
+/*****************************************************************************/
+
+void Brw_DB_UpdateFileType (const struct Brw_File *File)
+  {
+   DB_QueryUPDATE ("can not update file type",
+		   "UPDATE brw_files"
+		     " SET FileType=%u"
+		   " WHERE FilCod=%ld",
+		   (unsigned) File->Type,
+		   File->FilCod);
+  }
+
+/*****************************************************************************/
 /*************** Rename a file or folder in table of files *******************/
 /*****************************************************************************/
 
@@ -247,8 +261,8 @@ void Brw_DB_RenameOneFolder (Brw_Zone_t Zone,
 			     const char OldPathInZone[PATH_MAX + 1],
                              const char NewPathInZone[PATH_MAX + 1])
   {
-   /***** Update file or folder in table of common files *****/
-   DB_QueryUPDATE ("can not update folder name in a common zone",
+   /***** Update file or folder *****/
+   DB_QueryUPDATE ("can not update folder name",
 		   "UPDATE brw_files"
 		     " SET Path='%s'"
 		   " WHERE FileBrowser=%u"
@@ -273,7 +287,7 @@ void Brw_DB_RenameChildrenFilesOrFolders (Brw_Zone_t Zone,
    unsigned StartFinalSubpathNotChanged = strlen (OldPathInZone) + 2;
 
    /***** Update children of a folder in table of files *****/
-   DB_QueryUPDATE ("can not rename file or folder names in a common zone",
+   DB_QueryUPDATE ("can not rename file or folder names",
 		   "UPDATE brw_files"
 		     " SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
 		   " WHERE FileBrowser=%u"
@@ -399,7 +413,7 @@ void Brw_DB_GetPathByCod (long FilCod,char *Title,size_t TitleSize)
 long Brw_DB_GetPublisherOfSubtree (Brw_Zone_t Zone,
 				   const char PathInZone[PATH_MAX + 1])
   {
-   /***** Get all common files that are equal to full path (including filename)
+   /***** Get all files that are equal to full path (including filename)
 	  or that are under that full path from database *****/
    return DB_QuerySELECTCode ("can not get publishers of files",
 			      "SELECT DISTINCT "
