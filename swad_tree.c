@@ -423,6 +423,13 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
       [Tre_CHG_SPC_ITEM			] = Vie_EDIT,
       [Tre_END_EDIT_SPC_LIST_ITEMS	] = Vie_EDIT,
      };
+   static Lay_Show_t ShowHiddenResources[Vie_NUM_VIEW_TYPES] =
+     {
+      [Vie_VIEW  ] = Lay_DONT_SHOW,
+      [Vie_EDIT  ] = Lay_SHOW,
+      [Vie_CONFIG] = Lay_DONT_SHOW,
+      [Vie_PRINT ] = Lay_DONT_SHOW,
+     };
    Lay_Show_t ShowIconExpandContract;
    HidVis_HiddenOrVisible_t HiddenOrVisible;
    char *Id;
@@ -431,13 +438,6 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
    char *TitleClass;
    Dat_StartEndTime_t StartEndTime;
    Lay_Highlight_t HighlightNode;
-   static Lay_Show_t ShowHiddenResources[Vie_NUM_VIEW_TYPES] =
-     {
-      [Vie_VIEW  ] = Lay_DONT_SHOW,
-      [Vie_EDIT  ] = Lay_SHOW,
-      [Vie_CONFIG] = Lay_DONT_SHOW,
-      [Vie_PRINT ] = Lay_DONT_SHOW,
-     };
 
    /***** Check if icon expand/contract is necessary *****/
    ShowIconExpandContract = Show[Tre_GetIfNodeHasChildren (NumNode)];
@@ -483,12 +483,14 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      NumCol < Node->Hierarchy.Level;
 	      NumCol++)
 	   {
-	    HTM_TD_Begin ("class=\"TRE_COL1 %s\" rowspan=\"2\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"TRE_COL1 %s\" rowspan=\"2\"",
+			  The_GetColorRowsHighlight(HighlightNode));
 	    HTM_TD_End ();
 	   }
 
 	 /* Expand/contract this tree node */
-	 HTM_TD_Begin ("class=\"TRE_COL1 RT %s\" rowspan=\"2\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"TRE_COL1 RT %s\" rowspan=\"2\"",
+		       The_GetColorRowsHighlight(HighlightNode));
 	    if (ShowIconExpandContract == Lay_SHOW)
 	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
 						  ViewingOrEditingProgram[ListingType]);
@@ -497,13 +499,15 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Forms to remove/edit this tree node */
 	 if (ViewingOrEditingProgram[ListingType] == Vie_EDIT)
 	   {
-	    HTM_TD_Begin ("class=\"TRE_COL1 LT %s\" rowspan=\"2\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"TRE_COL1 LT %s\" rowspan=\"2\"",
+			  The_GetColorRowsHighlight(HighlightNode));
 	       Tre_PutFormsToRemEditOneNode (ListingType,NumNode,Node,HighlightNode);
 	    HTM_TD_End ();
 	   }
 
 	 /* Node number */
-	 HTM_TD_Begin ("class=\"TRE_NUM %s\" rowspan=\"2\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"TRE_NUM %s\" rowspan=\"2\"",
+		       The_GetColorRowsHighlight(HighlightNode));
 	    HTM_DIV_Begin ("class=\"%s%s\"",
 			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
 	       HTM_Unsigned (Tre_GetCurrentNumberInLevel (Node->Hierarchy.Level));
@@ -515,16 +519,16 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	  |   |   |                                                   |
 	  | v | 1 | Lesson 1                 (colspan = 3+2-1 = 4)    |
 	  |___|___|___________________________________________________|
-          |   |   |   |                                               |
+	  |   |   |   |                                               |
 	  |   | v | 1 | Lesson 1.1           (colspan = 3+2-2 = 3)    |
 	  |___|___|___|_______________________________________________|
-          |   |   |   |   |                                           |
+	  |   |   |   |   |                                           |
 	  |   |   | v | 1 | Lesson 1.1.1     (colspan = 3+2-3 = 2)    |
 	  |___|___|___|___|___________________________________________|
-          |   |   |   |   |   |                                       |
+	  |   |   |   |   |   |                                       |
 	  |   |   |   |   | 1 |  New node    (colspan = 3+2-4 = 1)    |
 	  |___|___|___|___|___|_______________________________________|
-          |   |   |   |                                               |
+	  |   |   |   |                                               |
 	  |   | v | 2 | Lesson 1.2           (colspan = 3+2-2 = 3)    |
 	  |___|___|___|_______________________________________________|
 	  */
@@ -536,7 +540,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       break;
 	    default:
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",ColSpan,
-			     The_GetColorRows ());
+			     The_GetColorRowsHighlight(HighlightNode));
 
 	       break;
 	   }
@@ -563,7 +567,8 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 		  HTM_TD_Begin ("class=\"TRE_DATE RT\"");
 		  break;
 	       default:
-		  HTM_TD_Begin ("class=\"TRE_DATE RT %s\"",The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"TRE_DATE RT %s\"",
+			        The_GetColorRowsHighlight(HighlightNode));
 		  break;
 	      }
 
@@ -591,7 +596,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    HTM_TD_End ();
 	   }
 
-      HTM_TR_End ();
+	 HTM_TR_End ();
 
       /***** Second row (text and specific content) *****/
       HTM_TR_Begin (NULL);
@@ -606,7 +611,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	       break;
 	    default:
 	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",ColSpan,
-			     The_GetColorRows ());
+			     The_GetColorRowsHighlight(HighlightNode));
 	       break;
 	   }
 

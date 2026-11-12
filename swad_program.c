@@ -74,7 +74,7 @@ void Prg_ShowProgram (void)
   {
    Prg_BeforeTree (Tre_VIEW);
       (void) Tre_ShowTree (Inf_PROGRAM);
-   Box_BoxEnd ();
+   Prg_AfterTree ();
   }
 
 /*****************************************************************************/

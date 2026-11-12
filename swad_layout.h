@@ -27,7 +27,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_action.h"
 #include "swad_hierarchy_type.h"
 #include "swad_HTML.h"
 #include "swad_icon.h"

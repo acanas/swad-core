@@ -640,11 +640,13 @@ TODO: Al confirmar el DNI de un profesor, sale "Wrong action" en el horario de t
 TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtube.com/shorts/fY6Oax_uJBc?si=G3UHqvSH3yEbxm1B
 
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
+TODO: Cuando se elimina una asignatura, ¡no mostrar mensaje para ir a esa asignatura!
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.32.11 (2026-11-11)"
-#define Chl_CSS_FILE		"swad26.32.7.css"
+#define Chl_PLATFORM_VERSION	"SWAD 26.33 (2026-11-12)"
+#define Chl_CSS_FILE		"swad26.33.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.33:    Nov 13, 2026	Hightlight in trees. (349297 lines)
 	Version 26.32.11: Nov 11, 2026	Optimization on database related to user figures. (349248 lines)
 					3 changes necessary in database:
 ALTER TABLE usr_figures ADD INDEX (FirstClickTime,NumClicks);

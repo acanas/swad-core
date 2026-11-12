@@ -25,8 +25,9 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For vasprintf
 #include <stdarg.h>		// For va_start, va_end
-#include <stdio.h>		// For FILE,fprintf
+#include <stdio.h>		// For FILE, vasprintf
 #include <stdlib.h>		// For exit, system, free, etc.
 #include <string.h>		// For string functions
 

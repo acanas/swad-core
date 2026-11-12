@@ -75,6 +75,8 @@ struct The_Theme The_Themes[The_NUM_THEMES] =
 
 static void The_PutIconsTheme (__attribute__((unused)) const void *Args);
 
+static void The_ChangeRowColorLevel (unsigned Level);
+
 /*****************************************************************************/
 /************************ Put icons to select a theme ***********************/
 /*****************************************************************************/
@@ -205,51 +207,72 @@ static unsigned The_RowEvenOdd[3] =	// To alternate row colors in listings
    0,
   };
 
-static const char *The_ClassColorRows[2][The_NUM_THEMES] =
+static const char *The_ClassColorRows[Lay_NUM_HIGHLIGHT][2][The_NUM_THEMES] =
   {
-   [0][The_THEME_WHITE ] = "COLOR0_WHITE",
-   [0][The_THEME_GREY  ] = "COLOR0_GREY",
-   [0][The_THEME_PURPLE] = "COLOR0_PURPLE",
-   [0][The_THEME_BLUE  ] = "COLOR0_BLUE",
-   [0][The_THEME_YELLOW] = "COLOR0_YELLOW",
-   [0][The_THEME_PINK  ] = "COLOR0_PINK",
-   [0][The_THEME_DARK  ] = "COLOR0_DARK",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_WHITE ] = "COLOR0_WHITE",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_GREY  ] = "COLOR0_GREY",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_PURPLE] = "COLOR0_PURPLE",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_BLUE  ] = "COLOR0_BLUE",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_YELLOW] = "COLOR0_YELLOW",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_PINK  ] = "COLOR0_PINK",
+   [Lay_DONT_HIGHLIGHT	][0][The_THEME_DARK  ] = "COLOR0_DARK",
 
-   [1][The_THEME_WHITE ] = "COLOR1_WHITE",
-   [1][The_THEME_GREY  ] = "COLOR1_GREY",
-   [1][The_THEME_PURPLE] = "COLOR1_PURPLE",
-   [1][The_THEME_BLUE  ] = "COLOR1_BLUE",
-   [1][The_THEME_YELLOW] = "COLOR1_YELLOW",
-   [1][The_THEME_PINK  ] = "COLOR1_PINK",
-   [1][The_THEME_DARK  ] = "COLOR1_DARK",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_WHITE ] = "COLOR1_WHITE",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_GREY  ] = "COLOR1_GREY",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_PURPLE] = "COLOR1_PURPLE",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_BLUE  ] = "COLOR1_BLUE",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_YELLOW] = "COLOR1_YELLOW",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_PINK  ] = "COLOR1_PINK",
+   [Lay_DONT_HIGHLIGHT	][1][The_THEME_DARK  ] = "COLOR1_DARK",
+
+   [Lay_HIGHLIGHT	][0][The_THEME_WHITE ] = "HIGHLIGHT0_WHITE",
+   [Lay_HIGHLIGHT	][0][The_THEME_GREY  ] = "HIGHLIGHT0_GREY",
+   [Lay_HIGHLIGHT	][0][The_THEME_PURPLE] = "HIGHLIGHT0_PURPLE",
+   [Lay_HIGHLIGHT	][0][The_THEME_BLUE  ] = "HIGHLIGHT0_BLUE",
+   [Lay_HIGHLIGHT	][0][The_THEME_YELLOW] = "HIGHLIGHT0_YELLOW",
+   [Lay_HIGHLIGHT	][0][The_THEME_PINK  ] = "HIGHLIGHT0_PINK",
+   [Lay_HIGHLIGHT	][0][The_THEME_DARK  ] = "HIGHLIGHT0_DARK",
+
+   [Lay_HIGHLIGHT	][1][The_THEME_WHITE ] = "HIGHLIGHT1_WHITE",
+   [Lay_HIGHLIGHT	][1][The_THEME_GREY  ] = "HIGHLIGHT1_GREY",
+   [Lay_HIGHLIGHT	][1][The_THEME_PURPLE] = "HIGHLIGHT1_PURPLE",
+   [Lay_HIGHLIGHT	][1][The_THEME_BLUE  ] = "HIGHLIGHT1_BLUE",
+   [Lay_HIGHLIGHT	][1][The_THEME_YELLOW] = "HIGHLIGHT1_YELLOW",
+   [Lay_HIGHLIGHT	][1][The_THEME_PINK  ] = "HIGHLIGHT1_PINK",
+   [Lay_HIGHLIGHT	][1][The_THEME_DARK  ] = "HIGHLIGHT1_DARK",
   };
 
 const char *The_GetColorRows (void)
   {
-   return The_GetColorRows1 (0);
+   return The_GetColorRowsLevel (0);
   }
 
-const char *The_GetColorRows1 (unsigned Level)
+const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightNode)
   {
-   return The_ClassColorRows[The_RowEvenOdd[Level]][Gbl.Prefs.Theme];
+   return The_ClassColorRows[HighlightNode][The_RowEvenOdd[0]][Gbl.Prefs.Theme];
+  }
+
+const char *The_GetColorRowsLevel (unsigned Level)
+  {
+   return The_ClassColorRows[Lay_DONT_HIGHLIGHT][The_RowEvenOdd[Level]][Gbl.Prefs.Theme];
   }
 
 void The_ResetRowColor (void)
   {
-   The_ResetRowColor1 (0);
+   The_ResetRowColorLevel (0);
   }
 
-void The_ResetRowColor1 (unsigned Level)
+void The_ResetRowColorLevel (unsigned Level)
   {
    The_RowEvenOdd[Level] = 0;
   }
 
 void The_ChangeRowColor (void)
   {
-   The_ChangeRowColor1 (0);
+   The_ChangeRowColorLevel (0);
   }
 
-void The_ChangeRowColor1 (unsigned Level)
+static void The_ChangeRowColorLevel (unsigned Level)
   {
    The_RowEvenOdd[Level] = 1 - The_RowEvenOdd[Level];
   }

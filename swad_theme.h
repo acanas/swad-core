@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_layout.h"
+
+/*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
@@ -64,13 +70,13 @@ The_Theme_t The_GetThemeFromStr (const char *Str);
 const char *The_GetSuffix (void);
 
 const char *The_GetColorRows (void);
-const char *The_GetColorRows1 (unsigned Level);
+const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightNode);
+const char *The_GetColorRowsLevel (unsigned Level);
 
 void The_ResetRowColor (void);
-void The_ResetRowColor1 (unsigned Level);
+void The_ResetRowColorLevel (unsigned Level);
 
 void The_ChangeRowColor (void);
-void The_ChangeRowColor1 (unsigned Level);
 
 //-------------------------------- Figures ------------------------------------
 void The_GetAndShowNumUsrsPerTheme (Hie_Level_t HieLvl);

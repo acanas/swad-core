@@ -2621,6 +2621,26 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .COLOR1_PINK	{background-color: #fdfcfa;}
 .COLOR1_DARK	{background-color: #484848;}
 
+.HIGHLIGHT0_WHITE,
+.HIGHLIGHT0_GREY,
+.HIGHLIGHT0_PURPLE,
+.HIGHLIGHT0_BLUE,
+.HIGHLIGHT0_YELLOW,
+.HIGHLIGHT0_PINK	{background-color: #ddecf1; animation: fadetolight0 2s linear forwards;}
+.HIGHLIGHT0_DARK	{background-color: #707070; animation: fadetodark0 2s linear forwards;}
+@keyframes fadetolight0	{to {background-color: #f8f7f2;}}
+@keyframes fadetodark0	{to {background-color: #404040;}}
+
+.HIGHLIGHT1_WHITE,
+.HIGHLIGHT1_GREY,
+.HIGHLIGHT1_PURPLE,
+.HIGHLIGHT1_BLUE,
+.HIGHLIGHT1_YELLOW,
+.HIGHLIGHT1_PINK	{background-color: #ddecf1; animation: fadetolight1 2s linear forwards;}
+.HIGHLIGHT1_DARK	{background-color: #707070; animation: fadetodark1 2s linear forwards;}
+@keyframes fadetolight1	{to {background-color: #fdfcfa;}}
+@keyframes fadetodark1	{to {background-color: #484848;}}
+
 .LIGHT_GREEN	{background-color: #C0FF40;}
 
 .BG_HIGHLIGHT	{background-color: rgba(166,196,208,0.33);}

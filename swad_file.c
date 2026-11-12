@@ -25,13 +25,14 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#define _GNU_SOURCE 		// For vasprintf
 #include <ctype.h>		// For isprint, isspace, etc.
 #include <dirent.h>		// For scandir, etc.
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdarg.h>		// For va_start, va_end
 #include <stddef.h>		// For NULL
-#include <stdio.h>		// For FILE,fprintf
+#include <stdio.h>		// For FILE, vasprintf
 #include <stdlib.h>		// For exit, system, free, etc.
 #include <string.h>		// For string functions
 #include <sys/stat.h>		// For mkdir

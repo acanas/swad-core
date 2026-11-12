@@ -563,18 +563,18 @@ static void TreSpc_WriteRowNewItem (struct Tre_Node *Node,unsigned NumItems)
    HTM_TR_Begin (NULL);
 
       /***** Forms to remove/edit this question & answer *****/
-      HTM_TD_Begin ("class=\"ITM_COL1 LT %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"ITM_COL1 LT %s\"",The_GetColorRowsLevel (1));
 	 TreSpc_PutFormsToEditItem (Node,NumItems,NumItems);
       HTM_TD_End ();
 
       /***** Item number *****/
       HTM_TD_Begin ("class=\"TRE_NUM ITM_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows1 (1));
+                    The_GetSuffix (),The_GetColorRowsLevel (1));
 	 HTM_Unsigned (NumItems + 1);
       HTM_TD_End ();
 
       /***** Item content *****/
-      HTM_TD_Begin ("class=\"TRE_MAIN %s\"",The_GetColorRows1 (1));
+      HTM_TD_Begin ("class=\"TRE_MAIN %s\"",The_GetColorRowsLevel (1));
 
 	 Frm_BeginFormAnchor (ActionsNewItem[Node->InfoType],
 			      TreSpc_LIST_ITEMS_SECTION_ID);
