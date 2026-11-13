@@ -244,6 +244,7 @@ void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
    Inf_Type_t InfoType = SelectedNode->InfoType;
    long SelectedNodCod = SelectedNode->Hierarchy.NodCod;
    long SelectedItmCod = SelectedNode->Item.Cod;	// Specific code (resource, question,...)
+   long LastNodCod = -1L;
 
    /***** Trivial check: tree type must be valid *****/
    if (InfoType < (Inf_Type_t) 1 ||
@@ -259,7 +260,8 @@ void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
      {
       ParentNodCod = SelectedNodCod;	// Node code here is parent of the node to create
       NumNode = Tre_GetNumNodeFromNodCod (SelectedNodCod);
-      SelectedNodCod = Tre_GetNodCodFromNumNode (Tre_GetLastChild (NumNode));
+      // SelectedNodCod = Tre_GetNodCodFromNumNode (Tre_GetLastChild (NumNode));
+      LastNodCod = Tre_GetNodCodFromNumNode (Tre_GetLastChild (NumNode));
       FormLevel = Tre_GetLevelFromNumNode (NumNode) + 1;
      }
 
@@ -290,7 +292,7 @@ void Tre_ShowAllNodes (Tre_ListingType_t ListingType,
 
 	    /* Show form to create child node? */
 	    if (ListingType == Tre_FORM_NEW_CHILD_NODE &&
-		Node.Hierarchy.NodCod == SelectedNodCod)
+		Node.Hierarchy.NodCod == LastNodCod)
 	      {
 	       Tre_WriteRowToCreateNode (InfoType,ParentNodCod,FormLevel);
 	       The_ChangeRowColor ();
@@ -473,7 +475,15 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 								 Lay_DONT_HIGHLIGHT;
 
       /***** First row (title and dates) *****/
-      HTM_TR_Begin (NULL);
+      switch (ListingType)
+	{
+	 case Tre_PRINT:
+	    HTM_TR_Begin (NULL);
+	    break;
+	 default:
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightNode));
+	    break;
+	}
 
 	 /* Title CSS class */
 	 Tre_SetTitleClass (&TitleClass,Node->Hierarchy.Level);
@@ -483,14 +493,12 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	      NumCol < Node->Hierarchy.Level;
 	      NumCol++)
 	   {
-	    HTM_TD_Begin ("class=\"TRE_COL1 %s\" rowspan=\"2\"",
-			  The_GetColorRowsHighlight(HighlightNode));
+	    HTM_TD_Begin ("class=\"TRE_COL1\" rowspan=\"2\"");
 	    HTM_TD_End ();
 	   }
 
 	 /* Expand/contract this tree node */
-	 HTM_TD_Begin ("class=\"TRE_COL1 RT %s\" rowspan=\"2\"",
-		       The_GetColorRowsHighlight(HighlightNode));
+	 HTM_TD_Begin ("class=\"TRE_COL1 RT\" rowspan=\"2\"");
 	    if (ShowIconExpandContract == Lay_SHOW)
 	       Tre_PutIconToContractOrExpandNode (Node,ContractedOrExpanded,
 						  ViewingOrEditingProgram[ListingType]);
@@ -499,15 +507,13 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 /* Forms to remove/edit this tree node */
 	 if (ViewingOrEditingProgram[ListingType] == Vie_EDIT)
 	   {
-	    HTM_TD_Begin ("class=\"TRE_COL1 LT %s\" rowspan=\"2\"",
-			  The_GetColorRowsHighlight(HighlightNode));
+	    HTM_TD_Begin ("class=\"TRE_COL1 LT\" rowspan=\"2\"");
 	       Tre_PutFormsToRemEditOneNode (ListingType,NumNode,Node,HighlightNode);
 	    HTM_TD_End ();
 	   }
 
 	 /* Node number */
-	 HTM_TD_Begin ("class=\"TRE_NUM %s\" rowspan=\"2\"",
-		       The_GetColorRowsHighlight(HighlightNode));
+	 HTM_TD_Begin ("class=\"TRE_NUM\" rowspan=\"2\"");
 	    HTM_DIV_Begin ("class=\"%s%s\"",
 			   TitleClass,HidVis_TreeClass[HiddenOrVisible]);
 	       HTM_Unsigned (Tre_GetCurrentNumberInLevel (Node->Hierarchy.Level));
@@ -533,17 +539,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	  |___|___|___|_______________________________________________|
 	  */
 	 ColSpan = Tre_GetMaxNodeLevel () + 2 - Node->Hierarchy.Level;
-	 switch (ListingType)
-	   {
-	    case Tre_PRINT:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
-	       break;
-	    default:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",ColSpan,
-			     The_GetColorRowsHighlight(HighlightNode));
-
-	       break;
-	   }
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
 
 	    if (HighlightNode == Lay_HIGHLIGHT)
 	       HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
@@ -553,6 +549,7 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	    HTM_DIV_End ();
 	    if (HighlightNode == Lay_HIGHLIGHT)
 	       HTM_ARTICLE_End ();
+
 	 HTM_TD_End ();
 
 	 /* Free title CSS class */
@@ -561,37 +558,28 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 if (Node->InfoType == Inf_PROGRAM)
 	   {
 	    /* Start/end date/time */
-	    switch (ListingType)
-	      {
-	       case Tre_PRINT:
-		  HTM_TD_Begin ("class=\"TRE_DATE RT\"");
-		  break;
-	       default:
-		  HTM_TD_Begin ("class=\"TRE_DATE RT %s\"",
-			        The_GetColorRowsHighlight(HighlightNode));
-		  break;
-	      }
+	    HTM_TD_Begin ("class=\"TRE_DATE RT\"");
 
-	    UniqueId++;
-	    for (StartEndTime  = (Dat_StartEndTime_t) 0;
-		 StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-		 StartEndTime++)
-	      {
-	       if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-		  Err_NotEnoughMemoryExit ();
-	       HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
-			      Id,
-			      CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBL],The_GetSuffix (),
-			      HidVis_TreeClass[HiddenOrVisible]);
-		  Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
-						Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-						Dat_WRITE_TODAY |
-						Dat_WRITE_DATE_ON_SAME_DAY |
-						Dat_WRITE_HOUR |
-						Dat_WRITE_MINUTE);
-	       HTM_DIV_End ();
-	       free (Id);
-	      }
+	       UniqueId++;
+	       for (StartEndTime  = (Dat_StartEndTime_t) 0;
+		    StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+		    StartEndTime++)
+		 {
+		  if (asprintf (&Id,"prg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+		     Err_NotEnoughMemoryExit ();
+		  HTM_DIV_Begin ("id=\"%s\" class=\"%s_%s%s\"",
+				 Id,
+				 CloOpe_Class[Node->ClosedOrOpen][HidVis_VISIBL],The_GetSuffix (),
+				 HidVis_TreeClass[HiddenOrVisible]);
+		     Dat_WriteLocalDateHMSFromUTC (Id,Node->TimeUTC[StartEndTime],
+						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+						   Dat_WRITE_TODAY |
+						   Dat_WRITE_DATE_ON_SAME_DAY |
+						   Dat_WRITE_HOUR |
+						   Dat_WRITE_MINUTE);
+		  HTM_DIV_End ();
+		  free (Id);
+		 }
 
 	    HTM_TD_End ();
 	   }
@@ -599,37 +587,38 @@ static void Tre_WriteRowNode (Tre_ListingType_t ListingType,
 	 HTM_TR_End ();
 
       /***** Second row (text and specific content) *****/
-      HTM_TR_Begin (NULL);
+      switch (ListingType)
+	{
+	 case Tre_PRINT:
+	    HTM_TR_Begin (NULL);
+	    break;
+	 default:
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightNode));
+	    break;
+	}
 
 	 /* Begin text and specific content */
 	 if (Node->InfoType == Inf_PROGRAM)
 	    ColSpan++;
-	 switch (ListingType)
-	   {
-	    case Tre_PRINT:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
-	       break;
-	    default:
-	       HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",ColSpan,
-			     The_GetColorRowsHighlight(HighlightNode));
-	       break;
-	   }
+         HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
 
-	 if (ContractedOrExpanded == ConExp_EXPANDED)
-	   {
-	    /* Item text / form */
-	    if (ListingType == Tre_FORM_EDIT_NODE &&
-		HighlightNode == Lay_HIGHLIGHT)
-	       /* Form to change node title, dates and text */
-	       Tre_ShowFormToChangeNode (Node);
-	    else
-	       /* Text */
-	       Tre_WriteNodeText (Node,HiddenOrVisible);
+	    if (ContractedOrExpanded == ConExp_EXPANDED)
+	      {
+	       /* Item text / form */
+	       if (ListingType == Tre_FORM_EDIT_NODE &&
+		   HighlightNode == Lay_HIGHLIGHT)
+		  /* Form to change node title, dates and text */
+		  Tre_ShowFormToChangeNode (Node);
+	       else
+		  /* Text */
+		  Tre_WriteNodeText (Node,HiddenOrVisible);
 
-	    /* List of items of this tree node (specific content depending on the tree type) */
-	    TreSpc_ListNodeItems (ListingType,Node,SelectedNodCod,SelectedItmCod,
-				  HiddenOrVisible);
-	   }
+	       /* List of items of this tree node
+	          (specific content depending on the tree type) */
+	       TreSpc_ListNodeItems (ListingType,Node,
+				     SelectedNodCod,SelectedItmCod,
+				     HiddenOrVisible);
+	      }
 
 	 /* End text and specific content */
 	 HTM_TD_End ();
@@ -744,14 +733,14 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
    Tre_SetTitleClass (&TitleClass,FormLevel);
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (Lay_HIGHLIGHT));
 
       /***** Column under expand/contract icon *****/
-      HTM_TD_Begin ("class=\"TRE_COL1 LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"TRE_COL1 LT\"");
       HTM_TD_End ();
 
       /***** Column under icons *****/
-      HTM_TD_Begin ("class=\"TRE_COL1 LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"TRE_COL1 LT\"");
       HTM_TD_End ();
 
       /***** Indent depending on the level *****/
@@ -759,12 +748,12 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
 	   NumCol < FormLevel;
 	   NumCol++)
 	{
-	 HTM_TD_Begin ("class=\"TRE_COL1 %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"TRE_COL1\"");
 	 HTM_TD_End ();
 	}
 
       /***** Node number *****/
-      HTM_TD_Begin ("class=\"TRE_NUM %s %s\"",TitleClass,The_GetColorRows ());
+      HTM_TD_Begin ("class=\"TRE_NUM %s\"",TitleClass);
 	 HTM_Unsigned (Tre_GetCurrentNumberInLevel (FormLevel) + 1);
       HTM_TD_End ();
 
@@ -772,8 +761,7 @@ static void Tre_WriteRowToCreateNode (Inf_Type_t InfoType,
       ColSpan = Tre_GetMaxNodeLevel () + 2 - FormLevel;
       if (InfoType == Inf_PROGRAM)
 	 ColSpan++;
-      HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN %s\"",
-		    ColSpan,The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"%u\" class=\"TRE_MAIN\"",ColSpan);
          /* Form for node data */
 	 HTM_ARTICLE_Begin (Tre_NODE_SECTION_ID);
 	    Tre_ShowFormToCreateNode (InfoType,ParentNodCod);
@@ -1595,7 +1583,7 @@ void Tre_ReqCreateNode (Inf_Type_t InfoType)
    /***** Add node to table of expanded nodes
           to ensure that child items are displayed *****/
    if (Tre_DB_GetIfContractedOrExpandedNode (Node.Hierarchy.NodCod) == ConExp_CONTRTED)	// If contracted...
-      Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);					// ...expand it
+      Tre_DB_InsertNodeInExpandedNodes (Node.Hierarchy.NodCod);				// ...expand it
 
    /***** Show current tree nodes, if any *****/
    Node.Item.Cod = -1L;
