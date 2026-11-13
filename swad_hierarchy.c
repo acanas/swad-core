@@ -759,18 +759,18 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	NumRow <= NumRows;
 	NumRow++)
      {
-      HTM_TR_Begin (NULL);
+      HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	 /***** Indent *****/
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT\"");
 	    Ico_PutIcon (NumRow == NumRows ? "subend20x20.gif" :
 					     "submid20x20.gif",Ico_BLACK,
 			 "","ICO25x25");
 	 HTM_TD_End ();
 
 	 /***** Write institution, center, degree *****/
-	 HTM_TD_Begin ("colspan=\"%u\" class=\"LT DAT_SMALL_NOBR_%s %s\"",
-		       ColSpan - 1,The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("colspan=\"%u\" class=\"LT DAT_SMALL_NOBR_%s\"",
+		       ColSpan - 1,The_GetSuffix ());
 
 	    /* Get next institution, center, degree */
 	    row = mysql_fetch_row (mysql_res);

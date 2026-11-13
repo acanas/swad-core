@@ -474,13 +474,20 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
       HTM_TABLE_Begin ("TBL_SCROLL");
 
    /***** Begin first row of this exam *****/
-   HTM_TR_Begin (NULL);
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TR_Begin (NULL);
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+     }
 
       /***** Icons related to this exam *****/
       if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-		       The_GetColorRows ());
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	    Exa_PutIconsToRemEditOneExam (Exams,Anchor);
 	 HTM_TD_End ();
 	}
@@ -493,93 +500,68 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	{
 	 if (asprintf (&Id,"exa_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-
-	 switch (ShowingOneOrSeveral)
-	   {
-	    case Lay_SHOWING_ONLY_ONE:
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			     Id,CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
-			     The_GetSuffix ());
-	       break;
-	    case Lay_SHOWING_SEVERAL:
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			     Id,CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
-			     The_GetSuffix (),The_GetColorRows ());
-	       break;
-	   }
-	 if (Exams->Exam.TimeUTC[Dat_STR_TIME])
-	    Dat_WriteLocalDateHMSFromUTC (Id,Exams->Exam.TimeUTC[StartEndTime],
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  Dat_WRITE_TODAY |
-					  Dat_WRITE_DATE_ON_SAME_DAY |
-					  Dat_WRITE_WEEK_DAY |
-					  Dat_WRITE_HOUR |
-					  Dat_WRITE_MINUTE);
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+		       Id,CloOpe_Class[ClosedOrOpen][Exams->Exam.Hidden],
+		       The_GetSuffix ());
+	    if (Exams->Exam.TimeUTC[Dat_STR_TIME])
+	       Dat_WriteLocalDateHMSFromUTC (Id,Exams->Exam.TimeUTC[StartEndTime],
+					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					     Dat_WRITE_TODAY |
+					     Dat_WRITE_DATE_ON_SAME_DAY |
+					     Dat_WRITE_WEEK_DAY |
+					     Dat_WRITE_HOUR |
+					     Dat_WRITE_MINUTE);
 	 HTM_TD_End ();
 	 free (Id);
 	}
 
       /***** Exam title and main data *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
+      HTM_TD_Begin ("class=\"LT\"");
 
-      /* Exam title */
-      HTM_ARTICLE_Begin (Anchor);
+	 /* Exam title */
+	 HTM_ARTICLE_Begin (Anchor);
+	    Frm_BeginForm (ActSeeOneExa);
+	       Exa_PutPars (Exams);
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
+					"class=\"LT BT_LINK %s_%s\"",
+					HidVis_TitleClass[Exams->Exam.Hidden],
+					The_GetSuffix ());
+		  HTM_Txt (Exams->Exam.Title);
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	 HTM_ARTICLE_End ();
+
+	 /* Number of questions, maximum grade, visibility of results */
+	 HTM_DIV_Begin ("class=\"%s_%s\"",
+			HidVis_GroupClass[Exams->Exam.Hidden],The_GetSuffix ());
+	    HTM_Txt (Txt_Sets_of_questions); HTM_Colon (); HTM_NBSP ();
+	    HTM_Unsigned (Exams->Exam.NumSets); HTM_BR ();
+
+	    HTM_Txt (Txt_Maximum_grade); HTM_Colon (); HTM_NBSP ();
+	    HTM_Double (Exams->Exam.MaxGrade); HTM_BR ();
+
+	    HTM_Txt (Txt_Result_visibility); HTM_Colon (); HTM_NBSP ();
+	    TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,Exams->Exam.Hidden);
+	 HTM_DIV_End ();
+
+      HTM_TD_End ();
+
+      /***** Number of sessions in exam *****/
+      HTM_TD_Begin ("class=\"RT\"");
+
 	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
 	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Exams->Exam.Hidden],
 				     The_GetSuffix ());
-	       HTM_Txt (Exams->Exam.Title);
+	       if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
+		 {
+		  HTM_Txt (Txt_Sessions); HTM_Colon (); HTM_NBSP ();
+		 }
+	       HTM_Unsigned (Exams->Exam.NumSess);
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
-      HTM_ARTICLE_End ();
-
-      /* Number of questions, maximum grade, visibility of results */
-      HTM_DIV_Begin ("class=\"%s_%s\"",
-                     HidVis_GroupClass[Exams->Exam.Hidden],The_GetSuffix ());
-	 HTM_Txt (Txt_Sets_of_questions); HTM_Colon (); HTM_NBSP ();
-	 HTM_Unsigned (Exams->Exam.NumSets); HTM_BR ();
-
-	 HTM_Txt (Txt_Maximum_grade); HTM_Colon (); HTM_NBSP ();
-	 HTM_Double (Exams->Exam.MaxGrade); HTM_BR ();
-
-	 HTM_Txt (Txt_Result_visibility); HTM_Colon (); HTM_NBSP ();
-	 TstVis_ShowVisibilityIcons (Exams->Exam.Visibility,Exams->Exam.Hidden);
-      HTM_DIV_End ();
-
-      /***** Number of sessions in exam *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("class=\"RT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	    break;
-	}
-
-      Frm_BeginForm (ActSeeOneExa);
-	 Exa_PutPars (Exams);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
-				  "class=\"LT BT_LINK %s_%s\"",
-				  HidVis_TitleClass[Exams->Exam.Hidden],
-				  The_GetSuffix ());
-	    if (ShowingOneOrSeveral == Lay_SHOWING_ONLY_ONE)
-	      {
-	       HTM_Txt (Txt_Sessions); HTM_Colon (); HTM_NBSP ();
-	      }
-	    HTM_Unsigned (Exams->Exam.NumSess);
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
 
       HTM_TD_End ();
 
@@ -587,40 +569,32 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
    HTM_TR_End ();
 
    /***** Begin 2nd row of this exam *****/
-   HTM_TR_Begin (NULL);
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TR_Begin (NULL);
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+     }
 
       /***** Author of the exam *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      Exa_WriteAuthor (&Exams->Exam);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 Exa_WriteAuthor (&Exams->Exam);
       HTM_TD_End ();
 
       /***** Text of the exam *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     HidVis_DataClass[Exams->Exam.Hidden],
-		     The_GetSuffix ());
-	 HTM_Txt (Txt);
-      HTM_DIV_End ();
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+	 ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+			HidVis_DataClass[Exams->Exam.Hidden],
+			The_GetSuffix ());
+	    HTM_Txt (Txt);
+	 HTM_DIV_End ();
       HTM_TD_End ();
 
    /***** End 2nd row of this exam *****/

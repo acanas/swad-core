@@ -419,43 +419,42 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
       HTM_TABLE_BeginWidePadding (2);
 
    /***** Begin first row of this rubric *****/
-   HTM_TR_Begin (NULL);
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TR_Begin (NULL);
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+     }
 
       /***** Icons related to this rubric *****/
       if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-		       The_GetColorRows ());
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	    Rub_PutIconsToRemEditOneRubric (Rubrics);
 	 HTM_TD_End ();
 	}
 
       /***** Rubric title and main data *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 
-      /* Rubric title */
-      Frm_BeginForm (ActSeeOneRub);
-	 Rub_PutPars (Rubrics);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneRub),NULL,
-				  "class=\"LT BT_LINK ASG_TITLE_%s\"",
-				  The_GetSuffix ());
-	    HTM_Txt (Rubrics->Rubric.Title);
-	 HTM_BUTTON_End ();
-      Frm_EndForm ();
+	 /* Rubric title */
+	 Frm_BeginForm (ActSeeOneRub);
+	    Rub_PutPars (Rubrics);
+	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneRub),NULL,
+				     "class=\"LT BT_LINK ASG_TITLE_%s\"",
+				     The_GetSuffix ());
+	       HTM_Txt (Rubrics->Rubric.Title);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
 
-      /* Number of criteria */
-      HTM_DIV_Begin ("class=\"ASG_GRP_%s\"",The_GetSuffix ());
-	 HTM_Txt (Txt_Number_of_criteria); HTM_Colon (); HTM_NBSP ();
-	 HTM_Unsigned (Rub_DB_GetNumCriteriaInRubric (Rubrics->Rubric.RubCod));
-      HTM_DIV_End ();
+	 /* Number of criteria */
+	 HTM_DIV_Begin ("class=\"ASG_GRP_%s\"",The_GetSuffix ());
+	    HTM_Txt (Txt_Number_of_criteria); HTM_Colon (); HTM_NBSP ();
+	    HTM_Unsigned (Rub_DB_GetNumCriteriaInRubric (Rubrics->Rubric.RubCod));
+	 HTM_DIV_End ();
 
       HTM_TD_End ();
 
@@ -463,38 +462,30 @@ void Rub_ShowRubricMainData (struct Rub_Rubrics *Rubrics,
    HTM_TR_End ();
 
    /***** Begin 2nd row of this rubric *****/
-   HTM_TR_Begin (NULL);
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TR_Begin (NULL);
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+     }
 
       /***** Author of the rubric *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      Rub_WriteAuthor (&Rubrics->Rubric);
+      HTM_TD_Begin ("class=\"LT\"");
+         Rub_WriteAuthor (&Rubrics->Rubric);
       HTM_TD_End ();
 
       /***** Text of the rubric *****/
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,
-			Str_DONT_REMOVE_SPACES);
-      ALn_InsertLinks (Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_DIV_Begin ("class=\"PAR DAT_%s\"",The_GetSuffix ());
-	 HTM_Txt (Rubrics->Rubric.Txt);
-      HTM_DIV_End ();
+      HTM_TD_Begin ("class=\"LT\"");
+	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+			   Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,
+			   Str_DONT_REMOVE_SPACES);
+	 ALn_InsertLinks (Rubrics->Rubric.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+	 HTM_DIV_Begin ("class=\"PAR DAT_%s\"",The_GetSuffix ());
+	    HTM_Txt (Rubrics->Rubric.Txt);
+	 HTM_DIV_End ();
       HTM_TD_End ();
 
    /***** End 2nd row of this rubric *****/

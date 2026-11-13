@@ -97,6 +97,7 @@ struct Gam_Games
       long Sel;			// Selected match
       long Par;			// Parameter to be used in forms
      } MchCod;			// Match code
+   unsigned SelectedQstInd;	// Selected question index
    unsigned QstInd;		// Current question index
   };
 

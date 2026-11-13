@@ -247,7 +247,7 @@ void QstTxt_WriteCorrAns (struct Qst_Question *Qst,
 	 HTM_TR_Begin (NULL);
 
 	    /* Put an icon that indicates whether the answer is correct or wrong */
-	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"BT\"");
 	       Ico_PutIcon ("check.svg",Ico_BLACK,
 			    Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
 	    HTM_TD_End ();

@@ -912,12 +912,12 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Qst)
    MYSQL_RES *mysql_res_qst;
    MYSQL_RES *mysql_res_ans;
    MYSQL_ROW row;
-   Exi_Exist_t QuestionExists;
+   Exi_Exist_t QstExists;
 
    /***** Get question data from database *****/
-   QuestionExists = Exa_DB_GetQstDataByCod (&mysql_res_qst,Qst->QstCod);
+   QstExists = Exa_DB_GetQstDataByCod (&mysql_res_qst,Qst->QstCod);
 
-   if (QuestionExists == Exi_EXISTS)
+   if (QstExists == Exi_EXISTS)
      {
       row = mysql_fetch_row (mysql_res_qst);
       /*
@@ -956,10 +956,9 @@ void ExaSet_GetQstDataFromDB (struct Qst_Question *Qst)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res_qst);
 
-   if (QuestionExists == Exi_DOES_NOT_EXIST)
+   if (QstExists == Exi_DOES_NOT_EXIST)
       Err_WrongQuestionExit ();
   }
-
 
 /*****************************************************************************/
 /********* Get if invalid or valid question from a 'Y'/'N' character *********/

@@ -72,7 +72,7 @@ static void QstImp_WriteHeadingListImportedQst (void);
 static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         struct XMLElement *FeedbackElem,
                                         const struct Qst_Question *Qst,
-                                        Exi_Exist_t QuestionExists);
+                                        Exi_Exist_t QstExists);
 
 /*****************************************************************************/
 /**************** Put a link (form) to export test questions *****************/
@@ -879,7 +879,7 @@ static void QstImp_WriteHeadingListImportedQst (void)
 static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
                                         struct XMLElement *FeedbackElem,
                                         const struct Qst_Question *Qst,
-                                        Exi_Exist_t QuestionExists)
+                                        Exi_Exist_t QstExists)
   {
    extern const char *Txt_New_question;
    extern const char *Txt_Existing_question;
@@ -930,31 +930,30 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
    size_t AnswerTextLength;
    char *AnswerFeedback;
    size_t AnswerFeedbackLength;
-   const char *ClassData = Layout[QuestionExists].ClassData;
-   const char *ClassStem = Layout[QuestionExists].ClassStem;
+   const char *ClassData = Layout[QstExists].ClassData;
+   const char *ClassStem = Layout[QstExists].ClassStem;
 
    NumQst++;
 
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Put icon to indicate that a question does not exist in database *****/
-      HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
-	 Ico_PutIcon ( Layout[QuestionExists].Icon,
-		       Layout[QuestionExists].Color,
-		      *Layout[QuestionExists].Title,"CONTEXT_ICO16x16");
+      HTM_TD_Begin ("class=\"BT\"");
+	 Ico_PutIcon ( Layout[QstExists].Icon,
+		       Layout[QstExists].Color,
+		      *Layout[QstExists].Title,"CONTEXT_ICO16x16");
       HTM_TD_End ();
 
       /***** Write number of question *****/
-      HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-                    ClassData,The_GetSuffix (),The_GetColorRows ());
-	 if (QuestionExists == Exi_DOES_NOT_EXIST)
+      HTM_TD_Begin ("class=\"CT %s_%s\"",ClassData,The_GetSuffix ());
+	 if (QstExists == Exi_DOES_NOT_EXIST)
 	   {
 	    HTM_Unsigned (++NumNonExistingQst); HTM_NBSP ();
 	   }
       HTM_TD_End ();
 
       /***** Write the question tags *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT\"");
 
 	 if (Qst->Tags.Num)
 	   {
@@ -988,24 +987,24 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_End ();
 
       /***** Write the question type *****/
-      HTM_TD_Begin ("class=\"%s CT %s\"",ClassData,The_GetColorRows ());
+      HTM_TD_Begin ("class=\"%s CT\"",ClassData);
 	 HTM_Txt (Txt_TST_STR_ANSWER_TYPES[Qst->Answer.Type]);
 	 HTM_NBSP ();
       HTM_TD_End ();
 
       /***** Write if shuffle is enabled *****/
-      HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CT\"");
 	 if (Qst->Answer.Type == Qst_ANS_UNIQUE_CHOICE ||
 	     Qst->Answer.Type == Qst_ANS_MULTIPLE_CHOICE)
 	    /* Put an icon that indicates whether shuffle is enabled or not */
 	    if (Qst->Answer.Shuffle == Qst_SHUFFLE)
 	       Ico_PutIcon ("check.svg",Ico_BLACK,
 	                    Txt_TST_Answer_given_by_the_teachers,
-			    Layout[QuestionExists].ClassShuffle);
+			    Layout[QstExists].ClassShuffle);
       HTM_TD_End ();
 
       /***** Write the stem and the answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT\"");
 	 Qst_WriteQstStem (Stem,ClassStem,HidVis_VISIBL);
 	 Qst_WriteQstFeedback (Feedback,"Qst_TXT_LIGHT");
 	 switch (Qst->Answer.Type)
@@ -1072,11 +1071,11 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
 		     HTM_TR_Begin (NULL);
 
 			/* Put an icon that indicates whether the answer is correct or wrong */
-			HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+			HTM_TD_Begin ("class=\"BT\"");
 			   if (Qst->Answer.Options[NumOpt].Correct == Qst_CORRECT)
 			      Ico_PutIcon ("check.svg",Ico_BLACK,
 			                   Txt_TST_Answer_given_by_the_teachers,
-					   Layout[QuestionExists].ClassCorrect);
+					   Layout[QstExists].ClassCorrect);
 			HTM_TD_End ();
 
 			/* Write the number of option */

@@ -227,16 +227,16 @@ static void TstPrn_WriteQstAndAnsToFill (struct Qst_PrintedQuestion *PrintedQst,
                                          unsigned QstInd,struct Qst_Question *Qst)
   {
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT\"");
 
 	 /* Write parameter with question code */
 	 Qst_WriteParQstCod (QstInd,Qst->QstCod);
@@ -310,7 +310,7 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
   {
    unsigned QstInd;
    struct Qst_Question Qst;
-   Exi_Exist_t QuestionExists;
+   Exi_Exist_t QstExists;
 
    /***** Begin table *****/
    HTM_TABLE_BeginWideMarginPadding (10);
@@ -328,13 +328,13 @@ void TstPrn_ShowPrintAfterAssess (struct TstPrn_Print *Print)
 	 Qst.QstCod = Print->PrintedQsts[QstInd].QstCod;
 
 	    /***** Get question data *****/
-	    QuestionExists = Qst_GetQstDataByCod (&Qst);
+	    QstExists = Qst_GetQstDataByCod (&Qst);
 
 	    /***** Write question and answers *****/
 	    TstPrn_WriteQstAndAnsExam (&Gbl.Usrs.Me.UsrDat,
 				       Print->PrintedQsts,QstInd,
 				       Print->TimeUTC,
-				       &Qst,QuestionExists,
+				       &Qst,QstExists,
 				       TstCfg_GetConfigVisibility ());
 
 	 /***** Destroy question *****/
@@ -422,17 +422,17 @@ static void TstPrn_WriteQstAndAnsExam (struct Usr_Data *UsrDat,
      }
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Number of question and answer type *****/
-      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT\"");
 	 Lay_WriteIndex (QstInd + 1,"BIG_INDEX");
 	 if (QuestionUneditedAfterExam)
 	    Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
       HTM_TD_End ();
 
       /***** Stem, media and answers *****/
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT\"");
 	 switch (QstExists)
 	   {
 	    case Exi_EXISTS:
@@ -842,7 +842,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
    NumPrints = Tst_DB_GetUsrPrintsInThisCrs (&mysql_res,UsrDat->UsrCod);
 
    /***** Show user's data *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       Usr_ShowTableCellWithUsrData (UsrDat,NumPrints + 1);
 
@@ -874,9 +874,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	      {
 	       if (asprintf (&Id,"tst_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			     Id,ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-			     The_GetColorRows ());
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+			     Id,ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						Dat_WRITE_TODAY |
@@ -889,7 +888,7 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	      }
 
 	    /* Link to show this test */
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT\"");
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -917,9 +916,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	      }
 
 	    /* Write grade */
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -934,9 +932,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write score */
-	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -950,9 +947,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write average score per question */
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 	       switch (ICanView.Score)
 		 {
 		  case Usr_CAN:
@@ -968,9 +964,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write number of questions */
-	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -984,9 +979,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write number of non-blank answers */
-	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s LINE_LEFT\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -1000,9 +994,8 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
 	    HTM_TD_End ();
 
 	    /* Write number of blank answers */
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix (),
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",
+	                  ClassDat[Print.DenyOrAllowTchs],The_GetSuffix ());
 	       switch (ICanView.Result)
 		 {
 		  case Usr_CAN:
@@ -1030,30 +1023,27 @@ static void TstPrn_ShowUsrPrints (struct Usr_Data *UsrDat)
       else
 	{
 	 /* Columns for dates */
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM\"");
 	 HTM_TD_End ();
 
 	 /* Column for link to show the result */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM\"");
 	 HTM_TD_End ();
 
 	 /* Column for grade */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM\"");
 	 HTM_TD_End ();
 
 	 /* Columns for score */
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT\"");
 	 HTM_TD_End ();
 
 	 /* Column for questions */
-	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT\"");
 	 HTM_TD_End ();
 
 	 /* Columns for answers */
-	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT\"");
 	 HTM_TD_End ();
 
 	 HTM_TR_End ();
@@ -1117,38 +1107,38 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
      }
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Row title *****/
       HTM_TD_Begin ("colspan=\"2\""
-	            " class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+	            " class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 HTM_Txt (Txt_Visible_tests); HTM_Colon ();
       HTM_TD_End ();
 
       /***** Cell for links to show results *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 HTM_Unsigned (NumPrints);
       HTM_TD_End ();
 
       /***** Write grade over Tst_SCORE_MAX *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 if (ICanViewTotalScore == Usr_CAN)
 	    Qst_ComputeAndShowGrade (NumTotalQsts->All,TotalScore,Tst_SCORE_MAX);
       HTM_TD_End ();
 
       /***** Write total score *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT\"",
+                    The_GetSuffix ());
 	 if (ICanViewTotalScore == Usr_CAN)
 	    HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write average score per question *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 if (ICanViewTotalScore == Usr_CAN)
 	    HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
 						     (double) NumTotalQsts->All :
@@ -1156,22 +1146,22 @@ static void TstPrn_ShowPrintsSummaryRow (Usr_MeOrOther_t MeOrOther,
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT\"",
+                    The_GetSuffix ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write total number of non-blank answers *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT\"",
+                    The_GetSuffix ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total number of blank answers *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 if (NumPrints)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
       HTM_TD_End ();
@@ -1491,7 +1481,7 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
   {
    unsigned QstInd;
    struct Qst_Question Qst;
-   Exi_Exist_t QuestionExists;
+   Exi_Exist_t QstExists;
 
    for (QstInd = 0, The_ResetRowColor ();
 	QstInd < NumQsts;
@@ -1502,13 +1492,13 @@ void TstPrn_ShowPrintAnswers (struct Usr_Data *UsrDat,
       Qst.QstCod = PrintedQsts[QstInd].QstCod;
 
 	 /***** Get question data *****/
-	 QuestionExists = Qst_GetQstDataByCod (&Qst);
+	 QstExists = Qst_GetQstDataByCod (&Qst);
 
 	 /***** Write questions and answers *****/
 	 TstPrn_WriteQstAndAnsExam (UsrDat,
 				    PrintedQsts,QstInd,
 				    TimeUTC,
-				    &Qst,QuestionExists,
+				    &Qst,QstExists,
 				    Visibility);
 
       /***** Destroy question *****/
