@@ -149,7 +149,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,long MsgCod,Ntf_GetContent_t GetContent);
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,CloOpe_ClosedOrOpen_t ClosedOrOpen);
-void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg);
+void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt);
 
 void Msg_BanSenderWhenShowingMsgs (void);
 void Msg_UnbanSenderWhenShowingMsgs (void);

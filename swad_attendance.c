@@ -428,12 +428,19 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 
    /***** Write first row of data of this attendance event *****/
    /* Forms to remove/edit this attendance event */
-   HTM_TR_Begin (NULL);
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TR_Begin (NULL);
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+     }
 
       if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
             Att_PutFormsToRemEditOneEvent (Events,Anchor);
          HTM_TD_End ();
 	}
@@ -455,10 +462,10 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 			     The_GetSuffix ());
 	       break;
 	    case Lay_SHOWING_SEVERAL:
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 			     Id,
 			     CloOpe_Class[Events->Event.ClosedOrOpen][Events->Event.Hidden],
-			     The_GetSuffix (),The_GetColorRows ());
+			     The_GetSuffix ());
 	       break;
 	   }
 	 Dat_WriteLocalDateHMSFromUTC (Id,Events->Event.TimeUTC[StartEndTime],
@@ -474,53 +481,37 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	}
 
       /* Attendance event title */
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      HTM_ARTICLE_Begin (Anchor);
-	 Att_PutLinkEvent (&Events->Event,Act_GetActionText (ActSeeOneAtt),
-			   Events->Event.Title);
-      HTM_ARTICLE_End ();
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_ARTICLE_Begin (Anchor);
+	    Att_PutLinkEvent (&Events->Event,Act_GetActionText (ActSeeOneAtt),
+			      Events->Event.Title);
+	 HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Number of students in this event */
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("class=\"RT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
-	    break;
-	}
-      HTM_SPAN_Begin ("class=\"%s_%s\"",
-		       HidVis_TitleClass[Events->Event.Hidden],The_GetSuffix ());
-         HTM_Unsigned (Events->Event.NumStdsTotal);
-      HTM_SPAN_End ();
+      HTM_TD_Begin ("class=\"RT\"");
+	 HTM_SPAN_Begin ("class=\"%s_%s\"",
+			  HidVis_TitleClass[Events->Event.Hidden],The_GetSuffix ());
+	    HTM_Unsigned (Events->Event.NumStdsTotal);
+	 HTM_SPAN_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Write second row of data of this attendance event *****/
-   HTM_TR_Begin (NULL);
+   switch (ShowingOneOrSeveral)
+     {
+      case Lay_SHOWING_ONLY_ONE:
+	 HTM_TR_Begin (NULL);
+	 break;
+      case Lay_SHOWING_SEVERAL:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+     }
 
       /* Author of the attendance event */
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      Att_WriteEventAuthor (&Events->Event);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 Att_WriteEventAuthor (&Events->Event);
       HTM_TD_End ();
 
       /* Text of the attendance event */
@@ -528,23 +519,13 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Description,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Description,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      switch (ShowingOneOrSeveral)
-	{
-	 case Lay_SHOWING_ONLY_ONE:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 case Lay_SHOWING_SEVERAL:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	}
-      if (Gbl.Crs.Grps.NumGrps)
-	 Att_GetAndWriteNamesOfGrpsAssociatedToEvent (&Events->Event);
-
-      HTM_DIV_Begin ("class=\"%s_%s\"",
-                     HidVis_DataClass[Events->Event.Hidden],The_GetSuffix ());
-	 HTM_Txt (Description);
-      HTM_DIV_End ();
-
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 if (Gbl.Crs.Grps.NumGrps)
+	    Att_GetAndWriteNamesOfGrpsAssociatedToEvent (&Events->Event);
+	 HTM_DIV_Begin ("class=\"%s_%s\"",
+			HidVis_DataClass[Events->Event.Hidden],The_GetSuffix ());
+	    HTM_Txt (Description);
+	 HTM_DIV_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1709,17 +1690,17 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
 							   CommentStd,CommentTch);
 
    /***** Begin table row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Icon to show if the user is already present *****/
-      HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"BT\"");
 	 HTM_LABEL_Begin ("for=\"Std%u\"",NumUsr);
 	    Att_PutCheckOrCross (Present);
 	 HTM_LABEL_End ();
       HTM_TD_End ();
 
       /***** Checkbox to select user *****/
-      HTM_TD_Begin ("class=\"CT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CT\"");
 	 HTM_INPUT_CHECKBOX ("UsrCodStd",
 			     AttributesPresent[Present] |
 			     AttributesICanChg[ICanChangeStdAttendance],
@@ -1728,32 +1709,29 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Write number of student in the list *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT %s_%s\"",
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Show student's photo *****/
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
-	 HTM_TD_Begin ("class=\"%s LT\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write student's name *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	   {
@@ -1766,9 +1744,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Student's comment: write form or text */
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 switch (ICanEditStdComment)
 	   {
 	    case Usr_CAN:	// Show with form
@@ -1789,9 +1766,8 @@ static void Att_WriteRowUsrToCallTheRoll (unsigned NumUsr,
       HTM_TD_End ();
 
       /***** Teacher's comment: write form, text or nothing */
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 switch (ICanEditTchComment)
 	   {
 	    case Usr_CAN:			// Show with form
@@ -2617,25 +2593,22 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 	    Events->Event.NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInEvent (Events->Event.AttCod);
 
 	    /* Write a row for this event */
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
-	       HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
 		  HTM_INPUT_CHECKBOX ("AttCods",
 				      Events->Lst[NumAttEvent].Checked,
 				      "id=\"Event%u\" value=\"%ld\"",
 				      NumAttEvent,Events->Event.AttCod);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
 		     HTM_Unsigned (NumAttEvent + 1); HTM_Colon ();
 		  HTM_LABEL_End ();
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  if (asprintf (&Id,"att_date_start_%u",UniqueId) < 0)
 		     Err_NotEnoughMemoryExit ();
 		  HTM_LABEL_Begin ("for=\"Event%u\"",NumAttEvent);
@@ -2653,13 +2626,11 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 		  free (Id);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (Events->Event.Title);
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 		  HTM_Unsigned (Events->Event.NumStdsTotal);
 	       HTM_TD_End ();
 
@@ -2850,34 +2821,31 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
    unsigned NumTimesPresent;
 
    /***** Write number of user in the list *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM %s_%s\"",
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
 
       /***** Show user's photo *****/
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
-	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write user's name *****/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
 	   {
@@ -2901,7 +2869,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 						      UsrDat->UsrCod);
 
 	    /* Write check or cross */
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"BM\"");
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 
@@ -2910,8 +2878,7 @@ static void Att_WriteRowUsrSeveralAttEvents (const struct Att_Events *Events,
 	   }
 
       /***** Last column with the number of times this user is present *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumTimesPresent);
       HTM_TD_End ();
 
@@ -3045,21 +3012,20 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 
    /***** Write number of student in the list *****/
    NumUsr++;
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
-      HTM_TD_Begin ("class=\"RM %s_%s %s\"",
-		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM %s_%s\"",
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Unsigned (NumUsr); HTM_Colon ();
       HTM_TD_End ();
 
       /***** Show student's photo *****/
-      HTM_TD_Begin ("colspan=\"2\" class=\"RM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"2\" class=\"RM\"");
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM\"");
 
 	 HTM_TABLE_Begin (NULL);
 	    HTM_TR_Begin (NULL);
@@ -3113,21 +3079,20 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	                							 Lay_DONT_SHOW;
 
 	 /***** Write a row for this event *****/
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
 	    HTM_TD_ColouredEmpty (1);
 
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-			  Class[Present],The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",
+			  Class[Present],The_GetSuffix ());
 	       HTM_Unsigned (NumAttEvent + 1); HTM_Colon ();
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"BT\"");
 	       Att_PutCheckOrCross (Present);
 	    HTM_TD_End ();
 
-	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	       if (asprintf (&Id,"att_date_start_%u_%u",NumUsr,UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
 	       HTM_SPAN_Begin ("id=\"%s\"",Id);
@@ -3151,15 +3116,14 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	 if (ShowComment.Std == Lay_SHOW ||
 	     ShowComment.Tch == Lay_SHOW)
 	   {
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
 	       HTM_TD_ColouredEmpty (2);
 
-	       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"BT\"");
 	       HTM_TD_End ();
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 
 		  HTM_DL_Begin ();
 		     if (ShowComment.Std == Lay_SHOW)

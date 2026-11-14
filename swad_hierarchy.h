@@ -58,8 +58,7 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 Usr_Can_t Hie_CheckIfICanEdit (void);
 
 void Hie_WriteStatusCell (Hie_Status_t Status,
-			  const char *Class,const char *BgColor,
-			  const char *Txt[Hie_NUM_STATUS_TXT]);
+			  const char *Class,const char *Txt[Hie_NUM_STATUS_TXT]);
 void Hie_WriteStatusCellEditable (Usr_Can_t ICanEdit,Hie_Status_t Status,
                                   Act_Action_t NextAction,long HieCod,
                                   const char *Txt[Hie_NUM_STATUS_TXT]);

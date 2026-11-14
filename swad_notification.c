@@ -607,10 +607,9 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 
    /***** Write row for this notification *****/
    /* Write event icon */
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s_%s\"",Class.Bg,The_GetSuffix ());
 
-      HTM_TD_Begin ("class=\"LT %s_%s\" style=\"width:25px;\"",
-		    Class.Bg,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT\" style=\"width:25px;\"");
 	 if (PutForm == Frm_PUT_FORM)
 	   {
 	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
@@ -631,7 +630,7 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
       HTM_TD_End ();
 
       /* Write event type */
-      HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT\"");
 	 switch (PutForm)
 	   {
 	    case Frm_PUT_FORM:
@@ -654,13 +653,12 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
       HTM_TD_End ();
 
       /* Write user (from) */
-      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		    Class.Author,The_GetSuffix (),Class.Bg,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Author,The_GetSuffix ());
 	 Usr_WriteAuthor (UsrDat,For_ENABLED);
       HTM_TD_End ();
 
       /* Write location */
-      HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Bg,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT\"");
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 	   {
@@ -750,11 +748,10 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
       HTM_TD_End ();
 
       /* Write date and time */
-      Msg_WriteMsgDate (DateTimeUTC,Class.Txt,Class.Bg);
+      Msg_WriteMsgDate (DateTimeUTC,Class.Txt);
 
       /* Write status (sent by email / pending to be sent by email) */
-      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		    Class.Txt,The_GetSuffix (),Class.Bg,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",Class.Txt,The_GetSuffix ());
 	 StatusTxt = Ntf_GetStatusTxtFromStatusBits (Status);
 	 HTM_Txt (Txt_NOTIFICATION_STATUS[StatusTxt]);
       HTM_TD_End ();

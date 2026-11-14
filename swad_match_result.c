@@ -563,25 +563,22 @@ static void MchRes_ListGamesToSelect (struct Gam_Games *Games)
 	       Gam_GetGameDataByCod (&Games->Game);
 
 	       /* Write a row for this event */
-	       HTM_TR_Begin (NULL);
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-		  HTM_TD_Begin ("class=\"CT DAT_%s %s\"",
-		                The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
 		     HTM_INPUT_CHECKBOX (Par_CodeStr[ParCod_Gam],
 					 Games->Lst[NumGame].Checked,
 					 "id=\"Gam%u\" value=\"%ld\"",
 					 NumGame,Games->Lst[NumGame].GamCod);
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		                The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 		     HTM_LABEL_Begin ("for=\"Gam%u\"",NumGame);
 			HTM_Unsigned (NumGame + 1); HTM_Colon ();
 		     HTM_LABEL_End ();
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		                The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		     HTM_Txt (Games->Game.Title);
 		  HTM_TD_End ();
 
@@ -719,7 +716,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
    NumResults = Mch_DB_GetUsrMchResults (&mysql_res,MeOrOther,MchCod,GamCod,GamesSelectedCommas);
 
    /***** Show user's data *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
    Usr_ShowTableCellWithUsrData (Usr_UsrDat[MeOrOther],NumResults + 1);
 
    /***** Get and print matches results *****/
@@ -748,7 +745,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 MchRes_CheckIfICanViewMatchResult (&Games->Game,&Match,Usr_UsrDat[MeOrOther]->UsrCod,&ICanView);
 
 	 if (NumResult)
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	 /* Write start/end times */
 	 for (StartEndTime  = (Dat_StartEndTime_t) 0;
@@ -759,8 +756,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	    if (asprintf (&Id,"mch_res_time_%u_%u",
 	                  (unsigned) StartEndTime,UniqueId) < 0)
 	       Err_NotEnoughMemoryExit ();
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s %s\"",
-			  Id,The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s\"",Id,The_GetSuffix ());
 	       Dat_WriteLocalDateHMSFromUTC (Id,Print.TimeUTC[StartEndTime],
 					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					     Dat_WRITE_TODAY |
@@ -773,13 +769,12 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   }
 
 	 /* Write match title */
-	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    HTM_Txt (Match.Title);
 	 HTM_TD_End ();
 
 	 /* Link to show this result */
-	 HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT\"");
 	    switch (ICanView.Result)
 	      {
 	       case Usr_CAN:
@@ -819,13 +814,12 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	   }
 
 	 /* Write grade over maximum grade */
-	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		       The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
 		  Grade = Qst_ComputeGrade (Print.NumQsts.All,Print.Score,
-					       Games->Game.MaxGrade);
+					    Games->Game.MaxGrade);
 		  HTM_DoublePartOfDouble (Grade,Games->Game.MaxGrade);
 		  TotalGrade += Grade;
 		  break;
@@ -837,8 +831,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write score */
-	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT\"",The_GetSuffix ());
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
@@ -852,8 +845,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write average score per question */
-	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
@@ -869,8 +861,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write number of questions */
-	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT\"",The_GetSuffix ());
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
@@ -884,8 +875,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write number of non-blank answers */
-	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT %s\"",
-	               The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s LINE_LEFT\"",The_GetSuffix ());
 	    switch (ICanView.Score)
 	      {
 	       case Usr_CAN:
@@ -899,8 +889,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	 HTM_TD_End ();
 
 	 /* Write number of blank answers */
-	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-		       The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	    NumQstsBlank = Print.NumQsts.All - Print.NumQsts.NotBlank;
 	    switch (ICanView.Score)
 	      {
@@ -923,32 +912,29 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
      }
    else	// No results
      {
-      /* Columns for dates and match */
-      HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM %s\"",
-                    The_GetColorRows ());
-      HTM_TD_End ();
+	 /* Columns for dates and match */
+	 HTM_TD_Begin ("colspan=\"3\" class=\"LINE_BOTTOM\"");
+	 HTM_TD_End ();
 
-      /* Column for link to show the result */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
-      HTM_TD_End ();
+	 /* Column for link to show the result */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM\"");
+	 HTM_TD_End ();
 
-      /* Column for grade */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM %s\"",The_GetColorRows ());
-      HTM_TD_End ();
+	 /* Column for grade */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM\"");
+	 HTM_TD_End ();
 
-      /* Columns for score */
-      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetColorRows ());
-      HTM_TD_End ();
+	 /* Columns for score */
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT\"");
+	 HTM_TD_End ();
 
-      /* Column for questions */
-      HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT %s\"",The_GetColorRows ());
-      HTM_TD_End ();
+	 /* Column for questions */
+	 HTM_TD_Begin ("class=\"LINE_BOTTOM LINE_LEFT\"");
+	 HTM_TD_End ();
 
-      /* Columns for answers */
-      HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetColorRows ());
-      HTM_TD_End ();
+	 /* Columns for answers */
+	 HTM_TD_Begin ("colspan=\"2\" class=\"LINE_BOTTOM LINE_LEFT\"");
+	 HTM_TD_End ();
 
       HTM_TR_End ();
      }
@@ -971,57 +957,57 @@ static void MchRes_ShowMchResultsSummaryRow (unsigned NumResults,
    extern const char *Txt_Matches;
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Row title *****/
-      HTM_TD_Begin ("colspan=\"3\" class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"3\" class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 HTM_Txt (Txt_Matches); HTM_Colon ();
       HTM_TD_End ();
 
       /***** Cell for links to show results *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 HTM_Unsigned (NumResults);
       HTM_TD_End ();
 
       /***** Write total grade *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 HTM_Double2Decimals (TotalGrade);
       HTM_TD_End ();
 
       /***** Write total score *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT\"",
+                    The_GetSuffix ());
 	 HTM_DoublePartOfUnsigned (TotalScore,NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write average score per question *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 HTM_Double2Decimals (NumTotalQsts->All ? TotalScore /
 						  (double) NumTotalQsts->All :
 						  0.0);
       HTM_TD_End ();
 
       /***** Write total number of questions *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT\"",
+                    The_GetSuffix ());
 	 if (NumResults)
 	    HTM_Unsigned (NumTotalQsts->All);
       HTM_TD_End ();
 
       /***** Write total number of non-blank answers *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM LINE_LEFT\"",
+                    The_GetSuffix ());
 	 if (NumResults)
 	    HTM_Unsigned (NumTotalQsts->NotBlank);
       HTM_TD_End ();
 
       /***** Write total number of blank answers *****/
-      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM DAT_STRONG_%s LINE_TOP LINE_BOTTOM\"",
+                    The_GetSuffix ());
 	 if (NumResults)
 	    HTM_Unsigned (NumTotalQsts->All - NumTotalQsts->NotBlank);
       HTM_TD_End ();

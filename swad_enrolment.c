@@ -2623,8 +2623,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 		     HTM_TD_End ();
 
 		     /***** Request time (row[4]) *****/
-		     Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),
-		                       "DAT",The_GetColorRows ());
+		     Msg_WriteMsgDate (Dat_GetUNIXTimeFromStr (row[4]),"DAT");
 
 		     /***** Button to confirm the request *****/
 		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());

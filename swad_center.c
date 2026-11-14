@@ -123,7 +123,6 @@ void Ctr_SeeCtrWithPendingDegs (void)
    unsigned NumCtr;
    struct Hie_Node Ctr;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   const char *BgColor;
 
    /***** Get centers with pending degrees *****/
    if ((NumCtrs = Ctr_DB_GetCtrsWithPendingDegs (&mysql_res)))
@@ -148,21 +147,21 @@ void Ctr_SeeCtrWithPendingDegs (void)
 
 	    /* Get center code (row[0]) */
 	    Ctr.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = Ctr.HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
-									 The_GetColorRows ();
 
 	    /* Get data of center */
 	    SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 
 	    /* Center logo and full name */
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",
+			  Ctr.HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
+								       The_GetColorRows ());
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP\"",The_GetSuffix ());
 		  Ctr_DrawCtrLogoAndNameWithLink (&Ctr,ActSeeDeg,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending degrees (row[1]) */
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -314,7 +313,6 @@ static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
    struct Plc_Place Plc;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
-   const char *BgColor;
 
    if (Ctr->Status & Hie_STATUS_BIT_PENDING)
      {
@@ -326,49 +324,49 @@ static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = Ctr->HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
-								 The_GetColorRows ();
 
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+	         Ctr->HieCod == Gbl.Hie.Node[Hie_CTR].HieCod ? "BG_HIGHLIGHT" :
+							       The_GetColorRows ());
 
       /***** Number of center in this list *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (NumCtr);
       HTM_TD_End ();
 
       /***** Center logo and name *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassStrong,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",TxtClassStrong,The_GetSuffix ());
 	 Ctr_DrawCtrLogoAndNameWithLink (Ctr,ActSeeDeg,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this center *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTR,Ctr));
       HTM_TD_End ();
 
       /***** Place *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 Plc.PlcCod = Ctr->Specific.PlcCod;
 	 Plc_GetPlcDataByCod (&Plc);
 	 HTM_Txt (Plc.ShrtName);
       HTM_TD_End ();
 
       /***** Number of degrees *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_CTR,	// ...in center
 						      Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of courses *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_CTR,	// ...in center
 						      Ctr->HieCod));
       HTM_TD_End ();
 
       /***** Number of users in courses of this center *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTR,Ctr->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -376,7 +374,7 @@ static void Ctr_ListOneCtrForSeeing (struct Hie_Node *Ctr,unsigned NumCtr)
       HTM_TD_End ();
 
       /***** Center status *****/
-      Hie_WriteStatusCell (Ctr->Status,TxtClassNormal,BgColor,Txt_CENTER_STATUS);
+      Hie_WriteStatusCell (Ctr->Status,TxtClassNormal,Txt_CENTER_STATUS);
 
    HTM_TR_End ();
   }

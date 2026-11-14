@@ -2104,9 +2104,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       Msg_WriteSentOrReceivedMsgSubject (Messages,MsgCod,Subject,&Status);
 
       /***** Date-time *****/
-      Msg_WriteMsgDate (CreatTimeUTC,
-                        ClassDateTime[Status.ClosedOrOpen],
-                        ClassBg[Status.ClosedOrOpen]);
+      Msg_WriteMsgDate (CreatTimeUTC,ClassDateTime[Status.ClosedOrOpen]);
 
    HTM_TR_End ();
 
@@ -2679,7 +2677,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 /*****************************************************************************/
 // TimeUTC holds UTC date and time in UNIX format (seconds since 1970)
 
-void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg)
+void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt)
   {
    static unsigned UniqueId = 0;
    char *Id;
@@ -2689,10 +2687,8 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassTxt,const char *ClassBg)
       Err_NotEnoughMemoryExit ();
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("id=\"%s\" class=\"RT %s_%s %s_%s\" style=\"width:106px;\"",
-                 Id,
-                 ClassTxt,The_GetSuffix (),
-                 ClassBg,The_GetSuffix ());
+   HTM_TD_Begin ("id=\"%s\" class=\"RT %s_%s\" style=\"width:106px;\"",
+                 Id,ClassTxt,The_GetSuffix ());
 
       /***** Write date and time *****/
       Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,

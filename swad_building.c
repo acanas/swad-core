@@ -150,23 +150,20 @@ void Bld_SeeBuildings (void)
 	   NumBuilding < Buildings.Num;
 	   NumBuilding++, The_ChangeRowColor ())
 	{
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
 	    /* Short name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-			  The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Buildings.Lst[NumBuilding].ShrtName);
 	    HTM_TD_End ();
 
 	    /* Full name */
-	    HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-			  The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Buildings.Lst[NumBuilding].FullName);
 	    HTM_TD_End ();
 
 	    /* Location */
-	    HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-			  The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 	       HTM_Txt (Buildings.Lst[NumBuilding].Location);
 	    HTM_TD_End ();
 

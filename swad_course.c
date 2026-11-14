@@ -459,7 +459,6 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
    struct Hie_Node *Crs;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
-   const char *BgColor;
    Exi_Exist_t ThisYearHasCourses = Exi_DOES_NOT_EXIST;
    unsigned NumUsrs[Rol_NUM_ROLES];
 
@@ -484,10 +483,9 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
 	   }
 
 	 /* Check if this course is one of my courses */
-	 BgColor = Hie_CheckIfIBelongTo (Hie_CRS,Crs->HieCod) == Usr_BELONG ? "BG_HIGHLIGHT" :
-									      The_GetColorRows ();
-
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_Begin ("class=\"%s\"",
+		       Hie_CheckIfIBelongTo (Hie_CRS,Crs->HieCod) == Usr_BELONG ? "BG_HIGHLIGHT" :
+									          The_GetColorRows ());
 
 	    /* Get number of users */
 	    NumUsrs[Rol_STD] = Enr_GetCachedNumUsrsInCrss (Hie_CRS,Crs->HieCod,1 << Rol_STD);
@@ -498,8 +496,8 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
 			       NumUsrs[Rol_TCH];
 
 	    /* Put green tip if course has users */
-	    HTM_TD_Begin ("class=\"CT %s_%s %s\" title=\"%s\"",
-			  TxtClassNormal,The_GetSuffix (),BgColor,
+	    HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
+			  TxtClassNormal,The_GetSuffix (),
 			  NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
 					     Txt_COURSE_Without_users);
 	       if (NumUsrs[Rol_UNK])
@@ -509,20 +507,17 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Course year */
-	    HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-	                  TxtClassNormal,The_GetSuffix (),BgColor);
+	    HTM_TD_Begin ("class=\"CT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	       HTM_Txt (Txt_YEAR_OF_DEGREE[Crs->Specific.Year]);
 	    HTM_TD_End ();
 
 	    /* Institutional code of the course */
-	    HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-	                  TxtClassNormal,The_GetSuffix (),BgColor);
+	    HTM_TD_Begin ("class=\"CT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	       HTM_Txt (Crs->InstitutionalCod);
 	    HTM_TD_End ();
 
 	    /* Course full name */
-	    HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	                  TxtClassStrong,The_GetSuffix (),BgColor);
+	    HTM_TD_Begin ("class=\"LT %s_%s\"",TxtClassStrong,The_GetSuffix ());
 	       Frm_BeginFormGoTo (ActSeeCrsInf);
 		  ParCod_PutPar (ParCod_Crs,Crs->HieCod);
 		  HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (Crs->FullName),NULL,
@@ -534,20 +529,18 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
 	    HTM_TD_End ();
 
 	    /* Number of teachers in this course */
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  TxtClassNormal,The_GetSuffix (),BgColor);
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Rol_TCH] +
 			     NumUsrs[Rol_NET]);
 	    HTM_TD_End ();
 
 	    /* Number of students in this course */
-	    HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-	                  TxtClassNormal,The_GetSuffix (),BgColor);
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	       HTM_Unsigned (NumUsrs[Rol_STD]);
 	    HTM_TD_End ();
 
 	    /* Course status */
-            Hie_WriteStatusCell (Crs->Status,TxtClassNormal,BgColor,Txt_COURSE_STATUS);
+            Hie_WriteStatusCell (Crs->Status,TxtClassNormal,Txt_COURSE_STATUS);
 
 	 HTM_TR_End ();
 	}
@@ -1750,7 +1743,6 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    unsigned NumTchs;
    unsigned NumUsrs;
    const char *ClassTxt;
-   const char *BgColor;
    Usr_Accepted_t Accepted;
    /*
    row[0]: deg_degrees.DegCod
@@ -1780,32 +1772,30 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
    NumUsrs = NumStds + NumNETs + NumTchs;
    ClassTxt = NumUsrs ? "DAT_STRONG" :
 	                "DAT";
-   BgColor = HieCod == Gbl.Hie.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
-							    The_GetColorRows ();
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+		 HieCod == Gbl.Hie.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
+							  The_GetColorRows ());
 
       /***** User has accepted joining
 	     to this course/to any course in degree/to any course? *****/
       if (WriteColumnAccepted == Crs_WRITE_COL_ACCEPTED)
 	{
 	 Accepted = Usr_GetAcceptedFromYN (row[7][0]);
-	 HTM_TD_Begin ("class=\"BT %s\" title=\"%s\"",
-		       BgColor,*Usr_AcceptedTxt[Accepted]);
+	 HTM_TD_Begin ("class=\"BT\" title=\"%s\"",*Usr_AcceptedTxt[Accepted]);
 	    HTM_Txt (Usr_AcceptedIcon[Accepted]);
 	 HTM_TD_End ();
 	}
 
       /***** Write number of course in this search *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 HTM_Unsigned (NumCrs);
       HTM_TD_End ();
 
       /***** Write degree logo, degree short name (row[2])
 	     and center short name (row[6]) *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeDegInf);
 	    ParCod_PutPar (ParCod_Deg,Deg.HieCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[2]),NULL,
@@ -1819,12 +1809,12 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
       HTM_TD_End ();
 
       /***** Write year (row[4]) *****/
-      HTM_TD_Begin ("class=\"CT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"CT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 HTM_Txt (Txt_YEAR_OF_DEGREE[Deg_ConvStrToYear (row[4])]);
       HTM_TD_End ();
 
       /***** Write course full name (row[5]) *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 Frm_BeginFormGoTo (ActSeeCrsInf);
 	    ParCod_PutPar (ParCod_Crs,HieCod);
 	    HTM_BUTTON_Submit_Begin (Str_BuildGoToTitle (row[5]),NULL,
@@ -1836,17 +1826,17 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,
       HTM_TD_End ();
 
       /***** Write number of teachers in course *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 HTM_Unsigned (NumTchs);
       HTM_TD_End ();
 
       /***** Write number of non-editing teachers in course *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 HTM_Unsigned (NumNETs);
       HTM_TD_End ();
 
       /***** Write number of students in course *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",ClassTxt,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",ClassTxt,The_GetSuffix ());
 	 HTM_Unsigned (NumStds);
       HTM_TD_End ();
 

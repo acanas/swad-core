@@ -858,12 +858,11 @@ Usr_Can_t Hie_CheckIfICanEdit (void)
 /*****************************************************************************/
 
 void Hie_WriteStatusCell (Hie_Status_t Status,
-			  const char *Class,const char *BgColor,
-			  const char *Txt[Hie_NUM_STATUS_TXT])
+			  const char *Class,const char *Txt[Hie_NUM_STATUS_TXT])
   {
    Hie_StatusTxt_t StatusTxt = Hie_GetStatusTxtFromStatusBits (Status);
 
-   HTM_TD_Begin ("class=\"LT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
+   HTM_TD_Begin ("class=\"LT %s_%s\"",Class,The_GetSuffix ());
       if (StatusTxt != Hie_STATUS_ACTIVE) // If active ==> do not show anything
 	 HTM_Txt (Txt[StatusTxt]);
    HTM_TD_End ();

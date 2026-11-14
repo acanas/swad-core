@@ -380,7 +380,6 @@ static void Ins_ListOneInsForSeeing (struct Hie_Node *Ins,unsigned NumIns)
    extern const char *Txt_INSTITUTION_STATUS[Hie_NUM_STATUS_TXT];
    const char *TxtClassNormal;
    const char *TxtClassStrong;
-   const char *BgColor;
 
    if (Ins->Status & Hie_STATUS_BIT_PENDING)
      {
@@ -392,55 +391,55 @@ static void Ins_ListOneInsForSeeing (struct Hie_Node *Ins,unsigned NumIns)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = Ins->HieCod == Gbl.Hie.Node[Hie_INS].HieCod ? "BG_HIGHLIGHT" :
-							         The_GetColorRows ();
 
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+		 Ins->HieCod == Gbl.Hie.Node[Hie_INS].HieCod ? "BG_HIGHLIGHT" :
+							       The_GetColorRows ());
 
       /***** Number of institution in this list *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (NumIns);
       HTM_TD_End ();
 
       /***** Institution logo and name *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",TxtClassStrong,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",TxtClassStrong,The_GetSuffix ());
 	 Ins_DrawInsLogoAndNameWithLink (Ins,ActSeeCtr,"CT ICO16x16");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this institution *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_INS,Ins));
       HTM_TD_End ();
 
       /***** Other stats *****/
       /* Number of centers in this institution */
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CTR,	// Number of centers...
 						      Hie_INS,	// ...in institution
 						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of degrees in this institution */
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_DEG,	// Number of degrees...
 						      Hie_INS,	// ...in institution
 						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of courses in this institution */
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 						      Hie_INS,	// ...in institution
 						      Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of departments in this institution */
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Dpt_GetNumDptsInIns (Ins->HieCod));
       HTM_TD_End ();
 
       /* Number of users in courses of this institution */
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_INS,Ins->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -448,7 +447,7 @@ static void Ins_ListOneInsForSeeing (struct Hie_Node *Ins,unsigned NumIns)
       HTM_TD_End ();
 
       /***** Institution status *****/
-      Hie_WriteStatusCell (Ins->Status,TxtClassNormal,BgColor,Txt_INSTITUTION_STATUS);
+      Hie_WriteStatusCell (Ins->Status,TxtClassNormal,Txt_INSTITUTION_STATUS);
 
    HTM_TR_End ();
   }

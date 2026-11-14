@@ -167,15 +167,14 @@ void Dup_ListDuplicateUsrs (void)
 					      Usr_DONT_PUT_CHECKBOX,Rol_UNK,
 					      &Gbl.Usrs.Selected,Pho_PHOTOS_SHOW);
 
-		     HTM_TR_Begin (NULL);
+		     HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-			HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-				      The_GetColorRows ());
+			HTM_TD_Begin ("colspan=\"2\"");
 			HTM_TD_End ();
 
-			HTM_TD_Begin ("colspan=\"%u\" class=\"LM DAT_%s %s\"",
+			HTM_TD_Begin ("colspan=\"%u\" class=\"LM DAT_%s\"",
 				      Usr_NUM_MAIN_FIELDS_DATA_USR - 2,
-				      The_GetSuffix (),The_GetColorRows ());
+				      The_GetSuffix ());
 
 			   /* Write number of informants (row[1]) if greater than 1 */
 			   if (sscanf (row[1],"%u",&NumInformants) != 1)
@@ -292,15 +291,13 @@ static void Dup_ListSimilarUsrs (void)
 					&Gbl.Usrs.Selected,Pho_PHOTOS_SHOW);
 
 	       /***** Write user's profile and user's courses *****/
-	       HTM_TR_Begin (NULL);
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-		  HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                The_GetColorRows ());
+		  HTM_TD_Begin ("colspan=\"2\"");
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("colspan=\"%u\" class=\"%s\"",
-				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				The_GetColorRows ());
+		  HTM_TD_Begin ("colspan=\"%u\"",
+				Usr_NUM_MAIN_FIELDS_DATA_USR - 2);
 		     /* Show details of user's profile */
 		     Prf_ShowDetailsUserProfile (&UsrDat);
 		     /* Write all courses this user belongs to */
@@ -312,15 +309,13 @@ static void Dup_ListSimilarUsrs (void)
 	       HTM_TR_End ();
 
 	       /***** Buttons to remove user / mark as not duplicated *****/
-	       HTM_TR_Begin (NULL);
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-		  HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-		                The_GetColorRows ());
+		  HTM_TD_Begin ("colspan=\"2\"");
 		  HTM_TD_End ();
 
-		  HTM_TD_Begin ("colspan=\"%u\" class=\"LT %s\"",
-				Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				The_GetColorRows ());
+		  HTM_TD_Begin ("colspan=\"%u\" class=\"LT\"",
+				Usr_NUM_MAIN_FIELDS_DATA_USR - 2);
 		     /* Button to remove this user */
 		     if (Acc_CheckIfICanEliminateAccount (UsrDat.UsrCod) == Usr_CAN)
 			Dup_PutButtonToEliminateUsrAccount (&UsrDat);

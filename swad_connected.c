@@ -664,10 +664,10 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
 	 break;
      }
 
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Show photo *****/
-      HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CON_PHOTO\"");
 	 Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                            ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
@@ -675,7 +675,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
       /***** Write full name and link *****/
       ClassTxt = Con_Connected.Lst[NumUsr].ThisCrs ? "CON_NAME_NARROW CON_CRS" :
 						     "CON_NAME_NARROW CON_NO_CRS";
-      HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
+      HTM_TD_Begin ("class=\"%s\"",ClassTxt);
          if (!NextAction[Role])
 	    Err_WrongRoleExit ();
          Frm_BeginForm (NextAction[Role]);
@@ -694,7 +694,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
       /***** Write time from last access *****/
       ClassTxt = (Con_Connected.Lst[NumUsr].ThisCrs ? "CON_SINCE CON_CRS" :
 						      "CON_SINCE CON_NO_CRS");
-      HTM_TD_Begin ("class=\"%s %s\"",ClassTxt,The_GetColorRows ());
+      HTM_TD_Begin ("class=\"%s\"",ClassTxt);
 	 HTM_DIV_Begin ("id=\"hm%u\"",NumUsr);	// Used for automatic update, only when displayed on right column
 	    Dat_WriteHoursMinutesSecondsFromSeconds (Con_Connected.Lst[NumUsr].TimeDiff);
 	 HTM_DIV_End ();			// Used for automatic update, only when displayed on right column
@@ -742,7 +742,6 @@ static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t Hie
    unsigned NumUsr;
    bool ThisCrs;
    time_t TimeDiff;
-   const char *ClassTxt;
    struct Usr_Data UsrDat;
    Frm_PutForm_t PutFormRecord = Gbl.Hie.Lvl == Hie_CRS &&	// Course selected
 	                         HieLvl == Hie_CRS &&			// Scope is current course
@@ -777,19 +776,18 @@ static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t Hie
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)
 	       TimeDiff = (time_t) 0;
 
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	       /***** Show photo *****/
-	       HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"CON_PHOTO\"");
 		  Pho_ShowUsrPhotoIfAllowed (&UsrDat,
 		                             ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	       HTM_TD_End ();
 
 	       /***** Write full name and link *****/
-	       ClassTxt = ThisCrs ? "CON_NAME_WIDE CON_CRS" :
-			            "CON_NAME_WIDE CON_NO_CRS";
-	       HTM_TD_Begin ("class=\"%s %s\"",
-	                     ClassTxt,The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"%s\"",
+			     ThisCrs ? "CON_NAME_WIDE CON_CRS" :
+				       "CON_NAME_WIDE CON_NO_CRS");
 
 		  if (PutFormRecord == Frm_PUT_FORM)
 		    {
@@ -810,10 +808,9 @@ static void Con_ShowConnectedUsrsThisLocationOneByOneOnMainZone (Hie_Level_t Hie
 	       HTM_TD_End ();
 
 	       /***** Write time from last access *****/
-	       ClassTxt = ThisCrs ? "CON_SINCE CON_CRS" :
-				    "CON_SINCE CON_NO_CRS";
-	       HTM_TD_Begin ("class=\"%s %s\"",
-	                     ClassTxt,The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"%s\"",
+			     ThisCrs ? "CON_SINCE CON_CRS" :
+				       "CON_SINCE CON_NO_CRS");
 		  Dat_WriteHoursMinutesSecondsFromSeconds (TimeDiff);
 	       HTM_TD_End ();
 

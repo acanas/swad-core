@@ -283,17 +283,15 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
    extern const char *Txt_yet_unnamed;
 
    /***** Begin 1st table row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Write number of user in the list *****/
-      HTM_TD_Begin ("rowspan=\"2\" class=\"RT USR_LIST_NUM_N_%s %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("rowspan=\"2\" class=\"RT USR_LIST_NUM_N_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Write user's ID and name *****/
-      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
          HTM_Txt (Txt_ID);   HTM_Colon (); HTM_NBSP (); HTM_Txt (ID); HTM_BR ();
 	 HTM_Txt (Txt_Name); HTM_Colon (); HTM_NBSP ();
 	 if (UsrDat->FullName[0])
@@ -311,7 +309,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
       HTM_TD_End ();
 
       /***** Button to login with this account *****/
-      HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT\"");
 	 Frm_BeginForm (ActLogInNew);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	    Btn_PutButtonInline (Btn_ITS_ME);
@@ -322,10 +320,10 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct Usr_
    HTM_TR_End ();
 
    /***** Begin 2nd table row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Courses of this user *****/
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 UsrDat->Sex = Usr_SEX_UNKNOWN;
 	 Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
 	 Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NET);

@@ -4133,10 +4133,12 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	 switch (FolderContractedOrExpanded)
 	   {
 	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
-	       HTM_TR_Begin ("id=\"%s\" style=\"display:none;\"",Anchor);
+	       HTM_TR_Begin ("id=\"%s\" style=\"display:none;\" class=\"%s\"",
+			     Anchor,The_GetColorRows ());
 	       break;
 	    case ConExp_EXPANDED:
-	       HTM_TR_Begin ("id=\"%s\"",Anchor);
+	       HTM_TR_Begin ("id=\"%s\" class=\"%s\"",
+			     Anchor,The_GetColorRows ());
 	       break;
 	   }
 	 break;
@@ -4145,10 +4147,12 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	   {
 	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
-			     " style=\"display:none;\"",Anchor);
+			     " style=\"display:none;\" class=\"%s\"",
+			     Anchor,The_GetColorRows ());
 	       break;
 	    case ConExp_EXPANDED:
-	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\"",Anchor);
+	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\" class=\"%s\"",
+			     Anchor,The_GetColorRows ());
 	       break;
 	   }
 	 break;
@@ -4157,10 +4161,12 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	   {
 	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
-			     " style=\"display:none;\"",Anchor);
+			     " style=\"display:none;\" class=\"%s\"",
+			     Anchor,The_GetColorRows ());
 	       break;
 	    case ConExp_EXPANDED:
-	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\"",Anchor);
+	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\" class=\"%s\"",
+			     Anchor,The_GetColorRows ());
 	       break;
 	   }
 	 break;
@@ -4194,7 +4200,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 
    /***** Indentation depending on level, icon, and file/folder name *****/
    /* Begin column */
-   HTM_TD_Begin ("class=\"NO_BR LM %s\" style=\"width:99%%;\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"NO_BR LM\" style=\"width:99%%;\"");
 
       HTM_TABLE_Begin (NULL);
 	 HTM_TR_Begin (NULL);
@@ -4258,7 +4264,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
      {
       case Brw_IS_FOLDER:
 	 /***** Put icon to download ZIP of folder *****/
-	 HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"BM\"");
 	    if (Gbl.Usrs.Me.Role.Logged >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 		 !(Brw_ZoneType[FileBrowser->Zone] & Brw_IS_SEE_MRK) &&	// Do not ZIP folders when showing marks
 		!((Brw_ZoneType[FileBrowser->Zone] & Brw_IS_SEE_DOC) &&
@@ -4349,7 +4355,7 @@ static void Brw_PutIconRemove (const struct Brw_FileBrowser *FileBrowser,
       [Brw_IS_FOLDER ] = &Brw_ActRemoveFolder,
      };
 
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
 
       switch (Brw_GetIfICanEditFileOrFolder ())	// Can I remove this?
 	{
@@ -4376,7 +4382,7 @@ static void Brw_PutIconRemove (const struct Brw_FileBrowser *FileBrowser,
 
 static void Brw_PutIconCopy (const struct Brw_FileBrowser *FileBrowser)
   {
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
 
       /***** Form to copy into the clipboard *****/
       Ico_PutContextualIconToCopy (Brw_ActCopy[FileBrowser->Zone],FileBrowser->SectionId,
@@ -4394,7 +4400,7 @@ static void Brw_PutIconPaste (const struct Brw_FileBrowser *FileBrowser,
   {
    extern const char *Txt_Copy_not_allowed;
 
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
 
       if (Folder->Type == Brw_IS_FOLDER)	// Can't paste in a file or link
 	 /***** Icon to paste *****/
@@ -4431,7 +4437,7 @@ static void Brw_IndentAndWriteIconExpandContract (const struct Brw_FileBrowser *
 	    Brw_IndentDependingOnLevel (Level);
 
 	    /***** Icon to expand/contract *****/
-	    HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"BM\"");
 	       switch (IconThisRow)
 		 {
 		  case Brw_ICON_NOTHING:
@@ -4475,7 +4481,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
 	i < Level;
 	i++)
      {
-      HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"BM\"");
 	 Ico_PutIcon ("tr16x16.gif",Ico_UNCHANGED,"","ICO20x20");
       HTM_TD_End ();
      }
@@ -4627,7 +4633,7 @@ static void Brw_PutIconHideUnhide (const struct Brw_FileBrowser *FileBrowser,
 			    [HidVis_VISIBL] = ActUnk},
      };
 
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
       Ico_PutContextualIconToHideUnhide (Brw_ActHideUnhide[FileBrowser->Zone],
 					 FileBrowser->SectionId,
 					 Brw_PutImplicitParsFileBrowser,FileBrowser,
@@ -4683,7 +4689,7 @@ static void Brw_PutIconFolder (const struct Brw_FileBrowser *FileBrowser,
 								     File);
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
 
       /* Put two folder icons:	· 1st closed	(hidden or visible)
 				· 2nd open	(hidden or visible) */
@@ -4716,9 +4722,9 @@ static void Brw_PutIconFolderWithoutPlus (__attribute__((unused)) const struct B
      };
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\"%s",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\"%s",
 		  CloOpe_Txt[ClosedOrOpen],FileBrowserId,RowId,
-                  The_GetColorRows (),HidVis_ShownStyle[HiddenOrVisible]);
+                  HidVis_ShownStyle[HiddenOrVisible]);
 
       /***** Icon *****/
       Ico_PutIcon (CloOpe_Icon[ClosedOrOpen],Ico_UNCHANGED,Txt_Folder,
@@ -4741,9 +4747,9 @@ static void Brw_PutIconFolderWithPlus (const struct Brw_FileBrowser *FileBrowser
    extern const char *HidVis_ShownStyle[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Begin container *****/
-   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\" class=\"%s\"%s",
+   HTM_DIV_Begin ("id=\"folder_%s_%s_%s\"%s",
 		  CloOpe_Txt[ClosedOrOpen],FileBrowserId,RowId,
-		  The_GetColorRows (),HidVis_ShownStyle[HiddenOrVisible]);
+		  HidVis_ShownStyle[HiddenOrVisible]);
 
       /***** Form and icon *****/
       Ico_PutContextualIconToCreateInFolder (Brw_ActFormCreate[FileBrowser->Zone],
@@ -4764,7 +4770,7 @@ static void Brw_PutIconNewFileOrFolder (void)
    extern const char *Txt_New_FILE_OR_FOLDER;
 
    /***** Icon that indicates new file *****/
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
       Ico_PutIcon ("star16x16.gif",Ico_UNCHANGED,Txt_New_FILE_OR_FOLDER,"ICO20x20");
    HTM_TD_End ();
   }
@@ -4777,7 +4783,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileBrowser 
 						   const struct Brw_File *File)
   {
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
 
       /***** Begin form *****/
       Frm_BeginFormAnchor (Brw_ActShoDatFile[FileBrowser->Zone],
@@ -5022,13 +5028,13 @@ static void Brw_WriteFileSizeAndDate (const struct Brw_File *File,
       Fil_WriteFileSizeBrief ((double) File->Metadata.Size,FileSizeStr);
    else
       FileSizeStr[0] = '\0';
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtStyle,The_GetColorRows ());
+   HTM_TD_Begin ("class=\"%s RM\"",TxtStyle);
       HTM_NBSP ();
       HTM_Txt (FileSizeStr);
    HTM_TD_End ();
 
    /***** Write the date *****/
-   HTM_TD_Begin ("class=\"%s RM %s\"",TxtStyle,The_GetColorRows ());
+   HTM_TD_Begin ("class=\"%s RM\"",TxtStyle);
       HTM_NBSP ();
       if (File->Type == Brw_IS_FILE ||
 	  File->Type == Brw_IS_LINK)
@@ -5072,7 +5078,7 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 							   Usr_DONT_GET_PREFS,
 							   Usr_DONT_GET_ROLE_IN_CRS);
 
-   HTM_TD_Begin ("class=\"BM %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"BM\"");
       switch (UsrExists)
 	{
 	 case Exi_EXISTS:
@@ -9613,7 +9619,6 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    unsigned NumRow;
    long GrpCod;
    Act_Action_t Action;
-   const char *BgColor;
    char FileNameToShow[NAME_MAX + 1];
 /*
    row[ 0] = FilCod
@@ -9660,14 +9665,13 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
    GrpCod = Str_ConvertStrCodToLongCod (row[10]);
 
    /***** Set row color *****/
-   BgColor = Hie[Hie_CRS].HieCod > 0 &&
-	     Hie[Hie_CRS].HieCod == Gbl.Hie.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
-									 The_GetColorRows ();
-
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+		 Hie[Hie_CRS].HieCod > 0 &&
+		 Hie[Hie_CRS].HieCod == Gbl.Hie.Node[Hie_CRS].HieCod ? "BG_HIGHLIGHT" :
+								       The_GetColorRows ());
 
       /***** Write number of document in this search *****/
-      HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (++(*NumDocsNotHidden));
       HTM_TD_End ();
 
@@ -9677,7 +9681,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	   HieLvl++)
 	{
 	 /***** Write institution logo, institution short name *****/
-	 HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	    if (Hie[HieLvl].HieCod > 0)
 	      {
 	       Frm_BeginFormGoTo (Hie_ActionsSeeInfo[HieLvl]);
@@ -9700,7 +9704,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	}
 
       /***** Write file zone *****/
-      HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 	 if (Titles[FileBrowser.Zone])
 	    HTM_Txt (*Titles[FileBrowser.Zone]);
       HTM_TD_End ();
@@ -9709,7 +9713,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
       Brw_GetFileNameToShow (FileBrowser.Zone,&File,FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
-      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
 
 	 /* Begin form */
 	 Action = Brw_ActShoDatFile[Brw_ZoneForFoundDocs[FileBrowser.Zone]];

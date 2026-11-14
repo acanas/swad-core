@@ -125,7 +125,6 @@ void Deg_SeeDegWithPendingCrss (void)
    unsigned NumDeg;
    struct Hie_Node Deg;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   const char *BgColor;
 
    /***** Get degrees with pending courses *****/
    if ((NumDegs = Deg_DB_GetDegsWithPendingCrss (&mysql_res)))
@@ -150,24 +149,22 @@ void Deg_SeeDegWithPendingCrss (void)
 
 	    /* Get degree code (row[0]) */
 	    Deg.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = Deg.HieCod == Gbl.Hie.Node[Hie_DEG].HieCod ? "BG_HIGHLIGHT" :
-								         The_GetColorRows ();
 
 	    /* Get data of degree */
 	    SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
 	    /* Begin table row */
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",
+			  Deg.HieCod == Gbl.Hie.Node[Hie_DEG].HieCod ? "BG_HIGHLIGHT" :
+								       The_GetColorRows ());
 
 	       /* Degree logo and full name */
-	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",
-	                     The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP\"",The_GetSuffix ());
 		  Deg_DrawDegLogoAndNameWithLink (&Deg,ActSeeCrs,"CM ICO20x20");
 	       HTM_TD_End ();
 
 	       /* Number of pending courses (row[1]) */
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -746,7 +743,6 @@ static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
    struct DegTyp_DegType DegTyp;
    const char *TxtClassNormal;
    const char *TxtClassStrong;
-   const char *BgColor;
    unsigned NumCrss = Hie_GetCachedNumNodesInHieLvl (Hie_CRS,	// Number of courses...
 					             Hie_DEG,	// ...in degree
 					             Deg->HieCod);
@@ -766,15 +762,15 @@ static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       TxtClassNormal = "DAT";
       TxtClassStrong = "DAT_STRONG";
      }
-   BgColor = Deg->HieCod == Gbl.Hie.Node[Hie_DEG].HieCod ? "BG_HIGHLIGHT" :
-							         The_GetColorRows ();
 
    /***** Begin table row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+	         Deg->HieCod == Gbl.Hie.Node[Hie_DEG].HieCod ? "BG_HIGHLIGHT" :
+							       The_GetColorRows ());
 
       /***** Put tip if degree has courses *****/
-      HTM_TD_Begin ("class=\"CT %s_%s %s\" title=\"%s\"",
-		    TxtClassNormal,The_GetSuffix (),BgColor,
+      HTM_TD_Begin ("class=\"CT %s_%s\" title=\"%s\"",
+		    TxtClassNormal,The_GetSuffix (),
 		    NumCrss ? Txt_DEGREE_With_courses :
 			      Txt_DEGREE_Without_courses);
 	 if (NumCrss)
@@ -784,32 +780,27 @@ static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       HTM_TD_End ();
 
       /***** Number of degree in this list *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (NumDeg);
       HTM_TD_End ();
 
       /***** Degree logo and name *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    TxtClassStrong,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",TxtClassStrong,The_GetSuffix ());
 	 Deg_DrawDegLogoAndNameWithLink (Deg,ActSeeCrs,"CM ICO20x20");
       HTM_TD_End ();
 
       /***** Type of degree *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Txt (DegTyp.DegTypName);
       HTM_TD_End ();
 
       /***** Current number of courses in this degree *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (NumCrss);
       HTM_TD_End ();
 
       /***** Number of users in courses of this degree *****/
-      HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-                    TxtClassNormal,The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RT %s_%s\"",TxtClassNormal,The_GetSuffix ());
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_DEG,Deg->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
@@ -817,7 +808,7 @@ static void Deg_ListOneDegForSeeing (struct Hie_Node *Deg,unsigned NumDeg)
       HTM_TD_End ();
 
       /***** Degree status *****/
-      Hie_WriteStatusCell (Deg->Status,TxtClassNormal,BgColor,Txt_DEGREE_STATUS);
+      Hie_WriteStatusCell (Deg->Status,TxtClassNormal,Txt_DEGREE_STATUS);
 
    /***** End table row *****/
    HTM_TR_End ();

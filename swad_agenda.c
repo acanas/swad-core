@@ -798,7 +798,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    Frm_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
 
    /***** Write first row of data of this event *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /* Start/end date/time */
       UniqueId++;
@@ -808,11 +808,10 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	{
 	 if (asprintf (&Id,"agd_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
 		       Dat_TimeStatusClass[AgdEvent.TimeStatus][AgdEvent.Hidden],
-		       The_GetSuffix (),
-		       The_GetColorRows ());
+		       The_GetSuffix ());
 	    Dat_WriteLocalDateHMSFromUTC (Id,AgdEvent.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  Dat_WRITE_TODAY |
@@ -825,7 +824,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	}
 
       /* Event */
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT\"");
 	 HTM_ARTICLE_Begin (Anchor);
 	    HTM_SPAN_Begin ("class=\"%s_%s\"",
 			    HidVis_TitleClass[AgdEvent.Hidden],
@@ -836,7 +835,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_End ();
 
       /* Location */
-      HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT\"");
 	 HTM_SPAN_Begin ("class=\"%s_%s\"",
 			 HidVis_TitleClass[AgdEvent.Hidden],
 		         The_GetSuffix ());
@@ -847,9 +846,9 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    HTM_TR_End ();
 
    /***** Write second row of data of this event *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 switch (AgendaType)
 	   {
 	    case Agd_MY_AGENDA_TODAY:
@@ -863,7 +862,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
       HTM_TD_End ();
 
       /* Text of the event */
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
 	                HidVis_DataClass[AgdEvent.Hidden],
 	                The_GetSuffix ());

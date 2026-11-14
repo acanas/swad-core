@@ -109,32 +109,25 @@ static Usr_Can_t Mch_CheckIfICanEditThisMatch (const struct Mch_Match *Match);
 static Usr_Can_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
-                                           const char *BgColor,
                                            const char *Anchor);
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Gam_Games *Games,
-				            const struct Mch_Match *Match,
-				            const char *BgColor);
+				            const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesTimes (const struct Gam_Games *Games,
 					   const struct Mch_Match *Match,
-					   const char *BgColor,
 					   unsigned UniqueId);
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Gam_Games *Games,
 					       const struct Mch_Match *Match,
-					       const char *BgColor,
                                                const char *Anchor);
 static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games *Games,
 							 const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Gam_Games *Games,
-					        const struct Mch_Match *Match,
-					        const char *BgColor);
+					        const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 					    struct Mch_Match *Match,
-					    const char *BgColor,
 					    unsigned NumQsts);
 static void Mch_PutParMchCod (const void *MchCod);
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
-                                            const struct Mch_Match *Match,
-                                            const char *BgColor);
+                                            const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
                                                const struct Mch_Match *Match);
 static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
@@ -398,32 +391,32 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this match with match data ****/
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",BgColor);
 
 	       /* Icons */
 	       if (ICanEditMatches == Usr_CAN)
-		  Mch_ListOneOrMoreMatchesIcons (Games,&Match,BgColor,Anchor);
+		  Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
 
 	       /* Start/end date/time */
-	       Mch_ListOneOrMoreMatchesTimes (Games,&Match,BgColor,UniqueId);
+	       Mch_ListOneOrMoreMatchesTimes (Games,&Match,UniqueId);
 
 	       /* Title and groups */
-	       Mch_ListOneOrMoreMatchesTitleGrps (Games,&Match,BgColor,Anchor);
+	       Mch_ListOneOrMoreMatchesTitleGrps (Games,&Match,Anchor);
 
 	       /* Number of players who have played the match */
-	       Mch_ListOneOrMoreMatchesNumPlayers (Games,&Match,BgColor);
+	       Mch_ListOneOrMoreMatchesNumPlayers (Games,&Match);
 
 	       /* Match status */
-	       Mch_ListOneOrMoreMatchesStatus (Games,&Match,BgColor,Games->Game.NumQsts);
+	       Mch_ListOneOrMoreMatchesStatus (Games,&Match,Games->Game.NumQsts);
 
 	       /* Match result visible? */
-	       Mch_ListOneOrMoreMatchesResult (Games,&Match,BgColor);
+	       Mch_ListOneOrMoreMatchesResult (Games,&Match);
 
 	    HTM_TR_End ();
 
 	    /***** Second row: match author ****/
-	    HTM_TR_Begin (NULL);
-	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match,BgColor);
+	    HTM_TR_Begin ("class=\"%s\"",BgColor);
+	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
 	    HTM_TR_End ();
 
 	    /***** Third row for this match used for edition ****/
@@ -433,8 +426,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       /***** Check if I can edit this match *****/
 	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
 		 {
-		  HTM_TR_Begin (NULL);
-		     HTM_TD_Begin ("colspan=\"7\" class=\"LT %s\"",BgColor);
+		  HTM_TR_Begin ("class=\"%s\"",BgColor);
+		     HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
 			Mch_PutFormMatch (&Match);	// Form to edit this match
 		     HTM_TD_End ();
 		  HTM_TR_End ();
@@ -456,8 +449,8 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	 Str_Copy (Match.Title,Games->Game.Title,sizeof (Match.Title) - 1);
 
 	 /* Put form to create new match */
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"7\" class=\"LT %s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
 	       Mch_PutFormMatch (&Match);	// Form to create match
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -557,10 +550,9 @@ static Usr_Can_t Mch_CheckIfICanChangeVisibilityOfResults (const struct Mch_Matc
 
 static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
                                            const struct Mch_Match *Match,
-                                           const char *BgColor,
                                            const char *Anchor)
   {
-   HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"BT\"");
 
       switch (Mch_CheckIfICanEditThisMatch (Match))
 	{
@@ -587,11 +579,10 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
 /*****************************************************************************/
 
 static void Mch_ListOneOrMoreMatchesAuthor (const struct Gam_Games *Games,
-				            const struct Mch_Match *Match,
-				            const char *BgColor)
+				            const struct Mch_Match *Match)
   {
    /***** Match author (teacher) *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",BgColor);
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       Usr_WriteAuthor1Line (Match->UsrCod,Games->Game.Hidden);
    HTM_TD_End ();
   }
@@ -602,7 +593,6 @@ static void Mch_ListOneOrMoreMatchesAuthor (const struct Gam_Games *Games,
 
 static void Mch_ListOneOrMoreMatchesTimes (const struct Gam_Games *Games,
 					   const struct Mch_Match *Match,
-					   const char *BgColor,
 					   unsigned UniqueId)
   {
    extern const char *Dat_TimeStatusClass[Dat_NUM_TIME_STATUS][HidVis_NUM_HIDDEN_VISIBLE];
@@ -623,10 +613,10 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Gam_Games *Games,
      {
       if (asprintf (&Id,"mch_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		    Id,
 		    Dat_TimeStatusClass[TimeStatus[Match->Status.Showing]][Games->Game.Hidden],
-		    The_GetSuffix (),BgColor);
+		    The_GetSuffix ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Match->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -646,14 +636,13 @@ static void Mch_ListOneOrMoreMatchesTimes (const struct Gam_Games *Games,
 
 static void Mch_ListOneOrMoreMatchesTitleGrps (const struct Gam_Games *Games,
 					       const struct Mch_Match *Match,
-					       const char *BgColor,
                                                const char *Anchor)
   {
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *Txt_Play;
    extern const char *Txt_Resume;
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
       HTM_ARTICLE_Begin (Anchor);
 
 	 /***** Match title *****/
@@ -740,15 +729,13 @@ static void Mch_GetAndWriteNamesOfGrpsAssociatedToMatch (const struct Gam_Games 
 /*****************************************************************************/
 
 static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Gam_Games *Games,
-					        const struct Mch_Match *Match,
-					        const char *BgColor)
+					        const struct Mch_Match *Match)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Number of players who have answered any question in the match ******/
-   HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
-                 HidVis_DataClass[Games->Game.Hidden],The_GetSuffix (),
-                 BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s\"",
+                 HidVis_DataClass[Games->Game.Hidden],The_GetSuffix ());
       HTM_Unsigned (Mch_DB_GetNumUsrsWhoHavePlayedMch (Match->MchCod));
    HTM_TD_End ();
   }
@@ -759,13 +746,11 @@ static void Mch_ListOneOrMoreMatchesNumPlayers (const struct Gam_Games *Games,
 
 static void Mch_ListOneOrMoreMatchesStatus (const struct Gam_Games *Games,
 					    struct Mch_Match *Match,
-					    const char *BgColor,
 					    unsigned NumQsts)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s %s\"",
-                 The_GetSuffix (),BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s\"",The_GetSuffix ());
 
       if (Match->Status.Showing != Mch_END)	// Match not over
 	{
@@ -804,8 +789,7 @@ static void Mch_PutParMchCod (const void *MchCod)
 /*****************************************************************************/
 
 static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
-                                            const struct Mch_Match *Match,
-                                            const char *BgColor)
+                                            const struct Mch_Match *Match)
   {
    static void (*Function[Rol_NUM_ROLES]) (struct Gam_Games *Games,
                                            const struct Mch_Match *Match) =
@@ -816,7 +800,7 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
       [Rol_SYS_ADM] = Mch_ListOneOrMoreMatchesResultTch,
      };
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"CT %s\"",BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"CT\"");
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Games,Match);

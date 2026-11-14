@@ -523,13 +523,23 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    Frm_SetAnchorStr (Assignments->Asg.AsgCod,&Anchor);
 
    /***** Write first row of data of this assignment *****/
-   HTM_TR_Begin (NULL);
+   switch (ViewType)
+     {
+      case Vie_VIEW:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+      case Vie_PRINT:
+	 HTM_TR_Begin (NULL);
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
 
       /* Forms to remove/edit this assignment */
       if (OneOrMultiple == OneSev_SEVERAL)
 	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL %s\"",
-	               The_GetColorRows ());
+	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
 	    Asg_PutIconsToRemEditOneAsg (Assignments,Anchor);
          HTM_TD_End ();
 	}
@@ -543,104 +553,62 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	{
 	 if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 switch (ViewType)
-	   {
-	    case Vie_VIEW:
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			     Id,
-			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.Hidden],
-			     The_GetSuffix (),
-			     The_GetColorRows ());
-	       break;
-	    case Vie_PRINT:
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			     Id,
-			     CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.Hidden],
-			     The_GetSuffix ());
-	       break;
-	    default:
-	       Err_WrongTypeExit ();
-	       break;
-	   }
-	 Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],
-				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-				       Dat_WRITE_TODAY |
-				       Dat_WRITE_DATE_ON_SAME_DAY |
-				       Dat_WRITE_WEEK_DAY |
-				       Dat_WRITE_HOUR |
-				       Dat_WRITE_MINUTE |
-				       Dat_WRITE_SECOND);
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+		       Id,
+		       CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.Hidden],
+		       The_GetSuffix ());
+	    Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],
+					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+					  Dat_WRITE_TODAY |
+					  Dat_WRITE_DATE_ON_SAME_DAY |
+					  Dat_WRITE_WEEK_DAY |
+					  Dat_WRITE_HOUR |
+					  Dat_WRITE_MINUTE |
+					  Dat_WRITE_SECOND);
 	 HTM_TD_End ();
 	 free (Id);
 	}
 
       /* Assignment title */
-      switch (ViewType)
-	{
-	 case Vie_VIEW:
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	 case Vie_PRINT:
-	    HTM_TD_Begin ("class=\"LT\"");
-	    break;
-	 default:
-	    Err_WrongTypeExit ();
-	    break;
-	}
-
-      HTM_ARTICLE_Begin (Anchor);
-	 Frm_BeginForm (ActSeeOneAsg);
-	    Asg_PutPars (Assignments);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneAsg),NULL,
-	                             "class=\"LT BT_LINK %s_%s\"",
-				     HidVis_TitleClass[Assignments->Asg.Hidden],
-				     The_GetSuffix ());
-	       HTM_Txt (Assignments->Asg.Title);
-	    HTM_BUTTON_End ();
-	 Frm_EndForm ();
-      HTM_ARTICLE_End ();
-
+      HTM_TD_Begin ("class=\"LT\"");
+	 HTM_ARTICLE_Begin (Anchor);
+	    Frm_BeginForm (ActSeeOneAsg);
+	       Asg_PutPars (Assignments);
+	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneAsg),NULL,
+					"class=\"LT BT_LINK %s_%s\"",
+					HidVis_TitleClass[Assignments->Asg.Hidden],
+					The_GetSuffix ());
+		  HTM_Txt (Assignments->Asg.Title);
+	       HTM_BUTTON_End ();
+	    Frm_EndForm ();
+	 HTM_ARTICLE_End ();
       HTM_TD_End ();
 
       /* Assignment folder */
-      switch (ViewType)
-	{
-	 case Vie_VIEW:
-	    HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-			  The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 case Vie_PRINT:
-	    HTM_TD_Begin ("class=\"LT DAT_%s\"",
-			  The_GetSuffix ());
-	    break;
-	 default:
-	    Err_WrongTypeExit ();
-	    break;
-	}
-
-      if (Assignments->Asg.SendWork == Asg_SEND_WORK)
-	 Asg_WriteAssignmentFolder (&Assignments->Asg,ViewType);
+      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+	 if (Assignments->Asg.SendWork == Asg_SEND_WORK)
+	    Asg_WriteAssignmentFolder (&Assignments->Asg,ViewType);
       HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Write second row of data of this assignment *****/
-   HTM_TR_Begin (NULL);
+   switch (ViewType)
+     {
+      case Vie_VIEW:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+      case Vie_PRINT:
+	 HTM_TR_Begin (NULL);
+	 break;
+      default:
+	 Err_WrongTypeExit ();
+	 break;
+     }
 
       /* Author of the assignment */
-      switch (ViewType)
-	{
-	 case Vie_VIEW:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	 case Vie_PRINT:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 default:
-	    Err_WrongTypeExit ();
-	    break;
-	}
-      Asg_WriteAsgAuthor (&Assignments->Asg);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 Asg_WriteAsgAuthor (&Assignments->Asg);
       HTM_TD_End ();
 
       /* Text of the assignment */
@@ -648,27 +616,15 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      switch (ViewType)
-	{
-	 case Vie_VIEW:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	 case Vie_PRINT:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	    break;
-	 default:
-	    Err_WrongTypeExit ();
-	    break;
-	}
-      if (Gbl.Crs.Grps.NumGrps)
-	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Assignments->Asg);
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+	 if (Gbl.Crs.Grps.NumGrps)
+	    Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Assignments->Asg);
 
-      HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-                     HidVis_DataClass[Assignments->Asg.Hidden],
-		     The_GetSuffix ());
-	 HTM_Txt (Txt);
-      HTM_DIV_End ();
-
+	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+			HidVis_DataClass[Assignments->Asg.Hidden],
+			The_GetSuffix ());
+	    HTM_Txt (Txt);
+	 HTM_DIV_End ();
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -1756,9 +1712,8 @@ void Asg_WriteDatesAssignment (void)
    char *Id;
 
    /***** Begin table cell *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s %s\"",
-	         DateClass[Asg->ClosedOrOpen],The_GetSuffix (),
-	         The_GetColorRows ());
+   HTM_TD_Begin ("colspan=\"2\" class=\"RM %s_%s\"",
+	         DateClass[Asg->ClosedOrOpen],The_GetSuffix ());
 
       if (Asg->AsgCod > 0)
 	{

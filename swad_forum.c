@@ -987,9 +987,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       Msg_WriteMsgNumber ((unsigned long) PstNum,ClosedOrOpenPst);
 
       /***** Write date *****/
-      Msg_WriteMsgDate (CreatTimeUTC,
-                        Msg_Class[ClosedOrOpenPst].Title,
-                        Msg_Class[ClosedOrOpenPst].Background);
+      Msg_WriteMsgDate (CreatTimeUTC,Msg_Class[ClosedOrOpenPst].Title);
       /***** Write subject *****/
       HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
 		    Msg_Class[ClosedOrOpenPst].Title,The_GetSuffix (),

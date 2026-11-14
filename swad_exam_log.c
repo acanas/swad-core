@@ -337,20 +337,19 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  Err_NotEnoughMemoryExit ();
 
 	       /***** Write row *****/
-	       HTM_TR_Begin (NULL);
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 		  /* Write number of click */
-		  HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-				NumClickClass[UsrCouldAnswer],The_GetSuffix (),
-				The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"RT %s_%s\"",
+				NumClickClass[UsrCouldAnswer],The_GetSuffix ());
 		     HTM_Unsigned (NumClick + 1);
 		  HTM_TD_End ();
 
 		  /* Write click time */
 		  if (asprintf (&Id,"click_date_%u",NumClick) < 0)
 		     Err_NotEnoughMemoryExit ();
-		  HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		                Id,Class[Action],The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+		                Id,Class[Action],The_GetSuffix ());
 		     Dat_WriteLocalDateHMSFromUTC (Id,ClickTimeUTC,
 						   Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
 						   Dat_WRITE_TODAY |
@@ -363,28 +362,27 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write action */
-		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class[Action],The_GetSuffix ());
 		     HTM_Txt (Txt_EXAM_LOG_ACTIONS[Action]);
 		  HTM_TD_End ();
 
 		  /* Write number of question */
-		  HTM_TD_Begin ("class=\"RT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"RT %s_%s\"",
+		                Class[Action],The_GetSuffix ());
 		     if (QstInd >= 0)
 			HTM_Unsigned ((unsigned) QstInd + 1);
 		  HTM_TD_End ();
 
 		  /* Write if exam print was open and accesible to answer */
-		  HTM_TD_Begin ("class=\"CT %s_%s %s\"",
-				Status[UsrCouldAnswer].Class,The_GetSuffix (),
-				The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"CT %s_%s\"",
+				Status[UsrCouldAnswer].Class,The_GetSuffix ());
 		     HTM_Txt (Status[UsrCouldAnswer].Icon);
 		  HTM_TD_End ();
 
 		  /* Write IP */
-		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class[Action],The_GetSuffix ());
 		     Length = strlen (IP);
 		     if (Length > 6)
 		       {
@@ -402,9 +400,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write session id */
-		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),
-		                The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class[Action],The_GetSuffix ());
 		     if (SessionId[0])
 		       {
 			Length = strlen (SessionId);
@@ -425,9 +422,8 @@ void ExaLog_ShowExamLog (const struct ExaPrn_Print *Print)
 		  HTM_TD_End ();
 
 		  /* Write user agent (row[6]) */
-		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class[Action],The_GetSuffix (),
-		                The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",
+		                Class[Action],The_GetSuffix ());
 		     if (UserAgent[0])
 			HTM_Txt (UserAgent);
 		  HTM_TD_End ();

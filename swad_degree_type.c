@@ -309,32 +309,30 @@ void DegTyp_PutIconToViewDegTypes (void)
 static void DegTyp_ListDegTypesForSeeing (const struct DegTyp_DegTypes *DegTypes)
   {
    unsigned NumDegTyp;
-   const char *BgColor;
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0, The_ResetRowColor ();
 	NumDegTyp < DegTypes->Num;
 	NumDegTyp++, The_ChangeRowColor ())
      {
-      BgColor = DegTypes->Lst[NumDegTyp].DegTypCod ==
-	        Gbl.Hie.Node[Hie_DEG].Specific.TypCod ? "BG_HIGHLIGHT" :
-							      The_GetColorRows ();
-
       /* Begin table row */
-      HTM_TR_Begin (NULL);
+      HTM_TR_Begin ("class=\"%s\"",
+		    DegTypes->Lst[NumDegTyp].DegTypCod ==
+		    Gbl.Hie.Node[Hie_DEG].Specific.TypCod ? "BG_HIGHLIGHT" :
+							    The_GetColorRows ());
 
 	 /* Number of degree type in this list */
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (NumDegTyp + 1);
 	 HTM_TD_End ();
 
 	 /* Name of degree type */
-	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"LM DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_Txt (DegTypes->Lst[NumDegTyp].DegTypName);
 	 HTM_TD_End ();
 
 	 /* Number of degrees of this type */
-	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RM DAT_STRONG_%s\"",The_GetSuffix ());
 	    HTM_Unsigned (DegTypes->Lst[NumDegTyp].NumDegs);
 	 HTM_TD_End ();
 

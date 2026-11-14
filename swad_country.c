@@ -112,7 +112,6 @@ void Cty_SeeCtyWithPendingInss (void)
    unsigned NumCty;
    struct Hie_Node Cty;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   const char *BgColor;
 
    /***** Trivial check: only system admins can see countries with pending institutions *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -146,24 +145,24 @@ void Cty_SeeCtyWithPendingInss (void)
 
 	    /* Get country code (row[0]) */
 	    Cty.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = Cty.HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
-									 The_GetColorRows ();
 
 	    /* Get data of country */
 	    SuccessOrError = Hie_GetDataByCod[Hie_CTY] (&Cty);
 
 	    /* Begin row for this country */
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",
+			  Cty.HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
+								       The_GetColorRows ());
 
 	       /* Country map */
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 		  Cty_DrawCtyMapAndNameWithLink (&Cty,ActSeeIns,
 						     "COUNTRY_SMALL",
 						     "COUNTRY_MAP_SMALL");
 	       HTM_TD_End ();
 
 	       /* Number of pending institutions (row[1]) */
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 
@@ -361,28 +360,26 @@ static void Cty_PutHeadCtysForSeeing (Hie_OrderSelectable_t OrderSelectable)
 
 static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty)
   {
-   const char *BgColor;
    Hie_Level_t HieLvl;
 
-   BgColor = Cty->HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
-							         The_GetColorRows ();
-
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+		 Cty->HieCod == Gbl.Hie.Node[Hie_CTY].HieCod ? "BG_HIGHLIGHT" :
+							       The_GetColorRows ());
 
       /***** Number of country in this list *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumCty);
       HTM_TD_End ();
 
       /***** Country map (and link to WWW if exists) *****/
-      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LM DAT_STRONG_%s\"",The_GetSuffix ());
 	 Cty_DrawCtyMapAndNameWithLink (Cty,ActSeeIns,
 					    "COUNTRY_SMALL",
 					    "COUNTRY_MAP_SMALL");
       HTM_TD_End ();
 
       /***** Number of users who claim to belong to this country *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Hie_GetCachedNumUsrsWhoClaimToBelongTo (Hie_CTY,Cty));
       HTM_TD_End ();
 
@@ -391,15 +388,15 @@ static void Cty_ListOneCtyForSeeing (struct Hie_Node *Cty,unsigned NumCty)
 	   HieLvl <= Hie_CRS;
 	   HieLvl++)
         {
-	 HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
-	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl,		// Number of institutions/centers/degrees/courses...
+	 HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
+	    HTM_Unsigned (Hie_GetCachedNumNodesInHieLvl (HieLvl,	// Number of institutions/centers/degrees/courses...
 							 Hie_CTY,	// ...in country
 							 Cty->HieCod));
 	 HTM_TD_End ();
         }
 
       /***** Number of users in courses *****/
-      HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (Enr_GetCachedNumUsrsInCrss (Hie_CTY,Cty->HieCod,
 						   1 << Rol_STD |
 						   1 << Rol_NET |
