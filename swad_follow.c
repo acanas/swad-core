@@ -675,17 +675,16 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
    Usr_Can_t ICanView = Pri_CheckIfICanView (UsrDat->BaPrfVisibility,UsrDat);
 
    /***** Show user's photo *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-      HTM_TD_Begin ("class=\"CON_PHOTO %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CON_PHOTO\"");
 	 if (ICanView == Usr_CAN)
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
       HTM_TD_End ();
 
       /***** User's name *****/
-      HTM_TD_Begin ("class=\"CON_NAME_FOLLOW %s\"",
-                    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CON_NAME_FOLLOW\"");
 	 if (ICanView == Usr_CAN)
 	   {
 	    /* Put form to go to public profile */
@@ -702,7 +701,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
       HTM_TD_End ();
 
       /***** Icon to follow *****/
-      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CON_ICON_FOLLOW RM\"");
 	 if (!Gbl.Usrs.Me.Logged ||			// Not logged
 	     Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)	// It's me
 	    /* Inactive icon to follow/unfollow */

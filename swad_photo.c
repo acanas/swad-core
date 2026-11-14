@@ -2404,17 +2404,15 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 	    /* Get data of degree */
 	    SuccessOrError = Hie_GetDataByCod[Hie_DEG] (&Deg);
 
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Unsigned (++NumDegsNotEmpty);
 	       HTM_TD_End ();
 
 	       /***** Show logo and name of this degree *****/
-	       HTM_TD_Begin ("class=\"LM DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LM DAT_%s\"",The_GetSuffix ());
 		  if (SeeOrPrint == Pho_DEGREES_SEE)
 		     Deg_DrawDegLogoAndNameWithLink (&Deg,ActSeeDegInf,"CT ICO20x20");
 		  else	// Pho_DEGREES_PRINT
@@ -2431,8 +2429,7 @@ static void Pho_ShowOrPrintListDegrees (struct Pho_DegPhotos *DegPhotos,
 		 {
 		  /***** Show average photo of students belonging to this degree *****/
 		  Pho_GetNumStdsInDegree (Deg.HieCod,Sex,&NumStds,&NumStdsWithPhoto);
-		  HTM_TD_Begin ("class=\"RM DAT_SMALL_%s %s\"",
-				The_GetSuffix (),The_GetColorRows ());
+		  HTM_TD_Begin ("class=\"RM DAT_SMALL_%s\"",The_GetSuffix ());
 		     if (ShowPhotos == Pho_PHOTOS_SHOW)
 			Pho_ShowDegreeAvgPhotoAndStat (&Deg,DegPhotos,
 						       SeeOrPrint,Sex,

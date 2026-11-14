@@ -94,7 +94,6 @@ void HTM_TH_Empty (unsigned NumColumns);
 void HTM_TD_Begin (const char *fmt,...);
 void HTM_TD_End (void);
 void HTM_TD_Empty (unsigned NumColumns);
-void HTM_TD_ColouredEmpty (unsigned NumColumns);
 
 void HTM_DIV_Begin (const char *fmt,...);
 void HTM_DIV_End (void);

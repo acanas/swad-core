@@ -502,19 +502,6 @@ void HTM_TD_Empty (unsigned NumColumns)
      }
   }
 
-void HTM_TD_ColouredEmpty (unsigned NumColumns)
-  {
-   unsigned NumCol;
-
-   for (NumCol = 0;
-	NumCol < NumColumns;
-	NumCol++)
-     {
-      HTM_TD_Begin ("class=\"%s\"",The_GetColorRows ());
-      HTM_TD_End ();
-     }
-  }
-
 /*****************************************************************************/
 /************************************ Divs ***********************************/
 /*****************************************************************************/

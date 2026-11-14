@@ -2265,7 +2265,6 @@ static void For_ListForumThrs (struct For_Forums *Forums,
    long ThreadInMyClipboard = -1L;
    __attribute__((unused)) Exi_Exist_t UsrExists;
    unsigned Column;
-   const char *BgColor;
    Usr_Can_t ICanMoveThreads = For_CheckIfICanMoveThreads ();
 
    /***** Get if there is a thread ready to be moved *****/
@@ -2286,14 +2285,13 @@ static void For_ListForumThrs (struct For_Forums *Forums,
       Forums->Thread.This = Thr.ThrCod;
       Class = Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
 	                           "MSG_AUT";
-      BgColor =  Thr.ThrCod == ThreadInMyClipboard ? "LIGHT_GREEN" :
-	        (Thr.ThrCod == ThrCodHighlighted   ? "BG_HIGHLIGHT" :
-                                                     The_GetColorRows ());
-
-      HTM_TR_Begin (NULL);
+      HTM_TR_Begin ("class=\"%s\"",
+		     Thr.ThrCod == ThreadInMyClipboard ? "LIGHT_GREEN" :
+	            (Thr.ThrCod == ThrCodHighlighted   ? "BG_HIGHLIGHT" :
+                                                         The_GetColorRows ()));
 
          /***** Show my photo if I have any posts in this thread *****/
-	 HTM_TD_Begin ("class=\"BT %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"BT\"");
 	    if (Thr.NumMyPosts)
 	       HTM_IMG (Gbl.Usrs.Me.PhotoURL[0] ? Gbl.Usrs.Me.PhotoURL :
 						  Cfg_URL_ICON_PUBLIC,
@@ -2303,7 +2301,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 			"class=\"%s\"",ClassPhoto[Gbl.Prefs.PhotoShape]);
 	 HTM_TD_End ();
 
-	 HTM_TD_Begin ("class=\"CONTEXT_COL %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"CONTEXT_COL\"");
 	    /***** Put an icon with thread status *****/
 	    if (Thr.NumUnreadPosts)
 	       Ico_PutIcon ("envelope.svg",Ico_BLACK,
@@ -2341,13 +2339,13 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	 HTM_TD_End ();
 
 	 /***** Write subject and links to thread pages *****/
-	 HTM_TD_Begin ("class=\"LT %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"LT\"");
 
 	    /* Calculate pagination */
 	    PaginationPsts.NumItems = Thr.NumPosts;
 	    PaginationPsts.ThisPage =
 	       Thr.ThrCod == Forums->Thread.Selected ? Forums->ThisPagePsts :	// Current page
-						       0;				// No page is shown
+						       0;			// No page is shown
 	    Pag_CalculatePagination (&PaginationPsts);
 	    PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
 
@@ -2375,8 +2373,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 								    Usr_DONT_GET_PREFS,
 								    Usr_DONT_GET_ROLE_IN_CRS);
-	       HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	                     Class,The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LT %s_%s\"",Class,The_GetSuffix ());
 		  Usr_WriteAuthor (&UsrDat,Thr.Disabled[Order]);
 	       HTM_TD_End ();
 
@@ -2385,8 +2382,7 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 	       UniqueId++;
 	       if (asprintf (&Id,"thr_date_%u",UniqueId) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-	                     Id,Class,The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",Id,Class,The_GetSuffix ());
 		  Dat_WriteLocalDateHMSFromUTC (Id,TimeUTC,
 						Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 						Dat_WRITE_TODAY |
@@ -2401,29 +2397,28 @@ static void For_ListForumThrs (struct For_Forums *Forums,
 		    Column <= 2;
 		    Column++)
 		 {
-		  HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		                Class,The_GetSuffix (),BgColor);
+		  HTM_TD_Begin ("class=\"LT %s_%s\"",Class,The_GetSuffix ());
 		  HTM_TD_End ();
 		 }
 	   }
 
 	 /***** Write number of posts in this thread *****/
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",Class,The_GetSuffix ());
 	    HTM_Unsigned (Thr.NumPosts); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of new posts in this thread *****/
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",Class,The_GetSuffix ());
 	    HTM_Unsigned (Thr.NumUnreadPosts); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have write posts in this thread *****/
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",Class,The_GetSuffix ());
 	    HTM_Unsigned (Thr.NumWriters); HTM_NBSP ();
 	 HTM_TD_End ();
 
 	 /***** Write number of users who have read this thread *****/
-	 HTM_TD_Begin ("class=\"RT %s_%s %s\"",Class,The_GetSuffix (),BgColor);
+	 HTM_TD_Begin ("class=\"RT %s_%s\"",Class,The_GetSuffix ());
 	    HTM_Unsigned (Thr.NumReaders); HTM_NBSP ();
 	 HTM_TD_End ();
 

@@ -119,28 +119,22 @@ static Usr_Can_t ExaSes_CheckIfICanEditThisSession (long UsrCod);
 static Usr_Can_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
-                                               const char *BgColor,
 					       const char *Anchor);
-static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session,
-						const char *BgColor);
+static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
-					       const char *BgColor,
                                                unsigned UniqueId);
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
-                                                  const char *BgColor,
                                                   const char *Anchor);
 static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session,
-						unsigned NumPrints,
-						const char *BgColor);
+						unsigned NumPrints);
 static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
 				   const struct ExaSes_Session *Session,
 			           const char *Txt);
 static void ExaSes_WriteModality (const struct ExaSes_Session *Session);
 static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
-                                                const struct ExaSes_Session *Session,
-                                                const char *BgColor);
+                                                const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
                                                    const struct ExaSes_Session *Session);
 static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
@@ -856,17 +850,17 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this session ****/
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",BgColor);
 
 	       /* Icons */
 	       if (ICanEditSessions == Usr_CAN)
-		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,BgColor,Anchor);
+		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
 
 	       /* Start/end date/time */
-	       ExaSes_ListOneOrMoreSessionsTimes (&Session,BgColor,UniqueId);
+	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
 
 	       /* Title, modality and groups */
-	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,BgColor,Anchor);
+	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,Anchor);
 
 	       /* Prints in the session */
 	       if (ICanEditSessions == Usr_CAN)
@@ -874,17 +868,17 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		  NumPrints = Exa_DB_GetNumPrintsInSes (Session.SesCod);
 		  ICanChangeModality = NumPrints == 0 ? Usr_CAN : // Only if there are no exam prints yet
 							Usr_CAN_NOT;
-	          ExaSes_ListOneOrMoreSessionsPrints (&Session,NumPrints,BgColor);
+	          ExaSes_ListOneOrMoreSessionsPrints (&Session,NumPrints);
 	         }
 
 	       /* Session result visible? */
-	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session,BgColor);
+	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
 
 	    HTM_TR_End ();
 
 	    /***** Second row: session author */
-	    HTM_TR_Begin (NULL);
-	       ExaSes_ListOneOrMoreSessionsAuthor (&Session,BgColor);
+	    HTM_TR_Begin ("class=\"%s\"",BgColor);
+	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
 	    HTM_TR_End ();
 
 	    /***** Third row: form to edit this session ****/
@@ -892,8 +886,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		PutFormSession == Frm_PUT_FORM &&	// Editing...
 		Session.SesCod == Exams->SesCod.Sel)	// ...this session
 	      {
-	       HTM_TR_Begin (NULL);
-		  HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",BgColor);
+	       HTM_TR_Begin ("class=\"%s\"",BgColor);
+		  HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
 		     ExaSes_PutFormSession (&Session,ICanChangeModality);
 		  HTM_TD_End ();
 	       HTM_TR_End ();
@@ -917,8 +911,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 Str_Copy (Session.Title,Exams->Exam.Title,sizeof (Session.Title) - 1);
 
 	 /* Put form to create new session */
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"6\" class=\"LT %s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",BgColor);
+	    HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
 	       ExaSes_PutFormSession (&Session,
 				      Usr_CAN);	// Modality can be changed
 	    HTM_TD_End ();
@@ -1013,7 +1007,6 @@ static Usr_Can_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSe
 
 static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
                                                const struct ExaSes_Session *Session,
-                                               const char *BgColor,
 					       const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -1023,7 +1016,7 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
      };
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"BT\"");
 
       if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
 	{
@@ -1049,11 +1042,10 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 /********** Put a column for teacher who created the exam session ************/
 /*****************************************************************************/
 
-static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session,
-						const char *BgColor)
+static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Session)
   {
    /***** Session author (teacher) *****/
-   HTM_TD_Begin ("colspan=\"2\" class=\"LT %s\"",BgColor);
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
       Usr_WriteAuthor1Line (Session->UsrCod,Session->Hidden);
    HTM_TD_End ();
   }
@@ -1063,7 +1055,6 @@ static void ExaSes_ListOneOrMoreSessionsAuthor (const struct ExaSes_Session *Ses
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Session,
-					       const char *BgColor,
                                                unsigned UniqueId)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
@@ -1076,10 +1067,8 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
      {
       if (asprintf (&Id,"exa_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-		    Id,
-		    CloOpe_Class[Session->Open][Session->Hidden],The_GetSuffix (),
-		    BgColor);
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",Id,
+		    CloOpe_Class[Session->Open][Session->Hidden],The_GetSuffix ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Session->TimeUTC[StartEndTime],
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -1098,13 +1087,12 @@ static void ExaSes_ListOneOrMoreSessionsTimes (const struct ExaSes_Session *Sess
 
 static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
                                                   const struct ExaSes_Session *Session,
-                                                  const char *BgColor,
                                                   const char *Anchor)
   {
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
 
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"LT %s\"",BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"LT\"");
 
       /***** Session title *****/
       HTM_ARTICLE_Begin (Anchor);
@@ -1161,13 +1149,12 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsPrints (const struct ExaSes_Session *Session,
-						unsigned NumPrints,
-						const char *BgColor)
+						unsigned NumPrints)
   {
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s %s\"",
-                 HidVis_DataClass[Session->Hidden],The_GetSuffix (),BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s_%s\"",
+                 HidVis_DataClass[Session->Hidden],The_GetSuffix ());
       HTM_Unsigned (NumPrints);
    HTM_TD_End ();
   }
@@ -1283,8 +1270,7 @@ static void ExaSes_GetAndWriteNamesOfGrpsAssociatedToSession (const struct ExaSe
 /*****************************************************************************/
 
 static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
-                                                const struct ExaSes_Session *Session,
-                                                const char *BgColor)
+                                                const struct ExaSes_Session *Session)
   {
    static void (*Function[Rol_NUM_ROLES]) (struct Exa_Exams *Exams,
 	                                   const struct ExaSes_Session *Session) =
@@ -1295,8 +1281,7 @@ static void ExaSes_ListOneOrMoreSessionsResult (struct Exa_Exams *Exams,
       [Rol_SYS_ADM] = ExaSes_ListOneOrMoreSessionsResultTch,
      };
 
-   HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s %s\"",
-                 The_GetSuffix (),BgColor);
+   HTM_TD_Begin ("rowspan=\"2\" class=\"CT DAT_%s\"",The_GetSuffix ());
 
       if (Function[Gbl.Usrs.Me.Role.Logged])
 	 Function[Gbl.Usrs.Me.Role.Logged] (Exams,Session);

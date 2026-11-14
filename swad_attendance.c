@@ -3081,7 +3081,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
-	    HTM_TD_ColouredEmpty (1);
+	    HTM_TD_Empty (1);
 
 	    HTM_TD_Begin ("class=\"RT %s_%s\"",
 			  Class[Present],The_GetSuffix ());
@@ -3118,7 +3118,7 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	   {
 	    HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
-	       HTM_TD_ColouredEmpty (2);
+	       HTM_TD_Empty (2);
 
 	       HTM_TD_Begin ("class=\"BT\"");
 	       HTM_TD_End ();

@@ -2244,15 +2244,14 @@ static void Prj_PutLinkToShowHiddenInfo (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_exp_%u\" class=\"%s\"",
-		       UniqueId,The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_exp_%u\" class=\"%s\"",UniqueId,The_GetColorRows ());
 	    HTM_TD_Begin ("colspan=\"6\" class=\"CM\"");
 	       Prj_PutIconToTogglePrj (UniqueId,"angle-down.svg",Txt_See_more);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
-	 HTM_TR_Begin ("id=\"prj_con_%u\" class=\"%s\" style=\"display:none;\"",
-		       UniqueId,The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_con_%u\" class=\"%s\""
+		       " style=\"display:none;\"",UniqueId,The_GetColorRows ());
 	    HTM_TD_Begin ("colspan=\"6\" class=\"CM\"");
 	       Prj_PutIconToTogglePrj (UniqueId,"angle-up.svg",Txt_See_less);
 	    HTM_TD_End ();
@@ -2291,8 +2290,8 @@ static void Prj_ShowProposal (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_pro_%u\" class=\"%s\" style=\"display:none;\"",
-		       UniqueId,The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_pro_%u\" class=\"%s\""
+		       " style=\"display:none;\"",UniqueId,The_GetColorRows ());
 	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s\"",
 			  ClassLabel,The_GetSuffix ());
 	 break;

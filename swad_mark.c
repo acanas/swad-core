@@ -100,7 +100,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
    char StrHeadOrFoot[Cns_MAX_DIGITS_UINT + 1];
 
    if (File->Type == Brw_IS_FOLDER)
-      HTM_TD_ColouredEmpty (2);
+      HTM_TD_Empty (2);
    else	// File or link
      {
       ThisGrpCod = Brw_GetGrpCod ();
@@ -110,8 +110,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
 				     File->Path.InZone);
 
       /***** Write the number of rows of header *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP\"",The_GetSuffix ());
 	 Frm_BeginForm (ThisGrpCod > 0 ? ActChgNumRowHeaGrp :	// Group zone
 					 ActChgNumRowHeaCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (FileBrowser);
@@ -127,8 +126,7 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (struct Brw_FileBrowser *FileBrowser,
       HTM_TD_End ();
 
       /***** Write the number of rows of footer *****/
-      HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT FORM_IN_%s NOWRAP\"",The_GetSuffix ());
 	 Frm_BeginForm (ThisGrpCod > 0 ? ActChgNumRowFooGrp :	// Group zone
 				         ActChgNumRowFooCrs);	// Course zone
 	    Brw_PutImplicitParsFileBrowser (FileBrowser);

@@ -135,7 +135,6 @@ void Ins_SeeInsWithPendingCtrs (void)
    unsigned NumIns;
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   const char *BgColor;
 
    /***** Get institutions with pending centers *****/
    switch (Gbl.Usrs.Me.Role.Logged)
@@ -174,21 +173,21 @@ void Ins_SeeInsWithPendingCtrs (void)
 
 	    /* Get institution code (row[0]) */
 	    Ins.HieCod = Str_ConvertStrCodToLongCod (row[0]);
-	    BgColor = Ins.HieCod == Gbl.Hie.Node[Hie_INS].HieCod ? "BG_HIGHLIGHT" :
-								         The_GetColorRows ();
 
 	    /* Get data of institution */
 	    SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
 
 	    /* Institution logo and name */
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",
+			  Ins.HieCod == Gbl.Hie.Node[Hie_INS].HieCod ? "BG_HIGHLIGHT" :
+								       The_GetColorRows ());
 
-	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP %s\"",The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"LM DAT_%s NOWRAP\"",The_GetSuffix ());
 		   Ins_DrawInsLogoAndNameWithLink (&Ins,ActSeeCtr,"CM ICO16x16");
 	       HTM_TD_End ();
 
 	       /* Number of pending centers (row[1]) */
-	       HTM_TD_Begin ("class=\"RM DAT_%s %s\"",The_GetSuffix (),BgColor);
+	       HTM_TD_Begin ("class=\"RM DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (row[1]);
 	       HTM_TD_End ();
 

@@ -574,11 +574,10 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 Frm_SetAnchorStr (Set.SetCod,&Anchor);
 
 	 /***** Begin first row *****/
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT %s\"",
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT\"");
 
 	       /* Put icon to remove the set */
 	       switch (ICanEditSets)
@@ -614,13 +613,12 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /***** Index *****/
-	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT %s\"",
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("rowspan=\"2\" class=\"RT\"");
 	       Lay_WriteIndex (Set.SetInd,"BIG_INDEX");
 	    HTM_TD_End ();
 
 	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LT\"");
 	       HTM_ARTICLE_Begin (Anchor);
 		  if (ICanEditSets)
 		    {
@@ -644,7 +642,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /***** Current number of questions in set *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT\"");
 	       HTM_SPAN_Begin ("class=\"Exa_SET_NUM_QSTS_%s\"",
 			       The_GetSuffix ());
 		  HTM_Unsigned (Exa_DB_GetNumQstsInSet (Set.SetCod));
@@ -652,7 +650,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	    HTM_TD_End ();
 
 	    /***** Number of questions to appear in exam print *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT\"");
 	       if (ICanEditSets)
 		 {
 		  Frm_BeginFormAnchor (ActChgNumQstExaSet,Anchor);
@@ -677,15 +675,11 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_End ();
 
 	 /***** Begin second row *****/
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	    /***** Questions *****/
-	    HTM_TD_Begin ("colspan=\"3\" class=\"LT %s\"",
-	                  The_GetColorRows ());
-
-	       /* List questions */
+	    HTM_TD_Begin ("colspan=\"3\" class=\"LT\"");
 	       ExaSet_ListSetQuestions (Exams,&Set);
-
 	    HTM_TD_End ();
 
 	 /***** End second row *****/
@@ -699,8 +693,8 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       if (ICanEditSets)
         {
 	 /* Put form to create new set */
-	 HTM_TR_Begin (NULL);
-	    HTM_TD_Begin ("colspan=\"5\" class=\"LT %s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"5\" class=\"LT\"");
 	       ExaSet_PutFormNewSet (Exams,&Set,MaxSetInd);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -836,10 +830,10 @@ static void ExaSet_ListOneOrMoreQuestionsForEdition (struct Exa_Exams *Exams,
 	    Frm_SetAnchorStr (Exams->QstCod,&Anchor);
 
 	    /***** Begin row *****/
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	       /***** Icons *****/
-	       HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"BT\"");
 
 		  /* Put icon to remove the question */
 		  switch (ICanEditQuestions)
@@ -994,13 +988,13 @@ static void ExaSet_ListQuestionForEdition (struct Qst_Question *Qst,
      };
 
    /***** Number of question and answer type (row[1]) *****/
-   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"RT\"");
       Lay_WriteIndex (QstInd,ClassNumQst[Qst->Validity]);
       Qst_WriteAnswerType (Qst->Answer.Type,Qst->Validity);
    HTM_TD_End ();
 
    /***** Write stem (row[3]) and media *****/
-   HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT\"");
       HTM_ARTICLE_Begin (Anchor);
 
 	 /* Write stem */
