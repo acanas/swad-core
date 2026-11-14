@@ -642,10 +642,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 TODO: Cuando se elimina una asignatura, ¡no mostrar mensaje para ir a esa asignatura!
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.35 (2026-11-14)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.36 (2026-11-14)"
 #define Chl_CSS_FILE		"swad26.33.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.36:    Nov 14, 2026	Background colors of rows applied to tr instead of td. Not finished. (348821 lines)
 	Version 26.35:    Nov 14, 2026	Background colors of rows applied to tr instead of td. Not finished. (348997 lines)
 	Version 26.34:    Nov 14, 2026	Highlighting of game questions.
 					Background colors of rows applied to tr instead of td. Not finished. (349150 lines)

@@ -1681,10 +1681,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	      }
 
 	    /* Name of the field */
-	    HTM_TR_Begin (NULL);
-	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT %s\"",
-			     Class[ICanEditThisField],The_GetSuffix (),
-			     The_GetColorRows ());
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"REC_C1_BOT %s_%s RT\"",
+			     Class[ICanEditThisField],The_GetSuffix ());
 		  HTM_Txt (Gbl.Crs.Records.LstFields.Lst[NumField].Name);
 		  HTM_Colon ();
 		  if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
@@ -1706,8 +1705,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
 	       /* Write form, text, or nothing depending on
 		  the user's role and the visibility of the field */
-	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"REC_C2_BOT LT DAT_STRONG_%s\"",
+	                     The_GetSuffix ());
 		  switch (ICanEditThisField)
 		    {
 		     case Usr_CAN:		// Show with form

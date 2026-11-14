@@ -1635,14 +1635,22 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
    char *Id;
 
    /***** Write first row of data of this project *****/
-   HTM_TR_Begin (NULL);
+   switch (Prjs->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+      default:
+	 HTM_TR_Begin ("NULL");
+	 break;
+     }
 
       /* Number of project */
       switch (Prjs->View)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s %s\"",
-	                  The_GetSuffix (),The_GetColorRows ());
+	    HTM_TD_Begin ("rowspan=\"4\" class=\"RT BIG_INDEX_%s\"",
+	                  The_GetSuffix ());
 	       HTM_Unsigned (Prjs->NumIndex);
 	       if (Faults->Prj == Err_ERROR)
 		 {
@@ -1659,8 +1667,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
       switch (Prjs->View)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("rowspan=\"4\" class=\"CONTEXT_COL %s\"",
-	                  The_GetColorRows ());
+	    HTM_TD_Begin ("rowspan=\"4\" class=\"CONTEXT_COL\"");
 	       Prj_PutIconsToRemEditOnePrj (Prjs,Anchor);
 	    HTM_TD_End ();
 	    break;
@@ -1671,20 +1678,8 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
       /* Creation date/time */
       if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,
-			  HidVis_DateBlueClass[Prjs->Prj.Hidden],The_GetSuffix (),
-			  The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,
-			  HidVis_DateBlueClass[Prjs->Prj.Hidden],The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",Id,
+		    HidVis_DateBlueClass[Prjs->Prj.Hidden],The_GetSuffix ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Prjs->Prj.CreatTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -1700,20 +1695,8 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
       UniqueId++;
       if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s %s\"",
-			  Id,
-			  HidVis_DateBlueClass[Prjs->Prj.Hidden],The_GetSuffix (),
-			  The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-			  Id,
-			  HidVis_DateBlueClass[Prjs->Prj.Hidden],The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",Id,
+		    HidVis_DateBlueClass[Prjs->Prj.Hidden],The_GetSuffix ());
 	 Dat_WriteLocalDateHMSFromUTC (Id,Prjs->Prj.ModifTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -1726,15 +1709,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
       free (Id);
 
       /* Project title */
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("class=\"LT\"");
-	    break;
-	}
+      HTM_TD_Begin ("class=\"LT\"");
 	 HTM_ARTICLE_Begin (Anchor);
 	    if (Prjs->Prj.Title[0])
 	      {
@@ -1781,17 +1756,8 @@ static void Prj_ShowPrjDpt (const struct Prj_Projects *Prjs,
 	           (Prjs->View == Prj_LIST_PROJECTS ||
 	            Prjs->View == Prj_VIEW_ONE_PROJECT));
 
-   switch (Prjs->View)
-     {
-      case Prj_LIST_PROJECTS:
-	 HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-	               ClassData,The_GetSuffix (),The_GetColorRows ());
-	 break;
-      default:
-	 HTM_TD_Begin ("class=\"LT %s_%s\"",
-	               ClassData,The_GetSuffix ());
-	 break;
-     }
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+		 ClassData,The_GetSuffix ());
 
       if (PutLinkToDpt)
 	 HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"%s_%s\"",
@@ -1836,128 +1802,116 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Prjs,
 	 break;
      }
 
-   HTM_TR_Begin (NULL);
+   switch (Prjs->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+      default:
+	 HTM_TR_Begin (NULL);
+	 break;
+     }
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			  ClassLabel,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",ClassLabel,The_GetSuffix ());
 	 HTM_Txt (Txt_Review); HTM_Colon ();
       HTM_TD_End ();
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",ClassData,The_GetSuffix ());
 
-      switch (PutForm)
-	{
-	 case Frm_DONT_PUT_FORM:
-	    HTM_Txt (Txt_PROJECT_REVIEW_SINGUL[Prjs->Prj.Review.Status]);
-	    break;
-	 case Frm_PUT_FORM:
-	    /***** Begin form to change review status and text *****/
-	    Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
-	       Prj_PutCurrentPars (Prjs);
+	 switch (PutForm)
+	   {
+	    case Frm_DONT_PUT_FORM:
+	       HTM_Txt (Txt_PROJECT_REVIEW_SINGUL[Prjs->Prj.Review.Status]);
+	       break;
+	    case Frm_PUT_FORM:
+	       /***** Begin form to change review status and text *****/
+	       Frm_BeginFormAnchor (ActChgPrjRev,Anchor);
+		  Prj_PutCurrentPars (Prjs);
 
-	       /***** Selector to change review status *****/
-	       Prj_PutSelectorReviewStatus (Prjs);
-	    break;
-	}
+		  /***** Selector to change review status *****/
+		  Prj_PutSelectorReviewStatus (Prjs);
+	       break;
+	   }
 
-      HTM_NBSP ();
-      Ico_PutIconOff (ReviewIcon[Prjs->Prj.Review.Status].Icon,
-		      ReviewIcon[Prjs->Prj.Review.Status].Color,
-		      Txt_PROJECT_REVIEW_SINGUL[Prjs->Prj.Review.Status]);
+	 HTM_NBSP ();
+	 Ico_PutIconOff (ReviewIcon[Prjs->Prj.Review.Status].Icon,
+			 ReviewIcon[Prjs->Prj.Review.Status].Color,
+			 Txt_PROJECT_REVIEW_SINGUL[Prjs->Prj.Review.Status]);
 
-      /***** Show warning icon depending on review status *****/
-      if (Faults->ReviewStatus == Err_ERROR)
-	 Prj_PutWarningIcon ();
+	 /***** Show warning icon depending on review status *****/
+	 if (Faults->ReviewStatus == Err_ERROR)
+	    Prj_PutWarningIcon ();
 
-      if (Prjs->Prj.Review.Status != Prj_UNREVIEWED)
-	{
-         /***** Revision time *****/
-         HTM_NBSP ();
-	 UniqueId++;
-	 if (asprintf (&Id,"prj_date_%u",UniqueId) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 HTM_DIV_Begin ("id=\"%s\" class=\"PRJ_DATE\"",Id);
-	    Dat_WriteLocalDateHMSFromUTC (Id,Prjs->Prj.Review.Time,
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-					  Dat_WRITE_TODAY |
-					  Dat_WRITE_DATE_ON_SAME_DAY |
-					  Dat_WRITE_HOUR |
-					  Dat_WRITE_MINUTE);
-	 HTM_DIV_End ();
-	 free (Id);
-	}
+	 if (Prjs->Prj.Review.Status != Prj_UNREVIEWED)
+	   {
+	    /***** Revision time *****/
+	    HTM_NBSP ();
+	    UniqueId++;
+	    if (asprintf (&Id,"prj_date_%u",UniqueId) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    HTM_DIV_Begin ("id=\"%s\" class=\"PRJ_DATE\"",Id);
+	       Dat_WriteLocalDateHMSFromUTC (Id,Prjs->Prj.Review.Time,
+					     Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+					     Dat_WRITE_TODAY |
+					     Dat_WRITE_DATE_ON_SAME_DAY |
+					     Dat_WRITE_HOUR |
+					     Dat_WRITE_MINUTE);
+	    HTM_DIV_End ();
+	    free (Id);
+	   }
 
-      /***** Show warning icon depending on modify time *****/
-      if (Faults->ModifTime == Err_ERROR)
-	 Prj_PutWarningIcon ();
+	 /***** Show warning icon depending on modify time *****/
+	 if (Faults->ModifTime == Err_ERROR)
+	    Prj_PutWarningIcon ();
 
-      /***** Revision text *****/
-      switch (PutForm)
-	{
-	 case Frm_DONT_PUT_FORM:
-	    if (Prjs->Prj.Review.Txt[0])
-	      {
-	       /* Change text format */
-	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-				 Prjs->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,
-				 Str_DONT_REMOVE_SPACES);
-	       switch (Prjs->View)
+	 /***** Revision text *****/
+	 switch (PutForm)
+	   {
+	    case Frm_DONT_PUT_FORM:
+	       if (Prjs->Prj.Review.Txt[0])
 		 {
-		  case Prj_PRINT_ONE_PROJECT:
-		     break;
-		  default:
-		     ALn_InsertLinks (Prjs->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-		     break;
-		 }
+		  /* Change text format */
+		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+				    Prjs->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,
+				    Str_DONT_REMOVE_SPACES);
+		  switch (Prjs->View)
+		    {
+		     case Prj_PRINT_ONE_PROJECT:
+			break;
+		     default:
+			ALn_InsertLinks (Prjs->Prj.Review.Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+			break;
+		    }
 
-	       /* Show text */
-	       HTM_BR ();
-	       HTM_Txt (Prjs->Prj.Review.Txt);
-	      }
-	    break;
-	 case Frm_PUT_FORM:
-	       /* Show text form */
-	       HTM_BR ();
-	       HTM_TEXTAREA_Begin (HTM_NO_ATTR,
-				   "name=\"ReviewTxt\" rows=\"2\""
-				   " class=\"Frm_C2_INPUT INPUT_%s\""
-				   " placeholder=\"%s&hellip;\""
-				   " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
-				   The_GetSuffix (),Txt_Comments,
-				   Prjs->Prj.PrjCod);
+		  /* Show text */
+		  HTM_BR ();
 		  HTM_Txt (Prjs->Prj.Review.Txt);
-	       HTM_TEXTAREA_End ();
+		 }
+	       break;
+	    case Frm_PUT_FORM:
+		  /* Show text form */
+		  HTM_BR ();
+		  HTM_TEXTAREA_Begin (HTM_NO_ATTR,
+				      "name=\"ReviewTxt\" rows=\"2\""
+				      " class=\"Frm_C2_INPUT INPUT_%s\""
+				      " placeholder=\"%s&hellip;\""
+				      " onchange=\"unhideElement('prj_rev_%ld');return false;\"",
+				      The_GetSuffix (),Txt_Comments,
+				      Prjs->Prj.PrjCod);
+		     HTM_Txt (Prjs->Prj.Review.Txt);
+		  HTM_TEXTAREA_End ();
 
-	       /* Button to save changes.
-		  Initially hidden, is shown when clicking on selector or text */
-	       HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
-			      Prjs->Prj.PrjCod);
-		  Btn_PutButtonInline (Btn_SAVE_CHANGES);
-	       HTM_DIV_End ();
+		  /* Button to save changes.
+		     Initially hidden, is shown when clicking on selector or text */
+		  HTM_DIV_Begin ("id=\"prj_rev_%ld\" style=\"display:none;\"",
+				 Prjs->Prj.PrjCod);
+		     Btn_PutButtonInline (Btn_SAVE_CHANGES);
+		  HTM_DIV_End ();
 
-	    /* End form */
-	    Frm_EndForm ();
-	    break;
-	}
+	       /* End form */
+	       Frm_EndForm ();
+	       break;
+	   }
 
       HTM_TD_End ();
 
@@ -2022,33 +1976,22 @@ static void Prj_ShowAssigned (const struct Prj_Projects *Prjs,
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_PROJECT_NONASSIGNED_ASSIGNED_SINGUL[Prj_NUM_ASSIGNED];
 
-   HTM_TR_Begin (NULL);
+   switch (Prjs->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+      default:
+	 HTM_TR_Begin (NULL);
+	 break;
+     }
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			  ClassLabel,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",ClassLabel,The_GetSuffix ());
 	 HTM_Txt (Txt_Assigned_QUESTION); HTM_Colon ();
       HTM_TD_End ();
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",ClassData,The_GetSuffix ());
+
 	 HTM_Txt (*Prj_Assigned[Prjs->Prj.Assigned].Txt);
 	 HTM_NBSP ();
 	 Ico_PutIconOff (AssignedNonassigIcon[Prjs->Prj.Assigned],Ico_BLACK,
@@ -2073,33 +2016,21 @@ static void Prj_ShowNumStds (const struct Prj_Projects *Prjs,
   {
    extern const char *Txt_Number_of_students;
 
-   HTM_TR_Begin (NULL);
+   switch (Prjs->View)
+     {
+      case Prj_LIST_PROJECTS:
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 break;
+      default:
+	 HTM_TR_Begin (NULL);
+	 break;
+     }
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			  ClassLabel,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",ClassLabel,The_GetSuffix ());
 	 HTM_Txt (Txt_Number_of_students); HTM_Colon ();
       HTM_TD_End ();
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",ClassData,The_GetSuffix ());
 	 HTM_Unsigned (Prjs->Prj.NumStds);
 	 if (Faults->NumStds == Err_ERROR)
 	    Prj_PutWarningIcon ();
@@ -2166,15 +2097,22 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Prjs,
    if (NumUsrs || Prjs->View == Prj_EDIT_ONE_PROJECT)	// Show row
      {
       /***** Begin row with label and listing of users *****/
-      HTM_TR_Begin (NULL);
+      switch (Prjs->View)
+	{
+	 case Prj_LIST_PROJECTS:
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	    break;
+	 default:
+	    HTM_TR_Begin (NULL);
+	    break;
+	}
 
 	 /* Column for label */
 	 switch (Prjs->View)
 	   {
 	    case Prj_LIST_PROJECTS:
-	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-			     HidVis_LabelClass[Prjs->Prj.Hidden],
-			     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s\"",
+			     HidVis_LabelClass[Prjs->Prj.Hidden],The_GetSuffix ());
 		  HTM_Txt (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
 					  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 		  HTM_Colon ();
@@ -2182,16 +2120,14 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Prjs,
 	    case Prj_VIEW_ONE_PROJECT:
 	    case Prj_PRINT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"RT %s_%s\"",
-			     HidVis_LabelClass[Prjs->Prj.Hidden],
-			     The_GetSuffix ());
+			     HidVis_LabelClass[Prjs->Prj.Hidden],The_GetSuffix ());
 		  HTM_Txt (NumUsrs == 1 ? Txt_PROJECT_ROLES_SINGUL_Abc[RoleInPrj] :
 					  Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 		  HTM_Colon ();
 	       break;
 	    case Prj_EDIT_ONE_PROJECT:
 	       HTM_TD_Begin ("class=\"RT %s_%s\"",
-			     HidVis_LabelClass[Prjs->Prj.Hidden],
-			     The_GetSuffix ());
+			     HidVis_LabelClass[Prjs->Prj.Hidden],The_GetSuffix ());
 		  HTM_Txt (Txt_PROJECT_ROLES_PLURAL_Abc[RoleInPrj]);
 		  HTM_Colon ();
 	       break;
@@ -2201,20 +2137,14 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Prjs,
 	 /* Begin column with list of users */
 	 switch (Prjs->View)
 	   {
-	    case Prj_LIST_PROJECTS:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			     HidVis_DataClass[Prjs->Prj.Hidden],
-			     The_GetSuffix (),The_GetColorRows ());
-	       break;
-	    case Prj_VIEW_ONE_PROJECT:
-	    case Prj_PRINT_ONE_PROJECT:
-	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			     HidVis_DataClass[Prjs->Prj.Hidden],
-			     The_GetSuffix ());
-	       break;
 	    case Prj_EDIT_ONE_PROJECT:
 	       HTM_TD_Begin ("colspan=\"2\" class=\"LT DAT_%s\"",
 	                     The_GetSuffix ());
+	       break;
+	    default:
+	       HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
+			     HidVis_DataClass[Prjs->Prj.Hidden],
+			     The_GetSuffix ());
 	       break;
 	   }
 
@@ -2314,16 +2244,16 @@ static void Prj_PutLinkToShowHiddenInfo (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_exp_%u\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"6\" class=\"CM %s\"",
-	                  The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_exp_%u\" class=\"%s\"",
+		       UniqueId,The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"6\" class=\"CM\"");
 	       Prj_PutIconToTogglePrj (UniqueId,"angle-down.svg",Txt_See_more);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
-	 HTM_TR_Begin ("id=\"prj_con_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"6\" class=\"CM %s\"",
-	                  The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_con_%u\" class=\"%s\" style=\"display:none;\"",
+		       UniqueId,The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"6\" class=\"CM\"");
 	       Prj_PutIconToTogglePrj (UniqueId,"angle-up.svg",Txt_See_less);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
@@ -2361,9 +2291,10 @@ static void Prj_ShowProposal (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-			  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_pro_%u\" class=\"%s\" style=\"display:none;\"",
+		       UniqueId,The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s\"",
+			  ClassLabel,The_GetSuffix ());
 	 break;
       case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"prj_pro_%u\" style=\"display:none;\"",UniqueId);
@@ -2379,17 +2310,7 @@ static void Prj_ShowProposal (const struct Prj_Projects *Prjs,
 	 HTM_Txt (Txt_Proposal); HTM_Colon ();
       HTM_TD_End ();
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",ClassData,The_GetSuffix ());
 	 HTM_Txt (Txt_PROJECT_STATUS[Prjs->Prj.Proposal]);
       HTM_TD_End ();
 
@@ -2411,9 +2332,10 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"%s%u\" class=\"%s\" style=\"display:none;\"",
+		       id,UniqueId,The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
 	 break;
       case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
@@ -2446,17 +2368,7 @@ static void Prj_ShowTxtField (const struct Prj_Projects *Prjs,
 	}
 
       /***** Text *****/
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",ClassData,The_GetSuffix ());
 	 HTM_Txt (TxtField);
 	 if (Warning == Prj_PUT_WARNING)
 	    Prj_PutWarningIcon ();
@@ -2483,9 +2395,10 @@ static void Prj_ShowURL (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
-	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s %s\"",
-	                  ClassLabel,The_GetSuffix (),The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"%s%u\" class=\"%s\" style=\"display:none;\"",
+		       id,UniqueId,The_GetColorRows ());
+	    HTM_TD_Begin ("colspan=\"4\" class=\"RT %s_%s\"",
+	                  ClassLabel,The_GetSuffix ());
 	 break;
       case Prj_VIEW_ONE_PROJECT:
 	 HTM_TR_Begin ("id=\"%s%u\" style=\"display:none;\"",id,UniqueId);
@@ -2504,17 +2417,7 @@ static void Prj_ShowURL (const struct Prj_Projects *Prjs,
 	 HTM_Txt (Txt_URL); HTM_Colon ();
       HTM_TD_End ();
 
-      switch (Prjs->View)
-	{
-	 case Prj_LIST_PROJECTS:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s %s\"",
-			  ClassData,The_GetSuffix (),The_GetColorRows ());
-	    break;
-	 default:
-	    HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",
-			  ClassData,The_GetSuffix ());
-	    break;
-	}
+      HTM_TD_Begin ("colspan=\"2\" class=\"LT %s_%s\"",ClassData,The_GetSuffix ());
 
 	 if (PutLinkToURL)
 	    HTM_A_Begin ("href=\"%s\" target=\"_blank\"",Prjs->Prj.URL);
@@ -2664,14 +2567,14 @@ static void Prj_ShowTableAllPrjsOneRow (struct Prj_Project *Prj)
    Prj_GetPrjDataByCod (Prj);
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Start date/time *****/
       UniqueId++;
       if (asprintf (&Id,"prj_creat_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"LT %s %s\"",
-		    Id,HidVis_DateBlueClass[Prj->Hidden],The_GetColorRows ());
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s\"",
+		    Id,HidVis_DateBlueClass[Prj->Hidden]);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->CreatTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -2686,8 +2589,8 @@ static void Prj_ShowTableAllPrjsOneRow (struct Prj_Project *Prj)
       UniqueId++;
       if (asprintf (&Id,"prj_modif_%u",UniqueId) < 0)
 	 Err_NotEnoughMemoryExit ();
-      HTM_TD_Begin ("id=\"%s\" class=\"LT %s %s\"",
-		    Id,HidVis_DateBlueClass[Prj->Hidden],The_GetColorRows ());
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s\"",
+		    Id,HidVis_DateBlueClass[Prj->Hidden]);
 	 Dat_WriteLocalDateHMSFromUTC (Id,Prj->ModifTime,
 				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 				       Dat_WRITE_TODAY |
@@ -2699,9 +2602,8 @@ static void Prj_ShowTableAllPrjsOneRow (struct Prj_Project *Prj)
       free (Id);
 
       /***** Project title *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
 	 HTM_Txt (Prj->Title);
       HTM_TD_End ();
 
@@ -2709,16 +2611,14 @@ static void Prj_ShowTableAllPrjsOneRow (struct Prj_Project *Prj)
       Prj_ShowTableAllPrjsDpt (Prj);
 
       /***** Assigned? *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
 	 HTM_Txt (*Prj_Assigned[Prj->Assigned].Txt);
       HTM_TD_End ();
 
       /***** Number of students *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
 	 HTM_Unsigned (Prj->NumStds);
       HTM_TD_End ();
 
@@ -2729,9 +2629,8 @@ static void Prj_ShowTableAllPrjsOneRow (struct Prj_Project *Prj)
 	 Prj_ShowTableAllPrjsMembersWithARole (Prj,Prj_RolesToShow[NumRoleToShow]);
 
       /***** Proposal *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		    HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
 	 HTM_Txt (Txt_PROJECT_STATUS[Prj->Proposal]);
       HTM_TD_End ();
 
@@ -2766,9 +2665,8 @@ static void Prj_ShowTableAllPrjsDpt (const struct Prj_Project *Prj)
    Dpt_GetDptDataByCod (&Dpt);
 
    /***** Show department *****/
-   HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		 HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		 The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+		 HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
       HTM_Txt (Dpt.FullName);
    HTM_TD_End ();
   }
@@ -2787,9 +2685,8 @@ static void Prj_ShowTableAllPrjsTxtField (struct Prj_Project *Prj,
                      TxtField,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
 
    /***** Write text *****/
-   HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		 HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		 The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+		 HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
       HTM_Txt (TxtField);
    HTM_TD_End ();
   }
@@ -2803,9 +2700,8 @@ static void Prj_ShowTableAllPrjsURL (const struct Prj_Project *Prj)
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
 
    /***** Show URL *****/
-   HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		 HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		 The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+		 HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
       HTM_Txt (Prj->URL);
    HTM_TD_End ();
   }
@@ -2827,9 +2723,8 @@ static void Prj_ShowTableAllPrjsMembersWithARole (const struct Prj_Project *Prj,
    NumUsrs = Prj_DB_GetUsrsInPrj (&mysql_res,Prj->PrjCod,RoleInPrj);
 
    /***** Begin column with list of all members with this role *****/
-   HTM_TD_Begin ("class=\"LT %s_%s %s\"",
-		 HidVis_DataClass[Prj->Hidden],The_GetSuffix (),
-		 The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+		 HidVis_DataClass[Prj->Hidden],The_GetSuffix ());
 
       if (NumUsrs)
 	{

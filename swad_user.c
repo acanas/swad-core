@@ -281,11 +281,9 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 				    Pho_ShowPhotos_t ShowPhotos);
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 				 Pho_ShowPhotos_t ShowPhotos);
-static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
-                                         const char *BgColor);
-static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor);
-static void Usr_WriteUsrData (const char *BgColor,
-                              const char *Data,const char *Link,
+static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat);
+static void Usr_WriteEmail (struct Usr_Data *UsrDat);
+static void Usr_WriteUsrData (const char *Data,const char *Link,
                               Lay_Spaces_t Spaces,Usr_Accepted_t Accepted);
 
 static void Usr_GetGstsLst (Hie_Level_t HieLvl);
@@ -2322,68 +2320,57 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct Usr_Data *UsrDat,
 			      Pho_ShowPhotos_t ShowPhotos)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
-   char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    struct Hie_Node Ins;
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",
+		 PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
+		 UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod ? "LIGHT_GREEN" :
+								  The_GetColorRows ());
 
       /***** Checkbox to select user *****/
-      // Two colors are used alternatively to better distinguish the rows
-      if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
-	  UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
-	 Str_Copy (BgColor,"LIGHT_GREEN",sizeof (BgColor) - 1);
-      else
-	 snprintf (BgColor,sizeof (BgColor),"%s",The_GetColorRows ());
-
       if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX)
 	{
-	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"CM\"");
 	    Usr_PutCheckboxToSelectUser (Role,UsrDat,SelectedUsrs);
 	 HTM_TD_End ();
 	}
 
       /***** User has accepted enrolment? *****/
-      if (PutCheckBoxToSelectUsr == Usr_PUT_CHECKBOX &&
-	  UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)
-	 HTM_TD_Begin ("class=\"BM_SEL %s_%s\" title=\"%s\"",
-		       Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
-		       *Usr_AcceptedTxt[UsrDat->Accepted]);
-      else
-	 HTM_TD_Begin ("class=\"BM %s_%s %s\" title=\"%s\"",
-		       Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),BgColor,
-		       *Usr_AcceptedTxt[UsrDat->Accepted]);
-      HTM_Txt (Usr_AcceptedIcon[UsrDat->Accepted]);
+      HTM_TD_Begin ("class=\"BM %s_%s\" title=\"%s\"",
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),
+		    *Usr_AcceptedTxt[UsrDat->Accepted]);
+	 HTM_Txt (Usr_AcceptedIcon[UsrDat->Accepted]);
       HTM_TD_End ();
 
       /***** Write number of user in the list *****/
-      HTM_TD_Begin ("class=\"%s_%s RM %s\"",
-		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"RM %s_%s\"",
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       /***** Show user's photo *****/
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
-	 HTM_TD_Begin ("class=\"CM %s\"",BgColor);
+	 HTM_TD_Begin ("class=\"CM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               Usr_ClassPhoto21x28[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /****** Write user's IDs ******/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),BgColor);
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write rest of main user's data *****/
       Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteUsrSurnamesAndName (UsrDat,BgColor);
+      Usr_WriteUsrSurnamesAndName (UsrDat);
 
-      HTM_TD_Begin ("class=\"LM %s\"",BgColor);
+      HTM_TD_Begin ("class=\"LM\"");
 	 Ins_DrawInsLogoWithLink (&Ins,Pho_PHOTOS_SHOW,"ICO25x25");
       HTM_TD_End ();
 
@@ -2405,20 +2392,19 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show guest's photo *****/
-	 HTM_TD_Begin ("class=\"%s LM\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               Usr_ClassPhoto21x28[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /****** Write user's ID ******/
-      HTM_TD_Begin ("class=\"LM DAT_SMALL_%s %s\"",
-                    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM DAT_SMALL_%s\"",The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2426,10 +2412,9 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
       /***** Write rest of guest's main data *****/
       Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
-      Usr_WriteEmail (UsrDat,The_GetColorRows ());
-      Usr_WriteUsrData (The_GetColorRows (),
-			Ins.FullName,
+      Usr_WriteUsrSurnamesAndName (UsrDat);
+      Usr_WriteEmail (UsrDat);
+      Usr_WriteUsrData (Ins.FullName,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
 
       /***** Write the rest of the data of the guest *****/
@@ -2438,8 +2423,7 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 	 Ctr.HieCod = UsrDat->HieCods[Hie_CTR];
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->HieCods[Hie_CTR] > 0 ? Ctr.FullName :
+      Usr_WriteUsrData (UsrDat->HieCods[Hie_CTR] > 0 ? Ctr.FullName :
 						       NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
       if (UsrDat->Tch.DptCod > 0)
@@ -2447,28 +2431,22 @@ static void Usr_WriteRowGstAllData (struct Usr_Data *UsrDat,
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDptDataByCod (&Dpt);
 	}
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
+      Usr_WriteUsrData (UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
+      Usr_WriteUsrData (UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
 						NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
+      Usr_WriteUsrData (UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
 						     NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
+      Usr_WriteUsrData (UsrDat->Phone[0][0] ? UsrDat->Phone[0] :
 					      NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
+      Usr_WriteUsrData (UsrDat->Phone[1][0] ? UsrDat->Phone[1] :
 					      NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
+      Usr_WriteUsrData (UsrDat->StrBirthday[0] ? UsrDat->StrBirthday :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,Usr_HAS_NOT_ACCEPTED);
 
@@ -2499,21 +2477,20 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 								   Lay_DONT_SHOW;
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show student's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               Usr_ClassPhoto21x28[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /****** Write user's ID ******/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2521,25 +2498,21 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
       /***** Write rest of main student's data *****/
       Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
-      Usr_WriteEmail (UsrDat,The_GetColorRows ());
-      Usr_WriteUsrData (The_GetColorRows (),
-			Ins.FullName,
+      Usr_WriteUsrSurnamesAndName (UsrDat);
+      Usr_WriteEmail (UsrDat);
+      Usr_WriteUsrData (Ins.FullName,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of the data of the student *****/
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Phone[0][0] ? (ShowData == Lay_SHOW ? UsrDat->Phone[0] :
+      Usr_WriteUsrData (UsrDat->Phone[0][0] ? (ShowData == Lay_SHOW ? UsrDat->Phone[0] :
 								      "********") :
 					      NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->Phone[1][0] ? (ShowData == Lay_SHOW ? UsrDat->Phone[1] :
+      Usr_WriteUsrData (UsrDat->Phone[1][0] ? (ShowData == Lay_SHOW ? UsrDat->Phone[1] :
 								      "********") :
 					      NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-      Usr_WriteUsrData (The_GetColorRows (),
-			UsrDat->StrBirthday[0] ? (ShowData == Lay_SHOW ? UsrDat->StrBirthday :
+      Usr_WriteUsrData (UsrDat->StrBirthday[0] ? (ShowData == Lay_SHOW ? UsrDat->StrBirthday :
 									 "********") :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
@@ -2556,7 +2529,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 	    if (GrpTyp->NumGrps)         // If current course tiene groups of este type
 	      {
 	       Grp_GetNamesGrpsUsrBelongsTo (UsrDat->UsrCod,GrpTyp->GrpTypCod,GroupNames);
-	       Usr_WriteUsrData (The_GetColorRows (),GroupNames,NULL,
+	       Usr_WriteUsrData (GroupNames,NULL,
 				 Lay_NON_BR_SPACES,UsrDat->Accepted);
 	      }
 	   }
@@ -2583,7 +2556,7 @@ static void Usr_WriteRowStdAllData (struct Usr_Data *UsrDat,char *GroupNames,
 		  break;
 	      }
 
-	    Usr_WriteUsrData (The_GetColorRows (),Text,NULL,
+	    Usr_WriteUsrData (Text,NULL,
 			      Lay_NORMAL_SPACES,UsrDat->Accepted);
 
 	    /* Free structure that stores the query result */
@@ -2614,20 +2587,20 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 								  Lay_DONT_SHOW;
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show teacher's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
-	                               Usr_ClassPhoto21x28[Gbl.Prefs.PhotoShape],Pho_NO_ZOOM);
+	                               Usr_ClassPhoto21x28[Gbl.Prefs.PhotoShape],
+	                               Pho_NO_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /****** Write the user's ID ******/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-	            Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-	            The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+	            Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2635,10 +2608,9 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
       /***** Write rest of main teacher's data *****/
       Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
-      Usr_WriteEmail (UsrDat,The_GetColorRows ());
-      Usr_WriteUsrData (The_GetColorRows (),
-			Ins.FullName,NULL,
+      Usr_WriteUsrSurnamesAndName (UsrDat);
+      Usr_WriteEmail (UsrDat);
+      Usr_WriteUsrData (Ins.FullName,NULL,
 			Lay_NON_BR_SPACES,UsrDat->Accepted);
 
       /***** Write the rest of teacher's data *****/
@@ -2647,8 +2619,7 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 	 Ctr.HieCod = UsrDat->HieCods[Hie_CTR];
 	 SuccessOrError = Hie_GetDataByCod[Hie_CTR] (&Ctr);
 	}
-      Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Lay_SHOW &&
+      Usr_WriteUsrData (ShowData == Lay_SHOW &&
 			UsrDat->HieCods[Hie_CTR] > 0 ? Ctr.FullName :
 						       NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
@@ -2657,18 +2628,15 @@ static void Usr_WriteRowTchAllData (struct Usr_Data *UsrDat,
 	 Dpt.DptCod = UsrDat->Tch.DptCod;
 	 Dpt_GetDptDataByCod (&Dpt);
 	}
-      Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Lay_SHOW &&
+      Usr_WriteUsrData (ShowData == Lay_SHOW &&
 			UsrDat->Tch.DptCod > 0 ? Dpt.FullName :
 						 NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-      Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Lay_SHOW &&
+      Usr_WriteUsrData (ShowData == Lay_SHOW &&
 			UsrDat->Tch.Office[0] ? UsrDat->Tch.Office :
 						NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-      Usr_WriteUsrData (The_GetColorRows (),
-			ShowData == Lay_SHOW &&
+      Usr_WriteUsrData (ShowData == Lay_SHOW &&
 			UsrDat->Tch.OfficePhone[0] ? UsrDat->Tch.OfficePhone :
 						     NULL,
 			NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
@@ -2694,27 +2662,25 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
 
    /***** Begin row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Write number of user *****/
-      HTM_TD_Begin ("class=\"CM USR_LIST_NUM_N_%s %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CM USR_LIST_NUM_N_%s\"",The_GetSuffix ());
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
 	 /***** Show administrator's photo *****/
-	 HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"LM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               Usr_ClassPhoto21x28[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /****** Write the user's ID ******/
-      HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix (),
-		    The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
 	 HTM_NBSP ();
       HTM_TD_End ();
@@ -2722,9 +2688,9 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
       /***** Write rest of main administrator's data *****/
       Ins.HieCod = UsrDat->HieCods[Hie_INS];
       SuccessOrError = Hie_GetDataByCod[Hie_INS] (&Ins);
-      Usr_WriteUsrSurnamesAndName (UsrDat,The_GetColorRows ());
+      Usr_WriteUsrSurnamesAndName (UsrDat);
 
-      HTM_TD_Begin ("class=\"LM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LM\"");
 	 Ins_DrawInsLogoWithLink (&Ins,Pho_PHOTOS_SHOW,"ICO25x25");
       HTM_TD_End ();
 
@@ -2738,19 +2704,15 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct Usr_Data *UsrDat,
 /*********** Write surnames and name of a user in three columns **************/
 /*****************************************************************************/
 
-static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
-                                         const char *BgColor)
+static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat)
   {
-   Usr_WriteUsrData (BgColor,
-                     UsrDat->Surname1[0] ? UsrDat->Surname1 :
+   Usr_WriteUsrData (UsrDat->Surname1[0] ? UsrDat->Surname1 :
                 	                   NULL,
                      NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
-                     UsrDat->Surname2[0] ? UsrDat->Surname2 :
+   Usr_WriteUsrData (UsrDat->Surname2[0] ? UsrDat->Surname2 :
                 	                   NULL,
                      NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
-   Usr_WriteUsrData (BgColor,
-                     UsrDat->FrstName[0] ? UsrDat->FrstName :
+   Usr_WriteUsrData (UsrDat->FrstName[0] ? UsrDat->FrstName :
                 	                   NULL,
                      NULL,Lay_NON_BR_SPACES,UsrDat->Accepted);
   }
@@ -2759,7 +2721,7 @@ static void Usr_WriteUsrSurnamesAndName (struct Usr_Data *UsrDat,
 /**************************** Write user's email *****************************/
 /*****************************************************************************/
 
-static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
+static void Usr_WriteEmail (struct Usr_Data *UsrDat)
   {
    Usr_Can_t ShowEmail;
    char MailLink[7 + Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// mailto:mail_address
@@ -2772,8 +2734,7 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
      }
    else
       ShowEmail = Usr_CAN_NOT;
-   Usr_WriteUsrData (BgColor,
-                     UsrDat->Email[0] ? (ShowEmail == Usr_CAN ? UsrDat->Email :
+   Usr_WriteUsrData (UsrDat->Email[0] ? (ShowEmail == Usr_CAN ? UsrDat->Email :
                 						"********") :
                 	                NULL,
                      ShowEmail == Usr_CAN ? MailLink :
@@ -2785,8 +2746,7 @@ static void Usr_WriteEmail (struct Usr_Data *UsrDat,const char *BgColor)
 /********************* Write a cell with data of a user **********************/
 /*****************************************************************************/
 
-static void Usr_WriteUsrData (const char *BgColor,
-                              const char *Data,const char *Link,
+static void Usr_WriteUsrData (const char *Data,const char *Link,
                               Lay_Spaces_t Spaces,Usr_Accepted_t Accepted)
   {
    static const char *Class[Usr_NUM_ACCEPTED][Lay_NUM_SPACES] =
@@ -2798,8 +2758,7 @@ static void Usr_WriteUsrData (const char *BgColor,
      };
 
    /***** Begin table cell *****/
-   HTM_TD_Begin ("class=\"LM %s_%s %s\"",
-		 Class[Accepted][Spaces],The_GetSuffix (),BgColor);
+   HTM_TD_Begin ("class=\"LM %s_%s\"",Class[Accepted][Spaces],The_GetSuffix ());
 
       /***** Container to limit length *****/
       HTM_DIV_Begin ("class=\"USR_DAT\"");
@@ -4951,15 +4910,13 @@ unsigned Usr_ListUsrsFound (Hie_Level_t HieLvl,Rol_Role_t Role,
 	       if (Role != Rol_GST &&				// Guests do not belong to any course
 		   Gbl.Usrs.Me.Role.Logged >= Rol_DEG_ADM)	// Only admins can view the courses
 		 {
-		  HTM_TR_Begin (NULL);
+		  HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
-		     HTM_TD_Begin ("colspan=\"2\" class=\"%s\"",
-				   The_GetColorRows ());
+		     HTM_TD_Begin ("colspan=\"2\"");
 		     HTM_TD_End ();
 
-		     HTM_TD_Begin ("colspan=\"%u\" class=\"%s\"",
-				   Usr_NUM_MAIN_FIELDS_DATA_USR-2,
-				   The_GetColorRows ());
+		     HTM_TD_Begin ("colspan=\"%u\"",
+				   Usr_NUM_MAIN_FIELDS_DATA_USR - 2);
 			if (Role == Rol_UNK)
 			  {
 			   Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
@@ -6632,20 +6589,18 @@ void Usr_ShowTableCellWithUsrData (struct Usr_Data *UsrDat,unsigned NumRows)
 
    /***** Show user's photo *****/
    if (NumRows > 1)
-      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM %s\"",
-	            NumRows,The_GetColorRows ());
+      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM\"",NumRows);
    else
-      HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT LINE_BOTTOM\"");
    Pho_ShowUsrPhotoIfAllowed (UsrDat,ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
    HTM_TD_End ();
 
    /***** User's IDs and name *****/
    /* Begin cell */
    if (NumRows > 1)
-      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM %s\"",
-	            NumRows,The_GetColorRows ());
+      HTM_TD_Begin ("rowspan=\"%u\" class=\"LT LINE_BOTTOM\"",NumRows);
    else
-      HTM_TD_Begin ("class=\"LT LINE_BOTTOM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"LT LINE_BOTTOM\"");
 
    /* Action to go to user's record depending on role in course */
    if (!NextAction[UsrDat->Roles.InThisCrs])

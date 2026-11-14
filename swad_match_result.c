@@ -717,7 +717,8 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 
    /***** Show user's data *****/
    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
-   Usr_ShowTableCellWithUsrData (Usr_UsrDat[MeOrOther],NumResults + 1);
+
+      Usr_ShowTableCellWithUsrData (Usr_UsrDat[MeOrOther],NumResults + 1);
 
    /***** Get and print matches results *****/
    if (NumResults)

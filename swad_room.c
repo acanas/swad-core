@@ -219,42 +219,36 @@ void Roo_SeeRooms (void)
 	      NumRoom < Rooms.Num;
 	      NumRoom++, The_ChangeRowColor ())
 	   {
-	    HTM_TR_Begin (NULL);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	       /* Building short name */
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (Rooms.Lst[NumRoom].BldShrtName);
 	       HTM_TD_End ();
 
 	       /* Floor */
-	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 		  HTM_Int (Rooms.Lst[NumRoom].Floor);
 	       HTM_TD_End ();
 
 	       /* Type */
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  Ico_PutIconOn (Roo_TypesIcons[Rooms.Lst[NumRoom].Type],Ico_BLACK,
 		                 Txt_ROOM_TYPES[Rooms.Lst[NumRoom].Type]);
 	       HTM_TD_End ();
 
 	       /* Short name */
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (Rooms.Lst[NumRoom].ShrtName);
 	       HTM_TD_End ();
 
 	       /* Full name */
-	       HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 		  HTM_Txt (Rooms.Lst[NumRoom].FullName);
 	       HTM_TD_End ();
 
 	       /* Capacity */
-	       HTM_TD_Begin ("class=\"RT DAT_%s %s\"",
-	                     The_GetSuffix (),The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 		  Roo_WriteCapacity (StrCapacity,Rooms.Lst[NumRoom].Capacity);
 		  HTM_Txt (StrCapacity);
 	       HTM_TD_End ();
@@ -265,8 +259,7 @@ void Roo_SeeRooms (void)
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
-		     HTM_TD_Begin ("class=\"LT DAT_%s %s\"",
-		                   The_GetSuffix (),The_GetColorRows ());
+		     HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
 			Roo_GetAndListMACAddresses (Rooms.Lst[NumRoom].RooCod);
 		     HTM_TD_End ();
 		     break;

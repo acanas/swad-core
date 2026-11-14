@@ -575,15 +575,15 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 				   Exams->SesCod.Sel,-1L,NULL);
 
    /***** Begin table row *****/
-   HTM_TR_Begin (NULL);
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
       /***** Checkbox to select user *****/
-      HTM_TD_Begin ("class=\"CM LINE_BOTTOM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"CM LINE_BOTTOM\"");
 	 Usr_PutCheckboxToSelectUser (Rol_STD,UsrDat,&Gbl.Usrs.Selected);
       HTM_TD_End ();
 
       /***** Write number of user in the list *****/
-      HTM_TD_Begin ("class=\"RM LINE_BOTTOM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RM LINE_BOTTOM\"");
 	 HTM_Unsigned (NumUsr);
       HTM_TD_End ();
 
@@ -617,8 +617,8 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	 UniqueId++;
 	 if (asprintf (&Id,"exa_res_time_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
 	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s LINE_BOTTOM %s\"",
-		       Id,The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("id=\"%s\" class=\"LT DAT_%s LINE_BOTTOM\"",
+		       Id,The_GetSuffix ());
 	    // If an exam print has been created but has not been filled yet
 	    // ==> the time is 0 ==> don't print anything
 	    if (Print.TimeUTC[StartEndTime])
@@ -634,7 +634,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	}
 
       /* Link to show this result */
-      HTM_TD_Begin ("class=\"RT LINE_BOTTOM %s\"",The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT LINE_BOTTOM\"");
 	 if (NumResults)
 	   {
 	    Frm_BeginForm (ActSeeOneExaResOth);
@@ -646,8 +646,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /* Write grade over maximum grade (taking into account only valid questions) */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	   {
 	    Grade = Qst_ComputeGrade (Print.NumQsts.Valid.Total,
@@ -658,16 +657,14 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /* Write score valid (taking into account only valid questions) */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_DoublePartOfUnsigned (Print.Score.Valid,
 				      Print.NumQsts.Valid.Total);
       HTM_TD_End ();
 
       /* Write average score per question (taking into account only valid questions) */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_Double2Decimals (Print.NumQsts.Valid.Total ? Print.Score.Valid /
 							     (double) Print.NumQsts.Valid.Total :
@@ -675,22 +672,19 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /* Write total number of questions */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_Unsigned (Print.NumQsts.All);
       HTM_TD_End ();
 
       /* Valid questions */
-      HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_GREEN_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_UnsignedLight0 (Print.NumQsts.Valid.Total);
       HTM_TD_End ();
 
       /* Invalid questions */
-      HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_RED_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	   {
 	    NumQstsInvalid = Print.NumQsts.All -
@@ -700,34 +694,29 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
       HTM_TD_End ();
 
       /* Write number of correct questions */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM LINE_LEFT\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_UnsignedLight0 (Print.NumQsts.Valid.Correct);
       HTM_TD_End ();
 
       /* Write number of wrong questions */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Negative);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Zero);
       HTM_TD_End ();
 
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_UnsignedLight0 (Print.NumQsts.Valid.Wrong.Positive);
       HTM_TD_End ();
 
       /* Write number of blank questions */
-      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM %s\"",
-		    The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s LINE_BOTTOM\"",The_GetSuffix ());
 	 if (NumResults)
 	    HTM_UnsignedLight0 (Print.NumQsts.Valid.Blank);
       HTM_TD_End ();

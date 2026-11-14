@@ -699,10 +699,10 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	 Frm_SetAnchorStr (Rubrics->Criterion.CriCod,&Anchor);
 
 	 /***** Begin row *****/
-	 HTM_TR_Begin (NULL);
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	    /***** Icons *****/
-	    HTM_TD_Begin ("class=\"BT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"BT\"");
 
 	       /* Put icon to remove the criterion */
 	       Ico_PutContextualIconToRemove (ActReqRemRubCri,NULL,
@@ -732,7 +732,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    RubCri_WriteIndex (&Rubrics->Criterion,Anchor);
 
 	    /***** Title *****/
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LT\"");
 		  Frm_BeginFormAnchor (ActChgTitRubCri,Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_TEXT ("Title",RubCri_MAX_CHARS_TITLE,Rubrics->Criterion.Title,
@@ -744,7 +744,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	    HTM_TD_End ();
 
 	    /***** Link to resource *****/
-	    HTM_TD_Begin ("class=\"LT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"LT\"");
 	       Frm_BeginFormAnchor (ActChgLnkRubCri,Anchor);
 		  RubCri_PutParsOneCriterion (Rubrics);
 		  Rsc_ShowClipboardToChangeLink (&Rubrics->Criterion.Link,
@@ -757,7 +757,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 		 ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 		 ValueRange++)
 	      {
-	       HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	       HTM_TD_Begin ("class=\"RT\"");
 		  Frm_BeginFormAnchor (RubCri_ActionsValues[ValueRange],Anchor);
 		     RubCri_PutParsOneCriterion (Rubrics);
 		     HTM_INPUT_FLOAT (RubCri_ParValues[ValueRange],
@@ -771,7 +771,7 @@ static void RubCri_ListOneOrMoreCriteriaForEdition (struct Rub_Rubrics *Rubrics,
 	      }
 
 	    /***** Criterion weight *****/
-	    HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+	    HTM_TD_Begin ("class=\"RT\"");
 	       Frm_BeginFormAnchor (ActChgWeiRubCri,Anchor);
 		  RubCri_PutParsOneCriterion (Rubrics);
 		  HTM_INPUT_FLOAT ("Weight",
@@ -837,7 +837,7 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
       Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
 
       /***** Begin row *****/
-      HTM_TR_Begin (NULL);
+      HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
 
 	 /***** Index, title, link *****/
 	 RubCri_WriteIndex (&Criterion,Anchor);
@@ -845,7 +845,7 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
          RubCri_WriteLink (&Criterion);
 
 	 /***** Criterion score *****/
-	 HTM_TD_Begin ("class=\"RT NO_BR %s\"",The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT NO_BR\"");
 
 	    /* Minimum value */
 	    HTM_SPAN_Begin ("class=\"DAT_LIGHT_%s\"",The_GetSuffix ());
@@ -919,7 +919,7 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
 
 	 /***** Weighted score *****/
          RubCri_WriteTxt ("=");
-	 HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+	 HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	    WeightedScore = CriterionScore * Criterion.Weight;
 	    HTM_Double2Decimals (WeightedScore);
 	 HTM_TD_End ();
@@ -951,7 +951,7 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
 static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
                                const char *Anchor)
   {
-   HTM_TD_Begin ("class=\"RT %s\"",The_GetColorRows ());
+   HTM_TD_Begin ("class=\"RT\"");
       if (Anchor)
          HTM_ARTICLE_Begin (Anchor);
       Lay_WriteIndex (Criterion->CriInd,"DAT");
@@ -966,7 +966,7 @@ static void RubCri_WriteIndex (const struct RubCri_Criterion *Criterion,
 
 static void RubCri_WriteTitle (const struct RubCri_Criterion *Criterion)
   {
-   HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
       HTM_Txt (Criterion->Title);
    HTM_TD_End ();
   }
@@ -977,7 +977,7 @@ static void RubCri_WriteTitle (const struct RubCri_Criterion *Criterion)
 
 static void RubCri_WriteLink (const struct RubCri_Criterion *Criterion)
   {
-   HTM_TD_Begin ("class=\"LT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+   HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
       Rsc_WriteLinkName (&Criterion->Link,Frm_DONT_PUT_FORM);
    HTM_TD_End ();
   }
@@ -994,7 +994,7 @@ static void RubCri_WriteMinimumMaximum (const struct RubCri_Criterion *Criterion
 	ValueRange <= (RubCri_ValueRange_t) (RubCri_NUM_VALUES - 1);
 	ValueRange++)
      {
-      HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+      HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
 	 HTM_Double (Criterion->Values[ValueRange]);
       HTM_TD_End ();
      }
@@ -1006,7 +1006,7 @@ static void RubCri_WriteMinimumMaximum (const struct RubCri_Criterion *Criterion
 
 static void RubCri_WriteTxt (const char *Txt)
   {
-   HTM_TD_Begin ("class=\"CT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+   HTM_TD_Begin ("class=\"CT DAT_%s\"",The_GetSuffix ());
       HTM_Txt (Txt);
    HTM_TD_End ();
   }
@@ -1017,7 +1017,7 @@ static void RubCri_WriteTxt (const char *Txt)
 
 static void RubCri_WriteWeight (const struct RubCri_Criterion *Criterion)
   {
-   HTM_TD_Begin ("class=\"RT DAT_%s %s\"",The_GetSuffix (),The_GetColorRows ());
+   HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
       HTM_Double (Criterion->Weight);
    HTM_TD_End ();
   }
