@@ -455,7 +455,7 @@ void ExaSet_ListQstsToAddToSet (void)
 
    /***** Get set data from database *****/
    ExaSet_GetSetDataByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   Exams.SelectedSetCod = Exams.SetCod = Set.SetCod;
 
    /***** List several test questions for selection *****/
    Qst_ListQuestionsToSelectForExamSet (&Exams);
@@ -546,6 +546,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
    struct ExaSet_Set Set;
+   Lay_Highlight_t HighlightSet;
    char *Anchor;
 
    /***** Begin table *****/
@@ -569,12 +570,14 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 /* Initialize context */
 	 Exams->SetCod = Set.SetCod;
 	 Exams->SetInd = Set.SetInd;
+	 HighlightSet = Exams->SetCod == Exams->SelectedSetCod ? Lay_HIGHLIGHT :
+								 Lay_DONT_HIGHLIGHT;
 
 	 /***** Build anchor string *****/
 	 Frm_SetAnchorStr (Set.SetCod,&Anchor);
 
 	 /***** Begin first row *****/
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSet));
 
 	    /***** Icons *****/
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT\"");
@@ -675,7 +678,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_End ();
 
 	 /***** Begin second row *****/
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSet));
 
 	    /***** Questions *****/
 	    HTM_TD_Begin ("colspan=\"3\" class=\"LT\"");
@@ -1041,7 +1044,7 @@ void ExaSet_AddQstsToSet (void)
 
    /***** Get set data from database *****/
    ExaSet_GetSetDataByCod (&Set);
-   Exams.SetCod = Set.SetCod;
+   Exams.SelectedSetCod = Exams.SetCod = Set.SetCod;
 
    /***** Get selected questions *****/
    /* Allocate space for selected question codes */
@@ -1531,7 +1534,7 @@ static void ExaSet_GetAndCheckPars (struct Exa_Exams *Exams,
    ExaSet_GetSetDataByCod (Set);
    if (Set->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
-   Exams->SetCod = Set->SetCod;
+   Exams->SelectedSetCod = Exams->SetCod = Set->SetCod;
   }
 
 /*****************************************************************************/

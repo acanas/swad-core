@@ -170,10 +170,12 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->ListQuestions		= NULL;
    Exams->ExaCodsSelected	= NULL;	// String with selected exam codes separated by separator multiple
    Exams->Exam.ExaCod		= -1L;	// Selected/current exam code
-   Exams->SesCod.Sel		=
-   Exams->SesCod.Par		= -1L;	// Selected/parameter session code
+   Exams->SetCod		=	// Current set code
+   Exams->SelectedSetCod	= -1L;	// Selected set code
    Exams->SetInd		= 0;	// Current set index
    Exams->QstCod		= -1L;	// Current question code
+   Exams->SesCod.Sel		=
+   Exams->SesCod.Par		= -1L;	// Selected/parameter session code
   }
 
 /*****************************************************************************/
