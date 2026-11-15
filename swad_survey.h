@@ -82,7 +82,8 @@ struct Svy_Surveys
    Dat_StartEndTime_t SelectedOrder;
    unsigned ThisPage;
    struct Svy_Survey Svy;	// Selected/current survey
-   long QstCod;
+   long QstCod;			// Current question code
+   long SelectedQstCod;		// Selected question code
   };
 
 #define Svy_NUM_ANS_TYPES	2
