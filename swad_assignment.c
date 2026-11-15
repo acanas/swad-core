@@ -1201,7 +1201,6 @@ void Asg_ReqCreatOrEditAsg (void)
    Asg_PutFormCreatOrEditAsg (&Assignments,Description);
 
    /***** Show current assignments, if any *****/
-   HTM_BR ();
    Asg_ShowAllAssignments (&Assignments);
   }
 
@@ -1553,7 +1552,6 @@ void Asg_ReceiveAssignment (void)
       default:
 	 /***** Put the form again *****/
 	 Asg_PutFormCreatOrEditAsg (&Assignments,Description);
-	 HTM_BR ();
 	 break;
      }
 

@@ -1371,7 +1371,6 @@ static void Att_ShowEvent (struct Att_Events *Events)
                       Hlp_USERS_Attendance,Box_NOT_CLOSABLE,2);
       Att_ShowOneEventRow (Events,Lay_SHOWING_ONLY_ONE);
    Box_BoxTableEnd ();
-   HTM_BR ();
 
    switch (Gbl.Usrs.Me.Role.Logged)
      {

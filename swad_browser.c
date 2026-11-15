@@ -2799,7 +2799,6 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 	       HTM_DIV_End ();
 
 	       HTM_BR ();
-	       HTM_BR ();
 	      }
 	}
 

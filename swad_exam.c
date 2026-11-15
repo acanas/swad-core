@@ -1295,20 +1295,14 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
 
       /***** Show list of sets inside box *****/
       if (OldNewExam == OldNew_OLD)
-        {
-	 HTM_BR ();
 	 ExaSet_ListExamSets (Exams);
-        }
 
    /***** End box ****/
    Box_BoxEnd ();
 
    /***** Show exams again outside box *****/
    if (OldNewExam == OldNew_NEW)
-     {
-      HTM_BR ();
       Exa_ListAllExams (Exams);
-     }
   }
 
 /*****************************************************************************/

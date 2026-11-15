@@ -1315,20 +1315,14 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
 
       /***** Show list of questions inside box *****/
       if (OldNewGame == OldNew_OLD)
-        {
-	 HTM_BR ();
 	 Gam_ListGameQuestions (Games);
-        }
 
    /***** End box ****/
    Box_BoxEnd ();
 
    /***** Show games again outside box *****/
    if (OldNewGame == OldNew_NEW)
-     {
-      HTM_BR ();
       Gam_ListAllGames (Games);
-     }
   }
 
 /*****************************************************************************/
@@ -1467,6 +1461,10 @@ void Gam_ReceiveGame (void)
 	{
 	 case OldNew_OLD:
 	    Gam_UpdateGame (&Games.Game,Txt);	// Update game data in database
+
+	    /* Get all game data from database
+	       (get aditional data, as number of matches...) */
+	    Gam_GetGameDataByCod (&Games.Game);
 	    break;
 	 case OldNew_NEW:
 	 default:

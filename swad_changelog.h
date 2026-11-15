@@ -646,6 +646,7 @@ TODO: Cuando se elimina una asignatura, ¡no mostrar mensaje para ir a esa asigna
 #define Chl_CSS_FILE		"swad26.33.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.36.4:  Nov 15, 2026	Fixed issue in edition of a game. (348777 lines)
 	Version 26.36.3:  Nov 15, 2026	Highlighting of survey questions. (348790 lines)
 	Version 26.36.2:  Nov 15, 2026	Highlighting of exam sets. (348784 lines)
 	Version 26.36.1:  Nov 15, 2026	Background colors of rows applied to tr instead of td. (348777 lines)
