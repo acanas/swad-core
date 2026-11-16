@@ -7745,6 +7745,7 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
    PriPub_PrivateOrPublic_t PrivateOrPublic;
    Exi_Exist_t PublisherExists;
    Brw_License_t License;
+   Lay_Show_t ShowIconToGetLinkToFile;
    unsigned LicenseUnsigned;
 
    /***** Get file / link *****/
@@ -7823,226 +7824,228 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 
 			/***** Begin box *****/
 			// Put icon to get link?
-			if ((Brw_ActReqLnk[FileBrowser->Zone] != ActUnk &&
-			     (File.Type == Brw_IS_FILE ||	// Only files or links
-			      File.Type == Brw_IS_LINK) &&
-			     Rsc_CheckIfICanGetLink ()) == Usr_CAN)
-			   Box_BoxShadowBegin (NULL,
-					       Brw_PutIconToGetLinkToFile,FileBrowser,
-					       NULL);
-			else
-			   Box_BoxShadowBegin (NULL,NULL,NULL,NULL);
-
-			/***** Begin form to update the metadata of a file *****/
-			if (ICanEdit == Usr_CAN)	// I can edit file properties
-			  {
-			   /* Can the file be public? */
-			   ICanChangePublic = ICanChangePublics[FileBrowser->Zone];
-
-			   Frm_BeginFormAnchor (Brw_ActChgDatFile[FileBrowser->Zone],
-						FileBrowser->SectionId);
-			      Brw_PutParsFileBrowser (FileBrowser);
-			  }
-
-			/***** Begin table *****/
-			HTM_TABLE_BeginWidePadding (2);
-
-			   /***** Link to download the file *****/
-			   HTM_TR_Begin (NULL);
-
-			      HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
-				 Brw_WriteBigLinkToDownloadFile (URL,FileBrowser,&File,FileNameToShow);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Filename *****/
-			   HTM_TR_Begin (NULL);
-
-			      Frm_LabelColumn ("RT",NULL,Txt_Filename);
-
-			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-				 Brw_WriteSmallLinkToDownloadFile (URL,FileBrowser,FileNameToShow);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Publisher's data *****/
-			   HTM_TR_Begin (NULL);
-
-			      Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
-
-			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-				 switch (PublisherExists)
-				   {
-				    case Exi_EXISTS:
-				       /* Show photo */
-				       Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
-								  ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
-
-				       /* Write name */
-				       HTM_NBSP ();
-				       HTM_Txt (PublisherUsrDat.FullName);
-				       break;
-				    case Exi_DOES_NOT_EXIST:
-				    default:
-				       /* Unknown publisher */
-				       HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
-				       break;
-				   }
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Free memory used for publisher's data *****/
-			   if (File.Metadata.PublisherCod > 0)
-			      Usr_UsrDataDestructor (&PublisherUsrDat);
-
-			   /***** Write the file size *****/
-			   Fil_WriteFileSizeFull ((double) File.Metadata.Size,FileSizeStr);
-			   HTM_TR_Begin (NULL);
-
-			      Frm_LabelColumn ("RT",NULL,Txt_File_size);
-
-			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-				 HTM_Txt (FileSizeStr);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Write the date *****/
-			   HTM_TR_Begin (NULL);
-
-			      Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
-
-			      HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
-					    The_GetSuffix ());
-				 Dat_WriteLocalDateHMSFromUTC ("filedate",File.Metadata.Time,
-							       Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
-							       Dat_WRITE_TODAY |
-							       Dat_WRITE_DATE_ON_SAME_DAY |
-							       Dat_WRITE_WEEK_DAY |
-							       Dat_WRITE_HOUR |
-							       Dat_WRITE_MINUTE |
-							       Dat_WRITE_SECOND);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Private or public? *****/
-			   HTM_TR_Begin (NULL);
-
-			      /* Label */
-			      Frm_LabelColumn ("RT",ICanChangePublic == Usr_CAN ? "Public" :
+			ShowIconToGetLinkToFile = (Brw_ActReqLnk[FileBrowser->Zone] != ActUnk &&
+						   (File.Type == Brw_IS_FILE ||	// Only files or links
+						    File.Type == Brw_IS_LINK) &&
+						   Rsc_CheckIfICanGetLink ()) == Usr_CAN ? Lay_SHOW :
+											   Lay_DONT_SHOW;
+			Box_BoxShadowBegin (NULL,
+					    ShowIconToGetLinkToFile == Lay_SHOW ? Brw_PutIconToGetLinkToFile :
 										  NULL,
-					       Txt_Availability);
+					    ShowIconToGetLinkToFile == Lay_SHOW ? FileBrowser :
+										  NULL,
+					    NULL,Lay_HIGHLIGHT);
 
-			      /* Data */
-			      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
-				 if (ICanChangePublic == Usr_CAN)	// I can change file to public/private
-				   {
-				    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-						      "id=\"Public\" name=\"Public\""
-						      " class=\"PUBLIC_FILE\"");
-				       for (PrivateOrPublic  = (PriPub_PrivateOrPublic_t) 0;
-					    PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
-					    PrivateOrPublic++)
-					  HTM_OPTION (HTM_Type_STRING,Public_YN[PrivateOrPublic],
-						      File.Metadata.PrivateOrPublic == PrivateOrPublic ? HTM_SELECTED :
-													 HTM_NO_ATTR,
-						      "%s",*PrivatePublicLabel[PrivateOrPublic]);
-				    HTM_SELECT_End ();
-				   }
-				 else		// I can not edit file properties
-				    HTM_Txt (*PrivatePublicLabel[File.Metadata.PrivateOrPublic]);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** License *****/
-			   HTM_TR_Begin (NULL);
-
-			      /* Label */
-			      Frm_LabelColumn ("RT",ICanEdit == Usr_CAN ? "License" :
-									  NULL,
-					       Txt_License);
-
-			      /* Data */
-			      HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
-				 if (ICanEdit == Usr_CAN)	// I can edit file properties
-				   {
-				    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-						      "id=\"License\" name=\"License\""
-						      " class=\"LICENSE\"");
-				       for (License  = (Brw_License_t) 0;
-					    License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
-					    License++)
-					 {
-					  LicenseUnsigned = (unsigned) License;
-					  HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
-						      License == File.Metadata.License ? HTM_SELECTED :
-											 HTM_NO_ATTR,
-						      "%s",Txt_LICENSES[License]);
-					 }
-				    HTM_SELECT_End ();
-				   }
-				 else		// I can not edit file properties
-				    HTM_Txt (Txt_LICENSES[File.Metadata.License]);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Write my number of views *****/
-			   if (Gbl.Usrs.Me.Logged)
+			   /***** Begin form to update the metadata of a file *****/
+			   if (ICanEdit == Usr_CAN)	// I can edit file properties
 			     {
+			      /* Can the file be public? */
+			      ICanChangePublic = ICanChangePublics[FileBrowser->Zone];
+
+			      Frm_BeginFormAnchor (Brw_ActChgDatFile[FileBrowser->Zone],
+						   FileBrowser->SectionId);
+				 Brw_PutParsFileBrowser (FileBrowser);
+			     }
+
+			   /***** Begin table *****/
+			   HTM_TABLE_BeginWidePadding (2);
+
+			      /***** Link to download the file *****/
 			      HTM_TR_Begin (NULL);
 
-				 Frm_LabelColumn ("RT",NULL,Txt_My_views);
-
-				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-				    HTM_Unsigned (File.Stats.MyViews);
+				 HTM_TD_Begin ("colspan=\"2\" class=\"CM\"");
+				    Brw_WriteBigLinkToDownloadFile (URL,FileBrowser,&File,FileNameToShow);
 				 HTM_TD_End ();
 
 			      HTM_TR_End ();
+
+			      /***** Filename *****/
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_Filename);
+
+				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				    Brw_WriteSmallLinkToDownloadFile (URL,FileBrowser,FileNameToShow);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** Publisher's data *****/
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_Uploaded_by);
+
+				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				    switch (PublisherExists)
+				      {
+				       case Exi_EXISTS:
+					  /* Show photo */
+					  Pho_ShowUsrPhotoIfAllowed (&PublisherUsrDat,
+								     ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+
+					  /* Write name */
+					  HTM_NBSP ();
+					  HTM_Txt (PublisherUsrDat.FullName);
+					  break;
+				       case Exi_DOES_NOT_EXIST:
+				       default:
+					  /* Unknown publisher */
+					  HTM_Txt (Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
+					  break;
+				      }
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** Free memory used for publisher's data *****/
+			      if (File.Metadata.PublisherCod > 0)
+				 Usr_UsrDataDestructor (&PublisherUsrDat);
+
+			      /***** Write the file size *****/
+			      Fil_WriteFileSizeFull ((double) File.Metadata.Size,FileSizeStr);
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_File_size);
+
+				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				    HTM_Txt (FileSizeStr);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** Write the date *****/
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_Date_of_creation);
+
+				 HTM_TD_Begin ("id=\"filedate\" class=\"LB DAT_STRONG_%s\"",
+					       The_GetSuffix ());
+				    Dat_WriteLocalDateHMSFromUTC ("filedate",File.Metadata.Time,
+								  Gbl.Prefs.DateFormat,Dat_SEPARATOR_COMMA,
+								  Dat_WRITE_TODAY |
+								  Dat_WRITE_DATE_ON_SAME_DAY |
+								  Dat_WRITE_WEEK_DAY |
+								  Dat_WRITE_HOUR |
+								  Dat_WRITE_MINUTE |
+								  Dat_WRITE_SECOND);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** Private or public? *****/
+			      HTM_TR_Begin (NULL);
+
+				 /* Label */
+				 Frm_LabelColumn ("RT",ICanChangePublic == Usr_CAN ? "Public" :
+										     NULL,
+						  Txt_Availability);
+
+				 /* Data */
+				 HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
+				    if (ICanChangePublic == Usr_CAN)	// I can change file to public/private
+				      {
+				       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+							 "id=\"Public\" name=\"Public\""
+							 " class=\"PUBLIC_FILE\"");
+					  for (PrivateOrPublic  = (PriPub_PrivateOrPublic_t) 0;
+					       PrivateOrPublic <= (PriPub_PrivateOrPublic_t) (PriPub_NUM_PRIVATE_PUBLIC - 1);
+					       PrivateOrPublic++)
+					     HTM_OPTION (HTM_Type_STRING,Public_YN[PrivateOrPublic],
+							 File.Metadata.PrivateOrPublic == PrivateOrPublic ? HTM_SELECTED :
+													    HTM_NO_ATTR,
+							 "%s",*PrivatePublicLabel[PrivateOrPublic]);
+				       HTM_SELECT_End ();
+				      }
+				    else		// I can not edit file properties
+				       HTM_Txt (*PrivatePublicLabel[File.Metadata.PrivateOrPublic]);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** License *****/
+			      HTM_TR_Begin (NULL);
+
+				 /* Label */
+				 Frm_LabelColumn ("RT",ICanEdit == Usr_CAN ? "License" :
+									     NULL,
+						  Txt_License);
+
+				 /* Data */
+				 HTM_TD_Begin ("class=\"LT DAT_STRONG_%s\"",The_GetSuffix ());
+				    if (ICanEdit == Usr_CAN)	// I can edit file properties
+				      {
+				       HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+							 "id=\"License\" name=\"License\""
+							 " class=\"LICENSE\"");
+					  for (License  = (Brw_License_t) 0;
+					       License <= (Brw_License_t) (Brw_NUM_LICENSES - 1);
+					       License++)
+					    {
+					     LicenseUnsigned = (unsigned) License;
+					     HTM_OPTION (HTM_Type_UNSIGNED,&LicenseUnsigned,
+							 License == File.Metadata.License ? HTM_SELECTED :
+											    HTM_NO_ATTR,
+							 "%s",Txt_LICENSES[License]);
+					    }
+				       HTM_SELECT_End ();
+				      }
+				    else		// I can not edit file properties
+				       HTM_Txt (Txt_LICENSES[File.Metadata.License]);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** Write my number of views *****/
+			      if (Gbl.Usrs.Me.Logged)
+				{
+				 HTM_TR_Begin (NULL);
+
+				    Frm_LabelColumn ("RT",NULL,Txt_My_views);
+
+				    HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				       HTM_Unsigned (File.Stats.MyViews);
+				    HTM_TD_End ();
+
+				 HTM_TR_End ();
+				}
+
+			      /***** Write number of identificated views *****/
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
+
+				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				    HTM_Unsigned (File.Stats.ViewsFromLoggedUsrs);
+				    HTM_NBSP ();
+				    HTM_OpenParenthesis ();
+				       HTM_UnsignedTxt (File.Stats.LoggedUsrs,
+							Txt_user[Usr_SEX_UNKNOWN],
+							Txt_users[Usr_SEX_UNKNOWN]);
+				    HTM_CloseParenthesis ();
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			      /***** Write number of public views *****/
+			      HTM_TR_Begin (NULL);
+
+				 Frm_LabelColumn ("RT",NULL,Txt_Public_views);
+
+				 HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
+				    HTM_Unsigned (File.Stats.PublicViews);
+				 HTM_TD_End ();
+
+			      HTM_TR_End ();
+
+			   /***** End table *****/
+			   HTM_TABLE_End ();
+
+			   /***** End form *****/
+			   if (ICanEdit == Usr_CAN)	// I can edit file properties
+			     {
+				 Btn_PutButton (Btn_SAVE_CHANGES,NULL);
+			      Frm_EndForm ();
 			     }
-
-			   /***** Write number of identificated views *****/
-			   HTM_TR_Begin (NULL);
-
-			      Frm_LabelColumn ("RT",NULL,Txt_Identified_views);
-
-			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-				 HTM_Unsigned (File.Stats.ViewsFromLoggedUsrs);
-				 HTM_NBSP ();
-				 HTM_OpenParenthesis ();
-				    HTM_UnsignedTxt (File.Stats.LoggedUsrs,
-						     Txt_user[Usr_SEX_UNKNOWN],
-						     Txt_users[Usr_SEX_UNKNOWN]);
-				 HTM_CloseParenthesis ();
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			   /***** Write number of public views *****/
-			   HTM_TR_Begin (NULL);
-
-			      Frm_LabelColumn ("RT",NULL,Txt_Public_views);
-
-			      HTM_TD_Begin ("class=\"LB DAT_STRONG_%s\"",The_GetSuffix ());
-				 HTM_Unsigned (File.Stats.PublicViews);
-			      HTM_TD_End ();
-
-			   HTM_TR_End ();
-
-			/***** End table *****/
-			HTM_TABLE_End ();
-
-			/***** End form *****/
-			if (ICanEdit == Usr_CAN)	// I can edit file properties
-			  {
-			      Btn_PutButton (Btn_SAVE_CHANGES,NULL);
-			   Frm_EndForm ();
-			  }
 
 			/***** End box *****/
 			Box_BoxEnd ();

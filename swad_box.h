@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_button.h"
+#include "swad_layout.h"
 #include "swad_old_new.h"
 
 /*****************************************************************************/
@@ -59,10 +60,10 @@ void Box_BoxBegin (const char *Title,
                    const char *HelpLink,Box_Closable_t Closable);
 void Box_BoxShadowBegin (const char *Title,
                          void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
-                         const char *HelpLink);
+                         const char *HelpLink,Lay_Highlight_t Highlight);
 void Box_BoxTableShadowBegin (const char *Title,
                               void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
-                              const char *HelpLink,
+                              const char *HelpLink,Lay_Highlight_t Highlight,
                               unsigned CellPadding);
 void Box_BoxTableEnd (void);
 void Box_BoxTableWithButtonSaveCreateEnd (OldNew_OldNew_t OldNew);

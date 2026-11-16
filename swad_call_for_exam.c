@@ -938,7 +938,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 
 	 /* Begin highlighted box */
 	 Box_BoxShadowBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
-			     HelpLink);
+			     HelpLink,Lay_HIGHLIGHT);
 	 break;
       case Lay_DONT_HIGHLIGHT:
       default:

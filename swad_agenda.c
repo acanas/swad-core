@@ -115,7 +115,7 @@ static void Agd_GetPars (struct Agd_Agenda *Agenda,Agd_AgendaType_t AgendaType);
 
 static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
                                Agd_AgendaType_t AgendaType);
-static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent);
+static void Agd_GetEventDataByCod (struct Agd_Event *AgdEvent);
 
 static void Agd_FreeListEvents (struct Agd_Agenda *Agenda);
 
@@ -155,18 +155,19 @@ Usr_Can_t Agd_CheckIfICanViewUsrAgenda (struct Usr_Data *UsrDat)
 
 static void Agd_ResetAgenda (struct Agd_Agenda *Agenda)
   {
-   Agenda->LstReadStatus      = Cac_INVALID;
-   Agenda->Num                = 0;
-   Agenda->LstAgdCods         = NULL;
-   Agenda->Past__FutureEvents = Agd_DEFAULT_PAST___EVENTS |
-	                        Agd_DEFAULT_FUTURE_EVENTS;
-   Agenda->PrivatPublicEvents = Agd_DEFAULT_PRIVAT_EVENTS |
-	                        Agd_DEFAULT_PUBLIC_EVENTS;
-   Agenda->HiddenVisiblEvents = Agd_DEFAULT_HIDDEN_EVENTS |
-	                        Agd_DEFAULT_VISIBL_EVENTS;
-   Agenda->SelectedOrder      = Agd_ORDER_DEFAULT;
-   Agenda->AgdCodToEdit       = -1L;
-   Agenda->ThisPage           = 0;
+   Agenda->LstReadStatus	= Cac_INVALID;
+   Agenda->Num			= 0;
+   Agenda->LstAgdCods		= NULL;
+   Agenda->Past__FutureEvents	= Agd_DEFAULT_PAST___EVENTS |
+				  Agd_DEFAULT_FUTURE_EVENTS;
+   Agenda->PrivatPublicEvents	= Agd_DEFAULT_PRIVAT_EVENTS |
+				  Agd_DEFAULT_PUBLIC_EVENTS;
+   Agenda->HiddenVisiblEvents	= Agd_DEFAULT_HIDDEN_EVENTS |
+				  Agd_DEFAULT_VISIBL_EVENTS;
+   Agenda->SelectedOrder	= Agd_ORDER_DEFAULT;
+   Agenda->AgdCod		=
+   Agenda->SelectedAgdCod	= -1L;
+   Agenda->ThisPage		= 0;
   }
 
 /*****************************************************************************/
@@ -605,11 +606,11 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,
         {
 	 case Agd_MY_AGENDA_TODAY:
 	    Box_BoxTableShadowBegin (Txt_Today,NULL,NULL,
-				     Hlp_PROFILE_Agenda,2);
+				     Hlp_PROFILE_Agenda,Lay_DONT_HIGHLIGHT,2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
 	    Box_BoxTableShadowBegin (Txt_Today,NULL,NULL,
-			             Hlp_PROFILE_Agenda_public_agenda,2);
+			             Hlp_PROFILE_Agenda_public_agenda,Lay_HIGHLIGHT,2);
             break;
 	 default:
 	    break;
@@ -719,7 +720,7 @@ static void Agd_PutIconsMyPublicAgenda (const void *EncryptedUsrCod)
 
 static void Agd_PutIconToCreateNewEvent (const void *Agenda)
   {
-   ((struct Agd_Agenda *) Agenda)->AgdCodToEdit = -1L;
+   ((struct Agd_Agenda *) Agenda)->AgdCod = -1L;
    Ico_PutContextualIconToAdd (ActFrmNewEvtMyAgd,NULL,
 			       Agd_PutCurrentParsMyAgenda,Agenda);
   }
@@ -776,6 +777,8 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    static unsigned UniqueId = 0;
    char *Id;
    struct Agd_Event AgdEvent;
+   Lay_Highlight_t HighlightRow = AgdCod == Agenda->SelectedAgdCod ? Lay_HIGHLIGHT :
+								     Lay_DONT_HIGHLIGHT;
    Dat_StartEndTime_t StartEndTime;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
@@ -792,13 +795,13 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
 	 AgdEvent.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
          break;
      }
-   Agd_GetventDataByCod (&AgdEvent);
+   Agd_GetEventDataByCod (&AgdEvent);
 
    /***** Set anchor string *****/
    Frm_SetAnchorStr (AgdEvent.AgdCod,&Anchor);
 
    /***** Write first row of data of this event *****/
-   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
       /* Start/end date/time */
       UniqueId++;
@@ -846,7 +849,7 @@ static void Agd_ShowOneEvent (struct Agd_Agenda *Agenda,
    HTM_TR_End ();
 
    /***** Write second row of data of this event *****/
-   HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+   HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 switch (AgendaType)
@@ -899,7 +902,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct Agd_Agenda *Agenda,
       [PriPub_PUBLIC] = ActPrvEvtMyAgd,	// Public  ==> action to make private
      };
 
-   Agenda->AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
+   Agenda->AgdCod = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Icon to remove event *****/
    Ico_PutContextualIconToRemove (ActReqRemEvtMyAgd,NULL,
@@ -932,7 +935,7 @@ static void Agd_PutCurrentParsMyAgenda (const void *Agenda)
 			   ((struct Agd_Agenda *) Agenda)->HiddenVisiblEvents,
 			   ((struct Agd_Agenda *) Agenda)->SelectedOrder,
 			   ((struct Agd_Agenda *) Agenda)->ThisPage,
-			   ((struct Agd_Agenda *) Agenda)->AgdCodToEdit);
+			   ((struct Agd_Agenda *) Agenda)->AgdCod);
   }
 
 /* The following function is called
@@ -1080,7 +1083,7 @@ static void Agd_GetListEvents (struct Agd_Agenda *Agenda,
 /*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-static void Agd_GetventDataByCod (struct Agd_Event *AgdEvent)
+static void Agd_GetEventDataByCod (struct Agd_Event *AgdEvent)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1179,10 +1182,10 @@ void Agd_AskRemEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetventDataByCod (&AgdEvent);
+   Agd_GetEventDataByCod (&AgdEvent);
+   Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod;
 
    /***** Show question and button to remove event *****/
-   Agenda.AgdCodToEdit = AgdEvent.AgdCod;
    Ale_ShowAlertRemove (ActRemEvtMyAgd,NULL,
                         Agd_PutCurrentParsMyAgenda,&Agenda,
 			Txt_Do_you_really_want_to_remove_the_event_X,
@@ -1213,7 +1216,8 @@ void Agd_RemoveEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetventDataByCod (&AgdEvent);
+   Agd_GetEventDataByCod (&AgdEvent);
+   Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod;
 
    /***** Remove event *****/
    Agd_DB_RemoveEvent (&AgdEvent);
@@ -1255,7 +1259,8 @@ static void Agd_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetventDataByCod (&AgdEvent);
+   Agd_GetEventDataByCod (&AgdEvent);
+   Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod;
 
    /***** Unhide event *****/
    Agd_DB_HideOrUnhideEvent (AgdEvent.AgdCod,AgdEvent.UsrCod,HiddenOrVisible);
@@ -1284,7 +1289,8 @@ void Agd_MakeEventPrivate (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetventDataByCod (&AgdEvent);
+   Agd_GetEventDataByCod (&AgdEvent);
+   Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod;
 
    /***** Make event private *****/
    Agd_DB_MakeEventPrivate (&AgdEvent);
@@ -1313,7 +1319,8 @@ void Agd_MakeEventPublic (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetventDataByCod (&AgdEvent);
+   Agd_GetEventDataByCod (&AgdEvent);
+   Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod;
 
    /***** Make event public *****/
    Agd_DB_MakeEventPublic (&AgdEvent);
@@ -1332,15 +1339,20 @@ void Agd_ReqCreatOrEditEvent (void)
    extern const char *Txt_Event;
    extern const char *Txt_Location;
    extern const char *Txt_Description;
-   struct Agd_Agenda Agenda;
-   struct Agd_Event AgdEvent;
-   OldNew_OldNew_t OldNewEvent;
-   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   static Act_Action_t Actions[OldNew_NUM_OLD_NEW] =
+     {
+      [OldNew_OLD] = ActChgEvtMyAgd,
+      [OldNew_NEW] = ActNewEvtMyAgd,
+     };
    static Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME] =
      {
       [Dat_STR_TIME] = Dat_HMS_DO_NOT_SET,
       [Dat_END_TIME] = Dat_HMS_DO_NOT_SET
      };
+   struct Agd_Agenda Agenda;
+   struct Agd_Event AgdEvent;
+   OldNew_OldNew_t OldNewEvent;
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset agenda context *****/
    Agd_ResetAgenda (&Agenda);
@@ -1358,7 +1370,8 @@ void Agd_ReqCreatOrEditEvent (void)
      {
       case OldNew_OLD:
 	 /* Get data of the event from database */
-	 Agd_GetventDataByCod (&AgdEvent);
+	 Agd_GetEventDataByCod (&AgdEvent);
+         Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod;
 
 	 /* Get text of the event from database */
 	 Agd_DB_GetEventTxt (&AgdEvent,Txt);
@@ -1366,7 +1379,7 @@ void Agd_ReqCreatOrEditEvent (void)
       case OldNew_NEW:
       default:
 	 /* Initialize to empty event */
-	 AgdEvent.AgdCod = -1L;
+	 Agenda.SelectedAgdCod = Agenda.AgdCod = AgdEvent.AgdCod = -1L;
 	 AgdEvent.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
 	 AgdEvent.TimeUTC[Dat_END_TIME] = AgdEvent.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
 	 AgdEvent.TimeStatus = Dat_FUTURE;
@@ -1377,19 +1390,8 @@ void Agd_ReqCreatOrEditEvent (void)
      }
 
    /***** Begin form *****/
-   switch (OldNewEvent)
-     {
-      case OldNew_OLD:
-	 Frm_BeginForm (ActChgEvtMyAgd);
-	 Agenda.AgdCodToEdit = AgdEvent.AgdCod;
-	 break;
-      case OldNew_NEW:
-      default:
-	 Frm_BeginForm (ActNewEvtMyAgd);
-	 Agenda.AgdCodToEdit = -1L;
-	 break;
-     }
-   Agd_PutCurrentParsMyAgenda (&Agenda);
+   Frm_BeginForm (Actions[OldNewEvent]);
+      Agd_PutCurrentParsMyAgenda (&Agenda);
 
       /***** Begin box and table *****/
       Box_BoxTableBegin (AgdEvent.Title[0] ? AgdEvent.Title :

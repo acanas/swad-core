@@ -85,7 +85,8 @@ struct Agd_Agenda
    unsigned PrivatPublicEvents;
    unsigned HiddenVisiblEvents;
    Dat_StartEndTime_t SelectedOrder;
-   long AgdCodToEdit;	// Used as parameter in contextual links
+   long AgdCod;	// Current agenda event code, used as parameter in contextual links
+   long SelectedAgdCod;	// Selected agenda event code
    unsigned ThisPage;
   };
 

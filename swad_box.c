@@ -76,12 +76,12 @@ void Box_BoxTableBegin (const char *Title,
 
 void Box_BoxTableShadowBegin (const char *Title,
                               void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
-                              const char *HelpLink,
+                              const char *HelpLink,Lay_Highlight_t Highlight,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
    Box_BoxShadowBegin (Title,
                        FunctionToDrawContextualIcons,Args,
-                       HelpLink);
+                       HelpLink,Highlight);
       HTM_TABLE_BeginPadding (CellPadding);
   }
 
@@ -103,13 +103,23 @@ void Box_BoxBegin (const char *Title,
 
 void Box_BoxShadowBegin (const char *Title,
                          void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
-                         const char *HelpLink)
+                         const char *HelpLink,Lay_Highlight_t Highlight)
   {
    char *ClassFrame;
 
    /***** Begin box *****/
-   if (asprintf (&ClassFrame,"FRAME_SHADOW HIGHLIGHT_%s",The_GetSuffix ()) < 0)
-      Err_NotEnoughMemoryExit ();
+   switch (Highlight)
+     {
+      case Lay_HIGHLIGHT:
+	 if (asprintf (&ClassFrame,"FRAME_SHADOW HIGHLIGHT_%s",The_GetSuffix ()) < 0)
+	    Err_NotEnoughMemoryExit ();
+         break;
+      case Lay_DONT_HIGHLIGHT:
+      default:
+	 if (asprintf (&ClassFrame,"FRAME_SHADOW") < 0)
+	    Err_NotEnoughMemoryExit ();
+         break;
+     }
    Box_BoxInternalBegin (Title,
                          FunctionToDrawContextualIcons,Args,
 			 HelpLink,Box_NOT_CLOSABLE,
