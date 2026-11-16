@@ -493,7 +493,7 @@ static void Svy_ShowOneSvy (struct Svy_Surveys *Svys,
 	       MyAllGrps = Grp_GetParMyAllGrps ();
 	       Grp_PutParMyAllGrps (&MyAllGrps);
 	       Pag_PutParPagNum (Pag_SURVEYS,Svys->ThisPage);
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneSvy),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneSvy),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
 					HidVis_TitleClass[Svys->Svy.Status.Hidden],
 					The_GetSuffix ());
@@ -2556,7 +2556,7 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Svys)
    unsigned NumQsts;
    unsigned NumQst;
    struct Svy_Question SvyQst;
-   Lay_Highlight_t HighlightQst;
+   Lay_Highlight_t HighlightRow;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
    bool Editing = (Gbl.Action.Act == ActEdiOneSvy    ||
 	           Gbl.Action.Act == ActEdiOneSvyQst ||
@@ -2608,10 +2608,10 @@ static void Svy_ListSvyQuestions (struct Svy_Surveys *Svys)
 
 	       /* Initialize context */
 	       Svys->QstCod = SvyQst.QstCod;
-	       HighlightQst = Svys->QstCod == Svys->SelectedQstCod ? Lay_HIGHLIGHT :
+	       HighlightRow = Svys->QstCod == Svys->SelectedQstCod ? Lay_HIGHLIGHT :
 								     Lay_DONT_HIGHLIGHT;
 
-	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightQst));
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
 		  if (Svys->Svy.Status.ICanEdit == Usr_CAN)
 		    {

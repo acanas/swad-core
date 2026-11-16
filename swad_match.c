@@ -359,7 +359,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    unsigned NumMatch;
    unsigned UniqueId;
    struct Mch_Match Match;
-   Lay_Highlight_t HighlightMch;
+   Lay_Highlight_t HighlightRow;
    char *Anchor;
    Usr_Can_t ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
@@ -383,7 +383,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
 	   {
-	    HighlightMch = Match.MchCod == Games->MchCod.Sel ? Lay_HIGHLIGHT :
+	    HighlightRow = Match.MchCod == Games->MchCod.Sel ? Lay_HIGHLIGHT :
 							       Lay_DONT_HIGHLIGHT;
 
 	    /***** Build anchor string *****/
@@ -391,7 +391,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this match with match data ****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightMch));
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
 	       /* Icons */
 	       if (ICanEditMatches == Usr_CAN)
@@ -415,7 +415,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	    HTM_TR_End ();
 
 	    /***** Second row: match author ****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightMch));
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
 	    HTM_TR_End ();
 
@@ -426,7 +426,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       /***** Check if I can edit this match *****/
 	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
 		 {
-	          HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightMch));
+	          HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 		     HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
 			Mch_PutFormMatch (&Match);	// Form to edit this match
 		     HTM_TD_End ();
@@ -2594,7 +2594,7 @@ static void Mch_PutCheckboxResult (const struct Mch_Match *Match)
 	 ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
 
 	 /***** Put icon with link *****/
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (ActChgVisResMchQst),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActChgVisResMchQst),NULL,
 	                          "class=\"BT_LINK ICO_HIGHLIGHT\"");
 	    HTM_TxtF ("<i class=\"%s\"></i>",
 		      Class[Match->Status.Show.QstResults]);
@@ -2640,12 +2640,12 @@ static void Mch_PutIfAnswered (const struct Mch_Match *Match,
 	{
 	 Frm_BeginForm (ActSeeMchAnsQstStd);
 	    ParCod_PutPar (ParCod_Mch,Match->MchCod);	// Current match being played
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMchAnsQstStd),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeMchAnsQstStd),NULL,
 				     "class=\"BT_LINK\""
 				     " onmousedown=\"this.form.submit();return false;\"");
 	       HTM_Txt ("<i class=\"fas fa-check-circle\"></i>");
 	       HTM_NBSP ();
-	       HTM_Txt (Act_GetActionText (ActSeeMchAnsQstStd));
+	       HTM_Txt (Act_GetActTxt (ActSeeMchAnsQstStd));
 	    HTM_BUTTON_End ();
 	 Frm_EndForm ();
 	}

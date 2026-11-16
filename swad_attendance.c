@@ -483,7 +483,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
       /* Attendance event title */
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_ARTICLE_Begin (Anchor);
-	    Att_PutLinkEvent (&Events->Event,Act_GetActionText (ActSeeOneAtt),
+	    Att_PutLinkEvent (&Events->Event,Act_GetActTxt (ActSeeOneAtt),
 			      Events->Event.Title);
 	 HTM_ARTICLE_End ();
       HTM_TD_End ();

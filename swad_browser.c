@@ -2075,7 +2075,9 @@ Exi_Exist_t Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrow
 
    /***** Get file code *****/
    Brw_ResetFileMetadata (File);	// Paths are not reset
-   if ((File->FilCod = FileBrowser->FilCod = ParCod_GetPar (ParCod_Fil)) <= 0)
+   if ((FileBrowser->SelectedFilCod =
+        FileBrowser->FilCod         =
+        File->FilCod                = ParCod_GetPar (ParCod_Fil)) <= 0)
       return Exi_DOES_NOT_EXIST;
 
    /***** Get file metadata *****/
@@ -2136,7 +2138,8 @@ Exi_Exist_t Brw_GetParFilCodAndGetFileMetadata (struct Brw_FileBrowser *FileBrow
 void Brw_InitializeFileBrowser (struct Brw_FileBrowser *FileBrowser)
   {
    /***** Initialize parameter file code *****/
-   FileBrowser->FilCod = -1L;
+   FileBrowser->SelectedFilCod =
+   FileBrowser->FilCod         = -1L;
 
    /***** Initialize hidden levels *****/
    if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
@@ -3037,8 +3040,8 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 	 /***** Show user's name *****/
 	 HTM_BR ();
 
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[UsrDat->Roles.InThisCrs]),NULL,
-				  "class=\"BT_LINK\"");
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (NextAction[UsrDat->Roles.InThisCrs]),
+				  NULL,"class=\"BT_LINK\"");
 	    HTM_Txt (UsrDat->Surname1);
 	    if (UsrDat->Surname2[0])
 	      {
@@ -3047,8 +3050,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 	      }
 	    if (UsrDat->FrstName[0])
 	      {
-	       HTM_Comma ();
-	       HTM_SP ();
+	       HTM_Comma (); HTM_SP ();
 	       HTM_Txt (UsrDat->FrstName);
 	      }
 	 HTM_BUTTON_End ();
@@ -3058,8 +3060,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct Usr_Data *UsrDat)
 	   {
 	    HTM_BR ();
 	    HTM_A_Begin ("href=\"mailto:%s\" target=\"_blank\""
-			 " class=\"MSG_AUT_%s\"",
-			 UsrDat->Email,The_GetSuffix ());
+			 " class=\"MSG_AUT_%s\"",UsrDat->Email,The_GetSuffix ());
 	       HTM_Txt (UsrDat->Email);
 	    HTM_A_End ();
 	   }
@@ -4027,6 +4028,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
    HidVis_HiddenOrVisible_t ThisOrAncestorHiddenOrVisible = HidVis_VISIBL;
    PriPub_PrivateOrPublic_t RowPublicOrPrivate;
    Brw_BelongToClipboard_t RowBelongToClipboard = Brw_DONT_BELONG_TO_CLIPBOARD;
+   Lay_Highlight_t HighlightRow;
    bool IsOld = true;
    char FileBrowserId[32];
    char TxtStyle[64];
@@ -4034,8 +4036,15 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
    char FolderName[NAME_MAX + 1];
    __attribute__((unused)) Exi_Exist_t FileExists;
 
-   /***** Initializations *****/
-   snprintf (FileBrowserId,sizeof (FileBrowserId),"fil_brw_%u",FileBrowser->Id);
+   /***** Add entry to the table of files/folders *****/
+   if (FileOrFolder->FilCod <= 0)	// No entry for this file in database table of files
+     {
+      FileOrFolder->Metadata.PublisherCod    = -1L;
+      FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
+      FileOrFolder->Metadata.License         = Brw_LICENSE_DEFAULT;
+      FileOrFolder->FilCod         	     = Brw_DB_AddFile (FileBrowser->Zone,
+							       FileOrFolder);
+     }
 
    /***** Is this row hidden or visible? *****/
    if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
@@ -4046,14 +4055,15 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       ThisHiddenOrVisible = Brw_CheckIfFileOrFolderIsHidden (FileBrowser->Zone,
 							     FileOrFolder->Path.InZone);
 
-      if (ThisHiddenOrVisible == HidVis_HIDDEN &&
-	  (Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |
-					      Brw_IS_SEE_MRK)) &&
-	  FileOrFolder->Level)	// Don't return on level 0
-         return HidVis_HIDDEN;
-
-      if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_DOC |
-					      Brw_IS_ADM_MRK)))
+      if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_SEE_DOC |		// Showing documents...
+					      Brw_IS_SEE_MRK)))		// ...or marks
+	{
+	 if (ThisHiddenOrVisible == HidVis_HIDDEN &&
+	     FileOrFolder->Level)	// Don't return on level 0
+	    return HidVis_HIDDEN;
+        }
+      else if ((Brw_ZoneType[FileBrowser->Zone] & (Brw_IS_ADM_DOC |	// Editing documents...
+						   Brw_IS_ADM_MRK)))	// ...or marks
         {
 	 if (FileOrFolder->Type == Brw_IS_FOLDER)
 	    FileBrowser->HiddenLevels[FileOrFolder->Level] = ThisHiddenOrVisible;
@@ -4063,22 +4073,12 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
                ThisOrAncestorHiddenOrVisible = Brw_CheckIfAnyHigherLevelIsHidden (FileBrowser,
         									  FileOrFolder->Level);
 	       break;
-	    case HidVis_HIDDEN:		// this row is marked as hidden
+	    case HidVis_HIDDEN:	// this row is marked as hidden
 	    default:
                ThisOrAncestorHiddenOrVisible = HidVis_HIDDEN;
 	       break;
 	   }
         }
-     }
-
-   if (FileOrFolder->FilCod <= 0)	// No entry for this file in database table of files
-     {
-      /* Add entry to the table of files/folders */
-      FileOrFolder->Metadata.PublisherCod    = -1L;
-      FileOrFolder->Metadata.PrivateOrPublic = PriPub_PRIVAT;
-      FileOrFolder->Metadata.License         = Brw_LICENSE_DEFAULT;
-      FileOrFolder->FilCod         	     = Brw_DB_AddFile (FileBrowser->Zone,
-							       FileOrFolder);
      }
 
    /***** Is this row public or private? *****/
@@ -4123,6 +4123,10 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       // and they are overwritten on the next row with level == 1 (next assignment)
      }
 
+   /***** Is this the file selected? *****/
+   HighlightRow = FileOrFolder->FilCod == FileBrowser->SelectedFilCod ? Lay_HIGHLIGHT :
+									Lay_DONT_HIGHLIGHT;
+
    /***** Begin this row *****/
    if (asprintf (&Anchor,"fil_brw_%u_%s",FileBrowser->Id,RowId) < 0)
       Err_NotEnoughMemoryExit ();
@@ -4133,11 +4137,11 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	   {
 	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" style=\"display:none;\" class=\"%s\"",
-			     Anchor,The_GetColorRows ());
+			     Anchor,The_GetColorRowsHighlight (HighlightRow));
 	       break;
 	    case ConExp_EXPANDED:
 	       HTM_TR_Begin ("id=\"%s\" class=\"%s\"",
-			     Anchor,The_GetColorRows ());
+			     Anchor,The_GetColorRowsHighlight (HighlightRow));
 	       break;
 	   }
 	 break;
@@ -4147,11 +4151,11 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\""
 			     " style=\"display:none;\" class=\"%s\"",
-			     Anchor,The_GetColorRows ());
+			     Anchor,The_GetColorRowsHighlight (HighlightRow));
 	       break;
 	    case ConExp_EXPANDED:
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"contracted\" class=\"%s\"",
-			     Anchor,The_GetColorRows ());
+			     Anchor,The_GetColorRowsHighlight (HighlightRow));
 	       break;
 	   }
 	 break;
@@ -4161,11 +4165,11 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 	    case ConExp_CONTRTED:	// This row is inside a contracted subtree
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\""
 			     " style=\"display:none;\" class=\"%s\"",
-			     Anchor,The_GetColorRows ());
+			     Anchor,The_GetColorRowsHighlight (HighlightRow));
 	       break;
 	    case ConExp_EXPANDED:
 	       HTM_TR_Begin ("id=\"%s\" data-folder=\"expanded\" class=\"%s\"",
-			     Anchor,The_GetColorRows ());
+			     Anchor,The_GetColorRowsHighlight (HighlightRow));
 	       break;
 	   }
 	 break;
@@ -4204,6 +4208,9 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
       HTM_TABLE_Begin (NULL);
 	 HTM_TR_Begin (NULL);
 
+	    /* Initializations */
+	    snprintf (FileBrowserId,sizeof (FileBrowserId),"fil_brw_%u",FileBrowser->Id);
+
 	    /* Indent depending on level */
 	    if (FileOrFolder->Level)
 	       Brw_IndentAndWriteIconExpandContract (FileBrowser,
@@ -4215,7 +4222,7 @@ static HidVis_HiddenOrVisible_t Brw_WriteRowFileBrowser (struct Brw_FileBrowser 
 						    Brw_IS_ADM_MRK)))
 	       Brw_PutIconHideUnhide (FileBrowser,ThisHiddenOrVisible);
 
-	    /***** File or folder icon *****/
+	    /* File or folder icon */
 	    switch (FileOrFolder->Type)
 	      {
 	       case Brw_IS_FILE:
@@ -4950,7 +4957,7 @@ static void Brw_WriteFileName (struct Brw_FileBrowser *FileBrowser,
 	       Brw_PutImplicitParsFileBrowser (FileBrowser);
 
 	       /* Link to the form and to the file */
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActDowFile[FileBrowser->Zone]),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (Brw_ActDowFile[FileBrowser->Zone]),NULL,
 					"class=\"LM BT_LINK FILENAME\"");
 		  HTM_Txt (FileNameToShow);
 	       HTM_BUTTON_End ();
@@ -8316,7 +8323,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParsFileBrowser (FileBrowser);
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[FileBrowser->Zone]),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (Brw_ActSeeMyMrk[FileBrowser->Zone]),NULL,
 	                          "class=\"BT_LINK ICO_HIGHLIGHT FILENAME_BIG_%s\"",
 	                          The_GetSuffix ());
 
@@ -8332,7 +8339,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
             HTM_Txt (FileNameToShow);
 	    HTM_NBSP ();
 	    Ico_PutIcon ("list-alt.svg",Ico_UNCHANGED,
-			 Act_GetActionText (Brw_ActSeeMyMrk[FileBrowser->Zone]),
+			 Act_GetActTxt (Brw_ActSeeMyMrk[FileBrowser->Zone]),
 			 "ICO40x40");
 
 	 /* End link */
@@ -8380,7 +8387,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	 Brw_PutImplicitParsFileBrowser (FileBrowser);
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Brw_ActSeeMyMrk[FileBrowser->Zone]),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (Brw_ActSeeMyMrk[FileBrowser->Zone]),NULL,
 	                          "class=\"BT_LINK\"");
 
 	    /* Name of the file of marks */
@@ -9634,7 +9641,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 */
    /***** Get file code (row[0]) and metadata *****/
    Brw_ResetFileMetadata (&File);	// Paths are not reset
-   File.FilCod = FileBrowser.FilCod = Str_ConvertStrCodToLongCod (row[0]);
+   FileBrowser.FilCod = File.FilCod = Str_ConvertStrCodToLongCod (row[0]);
    FileExistsInDB = Brw_GetFileMetadataByCod (&ZoneDB,&File);
    if (FileExistsInDB == Exi_DOES_NOT_EXIST)
       return;

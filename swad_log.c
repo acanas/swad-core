@@ -287,7 +287,7 @@ void Log_GetAndShowLastClicks (void)
 	      }
 
 	    HTM_TD_Begin ("class=\"LC_ACT %s_%s\"",ClassRow,The_GetSuffix ());
-	       HTM_Txt (Act_GetActionText (Action));			// Action
+	       HTM_Txt (Act_GetActTxt (Action));			// Action
 	    HTM_TD_End ();
 
 	 HTM_TR_End ();

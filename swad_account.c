@@ -117,7 +117,7 @@ void Acc_PutLinkToCreateAccount (void)
    Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
 				  NULL,NULL,
 				  "at.svg",Ico_BLACK,
-				  Act_GetActionText (ActCreUsrAcc),NULL);
+				  Act_GetActTxt (ActCreUsrAcc),NULL);
   }
 
 /*****************************************************************************/
@@ -364,7 +364,7 @@ static void Acc_ShowFormRequestNewAccountWithPars (const char *NewNickWithoutArr
    Frm_BeginForm (ActCreUsrAcc);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Act_GetActionText (ActCreUsrAcc),NULL,NULL,
+      Box_BoxTableBegin (Act_GetActTxt (ActCreUsrAcc),NULL,NULL,
 			 Hlp_PROFILE_SignUp,Box_NOT_CLOSABLE,2);
 
 	 /***** Nickname *****/

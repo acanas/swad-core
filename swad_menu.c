@@ -273,7 +273,7 @@ void Mnu_WriteMenuThisTab (void)
 		  Frm_BeginForm (Action);
 
 		     /***** Begin link *****/
-		     HTM_BUTTON_Submit_Begin (Act_GetActionText (Action),NULL,
+		     HTM_BUTTON_Submit_Begin (Act_GetActTxt (Action),NULL,
 					      "class=\"BT_LINK\"");
 
 			/***** Icon and text *****/

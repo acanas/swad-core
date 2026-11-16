@@ -261,7 +261,7 @@ void Frm_BeginFormTable (Act_Action_t NextAction,const char *Anchor,
   {
    /***** Begin fieldset *****/
    HTM_FIELDSET_Begin (NULL);
-      HTM_LEGEND (Act_GetActionText (NextAction));
+      HTM_LEGEND (Act_GetActTxt (NextAction));
 
       /***** Begin form *****/
       Frm_BeginFormAnchor (NextAction,Anchor);

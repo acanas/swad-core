@@ -427,7 +427,7 @@ void Rsc_WriteLinkName (const struct Rsc_Link *Link,Frm_PutForm_t PutFormToGo)
 	   }
 
 	 /* Begin link */
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (NextAction),NULL,
 				  "class=\"LM BT_LINK RSC_LNK_%s\"",
 				  The_GetSuffix ());
 

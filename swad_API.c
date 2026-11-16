@@ -5075,7 +5075,7 @@ int swad__getFile (struct soap *soap,
 
    /***** Get file metadata *****/
    Brw_ResetFileMetadata (&File);	// Paths are not reset
-   File.FilCod = FileBrowser.FilCod = (long) fileCode;
+   FileBrowser.SelectedFilCod = FileBrowser.FilCod = File.FilCod = (long) fileCode;
    if (File.FilCod <= 0)
       return soap_sender_fault (soap,
 	                        "Bad file code",

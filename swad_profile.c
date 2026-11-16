@@ -812,7 +812,7 @@ static void Prf_PutLinkCalculateFigures (const char *EncryptedUsrCod)
       Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
 
       /***** Put icon to refresh *****/
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActCalFig),NULL,
+      HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActCalFig),NULL,
 			       "class=\"BT_LINK FORM_OUT_%s BOLD\"",
 			       The_GetSuffix ());
 	 Ico_PutIconTextUpdate (Txt_Calculate);
@@ -1416,7 +1416,7 @@ static void Prf_ShowUsrInRanking (struct Usr_Data *UsrDat,unsigned Rank,
 	{
 	 Frm_BeginForm (ActSeeOthPubPrf);
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOthPubPrf),NULL,
 				     "class=\"LM BT_LINK\"");
 	       Usr_WriteFirstNameBRSurnames (UsrDat);
 	    HTM_BUTTON_End ();

@@ -363,7 +363,7 @@ void Fol_ShowFollowingAndFollowers (const struct Usr_Data *UsrDat)
 		     Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 		     HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,
 				      Form[IAmFollowerOfUsr].Icon,
-				      Act_GetActionText (Form[IAmFollowerOfUsr].NextAction),
+				      Act_GetActTxt (Form[IAmFollowerOfUsr].NextAction),
 				      "class=\"ICO_HIGHLIGHT ICO40x40\"");
 		  Frm_EndForm ();
 		 }
@@ -625,7 +625,7 @@ static void Fol_ShowFollowedOrFollower (struct Usr_Data *UsrDat)
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"LT FOLLOW_TXT_NAME DAT_%s\"",	// Limited width
 			      The_GetSuffix ());
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),NULL,
+		  HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOthPubPrf),NULL,
 					   "class=\"BT_LINK LT\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();
@@ -691,7 +691,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct Usr_Data *UsrDat)
 	    Frm_BeginForm (ActSeeOthPubPrf);
 	       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 	       HTM_DIV_Begin ("class=\"CON_NAME_FOLLOW CON_CRS LT\"");	// Limited width
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOthPubPrf),NULL,
+		  HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOthPubPrf),NULL,
 		                           "class=\"LT BT_LINK\"");
 		     Usr_WriteFirstNameBRSurnames (UsrDat);
 		  HTM_BUTTON_End ();
@@ -749,7 +749,7 @@ static void Fol_PutIconToFollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_
    Frm_BeginForm (ActFolUsr);
       Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-plus.svg",
-                       Act_GetActionText (ActFolUsr),
+                       Act_GetActTxt (ActFolUsr),
                        "class=\"FOLLOW_TXT_ICO ICO16x16 ICO_%s_%s ICO_HIGHLIGHT\"",
                        Ico_GetPreffix (Ico_BLACK),The_GetSuffix ());
    Frm_EndForm ();
@@ -764,7 +764,7 @@ static void Fol_PutIconToUnfollow (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTE
    Frm_BeginForm (ActUnfUsr);
       Usr_PutParUsrCodEncrypted (EncryptedUsrCod);
       HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"user-check.svg",
-		       Act_GetActionText (ActUnfUsr),
+		       Act_GetActTxt (ActUnfUsr),
 		       "class=\"FOLLOW_TXT_ICO ICO_HIGHLIGHT ICO16x16\"");
    Frm_EndForm ();
   }

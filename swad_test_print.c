@@ -642,7 +642,7 @@ static void TstPrn_PutFormToSelectUsrsToViewUsrsPrints (__attribute__((unused)) 
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeUsrTstResCrs,
 				     NULL,NULL,
-				     Act_GetActionText (ActSeeUsrTstResCrs),
+				     Act_GetActTxt (ActSeeUsrTstResCrs),
 				     Hlp_ASSESSMENT_Tests_results,
 				     Btn_VIEW_RESULTS,
 				     Frm_PUT_FORM);	// Put form with date range

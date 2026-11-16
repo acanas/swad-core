@@ -271,7 +271,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),NULL,
+      HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActLstCon),NULL,
 			       "class=\"BT_LINK\"");
 
 	 /* Write total number of sessions */
@@ -402,7 +402,7 @@ void Con_ShowConnectedUsrsBelongingToThisCrs (void)
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
    Frm_BeginForm (ActLstCon);
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActLstCon),NULL,
+      HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActLstCon),NULL,
 			       "class=\"BT_LINK\"");
 	 Str_Copy (CourseName,Gbl.Hie.Node[Hie_CRS].ShrtName,sizeof (CourseName) - 1);
 	 Con_GetNumConnectedWithARole (Hie_CRS,Rol_UNK,&Usrs);
@@ -487,7 +487,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToThisCrsOnRightColumn (Rol_R
 	       Frm_BeginForm (ActLstCon);
 		  Sco_PutParScope ("ScopeCon",Hie_CRS);
 		  HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,"ellipsis-h.svg",
-		                   Act_GetActionText (ActLstCon),
+		                   Act_GetActTxt (ActLstCon),
 				   "class=\"ICO16x16 ICO_HIGHLIGHT ICO_BLACK_%s\"",
 				   The_GetSuffix ());
 	       Frm_EndForm ();
@@ -682,7 +682,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role,unsigned NumU
 	    Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 
 	    HTM_DIV_Begin ("class=\"CON_NAME_NARROW\"");	// Limited width
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction[Role]),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (NextAction[Role]),NULL,
 	                                "class=\"LT BT_LINK\"");
 		  Usr_WriteFirstNameBRSurnames (UsrDat);
 	       HTM_BUTTON_End ();

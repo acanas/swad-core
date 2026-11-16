@@ -462,7 +462,7 @@ void Ico_PutDivIcon (const char *DivClass,
 
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction)
   {
-   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActionText (NextAction),
+   HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActTxt (NextAction),
 		    "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
 		    Ico_GetPreffix (Color),The_GetSuffix ());
   }

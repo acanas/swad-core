@@ -812,7 +812,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    unsigned NumSession;
    unsigned UniqueId;
    struct ExaSes_Session Session;
-   Lay_Highlight_t HighlightSes;
+   Lay_Highlight_t HighlightRow;
    char *Anchor;
    unsigned NumPrints;
    Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
@@ -839,7 +839,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	   {
-	    HighlightSes = Session.SesCod == Exams->SesCod.Sel ? Lay_HIGHLIGHT :
+	    HighlightRow = Session.SesCod == Exams->SesCod.Sel ? Lay_HIGHLIGHT :
 								 Lay_DONT_HIGHLIGHT;
 
 	    /***** Build anchor string *****/
@@ -849,7 +849,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this session ****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSes));
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
 	       /* Icons */
 	       if (ICanEditSessions == Usr_CAN)
@@ -876,7 +876,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	    HTM_TR_End ();
 
 	    /***** Second row: session author *****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSes));
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
 	    HTM_TR_End ();
 
@@ -885,7 +885,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		PutFormSession == Frm_PUT_FORM &&	// Editing...
 		Session.SesCod == Exams->SesCod.Sel)	// ...this session
 	      {
-	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSes));
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 		  HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
 		     ExaSes_PutFormSession (&Session,ICanChangeModality);
 		  HTM_TD_End ();
@@ -1104,7 +1104,7 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 		  case Usr_CAN:
 		     Frm_BeginForm (ActSeeExaPrn);
 			Exa_PutPars (Exams);
-			HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeExaPrn),NULL,
+			HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeExaPrn),NULL,
 						 "class=\"LT BT_LINK %s_%s\"",
 						 HidVis_TitleClass[Session->Hidden],
 						 The_GetSuffix ());
@@ -1174,7 +1174,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
       Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod.Par);
 
       /***** Link to view attendance event *****/
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExaSes),NULL,
+      HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneExaSes),NULL,
 			       "class=\"LT BT_LINK %s_%s\"",
 			       HidVis_TitleClass[Session->Hidden],
 			       The_GetSuffix ());

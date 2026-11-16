@@ -1824,7 +1824,7 @@ static void For_WriteLinkToForum (const struct For_Forums *Forums,
 			      -1L,
 			      -1L);
 
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (For_ActionsSeeFor[Forum->Type]),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (For_ActionsSeeFor[Forum->Type]),NULL,
 				  NumThrsWithNewPosts ? "class=\"BT_LINK FORM_IN_%s BOLD\"" :
 	                                                "class=\"BT_LINK FORM_IN_%s\"",
 	                          The_GetSuffix ());

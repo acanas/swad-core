@@ -574,7 +574,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	 HTM_ARTICLE_Begin (Anchor);
 	    Frm_BeginForm (ActSeeOneAsg);
 	       Asg_PutPars (Assignments);
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneAsg),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneAsg),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
 					HidVis_TitleClass[Assignments->Asg.Hidden],
 					The_GetSuffix ());

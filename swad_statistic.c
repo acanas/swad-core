@@ -654,7 +654,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 			      Action == Stats->NumAction ? HTM_SELECTED :
 							   HTM_NO_ATTR,
 			      "%04u: %s",
-			      (unsigned) Action,Act_GetActionText (Action));
+			      (unsigned) Action,Act_GetActTxt (Action));
 	       else
 		  HTM_OPTION (HTM_Type_UNSIGNED,&ActionUnsigned,
 			      Action == Stats->NumAction ? HTM_SELECTED :
@@ -662,7 +662,7 @@ static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats)
 			      "%04u: %s &gt; %s &gt; %s",
 			      (unsigned) Action,Tab_GetTxt (Tab),
 			      Act_GetTitleAction (Action),
-			      Act_GetActionText (Action));
+			      Act_GetActTxt (Action));
 	      }
 	 HTM_SELECT_End ();
       HTM_TD_End ();
@@ -1244,7 +1244,7 @@ static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
 	    Err_WrongActionExit ();
 	 HTM_TD_Begin ("class=\"LT LOG_%s\"",The_GetSuffix ());
 	    if (ActCod >= 0)
-	       HTM_Txt (Act_GetActionText (Act_GetActionFromActCod (ActCod)));
+	       HTM_Txt (Act_GetActTxt (Act_GetActionFromActCod (ActCod)));
 	    else
 	       HTM_Question ();
 	    HTM_NBSP ();
@@ -2692,7 +2692,7 @@ static void Sta_ShowNumHitsPerAction (const struct Sta_Stats *Stats,
 
 	 HTM_TD_Begin ("class=\"RT LOG_%s\"",The_GetSuffix ());
 	    if (ActCod >= 0)
-	       HTM_Txt (Act_GetActionText (Act_GetActionFromActCod (ActCod)));
+	       HTM_Txt (Act_GetActTxt (Act_GetActionFromActCod (ActCod)));
 	    else
 	       HTM_Question ();
 	    HTM_NBSP ();

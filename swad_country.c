@@ -832,7 +832,7 @@ void Cty_WriteCtyName (long HieCod)
 	 /***** Write country name with link to country information *****/
 	 Frm_BeginForm (ActSeeCtyInf);
 	    ParCod_PutPar (ParCod_Cty,HieCod);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCtyInf),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeCtyInf),NULL,
 				     "class=\"BT_LINK\"");
 	       HTM_Txt (CtyName);
 	    HTM_BUTTON_End ();

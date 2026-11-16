@@ -247,9 +247,9 @@ const char *The_GetColorRows (void)
    return The_GetColorRowsLevel (0);
   }
 
-const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightNode)
+const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightRow)
   {
-   return The_ClassColorRows[HighlightNode][The_RowEvenOdd[0]][Gbl.Prefs.Theme];
+   return The_ClassColorRows[HighlightRow][The_RowEvenOdd[0]][Gbl.Prefs.Theme];
   }
 
 const char *The_GetColorRowsLevel (unsigned Level)

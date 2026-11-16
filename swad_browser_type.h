@@ -265,7 +265,8 @@ struct Brw_FileBrowser
       char AboveRootFolder[PATH_MAX + 1];
       char WithRootFolder[PATH_MAX + 1];
      } PathRootFolderInServ;
-   long FilCod;			// Used only as hidden parameter in forms
+   long FilCod;			// Current file, used as hidden parameter in forms
+   long SelectedFilCod;		// Selected file
    struct
      {
       struct Brw_File File;

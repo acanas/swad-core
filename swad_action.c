@@ -201,7 +201,7 @@ const char *Act_GetTitleAction (Act_Action_t Action)
 /********************* Get text for action from database *********************/
 /*****************************************************************************/
 
-const char *Act_GetActionText (Act_Action_t Action)
+const char *Act_GetActTxt (Act_Action_t Action)
   {
    extern const char *Txt_Actions[ActLst_NUM_ACTIONS];
 

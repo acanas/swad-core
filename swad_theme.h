@@ -70,7 +70,7 @@ The_Theme_t The_GetThemeFromStr (const char *Str);
 const char *The_GetSuffix (void);
 
 const char *The_GetColorRows (void);
-const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightNode);
+const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightRow);
 const char *The_GetColorRowsLevel (unsigned Level);
 
 void The_ResetRowColor (void);

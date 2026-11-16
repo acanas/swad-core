@@ -524,7 +524,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 HTM_ARTICLE_Begin (Anchor);
 	    Frm_BeginForm (ActSeeOneExa);
 	       Exa_PutPars (Exams);
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneExa),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
 					HidVis_TitleClass[Exams->Exam.Hidden],
 					The_GetSuffix ());
@@ -553,7 +553,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 
 	 Frm_BeginForm (ActSeeOneExa);
 	    Exa_PutPars (Exams);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneExa),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneExa),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Exams->Exam.Hidden],
 				     The_GetSuffix ());

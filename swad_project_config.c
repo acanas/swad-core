@@ -118,7 +118,7 @@ void PrjCfg_ShowFormConfig (void)
       /***** Projects are editable by non-editing teachers? *****/
       Frm_BeginForm (ActChgNETCanCrePrj);
 	 HTM_FIELDSET_Begin (NULL);
-	    HTM_LEGEND (Act_GetActionText (ActChgPrj));
+	    HTM_LEGEND (Act_GetActTxt (ActChgPrj));
 	    PrjCfg_ShowFormNETCanCreate (&Prjs.Config);
 	 HTM_FIELDSET_End ();
       Frm_EndForm ();

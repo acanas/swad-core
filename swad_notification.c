@@ -1768,7 +1768,7 @@ void Ntf_WriteNumberOfNewNtfs (void)
    Frm_BeginForm (ActSeeNewNtf);
 
       /***** Begin link *****/
-      HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeNewNtf),NULL,
+      HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeNewNtf),NULL,
 			       "class=\"BT_LINK\"");
 
 	 /***** Number of unseen notifications *****/

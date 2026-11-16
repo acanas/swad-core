@@ -592,7 +592,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 HTM_ARTICLE_Begin (Anchor);
 	    Frm_BeginForm (ActSeeOneGam);
 	       Gam_PutPars (Games);
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneGam),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
 					HidVis_TitleClass[Games->Game.Hidden],
 					The_GetSuffix ());
@@ -621,7 +621,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 
 	 Frm_BeginForm (ActSeeOneGam);
 	    Gam_PutPars (Games);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOneGam),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneGam),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Games->Game.Hidden],
 				     The_GetSuffix ());
@@ -1692,7 +1692,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
    Exi_Exist_t QstExists;
-   Lay_Highlight_t HighlightQst;
+   Lay_Highlight_t HighlightRow;
    char *Anchor = NULL;
 
    /***** Trivial check *****/
@@ -1740,12 +1740,12 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    /***** Build anchor string *****/
 	    Frm_SetAnchorStr (Qst.QstCod,&Anchor);
 
-	    /***** Is this the node selected? *****/
-	    HighlightQst = Games->QstInd == Games->SelectedQstInd ? Lay_HIGHLIGHT :
+	    /***** Is this the question selected? *****/
+	    HighlightRow = Games->QstInd == Games->SelectedQstInd ? Lay_HIGHLIGHT :
 							            Lay_DONT_HIGHLIGHT;
 
 	    /***** Begin row *****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightQst));
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
 	       /***** Icons *****/
 	       HTM_TD_Begin ("class=\"BT\"");

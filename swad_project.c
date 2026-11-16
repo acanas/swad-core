@@ -1718,7 +1718,7 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
 	       Frm_BeginForm (ActSeeOnePrj);
 		  Prj_PutCurrentPars (Prjs);
 		  // HTM_BUTTON_Submit_Begin (Act_GetActionText (NextAction),NULL,
-		  HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeOnePrj),NULL,
+		  HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOnePrj),NULL,
 					   "class=\"LT BT_LINK %s_%s\"",
 					   HidVis_TitleClass[Prjs->Prj.Hidden],
 					   The_GetSuffix ());
@@ -3843,7 +3843,7 @@ static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
 
       /***** 2. Project data *****/
       HTM_FIELDSET_Begin (NULL);
-	 HTM_LEGEND (Act_GetActionText (NextAction));
+	 HTM_LEGEND (Act_GetActTxt (NextAction));
 
 	 /* Begin data form */
 	 Frm_BeginForm (NextAction);

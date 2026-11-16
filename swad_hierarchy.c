@@ -1765,7 +1765,7 @@ static void Hie_WriteRowMyHierarchy (Hie_Level_t HieLvl,
 				  Lay_HORIZONTAL_LINE_AT_RIGHT);
       Frm_BeginForm (ActMyCrs);
 	 ParCod_PutPar (Hie_ParCod[HieLvl],Hie[HieLvl].HieCod);
-	 HTM_BUTTON_Submit_Begin (Act_GetActionText (Hie_ActionsSeeInfo[HieLvl]),NULL,
+	 HTM_BUTTON_Submit_Begin (Act_GetActTxt (Hie_ActionsSeeInfo[HieLvl]),NULL,
 				  "class=\"BT_LINK FORM_IN_%s\"",
 				  The_GetSuffix ());
 

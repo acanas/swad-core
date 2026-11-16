@@ -761,7 +761,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	 if (TabTxt)
 	    fprintf (Rep_File,"%s &gt; ",TabTxt);
 
-	 fprintf (Rep_File,"%s",Act_GetActionText (Action));
+	 fprintf (Rep_File,"%s",Act_GetActTxt (Action));
 	}
       else
 	 fprintf (Rep_File,"?");

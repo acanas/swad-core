@@ -546,7 +546,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
    extern const char *Txt_Movement_not_allowed;
    unsigned NumSet;
    struct ExaSet_Set Set;
-   Lay_Highlight_t HighlightSet;
+   Lay_Highlight_t HighlightRow;
    char *Anchor;
 
    /***** Begin table *****/
@@ -570,14 +570,14 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 /* Initialize context */
 	 Exams->SetCod = Set.SetCod;
 	 Exams->SetInd = Set.SetInd;
-	 HighlightSet = Exams->SetCod == Exams->SelectedSetCod ? Lay_HIGHLIGHT :
+	 HighlightRow = Exams->SetCod == Exams->SelectedSetCod ? Lay_HIGHLIGHT :
 								 Lay_DONT_HIGHLIGHT;
 
 	 /***** Build anchor string *****/
 	 Frm_SetAnchorStr (Set.SetCod,&Anchor);
 
 	 /***** Begin first row *****/
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSet));
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
 	    /***** Icons *****/
 	    HTM_TD_Begin ("rowspan=\"2\" class=\"BT\"");
@@ -678,7 +678,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
 	 HTM_TR_End ();
 
 	 /***** Begin second row *****/
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSet));
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
 	    /***** Questions *****/
 	    HTM_TD_Begin ("colspan=\"3\" class=\"LT\"");

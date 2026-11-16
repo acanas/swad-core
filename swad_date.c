@@ -490,7 +490,7 @@ void Dat_ShowClientLocalTime (void)
       /* Month with link to calendar */
       HTM_DIV_Begin ("id=\"current_month\"");
 	 Frm_BeginForm (ActSeeCal);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeCal),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeCal),NULL,
 	                             "class=\"BT_LINK CURRENT_MONTH\"");
 	       HTM_SPAN_Begin ("id=\"current_month_txt\"");
 	       // JavaScript will write HTML here
@@ -504,7 +504,7 @@ void Dat_ShowClientLocalTime (void)
 	 if (Gbl.Usrs.Me.Logged)
 	   {
 	    Frm_BeginForm (ActSeeMyAgd);
-	       HTM_BUTTON_Submit_Begin (Act_GetActionText (ActSeeMyAgd),NULL,
+	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeMyAgd),NULL,
 	                                "class=\"BT_LINK CURRENT_DAY\"");
 	   }
 	 HTM_SPAN_Begin ("id=\"current_day_txt\"");

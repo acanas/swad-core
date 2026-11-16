@@ -1495,7 +1495,7 @@ void Usr_WriteLoggedUsrHead (void)
       if (NumAvailableRoles == 1)
 	{
 	 Frm_BeginForm (ActFrmRolSes);
-	    HTM_BUTTON_Submit_Begin (Act_GetActionText (ActFrmRolSes),NULL,
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActFrmRolSes),NULL,
 				     "class=\"BT_LINK\"");
 	       HTM_Txt (Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.Role.Logged][Gbl.Usrs.Me.UsrDat.Sex]);
 	    HTM_BUTTON_End ();
