@@ -995,7 +995,7 @@ void Qst_WriteQuestionListing (struct Qst_Questions *Qsts,unsigned QstInd)
 	 HTM_TD_End ();
 
 	 /* Average score (not blank) */
-	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s %s\"",The_GetSuffix ());
+	 HTM_TD_Begin ("class=\"CT DAT_SMALL_%s\"",The_GetSuffix ());
 	    if (Qsts->Qst.NumHitsNotBlank)
 	       HTM_Double2Decimals (Qsts->Qst.Score /
 				    (double) Qsts->Qst.NumHitsNotBlank);

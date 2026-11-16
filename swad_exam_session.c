@@ -812,7 +812,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
    unsigned NumSession;
    unsigned UniqueId;
    struct ExaSes_Session Session;
-   const char *BgColor;
+   Lay_Highlight_t HighlightSes;
    char *Anchor;
    unsigned NumPrints;
    Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
@@ -835,13 +835,12 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	{
 	 /***** Get exam session data from row *****/
 	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
-
 	 Exams->SesCod.Par = Session.SesCod;	// To be used as hidden parameter in forms
 
 	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	   {
-	    BgColor = Session.SesCod == Exams->SesCod.Sel ? "BG_HIGHLIGHT" :
-							    The_GetColorRows ();
+	    HighlightSes = Session.SesCod == Exams->SesCod.Sel ? Lay_HIGHLIGHT :
+								 Lay_DONT_HIGHLIGHT;
 
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"evt_%lu_%lu",
@@ -850,7 +849,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this session ****/
-	    HTM_TR_Begin ("class=\"%s\"",BgColor);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSes));
 
 	       /* Icons */
 	       if (ICanEditSessions == Usr_CAN)
@@ -876,8 +875,8 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 
 	    HTM_TR_End ();
 
-	    /***** Second row: session author */
-	    HTM_TR_Begin ("class=\"%s\"",BgColor);
+	    /***** Second row: session author *****/
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSes));
 	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
 	    HTM_TR_End ();
 
@@ -886,7 +885,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 		PutFormSession == Frm_PUT_FORM &&	// Editing...
 		Session.SesCod == Exams->SesCod.Sel)	// ...this session
 	      {
-	       HTM_TR_Begin ("class=\"%s\"",BgColor);
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightSes));
 		  HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
 		     ExaSes_PutFormSession (&Session,ICanChangeModality);
 		  HTM_TD_End ();
@@ -911,7 +910,7 @@ static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
 	 Str_Copy (Session.Title,Exams->Exam.Title,sizeof (Session.Title) - 1);
 
 	 /* Put form to create new session */
-	 HTM_TR_Begin ("class=\"%s\"",BgColor);
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (Lay_HIGHLIGHT));
 	    HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
 	       ExaSes_PutFormSession (&Session,
 				      Usr_CAN);	// Modality can be changed

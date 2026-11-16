@@ -359,7 +359,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    unsigned NumMatch;
    unsigned UniqueId;
    struct Mch_Match Match;
-   const char *BgColor;
+   Lay_Highlight_t HighlightMch;
    char *Anchor;
    Usr_Can_t ICanEditMatches = Mch_CheckIfICanEditMatches ();
 
@@ -383,15 +383,15 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 
 	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
 	   {
-	    BgColor = Match.MchCod == Games->MchCod.Sel ? "BG_HIGHLIGHT" :
-							  The_GetColorRows ();
+	    HighlightMch = Match.MchCod == Games->MchCod.Sel ? Lay_HIGHLIGHT :
+							       Lay_DONT_HIGHLIGHT;
 
 	    /***** Build anchor string *****/
 	    if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
 	       Err_NotEnoughMemoryExit ();
 
 	    /***** First row for this match with match data ****/
-	    HTM_TR_Begin ("class=\"%s\"",BgColor);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightMch));
 
 	       /* Icons */
 	       if (ICanEditMatches == Usr_CAN)
@@ -415,7 +415,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	    HTM_TR_End ();
 
 	    /***** Second row: match author ****/
-	    HTM_TR_Begin ("class=\"%s\"",BgColor);
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightMch));
 	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
 	    HTM_TR_End ();
 
@@ -426,7 +426,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	       /***** Check if I can edit this match *****/
 	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
 		 {
-		  HTM_TR_Begin ("class=\"%s\"",BgColor);
+	          HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightMch));
 		     HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
 			Mch_PutFormMatch (&Match);	// Form to edit this match
 		     HTM_TD_End ();
@@ -449,7 +449,7 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
 	 Str_Copy (Match.Title,Games->Game.Title,sizeof (Match.Title) - 1);
 
 	 /* Put form to create new match */
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (Lay_HIGHLIGHT));
 	    HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
 	       Mch_PutFormMatch (&Match);	// Form to create match
 	    HTM_TD_End ();
