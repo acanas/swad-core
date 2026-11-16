@@ -3104,15 +3104,14 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
 	 ShowComment.Tch = CommentTch[0] &&
 	                   (Gbl.Usrs.Me.Role.Logged == Rol_TCH ||
 	                    Events->Event.CommentTchVisible == HidVis_VISIBL) ? Lay_SHOW :
-	                							 Lay_DONT_SHOW;
+	                							Lay_DONT_SHOW;
 
 	 /***** Write a row for this event *****/
 	 HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
 	    HTM_TD_Empty (1);
 
-	    HTM_TD_Begin ("class=\"RT %s_%s\"",
-			  Class[Present],The_GetSuffix ());
+	    HTM_TD_Begin ("class=\"RT %s_%s\"",Class[Present],The_GetSuffix ());
 	       HTM_Unsigned (NumAttEvent + 1); HTM_Colon ();
 	    HTM_TD_End ();
 

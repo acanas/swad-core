@@ -244,7 +244,7 @@ static void ExaShe_PutParsToPrintBlankSheets (const void *Exams)
   {
    if (Exams)
      {
-      Exa_PutPars (Exams);
+      Exa_PutParsOneExam (Exams);
       Grp_PutParsCodGrps ();
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }
@@ -265,7 +265,7 @@ static void ExaShe_PutParsToPrintSolvedSheets (const void *Exams)
   {
    if (Exams)
      {
-      Exa_PutPars (Exams);
+      Exa_PutParsOneExam (Exams);
       Grp_PutParsCodGrps ();
       Usr_PutParSelectedUsrsCods (&Gbl.Usrs.Selected);
      }

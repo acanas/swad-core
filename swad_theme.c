@@ -244,7 +244,7 @@ static const char *The_ClassColorRows[Lay_NUM_HIGHLIGHT][2][The_NUM_THEMES] =
 
 const char *The_GetColorRows (void)
   {
-   return The_GetColorRowsLevel (0);
+   return The_ClassColorRows[Lay_DONT_HIGHLIGHT][The_RowEvenOdd[0]][Gbl.Prefs.Theme];
   }
 
 const char *The_GetColorRowsHighlight (Lay_Highlight_t HighlightRow)

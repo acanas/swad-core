@@ -115,8 +115,6 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Exa_PutIconsListExams (const void *Exams);
-static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams);
-static void Exa_PutParsToCreateNewExam (const void *Exams);
 
 static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
@@ -125,10 +123,10 @@ static void Exa_PutIconsViewingOneExam (const void *Exams);
 static void Exa_PutIconsEditingOneExam (const void *Exams);
 static void Exa_WriteAuthor (struct Exa_Exam *Exam);
 
-static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder);
-
 static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
 					  const char *Anchor);
+
+static void Exa_PutParsAllExams (const void *Exams);
 
 static void Exa_PutParOrder (Exa_Order_t SelectedOrder);
 static Exa_Order_t Exa_GetParOrder (void);
@@ -348,41 +346,18 @@ static void Exa_PutIconsListExams (const void *Exams)
      {
       /***** Put icon to create a new exam *****/
       if (Exa_CheckIfICanEditExams () == Usr_CAN)
-	 Exa_PutIconToCreateNewExam ((struct Exa_Exams *) Exams);
+	 Ico_PutContextualIconToAdd (ActFrmNewExa,NULL,Exa_PutParsAllExams,Exams);
 
-      /***** Put icon to view sessions results *****/
+      /***** Put icon to view results *****/
       if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
 	 Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],NULL,
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
+      Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutParsAllExams,Exams);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_EXAMS);
-     }
-  }
-
-/*****************************************************************************/
-/********************** Put icon to create a new exam **********************/
-/*****************************************************************************/
-
-static void Exa_PutIconToCreateNewExam (struct Exa_Exams *Exams)
-  {
-   Ico_PutContextualIconToAdd (ActFrmNewExa,NULL,
-                               Exa_PutParsToCreateNewExam,Exams);
-  }
-
-/*****************************************************************************/
-/******************* Put parameters to create a new exam *******************/
-/*****************************************************************************/
-
-static void Exa_PutParsToCreateNewExam (const void *Exams)
-  {
-   if (Exams)
-     {
-      Exa_PutParExamOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
-      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->ThisPage);
      }
   }
 
@@ -405,9 +380,13 @@ void Exa_ShowOneExam (void)
 
    /***** Get exam data *****/
    Exa_GetExamDataByCod (&Exams.Exam);
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -427,10 +406,10 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
    extern const char *Txt_Exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
-					Txt_Exam,
-                 Exa_PutIconsViewingOneExam,Exams,
-		 Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
+					      Txt_Exam,
+		       Exa_PutIconsViewingOneExam,Exams,
+		       Hlp_ASSESSMENT_Exams,Lay_HIGHLIGHT);
 
       /***** Show main data of this exam *****/
       Exa_ShowExamMainData (Exams,Lay_SHOWING_ONLY_ONE);
@@ -460,6 +439,8 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   Lay_Highlight_t HighlightRow = Exams->Exam.ExaCod == Exams->SelectedExaCod ? Lay_HIGHLIGHT :
+										Lay_DONT_HIGHLIGHT;
    char *Anchor;
    static unsigned UniqueId = 0;
    char *Id;
@@ -482,7 +463,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 	 break;
       case Lay_SHOWING_SEVERAL:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
      }
 
@@ -523,7 +504,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 /* Exam title */
 	 HTM_ARTICLE_Begin (Anchor);
 	    Frm_BeginForm (ActSeeOneExa);
-	       Exa_PutPars (Exams);
+	       Exa_PutParsOneExam (Exams);
 	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneExa),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
 					HidVis_TitleClass[Exams->Exam.Hidden],
@@ -552,7 +533,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
       HTM_TD_Begin ("class=\"RT\"");
 
 	 Frm_BeginForm (ActSeeOneExa);
-	    Exa_PutPars (Exams);
+	    Exa_PutParsOneExam (Exams);
 	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneExa),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Exams->Exam.Hidden],
@@ -577,7 +558,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 HTM_TR_Begin (NULL);
 	 break;
       case Lay_SHOWING_SEVERAL:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
      }
 
@@ -642,7 +623,7 @@ static void Exa_PutIconsEditingOneExam (const void *Exams)
   {
    if (Exams)
       /***** Icon to view exam *****/
-      Ico_PutContextualIconToView (ActSeeOneExa,NULL,Exa_PutPars,Exams);
+      Ico_PutContextualIconToView (ActSeeOneExa,NULL,Exa_PutParsOneExam,Exams);
   }
 
 /*****************************************************************************/
@@ -652,15 +633,6 @@ static void Exa_PutIconsEditingOneExam (const void *Exams)
 static void Exa_WriteAuthor (struct Exa_Exam *Exam)
   {
    Usr_WriteAuthor1Line (Exam->UsrCod,Exam->Hidden);
-  }
-
-/*****************************************************************************/
-/****** Put a hidden parameter with the type of order in list of exams *******/
-/*****************************************************************************/
-
-static void Exa_PutParExamOrder (Exa_Order_t SelectedOrder)
-  {
-   Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -687,32 +659,49 @@ static void Exa_PutIconsToRemEditOneExam (struct Exa_Exams *Exams,
      {
       /***** Icon to remove exam *****/
       Ico_PutContextualIconToRemove (ActReqRemExa,NULL,
-				     Exa_PutPars,Exams);
+				     Exa_PutParsOneExam,Exams);
 
       /***** Icon to hide/unhide exam *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					 Exa_PutPars,Exams,
+					 Exa_PutParsOneExam,Exams,
 					 Exams->Exam.Hidden);
 
       /***** Icon to edit exam *****/
-      Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,Exa_PutPars,Exams);
+      Ico_PutContextualIconToEdit (ActEdiOneExa,NULL,Exa_PutParsOneExam,Exams);
      }
 
    /***** Put icon to view results of sessions in exam *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
       Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],
 					  ExaRes_RESULTS_BOX_ID,
-					  Exa_PutPars,Exams);
+					  Exa_PutParsOneExam,Exams);
 
    /***** Link to get resource link *****/
-   Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutPars,Exams);
+   Ico_PutContextualIconToGetLink (ActReqLnkExa,NULL,Exa_PutParsOneExam,Exams);
   }
 
 /*****************************************************************************/
-/*********************** Params used to edit an exam **************************/
+/******************* Put parameters to create a new exam *******************/
 /*****************************************************************************/
 
-void Exa_PutPars (const void *Exams)
+static void Exa_PutParsAllExams (const void *Exams)
+  {
+   Grp_MyAllGrps_t MyAllGrps;
+
+   if (Exams)
+     {
+      Exa_PutParOrder (((struct Exa_Exams *) Exams)->SelectedOrder);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
+      Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->ThisPage);
+     }
+  }
+
+/*****************************************************************************/
+/************************ Params used to edit an exam ************************/
+/*****************************************************************************/
+
+void Exa_PutParsOneExam (const void *Exams)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -1002,10 +991,11 @@ void Exa_AskRemExam (void)
 
    /***** Get data of the exam from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Show question and button to remove exam *****/
    Ale_ShowAlertRemove (ActRemExa,NULL,
-                        Exa_PutPars,&Exams,
+                        Exa_PutParsOneExam,&Exams,
 			Txt_Do_you_really_want_to_remove_the_exam_X,
                         Exams.Exam.Title);
 
@@ -1214,6 +1204,7 @@ static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the exam from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Unhide exam *****/
    Exa_DB_HideOrUnhideExam (Exams.Exam.ExaCod,HiddenOrVisible);
@@ -1247,9 +1238,13 @@ void Exa_ReqCreatOrEditExam (void)
    /***** Get exam data from database *****/
    if (OldNewExam == OldNew_OLD)
       Exa_GetExamDataByCod (&Exams.Exam);
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Put form to create/edit an exam and show sets *****/
    Exa_PutFormsOneExam (&Exams,OldNewExam);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -1286,10 +1281,10 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
-					Txt_Exam,
-		 FunctionToDrawContextualIcons[OldNewExam],Exams,
-		 *HelpLink[OldNewExam],Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
+					      Txt_Exam,
+		       FunctionToDrawContextualIcons[OldNewExam],Exams,
+		       *HelpLink[OldNewExam],Lay_HIGHLIGHT);
 
       /***** Put form to create/edit an exam *****/
       Exa_PutFormEditionExam (Exams,Txt,OldNewExam);
@@ -1300,10 +1295,6 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
 
    /***** End box ****/
    Box_BoxEnd ();
-
-   /***** Show exams again outside box *****/
-   if (OldNewExam == OldNew_NEW)
-      Exa_ListAllExams (Exams);
   }
 
 /*****************************************************************************/
@@ -1330,7 +1321,7 @@ static void Exa_PutFormEditionExam (struct Exa_Exams *Exams,
 
    /***** Begin form *****/
    Frm_BeginForm (Forms[OldNewExam].Action);
-      Exa_PutPars (Exams);
+      Exa_PutParsOneExam (Exams);
 
       /***** Begin table *****/
       HTM_TABLE_BeginCenterPadding (2);

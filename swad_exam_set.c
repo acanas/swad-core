@@ -127,7 +127,7 @@ void ExaSet_PutParsOneSet (const void *Exams)
   {
    if (Exams)
      {
-      Exa_PutPars (Exams);
+      Exa_PutParsOneExam (Exams);
       ParCod_PutPar (ParCod_Set,((struct Exa_Exams *) Exams)->SetCod);
      }
   }
@@ -187,7 +187,7 @@ static void ExaSet_PutFormNewSet (struct Exa_Exams *Exams,
 				  unsigned MaxSetInd)
   {
    /***** Begin form to create *****/
-   Frm_BeginFormTable (ActNewExaSet,NULL,Exa_PutPars,Exams,"TBL_WIDE");
+   Frm_BeginFormTable (ActNewExaSet,NULL,Exa_PutParsOneExam,Exams,"TBL_WIDE");
 
       /***** Table heading *****/
       ExaSet_PutTableHeadingForSets ();
@@ -696,7 +696,7 @@ static void ExaSet_ListOneOrMoreSetsForEdition (struct Exa_Exams *Exams,
       if (ICanEditSets)
         {
 	 /* Put form to create new set */
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (Lay_HIGHLIGHT));
 	    HTM_TD_Begin ("colspan=\"5\" class=\"LT\"");
 	       ExaSet_PutFormNewSet (Exams,&Set,MaxSetInd);
 	    HTM_TD_End ();

@@ -638,7 +638,7 @@ static void ExaPrn_ShowQstsAndAnssToFill (struct Exa_Exams *Exams,
 
    /***** Form to end/close this exam print *****/
    Frm_BeginForm (ActEndExaPrn);
-      Exa_PutPars (Exams);
+      Exa_PutParsOneExam (Exams);
       Btn_PutButton (Btn_DONE,NULL);
    Frm_EndForm ();
   }
@@ -829,7 +829,7 @@ void ExaPrn_ReceiveAnswer (void)
 
 	 /***** Form to end/close this exam print *****/
 	 Frm_BeginForm (ActEndExaPrn);
-	    Exa_PutPars (&Exams);
+	    Exa_PutParsOneExam (&Exams);
 	    Btn_PutButton (Btn_CONTINUE,NULL);
 	 Frm_EndForm ();
 	 break;

@@ -209,7 +209,7 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession)
 	   {
 	    Set_BeginSettingsHead ();
 	       Grp_ShowFormToSelMyAllGrps (ActSeeOneExa,Exams->MyAllGrps,
-					   Exa_PutPars,Exams);
+					   Exa_PutParsOneExam,Exams);
 	    Set_EndSettingsHead ();
 	   }
 
@@ -254,6 +254,9 @@ void ExaSes_ShowOneSession (void)
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -289,7 +292,7 @@ void ExaSes_ListUsersForSelection (Act_Action_t NextAction,
 
 	 /***** Form to select groups *****/
          Exams->SesCod.Par = Exams->SesCod.Sel;	// To be used as parameter
-	 Grp_ShowFormToSelectSeveralGroups (NextAction,Exa_PutPars,Exams,NULL);
+	 Grp_ShowFormToSelectSeveralGroups (NextAction,Exa_PutParsOneExam,Exams,NULL);
 
 	 /***** Begin section with user list *****/
 	 HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
@@ -302,7 +305,7 @@ void ExaSes_ListUsersForSelection (Act_Action_t NextAction,
 		  /* Form to select users */
 		  Frm_BeginFormIdAnchor (Act_DoAct_ExaSes,Usr_FORM_TO_SELECT_USRS_ID,
 					 ExaSes_EXAM_SHEET_OPTIONS_SECTION_ID);
-		     Exa_PutPars (Exams);
+		     Exa_PutParsOneExam (Exams);
 		     Grp_PutParsCodGrps ();
 		  Frm_EndForm ();
 
@@ -634,7 +637,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
 	 if (NumResults)
 	   {
 	    Frm_BeginForm (ActSeeOneExaResOth);
-	       Exa_PutPars (Exams);
+	       Exa_PutParsOneExam (Exams);
 	       Usr_PutParOtherUsrCodEncrypted (UsrDat->EnUsrCod);
 	       Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
 	    Frm_EndForm ();
@@ -799,7 +802,7 @@ static void ExaSes_PutIconsInListOfSessions (const void *Exams)
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams)
   {
    Ico_PutContextualIconToAdd (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID,
-                               Exa_PutPars,Exams);
+                               Exa_PutParsOneExam,Exams);
   }
 
 /*****************************************************************************/
@@ -1023,16 +1026,16 @@ static void ExaSes_ListOneOrMoreSessionsIcons (struct Exa_Exams *Exams,
 	{
 	 /***** Icon to remove the exam session *****/
 	 Ico_PutContextualIconToRemove (ActReqRemExaSes,NULL,
-					Exa_PutPars,Exams);
+					Exa_PutParsOneExam,Exams);
 
 	 /***** Icon to hide/unhide the exam session *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					    Exa_PutPars,Exams,
+					    Exa_PutParsOneExam,Exams,
 					    Session->Hidden);
 
 	 /***** Icon to edit the exam session *****/
 	 Ico_PutContextualIconToEdit (ActReqChgExaSes,Anchor,
-				      Exa_PutPars,Exams);
+				      Exa_PutParsOneExam,Exams);
 	}
 
    /***** End cell *****/
@@ -1105,7 +1108,7 @@ static void ExaSes_ListOneOrMoreSessionsMainData (struct Exa_Exams *Exams,
 		 {
 		  case Usr_CAN:
 		     Frm_BeginForm (ActSeeExaPrn);
-			Exa_PutPars (Exams);
+			Exa_PutParsOneExam (Exams);
 			HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeExaPrn),NULL,
 						 "class=\"LT BT_LINK %s_%s\"",
 						 HidVis_TitleClass[Session->Hidden],
@@ -1172,7 +1175,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
 
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActSeeOneExaSes,ExaSes_SESSION_BOX_ID);
-      Exa_PutPars (Exams);
+      Exa_PutParsOneExam (Exams);
       Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod.Par);
 
       /***** Link to view attendance event *****/
@@ -1303,7 +1306,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
 	 Exams->Exam.ExaCod = Session->ExaCod;
 	 Exams->SesCod.Par  = Session->SesCod;
 	 Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
-					Exa_PutPars,Exams,
+					Exa_PutParsOneExam,Exams,
 					"trophy.svg",Ico_BLACK);
 	 break;
       case Lay_DONT_SHOW:
@@ -1348,7 +1351,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
    /***** Show exam session results *****/
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
       Lay_PutContextualLinkOnlyIcon (ActSeeUsrExaResSes,ExaRes_RESULTS_BOX_ID,
-				     Exa_PutPars,Exams,
+				     Exa_PutParsOneExam,Exams,
 				     "trophy.svg",Ico_BLACK);
 
    /***** Check if visibility of session results can be changed *****/
@@ -1357,7 +1360,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
       case Usr_CAN:
 	 /***** Put form to change visibility of session results *****/
 	 Lay_PutContextualLinkOnlyIcon (ActChgVisExaRes,NULL,
-					Exa_PutPars,Exams,
+					Exa_PutParsOneExam,Exams,
 					IconPars[Session->Show_UsrResults].Icon,
 					IconPars[Session->Show_UsrResults].Color);
 	 break;
@@ -1513,12 +1516,15 @@ void ExaSes_ReqRemSession (void)
    Exams.SesCod.Sel  =
    Exams.SesCod.Par  = Session.SesCod;
    Ale_ShowAlertRemove (ActRemExaSes,NULL,
-			Exa_PutPars,&Exams,
+			Exa_PutParsOneExam,&Exams,
 			Txt_Do_you_really_want_to_remove_the_session_X,
 	                Session.Title);
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -1601,6 +1607,9 @@ static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -1859,6 +1868,9 @@ void ExaSes_ReqCreatOrEditSes (void)
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_PUT_FORM);	// Put form for session
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/
@@ -1956,6 +1968,9 @@ void ExaSes_ReceiveSession (void)
 
    /***** Show current exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 /*****************************************************************************/

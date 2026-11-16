@@ -394,6 +394,7 @@ void ExaRes_ShowAllResultsInExa (void)
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
    Exa_GetExamDataByCod (&Exams.Exam);
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Exam begin *****/
    Exa_ShowOnlyOneExamBegin (&Exams,Frm_DONT_PUT_FORM);
@@ -408,6 +409,9 @@ void ExaRes_ShowAllResultsInExa (void)
 
    /***** Exam end *****/
    Exa_ShowOnlyOneExamEnd ();
+
+   /***** Show exams again *****/
+   Exa_ListAllExams (&Exams);
   }
 
 static void ExaRes_ListAllResultsInExa (struct Exa_Exams *Exams)
@@ -845,13 +849,13 @@ static void ExaRes_ShowResults (struct Exa_Exams *Exams,
 		       {
 			case Usr_ME:
 			   Frm_BeginForm (ActSeeOneExaResMe);
-			      Exa_PutPars (Exams);
+			      Exa_PutParsOneExam (Exams);
 			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResMe);
 			   break;
 			case Usr_OTHER:
 			default:
 			   Frm_BeginForm (ActSeeOneExaResOth);
-			      Exa_PutPars (Exams);
+			      Exa_PutParsOneExam (Exams);
 			      Usr_PutParOtherUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EnUsrCod);
 			      Ico_PutIconLink ("tasks.svg",Ico_BLACK,ActSeeOneExaResOth);
 			   break;

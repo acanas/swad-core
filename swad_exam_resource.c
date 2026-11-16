@@ -54,6 +54,7 @@ void ExaRsc_GetLinkToExam (void)
    /***** Get exam title *****/
    if (Exams.Exam.ExaCod > 0)
       Exa_GetExamDataByCod (&Exams.Exam);
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Copy link to exam into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_EXAM,Exams.Exam.ExaCod);
