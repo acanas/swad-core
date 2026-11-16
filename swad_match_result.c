@@ -362,6 +362,7 @@ void MchRes_ShowAllMchResultsInGam (void)
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Gam_GetGameDataByCod (&Games.Game);
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Game begin *****/
    Gam_ShowOnlyOneGameBegin (&Games,
@@ -378,6 +379,9 @@ void MchRes_ShowAllMchResultsInGam (void)
 
    /***** Game end *****/
    Gam_ShowOnlyOneGameEnd ();
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games)

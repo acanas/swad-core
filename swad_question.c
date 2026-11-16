@@ -423,7 +423,7 @@ void Qst_ShowFormRequestSelectQstsForGame (struct Gam_Games *Games,
       if ((Qsts->Tags.Num = Tag_DB_GetAllTagsFromThisCrs (&mysql_res)))
 	{
 	 Frm_BeginForm (ActGamLstTstQst);
-	    Gam_PutPars (Games);
+	    Gam_PutParsOneGame (Games);
 
 	    HTM_TABLE_BeginPadding (2);
 
@@ -1115,7 +1115,7 @@ void Qst_ListOneOrMoreQstsForSelectionForGame (struct Gam_Games *Games,
 
       /***** Begin form *****/
       Frm_BeginForm (ActAddTstQstToGam);
-	 Gam_PutPars (Games);
+	 Gam_PutParsOneGame (Games);
 
 	 /***** Select all questions *****/
 	 Qst_PutCheckboxToSelectAllQuestions ();

@@ -116,22 +116,19 @@ static void Gam_ListAllGamesHeading (const struct Gam_Games *Games);
 static Usr_Can_t Gam_CheckIfICanEditGames (void);
 static Usr_Can_t Gam_CheckIfICanListGameQuestions (void);
 static void Gam_PutIconsListingGames (const void *Games);
-static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games);
-static void Gam_PutParsToCreateNewGame (const void *Games);
+static void Gam_PutParsAllGames (const void *Games);
 
 static void Gam_ShowGameMainData (struct Gam_Games *Games,
 				  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
 static void Gam_PutIconsViewingOneGame (const void *Games);
-static void Gam_PutIconsEditingOneGame (const void *Games);
 static void Gam_WriteAuthor (const struct Gam_Game *Game);
-
-static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder);
 
 static void Gam_PutIconsToRemEditOneGame (const struct Gam_Games *Games,
 					  const char *Anchor);
 
 static void Gam_PutParsOneQst (const void *Games);
+static void Gam_PutParsAllGames (const void *Games);
 static void Gam_PutParOrder (Gam_Order_t SelectedOrder);
 static Gam_Order_t Gam_GetParOrder (void);
 
@@ -182,7 +179,8 @@ void Gam_ResetGames (struct Gam_Games *Games)
    Games->ThisPage		= 0;
    Games->ListQuestions		= NULL;
    Games->GamCodsSelected	= NULL;	// String with selected game codes separated by separator multiple
-   Games->Game.GamCod		= -1L;	// Current/selected game code
+   Games->Game.GamCod		=	// Current game code
+   Games->SelectedGamCod	= -1L;	// Selected game code
    Games->MchCod.Sel		=
    Games->MchCod.Par		= -1L;	// Selected/parameter match code
    Games->QstInd		= 0;	// Current question index
@@ -390,7 +388,7 @@ static void Gam_PutIconsListingGames (const void *Games)
      {
       /***** Put icon to create a new game *****/
       if (Gam_CheckIfICanEditGames () == Usr_CAN)
-	 Gam_PutIconToCreateNewGame ((struct Gam_Games *) Games);
+	 Ico_PutContextualIconToAdd (ActFrmNewGam,NULL,Gam_PutParsAllGames,Games);
 
       /***** Put icon to view matches results *****/
       if (NextAction[Gbl.Usrs.Me.Role.Logged])
@@ -398,33 +396,10 @@ static void Gam_PutIconsListingGames (const void *Games)
 					     NULL,NULL);
 
       /***** Link to get resource link *****/
-      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
+      Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutParsAllGames,Games);
 
       /***** Put icon to show a figure *****/
       Fig_PutIconToShowFigure (Fig_GAMES);
-     }
-  }
-
-/*****************************************************************************/
-/*********************** Put icon to create a new game ***********************/
-/*****************************************************************************/
-
-static void Gam_PutIconToCreateNewGame (struct Gam_Games *Games)
-  {
-   Ico_PutContextualIconToAdd (ActFrmNewGam,NULL,
-                               Gam_PutParsToCreateNewGame,Games);
-  }
-
-/*****************************************************************************/
-/******************** Put parameters to create a new game ********************/
-/*****************************************************************************/
-
-static void Gam_PutParsToCreateNewGame (const void *Games)
-  {
-   if (Games)
-     {
-      Gam_PutParGameOrder (((struct Gam_Games *) Games)->SelectedOrder);
-      Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->ThisPage);
      }
   }
 
@@ -446,11 +421,15 @@ void Gam_ShowOneGame (void)
    if ((Games.Game.GamCod = Gam_GetPars (&Games)) <= 0)
       Err_WrongGameExit ();
    Gam_GetGameDataByCod (&Games.Game);
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
-                        Lay_DONT_SHOW,	// Do not list game questions
+                        Lay_DONT_SHOW,		// Do not list game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -473,10 +452,10 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    extern const char *Txt_Game;
 
    /***** Begin box *****/
-   Box_BoxBegin (Games->Game.Title[0] ? Games->Game.Title :
-					Txt_Game,
-                 Gam_PutIconsViewingOneGame,Games,
-		 Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Games->Game.Title[0] ? Games->Game.Title :
+					      Txt_Game,
+		       Gam_PutIconsViewingOneGame,Games,
+		       Hlp_ASSESSMENT_Games,Lay_HIGHLIGHT);
 
       /***** Show main data of this game *****/
       Gam_ShowGameMainData (Games,Lay_SHOWING_ONLY_ONE);
@@ -516,6 +495,8 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   Lay_Highlight_t HighlightRow = Games->Game.GamCod == Games->SelectedGamCod ? Lay_HIGHLIGHT :
+										Lay_DONT_HIGHLIGHT;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -538,7 +519,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 HTM_TR_Begin (NULL);
 	 break;
       case Lay_SHOWING_SEVERAL:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
      }
 
@@ -591,7 +572,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 /* Game title */
 	 HTM_ARTICLE_Begin (Anchor);
 	    Frm_BeginForm (ActSeeOneGam);
-	       Gam_PutPars (Games);
+	       Gam_PutParsOneGame (Games);
 	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneGam),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
 					HidVis_TitleClass[Games->Game.Hidden],
@@ -620,7 +601,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
       HTM_TD_Begin ("class=\"RT\"");
 
 	 Frm_BeginForm (ActSeeOneGam);
-	    Gam_PutPars (Games);
+	    Gam_PutParsOneGame (Games);
 	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneGam),NULL,
 				     "class=\"LT BT_LINK %s_%s\"",
 				     HidVis_TitleClass[Games->Game.Hidden],
@@ -645,7 +626,7 @@ static void Gam_ShowGameMainData (struct Gam_Games *Games,
 	 HTM_TR_Begin (NULL);
 	 break;
       case Lay_SHOWING_SEVERAL:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
      }
 
@@ -705,13 +686,6 @@ static void Gam_PutIconsViewingOneGame (const void *Games)
      }
   }
 
-static void Gam_PutIconsEditingOneGame (const void *Games)
-  {
-   if (Games)
-      /***** Icon to view game *****/
-      Ico_PutContextualIconToView (ActLstOneGam,NULL,Gam_PutPars,Games);
-  }
-
 /*****************************************************************************/
 /************************ Write the author of a game *************************/
 /*****************************************************************************/
@@ -719,15 +693,6 @@ static void Gam_PutIconsEditingOneGame (const void *Games)
 static void Gam_WriteAuthor (const struct Gam_Game *Game)
   {
    Usr_WriteAuthor1Line (Game->UsrCod,Game->Hidden);
-  }
-
-/*****************************************************************************/
-/****** Put a hidden parameter with the type of order in list of games *******/
-/*****************************************************************************/
-
-static void Gam_PutParGameOrder (Gam_Order_t SelectedOrder)
-  {
-   Par_PutParUnsigned (NULL,"Order",(unsigned) SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -754,29 +719,29 @@ static void Gam_PutIconsToRemEditOneGame (const struct Gam_Games *Games,
      {
       /***** Icon to remove game *****/
       Ico_PutContextualIconToRemove (ActReqRemGam,NULL,
-				     Gam_PutPars,Games);
+				     Gam_PutParsOneGame,Games);
 
       /***** Icon to unhide/hide game *****/
       Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					 Gam_PutPars,Games,
+					 Gam_PutParsOneGame,Games,
 					 Games->Game.Hidden);
 
       /***** Icon to edit game *****/
-      Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,Gam_PutPars,Games);
+      Ico_PutContextualIconToEdit (ActEdiOneGam,NULL,Gam_PutParsOneGame,Games);
      }
 
    if (Gam_CheckIfICanListGameQuestions () == Usr_CAN)
       /***** Icon to view game listing its questions *****/
-      Ico_PutContextualIconToView (ActLstOneGam,NULL,Gam_PutPars,Games);
+      Ico_PutContextualIconToView (ActLstOneGam,NULL,Gam_PutParsOneGame,Games);
 
    /***** Put icon to view matches results *****/
    if (ActionShowResults[Gbl.Usrs.Me.Role.Logged])
       Ico_PutContextualIconToShowResults (ActionShowResults[Gbl.Usrs.Me.Role.Logged],
 					  MchRes_RESULTS_BOX_ID,
-					  Gam_PutPars,Games);
+					  Gam_PutParsOneGame,Games);
 
    /***** Link to get resource link *****/
-   Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutPars,Games);
+   Ico_PutContextualIconToGetLink (ActReqLnkGam,NULL,Gam_PutParsOneGame,Games);
   }
 
 /*****************************************************************************/
@@ -787,8 +752,25 @@ static void Gam_PutParsOneQst (const void *Games)
   {
    if (Games)
      {
-      Gam_PutPars (Games);
+      Gam_PutParsOneGame (Games);
       Gam_PutParQstInd (((struct Gam_Games *) Games)->QstInd);
+     }
+  }
+
+/*****************************************************************************/
+/******************** Put parameters to create a new game ********************/
+/*****************************************************************************/
+
+static void Gam_PutParsAllGames (const void *Games)
+  {
+   Grp_MyAllGrps_t MyAllGrps;
+
+   if (Games)
+     {
+      Gam_PutParOrder (((struct Gam_Games *) Games)->SelectedOrder);
+      MyAllGrps = Grp_GetParMyAllGrps ();
+      Grp_PutParMyAllGrps (&MyAllGrps);
+      Pag_PutParPagNum (Pag_GAMES,((struct Gam_Games *) Games)->ThisPage);
      }
   }
 
@@ -796,7 +778,7 @@ static void Gam_PutParsOneQst (const void *Games)
 /*********************** Params used to edit a game **************************/
 /*****************************************************************************/
 
-void Gam_PutPars (const void *Games)
+void Gam_PutParsOneGame (const void *Games)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
@@ -1079,10 +1061,11 @@ void Gam_AskRemGame (void)
    Gam_GetGameDataByCod (&Games.Game);
    if (Gam_CheckIfICanEditGames () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Show question and button to remove game *****/
    Ale_ShowAlertRemove (ActRemGam,NULL,
-                        Gam_PutPars,&Games,
+                        Gam_PutParsOneGame,&Games,
 			Txt_Do_you_really_want_to_remove_the_game_X,
                         Games.Game.Title);
 
@@ -1187,6 +1170,7 @@ static void Gam_HideUnhideGame (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Gam_GetGameDataByCod (&Games.Game);
    if (Gam_CheckIfICanEditGames () == Usr_CAN_NOT)
       Err_NoPermissionExit ();
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Unhide game *****/
    Gam_DB_HideOrUnhideGame (Games.Game.GamCod,HiddenOrVisible);
@@ -1221,11 +1205,15 @@ void Gam_ListGame (void)
    /***** Get game data *****/
    Gam_GetGameDataByCod (&Games.Game);
    Gam_DB_GetGameTxt (Games.Game.GamCod,Txt);
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Show game *****/
    Gam_ShowOnlyOneGame (&Games,
                         Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -1266,9 +1254,13 @@ void Gam_ReqCreatOrEditGame (void)
 	 Txt[0] = '\0';
 	 break;
      }
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Put form to create/edit a game and show questions *****/
    Gam_PutFormsOneGame (&Games,OldNewGame);
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -1283,7 +1275,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    extern const char *Txt_Game;
    static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
-      [OldNew_OLD] = Gam_PutIconsEditingOneGame,
+      [OldNew_OLD] = Gam_PutIconsViewingOneGame,
       [OldNew_NEW] = NULL,
      };
    static const char **HelpLink[OldNew_NUM_OLD_NEW] =
@@ -1306,10 +1298,10 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (Games->Game.Title[0] ? Games->Game.Title :
-					Txt_Game,
-		 FunctionToDrawContextualIcons[OldNewGame],Games,
-		 *HelpLink[OldNewGame],Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Games->Game.Title[0] ? Games->Game.Title :
+					      Txt_Game,
+		       FunctionToDrawContextualIcons[OldNewGame],Games,
+		       *HelpLink[OldNewGame],Lay_HIGHLIGHT);
 
       /***** Put form to create/edit a game *****/
       Gam_PutFormEditionGame (Games,Txt,OldNewGame);
@@ -1320,10 +1312,6 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
 
    /***** End box ****/
    Box_BoxEnd ();
-
-   /***** Show games again outside box *****/
-   if (OldNewGame == OldNew_NEW)
-      Gam_ListAllGames (Games);
   }
 
 /*****************************************************************************/
@@ -1352,7 +1340,7 @@ static void Gam_PutFormEditionGame (struct Gam_Games *Games,
 
    /***** Begin form *****/
    Frm_BeginForm (Forms[OldNewGame].Action);
-      Gam_PutPars (Games);
+      Gam_PutParsOneGame (Games);
 
       /***** Begin table *****/
       HTM_TABLE_BeginCenterPadding (2);
@@ -1473,12 +1461,16 @@ void Gam_ReceiveGame (void)
 	    OldNewGame = OldNew_OLD;
 	    break;
 	}
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Show pending alerts */
    Ale_ShowAlerts (NULL);
 
    /***** Show current game and its questions *****/
    Gam_PutFormsOneGame (&Games,OldNew_OLD);
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 static void Gam_ReceiveGameFieldsFromForm (struct Gam_Game *Game,
@@ -1871,7 +1863,7 @@ static void Gam_ListQuestionForEdition (struct Qst_Question *Qst,
 
 static void Gam_PutIconToAddNewQuestions (const void *Games)
   {
-   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,Gam_PutPars,Games);
+   Ico_PutContextualIconToAdd (ActAddOneGamQst,NULL,Gam_PutParsOneGame,Games);
   }
 
 /*****************************************************************************/

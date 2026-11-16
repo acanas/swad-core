@@ -287,7 +287,7 @@ void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
 	   {
 	    Set_BeginSettingsHead ();
 	       Grp_ShowFormToSelMyAllGrps (ActSeeOneGam,Games->MyAllGrps,
-					   Gam_PutPars,Games);
+					   Gam_PutParsOneGame,Games);
 	    Set_EndSettingsHead ();
 	   }
 
@@ -346,7 +346,7 @@ static void Mch_PutIconsInListOfMatches (const void *Games)
 static void Mch_PutIconToCreateNewMatch (struct Gam_Games *Games)
   {
    Ico_PutContextualIconToAdd (ActReqNewMch,Mch_NEW_MATCH_SECTION_ID,
-                               Gam_PutPars,Games);
+                               Gam_PutParsOneGame,Games);
   }
 
 /*****************************************************************************/
@@ -1031,6 +1031,9 @@ void Mch_ReqRemMatch (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_DONT_SHOW,		// Do not show game questions
 			Frm_DONT_PUT_FORM);
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -1154,6 +1157,9 @@ void Mch_ReqCreatOrEditMatch (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_DONT_SHOW,	// Do not show game questions
                         Frm_PUT_FORM);
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -1164,7 +1170,7 @@ void Mch_PutParsEdit (const void *Games)
   {
    if (Games)
      {
-      Gam_PutPars (Games);
+      Gam_PutParsOneGame (Games);
       ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod.Par);
      }
   }
@@ -1195,6 +1201,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
       Mch_ResetMatch (Match);
 
    /***** Initialize context *****/
+   Games->SelectedGamCod = Games->Game.GamCod;
    Games->MchCod.Sel =
    Games->MchCod.Par = Match->MchCod;
   }

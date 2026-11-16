@@ -54,6 +54,7 @@ void GamRsc_GetLinkToGame (void)
    /***** Get game data *****/
    if (Games.Game.GamCod > 0)
       Gam_GetGameDataByCod (&Games.Game);
+   Games.SelectedGamCod = Games.Game.GamCod;
 
    /***** Copy link to game into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_GAME,Games.Game.GamCod);
