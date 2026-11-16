@@ -58,8 +58,8 @@ void AsgRsc_GetLinkToAssignment (void)
    Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);
 
    /***** Get data of this assignment *****/
-   if (Assignments.Asg.AsgCod > 0)
-      Asg_GetAssignmentDataByCod (&Assignments.Asg);
+   Asg_GetAssignmentDataByCod (&Assignments.Asg);
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    /***** Copy link to assignment into resource clipboard *****/
    Rsc_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
@@ -68,10 +68,6 @@ void AsgRsc_GetLinkToAssignment (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
    		  Assignments.Asg.AsgCod > 0 ? Assignments.Asg.Title :
    					       Txt_Assignments);
-
-   /***** Show selected assignment in a box *****/
-   if (Assignments.Asg.AsgCod > 0)
-      Asg_ShowOneAssignmentInBox (&Assignments);
 
    /***** Show current assignments, if any *****/
    Asg_ShowAllAssignments (&Assignments);

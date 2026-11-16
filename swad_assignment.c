@@ -144,12 +144,13 @@ const struct Asg_Assignment *Asg_GetAssigment (void)
 
 void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
   {
-   Assignments->LstReadStatus = Cac_INVALID;	// List is not read
-   Assignments->Num           = 0;
-   Assignments->LstAsgCods    = NULL;
-   Assignments->SelectedOrder = Asg_ORDER_DEFAULT;
-   Assignments->ThisPage   = 0;
-   Assignments->Asg.AsgCod    = -1L;	// Used as parameter in contextual links
+   Assignments->LstReadStatus	= Cac_INVALID;	// List is not read
+   Assignments->Num		= 0;
+   Assignments->LstAsgCods	= NULL;
+   Assignments->SelectedOrder	= Asg_ORDER_DEFAULT;
+   Assignments->ThisPage	= 0;
+   Assignments->Asg.AsgCod	=	// Used as parameter in contextual links
+   Assignments->SelectedAsgCod	= -1L;
    Asg_ResetAssignment (&Assignments->Asg);
   }
 
@@ -408,6 +409,7 @@ void Asg_SeeOneAssignment (void)
 
    /***** Get data of this assignment *****/
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    /***** Show selected assignment in a box *****/
    Asg_ShowOneAssignmentInBox (&Assignments);
@@ -433,6 +435,7 @@ void Asg_PrintOneAssignment (void)
 
    /***** Get data of this assignment *****/
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_PRINT);
@@ -513,6 +516,8 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   Lay_Highlight_t HighlightRow = Assignments->Asg.AsgCod == Assignments->SelectedAsgCod ? Lay_HIGHLIGHT :
+											   Lay_DONT_HIGHLIGHT;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -526,7 +531,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    switch (ViewType)
      {
       case Vie_VIEW:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
       case Vie_PRINT:
 	 HTM_TR_Begin (NULL);
@@ -596,7 +601,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    switch (ViewType)
      {
       case Vie_VIEW:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
       case Vie_PRINT:
 	 HTM_TR_Begin (NULL);
@@ -1059,6 +1064,7 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get data of the assignment from database *****/
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    /***** Show question and button to remove the assignment *****/
    Ale_ShowAlertRemove (ActRemAsg,NULL,
@@ -1092,6 +1098,7 @@ void Asg_RemoveAssignment (void)
 
    /***** Get data of the assignment from database *****/
    Asg_GetAssignmentDataByCod (&Assignments.Asg);	// Inside this function, the course is checked to be the current one
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    /***** Remove all folders associated to this assignment *****/
    if (Assignments.Asg.FolderName[0])
@@ -1144,6 +1151,7 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the assignment from database *****/
    Asg_GetAssignmentDataByCod (&Assignments.Asg);
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    /***** Unhide assignment *****/
    Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,HiddenOrVisible);
@@ -1197,6 +1205,7 @@ void Asg_ReqCreatOrEditAsg (void)
 	 Description[0] = '\0';
 	 break;
      }
+   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
    Asg_PutFormCreatOrEditAsg (&Assignments,Description);
 
@@ -1538,6 +1547,7 @@ void Asg_ReceiveAssignment (void)
 	       Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
 	       break;
 	   }
+	 Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
 
 	 /* Free memory for list of selected groups */
 	 Grp_FreeListCodSelectedGrps ();

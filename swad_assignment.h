@@ -71,7 +71,8 @@ struct Asg_Assignments
    long *LstAsgCods;		// List of assigment codes
    Dat_StartEndTime_t SelectedOrder;
    unsigned ThisPage;
-   struct Asg_Assignment Asg;	// Selected/current assignment
+   struct Asg_Assignment Asg;	// Current assignment
+   long SelectedAsgCod;		// Selected assigment code
   };
 
 #define Asg_ORDER_DEFAULT Dat_STR_TIME
