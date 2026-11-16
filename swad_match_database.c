@@ -216,30 +216,35 @@ Exi_Exist_t Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
 /************************* Get the matches of a game *************************/
 /*****************************************************************************/
 
-unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod)
+unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,
+				  long GamCod,Grp_MyAllGrps_t MyAllGrps)
   {
    char *SubQuery;
 
    /***** Fill subquery for game *****/
-   if (Gbl.Crs.Grps.MyAllGrps == Grp_MY_GROUPS)
+   switch (MyAllGrps)
      {
-      if (asprintf (&SubQuery," AND"
-			      " (MchCod NOT IN"
-			       " (SELECT MchCod"
-			          " FROM mch_groups)"
-			       " OR"
-			       " MchCod IN"
-			       " (SELECT mch_groups.MchCod"
-			          " FROM grp_users,"
-			                "mch_groups"
-			         " WHERE grp_users.UsrCod=%ld"
-			           " AND grp_users.GrpCod=mch_groups.GrpCod))",
-		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	  Err_NotEnoughMemoryExit ();
+      case Grp_MY_GROUPS:
+	 if (asprintf (&SubQuery," AND"
+				 " (MchCod NOT IN"
+				  " (SELECT MchCod"
+				     " FROM mch_groups)"
+				  " OR"
+				  " MchCod IN"
+				  " (SELECT mch_groups.MchCod"
+				     " FROM grp_users,"
+					   "mch_groups"
+				    " WHERE grp_users.UsrCod=%ld"
+				      " AND grp_users.GrpCod=mch_groups.GrpCod))",
+			Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	     Err_NotEnoughMemoryExit ();
+	  break;
+       case Grp_ALL_GROUPS:
+       default:
+	  if (asprintf (&SubQuery,"%s","") < 0)
+	     Err_NotEnoughMemoryExit ();
+	  break;
       }
-    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-       if (asprintf (&SubQuery,"%s","") < 0)
-	  Err_NotEnoughMemoryExit ();
 
    /***** Make query *****/
    return (unsigned)

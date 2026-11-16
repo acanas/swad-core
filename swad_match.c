@@ -275,7 +275,8 @@ void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
    unsigned NumMatches;
 
    /***** Get data of matches from database *****/
-   NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,Games->Game.GamCod);
+   NumMatches = Mch_DB_GetMatchesInGame (&mysql_res,
+					 Games->Game.GamCod,Games->MyAllGrps);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Matches,Mch_PutIconsInListOfMatches,Games,
@@ -285,7 +286,8 @@ void Mch_ListMatches (struct Gam_Games *Games,Frm_PutForm_t PutFormNewMatch)
 	 if (Gbl.Crs.Grps.NumGrps && Mch_CheckIfICanEditMatches () == Usr_CAN)
 	   {
 	    Set_BeginSettingsHead ();
-	       Grp_ShowFormToSelMyAllGrps (ActSeeOneGam,Gam_PutPars,Games);
+	       Grp_ShowFormToSelMyAllGrps (ActSeeOneGam,Games->MyAllGrps,
+					   Gam_PutPars,Games);
 	    Set_EndSettingsHead ();
 	   }
 
@@ -1178,7 +1180,6 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    /* Get parameters of game */
    if ((Games->Game.GamCod = Gam_GetPars (Games)) <= 0)
       Err_WrongGameExit ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Gam_GetGameDataByCod (&Games->Game);
    if (Games->Game.HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();

@@ -96,13 +96,13 @@ void Tmt_DB_InsertHourInUsrTimeTable (long UsrCod,
 /************************ Get timetable from database ************************/
 /*****************************************************************************/
 
-unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
-                              Tmt_TimeTableType_t Type,long UsrCod)
+unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,Tmt_TimeTableType_t Type,
+			      long UsrCod,Grp_MyAllGrps_t MyAllGrps)
   {
    switch (Type)
      {
       case Tmt_MY_TIMETABLE:
-         switch (Gbl.Crs.Grps.MyAllGrps)
+         switch (MyAllGrps)
            {
             case Grp_MY_GROUPS:
                return (unsigned)
@@ -187,7 +187,7 @@ unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
            }
          return 0;	// Not reached
       case Tmt_COURSE_TIMETABLE:
-         if (Gbl.Crs.Grps.MyAllGrps == Grp_ALL_GROUPS ||
+         if (MyAllGrps == Grp_ALL_GROUPS ||
              Gbl.Action.Act == ActEdiCrsTT ||
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
             return (unsigned)

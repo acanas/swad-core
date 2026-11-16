@@ -42,7 +42,8 @@ void Mch_DB_UpdateVisResultsMchUsr (long MchCod,Lay_Show_t ShowUsrResults);
 
 Exi_Exist_t Mch_DB_GetMatchDataByCod (MYSQL_RES **mysql_res,long MchCod);
 Exi_Exist_t Mch_DB_GetStartEndMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
-unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
+unsigned Mch_DB_GetMatchesInGame (MYSQL_RES **mysql_res,
+				  long GamCod,Grp_MyAllGrps_t MyAllGrps);
 unsigned Mch_DB_GetAvailableMatchesInGame (MYSQL_RES **mysql_res,long GamCod);
 unsigned Mch_DB_GetMatchesBetweenDates (MYSQL_RES **mysql_res,
                                         const char *From,

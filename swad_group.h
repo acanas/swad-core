@@ -175,7 +175,6 @@ struct Grp_Groups
    struct GroupTypes GrpTypes;
    struct ListCodGrps LstGrpsSel;
    bool AllGrpsSel;		// All groups selected?
-   Grp_MyAllGrps_t MyAllGrps;	// Show my groups or all groups
   };
 
 /*****************************************************************************/
@@ -260,7 +259,7 @@ void Grp_PutParAllGroups (void);
 void Grp_PutParMyAllGrps (const void *WhichGrps);
 void Grp_PutParWhichGrpsOnlyMyGrps (void);
 void Grp_PutParWhichGrpsAllGrps (void);
-void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
+void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,Grp_MyAllGrps_t SelectedMyAllGrps,
                                  void (*FuncPars) (const void *Args),const void *Args);
 Grp_MyAllGrps_t Grp_GetParMyAllGrps (void);
 

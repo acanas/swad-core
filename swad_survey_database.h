@@ -46,9 +46,10 @@ void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                      unsigned NumUsrsToBeNotifiedByEMail);
 
 unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
-                                unsigned ScopesAllowed,
+                                unsigned AllowedLvls,
                                 unsigned HiddenAllowed,
-                                Dat_StartEndTime_t SelectedOrder);
+                                Dat_StartEndTime_t SelectedOrder,
+                                Grp_MyAllGrps_t MyAllGrps);
 Exi_Exist_t Svy_DB_GetSurveyDataByCod (MYSQL_RES **mysql_res,long SvyCod);
 void Svy_DB_GetSurveyTitle (long SvyCod,char *Title,size_t TitleSize);
 Exi_Exist_t Svy_DB_GetSurveyTitleAndText (MYSQL_RES **mysql_res,long SvyCod);

@@ -29,6 +29,7 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_group.h"
 #include "swad_hierarchy_type.h"
 #include "swad_layout.h"
 #include "swad_photo_type.h"
@@ -95,6 +96,7 @@ struct Exa_Exams
    unsigned NumSelected;	// Number of exams selected
    struct Exa_ExamSelected *Lst;// List of exams
    Exa_Order_t SelectedOrder;
+   Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
    char *ListQuestions;
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple

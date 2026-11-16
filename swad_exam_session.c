@@ -197,7 +197,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession)
    unsigned NumSessions;
 
    /***** Get data of sessions from database *****/
-   NumSessions = Exa_DB_GetSessions (&mysql_res,Exams->Exam.ExaCod);
+   NumSessions = Exa_DB_GetSessions (&mysql_res,
+				     Exams->Exam.ExaCod,Exams->MyAllGrps);
 
       /***** Begin box *****/
       Box_BoxBegin (Txt_Sessions,ExaSes_PutIconsInListOfSessions,Exams,
@@ -207,7 +208,8 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession)
 	 if (Gbl.Crs.Grps.NumGrps && ExaSes_CheckIfICanEditSessions () == Usr_CAN)
 	   {
 	    Set_BeginSettingsHead ();
-	       Grp_ShowFormToSelMyAllGrps (ActSeeOneExa,Exa_PutPars,Exams);
+	       Grp_ShowFormToSelMyAllGrps (ActSeeOneExa,Exams->MyAllGrps,
+					   Exa_PutPars,Exams);
 	    Set_EndSettingsHead ();
 	   }
 
@@ -1610,7 +1612,6 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
   {
    /***** Get parameters *****/
    Exa_GetPars (Exams,Exa_CHECK_EXA_COD);
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Session->SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data from database *****/
@@ -1826,7 +1827,6 @@ void ExaSes_ReqCreatOrEditSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1879,7 +1879,6 @@ void ExaSes_ReceiveSession (void)
 
    /***** Get main parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
    OldNewSession = Session.SesCod > 0 ? OldNew_OLD :
 					OldNew_NEW;

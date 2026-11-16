@@ -162,7 +162,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Crs.Grps.LstGrpsSel.NumGrps     = 0;
    Gbl.Crs.Grps.LstGrpsSel.NestedCalls = 0;
    Gbl.Crs.Grps.AllGrpsSel = true;
-   Gbl.Crs.Grps.MyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
 
    Gbl.Crs.Records.Field.Name[0]    = '\0';
    Gbl.Crs.Records.Field.NumLines   = Rec_MIN_LINES_IN_EDITION_FIELD;

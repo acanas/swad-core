@@ -740,8 +740,9 @@ void Exa_GetPars (struct Exa_Exams *Exams,Exa_CheckExaCod_t CheckExaCod)
      };
 
    /***** Get other parameters *****/
-   Exams->SelectedOrder = Exa_GetParOrder ();
-   Exams->ThisPage = Pag_GetParPagNum (Pag_EXAMS);
+   Exams->SelectedOrder	= Exa_GetParOrder ();
+   Exams->MyAllGrps	= Grp_GetParMyAllGrps ();
+   Exams->ThisPage	= Pag_GetParPagNum (Pag_EXAMS);
 
    /***** Get exam code *****/
    Exams->Exam.ExaCod = GetExaCod[CheckExaCod] (ParCod_Exa);

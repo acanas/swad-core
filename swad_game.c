@@ -818,6 +818,7 @@ long Gam_GetPars (struct Gam_Games *Games)
   {
    /***** Get other parameters *****/
    Games->SelectedOrder = Gam_GetParOrder ();
+   Games->MyAllGrps = Grp_GetParMyAllGrps ();
    Games->ThisPage = Pag_GetParPagNum (Pag_GAMES);
 
    /***** Get game code *****/

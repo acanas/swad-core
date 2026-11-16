@@ -114,7 +114,8 @@ long Exa_DB_CreateSession (const struct ExaSes_Session *Session);
 void Exa_DB_UpdateSession (const struct ExaSes_Session *Session);
 unsigned Exa_DB_GetNumSessionsInExam (long ExaCod);
 unsigned Exa_DB_GetNumOpenSessionsInExam (long ExaCod);
-unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod);
+unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,
+			     long ExaCod,Grp_MyAllGrps_t MyAllGrps);
 Exi_Exist_t Exa_DB_GetSessionDataByCod (MYSQL_RES **mysql_res,long SesCod);
 void Exa_DB_GetSessionTitle (long SesCod,char Title[ExaSes_MAX_BYTES_TITLE + 1]);
 void Exa_DB_ToggleVisResultsSesUsr (const struct ExaSes_Session *Session);

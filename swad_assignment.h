@@ -70,6 +70,7 @@ struct Asg_Assignments
    unsigned Num;		// Number of assignments
    long *LstAsgCods;		// List of assigment codes
    Dat_StartEndTime_t SelectedOrder;
+   Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
    struct Asg_Assignment Asg;	// Current assignment
    long SelectedAsgCod;		// Selected assigment code

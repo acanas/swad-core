@@ -4716,7 +4716,7 @@ void Grp_PutParWhichGrpsAllGrps (void)
 /***** Show form to choice whether to show only my groups or all groups ******/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
+void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,Grp_MyAllGrps_t SelectedMyAllGrps,
                                  void (*FuncPars) (const void *Args),const void *Args)
   {
    extern const char *Txt_GROUP_WHICH_GROUPS[Grp_NUM_MY_ALL_GROUPS];
@@ -4732,7 +4732,7 @@ void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
 	   MyAllGrps <= Grp_ALL_GROUPS;
 	   MyAllGrps++)
 	{
-	 Set_BeginPref (MyAllGrps == Gbl.Crs.Grps.MyAllGrps);
+	 Set_BeginPref (MyAllGrps == SelectedMyAllGrps);
 	    Frm_BeginForm (Action);
 	       Par_PutParUnsigned (NULL,"WhichGrps",(unsigned) MyAllGrps);
 	       if (FuncPars)	// Extra parameters depending on the action

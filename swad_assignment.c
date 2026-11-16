@@ -148,6 +148,7 @@ void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
    Assignments->Num		= 0;
    Assignments->LstAsgCods	= NULL;
    Assignments->SelectedOrder	= Asg_ORDER_DEFAULT;
+   Assignments->MyAllGrps	= Grp_MY_ALL_GROUPS_DEFAULT;
    Assignments->ThisPage	= 0;
    Assignments->Asg.AsgCod	=	// Used as parameter in contextual links
    Assignments->SelectedAsgCod	= -1L;
@@ -166,9 +167,9 @@ void Asg_SeeAssignments (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all assignments *****/
    Asg_ShowAllAssignments (&Assignments);
@@ -203,7 +204,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAsg,
+	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAsg,Assignments->MyAllGrps,
 					Asg_ParsMyAllGrps,Assignments);
 	 Set_EndSettingsHead ();
 	}
@@ -400,9 +401,9 @@ void Asg_SeeOneAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -833,7 +834,7 @@ static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
       Asg_FreeListAssignments (Assignments);
 
    /***** Get list of assignments from database *****/
-   Assignments->Num = Asg_DB_GetListAssignments[Gbl.Crs.Grps.MyAllGrps] (&mysql_res,Assignments->SelectedOrder);
+   Assignments->Num = Asg_DB_GetListAssignments[Assignments->MyAllGrps] (&mysql_res,Assignments->SelectedOrder);
    if (Assignments->Num) // Assignments found...
      {
       /***** Create list of assignments *****/
@@ -1055,9 +1056,9 @@ void Asg_ReqRemAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -1089,9 +1090,9 @@ void Asg_RemoveAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -1142,9 +1143,9 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
@@ -1174,9 +1175,9 @@ void Asg_ReqCreatOrEditAsg (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
@@ -1410,9 +1411,9 @@ void Asg_ReceiveAssignment (void)
 
    /***** Get parameters from form *****/
    /* Get hidden parameters */
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /* Get the code of the assignment */
    OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :

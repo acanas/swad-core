@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_group.h"
 #include "swad_old_new.h"
 #include "swad_scope.h"
 
@@ -88,6 +89,7 @@ struct Gam_Games
    unsigned NumSelected;	// Number of games selected
    struct Gam_GameSelected *Lst;// List of games
    Gam_Order_t SelectedOrder;
+   Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
    char *ListQuestions;
    char *GamCodsSelected;	// String with selected game codes separated by separator multiple

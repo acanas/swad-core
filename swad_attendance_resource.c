@@ -55,9 +55,9 @@ void AttRsc_GetLinkToEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    Events.Event.AttCod = ParCod_GetPar (ParCod_Att);

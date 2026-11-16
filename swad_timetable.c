@@ -115,10 +115,11 @@ typedef enum
 static void Tmt_TimeTableConfigureIntervalsAndAllocateTimeTable (struct Tmt_Timetable *Timetable);
 static void Tmt_FreeTimeTable (void);
 
-static void Tmt_ShowTimeTableGrpsSelected (void);
+static void Tmt_ShowTimeTableGrpsSelected (Grp_MyAllGrps_t MyAllGrps);
 static void Tmt_GetParsTimeTable (struct Tmt_Timetable *Timetable);
 static void Tmt_PutContextualIcons (const void *Timetable);
-static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable);
+static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable,
+					  Grp_MyAllGrps_t SelectedMyAllGrps);
 
 static void Tmt_PutIconToViewCrsTT (__attribute__((unused)) const void *Args);
 static void Tmt_PutIconToViewMyTT (__attribute__((unused)) const void *Args);
@@ -128,7 +129,7 @@ static void Tmt_WriteCrsTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
 static void Tmt_WriteUsrTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
                                          long UsrCod);
 static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
-                                     long UsrCod);
+                                     long UsrCod,Grp_MyAllGrps_t MyAllGrps);
 static void Tmt_CalculateRangeCell (unsigned StartTimeSeconds,
                                     unsigned EndTimeSeconds,
                                     struct Tmt_Range *Range);
@@ -230,7 +231,7 @@ static void Tmt_FreeTimeTable (void)
 /*********** Show whether only my groups or all groups are shown *************/
 /*****************************************************************************/
 
-static void Tmt_ShowTimeTableGrpsSelected (void)
+static void Tmt_ShowTimeTableGrpsSelected (Grp_MyAllGrps_t MyAllGrps)
   {
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
@@ -238,7 +239,7 @@ static void Tmt_ShowTimeTableGrpsSelected (void)
    HTM_DIV_Begin ("class=\"CLASSPHOTO_TITLE CLASSPHOTO_%s CM\"",
                   The_GetSuffix ());
 
-      switch (Gbl.Crs.Grps.MyAllGrps)
+      switch (MyAllGrps)
 	{
 	 case Grp_MY_GROUPS:
 	   HTM_TxtF (Txt_Groups_OF_A_USER,Gbl.Usrs.Me.UsrDat.FullName);
@@ -379,7 +380,7 @@ void Tmt_ShowCrsTimeTable (void)
    Timetable.ShowIcons.Print           = ShowPrint[ViewType];
 
    /***** Get whether to show only my groups or all groups *****/
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
+   MyAllGrps = Grp_GetParMyAllGrps ();
 
    /***** Begin box *****/
    ShowContextualIcons = Timetable.ShowIcons.EditCrsTT       == Lay_SHOW ||
@@ -410,10 +411,9 @@ void Tmt_ShowCrsTimeTable (void)
 	       if ( Timetable.Type == Tmt_MY_TIMETABLE ||
 		   (Timetable.Type == Tmt_COURSE_TIMETABLE &&
 		    Gbl.Crs.Grps.NumGrps))
-		  Tmt_PutFormToSelectMyAllGrps (&Timetable);
+		  Tmt_PutFormToSelectMyAllGrps (&Timetable,MyAllGrps);
 
 	       /* Show form to change first day of week */
-	       MyAllGrps = Grp_GetParMyAllGrps ();
 	       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Timetable.Type],
 						Grp_PutParMyAllGrps,&MyAllGrps);
 
@@ -421,7 +421,7 @@ void Tmt_ShowCrsTimeTable (void)
 	    break;
 	 case Vie_PRINT:
 	    /***** Show whether only my groups or all groups are selected *****/
-	    Tmt_ShowTimeTableGrpsSelected ();
+	    Tmt_ShowTimeTableGrpsSelected (MyAllGrps);
 	    break;
 	 default:
 	    Err_WrongTypeExit ();
@@ -429,7 +429,7 @@ void Tmt_ShowCrsTimeTable (void)
 	}
 
       /***** Show the time table *****/
-      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
+      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod,MyAllGrps);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -473,7 +473,8 @@ static void Tmt_PutContextualIcons (const void *Timetable)
 /***************** Put form to select which groups to show *******************/
 /*****************************************************************************/
 
-static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable)
+static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable,
+					  Grp_MyAllGrps_t SelectedMyAllGrps)
   {
    static Act_Action_t ActSeeTT[Tmt_NUM_TIMETABLE_TYPES] =
      {
@@ -482,7 +483,7 @@ static void Tmt_PutFormToSelectMyAllGrps (const struct Tmt_Timetable *Timetable)
       [Tmt_TUTORING_TIMETABLE] = ActUnk,
      };
 
-   Grp_ShowFormToSelMyAllGrps (ActSeeTT[Timetable->Type],
+   Grp_ShowFormToSelMyAllGrps (ActSeeTT[Timetable->Type],SelectedMyAllGrps,
                                NULL,NULL);
   }
 
@@ -501,7 +502,7 @@ void Tmt_EditCrsTimeTable (void)
    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewCrsTT,NULL,
                  Hlp_COURSE_Timetable,Box_NOT_CLOSABLE);
-      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
+      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod,Grp_ALL_GROUPS);
    Box_BoxEnd ();
   }
 
@@ -520,7 +521,7 @@ void Tmt_EditMyTutTimeTable (void)
    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],
                  Tmt_PutIconToViewMyTT,NULL,
                  Hlp_PROFILE_Timetable,Box_NOT_CLOSABLE);
-      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod);
+      Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Me.UsrDat.UsrCod,Grp_ALL_GROUPS);
    Box_BoxEnd ();
   }
 
@@ -546,7 +547,8 @@ static void Tmt_PutIconToViewMyTT (__attribute__((unused)) const void *Args)
 /*********** Show course timetable or tutor timetable of a teacher ***********/
 /*****************************************************************************/
 
-void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
+void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,
+			long UsrCod,Grp_MyAllGrps_t MyAllGrps)
   {
    extern const char *Txt_The_timetable_is_empty;
 
@@ -588,7 +590,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
       configure and allocate memory when table is read from database */
 
    /***** Fill internal timetable with the timetable from database *****/
-   Tmt_FillTimeTableFromDB (Timetable,UsrCod);
+   Tmt_FillTimeTableFromDB (Timetable,UsrCod,MyAllGrps);
 
    /***** If timetable must be modified... *****/
    if (Gbl.Action.Act == ActChgCrsTT ||
@@ -614,7 +616,7 @@ void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod)
         }
 
       /* Get a new table from database */
-      Tmt_FillTimeTableFromDB (Timetable,UsrCod);
+      Tmt_FillTimeTableFromDB (Timetable,UsrCod,MyAllGrps);
      }
 
    /***** Draw timetable *****/
@@ -704,7 +706,7 @@ static void Tmt_WriteUsrTimeTableIntoDB (const struct Tmt_Timetable *Timetable,
 /*****************************************************************************/
 
 static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
-                                     long UsrCod)
+                                     long UsrCod,Grp_MyAllGrps_t MyAllGrps)
   {
    extern const char *Tmt_DB_ClassType[Tmt_NUM_CLASS_TYPES];
    extern const char *Txt_Incomplete_timetable_for_lack_of_space;
@@ -728,7 +730,7 @@ static void Tmt_FillTimeTableFromDB (struct Tmt_Timetable *Timetable,
    Exi_Exist_t TypeExists;
 
    /***** Get timetable from database *****/
-   NumRows = Tmt_DB_GetTimeTable (&mysql_res,Timetable->Type,UsrCod);
+   NumRows = Tmt_DB_GetTimeTable (&mysql_res,Timetable->Type,UsrCod,MyAllGrps);
 
    /***** If viewing of printing (not editing) ==>
           calculate range of hours and resolution *****/

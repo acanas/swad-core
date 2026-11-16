@@ -29,6 +29,7 @@
 
 #include "swad_date.h"
 #include "swad_deny_allow.h"
+#include "swad_group.h"
 #include "swad_hierarchy_type.h"
 #include "swad_notification_type.h"
 
@@ -80,6 +81,7 @@ struct Svy_Surveys
    unsigned Num;		// Number of surveys
    long *LstSvyCods;		// List of survey codes
    Dat_StartEndTime_t SelectedOrder;
+   Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
    struct Svy_Survey Svy;	// Selected/current survey
    long QstCod;			// Current question code

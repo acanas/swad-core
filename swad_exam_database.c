@@ -1396,7 +1396,8 @@ unsigned Exa_DB_GetNumOpenSessionsInExam (long ExaCod)
 /************************ List the sessions of an exam ***********************/
 /*****************************************************************************/
 
-unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
+unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,
+			     long ExaCod,Grp_MyAllGrps_t MyAllGrps)
   {
    char *HiddenSubQuery;
    char *GroupsSubQuery;
@@ -1424,24 +1425,28 @@ unsigned Exa_DB_GetSessions (MYSQL_RES **mysql_res,long ExaCod)
      }
 
    /***** Subquery: get sessions depending on groups *****/
-   if (Gbl.Crs.Grps.MyAllGrps == Grp_MY_GROUPS)
+   switch (MyAllGrps)
      {
-      if (asprintf (&GroupsSubQuery," AND"
-				    "(SesCod NOT IN"
-				    " (SELECT SesCod FROM exa_groups)"
-				    " OR"
-				    " SesCod IN"
-				    " (SELECT exa_groups.SesCod"
-				       " FROM exa_groups,"
-				             "grp_users"
-				      " WHERE grp_users.UsrCod=%ld"
-				        " AND exa_groups.GrpCod=grp_users.GrpCod))",
-		     Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	  Err_NotEnoughMemoryExit ();
-      }
-    else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-       if (asprintf (&GroupsSubQuery,"%s","") < 0)
-	  Err_NotEnoughMemoryExit ();
+      case Grp_MY_GROUPS:
+	 if (asprintf (&GroupsSubQuery," AND"
+				       "(SesCod NOT IN"
+				       " (SELECT SesCod FROM exa_groups)"
+				       " OR"
+				       " SesCod IN"
+				       " (SELECT exa_groups.SesCod"
+					  " FROM exa_groups,"
+						"grp_users"
+					 " WHERE grp_users.UsrCod=%ld"
+					   " AND exa_groups.GrpCod=grp_users.GrpCod))",
+			Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	     Err_NotEnoughMemoryExit ();
+	 break;
+      case Grp_ALL_GROUPS:
+      default:
+	  if (asprintf (&GroupsSubQuery,"%s","") < 0)
+	     Err_NotEnoughMemoryExit ();
+         break;
+     }
 
    /***** Get data of sessions from database *****/
    NumSessions = (unsigned)

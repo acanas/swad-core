@@ -143,7 +143,8 @@ void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
 unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
                                 unsigned AllowedLvls,
                                 unsigned HiddenAllowed,
-                                Dat_StartEndTime_t SelectedOrder)
+                                Dat_StartEndTime_t SelectedOrder,
+                                Grp_MyAllGrps_t MyAllGrps)
   {
    char *SubQuery[Hie_NUM_LEVELS];
    static const char *OrderBySubQuery[Dat_NUM_START_END_TIME] =
@@ -183,40 +184,42 @@ unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
    /***** Fill subquery for course *****/
    if (AllowedLvls & 1 << Hie_CRS)
      {
-      if (Gbl.Crs.Grps.MyAllGrps == Grp_MY_GROUPS)
+      switch (MyAllGrps)
         {
-	 if (asprintf (&SubQuery[Hie_CRS],"%s("
-					     "Scope='%s'"
-					     " AND Cod=%ld%s"
-					     " AND "
-					     "(SvyCod NOT IN"
-					     " (SELECT SvyCod"
-						" FROM svy_groups)"
-					     " OR"
-					     " SvyCod IN"
-					     " (SELECT svy_groups.SvyCod"
-						" FROM grp_users,"
-						      "svy_groups"
-					       " WHERE grp_users.UsrCod=%ld"
-						 " AND grp_users.GrpCod=svy_groups.GrpCod))"
-					     ")",
-		       SubQueryFilled ? " OR " :
-					"",
-		       Hie_GetDBStrFromLevel (Hie_CRS),Gbl.Hie.Node[Hie_CRS].HieCod,
-		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							" AND Hidden='N'",
-		       Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
-	    Err_NotEnoughMemoryExit ();
-        }
-      else	// Gbl.Crs.Grps.WhichGrps == Grp_ALL_GROUPS
-        {
-	 if (asprintf (&SubQuery[Hie_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
-		       SubQueryFilled ? " OR " :
-					"",
-		       Hie_GetDBStrFromLevel (Hie_CRS),Gbl.Hie.Node[Hie_CRS].HieCod,
-		       (HiddenAllowed & 1 << Hie_CRS) ? "" :
-							" AND Hidden='N'") < 0)
-	    Err_NotEnoughMemoryExit ();
+         case Grp_MY_GROUPS:
+	    if (asprintf (&SubQuery[Hie_CRS],"%s("
+						"Scope='%s'"
+						" AND Cod=%ld%s"
+						" AND "
+						"(SvyCod NOT IN"
+						" (SELECT SvyCod"
+						   " FROM svy_groups)"
+						" OR"
+						" SvyCod IN"
+						" (SELECT svy_groups.SvyCod"
+						   " FROM grp_users,"
+							 "svy_groups"
+						  " WHERE grp_users.UsrCod=%ld"
+						    " AND grp_users.GrpCod=svy_groups.GrpCod))"
+						")",
+			  SubQueryFilled ? " OR " :
+					   "",
+			  Hie_GetDBStrFromLevel (Hie_CRS),Gbl.Hie.Node[Hie_CRS].HieCod,
+			  (HiddenAllowed & 1 << Hie_CRS) ? "" :
+							   " AND Hidden='N'",
+			  Gbl.Usrs.Me.UsrDat.UsrCod) < 0)
+	       Err_NotEnoughMemoryExit ();
+	    break;
+	 case Grp_ALL_GROUPS:
+	 default:
+	    if (asprintf (&SubQuery[Hie_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
+			  SubQueryFilled ? " OR " :
+					   "",
+			  Hie_GetDBStrFromLevel (Hie_CRS),Gbl.Hie.Node[Hie_CRS].HieCod,
+			  (HiddenAllowed & 1 << Hie_CRS) ? "" :
+							   " AND Hidden='N'") < 0)
+	       Err_NotEnoughMemoryExit ();
+	    break;
         }
       SubQueryFilled = true;
      }

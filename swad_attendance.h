@@ -30,6 +30,7 @@
 #include <mysql/mysql.h>	// To access MySQL databases
 
 #include "swad_date.h"
+#include "swad_group.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -75,11 +76,12 @@ struct Att_Events
       HTM_Attributes_t Checked;	// Do I have selected this attendance event?
      } *Lst;			// List of attendance events
    Dat_StartEndTime_t SelectedOrder;
-   struct Att_Event Event;	// Current event
-   long SelectedAttCod;
+   Grp_MyAllGrps_t MyAllGrps;
+   unsigned ThisPage;
+   struct Att_Event Event;	// Current attendance event
+   long SelectedAttCod;		// Selected attendance event code
    Lay_Show_t ShowDetails;
    char *StrAttCodsSelected;
-   unsigned ThisPage;
   };
 
 #define Att_NUM_PRESENT 2

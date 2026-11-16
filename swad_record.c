@@ -1216,7 +1216,8 @@ void Rec_ShowRecordOneTchCrs (void)
 	    Timetable.Type = Tmt_TUTORING_TIMETABLE;
 	    Box_BoxBegin (Txt_TIMETABLE_TYPES[Timetable.Type],NULL,NULL,
 			  Hlp_USERS_Teachers_timetable,Box_NOT_CLOSABLE);
-	       Tmt_ShowTimeTable (&Timetable,Gbl.Usrs.Other.UsrDat.UsrCod);
+	       Tmt_ShowTimeTable (&Timetable,
+				  Gbl.Usrs.Other.UsrDat.UsrCod,Grp_ALL_GROUPS);
 	    Box_BoxEnd ();
 	 HTM_DIV_End ();
 	}
@@ -1334,7 +1335,8 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 				   Gbl.Action.Act == ActSeeRecSevTch ? Hlp_USERS_Teachers_timetable :
 								       NULL,
 				   Box_NOT_CLOSABLE);
-			Tmt_ShowTimeTable (&Timetable,UsrDat.UsrCod);
+			Tmt_ShowTimeTable (&Timetable,
+					   UsrDat.UsrCod,Grp_ALL_GROUPS);
 		     Box_BoxEnd ();
 		  HTM_DIV_End ();
 		 }

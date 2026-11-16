@@ -57,9 +57,9 @@ void AsgRsc_GetLinkToAssignment (void)
    Asg_ResetAssignments (&Assignments);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
+   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);

@@ -24,6 +24,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
+/********************************* Headers ***********************************/
+/*****************************************************************************/
+
+#include "swad_group.h"
+
+/*****************************************************************************/
 /************************* Public constants and types ************************/
 /*****************************************************************************/
 
@@ -115,6 +121,7 @@ struct Tmt_Column
 void Tmt_ShowCrsTimeTable (void);
 void Tmt_EditCrsTimeTable (void);
 void Tmt_EditMyTutTimeTable (void);
-void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,long UsrCod);
+void Tmt_ShowTimeTable (struct Tmt_Timetable *Timetable,
+			long UsrCod,Grp_MyAllGrps_t MyAllGrps);
 
 #endif

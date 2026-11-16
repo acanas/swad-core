@@ -165,9 +165,9 @@ void Att_ShowEvents (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Show all attendance events *****/
    Att_ShowAllEvents (&Events);
@@ -183,11 +183,12 @@ void Att_ResetEvents (struct Att_Events *Events)
    Events->Num			= 0;		// Number of attendance events
    Events->Lst			= NULL;		// List of attendance events
    Events->SelectedOrder	= Att_ORDER_DEFAULT;
+   Events->MyAllGrps		= Grp_MY_ALL_GROUPS_DEFAULT;
+   Events->ThisPage		= 0;
    Events->Event.AttCod		=
    Events->SelectedAttCod	= -1L;
    Events->ShowDetails		= Lay_DONT_SHOW;
    Events->StrAttCodsSelected	= NULL;
-   Events->ThisPage		= 0;
   }
 
 /*****************************************************************************/
@@ -225,7 +226,7 @@ void Att_ShowAllEvents (struct Att_Events *Events)
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAtt,
+	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAtt,Events->MyAllGrps,
 					Att_ParsMyAllGrps,&Events);
 	 Set_EndSettingsHead ();
 	}
@@ -646,9 +647,9 @@ static void Att_GetListEvents (struct Att_Events *Events,
       Att_FreeListEvents (Events);
 
    /***** Get list of attendance events from database *****/
-   Events->Num = Att_DB_GetListAttEvents[Gbl.Crs.Grps.MyAllGrps] (&mysql_res,
-	                                                          Events->SelectedOrder,
-	                                                          OrderNewestOldest);
+   Events->Num = Att_DB_GetListAttEvents[Events->MyAllGrps] (&mysql_res,
+	                                                     Events->SelectedOrder,
+	                                                     OrderNewestOldest);
    if (Events->Num) // Attendance events found...
      {
       /***** Create list of attendance events *****/
@@ -810,9 +811,9 @@ void Att_AskRemEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
@@ -844,9 +845,9 @@ void Att_RemoveEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
@@ -904,9 +905,9 @@ static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
@@ -956,9 +957,9 @@ void Att_ReqCreatOrEditEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    OldNewEvent = (Events.Event.AttCod = ParCod_GetPar (ParCod_Att)) > 0 ? OldNew_OLD :
@@ -1109,9 +1110,9 @@ void Att_ReceiveEvent (void)
    Att_ResetEvents (&Events);
 
    /***** Get parameters *****/
-   Events.SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events.SelectedOrder	= Att_GetParAttOrder ();
+   Events.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Events.ThisPage	= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    OldNewEvent = (ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) > 0 ? OldNew_OLD :
@@ -1383,9 +1384,9 @@ static void Att_ShowEvent (struct Att_Events *Events)
    extern const char *Txt_Event;
 
    /***** Get parameters *****/
-   Events->SelectedOrder = Att_GetParAttOrder ();
-   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
-   Events->ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+   Events->SelectedOrder	= Att_GetParAttOrder ();
+   Events->MyAllGrps		= Grp_GetParMyAllGrps ();
+   Events->ThisPage		= Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get data of this attendance event *****/
    Att_GetEventDataByCodAndCheckCrs (&Events->Event);
@@ -2430,7 +2431,7 @@ static void Att_GetListSelectedAttCods (struct Att_Events *Events)
      {
       /***** Set which events will be marked as selected by default *****/
       if (!Gbl.Crs.Grps.NumGrps ||	// Course has no groups
-          Gbl.Crs.Grps.AllGrpsSel)		// All groups selected
+          Gbl.Crs.Grps.AllGrpsSel)	// All groups selected
 	 /* Set all events as selected */
 	 for (NumAttEvent = 0;
 	      NumAttEvent < Events->Num;

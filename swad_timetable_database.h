@@ -44,8 +44,8 @@ void Tmt_DB_InsertHourInUsrTimeTable (long UsrCod,
                                       unsigned Weekday,unsigned Hour,unsigned Min,
                                       unsigned SecondsPerInterval);
 
-unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,
-                              Tmt_TimeTableType_t Type,long UsrCod);
+unsigned Tmt_DB_GetTimeTable (MYSQL_RES **mysql_res,Tmt_TimeTableType_t Type,
+			      long UsrCod,Grp_MyAllGrps_t MyAllGrps);
 
 void Tmt_DB_OrphanAllGrpsOfATypeInCrsTimeTable (long GrpTypCod);
 void Tmt_DB_OrphanGrpInCrsTimeTable (long GrpCod);
