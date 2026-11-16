@@ -32,9 +32,16 @@
 #include "swad_assignment_resource.h"
 #include "swad_error.h"
 #include "swad_form.h"
+#include "swad_global.h"
 #include "swad_pagination.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
+
+/*****************************************************************************/
+/*************** External global variables from others modules ***************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /************************** Get link to assignment ***************************/
@@ -51,7 +58,7 @@ void AsgRsc_GetLinkToAssignment (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/

@@ -1610,7 +1610,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
   {
    /***** Get parameters *****/
    Exa_GetPars (Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Session->SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data from database *****/
@@ -1826,7 +1826,7 @@ void ExaSes_ReqCreatOrEditSes (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
 
    /***** Get exam data from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -1879,7 +1879,7 @@ void ExaSes_ReceiveSession (void)
 
    /***** Get main parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Session.SesCod = ParCod_GetPar (ParCod_Ses);
    OldNewSession = Session.SesCod > 0 ? OldNew_OLD :
 					OldNew_NEW;

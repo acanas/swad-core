@@ -165,7 +165,7 @@ void Svy_SeeAllSvys (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Show all surveys *****/
@@ -370,7 +370,7 @@ void Svy_SeeOneSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1356,7 +1356,7 @@ void Svy_AskRemSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1391,7 +1391,7 @@ void Svy_RemoveSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1442,7 +1442,7 @@ void Svy_AskResetSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1478,7 +1478,7 @@ void Svy_ResetSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1528,7 +1528,7 @@ static void Svy_HideUnhideSvy (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
@@ -1579,7 +1579,7 @@ void Svy_ReqCreatOrEditSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
@@ -1829,7 +1829,7 @@ void Svy_ReceiveSvy (void)
 
    /***** Get parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
@@ -2098,7 +2098,7 @@ void Svy_ReqEditQuestion (void)
 
    /***** Get other parameters *****/
    Svys.SelectedOrder = Svy_GetParSvyOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Svys.ThisPage = Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Show form to create a new question in this survey *****/

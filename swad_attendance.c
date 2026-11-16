@@ -77,9 +77,6 @@ static unsigned Att_ColSpan[Pho_NUM_PHOTOS] =
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Att_ResetEvents (struct Att_Events *Events);
-
-static void Att_ShowAllEvents (struct Att_Events *Events);
 static void Att_ParsMyAllGrps (const void *Events);
 static void Att_PutIconsInListOfEvents (const void *Events);
 static void Att_PutIconToCreateNewEvent (const struct Att_Events *Events);
@@ -89,7 +86,6 @@ static void Att_PutParsToListUsrsAttendance (const void *Events);
 static void Att_ShowOneEventRow (struct Att_Events *Events,
                                  Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 static void Att_WriteEventAuthor (struct Att_Event *Event);
-static Dat_StartEndTime_t Att_GetParAttOrder (void);
 
 static void Att_PutFormsToRemEditOneEvent (struct Att_Events *Events,
                                            const char *Anchor);
@@ -158,22 +154,6 @@ static void Att_ListAttEventsForAStd (struct Att_Events *Events,
                                       unsigned NumUsr,struct Usr_Data *UsrDat);
 
 /*****************************************************************************/
-/************************** Reset attendance events **************************/
-/*****************************************************************************/
-
-static void Att_ResetEvents (struct Att_Events *Events)
-  {
-   Events->LstReadStatus      = Cac_INVALID;	// List is not read from database
-   Events->Num                = 0;		// Number of attendance events
-   Events->Lst                = NULL;		// List of attendance events
-   Events->SelectedOrder      = Att_ORDER_DEFAULT;
-   Events->Event.AttCod       = -1L;
-   Events->ShowDetails        = Lay_DONT_SHOW;
-   Events->StrAttCodsSelected = NULL;
-   Events->ThisPage           = 0;
-  }
-
-/*****************************************************************************/
 /************************ List all attendance events *************************/
 /*****************************************************************************/
 
@@ -186,21 +166,35 @@ void Att_ShowEvents (void)
 
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
-
-   /***** Get list of attendance events *****/
-   Att_GetListEvents (&Events,Att_NEWEST_FIRST);
 
    /***** Show all attendance events *****/
    Att_ShowAllEvents (&Events);
   }
 
 /*****************************************************************************/
+/************************** Reset attendance events **************************/
+/*****************************************************************************/
+
+void Att_ResetEvents (struct Att_Events *Events)
+  {
+   Events->LstReadStatus	= Cac_INVALID;	// List is not read from database
+   Events->Num			= 0;		// Number of attendance events
+   Events->Lst			= NULL;		// List of attendance events
+   Events->SelectedOrder	= Att_ORDER_DEFAULT;
+   Events->Event.AttCod		=
+   Events->SelectedAttCod	= -1L;
+   Events->ShowDetails		= Lay_DONT_SHOW;
+   Events->StrAttCodsSelected	= NULL;
+   Events->ThisPage		= 0;
+  }
+
+/*****************************************************************************/
 /************************* Show all attendance events ************************/
 /*****************************************************************************/
 
-static void Att_ShowAllEvents (struct Att_Events *Events)
+void Att_ShowAllEvents (struct Att_Events *Events)
   {
    extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Events;
@@ -213,6 +207,9 @@ static void Att_ShowAllEvents (struct Att_Events *Events)
    Dat_StartEndTime_t Order;
    Grp_MyAllGrps_t MyAllGrps;
    unsigned NumAttEvent;
+
+   /***** Get list of attendance events *****/
+   Att_GetListEvents (Events,Att_NEWEST_FIRST);
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Events->Num;
@@ -417,6 +414,8 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
+   Lay_Highlight_t HighlightRow = Events->Event.AttCod == Events->SelectedAttCod ? Lay_HIGHLIGHT :
+										   Lay_DONT_HIGHLIGHT;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -434,7 +433,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 HTM_TR_Begin (NULL);
 	 break;
       case Lay_SHOWING_SEVERAL:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
      }
 
@@ -505,7 +504,7 @@ static void Att_ShowOneEventRow (struct Att_Events *Events,
 	 HTM_TR_Begin (NULL);
 	 break;
       case Lay_SHOWING_SEVERAL:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
      }
 
@@ -547,7 +546,7 @@ static void Att_WriteEventAuthor (struct Att_Event *Event)
 /**** Get parameter with the type or order in list of attendance events ******/
 /*****************************************************************************/
 
-static Dat_StartEndTime_t Att_GetParAttOrder (void)
+Dat_StartEndTime_t Att_GetParAttOrder (void)
   {
    return (Dat_StartEndTime_t)
 	  Par_GetParUnsignedLong ("Order",
@@ -812,7 +811,7 @@ void Att_AskRemEvent (void)
 
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
@@ -820,6 +819,7 @@ void Att_AskRemEvent (void)
 
    /***** Get data of the attendance event from database *****/
    Att_GetEventDataByCodAndCheckCrs (&Events.Event);
+   Events.SelectedAttCod = Events.Event.AttCod;
 
    /***** Show question and button to remove event *****/
    Ale_ShowAlertRemove (ActRemAtt,NULL,
@@ -828,33 +828,42 @@ void Att_AskRemEvent (void)
 	                Events.Event.Title);
 
    /***** Show attendance events again *****/
-   Att_ShowEvents ();
+   Att_ShowAllEvents (&Events);
   }
 
 /*****************************************************************************/
-/** Get param., remove an attendance event and show attendance events again **/
+/********* Remove an attendance event and show attendance events again *******/
 /*****************************************************************************/
 
-void Att_GetAndRemEvent (void)
+void Att_RemoveEvent (void)
   {
    extern const char *Txt_Event_X_removed;
-   struct Att_Event Event;
+   struct Att_Events Events;
+
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
+   /***** Get parameters *****/
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
+   Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get data of the attendance event from database *****/
    // Inside this function, the course is checked to be the current one
-   Att_GetEventDataByCodAndCheckCrs (&Event);
+   Att_GetEventDataByCodAndCheckCrs (&Events.Event);
+   Events.SelectedAttCod = Events.Event.AttCod;
 
    /***** Remove the attendance event from database *****/
-   Att_RemoveEventFromDB (Event.AttCod);
+   Att_RemoveEventFromDB (Events.Event.AttCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,Event.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Event_X_removed,Events.Event.Title);
 
    /***** Show attendance events again *****/
-   Att_ShowEvents ();
+   Att_ShowAllEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -889,19 +898,28 @@ void Att_UnhideEvent (void)
 
 static void Att_HideUnhideEvent (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   struct Att_Event Event;
+   struct Att_Events Events;
+
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
+   /***** Get parameters *****/
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
-   Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
+   Events.Event.AttCod = ParCod_GetAndCheckPar (ParCod_Att);
 
    /***** Get data of the attendance event from database *****/
-   Att_GetEventDataByCodAndCheckCrs (&Event);
+   Att_GetEventDataByCodAndCheckCrs (&Events.Event);
+   Events.SelectedAttCod = Events.Event.AttCod;
 
    /***** Unhide attendance event *****/
-   Att_DB_HideOrUnhideEvent (Event.AttCod,HiddenOrVisible);
+   Att_DB_HideOrUnhideEvent (Events.Event.AttCod,HiddenOrVisible);
 
    /***** Show attendance events again *****/
-   Att_ShowEvents ();
+   Att_ShowAllEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -939,7 +957,7 @@ void Att_ReqCreatOrEditEvent (void)
 
    /***** Get parameters *****/
    Events.SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
@@ -971,6 +989,7 @@ void Att_ReqCreatOrEditEvent (void)
 	 Description[0] = '\0';
 	 break;
      }
+   Events.SelectedAttCod = Events.Event.AttCod;
 
    /***** Begin form *****/
    switch (OldNewEvent)
@@ -1069,7 +1088,6 @@ void Att_ReqCreatOrEditEvent (void)
    Frm_EndForm ();
 
    /***** Show current attendance events *****/
-   Att_GetListEvents (&Events,Att_NEWEST_FIRST);
    Att_ShowAllEvents (&Events);
   }
 
@@ -1080,11 +1098,20 @@ void Att_ReqCreatOrEditEvent (void)
 void Att_ReceiveEvent (void)
   {
    extern const char *Txt_Already_existed_an_event_with_the_title_X;
-   struct Att_Event OldAtt;
+   struct Att_Events Events;
+   // struct Att_Event OldAtt;
    struct Att_Event ReceivedAtt;
    OldNew_OldNew_t OldNewEvent;
    Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    char Description[Cns_MAX_BYTES_TEXT + 1];
+
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
+   /***** Get parameters *****/
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    OldNewEvent = (ReceivedAtt.AttCod = ParCod_GetPar (ParCod_Att)) > 0 ? OldNew_OLD :
@@ -1093,9 +1120,9 @@ void Att_ReceiveEvent (void)
    if (OldNewEvent == OldNew_OLD)
      {
       /* Get data of the old (current) attendance event from database */
-      OldAtt.AttCod = ReceivedAtt.AttCod;
-      Att_GetEventDataByCodAndCheckCrs (&OldAtt);
-      ReceivedAtt.Hidden = OldAtt.Hidden;
+      Events.Event.AttCod = ReceivedAtt.AttCod;
+      Att_GetEventDataByCodAndCheckCrs (&Events.Event);
+      ReceivedAtt.Hidden = Events.Event.Hidden;
      }
 
    /***** Get start/end date-times *****/
@@ -1165,7 +1192,7 @@ void Att_ReceiveEvent (void)
      }
 
    /***** Show attendance events again *****/
-   Att_ShowEvents ();
+   Att_ShowAllEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -1357,11 +1384,12 @@ static void Att_ShowEvent (struct Att_Events *Events)
 
    /***** Get parameters *****/
    Events->SelectedOrder = Att_GetParAttOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Events->ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
 
    /***** Get data of this attendance event *****/
    Att_GetEventDataByCodAndCheckCrs (&Events->Event);
+   Events->SelectedAttCod = Events->Event.AttCod;
    Events->Event.NumStdsTotal = Att_DB_GetNumStdsTotalWhoAreInEvent (Events->Event.AttCod);
 
    /***** Show attendance event inside a box *****/

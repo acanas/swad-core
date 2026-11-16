@@ -1178,7 +1178,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
    /* Get parameters of game */
    if ((Games->Game.GamCod = Gam_GetPars (Games)) <= 0)
       Err_WrongGameExit ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Gam_GetGameDataByCod (&Games->Game);
    if (Games->Game.HieCod != Gbl.Hie.Node[Hie_CRS].HieCod)
       Err_WrongGameExit ();

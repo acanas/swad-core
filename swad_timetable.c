@@ -379,7 +379,7 @@ void Tmt_ShowCrsTimeTable (void)
    Timetable.ShowIcons.Print           = ShowPrint[ViewType];
 
    /***** Get whether to show only my groups or all groups *****/
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
 
    /***** Begin box *****/
    ShowContextualIcons = Timetable.ShowIcons.EditCrsTT       == Lay_SHOW ||

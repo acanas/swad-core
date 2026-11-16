@@ -30,8 +30,15 @@
 #include "swad_attendance_database.h"
 #include "swad_attendance_resource.h"
 #include "swad_error.h"
+#include "swad_global.h"
 #include "swad_parameter_code.h"
 #include "swad_resource_database.h"
+
+/*****************************************************************************/
+/*************** External global variables from others modules ***************/
+/*****************************************************************************/
+
+extern struct Globals Gbl;
 
 /*****************************************************************************/
 /************************ Get link to attendance event ***********************/
@@ -41,24 +48,33 @@ void AttRsc_GetLinkToEvent (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Control_of_class_attendance;
-   struct Att_Event Event;
+   struct Att_Events Events;
    __attribute__((unused)) Exi_Exist_t AttExists;
 
+   /***** Reset attendance events *****/
+   Att_ResetEvents (&Events);
+
+   /***** Get parameters *****/
+   Events.SelectedOrder = Att_GetParAttOrder ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
+   Events.ThisPage = Pag_GetParPagNum (Pag_ATT_EVENTS);
+
    /***** Get attendance event code *****/
-   Event.AttCod = ParCod_GetPar (ParCod_Att);
+   Events.Event.AttCod = ParCod_GetPar (ParCod_Att);
 
    /***** Get attendance event data *****/
-   if (Event.AttCod > 0)
-      AttExists = Att_GetEventDataByCod (&Event);
+   if (Events.Event.AttCod > 0)
+      AttExists = Att_GetEventDataByCod (&Events.Event);
+   Events.SelectedAttCod = Events.Event.AttCod;
 
    /***** Copy link to attendance event into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_ATT_EVENT,Event.AttCod);
+   Rsc_DB_CopyToClipboard (Rsc_ATT_EVENT,Events.Event.AttCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-                  Event.AttCod > 0 ? Event.Title :
-                	             Txt_Control_of_class_attendance);
+                  Events.Event.AttCod > 0 ? Events.Event.Title :
+                			    Txt_Control_of_class_attendance);
 
    /***** Show attendance events again *****/
-   Att_ShowEvents ();
+   Att_ShowAllEvents (&Events);
   }

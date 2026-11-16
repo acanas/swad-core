@@ -401,7 +401,7 @@ void Asg_SeeOneAssignment (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
@@ -1175,7 +1175,7 @@ void Asg_ReqCreatOrEditAsg (void)
 
    /***** Get parameters *****/
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
@@ -1411,7 +1411,7 @@ void Asg_ReceiveAssignment (void)
    /***** Get parameters from form *****/
    /* Get hidden parameters */
    Assignments.SelectedOrder = Asg_GetParAsgOrder ();
-   Grp_GetParMyAllGrps ();
+   Gbl.Crs.Grps.MyAllGrps = Grp_GetParMyAllGrps ();
    Assignments.ThisPage = Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /* Get the code of the assignment */

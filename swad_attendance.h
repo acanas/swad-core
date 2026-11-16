@@ -75,7 +75,8 @@ struct Att_Events
       HTM_Attributes_t Checked;	// Do I have selected this attendance event?
      } *Lst;			// List of attendance events
    Dat_StartEndTime_t SelectedOrder;
-   struct Att_Event Event;	// Selected/current event
+   struct Att_Event Event;	// Current event
+   long SelectedAttCod;
    Lay_Show_t ShowDetails;
    char *StrAttCodsSelected;
    unsigned ThisPage;
@@ -93,6 +94,10 @@ typedef enum
 /*****************************************************************************/
 
 void Att_ShowEvents (void);
+void Att_ResetEvents (struct Att_Events *Events);
+void Att_ShowAllEvents (struct Att_Events *Events);
+
+Dat_StartEndTime_t Att_GetParAttOrder (void);
 
 Usr_Can_t Att_CheckIfICanEditEvents (void);
 
@@ -101,7 +106,7 @@ Exi_Exist_t Att_GetEventDataByCod (struct Att_Event *Event);
 void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event);
 
 void Att_AskRemEvent (void);
-void Att_GetAndRemEvent (void);
+void Att_RemoveEvent (void);
 void Att_RemoveEventFromDB (long AttCod);
 
 void Att_HideEvent (void);

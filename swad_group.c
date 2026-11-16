@@ -4751,6 +4751,7 @@ void Grp_ShowFormToSelMyAllGrps (Act_Action_t Action,
 
 Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
   {
+   static Grp_MyAllGrps_t CachedMyAllGrps = Grp_MY_ALL_GROUPS_DEFAULT;
    static Cac_Status_t Status = Cac_INVALID;
    static Grp_MyAllGrps_t MyAllGrps[Usr_NUM_BELONG] =
      {
@@ -4792,16 +4793,16 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
 	}
 
       /* Get parameter */
-      Gbl.Crs.Grps.MyAllGrps = (Grp_MyAllGrps_t)
-	                       Par_GetParUnsignedLong ("WhichGrps",
-	                                               0,
-	                                               Grp_NUM_MY_ALL_GROUPS - 1,
-	                                               (unsigned long) MyAllGrpsDefault);
+      CachedMyAllGrps = (Grp_MyAllGrps_t)
+	                Par_GetParUnsignedLong ("WhichGrps",
+	                                        0,
+	                                        Grp_NUM_MY_ALL_GROUPS - 1,
+	                                        (unsigned long) MyAllGrpsDefault);
 
       Status = Cac_VALID;
      }
 
-   return Gbl.Crs.Grps.MyAllGrps;
+   return CachedMyAllGrps;
   }
 
 /*****************************************************************************/
