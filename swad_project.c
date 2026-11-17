@@ -372,29 +372,31 @@ long Prj_GetPrjCod (void)
 void Prj_ResetPrjsAndReadConfig (struct Prj_Projects *Prjs)
   {
    /***** Filters *****/
-   Prjs->Filter.Who    = Prj_FILTER_WHO_DEFAULT;
-   Prjs->Filter.RolPrj = Prj_FILTER_ROLE_UNK_DEFAULT |
-			 Prj_FILTER_ROLE_STD_DEFAULT |
-                         Prj_FILTER_ROLE_TUT_DEFAULT |
-                         Prj_FILTER_ROLE_EVL_DEFAULT;
-   Prjs->Filter.Assign = Prj_FILTER_ASSIGNED_DEFAULT |
-	                 Prj_FILTER_NONASSIG_DEFAULT;
-   Prjs->Filter.Hidden = Prj_FILTER_HIDDEN_DEFAULT |
-	                 Prj_FILTER_VISIBL_DEFAULT;
-   Prjs->Filter.Faulti = Prj_FILTER_FAULTY_DEFAULT |
-	                 Prj_FILTER_FAULTLESS_DEFAULT;
-   Prjs->Filter.Review = Prj_FILTER_UNREVIEWED_DEFAULT |
-                         Prj_FILTER_UNAPPROVED_DEFAULT |
-                         Prj_FILTER_APPROVED_DEFAULT;
-   Prjs->Filter.DptCod = Prj_FILTER_DPT_DEFAULT;
+   Prjs->Filter.Who	= Prj_FILTER_WHO_DEFAULT;
+   Prjs->Filter.RolPrj	= Prj_FILTER_ROLE_UNK_DEFAULT |
+			  Prj_FILTER_ROLE_STD_DEFAULT |
+			  Prj_FILTER_ROLE_TUT_DEFAULT |
+			  Prj_FILTER_ROLE_EVL_DEFAULT;
+   Prjs->Filter.Assign	= Prj_FILTER_ASSIGNED_DEFAULT |
+			  Prj_FILTER_NONASSIG_DEFAULT;
+   Prjs->Filter.Hidden	= Prj_FILTER_HIDDEN_DEFAULT |
+			  Prj_FILTER_VISIBL_DEFAULT;
+   Prjs->Filter.Faulti	= Prj_FILTER_FAULTY_DEFAULT |
+			  Prj_FILTER_FAULTLESS_DEFAULT;
+   Prjs->Filter.Review	= Prj_FILTER_UNREVIEWED_DEFAULT |
+			  Prj_FILTER_UNAPPROVED_DEFAULT |
+			  Prj_FILTER_APPROVED_DEFAULT;
+   Prjs->Filter.DptCod	= Prj_FILTER_DPT_DEFAULT;
 
    /***** Project list *****/
-   Prjs->LstReadStatus = Cac_INVALID;	// List is not read
-   Prjs->Num           = 0;
-   Prjs->LstPrjCods    = NULL;
-   Prjs->SelectedOrder = Prj_ORDER_DEFAULT;
-   Prjs->ThisPage      = 0;
-   Prjs->Prj.PrjCod    = -1L;
+   Prjs->LstReadStatus	= Cac_INVALID;	// List is not read
+   Prjs->Num		= 0;
+   Prjs->LstPrjCods 	= NULL;
+   Prjs->SelectedOrder	= Prj_ORDER_DEFAULT;
+   Prjs->ThisPage	= 0;
+   Prjs->NumIndex	= 0;	// 0 ==> selected project shown before list of projects
+   Prjs->Prj.PrjCod	=
+   Prjs->SelectedPrjCod	= -1L;
 
    /***** Read project configuration from database *****/
    PrjCfg_GetConfig (&Prjs->Config);
@@ -1436,6 +1438,7 @@ void Prj_ShowOnePrj (struct Brw_FileBrowser *FileBrowser)
           then show project and (if possible) its file browser *****/
    Prj_AllocMemPrj (&Prjs.Prj);
       Prj_GetPrjDataByCod (&Prjs.Prj);
+      Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
       Prj_ShowBoxWithOnePrj (&Prjs,FileBrowser);
    Prj_FreeMemPrj (&Prjs.Prj);
 
@@ -1454,10 +1457,10 @@ void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs,
    extern const char *Txt_Project;
 
    /***** Begin box *****/
-   Box_BoxBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
-				      Txt_Project,
-                 Prj_PutIconsOnePrj,Prjs,
-		 Hlp_ASSESSMENT_Projects,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
+					    Txt_Project,
+		       Prj_PutIconsOnePrj,Prjs,
+		       Hlp_ASSESSMENT_Projects,Lay_HIGHLIGHT);
 
       /***** Show project data *****/
       HTM_FIELDSET_Begin (NULL);
@@ -1498,7 +1501,7 @@ static void Prj_PutIconsOnePrj (const void *Prjs)
       Frm_SetAnchorStr ((long) ((struct Prj_Projects *) Prjs)->NumIndex,&Anchor);
 
       /***** Icons to remove/edit this project *****/
-      Prj_PutIconsToRemEditOnePrj (Prjs,Anchor);
+      Prj_PutIconsToRemEditOnePrj ((struct Prj_Projects *) Prjs,Anchor);
 
       /***** Free anchor string *****/
       Frm_FreeAnchorStr (&Anchor);
@@ -1632,13 +1635,15 @@ static void Prj_ShowFirstRow (struct Prj_Projects *Prjs,
   {
    extern const char *HidVis_DateBlueClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
+   Lay_Highlight_t HighlightRow = Prjs->Prj.PrjCod == Prjs->SelectedPrjCod ? Lay_HIGHLIGHT :
+									     Lay_DONT_HIGHLIGHT;
    char *Id;
 
    /***** Write first row of data of this project *****/
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
       default:
 	 HTM_TR_Begin ("NULL");
@@ -1787,6 +1792,8 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Prjs,
       [Usr_CAN_NOT] = Frm_DONT_PUT_FORM,
       [Usr_CAN    ] = Frm_PUT_FORM,
      };
+   Lay_Highlight_t HighlightRow = Prjs->Prj.PrjCod == Prjs->SelectedPrjCod ? Lay_HIGHLIGHT :
+									     Lay_DONT_HIGHLIGHT;
    Frm_PutForm_t PutForm;
    static unsigned UniqueId = 0;
    char *Id;
@@ -1805,7 +1812,7 @@ static void Prj_ShowReviewStatus (struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
       default:
 	 HTM_TR_Begin (NULL);
@@ -1975,11 +1982,13 @@ static void Prj_ShowAssigned (const struct Prj_Projects *Prjs,
   {
    extern const char *Txt_Assigned_QUESTION;
    extern const char *Txt_PROJECT_NONASSIGNED_ASSIGNED_SINGUL[Prj_NUM_ASSIGNED];
+   Lay_Highlight_t HighlightRow = Prjs->Prj.PrjCod == Prjs->SelectedPrjCod ? Lay_HIGHLIGHT :
+									     Lay_DONT_HIGHLIGHT;
 
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
       default:
 	 HTM_TR_Begin (NULL);
@@ -2015,11 +2024,13 @@ static void Prj_ShowNumStds (const struct Prj_Projects *Prjs,
                              const struct Prj_Faults *Faults)
   {
    extern const char *Txt_Number_of_students;
+   Lay_Highlight_t HighlightRow = Prjs->Prj.PrjCod == Prjs->SelectedPrjCod ? Lay_HIGHLIGHT :
+									     Lay_DONT_HIGHLIGHT;
 
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	 break;
       default:
 	 HTM_TR_Begin (NULL);
@@ -2086,6 +2097,8 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Prjs,
       [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
+   Lay_Highlight_t HighlightRow = Prjs->Prj.PrjCod == Prjs->SelectedPrjCod ? Lay_HIGHLIGHT :
+									     Lay_DONT_HIGHLIGHT;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -2100,7 +2113,7 @@ static void Prj_ShowProjectMembersWithARole (struct Prj_Projects *Prjs,
       switch (Prjs->View)
 	{
 	 case Prj_LIST_PROJECTS:
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
+	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 	    break;
 	 default:
 	    HTM_TR_Begin (NULL);
@@ -2244,14 +2257,15 @@ static void Prj_PutLinkToShowHiddenInfo (const struct Prj_Projects *Prjs,
    switch (Prjs->View)
      {
       case Prj_LIST_PROJECTS:
-	 HTM_TR_Begin ("id=\"prj_exp_%u\" class=\"%s\"",UniqueId,The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_exp_%u\" class=\"%s\"",
+		       UniqueId,The_GetColorRows ());
 	    HTM_TD_Begin ("colspan=\"6\" class=\"CM\"");
 	       Prj_PutIconToTogglePrj (UniqueId,"angle-down.svg",Txt_See_more);
 	    HTM_TD_End ();
 	 HTM_TR_End ();
 
-	 HTM_TR_Begin ("id=\"prj_con_%u\" class=\"%s\""
-		       " style=\"display:none;\"",UniqueId,The_GetColorRows ());
+	 HTM_TR_Begin ("id=\"prj_con_%u\" class=\"%s\" style=\"display:none;\"",
+		       UniqueId,The_GetColorRows ());
 	    HTM_TD_Begin ("colspan=\"6\" class=\"CM\"");
 	       Prj_PutIconToTogglePrj (UniqueId,"angle-up.svg",Txt_See_less);
 	    HTM_TD_End ();
@@ -3273,9 +3287,11 @@ static void Prj_PutIconsToRemEditOnePrj (const struct Prj_Projects *Prjs,
      {
       case Usr_CAN:
 	 /* Icon to lock/unlock project edition */
-	 HTM_DIV_Begin ("id=\"prj_lck_%ld\" class=\"PRJ_LOCK\"",
-			Prjs->Prj.PrjCod);
-	    Prj_FormLockUnlock (&Prjs->Prj);
+	 if (Prjs->NumIndex)	// Project in list of projects
+	    HTM_DIV_Begin ("id=\"prj_lck_%ld\" class=\"PRJ_LOCK\"",Prjs->Prj.PrjCod);
+	 else			// Selected project shown before list of projects
+	    HTM_DIV_Begin ("id=\"prj_lck\" class=\"PRJ_LOCK\"");
+	 Prj_FormLockUnlock (&Prjs->Prj);
 	 HTM_DIV_End ();
 	 break;
       case Usr_CAN_NOT:
@@ -3592,6 +3608,7 @@ void Prj_ReqRemPrj (void)
 
    /***** Get data of the project from database *****/
    Prj_GetPrjDataByCod (&Prjs.Prj);
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /***** Check if I can edit this project *****/
    if (Prj_CheckIfICanEditPrj (&Prjs.Prj) == Usr_CAN_NOT)
@@ -3632,6 +3649,7 @@ void Prj_RemovePrj (void)
 
    /***** Get data of the project from database *****/
    Prj_GetPrjDataByCod (&Prjs.Prj);	// Inside this function, the course is checked to be the current one
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /***** Check if I can edit this project *****/
    if (Prj_CheckIfICanEditPrj (&Prjs.Prj) == Usr_CAN_NOT)
@@ -3698,6 +3716,7 @@ static void Prj_HideUnhidePrj (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the project from database *****/
    Prj_GetPrjDataByCod (&Prjs.Prj);
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /***** Check if I can edit this project *****/
    if (Prj_CheckIfICanEditPrj (&Prjs.Prj) == Usr_CAN_NOT)
@@ -3749,12 +3768,15 @@ void Prj_ReqEditPrj (void)
 
    /***** Form to edit project *****/
    Prj_ReqCreatOrEditPrj (&Prjs);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Prjs);
   }
 
 static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs)
   {
    OldNew_OldNew_t OldNewPrj = Prjs->Prj.PrjCod > 0 ? OldNew_OLD :
-							  OldNew_NEW;
+						      OldNew_NEW;
 
    /***** Allocate memory for the project *****/
    Prj_AllocMemPrj (&Prjs->Prj);
@@ -3775,15 +3797,13 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs)
 	 Prjs->Prj.DptCod = Gbl.Usrs.Me.UsrDat.Tch.DptCod;	// Default: my department
 	 break;
      }
+   Prjs->SelectedPrjCod = Prjs->Prj.PrjCod;
 
    /***** Put form to edit project *****/
    Prj_PutFormPrj (Prjs,OldNewPrj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemPrj (&Prjs->Prj);
-
-   /***** Show projects again *****/
-   Prj_ShowProjects (Prjs);
   }
 
 static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
@@ -3821,10 +3841,10 @@ static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
    Act_Action_t NextAction = Forms[OldNewPrj].Action;
 
    /***** Begin project box *****/
-   Box_BoxBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
-					  Txt_Project,
-		 NULL,NULL,
-		 Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
+					    Txt_Project,
+		       NULL,NULL,
+		       Hlp_ASSESSMENT_Projects_edit_project,Lay_HIGHLIGHT);
 
       /***** 1. Project members *****/
       if (OldNewPrj == OldNew_OLD)	// Existing project
@@ -3962,18 +3982,18 @@ static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
 
 	       /* Description of the project */
 	       Prj_EditOnePrjTxtArea ("Description",Txt_Description,
-					  Prjs->Prj.Description,12,
-					  HTM_REQUIRED);
+				      Prjs->Prj.Description,12,
+				      HTM_REQUIRED);
 
 	       /* Required knowledge to carry out the project */
 	       Prj_EditOnePrjTxtArea ("Knowledge",Txt_Required_knowledge,
-					  Prjs->Prj.Knowledge,4,
-					  HTM_NO_ATTR);
+				      Prjs->Prj.Knowledge,4,
+				      HTM_NO_ATTR);
 
 	       /* Required materials to carry out the project */
 	       Prj_EditOnePrjTxtArea ("Materials",Txt_Required_materials,
-					  Prjs->Prj.Materials,4,
-					  HTM_NO_ATTR);
+				      Prjs->Prj.Materials,4,
+				      HTM_NO_ATTR);
 
 	       /* URL for additional info */
 	       HTM_TR_Begin (NULL);
@@ -4118,6 +4138,7 @@ void Prj_ReceivePrj (void)
 	 ICanEditProject = Prj_CheckIfICanCreatePrjs (&Prjs);
 	 break;
      }
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /* Check if I can create/edit project */
    if (ICanEditProject == Usr_CAN_NOT)
@@ -4190,6 +4211,9 @@ void Prj_ReceivePrj (void)
 
    /***** Show again form to edit project *****/
    Prj_ReqCreatOrEditPrj (&Prjs);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Prjs);
   }
 
 /*****************************************************************************/
@@ -4472,6 +4496,7 @@ void Prj_LockPrjEdition (void)
 
    /***** Get data of the project from database *****/
    Prj_GetPrjDataByCod (&Prjs.Prj);
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /***** Lock project edition *****/
    Prj_DB_LockProjectEdition (Prjs.Prj.PrjCod);
@@ -4508,6 +4533,7 @@ void Prj_UnloPrjEdition (void)
 
    /***** Get data of the project from database *****/
    Prj_GetPrjDataByCod (&Prjs.Prj);
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /***** Unlock project edition *****/
    Prj_DB_UnlockProjectEdition (Prjs.Prj.PrjCod);

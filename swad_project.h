@@ -192,7 +192,8 @@ struct Prj_Projects
    Prj_Order_t SelectedOrder;
    unsigned ThisPage;
    unsigned NumIndex;		// Index shown in first column of projects list
-   struct Prj_Project Prj;	// Selected/current project
+   struct Prj_Project Prj;	// Current project
+   long SelectedPrjCod;		// Selected project code
   };
 
 /*****************************************************************************/

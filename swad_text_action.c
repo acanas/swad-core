@@ -13111,11 +13111,11 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==3	// en
 	"Lock project edition"
 #elif L==4	// es
-	"Bloquear edici&oacute;n de proyectos"
+	"Bloquear edici&oacute;n de proyecto"
 #elif L==5	// fr
 	"Lock project edition"			// Besoin de traduction
 #elif L==6	// gn
-	"Bloquear edici&oacute;n de proyectos"	// Okoteve traducción
+	"Bloquear edici&oacute;n de proyecto"	// Okoteve traducción
 #elif L==7	// it
 	"Lock project edition"			// Bisogno di traduzione
 #elif L==8	// pl
@@ -13134,11 +13134,11 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 #elif L==3	// en
 	"Unlock project edition"
 #elif L==4	// es
-	"Desbloquear edici&oacute;n de proyectos"
+	"Desbloquear edici&oacute;n de proyecto"
 #elif L==5	// fr
 	"Unlock project edition"			// Besoin de traduction
 #elif L==6	// gn
-	"Desbloquear edici&oacute;n de proyectos"	// Okoteve traducción
+	"Desbloquear edici&oacute;n de proyecto"	// Okoteve traducción
 #elif L==7	// it
 	"Unlock project edition"			// Bisogno di traduzione
 #elif L==8	// pl
