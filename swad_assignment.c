@@ -691,7 +691,9 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
+	    // Show course assignments zone, only with me in the list of selected users
 	    FileBrowser.Zone = Brw_ADMI_ASG_CRS;	// Course assignments
+	    Gbl.Usrs.Other.UsrDat.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.EnUsrCod,Gbl.Usrs.Me.UsrDat.EnUsrCod,
 		      sizeof (Gbl.Usrs.Other.UsrDat.EnUsrCod) - 1);
 	    Usr_CreateListSelectedUsrsCodsAndFillWithOtherUsr (&Gbl.Usrs.Selected,
