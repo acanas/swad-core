@@ -825,8 +825,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Get the type of stat of clicks ******/
    DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)
 	               Par_GetParUnsignedLong ("GroupedOrDetailed",
-	                                       0,
-	                                       Sta_NUM_CLICKS_DETAILED_OR_GROUPED - 1,
+	                                       0,Sta_NUM_CLICKS_DETAILED_OR_GROUPED - 1,
 	                                       (unsigned long) Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT);
 
    if (DetailedOrGrouped == Sta_CLICKS_DETAILED)
@@ -834,23 +833,20 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
       Stats.ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
 			      Par_GetParUnsignedLong ("GroupedBy",
-						      0,
-						      Sta_NUM_CLICKS_GROUPED_BY - 1,
+						      0,Sta_NUM_CLICKS_GROUPED_BY - 1,
 						      (unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
 
    /***** Get the type of count of clicks *****/
    if (Stats.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
       Stats.CountType = (Sta_CountType_t)
 			Par_GetParUnsignedLong ("CountType",
-						0,
-						Sta_NUM_COUNT_TYPES - 1,
+						0,Sta_NUM_COUNT_TYPES - 1,
 						(unsigned long) Sta_COUNT_TYPE_DEFAULT);
 
    /***** Get action *****/
    Stats.NumAction = (Act_Action_t)
 		     Par_GetParUnsignedLong ("StatAct",
-					     0,
-					     ActLst_NUM_ACTIONS - 1,
+					     0,ActLst_NUM_ACTIONS - 1,
 					     (unsigned long) Sta_NUM_ACTION_DEFAULT);
 
    switch (Stats.GlobalOrCourse)
@@ -860,16 +856,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	   {
 	    /****** Get the number of the first row to show ******/
-	    Stats.FirstRow = Par_GetParUnsignedLong ("FirstRow",
-						     1,
-						     ULONG_MAX,
-						     0);
+	    Stats.FirstRow = Par_GetParUnsignedLong ("FirstRow",1,ULONG_MAX,0);
 
 	    /****** Get the number of the last row to show ******/
-	    Stats.LastRow = Par_GetParUnsignedLong ("LastRow",
-						    1,
-						    ULONG_MAX,
-						    0);
+	    Stats.LastRow = Par_GetParUnsignedLong ("LastRow",1,ULONG_MAX,0);
 
 	    /****** Get the number of rows per page ******/
 	    Stats.RowsPerPage =
@@ -908,9 +898,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       default:
 	 /***** Get the type of user of clicks *****/
 	 Stats.Role = (Sta_Role_t)
-		      Par_GetParUnsignedLong ("Role",
-					      0,
-					      Sta_NUM_ROLES_STAT - 1,
+		      Par_GetParUnsignedLong ("Role",0,Sta_NUM_ROLES_STAT - 1,
 					      (unsigned long) Sta_ROLE_DEFAULT);
 
 	 /***** Get users range for access statistics *****/
@@ -1832,9 +1820,7 @@ static void Sta_ShowNumHitsPerDayAndHour (const struct Sta_Stats *Stats,
 static Sta_ColorType_t Sta_GetStatColorType (void)
   {
    return (Sta_ColorType_t)
-	  Par_GetParUnsignedLong ("ColorType",
-	                          0,
-	                          Sta_NUM_COLOR_TYPES - 1,
+	  Par_GetParUnsignedLong ("ColorType",0,Sta_NUM_COLOR_TYPES - 1,
 	                          (unsigned long) Sta_COLOR_TYPE_DEF);
   }
 

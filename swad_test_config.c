@@ -370,33 +370,22 @@ void TstCfg_ReceiveConfigTst (void)
    /***** Get number of questions *****/
    /* Get minimum number of questions */
    TstCfg_SetConfigMin ((unsigned)
-	                Par_GetParUnsignedLong ("NumQstMin",
-	                                        1,
-	                                        UINT_MAX,
-	                                        1));
+	                Par_GetParUnsignedLong ("NumQstMin",1,UINT_MAX,1));
 
    /* Get default number of questions */
    TstCfg_SetConfigDef ((unsigned)
-	                Par_GetParUnsignedLong ("NumQstDef",
-	                                        1,
-	                                        UINT_MAX,
-	                                        1));
+	                Par_GetParUnsignedLong ("NumQstDef",1,UINT_MAX,1));
 
    /* Get maximum number of questions */
    TstCfg_SetConfigMax ((unsigned)
-	                Par_GetParUnsignedLong ("NumQstMax",
-	                                        1,
-	                                        UINT_MAX,
-	                                        1));
+	                Par_GetParUnsignedLong ("NumQstMax",1,UINT_MAX,1));
 
    /* Check and correct numbers */
    TstCfg_CheckAndCorrectMinDefMax ();
 
    /***** Get minimum time between consecutive tests, per question *****/
    TstCfg_SetConfigMinTimeNxtTstPerQst (Par_GetParUnsignedLong ("MinTimeNxtTstPerQst",
-                                                                0,
-                                                                ULONG_MAX,
-                                                                0));
+                                                                0,ULONG_MAX,0));
 
    /***** Get visibility from form *****/
    TstCfg_SetConfigVisibility (TstVis_GetVisibilityFromForm ());
@@ -415,9 +404,7 @@ void TstCfg_ReceiveConfigTst (void)
 static TstCfg_Pluggable_t TstCfg_GetPluggableFromForm (void)
   {
    return (TstCfg_Pluggable_t)
-	  Par_GetParUnsignedLong ("Pluggable",
-	                          0,
-                                  TstCfg_NUM_OPTIONS_PLUGGABLE - 1,
+	  Par_GetParUnsignedLong ("Pluggable",0,TstCfg_NUM_OPTIONS_PLUGGABLE - 1,
                                   (unsigned long) TstCfg_PLUGGABLE_UNKNOWN);
   }
 

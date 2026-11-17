@@ -671,9 +671,7 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParAction)
   {
    /***** Get parameter with the action to perform on media *****/
    return (Med_Action_t)
-   Par_GetParUnsignedLong (ParAction,
-			   0,
-			   Med_NUM_ACTIONS - 1,
+   Par_GetParUnsignedLong (ParAction,0,Med_NUM_ACTIONS - 1,
 			   (unsigned long) Med_ACTION_DEFAULT);
   }
 
@@ -684,9 +682,7 @@ static Med_Action_t Med_GetMediaActionFromForm (const char *ParAction)
 static Med_FormType_t Usr_GetFormTypeFromForm (struct Med_ParUpload *ParUpload)
   {
    return (Med_FormType_t)
-   Par_GetParUnsignedLong (ParUpload->FormType,
-			   0,
-			   Med_NUM_FORM_TYPES - 1,
+   Par_GetParUnsignedLong (ParUpload->FormType,0,Med_NUM_FORM_TYPES - 1,
 			   (unsigned long) Med_FORM_NONE);
   }
 

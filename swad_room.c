@@ -353,10 +353,8 @@ void Roo_ChangeMAC (void)
 
 static Roo_Order_t Roo_GetParRoomOrder (void)
   {
-   return (Roo_Order_t) Par_GetParUnsignedLong ("Order",
-						  0,
-						  Roo_NUM_ORDERS - 1,
-						  (unsigned long) Roo_ORDER_DEFAULT);
+   return (Roo_Order_t) Par_GetParUnsignedLong ("Order",0,Roo_NUM_ORDERS - 1,
+						(unsigned long) Roo_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1054,9 +1052,7 @@ void Roo_ChangeCapacity (void)
 
    /* Get the seating capacity of the room */
    NewCapacity = (unsigned)
-	          Par_GetParUnsignedLong ("Capacity",
-                                          0,
-                                          Roo_MAX_CAPACITY,
+	          Par_GetParUnsignedLong ("Capacity",0,Roo_MAX_CAPACITY,
                                           Roo_UNLIMITED_CAPACITY);
 
    /***** Get data of the room from database *****/
@@ -1231,8 +1227,7 @@ void Roo_ReceiveNewRoom (void)
    /* Get seating capacity */
    Roo_EditingRoom->Capacity = (unsigned)
 	                       Par_GetParUnsignedLong ("Capacity",
-                                                       0,
-                                                       Roo_MAX_CAPACITY,
+                                                       0,Roo_MAX_CAPACITY,
                                                        Roo_UNLIMITED_CAPACITY);
 
    /* Get MAC address */

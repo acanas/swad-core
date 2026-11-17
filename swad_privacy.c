@@ -236,10 +236,9 @@ Pri_Visibility_t Pri_GetParVisibility (const char *ParName,
   {
    Pri_Visibility_t Visibility;
 
-   Visibility = (Pri_Visibility_t) Par_GetParUnsignedLong (ParName,
-							   0,
-							   Pri_NUM_OPTIONS_PRIVACY - 1,
-							   (unsigned long) Pri_VISIBILITY_UNKNOWN);
+   Visibility = (Pri_Visibility_t)
+		Par_GetParUnsignedLong (ParName,0,Pri_NUM_OPTIONS_PRIVACY - 1,
+					(unsigned long) Pri_VISIBILITY_UNKNOWN);
    return (MaskAllowedVisibility & (1 << Visibility)) ? Visibility :
 	                                                Pri_VISIBILITY_UNKNOWN;
   }

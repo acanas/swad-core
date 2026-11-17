@@ -815,9 +815,7 @@ unsigned Pag_GetParPagNum (Pag_WhatPaginate_t WhatPaginate)
 
    /***** Try to get parameter with the number of page *****/
    ThisPage = (unsigned) Par_GetParUnsignedLong (Pag_ParNumPag[WhatPaginate],
-						 1,
-						 UINT_MAX,
-						 0);
+						 1,UINT_MAX,0);
    if (ThisPage == 0)
       /***** If there's no parameter page, return a default value *****/
       switch (WhatPaginate)

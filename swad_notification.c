@@ -971,9 +971,7 @@ static void Ntf_PutParNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
 Ntf_NotifyEvent_t Ntf_GetParNotifyEvent (void)
   {
    return (Ntf_NotifyEvent_t)
-	  Par_GetParUnsignedLong ("NotifyEvent",
-                                  0,
-                                  Ntf_NUM_NOTIFY_EVENTS - 1,
+	  Par_GetParUnsignedLong ("NotifyEvent",0,Ntf_NUM_NOTIFY_EVENTS - 1,
                                   (unsigned long) Ntf_EVENT_UNKNOWN);
   }
 

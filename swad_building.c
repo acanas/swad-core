@@ -183,9 +183,7 @@ void Bld_SeeBuildings (void)
 
 static Bld_Order_t Bld_GetParBuildingOrder (void)
   {
-   return (Bld_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Bld_NUM_ORDERS - 1,
+   return (Bld_Order_t) Par_GetParUnsignedLong ("Order",0,Bld_NUM_ORDERS - 1,
 						(unsigned long) Bld_ORDER_DEFAULT);
   }
 

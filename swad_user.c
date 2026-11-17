@@ -3805,24 +3805,24 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
    Brw_WhichFiles_t WhichFiles;
    unsigned NumUsrs;
 
+   /***** Get and update type of list,
+	  number of columns in class photo
+	  and preference about view photos *****/
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
+
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order lists of users from this course *****/
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
+   NumUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	     Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+
    /***** Begin box *****/
-   Box_BoxBegin (Title,NULL,NULL,HelpLink,Box_NOT_CLOSABLE);
-
-      /***** Get and update type of list,
-	     number of columns in class photo
-	     and preference about view photos *****/
-      Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
-
-      /***** Get groups to show ******/
-      Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
-      /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (Hie_CRS,Rol_STD);
-      Usr_GetListUsrs (Hie_CRS,Rol_NET);
-      Usr_GetListUsrs (Hie_CRS,Rol_TCH);
-      NumUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
-		Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
-		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+   Box_BoxShadowBegin (Title,NULL,NULL,HelpLink,Lay_HIGHLIGHT);
 
       /***** Show form to select the groups *****/
       Grp_ShowFormToSelectSeveralGroups (NextAction,FuncPars,Args,NULL);
@@ -3892,16 +3892,16 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
       /***** End section with user list *****/
       HTM_SECTION_End ();
 
-      /***** Free memory for users' list *****/
-      Usr_FreeUsrsList (Rol_TCH);
-      Usr_FreeUsrsList (Rol_NET);
-      Usr_FreeUsrsList (Rol_STD);
-
-      /***** Free memory for list of selected groups *****/
-      Grp_FreeListCodSelectedGrps ();
-
    /***** End box *****/
    Box_BoxEnd ();
+
+   /***** Free memory for users' list *****/
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
+   Usr_FreeUsrsList (Rol_STD);
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
   }
 
 void Usr_GetSelectedUsrsAndGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
@@ -5752,8 +5752,7 @@ void Usr_PutListUsrsActions (const Usr_Can_t ICanChooseOption[Usr_LIST_USRS_NUM_
 static Usr_ListUsrsAction_t Usr_GetListUsrsAction (Usr_ListUsrsAction_t DefaultAction)
   {
    return (Usr_ListUsrsAction_t) Par_GetParUnsignedLong ("ListUsrsAction",
-							 0,
-							 Usr_LIST_USRS_NUM_OPTIONS - 1,
+							 0,Usr_LIST_USRS_NUM_OPTIONS - 1,
 							 (unsigned long) DefaultAction);
   }
 
@@ -6706,9 +6705,7 @@ void Usr_PutParWho (Usr_Who_t Who)
 
 Usr_Who_t Usr_GetParWho (void)
   {
-   return (Usr_Who_t) Par_GetParUnsignedLong ("Who",
-                                              1,
-                                              Usr_NUM_WHO - 1,
+   return (Usr_Who_t) Par_GetParUnsignedLong ("Who",1,Usr_NUM_WHO - 1,
                                               Usr_WHO_UNKNOWN);
   }
 

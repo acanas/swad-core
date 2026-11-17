@@ -309,8 +309,7 @@ void Sch_GetParWhatToSearch (void)
    /***** Get what to search from form *****/
    WhatToSearch = (Sch_WhatToSearch_t)
 	          Par_GetParUnsignedLong ("WhatToSearch",
-	                                  0,
-	                                  Sch_NUM_WHAT_TO_SEARCH - 1,
+	                                  0,Sch_NUM_WHAT_TO_SEARCH - 1,
 	                                  (unsigned long) Sch_SEARCH_UNKNOWN);
 
    /***** If parameter WhatToSearch is not present,

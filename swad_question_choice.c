@@ -103,8 +103,7 @@ void QstCho_GetAnsFromForm (struct Qst_Question *Qst)
    if (Qst->Answer.Type == Qst_ANS_UNIQUE_CHOICE)
      {
       NumCorrectAns = (unsigned) Par_GetParUnsignedLong ("AnsUni",
-							 0,
-							 Qst_MAX_OPTS_PER_QST - 1,
+							 0,Qst_MAX_OPTS_PER_QST - 1,
 							 0);
       Qst->Answer.Options[NumCorrectAns].Correct = Qst_CORRECT;
      }

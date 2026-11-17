@@ -2326,8 +2326,7 @@ void Qst_GetQstFromForm (struct Qst_Question *Qst)
    /***** Get answer type *****/
    Qst->Answer.Type = (Qst_AnswerType_t)
 		      Par_GetParUnsignedLong ("AnswerType",
-					      0,
-					      Qst_NUM_ANS_TYPES - 1,
+					      0,Qst_NUM_ANS_TYPES - 1,
 					      (unsigned long) Qst_ANS_UNKNOWN);
    if (Qst->Answer.Type == Qst_ANS_UNKNOWN)
       Err_WrongAnswerExit ();

@@ -1464,12 +1464,12 @@ void Brw_GetParAndInitFileBrowser (struct Brw_FileBrowser *FileBrowser)
    FileBrowser->OnlyPublicFiles = Brw_GetOnlyPublicFiles (FileBrowser->Zone);
 
    /* Get whether to show all files */
-   FileBrowser->WhichFiles = FileBrowser->OnlyPublicFiles ? Brw_ALL_FILES :	// If I can see only public files, show all files
-							    (Grp_MyAllGrps_t)
-							    Par_GetParUnsignedLong ("WhichFiles",
-										    0,
-										    Brw_NUM_WHICH_FILES - 1,
-										    (unsigned long) Brw_NUM_WHICH_FILES_DEFAULT);
+   FileBrowser->WhichFiles =
+   FileBrowser->OnlyPublicFiles ? Brw_ALL_FILES :	// If I can see only public files, show all files
+				  (Grp_MyAllGrps_t)
+				  Par_GetParUnsignedLong ("WhichFiles",
+							  0,Brw_NUM_WHICH_FILES - 1,
+							  (unsigned long) Brw_NUM_WHICH_FILES_DEFAULT);
 
    /***** Initialize file browser *****/
    Brw_InitializeFileBrowser (FileBrowser);
@@ -8548,9 +8548,7 @@ static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
 static Brw_License_t Brw_GetParLicense (void)
   {
    return (Brw_License_t)
-	  Par_GetParUnsignedLong ("License",
-                                  0,
-                                  Brw_NUM_LICENSES - 1,
+	  Par_GetParUnsignedLong ("License",0,Brw_NUM_LICENSES - 1,
                                   (unsigned long) Brw_LICENSE_UNKNOWN);
   }
 

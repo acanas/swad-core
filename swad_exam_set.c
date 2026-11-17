@@ -273,9 +273,7 @@ static void ExaSet_ReceiveSetFieldsFromForm (struct ExaSet_Set *Set)
 
    /***** Get number of questions in set to appear in exam print *****/
    Set->NumQstsToPrint = (unsigned) Par_GetParUnsignedLong ("NumQstsToPrint",
-                                                            0,
-                                                            UINT_MAX,
-                                                            0);
+                                                            0,UINT_MAX,0);
   }
 
 static Err_SuccessOrError_t ExaSet_CheckSetTitleReceivedFromForm (const struct ExaSet_Set *Set,
@@ -378,9 +376,7 @@ void ExaSet_ChangeNumQstsToExam (void)
 
    /***** Get number of questions in set to appear in exam print *****/
    NumQstsToPrint = (unsigned) Par_GetParUnsignedLong ("NumQstsToPrint",
-                                                       0,
-                                                       UINT_MAX,
-                                                       0);
+                                                       0,UINT_MAX,0);
 
    /***** Check if title should be changed *****/
    if (NumQstsToPrint != Set.NumQstsToPrint)

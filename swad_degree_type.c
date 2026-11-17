@@ -176,8 +176,7 @@ static void DegTyp_SeeDegTypes (Act_Action_t NextAction,Hie_Level_t HieLvl,
 static DegTyp_Order_t DegTyp_GetParDegTypOrder (DegTyp_Order_t DefaultOrder)
   {
    return (DegTyp_Order_t) Par_GetParUnsignedLong ("Order",
-						   0,
-						   DegTyp_NUM_ORDERS - 1,
+						   0,DegTyp_NUM_ORDERS - 1,
 						   (unsigned long) DefaultOrder);
   }
 

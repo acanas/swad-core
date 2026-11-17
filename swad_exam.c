@@ -753,9 +753,7 @@ static void Exa_PutParOrder (Exa_Order_t SelectedOrder)
 
 static Exa_Order_t Exa_GetParOrder (void)
   {
-   return (Exa_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Exa_NUM_ORDERS - 1,
+   return (Exa_Order_t) Par_GetParUnsignedLong ("Order",0,Exa_NUM_ORDERS - 1,
 						(unsigned long) Exa_ORDER_DEFAULT);
   }
 

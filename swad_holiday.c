@@ -228,9 +228,7 @@ void Hld_SeeAllHolidays (void)
 
 static Hld_Order_t Hld_GetParHldOrder (void)
   {
-   return (Hld_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Hld_NUM_ORDERS - 1,
+   return (Hld_Order_t) Par_GetParUnsignedLong ("Order",0,Hld_NUM_ORDERS - 1,
 						(unsigned long) Hld_DEFAULT_ORDER_TYPE);
   }
 
@@ -434,9 +432,7 @@ static void Hld_GetHolidayDataFromRow (MYSQL_RES *mysql_res,
 static Hld_HolidayType_t Hld_GetParHldType (void)
   {
    return (Hld_HolidayType_t)
-	  Par_GetParUnsignedLong ("HldTyp",
-	                          0,
-	                          Hld_NUM_TYPES_HOLIDAY - 1,
+	  Par_GetParUnsignedLong ("HldTyp",0,Hld_NUM_TYPES_HOLIDAY - 1,
 	                          (unsigned long) Hld_HOLIDAY_TYPE_DEFAULT);
   }
 

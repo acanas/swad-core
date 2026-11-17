@@ -459,8 +459,7 @@ void Rec_ReceiveField (void)
    /* Get the field visibility by students */
    Gbl.Crs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
 	                              Par_GetParUnsignedLong ("Visibility",
-                                                              0,
-                                                              Rec_NUM_TYPES_VISIBILITY - 1,
+                                                              0,Rec_NUM_TYPES_VISIBILITY - 1,
                                                               (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    if (Gbl.Crs.Records.Field.Name[0])	// If there's a name
@@ -761,8 +760,7 @@ void Rec_ChangeVisibilityField (void)
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
 	           Par_GetParUnsignedLong ("Visibility",
-                                           0,
-                                           Rec_NUM_TYPES_VISIBILITY - 1,
+	        			   0,Rec_NUM_TYPES_VISIBILITY - 1,
                                            (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    /* Get from the database the visibility of the field */
@@ -3571,9 +3569,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 
    /***** Get role as a parameter from form *****/
    Role = (Rol_Role_t)
-	  Par_GetParUnsignedLong ("Role",
-				  0,
-				  Rol_NUM_ROLES - 1,
+	  Par_GetParUnsignedLong ("Role",0,Rol_NUM_ROLES - 1,
 				  (unsigned long) Rol_UNK);
 
    /***** Check if I can register a user

@@ -1930,8 +1930,7 @@ void ExaSes_ReceiveSession (void)
    if (ICanChangeModality == Usr_CAN)
       Session.Modality = (ExaSes_Modality_t)
 			 Par_GetParUnsignedLong ("Modality",
-						 0,
-						 ExaSes_NUM_MODALITIES - 1,
+						 0,ExaSes_NUM_MODALITIES - 1,
 						 (unsigned long) ExaSes_MODALITY_DEFAULT);
    if (Session.Modality == ExaSes_NONE)
       Session.Modality = ExaSes_MODALITY_DEFAULT;

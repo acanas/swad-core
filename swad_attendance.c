@@ -550,9 +550,7 @@ static void Att_WriteEventAuthor (struct Att_Event *Event)
 Dat_StartEndTime_t Att_GetParAttOrder (void)
   {
    return (Dat_StartEndTime_t)
-	  Par_GetParUnsignedLong ("Order",
-				  0,
-				  Dat_NUM_START_END_TIME - 1,
+	  Par_GetParUnsignedLong ("Order",0,Dat_NUM_START_END_TIME - 1,
 				  (unsigned long) Att_ORDER_DEFAULT);
   }
 

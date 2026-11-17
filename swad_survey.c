@@ -792,9 +792,7 @@ static void Svy_WriteStatus (struct Svy_Survey *Svy)
 static Dat_StartEndTime_t Svy_GetParSvyOrder (void)
   {
    return (Dat_StartEndTime_t)
-	  Par_GetParUnsignedLong ("Order",
-				  0,
-				  Dat_NUM_START_END_TIME - 1,
+	  Par_GetParUnsignedLong ("Order",0,Dat_NUM_START_END_TIME - 1,
 				  (unsigned long) Svy_ORDER_DEFAULT);
   }
 
@@ -2415,9 +2413,7 @@ void Svy_ReceiveQst (void)
 
    /* Get answer type */
    SvyQst.AnswerType = (Svy_AnswerType_t)
-	               Par_GetParUnsignedLong ("AnswerType",
-	                                       0,
-	                                       Svy_NUM_ANS_TYPES - 1,
+	               Par_GetParUnsignedLong ("AnswerType",0,Svy_NUM_ANS_TYPES - 1,
                                                (unsigned long) Svy_ANSWER_TYPE_DEFAULT);
 
    /* Get question text */

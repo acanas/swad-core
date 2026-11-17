@@ -179,9 +179,7 @@ static long Cfe_GetParsCallsForExams (struct Cfe_CallsForExams *CallsForExams)
 
    /***** Get the year *****/
    CallsForExams->CallForExam.Year = (unsigned)
-   Par_GetParUnsignedLong ("Year",
-			   0,	// N.A.
-			   Deg_MAX_YEARS_PER_DEGREE,
+   Par_GetParUnsignedLong ("Year",0 /* N.A.*/,Deg_MAX_YEARS_PER_DEGREE,
 			   (unsigned long) Gbl.Hie.Node[Hie_CRS].Specific.Year);
 
    /***** Get the type of call for exam *****/

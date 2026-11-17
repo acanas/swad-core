@@ -1536,9 +1536,7 @@ void Pho_PutButtonShowPhotos (Pho_ShowPhotos_t ShowPhotos,
 
 Pho_ShowPhotos_t Pho_GetParShowPhotos (void)
   {
-   return (unsigned) Par_GetParUnsignedLong ("ShowPhotos",
-                                             (unsigned long) 0,
-                                             (unsigned long) (Pho_NUM_PHOTOS - 1),
+   return (unsigned) Par_GetParUnsignedLong ("ShowPhotos",0,Pho_NUM_PHOTOS - 1,
                                              (unsigned long) Pho_PHOTOS_UNKNOWN);	// If parameter does not exists
   }
 
@@ -1996,9 +1994,7 @@ void Pho_PutParTypeOfAvg (Pho_AvgPhotoTypeOfAverage_t TypeOfAverage)
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
   {
    return (Pho_AvgPhotoTypeOfAverage_t)
-	  Par_GetParUnsignedLong ("AvgType",
-                                  0,
-                                  Pho_NUM_AVERAGE_PHOTO_TYPES - 1,
+	  Par_GetParUnsignedLong ("AvgType",0,Pho_NUM_AVERAGE_PHOTO_TYPES - 1,
                                   (unsigned long) Pho_PHOTO_AVG_DEFAULT);
   }
 
@@ -2062,9 +2058,7 @@ void Pho_PutParPhotoSize (Pho_HowComputePhotoSize_t HowComputePhotoSize)
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
   {
    return (Pho_HowComputePhotoSize_t)
-	  Par_GetParUnsignedLong ("PhotoSize",
-                                  0,
-                                  Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1,
+	  Par_GetParUnsignedLong ("PhotoSize",0,Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1,
                                   (unsigned long) Pho_PHOTO_SIZE_DEFAULT);
   }
 
@@ -2128,9 +2122,7 @@ void Pho_PutParOrderDegrees (Pho_HowOrderDegrees_t HowOrderDegrees)
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   {
    return (Pho_HowOrderDegrees_t)
-	  Par_GetParUnsignedLong ("Order",
-                                  0,
-                                  Pho_NUM_HOW_ORDER_DEGREES - 1,
+	  Par_GetParUnsignedLong ("Order",0,Pho_NUM_HOW_ORDER_DEGREES - 1,
                                   (unsigned long) Pho_ORDER_DEFAULT);
   }
 

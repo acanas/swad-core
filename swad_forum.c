@@ -2618,16 +2618,12 @@ void For_GetParsForums (struct For_Forums *Forums)
 
    /***** Get which forums I want to see *****/
    Forums->ForumSet = (For_ForumSet_t)
-		      Par_GetParUnsignedLong ("ForumSet",
-					      0,
-					      For_NUM_FORUM_SETS - 1,
+		      Par_GetParUnsignedLong ("ForumSet",0,For_NUM_FORUM_SETS - 1,
 					      (unsigned long) For_DEFAULT_FORUM_SET);
 
    /***** Get order type *****/
    Forums->ThreadsOrder = (Dat_StartEndTime_t)
-			  Par_GetParUnsignedLong ("Order",
-						  0,
-						  Dat_NUM_START_END_TIME - 1,
+			  Par_GetParUnsignedLong ("Order",0,Dat_NUM_START_END_TIME - 1,
 						  (unsigned long) For_DEFAULT_ORDER);
 
    /***** Get optional page numbers for threads and posts *****/

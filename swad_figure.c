@@ -253,9 +253,7 @@ void Fig_ShowFigures (void)
 
    /***** Get the type of figure ******/
    SelectedFigureType = (Fig_FigureType_t)
-		        Par_GetParUnsignedLong ("FigureType",
-						1,
-						Fig_NUM_FIGURES - 1,
+		        Par_GetParUnsignedLong ("FigureType",1,Fig_NUM_FIGURES - 1,
 						(unsigned long) Fig_FIGURE_TYPE_DEF);
 
    /***** Show again the form to see use of the platform *****/

@@ -1706,8 +1706,7 @@ void Mch_ChangeNumColsMch (void)
    /***** Get number of columns *****/
    Match.Status.NumCols = (unsigned)
 	                  Par_GetParUnsignedLong ("NumCols",
-						  1,
-						  Mch_MAX_COLS,
+						  1,Mch_MAX_COLS,
 						  Mch_NUM_COLS_DEFAULT);
 
    /***** Update match status in database *****/

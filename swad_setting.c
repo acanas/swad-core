@@ -236,9 +236,7 @@ void Set_ChangeSideCols (void)
 
 unsigned Set_GetParSideCols (void)
   {
-   return (unsigned) Par_GetParUnsignedLong ("SideCols",
-                                             0,
-                                             Lay_SHOW_BOTH_COLUMNS,
+   return (unsigned) Par_GetParUnsignedLong ("SideCols",0,Lay_SHOW_BOTH_COLUMNS,
                                              Cfg_DEFAULT_COLUMNS);
   }
 
@@ -267,9 +265,6 @@ void Set_GetAndUpdatePrefsAboutUsrList (Pho_ShowPhotos_t *ShowPhotos)
   {
    /***** Get and update type of list *****/
    Set_GetAndUpdateUsrListType ();
-
-   /***** Get and update number of columns in class photo *****/
-   // Set_SetColsClassPhoto ();
 
    /***** Get and update preference about viewing photos *****/
    *ShowPhotos = Set_GetAndUpdatePrefAboutListWithPhotos ();
@@ -310,8 +305,7 @@ static void Set_GetUsrListTypeFromForm (void)
   {
    Gbl.Usrs.Me.ListType = (Set_ShowUsrsType_t)
 	                  Par_GetParUnsignedLong ("UsrListType",
-                                                  0,
-                                                  Set_NUM_USR_LIST_TYPES - 1,
+                                                  0,Set_NUM_USR_LIST_TYPES - 1,
                                                   (unsigned long) Set_USR_LIST_UNKNOWN);
   }
 

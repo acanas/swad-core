@@ -217,9 +217,7 @@ Lan_Language_t Lan_GetParLanguage (void)
    extern unsigned Txt_This_CGI_SWAD_Language;
 
    return (Lan_Language_t)
-	  Par_GetParUnsignedLong ("Lan",
-                                  1,
-                                  Lan_NUM_LANGUAGES,
+	  Par_GetParUnsignedLong ("Lan",1,Lan_NUM_LANGUAGES,
                                   (unsigned long) Txt_This_CGI_SWAD_Language);
   }
 

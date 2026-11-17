@@ -477,9 +477,7 @@ void Rol_ChangeMyRole (void)
 
    /***** Get parameter with the new logged role ******/
    NewRole = (Rol_Role_t)
-	     Par_GetParUnsignedLong ("MyRole",
-                                     0,
-                                     Rol_NUM_ROLES - 1,
+	     Par_GetParUnsignedLong ("MyRole",0,Rol_NUM_ROLES - 1,
                                      (unsigned long) Rol_UNK);
    if (NewRole != Rol_UNK)
      {

@@ -823,9 +823,7 @@ static void Gam_PutParOrder (Gam_Order_t SelectedOrder)
 
 static Gam_Order_t Gam_GetParOrder (void)
   {
-   return (Gam_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Gam_NUM_ORDERS - 1,
+   return (Gam_Order_t) Par_GetParUnsignedLong ("Order",0,Gam_NUM_ORDERS - 1,
 						(unsigned long) Gam_ORDER_DEFAULT);
   }
 

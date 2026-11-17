@@ -129,9 +129,7 @@ Hie_Level_t Sco_GetScope (const char *ParName,
    Hie_Level_t HieLvl;
 
    /***** Get parameter with scope *****/
-   HieLvl = (Hie_Level_t) Par_GetParUnsignedLong (ParName,
-                                                  0,
-                                                  Hie_NUM_LEVELS - 1,
+   HieLvl = (Hie_Level_t) Par_GetParUnsignedLong (ParName,0,Hie_NUM_LEVELS - 1,
                                                   (unsigned long) Hie_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/

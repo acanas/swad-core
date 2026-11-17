@@ -988,9 +988,7 @@ void Hie_PutParOtherHieCod (const void *HieCod)
 
 Hie_Order_t Hie_GetParHieOrder (void)
   {
-   return (Hie_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Hie_NUM_ORDERS - 1,
+   return (Hie_Order_t) Par_GetParUnsignedLong ("Order",0,Hie_NUM_ORDERS - 1,
 						(unsigned long) Hie_ORDER_DEFAULT);
   }
 

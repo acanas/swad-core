@@ -205,9 +205,7 @@ void Mai_SeeMailDomains (void)
 static Mai_DomainsOrder_t Mai_GetParMaiOrder (void)
   {
    return (Mai_DomainsOrder_t)
-	  Par_GetParUnsignedLong ("Order",
-				  0,
-				  Mai_NUM_ORDERS - 1,
+	  Par_GetParUnsignedLong ("Order",0,Mai_NUM_ORDERS - 1,
 				  (unsigned long) Mai_ORDER_DEFAULT);
   }
 

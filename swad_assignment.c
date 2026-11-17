@@ -747,9 +747,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 Dat_StartEndTime_t Asg_GetParAsgOrder (void)
   {
    return (Dat_StartEndTime_t)
-   Par_GetParUnsignedLong ("Order",
-			   0,
-			   Dat_NUM_START_END_TIME - 1,
+   Par_GetParUnsignedLong ("Order",0,Dat_NUM_START_END_TIME - 1,
 			   (unsigned long) Asg_ORDER_DEFAULT);
   }
 
@@ -1249,10 +1247,10 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
    Asg_PutPars (Assignments);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Assignments->Asg.Title[0] ? Assignments->Asg.Title :
-						     Txt_Assignment,
-			 NULL,NULL,
-			 Hlp_ASSESSMENT_Assignments_edit_assignment,Box_NOT_CLOSABLE,2);
+      Box_BoxTableShadowBegin (Assignments->Asg.Title[0] ? Assignments->Asg.Title :
+							   Txt_Assignment,
+			       NULL,NULL,Hlp_ASSESSMENT_Assignments_edit_assignment,
+			       Lay_HIGHLIGHT,2);
 
 	 /***** Assignment title *****/
 	 HTM_TR_Begin (NULL);

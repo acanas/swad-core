@@ -1024,8 +1024,7 @@ static void Enr_ReceiveUsrsCrs (Rol_Role_t Role)
 
    EnrRemUsrsAction = (Enr_EnrRemUsrsAction_t)
 	              Par_GetParUnsignedLong ("EnrRemAction",
-                                              0,
-                                              Enr_NUM_ENR_REM_USRS_ACTIONS - 1,
+                                              0,Enr_NUM_ENR_REM_USRS_ACTIONS - 1,
                                               (unsigned long) Enr_ENR_REM_USRS_UNKNOWN_ACTION);
    switch (EnrRemUsrsAction)
      {
@@ -2162,9 +2161,7 @@ void Enr_SignUpInCrs (void)
      {
       /***** Get new role from record form *****/
       RoleFromForm = (Rol_Role_t)
-	             Par_GetParUnsignedLong ("Role",
-                                             0,
-                                             Rol_NUM_ROLES - 1,
+	             Par_GetParUnsignedLong ("Role",0,Rol_NUM_ROLES - 1,
                                              (unsigned long) Rol_UNK);
 
       /* Check if role is correct */
@@ -3273,8 +3270,7 @@ void Enr_AdminUsr1 (void)
 	 /***** Get the action to do *****/
 	 EnrRemAction = (Enr_EnrRemOneUsrAction_t)
 			Par_GetParUnsignedLong ("EnrRemAction",
-						0,
-						Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
+						0,Enr_ENR_REM_ONE_USR_NUM_ACTIONS - 1,
 						(unsigned long) Enr_ENR_REM_ONE_USR_UNKNOWN_ACTION);
 	 Enr_SetEnrRemAction (EnrRemAction);
 	 switch (EnrRemAction)

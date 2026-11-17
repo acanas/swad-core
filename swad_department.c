@@ -228,8 +228,7 @@ void Dpt_SeeAllDepts (void)
 static Dpt_Order_t Dpt_GetParDptOrder (void)
   {
    return (Dpt_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Dpt_NUM_ORDERS - 1,
+						0,Dpt_NUM_ORDERS - 1,
 						(unsigned long) Dpt_ORDER_DEFAULT);
   }
 

@@ -765,10 +765,7 @@ Err_SuccessOrError_t Tst_GetParsTst (struct Qst_Questions *Qsts,
 
 static unsigned Tst_GetParNumTst (void)
   {
-   return (unsigned) Par_GetParUnsignedLong ("NumTst",
-                                             1,
-                                             UINT_MAX,
-                                             1);
+   return (unsigned) Par_GetParUnsignedLong ("NumTst",1,UINT_MAX,1);
   }
 
 /*****************************************************************************/

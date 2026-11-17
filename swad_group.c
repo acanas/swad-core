@@ -4795,8 +4795,7 @@ Grp_MyAllGrps_t Grp_GetParMyAllGrps (void)
       /* Get parameter */
       CachedMyAllGrps = (Grp_MyAllGrps_t)
 	                Par_GetParUnsignedLong ("WhichGrps",
-	                                        0,
-	                                        Grp_NUM_MY_ALL_GROUPS - 1,
+	                                        0,Grp_NUM_MY_ALL_GROUPS - 1,
 	                                        (unsigned long) MyAllGrpsDefault);
 
       Status = Cac_VALID;

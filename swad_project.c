@@ -325,9 +325,10 @@ static void Prj_ResetPrj (struct Prj_Project *Prj);
 
 static void Prj_HideUnhidePrj (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs);
+static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs,
+				   Lay_Highlight_t Highlight);
 static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
-			    OldNew_OldNew_t OldNewPrj);
+			    Lay_Highlight_t Highlight,OldNew_OldNew_t OldNewPrj);
 static void Prj_EditOnePrjTxtArea (const char *Id,
                                    const char *Label,char *TxtField,
                                    unsigned NumRows,
@@ -2932,7 +2933,10 @@ static void Prj_FormToSelectUsrs (struct Prj_Projects *Prjs,
    free (TxtButton);
 
    /***** Put a form to create/edit project *****/
-   Prj_ReqCreatOrEditPrj (Prjs);
+   Prj_ReqCreatOrEditPrj (Prjs,Lay_DONT_HIGHLIGHT);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (Prjs);
   }
 
 /*****************************************************************************/
@@ -3042,7 +3046,10 @@ static void Prj_AddUsrsToPrj (struct Prj_Projects *Prjs,
    Usr_FreeListsSelectedEncryptedUsrsCods (&Prj_MembersToAdd);
 
    /***** Put form to edit project again *****/
-   Prj_ReqCreatOrEditPrj (Prjs);
+   Prj_ReqCreatOrEditPrj (Prjs,Lay_HIGHLIGHT);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (Prjs);
   }
 
 /*****************************************************************************/
@@ -3150,7 +3157,10 @@ static void Prj_ReqRemUsrFromPrj (struct Prj_Projects *Prjs,
    Prj_FreeMemPrj (&Prjs->Prj);
 
    /***** Put form to edit project again *****/
-   Prj_ReqCreatOrEditPrj (Prjs);
+   Prj_ReqCreatOrEditPrj (Prjs,Lay_HIGHLIGHT);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (Prjs);
   }
 
 /*****************************************************************************/
@@ -3229,7 +3239,10 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
    Prj_FreeMemPrj (&Prjs.Prj);
 
    /***** Put form to edit project again *****/
-   Prj_ReqCreatOrEditPrj (&Prjs);
+   Prj_ReqCreatOrEditPrj (&Prjs,Lay_HIGHLIGHT);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Prjs);
   }
 
 /*****************************************************************************/
@@ -3239,9 +3252,7 @@ static void Prj_RemUsrFromPrj (Prj_RoleInProject_t RoleInPrj)
 static Prj_Order_t Prj_GetParPrjOrder (void)
   {
    return (Prj_Order_t)
-	  Par_GetParUnsignedLong ("Order",
-				  0,
-				  Prj_NUM_ORDERS - 1,
+	  Par_GetParUnsignedLong ("Order",0,Prj_NUM_ORDERS - 1,
 				  (unsigned long) Prj_ORDER_DEFAULT);
   }
 
@@ -3752,7 +3763,10 @@ void Prj_ReqCreatePrj (void)
    Prjs.Prj.PrjCod = -1L;	// It's a new, non existing, project
 
    /***** Form to create project *****/
-   Prj_ReqCreatOrEditPrj (&Prjs);
+   Prj_ReqCreatOrEditPrj (&Prjs,Lay_HIGHLIGHT);
+
+   /***** Show projects again *****/
+   Prj_ShowProjects (&Prjs);
   }
 
 void Prj_ReqEditPrj (void)
@@ -3767,13 +3781,14 @@ void Prj_ReqEditPrj (void)
    Prjs.Prj.PrjCod = ParCod_GetAndCheckPar (ParCod_Prj);
 
    /***** Form to edit project *****/
-   Prj_ReqCreatOrEditPrj (&Prjs);
+   Prj_ReqCreatOrEditPrj (&Prjs,Lay_HIGHLIGHT);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Prjs);
   }
 
-static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs)
+static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs,
+				   Lay_Highlight_t Highlight)
   {
    OldNew_OldNew_t OldNewPrj = Prjs->Prj.PrjCod > 0 ? OldNew_OLD :
 						      OldNew_NEW;
@@ -3800,14 +3815,14 @@ static void Prj_ReqCreatOrEditPrj (struct Prj_Projects *Prjs)
    Prjs->SelectedPrjCod = Prjs->Prj.PrjCod;
 
    /***** Put form to edit project *****/
-   Prj_PutFormPrj (Prjs,OldNewPrj);
+   Prj_PutFormPrj (Prjs,Highlight,OldNewPrj);
 
    /***** Free memory of the project *****/
    Prj_FreeMemPrj (&Prjs->Prj);
   }
 
 static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
-                            OldNew_OldNew_t OldNewPrj)
+			    Lay_Highlight_t Highlight,OldNew_OldNew_t OldNewPrj)
   {
    extern const char *Hlp_ASSESSMENT_Projects_edit_project;
    extern const char *Par_CodeStr[Par_NUM_PAR_COD];
@@ -3841,10 +3856,22 @@ static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
    Act_Action_t NextAction = Forms[OldNewPrj].Action;
 
    /***** Begin project box *****/
-   Box_BoxShadowBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
+   switch (Highlight)
+     {
+      case Lay_HIGHLIGHT:
+	 Box_BoxShadowBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
+						  Txt_Project,
+			     NULL,NULL,
+			     Hlp_ASSESSMENT_Projects_edit_project,Lay_HIGHLIGHT);
+	 break;
+      case Lay_DONT_HIGHLIGHT:
+      default:
+	 Box_BoxBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
 					    Txt_Project,
 		       NULL,NULL,
-		       Hlp_ASSESSMENT_Projects_edit_project,Lay_HIGHLIGHT);
+		       Hlp_ASSESSMENT_Projects_edit_project,Box_NOT_CLOSABLE);
+	 break;
+     }
 
       /***** 1. Project members *****/
       if (OldNewPrj == OldNew_OLD)	// Existing project
@@ -4147,26 +4174,16 @@ void Prj_ReceivePrj (void)
    /* Get project title */
    Par_GetParText ("Title",Prjs.Prj.Title,Prj_MAX_BYTES_TITLE);
 
-   /* Get department */
-   Prjs.Prj.DptCod = ParCod_GetPar (ParCod_Dpt);
-
-   /* Get whether the project is assigned */
-   Prjs.Prj.Assigned = Par_GetParBool ("Assigned") ? Prj_ASSIGNED :
-							 Prj_NONASSIG;
-
-   /* Get number of students */
-   Prjs.Prj.NumStds = (unsigned)
-			  Par_GetParUnsignedLong ("NumStds",
-						  0,
-						  UINT_MAX,
-						  1);
-
-   /* Get status */
-   Prjs.Prj.Proposal = (Prj_Proposal_t)
-			   Par_GetParUnsignedLong ("Proposal",
-						   0,
-						   Prj_NUM_PROPOSAL_TYPES - 1,
-						   (unsigned long) Prj_PROPOSAL_DEFAULT);
+   /* Get department, whether the project is assigned, number of students and status */
+   Prjs.Prj.DptCod	= ParCod_GetPar (ParCod_Dpt);
+   Prjs.Prj.Assigned	= Par_GetParBool ("Assigned") ? Prj_ASSIGNED :
+						        Prj_NONASSIG;
+   Prjs.Prj.NumStds	= (unsigned)
+			  Par_GetParUnsignedLong ("NumStds",0,UINT_MAX,1);
+   Prjs.Prj.Proposal	= (Prj_Proposal_t)
+			  Par_GetParUnsignedLong ("Proposal",
+					          0,Prj_NUM_PROPOSAL_TYPES - 1,
+					          (unsigned long) Prj_PROPOSAL_DEFAULT);
 
    /* Get project description, required knowledge and required materials */
    Par_GetParHTML ("Description",Prjs.Prj.Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -4202,15 +4219,12 @@ void Prj_ReceivePrj (void)
 	 break;
       case Err_ERROR:
       default:
-	 Prj_PutFormPrj (&Prjs,OldNewPrj);
+	 Prj_PutFormPrj (&Prjs,Lay_HIGHLIGHT,OldNewPrj);
 	 break;
      }
 
    /***** Free memory of the project *****/
    Prj_FreeMemPrj (&Prjs.Prj);
-
-   /***** Show again form to edit project *****/
-   Prj_ReqCreatOrEditPrj (&Prjs);
 
    /***** Show projects again *****/
    Prj_ShowProjects (&Prjs);
@@ -4570,6 +4584,7 @@ void Prj_ChangeReviewStatus (void)
 
    /***** Get data of the project from database *****/
    Prj_GetPrjDataByCod (&Prjs.Prj);
+   Prjs.SelectedPrjCod = Prjs.Prj.PrjCod;
 
    /***** Update review *****/
    Prjs.Prj.Review.Status = Prj_GetParReviewStatus ();
@@ -4590,9 +4605,7 @@ void Prj_ChangeReviewStatus (void)
 static Prj_ReviewStatus_t Prj_GetParReviewStatus (void)
   {
    return (Prj_ReviewStatus_t)
-	  Par_GetParUnsignedLong ("ReviewStatus",
-				  0,
-				  Prj_NUM_REVIEW_STATUS - 1,
+	  Par_GetParUnsignedLong ("ReviewStatus",0,Prj_NUM_REVIEW_STATUS - 1,
 				  (unsigned long) Prj_REVIEW_STATUS_DEFAULT);
   }
 

@@ -224,9 +224,7 @@ void Plc_SeeAllPlcs (void)
 
 static Plc_Order_t Plc_GetParPlcOrder (void)
   {
-   return (Plc_Order_t) Par_GetParUnsignedLong ("Order",
-						0,
-						Plc_NUM_ORDERS - 1,
+   return (Plc_Order_t) Par_GetParUnsignedLong ("Order",0,Plc_NUM_ORDERS - 1,
 						(unsigned long) Plc_ORDER_DEFAULT);
   }
 

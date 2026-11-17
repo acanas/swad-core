@@ -377,9 +377,7 @@ void Mnu_ChangeMenu (void)
 Mnu_Menu_t Mnu_GetParMenu (void)
   {
    return (Mnu_Menu_t)
-	  Par_GetParUnsignedLong ("Menu",
-	                          0,
-	                          Mnu_NUM_MENUS - 1,
+	  Par_GetParUnsignedLong ("Menu",0,Mnu_NUM_MENUS - 1,
 	                          (unsigned long) Mnu_MENU_DEFAULT);
   }
 

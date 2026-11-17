@@ -73,7 +73,7 @@ struct Tmt_Range
 struct Tmt_WhichCell
   {
    unsigned Weekday;
-   unsigned Interval;
+   unsigned Interv;
    unsigned Column;
   };
 
@@ -85,7 +85,7 @@ struct Tmt_Timetable
       unsigned HoursPerDay;		// From start hour to end hour
       unsigned SecondsPerInterval;
       unsigned IntervalsPerHour;
-      unsigned IntervalsPerDay;
+      unsigned IntervsPerDay;
       unsigned IntervalsBeforeStartHour;
      } Config;
    Tmt_TimeTableType_t Type;
