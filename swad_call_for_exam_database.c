@@ -228,15 +228,15 @@ void Cfe_DB_ModifyCallForExam (const struct Cfe_CallForExam *CallForExam,
 /******* Update number of users notified in table of calls for exams *********/
 /*****************************************************************************/
 
-void Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (long ExaCod,
-                                                          unsigned NumUsrsToBeNotifiedByEMail)
+void Cfe_DB_UpdateNumUsrsNotifByEMailAboutCallForExam (long ExaCod,
+                                                       unsigned NumUsrsToNotifByEMail)
   {
    DB_QueryUPDATE ("can not update the number of notifications"
 		   " of a call for exam",
 		   "UPDATE cfe_exams"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE ExaCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,
+                   NumUsrsToNotifByEMail,
                    ExaCod);
   }
 

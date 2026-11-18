@@ -94,7 +94,7 @@ void Enr_ReqAdminNETs (void);
 void Enr_ReqAdminTchs (void);
 
 void Enr_PutLinkToRemOldUsrs (void);
-void Enr_AskRemoveOldUsrs (void);
+void Enr_ReqRemOldUsrs (void);
 void Enr_RemoveOldUsrs (void);
 
 void Enr_ReceiveAdminStds (void);
@@ -104,8 +104,8 @@ void Enr_ReceiveAdminTchs (void);
 void Enr_PutActionsEnrRemOneUsr (Usr_MeOrOther_t MeOrOther);
 
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role);
-void Enr_AskRemAllStdsThisCrs (void);
-void Enr_RemAllStdsThisCrs (void);
+void Enr_ReqRemAllStdsThisCrs (void);
+void Enr_RemoveAllStdsThisCrs (void);
 unsigned Enr_RemAllStdsInCrs (struct Hie_Node *Crs);
 void Enr_ReqSignUpInCrs (void);
 void Enr_SignUpInCrs (void);

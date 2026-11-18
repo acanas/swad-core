@@ -107,7 +107,7 @@ void Att_ReqCreatOrEditEvent (void);
 Exi_Exist_t Att_GetEventDataByCod (struct Att_Event *Event);
 void Att_GetEventDataFromRow (MYSQL_ROW row,struct Att_Event *Event);
 
-void Att_AskRemEvent (void);
+void Att_ReqRemEvent (void);
 void Att_RemoveEvent (void);
 void Att_RemoveEventFromDB (long AttCod);
 

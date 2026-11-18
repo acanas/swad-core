@@ -126,13 +126,13 @@ void Svy_DB_HideOrUnhideSurvey (long SvyCod,
 /*****************************************************************************/
 
 void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
-                                                     unsigned NumUsrsToBeNotifiedByEMail)
+                                                     unsigned NumUsrsToNotifByEMail)
   {
    DB_QueryUPDATE ("can not update the number of notifications of a survey",
 		   "UPDATE svy_surveys"
 		     " SET NumNotif=NumNotif+%u"
                    " WHERE SvyCod=%ld",
-		   NumUsrsToBeNotifiedByEMail,
+		   NumUsrsToNotifByEMail,
 		   SvyCod);
   }
 

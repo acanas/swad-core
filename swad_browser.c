@@ -455,7 +455,7 @@ static Act_Action_t Brw_ActDowFile[Brw_NUM_ZONES] =
    [Brw_ADMI_ASS_PRJ] = ActDowAssPrj,
   };
 
-static Act_Action_t Brw_ActAskRemoveFile[Brw_NUM_ZONES] =
+static Act_Action_t Brw_ActReqRemFile[Brw_NUM_ZONES] =
   {
    [Brw_UNKNOWN     ] = ActUnk,
    [Brw_SHOW_DOC_CRS] = ActUnk,
@@ -1269,12 +1269,10 @@ static void Brw_WriteFileSizeAndDate (const struct Brw_File *File,
 				      const char *TxtStyle);
 static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Level);
 
-static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser);
-static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser);
-static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser);
-static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
-						const char FolderName[NAME_MAX + 1]);
-static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionReqRemFile (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRemoveFile (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionReqRemFolder (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRemoveFolder (struct Brw_FileBrowser *FileBrowser);
 
 //--------------------------------- Clipboard ---------------------------------
 
@@ -1294,7 +1292,7 @@ static void Brw_RemThisFolderAndUpdOtherFoldersFromExpandedFolders (Brw_Zone_t Z
 static void Brw_DoActionPaste (struct Brw_FileBrowser *FileBrowser);
 static void Brw_PasteClipboard (struct Brw_FileBrowser *FileBrowser,
 				const struct Brw_File *ParentFolder);
-static void Brw_DoActionRemMyClipboard (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRemoveMyClipboard (struct Brw_FileBrowser *FileBrowser);
 static Err_SuccessOrError_t Brw_PasteIntoFolder (struct Brw_FileBrowser *FileBrowser,
 						 unsigned LevelOrg,
 						 const char PathOrgInServ[PATH_MAX + 1],
@@ -1347,7 +1345,7 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,
 	                                      struct Brw_FileBrowser *FileBrowser,
                                               const char *FileNameToShow);
 
-static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionChangeFileMetadata (struct Brw_FileBrowser *FileBrowser);
 
 static Brw_License_t Brw_GetParLicense (void);
 
@@ -1381,8 +1379,8 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
 //------------------------ Remove old files in briefcase ----------------------
 
-static void Brw_DoActionAskRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
-static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionReqRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
+static void Brw_DoActionRemoveOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser);
 static void Brw_RemoveOldFilesInBrowser (struct Brw_FileBrowser *FileBrowser,
 					 unsigned Months,struct Brw_NumObjects *Removed);
 static void Brw_ScanDirRemovingOldFiles (Brw_Zone_t Zone,unsigned Level,
@@ -3216,21 +3214,21 @@ static void Brw_ShowOneFileBrowser (struct Brw_FileBrowser *FileBrowser)
    static void (*Brw_DoAction[Brw_NUM_ACTIONS])(struct Brw_FileBrowser *FileBrowser) =
      {
       [Brw_ACT_NONE			] = NULL,
-      [Brw_ACT_ASK_REM_FILE		] = Brw_DoActionAskRemFile,
-      [Brw_ACT_REM_FILE			] = Brw_DoActionRemFile,
-      [Brw_ACT_ASK_REM_FOLDER		] = Brw_DoActionAskRemFolder,
-      [Brw_ACT_REM_NON_EMPTY_FOLDER	] = Brw_DoActionRemNonEmptyFolder,
+      [Brw_ACT_REQ_REM_FILE		] = Brw_DoActionReqRemFile,
+      [Brw_ACT_REM_FILE			] = Brw_DoActionRemoveFile,
+      [Brw_ACT_REQ_REM_FOLDER		] = Brw_DoActionReqRemFolder,
+      [Brw_ACT_REM_FOLDER		] = Brw_DoActionRemoveFolder,
       [Brw_ACT_COPY			] = Brw_DoActionCopy,
       [Brw_ACT_PASTE			] = Brw_DoActionPaste,
       [Brw_ACT_SHOW_CLIPBOARD		] = Brw_DoActionShowMyClipboard,
-      [Brw_ACT_REM_CLIPBOARD		] = Brw_DoActionRemMyClipboard,
+      [Brw_ACT_REM_CLIPBOARD		] = Brw_DoActionRemoveMyClipboard,
       [Brw_ACT_SHOW_FORM		] = Brw_DoActionShowForm,
       [Brw_ACT_CREATE_FOLDER		] = Brw_DoActionCreateFolder,
       [Brw_ACT_REN_FOLDER		] = Brw_DoActionRenameFolder,
       [Brw_ACT_RCV_FILE_CLASSIC		] = Brw_DoActionRcvFileClassic,
       [Brw_ACT_CREATE_LINK		] = Brw_DoActionCreateLink,
       [Brw_ACT_SHOW_FILE_METADATA	] = Brw_DoActionShowFileMetadata,
-      [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChgFileMetadata,
+      [Brw_ACT_CHG_FILE_METADATA	] = Brw_DoActionChangeFileMetadata,
       [Brw_ACT_SET_DOC_VISIBLE		] = Brw_DoActionSetDocAsVisible,
       [Brw_ACT_SET_DOC_HIDDEN		] = Brw_DoActionSetDocAsHidden,
       [Brw_ACT_GET_LINK_TO_DOC_FILE	] = BrwRsc_DoActionGetLinkToDocFil,
@@ -3238,8 +3236,8 @@ static void Brw_ShowOneFileBrowser (struct Brw_FileBrowser *FileBrowser)
       [Brw_ACT_COMPRESS_FOLDER		] = ZIP_DoActionCompressFolder,
       [Brw_ACT_CHG_NUM_ROWS_HEADER	] = Mrk_DoActionChangeNumRowsHeader,
       [Brw_ACT_CHG_NUM_ROWS_FOOTER	] = Mrk_DoActionChangeNumRowsFooter,
-      [Brw_ACT_ASK_REM_OLD_BRIEFCASE	] = Brw_DoActionAskRemOldFilesBriefcase,
-      [Brw_ACT_REM_OLD_BRIEFCASE	] = Brw_DoActionRemOldFilesBriefcase,
+      [Brw_ACT_REQ_REM_OLD_BRIEFCASE	] = Brw_DoActionReqRemOldFilesBriefcase,
+      [Brw_ACT_REM_OLD_BRIEFCASE	] = Brw_DoActionRemoveOldFilesBriefcase,
      };
    Brw_Action_t Action;
    struct Brw_File RootFolder;
@@ -4356,8 +4354,8 @@ static void Brw_PutIconRemove (const struct Brw_FileBrowser *FileBrowser,
    static Act_Action_t (*Actions[Brw_NUM_FILE_TYPES])[Brw_NUM_ZONES] =
      {
       [Brw_IS_UNKNOWN] = NULL,
-      [Brw_IS_FILE   ] = &Brw_ActAskRemoveFile,
-      [Brw_IS_LINK   ] = &Brw_ActAskRemoveFile,
+      [Brw_IS_FILE   ] = &Brw_ActReqRemFile,
+      [Brw_IS_LINK   ] = &Brw_ActReqRemFile,
       [Brw_IS_FOLDER ] = &Brw_ActRemoveFolder,
      };
 
@@ -5107,10 +5105,10 @@ static void Brw_WriteFileOrFolderPublisher (struct Usr_Data *UsrDat,unsigned Lev
 
 void Brw_ReqRemFile (void)
   {
-   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_FILE);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REQ_REM_FILE);
   }
 
-static void Brw_DoActionAskRemFile (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionReqRemFile (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X;
    struct Brw_File File;
@@ -5156,7 +5154,7 @@ void Brw_RemFile (void)
    Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_FILE);
   }
 
-static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionRemoveFile (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_FILE_X_removed;
    struct Brw_File File;
@@ -5212,11 +5210,12 @@ static void Brw_DoActionRemFile (struct Brw_FileBrowser *FileBrowser)
 
 void Brw_TryRemFolder (void)
   {
-   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_FOLDER);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REQ_REM_FOLDER);
   }
 
-static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionReqRemFolder (struct Brw_FileBrowser *FileBrowser)
   {
+   extern const char *Txt_Do_you_really_want_to_remove_the_folder_X;
    extern const char *Txt_Folder_X_removed;
    struct Brw_File Folder;
    Exi_Exist_t FolderExistsInDB;
@@ -5237,8 +5236,10 @@ static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
 		  if (Brw_RemoveFolderFromDiskAndDB (FileBrowser->Zone,&Folder))
 		    {
 		     if (errno == ENOTEMPTY)	// The directory is not empty
-			Brw_AskConfirmRemoveFolderNotEmpty (FileBrowser,
-							    Folder.Path.Name);
+		        Ale_ShowAlertRemove (Brw_ActRemoveFolderNotEmpty[FileBrowser->Zone],FileBrowser->SectionId,
+					     Brw_PutImplicitParsFileBrowser,FileBrowser,
+					     Txt_Do_you_really_want_to_remove_the_folder_X,
+					     Folder.Path.Name);
 		     else			// The directory is empty
 			Err_NoPermission ();
 		    }
@@ -5267,35 +5268,19 @@ static void Brw_DoActionAskRemFolder (struct Brw_FileBrowser *FileBrowser)
   }
 
 /*****************************************************************************/
-/*********** Ask for confirmation of removing of a folder no empty ***********/
-/*****************************************************************************/
-
-static void Brw_AskConfirmRemoveFolderNotEmpty (struct Brw_FileBrowser *FileBrowser,
-						const char FolderName[NAME_MAX + 1])
-  {
-   extern const char *Txt_Do_you_really_want_to_remove_the_folder_X;
-
-   /***** Show question and button to remove not empty folder *****/
-   Ale_ShowAlertRemove (Brw_ActRemoveFolderNotEmpty[FileBrowser->Zone],FileBrowser->SectionId,
-			Brw_PutImplicitParsFileBrowser,FileBrowser,
-			Txt_Do_you_really_want_to_remove_the_folder_X,
-                        FolderName);
-  }
-
-/*****************************************************************************/
 /********* Complete removing of a not empty folder in a file browser *********/
 /*****************************************************************************/
 
 void Brw_RemFolder (void)
   {
-   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_NON_EMPTY_FOLDER);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_FOLDER);
   }
 
 /*****************************************************************************/
 /********* Complete removing of a not empty folder in a file browser *********/
 /*****************************************************************************/
 
-static void Brw_DoActionRemNonEmptyFolder (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionRemoveFolder (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
    struct Brw_File Folder;
@@ -6287,7 +6272,7 @@ void Brw_RemMyClipboard (void)
    Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_CLIPBOARD);
   }
 
-static void Brw_DoActionRemMyClipboard (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionRemoveMyClipboard (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Clipboard_removed;
 
@@ -8422,7 +8407,7 @@ void Brw_ChgFileMetadata (void)
    Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_CHG_FILE_METADATA);
   }
 
-static void Brw_DoActionChgFileMetadata (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionChangeFileMetadata (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Changes_saved;
    static TmlNot_Type_t NoteTypes[Brw_NUM_ZONES] =
@@ -9793,12 +9778,12 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 /************** Write a form fo confirm removing of old files ****************/
 /*****************************************************************************/
 
-void Brw_AskRemoveOldFilesBriefcase (void)
+void Brw_ReqRemOldFilesBriefcase (void)
   {
-   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_ASK_REM_OLD_BRIEFCASE);
+   Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REQ_REM_OLD_BRIEFCASE);
   }
 
-static void Brw_DoActionAskRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionReqRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Remove_old_files;
    extern const char *Txt_Remove_files_older_than_PART_1_OF_2;
@@ -9848,7 +9833,7 @@ void Brw_RemoveOldFilesBriefcase (void)
    Brw_ShowOneOrMoreFileBrowsers (Brw_ACT_REM_OLD_BRIEFCASE);
   }
 
-static void Brw_DoActionRemOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
+static void Brw_DoActionRemoveOldFilesBriefcase (struct Brw_FileBrowser *FileBrowser)
   {
    extern const char *Txt_Files_removed;
    extern const char *Txt_Links_removed;

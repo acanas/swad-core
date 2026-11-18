@@ -1165,7 +1165,7 @@ static void Agd_FreeListEvents (struct Agd_Agenda *Agenda)
 /************** Ask for confirmation of removing of an event *****************/
 /*****************************************************************************/
 
-void Agd_AskRemEvent (void)
+void Agd_ReqRemEvent (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    struct Agd_Agenda Agenda;

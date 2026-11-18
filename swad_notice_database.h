@@ -37,7 +37,7 @@ long Not_DB_InsertNotice (const char *Content,PriPub_PrivateOrPublic_t PrivateOr
 void Not_DB_ChangeNoticeStatus (long NotCod,HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Not_DB_CopyNoticeToDeleted (long NotCod);
 void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
-                                                     unsigned NumUsrsToBeNotifiedByEMail);
+                                                     unsigned NumUsrsToNotifByEMail);
 
 Exi_Exist_t Not_DB_GetNoticeData (MYSQL_RES **mysql_res,long NotCod);
 Exi_Exist_t Not_DB_ContentNotice (MYSQL_RES **mysql_res,long NotCod);

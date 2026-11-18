@@ -531,13 +531,13 @@ void Asg_DB_RemoveCrsAssignments (long HieCod)
 /*****************************************************************************/
 
 void Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,
-                                                         unsigned NumUsrsToBeNotifiedByEMail)
+                                                         unsigned NumUsrsToNotifByEMail)
   {
    DB_QueryUPDATE ("can not update the number of notifs. of an assignment",
 		   "UPDATE asg_assignments"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE AsgCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,
+                   NumUsrsToNotifByEMail,
                    AsgCod);
   }
 

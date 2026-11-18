@@ -2968,7 +2968,7 @@ void For_ReceiveForumPost (void)
    struct For_Forums Forums;
    For_FirstOrReply_t FirstOrReply = For_FIRST_POST_IN_THREAD;
    long PstCod = 0;
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumUsrsToNotifByEMail;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Med_Media Media;
@@ -3044,8 +3044,10 @@ void For_ReceiveForumPost (void)
      {
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-	 if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_POST_COURSE,PstCod)))
-	    For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
+	 if ((NumUsrsToNotifByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_POST_COURSE,
+								      PstCod)))
+	    For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,
+							  NumUsrsToNotifByEMail);
 	 break;
       default:
 	 break;
@@ -3053,8 +3055,10 @@ void For_ReceiveForumPost (void)
 
    /***** Notify the new post to previous writers in this thread *****/
    if (FirstOrReply == For_REPLY_TO_ANOTHER_POST)
-      if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,PstCod)))
-         For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
+      if ((NumUsrsToNotifByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,
+								   PstCod)))
+         For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,
+						       NumUsrsToNotifByEMail);
 
    /***** Insert forum post into public social activity *****/
    switch (Forums.Forum.Type)	// Only if forum is public for any logged user
@@ -3520,7 +3524,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
    unsigned NumFors;
    unsigned NumThrs;
    unsigned NumPsts;
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumUsrsToNotifByEMail;
    double NumThrsPerForum;
    double NumPostsPerThread;
    double NumPostsPerForum;
@@ -3529,7 +3533,8 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
    /***** Compute number of forums, number of threads and number of posts *****/
    NumFors = For_DB_GetNumTotalForumsOfType       (ForumType,HieCod);
    NumThrs = For_DB_GetNumTotalThrsInForumsOfType (ForumType,HieCod);
-   NumPsts  = For_DB_GetNumTotalPstsInForumsOfType (ForumType,HieCod,&NumUsrsToBeNotifiedByEMail);
+   NumPsts = For_DB_GetNumTotalPstsInForumsOfType (ForumType,HieCod,
+						   &NumUsrsToNotifByEMail);
 
    /***** Compute number of threads per forum, number of posts per forum and number of posts per thread *****/
    NumThrsPerForum   = NumFors ? (double) NumThrs / (double) NumFors :
@@ -3543,7 +3548,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
    FiguresForum->NumFors += NumFors;
    FiguresForum->NumThrs += NumThrs;
    FiguresForum->NumPsts += NumPsts;
-   FiguresForum->NumUsrsToBeNotifByEMail += NumUsrsToBeNotifiedByEMail;
+   FiguresForum->NumUsrsToBeNotifByEMail += NumUsrsToNotifByEMail;
 
    /***** Write forum name and stats *****/
    HTM_TR_Begin (NULL);
@@ -3573,7 +3578,7 @@ static void For_WriteForumTitleAndStats (For_ForumType_t ForumType,
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());
-	 HTM_Unsigned (NumUsrsToBeNotifiedByEMail);
+	 HTM_Unsigned (NumUsrsToNotifByEMail);
       HTM_TD_End ();
 
       HTM_TD_Begin ("class=\"RT DAT_%s\"",The_GetSuffix ());

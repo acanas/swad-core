@@ -62,7 +62,7 @@ struct Svy_Survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey
    struct
      {
-      HidVis_HiddenOrVisible_t Hidden;	// Survey is hidden or visible?
+      HidVis_HiddenOrVisible_t HiddenOrVisible;	// Survey is hidden or visible?
       CloOpe_ClosedOrOpen_t ClosedOrOpen;	// Start date <= now <= end date
       Err_SuccessOrError_t ValidRoleToAnswer;	// I am logged with a valid role to answer this survey
       Usr_Belong_t IBelongToScope;		// I belong to the scope of this survey
@@ -83,9 +83,12 @@ struct Svy_Surveys
    Dat_StartEndTime_t SelectedOrder;
    Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
-   struct Svy_Survey Svy;	// Selected/current survey
-   long QstCod;			// Current question code
-   long SelectedQstCod;		// Selected question code
+   struct Svy_Survey Svy;	// Current survey
+   struct
+     {
+      long Sel;			// Selected question
+      long Par;			// Parameter to be used in forms
+     } QstCod;			// Question code
   };
 
 #define Svy_NUM_ANS_TYPES	2
@@ -116,8 +119,11 @@ struct Svy_Question	// Must be initialized to 0 before using it
 void Svy_ResetSvys (struct Svy_Surveys *Svys);
 
 void Svy_SeeAllSvys (void);
-void Svy_ListAllSvys (struct Svy_Surveys *Svys);
+void Svy_ListAllSvys (struct Svy_Surveys *Svys,long SelectedSvyCod);
 void Svy_SeeOneSvy (void);
+
+void Svy_ShowOnlyOneSvy (struct Svy_Surveys *Svys,Frm_PutForm_t PutFormQst);
+
 void Svy_PutParSvyOrder (Dat_StartEndTime_t SelectedOrder);
 void Svy_ReqCreatOrEditSvy (void);
 void Svy_GetSvyDataByCod (struct Svy_Survey *Svy);
@@ -126,7 +132,7 @@ void Svy_FreeListSvys (struct Svy_Surveys *Svys);
 void Svy_GetNotifSvy (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                       char **ContentStr,
                       long SvyCod,Ntf_GetContent_t GetContent);
-void Svy_AskRemSvy (void);
+void Svy_ReqRemSvy (void);
 void Svy_RemoveSvy (void);
 void Svy_AskResetSvy (void);
 void Svy_ResetSvy (void);
@@ -135,7 +141,7 @@ void Svy_UnhideSvy (void);
 void Svy_ReceiveSvy (void);
 void Svy_RemoveSvys (Hie_Level_t HieLvl,long HieCod);
 
-void Svy_ReqEditQuestion (void);
+void Svy_ReqCreatOrEditQst (void);
 void Svy_ReceiveQst (void);
 
 void Svy_ReqRemQst (void);

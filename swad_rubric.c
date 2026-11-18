@@ -681,7 +681,7 @@ void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics)
 /************** Ask for confirmation of removing of a rubric *****************/
 /*****************************************************************************/
 
-void Rub_AskRemRubric (void)
+void Rub_ReqRemRubric (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_rubric_X;
    struct Rub_Rubrics Rubrics;

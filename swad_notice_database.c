@@ -105,13 +105,13 @@ void Not_DB_CopyNoticeToDeleted (long NotCod)
 /*****************************************************************************/
 
 void Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,
-                                                     unsigned NumUsrsToBeNotifiedByEMail)
+                                                     unsigned NumUsrsToNotifByEMail)
   {
    DB_QueryUPDATE ("can not update the number of notifications of a notice",
 		   "UPDATE not_notices"
 		     " SET NumNotif=%u"
 		   " WHERE NotCod=%ld",
-	           NumUsrsToBeNotifiedByEMail,
+	           NumUsrsToNotifByEMail,
 	           NotCod);
   }
 

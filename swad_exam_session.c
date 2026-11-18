@@ -72,6 +72,8 @@ const char *ExaSes_ModalityIcon[ExaSes_NUM_MODALITIES] =
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
+#define ExaSes_EDIT_SES_SECTION_ID	"edit_ses"
+
 #define ExaSes_MIN_COLS			1
 #define ExaSes_MAX_COLS			4
 #define ExaSes_NUM_COLS_DEFAULT		2
@@ -98,6 +100,12 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
+      					  Frm_PutForm_t PutFormSession,
+				          unsigned NumSessions,
+                                          MYSQL_RES *mysql_res);
+static void ExaSes_ShowTableWithSessionsHeading (Usr_Can_t ICanEditSessions);
+
 static void ExaSes_ShowFormColumns (unsigned CurrentNumCols);
 static void ExaSes_ShowFormShowPhotos (Pho_ShowPhotos_t ShowPhotos);
 
@@ -109,11 +117,6 @@ static void ExaSes_SetListUsrsAllowedActions (Usr_Can_t AllowedActions[Usr_LIST_
 static void ExaSes_PutIconsInListOfSessions (const void *Exams);
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams);
 
-static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
-      					  Frm_PutForm_t PutFormSession,
-				          unsigned NumSessions,
-                                          MYSQL_RES *mysql_res);
-static void ExaSes_ListOneOrMoreSessionsHeading (Usr_Can_t ICanEditSessions);
 static Usr_Can_t ExaSes_CheckIfICanEditSessions (void);
 static Usr_Can_t ExaSes_CheckIfICanEditThisSession (long UsrCod);
 static Usr_Can_t ExaSes_CheckIfICanChangeVisibilityOfResults (const struct ExaSes_Session *Session);
@@ -146,9 +149,9 @@ static ExaSes_Modality_t ExaSes_GetModalityFromString (const char *Str);
 
 static void ExaSes_HideUnhideSession (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
+static void ExaSes_PutFormSession (struct Exa_Exams *Exams,
+				   struct ExaSes_Session *Session,
 				   Usr_Can_t ICanChangeModality);
-static void ExaSes_ParsFormSession (const void *Session);
 
 static void ExaSes_PutSessionModalities (const struct ExaSes_Session *Session,
 					 Usr_Can_t ICanChangeModality);
@@ -214,13 +217,168 @@ void ExaSes_ListSessions (struct Exa_Exams *Exams,Frm_PutForm_t PutFormSession)
 	   }
 
 	 /***** Show the table with the sessions *****/
-	 ExaSes_ListOneOrMoreSessions (Exams,PutFormSession,NumSessions,mysql_res);
+	 ExaSes_ShowTableWithSessions (Exams,PutFormSession,NumSessions,mysql_res);
 
       /***** End box *****/
       Box_BoxEnd ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*********************** Show table with exam sessions ***********************/
+/*****************************************************************************/
+
+static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
+      					  Frm_PutForm_t PutFormSession,
+				          unsigned NumSessions,
+                                          MYSQL_RES *mysql_res)
+  {
+   unsigned NumSession;
+   unsigned UniqueId;
+   struct ExaSes_Session Session;
+   Lay_Highlight_t HighlightRow;
+   char *Anchor;
+   unsigned NumPrints;
+   Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
+   Usr_Can_t ICanChangeModality = Usr_CAN_NOT;
+   Frm_PutForm_t PutFormToEditSession = ICanEditSessions == Usr_CAN &&
+					PutFormSession == Frm_PUT_FORM ? Frm_PUT_FORM :
+									 Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutFormToCreateNewSession = PutFormToEditSession == Frm_PUT_FORM &&
+					     Exams->SesCod.Sel <= 0 ? Frm_PUT_FORM :
+								      Frm_DONT_PUT_FORM;
+
+   /***** Begin table with sessions *****/
+   HTM_TABLE_Begin ("TBL_SCROLL");
+
+      if (NumSessions)
+	{
+	 /***** Write the heading *****/
+	 ExaSes_ShowTableWithSessionsHeading (ICanEditSessions);
+
+	 /***** Write rows *****/
+	 ExaSes_ResetSession (&Session);
+	 for (NumSession = 0, UniqueId = 1, The_ResetRowColor ();
+	      NumSession < NumSessions;
+	      NumSession++, UniqueId++, The_ChangeRowColor ())
+	   {
+	    /***** Get exam session data from row *****/
+	    ExaSes_GetSessionDataFromRow (mysql_res,&Session);
+	    Exams->SesCod.Par = Session.SesCod;	// To be used as hidden parameter in forms
+
+	    if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
+	      {
+	       HighlightRow = Session.SesCod == Exams->SesCod.Sel ? Lay_HIGHLIGHT :
+								    Lay_DONT_HIGHLIGHT;
+
+	       /***** Build anchor string *****/
+	       if (asprintf (&Anchor,"evt_%lu_%lu",
+			     (unsigned long) Exams->Exam.ExaCod,
+			     (unsigned long) Session.SesCod) < 0)
+		  Err_NotEnoughMemoryExit ();
+
+	       /***** First row for this session ****/
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+
+		  /* Icons */
+		  if (ICanEditSessions == Usr_CAN)
+		     ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
+
+		  /* Start/end date/time */
+		  ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
+
+		  /* Title, modality and groups */
+		  ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,Anchor);
+
+		  /* Prints in the session */
+		  if (ICanEditSessions == Usr_CAN)
+		    {
+		     NumPrints = Exa_DB_GetNumPrintsInSes (Session.SesCod);
+		     ICanChangeModality = NumPrints == 0 ? Usr_CAN : // Only if there are no exam prints yet
+							   Usr_CAN_NOT;
+		     ExaSes_ListOneOrMoreSessionsPrints (&Session,NumPrints);
+		    }
+
+		  /* Session result visible? */
+		  ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
+
+	       HTM_TR_End ();
+
+	       /***** Second row: session author *****/
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+		  ExaSes_ListOneOrMoreSessionsAuthor (&Session);
+	       HTM_TR_End ();
+
+	       /***** Third row: form to edit this session ****/
+	       if (PutFormToEditSession == Frm_PUT_FORM &&	// Editing...
+		   Session.SesCod == Exams->SesCod.Sel)		// ...this session
+		 {
+		  HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+		     HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
+			ExaSes_PutFormSession (Exams,&Session,ICanChangeModality);
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+		 }
+
+	       /***** Free anchor string *****/
+	       free (Anchor);
+	      }
+	   }
+	}
+
+      /***** Put form to create a new exam session in this exam *****/
+      if (PutFormToCreateNewSession == Frm_PUT_FORM)
+	{
+	 /* Reset session */
+	 ExaSes_ResetSession (&Session);
+	 Session.ExaCod = Exams->Exam.ExaCod;
+	 Session.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();			// Now
+	 Session.TimeUTC[Dat_END_TIME] = Session.TimeUTC[Dat_STR_TIME] + (1 * 60 * 60);	// Now + 1 hour
+	 Str_Copy (Session.Title,Exams->Exam.Title,sizeof (Session.Title) - 1);
+
+	 /* Put form to create new session */
+	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (Lay_HIGHLIGHT));
+	    HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
+	       ExaSes_PutFormSession (Exams,&Session,
+				      Usr_CAN);	// Modality can be changed
+	    HTM_TD_End ();
+	 HTM_TR_End ();
+	}
+
+   /***** End table with sessions *****/
+   HTM_TABLE_End ();
+  }
+
+/*****************************************************************************/
+/************* Put a column for exam session start and end times *************/
+/*****************************************************************************/
+
+static void ExaSes_ShowTableWithSessionsHeading (Usr_Can_t ICanEditSessions)
+  {
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Session;
+   extern const char *Txt_Exam_printouts;
+   extern const char *Txt_Results;
+
+   /***** Begin row *****/
+   HTM_TR_Begin (NULL);
+
+      /***** Column for icons *****/
+      if (ICanEditSessions == Usr_CAN)
+	 HTM_TH_Empty (1);
+
+      /***** The rest of columns *****/
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_STR_DATE]	,HTM_HEAD_LEFT);
+      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE]	,HTM_HEAD_LEFT);
+      HTM_TH (Txt_Session				,HTM_HEAD_LEFT);
+      if (ICanEditSessions == Usr_CAN)
+	 HTM_TH (Txt_Exam_printouts			,HTM_HEAD_RIGHT);
+      HTM_TH (Txt_Results				,HTM_HEAD_CENTER);
+
+   /***** End row *****/
+   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -801,160 +959,8 @@ static void ExaSes_PutIconsInListOfSessions (const void *Exams)
 
 static void ExaSes_PutIconToCreateNewSession (struct Exa_Exams *Exams)
   {
-   Ico_PutContextualIconToAdd (ActReqNewExaSes,ExaSes_NEW_SESSION_SECTION_ID,
+   Ico_PutContextualIconToAdd (ActReqNewExaSes,ExaSes_EDIT_SES_SECTION_ID,
                                Exa_PutParsOneExam,Exams);
-  }
-
-/*****************************************************************************/
-/********************** List exam sessions for edition ***********************/
-/*****************************************************************************/
-
-static void ExaSes_ListOneOrMoreSessions (struct Exa_Exams *Exams,
-      					  Frm_PutForm_t PutFormSession,
-				          unsigned NumSessions,
-                                          MYSQL_RES *mysql_res)
-  {
-   unsigned NumSession;
-   unsigned UniqueId;
-   struct ExaSes_Session Session;
-   Lay_Highlight_t HighlightRow;
-   char *Anchor;
-   unsigned NumPrints;
-   Usr_Can_t ICanEditSessions = ExaSes_CheckIfICanEditSessions ();
-   Usr_Can_t ICanChangeModality = Usr_CAN_NOT;
-
-   /***** Reset session *****/
-   ExaSes_ResetSession (&Session);
-
-   /***** Begin table with sessions *****/
-   HTM_TABLE_Begin ("TBL_SCROLL");
-
-      /***** Write the heading *****/
-      if (NumSessions)
-	 ExaSes_ListOneOrMoreSessionsHeading (ICanEditSessions);
-
-      /***** Write rows *****/
-      for (NumSession = 0, UniqueId = 1, The_ResetRowColor ();
-	   NumSession < NumSessions;
-	   NumSession++, UniqueId++, The_ChangeRowColor ())
-	{
-	 /***** Get exam session data from row *****/
-	 ExaSes_GetSessionDataFromRow (mysql_res,&Session);
-	 Exams->SesCod.Par = Session.SesCod;	// To be used as hidden parameter in forms
-
-	 if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
-	   {
-	    HighlightRow = Session.SesCod == Exams->SesCod.Sel ? Lay_HIGHLIGHT :
-								 Lay_DONT_HIGHLIGHT;
-
-	    /***** Build anchor string *****/
-	    if (asprintf (&Anchor,"evt_%lu_%lu",
-	                  (unsigned long) Exams->Exam.ExaCod,
-	                  (unsigned long) Session.SesCod) < 0)
-	       Err_NotEnoughMemoryExit ();
-
-	    /***** First row for this session ****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-
-	       /* Icons */
-	       if (ICanEditSessions == Usr_CAN)
-		  ExaSes_ListOneOrMoreSessionsIcons (Exams,&Session,Anchor);
-
-	       /* Start/end date/time */
-	       ExaSes_ListOneOrMoreSessionsTimes (&Session,UniqueId);
-
-	       /* Title, modality and groups */
-	       ExaSes_ListOneOrMoreSessionsMainData (Exams,&Session,Anchor);
-
-	       /* Prints in the session */
-	       if (ICanEditSessions == Usr_CAN)
-	         {
-		  NumPrints = Exa_DB_GetNumPrintsInSes (Session.SesCod);
-		  ICanChangeModality = NumPrints == 0 ? Usr_CAN : // Only if there are no exam prints yet
-							Usr_CAN_NOT;
-	          ExaSes_ListOneOrMoreSessionsPrints (&Session,NumPrints);
-	         }
-
-	       /* Session result visible? */
-	       ExaSes_ListOneOrMoreSessionsResult (Exams,&Session);
-
-	    HTM_TR_End ();
-
-	    /***** Second row: session author *****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-	       ExaSes_ListOneOrMoreSessionsAuthor (&Session);
-	    HTM_TR_End ();
-
-	    /***** Third row: form to edit this session ****/
-	    if (ICanEditSessions == Usr_CAN &&
-		PutFormSession == Frm_PUT_FORM &&	// Editing...
-		Session.SesCod == Exams->SesCod.Sel)	// ...this session
-	      {
-	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-		  HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
-		     ExaSes_PutFormSession (&Session,ICanChangeModality);
-		  HTM_TD_End ();
-	       HTM_TR_End ();
-	      }
-
-	    /***** Free anchor string *****/
-	    free (Anchor);
-	   }
-	}
-
-      /***** Put form to create a new exam session in this exam *****/
-      if (ICanEditSessions == Usr_CAN &&
-	  PutFormSession == Frm_PUT_FORM &&
-	  Exams->SesCod.Sel <= 0)
-	{
-	 /* Reset session */
-	 ExaSes_ResetSession (&Session);
-	 Session.ExaCod = Exams->Exam.ExaCod;
-	 Session.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();		// Now
-	 Session.TimeUTC[Dat_END_TIME] = Session.TimeUTC[Dat_STR_TIME] + (1 * 60 * 60);	// Now + 1 hour
-	 Str_Copy (Session.Title,Exams->Exam.Title,sizeof (Session.Title) - 1);
-
-	 /* Put form to create new session */
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (Lay_HIGHLIGHT));
-	    HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
-	       ExaSes_PutFormSession (&Session,
-				      Usr_CAN);	// Modality can be changed
-	    HTM_TD_End ();
-	 HTM_TR_End ();
-	}
-
-   /***** End table with sessions *****/
-   HTM_TABLE_End ();
-  }
-
-/*****************************************************************************/
-/************* Put a column for exam session start and end times *************/
-/*****************************************************************************/
-
-static void ExaSes_ListOneOrMoreSessionsHeading (Usr_Can_t ICanEditSessions)
-  {
-   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Session;
-   extern const char *Txt_Exam_printouts;
-   extern const char *Txt_Results;
-
-   /***** Begin row *****/
-   HTM_TR_Begin (NULL);
-
-      /***** Column for icons *****/
-      if (ICanEditSessions == Usr_CAN)
-	 HTM_TH_Empty (1);
-
-      /***** The rest of columns *****/
-      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_STR_DATE]	,HTM_HEAD_LEFT);
-      HTM_TH (Txt_START_END_TIME[Exa_ORDER_BY_END_DATE]	,HTM_HEAD_LEFT);
-      HTM_TH (Txt_Session				,HTM_HEAD_LEFT);
-      if (ICanEditSessions == Usr_CAN)
-	 HTM_TH (Txt_Exam_printouts			,HTM_HEAD_RIGHT);
-      HTM_TH (Txt_Results				,HTM_HEAD_CENTER);
-
-   /***** End row *****/
-   HTM_TR_End ();
   }
 
 /*****************************************************************************/
@@ -1497,7 +1503,7 @@ static ExaSes_Modality_t ExaSes_GetModalityFromString (const char *Str)
 /********** Request the removal of an exam session (exam instance) ***********/
 /*****************************************************************************/
 
-void ExaSes_ReqRemSession (void)
+void ExaSes_ReqRemSes (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_session_X;
    struct Exa_Exams Exams;
@@ -1531,7 +1537,7 @@ void ExaSes_ReqRemSession (void)
 /****************** Remove an exam session (exam instance) *******************/
 /*****************************************************************************/
 
-void ExaSes_RemoveSession (void)
+void ExaSes_RemoveSes (void)
   {
    extern const char *Txt_Session_X_removed;
    struct Exa_Exams Exams;
@@ -1640,7 +1646,8 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
 /* Put a big button to play exam session (start a new session) as a teacher **/
 /*****************************************************************************/
 
-static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
+static void ExaSes_PutFormSession (struct Exa_Exams *Exams,
+				   struct ExaSes_Session *Session,
 				   Usr_Can_t ICanChangeModality)
   {
    extern const char *Txt_Title;
@@ -1664,12 +1671,12 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
 							 OldNew_NEW;
 
    /***** Begin section for exam session *****/
-   HTM_SECTION_Begin (ExaSes_NEW_SESSION_SECTION_ID);
+   HTM_SECTION_Begin (ExaSes_EDIT_SES_SECTION_ID);
 
       /***** Begin form to create/edit *****/
       Frm_BeginFormTable (Forms[OldNewSession].Action,
-			  ExaSes_NEW_SESSION_SECTION_ID,
-			  ExaSes_ParsFormSession,Session,
+			  ExaSes_EDIT_SES_SECTION_ID,
+			  Exa_PutParsOneExam,Exams,
 			  "TBL_WIDE");
 
 	 /***** Title *****/
@@ -1727,12 +1734,6 @@ static void ExaSes_PutFormSession (struct ExaSes_Session *Session,
 
    /***** End section for exam session *****/
    HTM_SECTION_End ();
-  }
-
-static void ExaSes_ParsFormSession (const void *Session)
-  {
-   ParCod_PutPar (ParCod_Exa,((struct ExaSes_Session *) Session)->ExaCod);
-   ParCod_PutPar (ParCod_Ses,((struct ExaSes_Session *) Session)->SesCod);
   }
 
 /*****************************************************************************/

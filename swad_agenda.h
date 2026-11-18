@@ -122,7 +122,7 @@ void Agd_PutParsMyAgenda (unsigned Past__FutureEvents,
                           long AgdCodToEdit);
 void Agd_PutParEventsOrder (Dat_StartEndTime_t SelectedOrder);
 
-void Agd_AskRemEvent (void);
+void Agd_ReqRemEvent (void);
 void Agd_RemoveEvent (void);
 
 void Agd_HideEvent (void);

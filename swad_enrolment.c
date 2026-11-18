@@ -728,7 +728,7 @@ void Enr_PutLinkToRemOldUsrs (void)
 /*********************** Write form to remove old users **********************/
 /*****************************************************************************/
 
-void Enr_AskRemoveOldUsrs (void)
+void Enr_ReqRemOldUsrs (void)
   {
    extern const char *Txt_Eliminate_old_users;
    extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
@@ -2018,7 +2018,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
 /************ Ask for removing all students from current course **************/
 /*****************************************************************************/
 
-void Enr_AskRemAllStdsThisCrs (void)
+void Enr_ReqRemAllStdsThisCrs (void)
   {
    extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
@@ -2060,7 +2060,7 @@ void Enr_AskRemAllStdsThisCrs (void)
 /******************* Remove all students from current course *****************/
 /*****************************************************************************/
 
-void Enr_RemAllStdsThisCrs (void)
+void Enr_RemoveAllStdsThisCrs (void)
   {
    extern const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it;
    unsigned NumStdsInCrs;

@@ -42,8 +42,8 @@ Exi_Exist_t Cfe_DB_GetCallForExamDataByCod (MYSQL_RES **mysql_res,long ExaCod);
 
 void Cfe_DB_ModifyCallForExam (const struct Cfe_CallForExam *CallForExam,
                                long ExaCod);
-void Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (long ExaCod,
-                                                          unsigned NumUsrsToBeNotifiedByEMail);
+void Cfe_DB_UpdateNumUsrsNotifByEMailAboutCallForExam (long ExaCod,
+                                                       unsigned NumUsrsToNotifByEMail);
 
 void Cfe_DB_HideCallForExam (long ExaCod);
 void Cfe_DB_UnhideCallForExam (long ExaCod);

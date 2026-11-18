@@ -137,7 +137,7 @@ void Brw_ListDocsFound (MYSQL_RES **mysql_res,
 			unsigned NumDocs,
 			const char *TitleSingular,const char *TitlePlural);
 
-void Brw_AskRemoveOldFilesBriefcase (void);
+void Brw_ReqRemOldFilesBriefcase (void);
 void Brw_RemoveOldFilesBriefcase (void);
 
 Act_Action_t Brw_GetActionExpand (Brw_Zone_t Zone);

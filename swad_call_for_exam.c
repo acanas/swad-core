@@ -341,13 +341,13 @@ void Cfe_ReceiveCallForExam1 (void)
 void Cfe_ReceiveCallForExam2 (void)
   {
    struct Cfe_CallsForExams *CallsForExams = Cfe_GetGlobalCallsForExams ();
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumUsrsToNotifByEMail;
 
    /***** Notify by email about the new call for exam *****/
-   if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_CALL_FOR_EXAM,
-								     CallsForExams->Highlight.ExaCod)))
-      Cfe_DB_UpdateNumUsrsNotifiedByEMailAboutCallForExam (CallsForExams->Highlight.ExaCod,
-							   NumUsrsToBeNotifiedByEMail);
+   if ((NumUsrsToNotifByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_CALL_FOR_EXAM,
+								CallsForExams->Highlight.ExaCod)))
+      Cfe_DB_UpdateNumUsrsNotifByEMailAboutCallForExam (CallsForExams->Highlight.ExaCod,
+							NumUsrsToNotifByEMail);
 
    /***** Create a new social note about the new call for exam *****/
    TmlNot_StoreAndPublishNote (TmlNot_CALL_FOR_EXAM,CallsForExams->Highlight.ExaCod);

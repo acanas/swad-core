@@ -1040,7 +1040,7 @@ void Gam_FreeListGames (struct Gam_Games *Games)
 /*************** Ask for confirmation of removing of a game ******************/
 /*****************************************************************************/
 
-void Gam_AskRemGame (void)
+void Gam_ReqRemGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_game_X;
    struct Gam_Games Games;

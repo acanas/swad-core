@@ -85,14 +85,14 @@ struct Asg_Assignments
 void Asg_SetAssignment (const struct Asg_Assignment *Asg);
 const struct Asg_Assignment *Asg_GetAssigment (void);
 
-void Asg_ResetAssignments (struct Asg_Assignments *Assignments);
+void Asg_ResetAssignments (struct Asg_Assignments *Asgs);
 
 void Asg_SeeAssignments (void);
-void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments);
+void Asg_ShowAllAssignments (struct Asg_Assignments *Asgs);
 void Asg_SeeOneAssignment (void);
 void Asg_PrintOneAssignment (void);
 
-void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments);
+void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Asgs);
 
 Dat_StartEndTime_t Asg_GetParAsgOrder (void);
 

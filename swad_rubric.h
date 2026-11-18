@@ -69,7 +69,7 @@ void Rub_GetListRubrics (struct Rub_Rubrics *Rubrics);
 void Rub_GetRubricDataByCod (struct Rub_Rubric *Rubric);
 void Rub_FreeListRubrics (struct Rub_Rubrics *Rubrics);
 
-void Rub_AskRemRubric (void);
+void Rub_ReqRemRubric (void);
 void Rub_RemoveRubric (void);
 void Rub_RemoveCrsRubrics (long HieCod);
 

@@ -229,13 +229,13 @@ long For_DB_InsertForumPst (long ThrCod,long UsrCod,
 /*****************************************************************************/
 
 void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
-                                                   unsigned NumUsrsToBeNotifiedByEMail)
+                                                   unsigned NumUsrsToNotifByEMail)
   {
    DB_QueryUPDATE ("can not update the number of notifications of a post",
 		   "UPDATE for_posts"
 		     " SET NumNotif=NumNotif+%u"
 		   " WHERE PstCod=%ld",
-                   NumUsrsToBeNotifiedByEMail,
+                   NumUsrsToNotifByEMail,
                    PstCod);
   }
 
@@ -1491,7 +1491,7 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 
 unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 					       long HieCods[Hie_NUM_LEVELS],
-                                               unsigned *NumUsrsToBeNotifiedByEMail)
+                                               unsigned *NumUsrsToNotifByEMail)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1788,11 +1788,11 @@ unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
    /* Get number of users notified (row[1]) */
    if (row[1])
      {
-      if (sscanf (row[1],"%u",NumUsrsToBeNotifiedByEMail) != 1)
+      if (sscanf (row[1],"%u",NumUsrsToNotifByEMail) != 1)
          Err_ShowErrorAndExit ("Error when getting the total number of forums of a type.");
      }
    else
-      *NumUsrsToBeNotifiedByEMail = 0;
+      *NumUsrsToNotifByEMail = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

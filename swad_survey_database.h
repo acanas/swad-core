@@ -43,7 +43,7 @@ void Svy_DB_UpdateSurvey (const struct Svy_Survey *Svy,const char *Txt);
 void Svy_DB_HideOrUnhideSurvey (long SvyCod,
 				HidVis_HiddenOrVisible_t HiddenOrVisible);
 void Svy_DB_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
-                                                     unsigned NumUsrsToBeNotifiedByEMail);
+                                                     unsigned NumUsrsToNotifByEMail);
 
 unsigned Svy_DB_GetListSurveys (MYSQL_RES **mysql_res,
                                 unsigned AllowedLvls,

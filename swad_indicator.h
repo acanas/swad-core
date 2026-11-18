@@ -65,7 +65,7 @@ struct Ind_IndicatorsCrs
 
    unsigned NumThreads;
    unsigned NumPosts;
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumUsrsToNotifByEMail;
    unsigned NumMsgsSentByTchs;
 
    unsigned NumFilesInDocumentZones;

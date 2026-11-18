@@ -59,7 +59,7 @@ void Exa_GetExamDataByCod (struct Exa_Exam *Exam);
 void Exa_GetExamDataByFolder (struct Exa_Exam *Exam);
 void Exa_FreeListExams (struct Exa_Exams *Exams);
 
-void Exa_AskRemExam (void);
+void Exa_ReqRemExam (void);
 void Exa_RemoveExam (void);
 void Exa_RemoveCrsExams (long HieCod);
 

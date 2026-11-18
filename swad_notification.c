@@ -1139,7 +1139,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
    struct For_Forum ForumSelected;
    long GrpCod;
    long HieCods[Hie_NUM_LEVELS];
-   unsigned NumUsrsToBeNotifiedByEMail = 0;
+   unsigned NumUsrsToNotifByEMail = 0;
    unsigned NotifyEventMask = (1 << NotifyEvent);
 
    /***** Get users who want to be notified from database ******/
@@ -1270,7 +1270,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 		  Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,Cod,
 						(Ntf_Status_t) Ntf_STATUS_BIT_EMAIL,
 						HieCods);
-		  NumUsrsToBeNotifiedByEMail++;
+		  NumUsrsToNotifByEMail++;
 		 }
 	       else							// Don't send notification by email
 		  Ntf_DB_StoreNotifyEventToUsr (NotifyEvent,UsrDat.UsrCod,Cod,
@@ -1286,7 +1286,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumUsrsToBeNotifiedByEMail;
+   return NumUsrsToNotifByEMail;
   }
 
 /*****************************************************************************/

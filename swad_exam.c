@@ -380,12 +380,12 @@ void Exa_ShowOneExam (void)
 
    /***** Get exam data *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
 
    /***** Show exams again *****/
+   Exams.SelectedExaCod = Exams.Exam.ExaCod;
    Exa_ListAllExams (&Exams);
   }
 
@@ -467,7 +467,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 break;
      }
 
-      /***** Icons related to this exam *****/
+      /* Icons related to this exam */
       if (ShowingOneOrSeveral == Lay_SHOWING_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
@@ -475,7 +475,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 HTM_TD_End ();
 	}
 
-      /***** Start/end date/time *****/
+      /* Start/end date/time */
       UniqueId++;
       for (StartEndTime  = (Dat_StartEndTime_t) 0;
 	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
@@ -498,7 +498,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 free (Id);
 	}
 
-      /***** Exam title and main data *****/
+      /* Exam title and main data */
       HTM_TD_Begin ("class=\"LT\"");
 
 	 /* Exam title */
@@ -529,7 +529,7 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 
       HTM_TD_End ();
 
-      /***** Number of sessions in exam *****/
+      /* Number of sessions in exam */
       HTM_TD_Begin ("class=\"RT\"");
 
 	 Frm_BeginForm (ActSeeOneExa);
@@ -562,12 +562,12 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
 	 break;
      }
 
-      /***** Author of the exam *****/
+      /* Author of the exam */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 Exa_WriteAuthor (&Exams->Exam);
       HTM_TD_End ();
 
-      /***** Text of the exam *****/
+      /* Text of the exam */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 Exa_DB_GetExamTxt (Exams->Exam.ExaCod,Txt);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
@@ -971,7 +971,7 @@ void Exa_FreeListExams (struct Exa_Exams *Exams)
 /*************** Ask for confirmation of removing of an exam *****************/
 /*****************************************************************************/
 
-void Exa_AskRemExam (void)
+void Exa_ReqRemExam (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_exam_X;
    struct Exa_Exams Exams;

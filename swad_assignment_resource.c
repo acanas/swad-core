@@ -51,31 +51,31 @@ void AsgRsc_GetLinkToAssignment (void)
   {
    extern const char *Txt_Link_to_resource_X_copied_into_clipboard;
    extern const char *Txt_Assignments;
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);
+   Asgs.Asg.AsgCod = ParCod_GetPar (ParCod_Asg);
 
    /***** Get data of this assignment *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asg_GetAssignmentDataByCod (&Asgs.Asg);
 
    /***** Copy link to assignment into resource clipboard *****/
-   Rsc_DB_CopyToClipboard (Rsc_ASSIGNMENT,Assignments.Asg.AsgCod);
+   Rsc_DB_CopyToClipboard (Rsc_ASSIGNMENT,Asgs.Asg.AsgCod);
 
    /***** Write success message *****/
    Ale_ShowAlert (Ale_SUCCESS,Txt_Link_to_resource_X_copied_into_clipboard,
-   		  Assignments.Asg.AsgCod > 0 ? Assignments.Asg.Title :
-   					       Txt_Assignments);
+   		  Asgs.Asg.AsgCod > 0 ? Asgs.Asg.Title :
+   					Txt_Assignments);
 
    /***** Show current assignments, if any *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
+   Asg_ShowAllAssignments (&Asgs);
   }

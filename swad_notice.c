@@ -242,7 +242,7 @@ static void Not_PutVisibility (void)
 void Not_ReceiveNotice (void)
   {
    long NotCod;
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumUsrsToNotifByEMail;
    char Content[Cns_MAX_BYTES_TEXT + 1];
    PriPub_PrivateOrPublic_t PrivateOrPublic;
 
@@ -261,8 +261,9 @@ void Not_ReceiveNotice (void)
    RSS_UpdateRSSFileForACrs (&Gbl.Hie.Node[Hie_CRS]);
 
    /***** Notify by email about the new notice *****/
-   if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
-      Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
+   if ((NumUsrsToNotifByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,
+							        NotCod)))
+      Not_DB_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToNotifByEMail);
 
    /***** Create a new social note about the new notice *****/
    if (PrivateOrPublic == PriPub_PUBLIC)

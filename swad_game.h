@@ -131,7 +131,7 @@ void Gam_GetListSelectedGamCods (struct Gam_Games *Games);
 void Gam_GetGameDataByCod (struct Gam_Game *Game);
 void Gam_FreeListGames (struct Gam_Games *Games);
 
-void Gam_AskRemGame (void);
+void Gam_ReqRemGame (void);
 void Gam_RemoveGame (void);
 void Gam_RemoveCrsGames (long HieCod);
 

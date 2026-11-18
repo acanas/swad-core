@@ -800,7 +800,7 @@ static void Att_FreeListEvents (struct Att_Events *Events)
 /********* Ask for confirmation of removing of an attendance event ***********/
 /*****************************************************************************/
 
-void Att_AskRemEvent (void)
+void Att_ReqRemEvent (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
    struct Att_Events Events;

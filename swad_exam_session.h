@@ -34,8 +34,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define ExaSes_NEW_SESSION_SECTION_ID	"new_session"
-
 #define ExaSes_AFTER_LAST_QUESTION	((unsigned)((1UL << 31) - 1))	// 2^31 - 1, don't change this number because it is used in database to indicate that a session is finished
 
 struct ExaSes_UsrAnswer
@@ -69,8 +67,8 @@ void ExaSes_GetSessionDataByCod (struct ExaSes_Session *Session);
 
 void ExaSes_ToggleVisResultsSesUsr (void);
 
-void ExaSes_ReqRemSession (void);
-void ExaSes_RemoveSession (void);
+void ExaSes_ReqRemSes (void);
+void ExaSes_RemoveSes (void);
 
 void ExaSes_HideSession (void);
 void ExaSes_UnhideSession (void);

@@ -77,33 +77,33 @@ static struct Asg_Assignment Asg_Assignment;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Asg_PutHead (struct Asg_Assignments *Assignments,
+static void Asg_PutHead (struct Asg_Assignments *Asgs,
                          OneSev_OneOrSeveral_t OneOrMultiple,
                          Vie_ViewType_t ViewType);
 static Usr_Can_t Asg_CheckIfICanCreateAssignments (void);
-static void Asg_PutIconsListAssignments (const void *Assignments);
-static void Asg_PutIconToCreateNewAsg (const void *Assignments);
-static void Asg_ParsMyAllGrps (const void *Assignments);
-static void Asg_PutIconsOneAsg (const void *Assignments);
-static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
+static void Asg_PutIconsListAssignments (const void *Asgs);
+static void Asg_PutIconToCreateNewAsg (const void *Asgs);
+static void Asg_ParsMyAllGrps (const void *Asgs);
+static void Asg_PutIconsOneAsg (const void *Asgs);
+static void Asg_ShowAssignmentRow (struct Asg_Assignments *Asgs,
                                    OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 				       Vie_ViewType_t ViewType);
 
-static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignments,
+static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Asgs,
                                          const char *Anchor);
-static void Asg_PutPars (const void *Assignments);
-static void Asg_GetListAssignments (struct Asg_Assignments *Assignments);
+static void Asg_PutPars (const void *Asgs);
+static void Asg_GetListAssignments (struct Asg_Assignments *Asgs);
 static void Asg_GetAssignmentDataFromRow (MYSQL_RES **mysql_res,
                                           struct Asg_Assignment *Asg,
                                           Exi_Exist_t AsgExists);
 static void Asg_ResetAssignment (struct Asg_Assignment *Asg);
-static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments);
+static void Asg_FreeListAssignments (struct Asg_Assignments *Asgs);
 static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible);
 
-static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
+static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Asgs,
 				       const char *Description);
 
 static void Asg_EditRubrics (long AsgRubCod);
@@ -142,17 +142,17 @@ const struct Asg_Assignment *Asg_GetAssigment (void)
 /*************************** Reset assignments *******************************/
 /*****************************************************************************/
 
-void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
+void Asg_ResetAssignments (struct Asg_Assignments *Asgs)
   {
-   Assignments->LstReadStatus	= Cac_INVALID;	// List is not read
-   Assignments->Num		= 0;
-   Assignments->LstAsgCods	= NULL;
-   Assignments->SelectedOrder	= Asg_ORDER_DEFAULT;
-   Assignments->MyAllGrps	= Grp_MY_ALL_GROUPS_DEFAULT;
-   Assignments->ThisPage	= 0;
-   Assignments->Asg.AsgCod	=	// Used as parameter in contextual links
-   Assignments->SelectedAsgCod	= -1L;
-   Asg_ResetAssignment (&Assignments->Asg);
+   Asgs->LstReadStatus	= Cac_INVALID;	// List is not read
+   Asgs->Num		= 0;
+   Asgs->LstAsgCods	= NULL;
+   Asgs->SelectedOrder	= Asg_ORDER_DEFAULT;
+   Asgs->MyAllGrps	= Grp_MY_ALL_GROUPS_DEFAULT;
+   Asgs->ThisPage	= 0;
+   Asgs->Asg.AsgCod	=	// Used as parameter in contextual links
+   Asgs->SelectedAsgCod	= -1L;
+   Asg_ResetAssignment (&Asgs->Asg);
   }
 
 /*****************************************************************************/
@@ -161,25 +161,25 @@ void Asg_ResetAssignments (struct Asg_Assignments *Assignments)
 
 void Asg_SeeAssignments (void)
   {
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all assignments *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
 /**************************** Show all assignments ***************************/
 /*****************************************************************************/
 
-void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
+void Asg_ShowAllAssignments (struct Asg_Assignments *Asgs)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
@@ -188,47 +188,47 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
    unsigned NumAsg;
 
    /***** Get list of assignments *****/
-   Asg_GetListAssignments (Assignments);
+   Asg_GetListAssignments (Asgs);
 
    /***** Compute variables related to pagination *****/
-   Pagination.NumItems = Assignments->Num;
-   Pagination.ThisPage = Assignments->ThisPage;
+   Pagination.NumItems = Asgs->Num;
+   Pagination.ThisPage = Asgs->ThisPage;
    Pag_CalculatePagination (&Pagination);
-   Assignments->ThisPage = Pagination.ThisPage;
+   Asgs->ThisPage = Pagination.ThisPage;
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Assignments,Asg_PutIconsListAssignments,Assignments,
+   Box_BoxBegin (Txt_Assignments,Asg_PutIconsListAssignments,Asgs,
                  Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
       /***** Select whether show only my groups or all groups *****/
       if (Gbl.Crs.Grps.NumGrps)
 	{
 	 Set_BeginSettingsHead ();
-	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAsg,Assignments->MyAllGrps,
-					Asg_ParsMyAllGrps,Assignments);
+	    Grp_ShowFormToSelMyAllGrps (ActSeeAllAsg,Asgs->MyAllGrps,
+					Asg_ParsMyAllGrps,Asgs);
 	 Set_EndSettingsHead ();
 	}
 
       /***** Write links to pages *****/
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
-				     Assignments,-1L);
+				     Asgs,-1L);
 
-      if (Assignments->Num)
+      if (Asgs->Num)
 	{
 	 /***** Begin table *****/
 	 HTM_TABLE_Begin ("TBL_SCROLL");
 
 	    /***** Table head *****/
-	    Asg_PutHead (Assignments,OneSev_SEVERAL,Vie_VIEW);
+	    Asg_PutHead (Asgs,OneSev_SEVERAL,Vie_VIEW);
 
 	    /***** Write all assignments *****/
 	    for (NumAsg  = Pagination.FirstItemVisible, The_ResetRowColor ();
 		 NumAsg <= Pagination.LastItemVisible;
 		 NumAsg++, The_ChangeRowColor ())
 	      {
-	       Assignments->Asg.AsgCod = Assignments->LstAsgCods[NumAsg - 1];
-	       Asg_GetAssignmentDataByCod (&Assignments->Asg);
-	       Asg_ShowAssignmentRow (Assignments,OneSev_SEVERAL,Vie_VIEW);
+	       Asgs->Asg.AsgCod = Asgs->LstAsgCods[NumAsg - 1];
+	       Asg_GetAssignmentDataByCod (&Asgs->Asg);
+	       Asg_ShowAssignmentRow (Asgs,OneSev_SEVERAL,Vie_VIEW);
 	      }
 
 	 /***** End table *****/
@@ -239,20 +239,20 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Assignments)
 
       /***** Write again links to pages *****/
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
-				     Assignments,-1L);
+				     Asgs,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();
 
    /***** Free list of assignments *****/
-   Asg_FreeListAssignments (Assignments);
+   Asg_FreeListAssignments (Asgs);
   }
 
 /*****************************************************************************/
 /***************** Write header with fields of an assignment *****************/
 /*****************************************************************************/
 
-static void Asg_PutHead (struct Asg_Assignments *Assignments,
+static void Asg_PutHead (struct Asg_Assignments *Asgs,
                          OneSev_OneOrSeveral_t OneOrMultiple,
                          Vie_ViewType_t ViewType)
   {
@@ -281,13 +281,13 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	       Frm_BeginForm (ActSeeAllAsg);
 		  MyAllGrps = Grp_GetParMyAllGrps ();
 		  Grp_PutParMyAllGrps (&MyAllGrps);
-		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Assignments->ThisPage);
+		  Pag_PutParPagNum (Pag_ASSIGNMENTS,Asgs->ThisPage);
 		  Par_PutParOrder ((unsigned) Order);
 
 	          /* Begin link to select order */
 		  HTM_BUTTON_Submit_Begin (Txt_START_END_TIME_HELP[Order],NULL,
 		                           "class=\"BT_LINK\"");
-		  if (Order == Assignments->SelectedOrder)
+		  if (Order == Asgs->SelectedOrder)
 		     HTM_U_Begin ();
 	      }
 
@@ -297,7 +297,7 @@ static void Asg_PutHead (struct Asg_Assignments *Assignments,
 	    if (ViewType == Vie_VIEW)
 	      {
 	          /* End link to select order */
-		  if (Order == Assignments->SelectedOrder)
+		  if (Order == Asgs->SelectedOrder)
 		     HTM_U_End ();
 		  HTM_BUTTON_End ();
 
@@ -342,18 +342,18 @@ static Usr_Can_t Asg_CheckIfICanCreateAssignments (void)
 /*************** Put contextual icons in list of assignments *****************/
 /*****************************************************************************/
 
-static void Asg_PutIconsListAssignments (const void *Assignments)
+static void Asg_PutIconsListAssignments (const void *Asgs)
   {
    /***** Put icon to create a new assignment *****/
-   if (Assignments)
+   if (Asgs)
      {
       if (Asg_CheckIfICanCreateAssignments () == Usr_CAN)
-	 Asg_PutIconToCreateNewAsg (Assignments);
+	 Asg_PutIconToCreateNewAsg (Asgs);
 
       /***** Link to get resource link *****/
-      ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
+      ((struct Asg_Assignments *) Asgs)->Asg.AsgCod = -1L;
       Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
-				      Asg_PutPars,Assignments);
+				      Asg_PutPars,Asgs);
      }
 
    /***** Put icon to show a figure *****/
@@ -364,12 +364,12 @@ static void Asg_PutIconsListAssignments (const void *Assignments)
 /******************* Put icon to create a new assignment *********************/
 /*****************************************************************************/
 
-static void Asg_PutIconToCreateNewAsg (const void *Assignments)
+static void Asg_PutIconToCreateNewAsg (const void *Asgs)
   {
-   if (Assignments)
+   if (Asgs)
      {
-      ((struct Asg_Assignments *) Assignments)->Asg.AsgCod = -1L;
-      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutPars,Assignments);
+      ((struct Asg_Assignments *) Asgs)->Asg.AsgCod = -1L;
+      Ico_PutContextualIconToAdd (ActFrmNewAsg,NULL,Asg_PutPars,Asgs);
      }
   }
 
@@ -377,14 +377,14 @@ static void Asg_PutIconToCreateNewAsg (const void *Assignments)
 /**************** Put params to select which groups to show ******************/
 /*****************************************************************************/
 
-static void Asg_ParsMyAllGrps (const void *Assignments)
+static void Asg_ParsMyAllGrps (const void *Asgs)
   {
-   if (Assignments)
+   if (Asgs)
      {
       Par_PutParOrder ((unsigned)
-	               ((struct Asg_Assignments *) Assignments)->SelectedOrder);
+	               ((struct Asg_Assignments *) Asgs)->SelectedOrder);
       Pag_PutParPagNum (Pag_ASSIGNMENTS,
-                        ((struct Asg_Assignments *) Assignments)->ThisPage);
+                        ((struct Asg_Assignments *) Asgs)->ThisPage);
      }
   }
 
@@ -395,29 +395,29 @@ static void Asg_ParsMyAllGrps (const void *Assignments)
 void Asg_SeeOneAssignment (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+   Asgs.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of this assignment *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asg_GetAssignmentDataByCod (&Asgs.Asg);
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Show selected assignment in a box *****/
-   Asg_ShowOneAssignmentInBox (&Assignments);
+   Asg_ShowOneAssignmentInBox (&Asgs);
 
    /***** Show current assignments, if any *****/
    // TODO: The page should be that corresponding to the selected assignment.
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
@@ -426,17 +426,17 @@ void Asg_SeeOneAssignment (void)
 
 void Asg_PrintOneAssignment (void)
   {
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get the code of the assignment *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+   Asgs.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of this assignment *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asg_GetAssignmentDataByCod (&Asgs.Asg);
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_PRINT);
@@ -445,10 +445,10 @@ void Asg_PrintOneAssignment (void)
    HTM_TABLE_BeginWideMarginPadding (2);
 
       /***** Table head *****/
-      Asg_PutHead (&Assignments,OneSev_ONE,Vie_PRINT);
+      Asg_PutHead (&Asgs,OneSev_ONE,Vie_PRINT);
 
       /***** Write assignment *****/
-      Asg_ShowAssignmentRow (&Assignments,OneSev_ONE,Vie_PRINT);
+      Asg_ShowAssignmentRow (&Asgs,OneSev_ONE,Vie_PRINT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -458,25 +458,25 @@ void Asg_PrintOneAssignment (void)
 /************************* Show an assignment in a box ***********************/
 /*****************************************************************************/
 
-void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
+void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Asgs)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignment;
 
    /***** Begin box *****/
-   Box_BoxBegin (Assignments->Asg.Title[0] ? Assignments->Asg.Title :
-					     Txt_Assignment,
-		 Asg_PutIconsOneAsg,Assignments,
+   Box_BoxBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
+				      Txt_Assignment,
+		 Asg_PutIconsOneAsg,Asgs,
 		 Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
       /***** Begin table *****/
       HTM_TABLE_Begin ("TBL_SCROLL");
 
 	 /***** Table head *****/
-	 Asg_PutHead (Assignments,OneSev_ONE,Vie_VIEW);
+	 Asg_PutHead (Asgs,OneSev_ONE,Vie_VIEW);
 
 	 /***** Write assignment *****/
-	 Asg_ShowAssignmentRow (Assignments,OneSev_ONE,Vie_VIEW);
+	 Asg_ShowAssignmentRow (Asgs,OneSev_ONE,Vie_VIEW);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -489,17 +489,17 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Assignments)
 /****************** Put contextual icons in an assignment ********************/
 /*****************************************************************************/
 
-static void Asg_PutIconsOneAsg (const void *Assignments)
+static void Asg_PutIconsOneAsg (const void *Asgs)
   {
    char *Anchor = NULL;
 
-   if (Assignments)
+   if (Asgs)
      {
       /***** Set anchor string *****/
-      Frm_SetAnchorStr (((struct Asg_Assignments *) Assignments)->Asg.AsgCod,&Anchor);
+      Frm_SetAnchorStr (((struct Asg_Assignments *) Asgs)->Asg.AsgCod,&Anchor);
 
       /***** Icons to remove/edit this assignment *****/
-      Asg_PutIconsToRemEditOneAsg (Assignments,Anchor);
+      Asg_PutIconsToRemEditOneAsg (Asgs,Anchor);
 
       /***** Free anchor string *****/
       Frm_FreeAnchorStr (&Anchor);
@@ -510,14 +510,14 @@ static void Asg_PutIconsOneAsg (const void *Assignments)
 /********************* Show assignment row in a table ************************/
 /*****************************************************************************/
 
-static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
+static void Asg_ShowAssignmentRow (struct Asg_Assignments *Asgs,
                                    OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   Lay_Highlight_t HighlightRow = Assignments->Asg.AsgCod == Assignments->SelectedAsgCod ? Lay_HIGHLIGHT :
+   Lay_Highlight_t HighlightRow = Asgs->Asg.AsgCod == Asgs->SelectedAsgCod ? Lay_HIGHLIGHT :
 											   Lay_DONT_HIGHLIGHT;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
@@ -526,7 +526,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Set anchor string *****/
-   Frm_SetAnchorStr (Assignments->Asg.AsgCod,&Anchor);
+   Frm_SetAnchorStr (Asgs->Asg.AsgCod,&Anchor);
 
    /***** Write first row of data of this assignment *****/
    switch (ViewType)
@@ -546,7 +546,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       if (OneOrMultiple == OneSev_SEVERAL)
 	{
 	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-	    Asg_PutIconsToRemEditOneAsg (Assignments,Anchor);
+	    Asg_PutIconsToRemEditOneAsg (Asgs,Anchor);
          HTM_TD_End ();
 	}
 
@@ -561,9 +561,9 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 	    Err_NotEnoughMemoryExit ();
 	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
 		       Id,
-		       CloOpe_Class[Assignments->Asg.ClosedOrOpen][Assignments->Asg.Hidden],
+		       CloOpe_Class[Asgs->Asg.ClosedOrOpen][Asgs->Asg.Hidden],
 		       The_GetSuffix ());
-	    Dat_WriteLocalDateHMSFromUTC (Id,Assignments->Asg.TimeUTC[StartEndTime],
+	    Dat_WriteLocalDateHMSFromUTC (Id,Asgs->Asg.TimeUTC[StartEndTime],
 					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
 					  Dat_WRITE_TODAY |
 					  Dat_WRITE_DATE_ON_SAME_DAY |
@@ -579,12 +579,12 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
       HTM_TD_Begin ("class=\"LT\"");
 	 HTM_ARTICLE_Begin (Anchor);
 	    Frm_BeginForm (ActSeeOneAsg);
-	       Asg_PutPars (Assignments);
+	       Asg_PutPars (Asgs);
 	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneAsg),NULL,
 					"class=\"LT BT_LINK %s_%s\"",
-					HidVis_TitleClass[Assignments->Asg.Hidden],
+					HidVis_TitleClass[Asgs->Asg.Hidden],
 					The_GetSuffix ());
-		  HTM_Txt (Assignments->Asg.Title);
+		  HTM_Txt (Asgs->Asg.Title);
 	       HTM_BUTTON_End ();
 	    Frm_EndForm ();
 	 HTM_ARTICLE_End ();
@@ -592,8 +592,8 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 
       /* Assignment folder */
       HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	 if (Assignments->Asg.SendWork == Asg_SEND_WORK)
-	    Asg_WriteAssignmentFolder (&Assignments->Asg,ViewType);
+	 if (Asgs->Asg.SendWork == Asg_SEND_WORK)
+	    Asg_WriteAssignmentFolder (&Asgs->Asg,ViewType);
       HTM_TD_End ();
 
    HTM_TR_End ();
@@ -614,20 +614,20 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
 
       /* Author of the assignment */
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	 Asg_WriteAsgAuthor (&Assignments->Asg);
+	 Asg_WriteAsgAuthor (&Asgs->Asg);
       HTM_TD_End ();
 
       /* Text of the assignment */
-      Asg_DB_GetAssignmentTxt (Assignments->Asg.AsgCod,Txt);
+      Asg_DB_GetAssignmentTxt (Asgs->Asg.AsgCod,Txt);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
       ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
       HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
 	 if (Gbl.Crs.Grps.NumGrps)
-	    Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Assignments->Asg);
+	    Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asgs->Asg);
 
 	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-			HidVis_DataClass[Assignments->Asg.Hidden],
+			HidVis_DataClass[Asgs->Asg.Hidden],
 			The_GetSuffix ());
 	    HTM_Txt (Txt);
 	 HTM_DIV_End ();
@@ -639,7 +639,7 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Assignments,
    Frm_FreeAnchorStr (&Anchor);
 
    /***** Mark possible notification as seen *****/
-   Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_ASSIGNMENT,Assignments->Asg.AsgCod);
+   Ntf_DB_MarkNotifAsSeenUsingCod (Ntf_EVENT_ASSIGNMENT,Asgs->Asg.AsgCod);
   }
 
 /*****************************************************************************/
@@ -715,7 +715,7 @@ static void Asg_WriteAssignmentFolder (struct Asg_Assignment *Asg,
 	 Str_Copy (Folder.Path.Name,Asg->FolderName,sizeof (Folder.Path.Name) - 1);
 	 Brw_BuildFullPathFromPathAndName (&FileBrowser,&Folder);
 	 Brw_GetFileMetadataByPath (FileBrowser.Zone,&Folder);
-	 FileBrowser.FilCod = Folder.FilCod;
+	 FileBrowser.SelectedFilCod = FileBrowser.FilCod = Folder.FilCod;
 	 Brw_PutImplicitParsFileBrowser (&FileBrowser);
 	 Ico_PutIconLink ("folder-open-yellow-plus.png",Ico_UNCHANGED,NextAction);
 
@@ -757,7 +757,7 @@ Dat_StartEndTime_t Asg_GetParAsgOrder (void)
 /******************** Put icons to edit one assignment ***********************/
 /*****************************************************************************/
 
-static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignments,
+static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Asgs,
                                          const char *Anchor)
   {
    static Act_Action_t ActionHideUnhide[HidVis_NUM_HIDDEN_VISIBLE] =
@@ -772,26 +772,26 @@ static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignmen
       case Rol_SYS_ADM:
 	 /***** Icon to remove assignment *****/
 	 Ico_PutContextualIconToRemove (ActReqRemAsg,NULL,
-	                                Asg_PutPars,Assignments);
+	                                Asg_PutPars,Asgs);
 
 	 /***** Icon to hide/unhide assignment *****/
 	 Ico_PutContextualIconToHideUnhide (ActionHideUnhide,Anchor,
-					    Asg_PutPars,Assignments,
-					    Assignments->Asg.Hidden);
+					    Asg_PutPars,Asgs,
+					    Asgs->Asg.Hidden);
 
 	 /***** Icon to edit assignment *****/
 	 Ico_PutContextualIconToEdit (ActEdiOneAsg,NULL,
-	                              Asg_PutPars,Assignments);
+	                              Asg_PutPars,Asgs);
 
 	 /***** Link to get resource link *****/
 	 Ico_PutContextualIconToGetLink (ActReqLnkAsg,NULL,
-					 Asg_PutPars,Assignments);
+					 Asg_PutPars,Asgs);
 	 /* falls through */
 	 /* no break */
       case Rol_STD:
       case Rol_NET:
 	 /***** Icon to print assignment *****/
-	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutPars,Assignments);
+	 Ico_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutPars,Asgs);
 	 break;
       default:
          break;
@@ -802,20 +802,20 @@ static void Asg_PutIconsToRemEditOneAsg (const struct Asg_Assignments *Assignmen
 /******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Asg_PutPars (const void *Assignments)
+static void Asg_PutPars (const void *Asgs)
   {
    Grp_MyAllGrps_t MyAllGrps;
 
-   if (Assignments)
+   if (Asgs)
      {
       ParCod_PutPar (ParCod_Asg,
-		     ((struct Asg_Assignments *) Assignments)->Asg.AsgCod);
+		     ((struct Asg_Assignments *) Asgs)->Asg.AsgCod);
       Par_PutParOrder ((unsigned)
-		       ((struct Asg_Assignments *) Assignments)->SelectedOrder);
+		       ((struct Asg_Assignments *) Asgs)->SelectedOrder);
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_ASSIGNMENTS,
-			((struct Asg_Assignments *) Assignments)->ThisPage);
+			((struct Asg_Assignments *) Asgs)->ThisPage);
      }
   }
 
@@ -823,38 +823,38 @@ static void Asg_PutPars (const void *Assignments)
 /*************************** List all assignments ****************************/
 /*****************************************************************************/
 
-static void Asg_GetListAssignments (struct Asg_Assignments *Assignments)
+static void Asg_GetListAssignments (struct Asg_Assignments *Asgs)
   {
    extern unsigned (*Asg_DB_GetListAssignments[Grp_NUM_MY_ALL_GROUPS]) (MYSQL_RES **mysql_res,
-                                                                       Dat_StartEndTime_t SelectedOrder);
+                                                                        Dat_StartEndTime_t SelectedOrder);
    MYSQL_RES *mysql_res;
    unsigned NumAsg;
 
-   if (Assignments->LstReadStatus == Cac_VALID)
-      Asg_FreeListAssignments (Assignments);
+   if (Asgs->LstReadStatus == Cac_VALID)
+      Asg_FreeListAssignments (Asgs);
 
    /***** Get list of assignments from database *****/
-   Assignments->Num = Asg_DB_GetListAssignments[Assignments->MyAllGrps] (&mysql_res,Assignments->SelectedOrder);
-   if (Assignments->Num) // Assignments found...
+   Asgs->Num = Asg_DB_GetListAssignments[Asgs->MyAllGrps] (&mysql_res,Asgs->SelectedOrder);
+   if (Asgs->Num) // Assignments found...
      {
       /***** Create list of assignments *****/
-      if ((Assignments->LstAsgCods = calloc ((size_t) Assignments->Num,
-                                             sizeof (*Assignments->LstAsgCods))) == NULL)
+      if ((Asgs->LstAsgCods = calloc ((size_t) Asgs->Num,
+                                      sizeof (*Asgs->LstAsgCods))) == NULL)
          Err_NotEnoughMemoryExit ();
 
       /***** Get the assignments codes *****/
       for (NumAsg = 0;
-	   NumAsg < Assignments->Num;
+	   NumAsg < Asgs->Num;
 	   NumAsg++)
          /* Get next assignment code */
-         if ((Assignments->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) <= 0)
+         if ((Asgs->LstAsgCods[NumAsg] = DB_GetNextCode (mysql_res)) <= 0)
             Err_WrongAssignmentExit ();
      }
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Assignments->LstReadStatus = Cac_VALID;
+   Asgs->LstReadStatus = Cac_VALID;
   }
 
 /*****************************************************************************/
@@ -992,16 +992,16 @@ static void Asg_ResetAssignment (struct Asg_Assignment *Asg)
 /************************* Free list of assignments **************************/
 /*****************************************************************************/
 
-static void Asg_FreeListAssignments (struct Asg_Assignments *Assignments)
+static void Asg_FreeListAssignments (struct Asg_Assignments *Asgs)
   {
-   if (Assignments->LstReadStatus == Cac_VALID &&
-       Assignments->LstAsgCods)
+   if (Asgs->LstReadStatus == Cac_VALID &&
+       Asgs->LstAsgCods)
      {
       /***** Free memory used by the list of assignments *****/
-      free (Assignments->LstAsgCods);
-      Assignments->LstAsgCods    = NULL;
-      Assignments->Num           = 0;
-      Assignments->LstReadStatus = Cac_INVALID;
+      free (Asgs->LstAsgCods);
+      Asgs->LstAsgCods    = NULL;
+      Asgs->Num           = 0;
+      Asgs->LstReadStatus = Cac_INVALID;
      }
   }
 
@@ -1050,31 +1050,30 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 void Asg_ReqRemAssignment (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+   Asgs.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asg_GetAssignmentDataByCod (&Asgs.Asg);
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Show question and button to remove the assignment *****/
-   Ale_ShowAlertRemove (ActRemAsg,NULL,
-                        Asg_PutPars,&Assignments,
+   Ale_ShowAlertRemove (ActRemAsg,NULL,Asg_PutPars,&Asgs,
 			Txt_Do_you_really_want_to_remove_the_assignment_X,
-			Assignments.Asg.Title);
+			Asgs.Asg.Title);
 
    /***** Show all assignments again *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
@@ -1084,41 +1083,41 @@ void Asg_ReqRemAssignment (void)
 void Asg_RemoveAssignment (void)
   {
    extern const char *Txt_Assignment_X_removed;
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+   Asgs.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);	// Inside this function, the course is checked to be the current one
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asg_GetAssignmentDataByCod (&Asgs.Asg);	// Inside this function, the course is checked to be the current one
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Remove all folders associated to this assignment *****/
-   if (Assignments.Asg.FolderName[0])
-      Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Assignments.Asg.FolderName);
+   if (Asgs.Asg.FolderName[0])
+      Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (Asgs.Asg.FolderName);
 
    /***** Remove all groups of this assignment *****/
-   Asg_DB_RemoveGrpsAssociatedToAnAssignment (Assignments.Asg.AsgCod);
+   Asg_DB_RemoveGrpsAssociatedToAnAssignment (Asgs.Asg.AsgCod);
 
    /***** Remove assignment *****/
-   Asg_DB_RemoveAssignment (Assignments.Asg.AsgCod);
+   Asg_DB_RemoveAssignment (Asgs.Asg.AsgCod);
 
    /***** Mark possible notifications as removed *****/
-   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Assignments.Asg.AsgCod);
+   Ntf_DB_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asgs.Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,Assignments.Asg.Title);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Assignment_X_removed,Asgs.Asg.Title);
 
    /***** Show all assignments again *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
@@ -1137,28 +1136,28 @@ void Asg_UnhideAssignment (void)
 
 static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
   {
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
-   Assignments.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
+   Asgs.Asg.AsgCod = ParCod_GetAndCheckPar (ParCod_Asg);
 
    /***** Get data of the assignment from database *****/
-   Asg_GetAssignmentDataByCod (&Assignments.Asg);
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asg_GetAssignmentDataByCod (&Asgs.Asg);
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Unhide assignment *****/
-   Asg_DB_HideOrUnhideAssignment (Assignments.Asg.AsgCod,HiddenOrVisible);
+   Asg_DB_HideOrUnhideAssignment (Asgs.Asg.AsgCod,HiddenOrVisible);
 
    /***** Show all assignments again *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
@@ -1167,58 +1166,58 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
 void Asg_ReqCreatOrEditAsg (void)
   {
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
    OldNew_OldNew_t OldNewAsg;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters *****/
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
-   OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
-									   OldNew_NEW;
+   OldNewAsg = (Asgs.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
+								    OldNew_NEW;
 
    /***** Get from the database the data of the assignment *****/
    switch (OldNewAsg)
      {
       case OldNew_OLD:
 	 /* Get data of the assignment from database */
-	 Asg_GetAssignmentDataByCod (&Assignments.Asg);
+	 Asg_GetAssignmentDataByCod (&Asgs.Asg);
 
 	 /* Get text of the assignment from database */
-	 Asg_DB_GetAssignmentTxt (Assignments.Asg.AsgCod,Description);
+	 Asg_DB_GetAssignmentTxt (Asgs.Asg.AsgCod,Description);
 
 	 /* Get rubric associated to the assignment from database */
-	 Assignments.Asg.RubCod = Asg_DB_GetAssignmentRubCod (Assignments.Asg.AsgCod);
+	 Asgs.Asg.RubCod = Asg_DB_GetAssignmentRubCod (Asgs.Asg.AsgCod);
 	 break;
       case OldNew_NEW:
       default:
 	 /* Initialize to empty assignment */
-	 Asg_ResetAssignment (&Assignments.Asg);
-	 Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-	 Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
-	 Assignments.Asg.ClosedOrOpen	       = CloOpe_OPEN;
+	 Asg_ResetAssignment (&Asgs.Asg);
+	 Asgs.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+	 Asgs.Asg.TimeUTC[Dat_END_TIME] = Asgs.Asg.TimeUTC[Dat_STR_TIME] + (2 * 60 * 60);	// +2 hours
+	 Asgs.Asg.ClosedOrOpen	        = CloOpe_OPEN;
 	 Description[0] = '\0';
 	 break;
      }
-   Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
-   Asg_PutFormCreatOrEditAsg (&Assignments,Description);
+   Asg_PutFormCreatOrEditAsg (&Asgs,Description);
 
    /***** Show current assignments, if any *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
 /**************** Put a form to create/edit an assignment ********************/
 /*****************************************************************************/
 
-static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
+static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Asgs,
 				       const char *Description)
   {
    extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
@@ -1241,15 +1240,15 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
       [Dat_STR_TIME] = Dat_HMS_TO_000000,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
-   OldNew_OldNew_t OldNewAsg = Assignments->Asg.AsgCod > 0 ? OldNew_OLD :
+   OldNew_OldNew_t OldNewAsg = Asgs->Asg.AsgCod > 0 ? OldNew_OLD :
 							     OldNew_NEW;
 
    /***** Begin form *****/
    Frm_BeginForm (Actions[OldNewAsg]);
-   Asg_PutPars (Assignments);
+   Asg_PutPars (Asgs);
 
       /***** Begin box and table *****/
-      Box_BoxTableShadowBegin (Assignments->Asg.Title[0] ? Assignments->Asg.Title :
+      Box_BoxTableShadowBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
 							   Txt_Assignment,
 			       NULL,NULL,Hlp_ASSESSMENT_Assignments_edit_assignment,
 			       Lay_HIGHLIGHT,2);
@@ -1262,7 +1261,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Assignments->Asg.Title,
+	       HTM_INPUT_TEXT ("Title",Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asgs->Asg.Title,
 			       HTM_REQUIRED,
 			       "id=\"Title\" class=\"Frm_C2_INPUT INPUT_%s\"",
 			       The_GetSuffix ());
@@ -1271,7 +1270,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 	 HTM_TR_End ();
 
 	 /***** Assignment start and end dates *****/
-	 Dat_PutFormStartEndClientLocalDateTimes (Assignments->Asg.TimeUTC,
+	 Dat_PutFormStartEndClientLocalDateTimes (Asgs->Asg.TimeUTC,
 						  Dat_FORM_SECONDS_ON,
 						  Gbl.Action.Act == ActFrmNewAsg ? SetHMSAllDay :
 										   SetHMSDontSet);
@@ -1285,7 +1284,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 	    /* Data */
 	    HTM_TD_Begin ("class=\"Frm_C2 LM\"");
 	       HTM_LABEL_Begin ("class=\"DAT_%s\"",The_GetSuffix ());
-		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Assignments->Asg.FolderName,
+		  HTM_INPUT_TEXT ("Folder",Brw_MAX_CHARS_FOLDER,Asgs->Asg.FolderName,
 				  HTM_NO_ATTR,
 				  "id=\"Folder\" class=\"Frm_C2_INPUT INPUT_%s\"",
 				  The_GetSuffix ());
@@ -1314,10 +1313,10 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Assignments,
 
 	 /***** Rubrics *****/
 	 if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)	// TODO: Remove when finished
-	    Asg_EditRubrics (Assignments->Asg.RubCod);
+	    Asg_EditRubrics (Asgs->Asg.RubCod);
 
 	 /***** Groups *****/
-	 Grp_ShowLstGrpsToEditAssociated (Grp_ASSIGNMENT,Assignments->Asg.AsgCod);
+	 Grp_ShowLstGrpsToEditAssociated (Grp_ASSIGNMENT,Asgs->Asg.AsgCod);
 
       /***** End table, send button and end box *****/
       Box_BoxTableWithButtonSaveCreateEnd (OldNewAsg);
@@ -1398,26 +1397,26 @@ void Asg_ReceiveAssignment (void)
    extern const char *Txt_Already_existed_an_assignment_with_the_folder_X;
    extern const char *Txt_UPLOAD_FILE_Invalid_name;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
-   struct Asg_Assignments Assignments;
+   struct Asg_Assignments Asgs;
    struct Asg_Assignment OldAsg;	// Current assigment data in database
    OldNew_OldNew_t OldNewAsg;
    Err_SuccessOrError_t SuccessOrError = Err_SUCCESS;
    Dat_StartEndTime_t StartEndTime;
-   unsigned NumUsrsToBeNotifiedByEMail;
+   unsigned NumUsrsToNotifByEMail;
    char Description[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Reset assignments *****/
-   Asg_ResetAssignments (&Assignments);
+   Asg_ResetAssignments (&Asgs);
 
    /***** Get parameters from form *****/
    /* Get hidden parameters */
-   Assignments.SelectedOrder	= Asg_GetParAsgOrder ();
-   Assignments.MyAllGrps	= Grp_GetParMyAllGrps ();
-   Assignments.ThisPage		= Pag_GetParPagNum (Pag_ASSIGNMENTS);
+   Asgs.SelectedOrder	= Asg_GetParAsgOrder ();
+   Asgs.MyAllGrps	= Grp_GetParMyAllGrps ();
+   Asgs.ThisPage	= Pag_GetParPagNum (Pag_ASSIGNMENTS);
 
    /* Get the code of the assignment */
-   OldNewAsg = (Assignments.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
-									   OldNew_NEW;
+   OldNewAsg = (Asgs.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
+								    OldNew_NEW;
 
    switch (OldNewAsg)
      {
@@ -1429,7 +1428,7 @@ void Asg_ReceiveAssignment (void)
       case OldNew_NEW:
       default:
 	 /* Get data of the old (current) assignment from database */
-	 OldAsg.AsgCod = Assignments.Asg.AsgCod;
+	 OldAsg.AsgCod = Asgs.Asg.AsgCod;
 	 Asg_GetAssignmentDataByCod (&OldAsg);
 	 break;
      }
@@ -1438,58 +1437,58 @@ void Asg_ReceiveAssignment (void)
    for (StartEndTime  = Dat_STR_TIME;
 	StartEndTime <= Dat_END_TIME;
 	StartEndTime++)
-      Assignments.Asg.TimeUTC[StartEndTime] = Dat_GetTimeUTCFromForm (StartEndTime);
+      Asgs.Asg.TimeUTC[StartEndTime] = Dat_GetTimeUTCFromForm (StartEndTime);
 
    /* Get assignment title */
-   Par_GetParText ("Title",Assignments.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
+   Par_GetParText ("Title",Asgs.Asg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /* Get folder name where to send works of the assignment */
-   Par_GetParText ("Folder",Assignments.Asg.FolderName,NAME_MAX);
-   Assignments.Asg.SendWork = Assignments.Asg.FolderName[0] ? Asg_SEND_WORK :
-							  Asg_DONT_SEND_WORK;
+   Par_GetParText ("Folder",Asgs.Asg.FolderName,NAME_MAX);
+   Asgs.Asg.SendWork = Asgs.Asg.FolderName[0] ? Asg_SEND_WORK :
+						Asg_DONT_SEND_WORK;
 
    /* Get assignment text */
    Par_GetParHTML ("Txt",Description,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /* Get rubric code */
-   Assignments.Asg.RubCod = ParCod_GetPar (ParCod_Rub);
+   Asgs.Asg.RubCod = ParCod_GetPar (ParCod_Rub);
 
    /***** Adjust dates *****/
-   if (Assignments.Asg.TimeUTC[Dat_STR_TIME] == 0)
-      Assignments.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
-   if (Assignments.Asg.TimeUTC[Dat_END_TIME] == 0)
-      Assignments.Asg.TimeUTC[Dat_END_TIME] = Assignments.Asg.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
+   if (Asgs.Asg.TimeUTC[Dat_STR_TIME] == 0)
+      Asgs.Asg.TimeUTC[Dat_STR_TIME] = Dat_GetStartExecutionTimeUTC ();
+   if (Asgs.Asg.TimeUTC[Dat_END_TIME] == 0)
+      Asgs.Asg.TimeUTC[Dat_END_TIME] = Asgs.Asg.TimeUTC[Dat_STR_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
-   if (Assignments.Asg.Title[0])	// If there's an assignment title
+   if (Asgs.Asg.Title[0])	// If there's an assignment title
       /* If title of assignment was in database... */
       switch (Asg_DB_CheckIfSimilarAssignmentExists ("Title",
-						     Assignments.Asg.Title,
-						     Assignments.Asg.AsgCod))
+						     Asgs.Asg.Title,
+						     Asgs.Asg.AsgCod))
         {
 	 case Exi_EXISTS:
 	    SuccessOrError = Err_ERROR;
 	    Ale_CreateAlert (Ale_WARNING,NULL,
 			     Txt_Already_existed_an_assignment_with_the_title_X,
-			     Assignments.Asg.Title);
+			     Asgs.Asg.Title);
 	    break;
 	 case Exi_DOES_NOT_EXIST:
 	 default:
 	    // Title is correct
-	    switch (Assignments.Asg.SendWork)
+	    switch (Asgs.Asg.SendWork)
 	      {
 	       case Asg_SEND_WORK:
-		  switch (Str_ConvertFilFolLnkNameToValid (Assignments.Asg.FolderName))
+		  switch (Str_ConvertFilFolLnkNameToValid (Asgs.Asg.FolderName))
 		    {
 		     case Err_SUCCESS:	// Folder name is valid
 			if (Asg_DB_CheckIfSimilarAssignmentExists ("Folder",
-								   Assignments.Asg.FolderName,
-								   Assignments.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
+								   Asgs.Asg.FolderName,
+								   Asgs.Asg.AsgCod) == Exi_EXISTS)	// If folder of assignment was in database...
 			  {
 			   SuccessOrError = Err_ERROR;
 			   Ale_CreateAlert (Ale_WARNING,NULL,
 					    Txt_Already_existed_an_assignment_with_the_folder_X,
-					    Assignments.Asg.FolderName);
+					    Asgs.Asg.FolderName);
 			  }
 			break;
 		     case Err_ERROR:	// Folder name not valid
@@ -1527,8 +1526,8 @@ void Asg_ReceiveAssignment (void)
       case Err_SUCCESS:
 	 /* Check if current rubric code must be changed */
 	 OldAsg.RubCod = Asg_DB_GetAssignmentRubCod (OldAsg.AsgCod);
-	 if (Assignments.Asg.RubCod != OldAsg.RubCod)
-	    Asg_DB_UpdateRubCod (OldAsg.AsgCod,Assignments.Asg.RubCod);
+	 if (Asgs.Asg.RubCod != OldAsg.RubCod)
+	    Asg_DB_UpdateRubCod (OldAsg.AsgCod,Asgs.Asg.RubCod);
 
 	 /* Get groups for this assignments */
 	 Grp_GetParCodsSeveralGrps ();
@@ -1536,38 +1535,38 @@ void Asg_ReceiveAssignment (void)
 	 switch (OldNewAsg)
 	   {
 	    case OldNew_OLD:
-	       if (OldAsg.FolderName[0] && Assignments.Asg.FolderName[0])
-		  if (strcmp (OldAsg.FolderName,Assignments.Asg.FolderName))	// Folder name has changed
+	       if (OldAsg.FolderName[0] && Asgs.Asg.FolderName[0])
+		  if (strcmp (OldAsg.FolderName,Asgs.Asg.FolderName))	// Folder name has changed
 		     SuccessOrError = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldAsg.FolderName,
-										    Assignments.Asg.FolderName);
+										    Asgs.Asg.FolderName);
 	       if (SuccessOrError == Err_SUCCESS)
-		  Asg_UpdateAssignment (&Assignments.Asg,Description);
+		  Asg_UpdateAssignment (&Asgs.Asg,Description);
 	       break;
 	    case OldNew_NEW:
 	    default:
-	       Asg_CreateAssignment (&Assignments.Asg,Description);	// Add new assignment to database
+	       Asg_CreateAssignment (&Asgs.Asg,Description);	// Add new assignment to database
 	       break;
 	   }
-	 Assignments.SelectedAsgCod = Assignments.Asg.AsgCod;
+	 Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
 	 /* Free memory for list of selected groups */
 	 Grp_FreeListCodSelectedGrps ();
 
 	 /***** Notify by email about the new assignment *****/
-	 if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,
-									   Assignments.Asg.AsgCod)))
-	    Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (Assignments.Asg.AsgCod,
-								NumUsrsToBeNotifiedByEMail);
+	 if ((NumUsrsToNotifByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,
+								      Asgs.Asg.AsgCod)))
+	    Asg_DB_UpdateNumUsrsNotifiedByEMailAboutAssignment (Asgs.Asg.AsgCod,
+								NumUsrsToNotifByEMail);
 	 break;
       case Err_ERROR:	// Assignment is not correct
       default:
 	 /***** Put the form again *****/
-	 Asg_PutFormCreatOrEditAsg (&Assignments,Description);
+	 Asg_PutFormCreatOrEditAsg (&Asgs,Description);
 	 break;
      }
 
    /***** Show all assignments again *****/
-   Asg_ShowAllAssignments (&Assignments);
+   Asg_ShowAllAssignments (&Asgs);
   }
 
 /*****************************************************************************/
@@ -1850,10 +1849,10 @@ unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumAssignments;
+   unsigned NumAsgs;
 
    /***** Default values *****/
-   NumAssignments = 0;
+   NumAsgs = 0;
    *NumNotif = 0;
 
    /***** Get number of assignments from database *****/
@@ -1861,7 +1860,7 @@ unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif)
      {
       /***** Get number of assignments *****/
       row = mysql_fetch_row (mysql_res);
-      if (sscanf (row[0],"%u",&NumAssignments) != 1)
+      if (sscanf (row[0],"%u",&NumAsgs) != 1)
 	 Err_ShowErrorAndExit ("Error when getting number of assignments.");
 
       /***** Get number of notifications by email *****/
@@ -1873,7 +1872,7 @@ unsigned Asg_GetNumAssignments (Hie_Level_t HieLvl,unsigned *NumNotif)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumAssignments;
+   return NumAsgs;
   }
 
 /*****************************************************************************/

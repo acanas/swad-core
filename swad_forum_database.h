@@ -48,7 +48,7 @@ long For_DB_InsertForumPst (long ThrCod,long UsrCod,
                             const char *Subject,const char *Content,
                             long MedCod);
 void For_DB_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,
-                                                   unsigned NumUsrsToBeNotifiedByEMail);
+                                                   unsigned NumUsrsToNotifByEMail);
 Exi_Exist_t For_DB_CheckIfForumPstExists (long PstCod);
 Exi_Exist_t For_DB_GetPstData (MYSQL_RES **mysql_res,long PstCod);
 Exi_Exist_t For_DB_GetPstSubjectAndContent (MYSQL_RES **mysql_res,long PstCod);
@@ -113,6 +113,6 @@ unsigned For_DB_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 					       long HieCods[Hie_NUM_LEVELS]);
 unsigned For_DB_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 					       long HieCods[Hie_NUM_LEVELS],
-                                               unsigned *NumUsrsToBeNotifiedByEMail);
+                                               unsigned *NumUsrsToNotifByEMail);
 
 #endif
