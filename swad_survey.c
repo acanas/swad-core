@@ -279,8 +279,7 @@ void Svy_ListAllSvys (struct Svy_Surveys *Svys)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_surveys);
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
-				     Svys,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,Svys,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();

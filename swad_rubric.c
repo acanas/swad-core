@@ -173,8 +173,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
                  Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_RUBRICS,&Pagination,
-				     Rubrics,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_RUBRICS,&Pagination,Rubrics,-1L);
 
       if (Rubrics->Num)
 	{
@@ -217,8 +216,7 @@ void Rub_ListAllRubrics (struct Rub_Rubrics *Rubrics)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_rubrics);
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_RUBRICS,&Pagination,
-				     Rubrics,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_RUBRICS,&Pagination,Rubrics,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();

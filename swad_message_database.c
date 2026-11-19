@@ -397,7 +397,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
    unsigned NumMsgs;
 
    if (Messages->FilterCrsCod > 0)	// If origin course selected
-      switch (Messages->TypeOfMessages)
+      switch (Messages->TypeOfMsgs)
         {
          case Msg_RECEIVED:
             StrUnreadMsg = Messages->OnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
@@ -489,7 +489,7 @@ unsigned Msg_DB_GetSntOrRcvMsgs (MYSQL_RES **mysql_res,
             break;
         }
    else	// If no origin course selected
-      switch (Messages->TypeOfMessages)
+      switch (Messages->TypeOfMsgs)
         {
          case Msg_RECEIVED:
             if (FilterFromToSubquery[0])

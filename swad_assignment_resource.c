@@ -76,6 +76,5 @@ void AsgRsc_GetLinkToAssignment (void)
    					Txt_Assignments);
 
    /***** Show current assignments, if any *****/
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
    Asg_ShowAllAssignments (&Asgs);
   }

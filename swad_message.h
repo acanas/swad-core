@@ -84,7 +84,7 @@ typedef enum
 
 struct Msg_Messages
   {
-   Msg_TypeOfMessages_t TypeOfMessages;
+   Msg_TypeOfMessages_t TypeOfMsgs;
    unsigned NumMsgs;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    char *Content;	// Message content. Must be allocated and freed

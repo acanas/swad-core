@@ -232,8 +232,7 @@ void Att_ShowAllEvents (struct Att_Events *Events)
 	}
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
-				     Events,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,Events,-1L);
 
       if (Events->Num)
 	{
@@ -297,8 +296,7 @@ void Att_ShowAllEvents (struct Att_Events *Events)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,
-				     Events,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,&Pagination,Events,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();

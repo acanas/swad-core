@@ -996,7 +996,7 @@ void Msg_ReqDelAllRecMsgs (void)
      }
 
    /* Show received messages again */
-   Messages.TypeOfMessages = Msg_RECEIVED;
+   Messages.TypeOfMsgs = Msg_RECEIVED;
    Msg_ShowSntOrRcvMessages (&Messages);
 
    /* End alert */
@@ -1038,7 +1038,7 @@ void Msg_ReqDelAllSntMsgs (void)
 			           Messages.FilterCrsShrtName);
 
    /* Show sent messages again */
-   Messages.TypeOfMessages = Msg_SENT;
+   Messages.TypeOfMsgs = Msg_SENT;
    Msg_ShowSntOrRcvMessages (&Messages);
 
    /* End alert */
@@ -1068,7 +1068,7 @@ void Msg_DelAllRecMsgs (void)
    Msg_DB_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
-   Messages.TypeOfMessages = Msg_RECEIVED;
+   Messages.TypeOfMsgs = Msg_RECEIVED;
    NumMsgs = Msg_RemoveSomeRecOrSntMsgsUsr (&Messages,
                                             Gbl.Usrs.Me.UsrDat.UsrCod,
                                             FilterFromToSubquery);
@@ -1096,7 +1096,7 @@ void Msg_DelAllSntMsgs (void)
    Msg_DB_MakeFilterFromToSubquery (&Messages,FilterFromToSubquery);
 
    /***** Delete messages *****/
-   Messages.TypeOfMessages = Msg_SENT;
+   Messages.TypeOfMsgs = Msg_SENT;
    NumMsgs = Msg_RemoveSomeRecOrSntMsgsUsr (&Messages,
                                             Gbl.Usrs.Me.UsrDat.UsrCod,
                                             FilterFromToSubquery);
@@ -1337,7 +1337,7 @@ static unsigned long Msg_RemoveSomeRecOrSntMsgsUsr (const struct Msg_Messages *M
       if ((MsgCod = DB_GetNextCode (mysql_res)) <= 0)
          Err_WrongMessageExit ();
 
-      switch (Messages->TypeOfMessages)
+      switch (Messages->TypeOfMsgs)
         {
          case Msg_RECEIVED:
             Msg_RemoveRcvMsg (MsgCod,UsrCod);
@@ -1381,7 +1381,7 @@ void Msg_ShowSntMsgs (void)
    Msg_ResetMessages (&Messages);
 
    /***** Show the sent messages *****/
-   Messages.TypeOfMessages = Msg_SENT;
+   Messages.TypeOfMsgs = Msg_SENT;
    Msg_ShowSntOrRcvMessages (&Messages);
   }
 
@@ -1405,7 +1405,7 @@ void Msg_ShowRecMsgs (void)
      }
 
    /***** Show the received messages *****/
-   Messages.TypeOfMessages = Msg_RECEIVED;
+   Messages.TypeOfMsgs = Msg_RECEIVED;
    Msg_ShowSntOrRcvMessages (&Messages);
   }
 
@@ -1447,7 +1447,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
      };
 
    /***** Get the page number *****/
-   Messages->ThisPage = Pag_GetParPagNum (WhatPaginate[Messages->TypeOfMessages]);
+   Messages->ThisPage = Pag_GetParPagNum (WhatPaginate[Messages->TypeOfMsgs]);
 
    /***** Get other parameters *****/
    Msg_GetParMsgsCrsCod (Messages);
@@ -1456,7 +1456,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    Msg_DB_MakeFilterFromToSubquery (Messages,FilterFromToSubquery);
 
    /***** Get number of unread messages *****/
-   switch (Messages->TypeOfMessages)
+   switch (Messages->TypeOfMsgs)
      {
       case Msg_RECEIVED:
          Messages->OnlyUnreadMsgs = Msg_GetParOnlyUnreadMsgs ();
@@ -1477,7 +1477,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
    /***** Begin box with messages *****/
    Msg_SetNumMsgsStr (Messages,&NumMsgsStr,NumUnreadMsgs);
    Box_BoxBegin (NumMsgsStr,Msg_PutIconsListMsgs,Messages,
-                 Help[Messages->TypeOfMessages],Box_NOT_CLOSABLE);
+                 Help[Messages->TypeOfMsgs],Box_NOT_CLOSABLE);
    free (NumMsgsStr);
 
       /***** Filters for messages *****/
@@ -1485,13 +1485,13 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	 HTM_LEGEND (Txt_Filters);
 
 	 /* Form to see messages again */
-	 Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
+	 Frm_BeginForm (ActionSee[Messages->TypeOfMsgs]);
 
 	    /* Filters */
 	    HTM_TABLE_BeginCenterPadding (2);
 
 	       Msg_ShowFormSelectCourseSentOrRecMsgs (Messages);
-	       if (Messages->TypeOfMessages == Msg_RECEIVED)
+	       if (Messages->TypeOfMsgs == Msg_RECEIVED)
 		  Msg_ShowFormToShowOnlyUnreadMessages (Messages);
 
 	       Msg_ShowFormToFilterMsgs (Messages);
@@ -1532,11 +1532,11 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	 Messages->ThisPage = Pagination.ThisPage;
 
 	 /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
-	 Ses_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMessages],
+	 Ses_DB_SaveLastPageMsgIntoSession (WhatPaginate[Messages->TypeOfMsgs],
 					    Messages->ThisPage);
 
 	 /***** Write links to pages *****/
-	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
+	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMsgs],&Pagination,
 					Messages,-1L);
 
 	 /***** Show received / sent messages in this page *****/
@@ -1559,7 +1559,7 @@ static void Msg_ShowSntOrRcvMessages (struct Msg_Messages *Messages)
 	 HTM_TABLE_End ();
 
 	 /***** Write again links to pages *****/
-	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMessages],&Pagination,
+	 Pag_WriteLinksToPagesCentered (WhatPaginate[Messages->TypeOfMsgs],&Pagination,
 					Messages,-1L);
 	}
 
@@ -1599,7 +1599,7 @@ static void Msg_SetNumMsgsStr (const struct Msg_Messages *Messages,
    extern const char *Txt_unread_MESSAGE;
    extern const char *Txt_unread_MESSAGES;
 
-   switch (Messages->TypeOfMessages)
+   switch (Messages->TypeOfMsgs)
      {
       case Msg_RECEIVED:
 	 if (Messages->NumMsgs == 1)
@@ -1674,7 +1674,7 @@ static void Msg_PutIconsListMsgs (const void *Messages)
    if (Messages)
      {
       /***** Put icon to write a new message *****/
-      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+      switch (((struct Msg_Messages *) Messages)->TypeOfMsgs)
         {
 	 case Msg_RECEIVED:
 	 case Msg_SENT:
@@ -1687,7 +1687,7 @@ static void Msg_PutIconsListMsgs (const void *Messages)
         }
 
       /***** Put icon to see received messages *****/
-      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+      switch (((struct Msg_Messages *) Messages)->TypeOfMsgs)
         {
 	 case Msg_WRITING:
 	 case Msg_SENT:
@@ -1700,7 +1700,7 @@ static void Msg_PutIconsListMsgs (const void *Messages)
         }
 
       /***** Put icon to see sent messages *****/
-      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+      switch (((struct Msg_Messages *) Messages)->TypeOfMsgs)
         {
 	 case Msg_WRITING:
 	 case Msg_RECEIVED:
@@ -1713,11 +1713,11 @@ static void Msg_PutIconsListMsgs (const void *Messages)
         }
 
       /***** Put icon to remove messages *****/
-      switch (((struct Msg_Messages *) Messages)->TypeOfMessages)
+      switch (((struct Msg_Messages *) Messages)->TypeOfMsgs)
         {
 	 case Msg_RECEIVED:
 	 case Msg_SENT:
-	    Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMessages],NULL,
+	    Ico_PutContextualIconToRemove (ActionReqDelAllMsg[((struct Msg_Messages *) Messages)->TypeOfMsgs],NULL,
 					   Msg_PutParsMsgsFilters,Messages);
 	    break;
 	 default:
@@ -1737,7 +1737,7 @@ static void Msg_PutParsOneMsg (const void *Messages)
   {
    if (Messages)
      {
-      Pag_PutParPagNum (Msg_WhatPaginate[((struct Msg_Messages *) Messages)->TypeOfMessages],
+      Pag_PutParPagNum (Msg_WhatPaginate[((struct Msg_Messages *) Messages)->TypeOfMsgs],
 			((struct Msg_Messages *) Messages)->ThisPage);
       ParCod_PutPar (ParCod_Msg,((struct Msg_Messages *) Messages)->MsgCod);
       Msg_PutParsMsgsFilters (Messages);
@@ -1787,8 +1787,8 @@ static void Msg_ShowFormSelectCourseSentOrRecMsgs (const struct Msg_Messages *Me
    long HieCod;	// Course code
 
    /***** Get distinct courses in my messages *****/
-   if (GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages])
-      NumCrss = GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMessages] (&mysql_res);
+   if (GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMsgs])
+      NumCrss = GetDistinctCrssInMyRcvMsgs[Messages->TypeOfMsgs] (&mysql_res);
 
    /***** Course selection *****/
    HTM_TR_Begin (NULL);
@@ -1847,7 +1847,7 @@ static void Msg_ShowFormToFilterMsgs (const struct Msg_Messages *Messages)
 
    /***** Filter authors/recipients *****/
    HTM_TR_Begin (NULL);
-      Frm_LabelColumn ("Frm_C1 RT","",*TxtFromTo[Messages->TypeOfMessages]);
+      Frm_LabelColumn ("Frm_C1 RT","",*TxtFromTo[Messages->TypeOfMsgs]);
       HTM_TD_Begin ("class=\"Frm_C2 LT\"");
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
 	    HTM_INPUT_SEARCH ("FilterFromTo",Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,
@@ -2052,7 +2052,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
    /***** Get data of message *****/
    Msg_GetMsgSntData (MsgCod,&HieCod,&UsrDat.UsrCod,&CreatTimeUTC,Subject,&Deleted);
-   switch (Messages->TypeOfMessages)
+   switch (Messages->TypeOfMsgs)
      {
       case Msg_RECEIVED:
          Msg_DB_GetStatusOfRcvMsg (MsgCod,&Status);
@@ -2070,20 +2070,20 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
       /***** Icons *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
-		    Class[Messages->TypeOfMessages][Status.ClosedOrOpen],
+		    Class[Messages->TypeOfMsgs][Status.ClosedOrOpen],
 		    The_GetSuffix ());
 
          /* Type of message icon (envelope, reply...) */
-	 Ico_PutIcon (Icons[Messages->TypeOfMessages][Status.ClosedOrOpen][Status.Replied].Icon,
+	 Ico_PutIcon (Icons[Messages->TypeOfMsgs][Status.ClosedOrOpen][Status.Replied].Icon,
 		      Ico_BLACK,
-		      *Icons[Messages->TypeOfMessages][Status.ClosedOrOpen][Status.Replied].Title,
+		      *Icons[Messages->TypeOfMsgs][Status.ClosedOrOpen][Status.Replied].Title,
 		      "ICO16x16");
 
 	 HTM_BR ();
 
 	 /* Form to delete message */
 	 Messages->MsgCod = MsgCod;	// Message to be deleted
-	 Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMessages],NULL,
+	 Ico_PutContextualIconToRemove (ActionDelMsg[Messages->TypeOfMsgs],NULL,
 					Msg_PutParsOneMsg,Messages);
       HTM_TD_End ();
 
@@ -2125,7 +2125,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	       /***** Form to reply message *****/
 	       HTM_TR_Begin (NULL);
 		  HTM_TD_Begin ("class=\"LM\"");
-		     if (Messages->TypeOfMessages == Msg_RECEIVED)
+		     if (Messages->TypeOfMsgs == Msg_RECEIVED)
 			// && Gbl.Usrs.Me.Role.Logged >= Rol_USR)	// TODO: Remove?
 			// Guests (users without courses) can read messages but not reply them
 			Msg_WriteFormToReply (MsgCod,HieCod,&UsrDat);
@@ -2281,7 +2281,7 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
                  Msg_Class[Status->ClosedOrOpen].Background,The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
-      Frm_BeginForm (Action[Messages->TypeOfMessages][Status->ContractedOrExpanded]);
+      Frm_BeginForm (Action[Messages->TypeOfMsgs][Status->ContractedOrExpanded]);
 	 Messages->MsgCod = MsgCod;	// Message to be contracted/expanded
 	 Msg_PutParsOneMsg (Messages);
 
@@ -2645,7 +2645,7 @@ static void Msg_WriteMsgTo (struct Msg_Messages *Messages,long MsgCod)
 
 	       HTM_TD_Begin ("colspan=\"3\" class=\"LM MSG_AUT_%s\"",
 	                     The_GetSuffix ());
-		  Frm_BeginForm (ActionSee[Messages->TypeOfMessages]);
+		  Frm_BeginForm (ActionSee[Messages->TypeOfMsgs]);
 		     Messages->MsgCod = MsgCod;	// Message to be expanded with all recipients visible
 		     Msg_PutParsOneMsg (Messages);
 		     Par_PutParChar ("SeeAllRcpts",'Y');
@@ -2712,7 +2712,7 @@ static void Msg_PutFormToBanSender (struct Msg_Messages *Messages,
                                     struct Usr_Data *UsrDat)
   {
    Frm_BeginForm (ActBanUsrMsg);
-      Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
+      Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMsgs],
 			Messages->ThisPage);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutParsMsgsFilters (Messages);
@@ -2728,7 +2728,7 @@ static void Msg_PutFormToUnbanSender (struct Msg_Messages *Messages,
                                       struct Usr_Data *UsrDat)
   {
    Frm_BeginForm (ActUnbUsrMsg);
-      Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMessages],
+      Pag_PutParPagNum (Msg_WhatPaginate[Messages->TypeOfMsgs],
 			Messages->ThisPage);
       Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
       Msg_PutParsMsgsFilters (Messages);

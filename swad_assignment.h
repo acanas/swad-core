@@ -73,7 +73,7 @@ struct Asg_Assignments
    Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
    struct Asg_Assignment Asg;	// Current assignment
-   long SelectedAsgCod;		// Selected assigment code
+   // long SelectedAsgCod;		// Selected assigment code
   };
 
 #define Asg_ORDER_DEFAULT Dat_STR_TIME

@@ -86,6 +86,7 @@ static void Asg_PutIconToCreateNewAsg (const void *Asgs);
 static void Asg_ParsMyAllGrps (const void *Asgs);
 static void Asg_PutIconsOneAsg (const void *Asgs);
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Asgs,
+				   long SelectedAsgCod,
                                    OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType);
 static void Asg_WriteAsgAuthor (struct Asg_Assignment *Asg);
@@ -150,8 +151,7 @@ void Asg_ResetAssignments (struct Asg_Assignments *Asgs)
    Asgs->SelectedOrder	= Asg_ORDER_DEFAULT;
    Asgs->MyAllGrps	= Grp_MY_ALL_GROUPS_DEFAULT;
    Asgs->ThisPage	= 0;
-   Asgs->Asg.AsgCod	=	// Used as parameter in contextual links
-   Asgs->SelectedAsgCod	= -1L;
+   Asgs->Asg.AsgCod	= -1L;
    Asg_ResetAssignment (&Asgs->Asg);
   }
 
@@ -184,6 +184,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Asgs)
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
    extern const char *Txt_No_assignments;
+   long SelectedAsgCod = Asgs->Asg.AsgCod;
    struct Pag_Pagination Pagination;
    unsigned NumAsg;
 
@@ -210,8 +211,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Asgs)
 	}
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
-				     Asgs,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,Asgs,-1L);
 
       if (Asgs->Num)
 	{
@@ -228,7 +228,8 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Asgs)
 	      {
 	       Asgs->Asg.AsgCod = Asgs->LstAsgCods[NumAsg - 1];
 	       Asg_GetAssignmentDataByCod (&Asgs->Asg);
-	       Asg_ShowAssignmentRow (Asgs,OneSev_SEVERAL,Vie_VIEW);
+	       Asg_ShowAssignmentRow (Asgs,SelectedAsgCod,
+				      OneSev_SEVERAL,Vie_VIEW);
 	      }
 
 	 /***** End table *****/
@@ -238,8 +239,7 @@ void Asg_ShowAllAssignments (struct Asg_Assignments *Asgs)
 	 Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
       /***** Write again links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,
-				     Asgs,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,&Pagination,Asgs,-1L);
 
    /***** End box *****/
    Box_BoxEnd ();
@@ -275,7 +275,7 @@ static void Asg_PutHead (struct Asg_Assignments *Asgs,
 	 /* Begin head cell */
          HTM_TH_Begin (HTM_HEAD_LEFT);
 
-	    if (ViewType == Vie_VIEW)
+	    if (ViewType == Vie_VIEW && OneOrMultiple == OneSev_SEVERAL)
 	      {
 	       /* Begin form */
 	       Frm_BeginForm (ActSeeAllAsg);
@@ -294,7 +294,7 @@ static void Asg_PutHead (struct Asg_Assignments *Asgs,
 	    /* Start / end text */
 	    HTM_Txt (Txt_START_END_TIME[Order]);
 
-	    if (ViewType == Vie_VIEW)
+	    if (ViewType == Vie_VIEW && OneOrMultiple == OneSev_SEVERAL)
 	      {
 	          /* End link to select order */
 		  if (Order == Asgs->SelectedOrder)
@@ -410,7 +410,6 @@ void Asg_SeeOneAssignment (void)
 
    /***** Get data of this assignment *****/
    Asg_GetAssignmentDataByCod (&Asgs.Asg);
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Show selected assignment in a box *****/
    Asg_ShowOneAssignmentInBox (&Asgs);
@@ -436,7 +435,6 @@ void Asg_PrintOneAssignment (void)
 
    /***** Get data of this assignment *****/
    Asg_GetAssignmentDataByCod (&Asgs.Asg);
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Write header *****/
    Lay_WriteHeaderClassPhoto (Hie_CRS,Vie_PRINT);
@@ -448,7 +446,7 @@ void Asg_PrintOneAssignment (void)
       Asg_PutHead (&Asgs,OneSev_ONE,Vie_PRINT);
 
       /***** Write assignment *****/
-      Asg_ShowAssignmentRow (&Asgs,OneSev_ONE,Vie_PRINT);
+      Asg_ShowAssignmentRow (&Asgs,-1L,OneSev_ONE,Vie_PRINT);
 
    /***** End table *****/
    HTM_TABLE_End ();
@@ -464,10 +462,10 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Asgs)
    extern const char *Txt_Assignment;
 
    /***** Begin box *****/
-   Box_BoxBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
-				      Txt_Assignment,
-		 Asg_PutIconsOneAsg,Asgs,
-		 Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
+					    Txt_Assignment,
+		       Asg_PutIconsOneAsg,Asgs,
+		       Hlp_ASSESSMENT_Assignments,Lay_HIGHLIGHT);
 
       /***** Begin table *****/
       HTM_TABLE_Begin ("TBL_SCROLL");
@@ -476,7 +474,7 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Asgs)
 	 Asg_PutHead (Asgs,OneSev_ONE,Vie_VIEW);
 
 	 /***** Write assignment *****/
-	 Asg_ShowAssignmentRow (Asgs,OneSev_ONE,Vie_VIEW);
+	 Asg_ShowAssignmentRow (Asgs,-1L,OneSev_ONE,Vie_VIEW);
 
       /***** End table *****/
       HTM_TABLE_End ();
@@ -511,14 +509,15 @@ static void Asg_PutIconsOneAsg (const void *Asgs)
 /*****************************************************************************/
 
 static void Asg_ShowAssignmentRow (struct Asg_Assignments *Asgs,
+				   long SelectedAsgCod,
                                    OneSev_OneOrSeveral_t OneOrMultiple,
                                    Vie_ViewType_t ViewType)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   Lay_Highlight_t HighlightRow = Asgs->Asg.AsgCod == Asgs->SelectedAsgCod ? Lay_HIGHLIGHT :
-											   Lay_DONT_HIGHLIGHT;
+   Lay_Highlight_t HighlightRow = Asgs->Asg.AsgCod == SelectedAsgCod ? Lay_HIGHLIGHT :
+								       Lay_DONT_HIGHLIGHT;
    char *Anchor = NULL;
    static unsigned UniqueId = 0;
    char *Id;
@@ -529,109 +528,93 @@ static void Asg_ShowAssignmentRow (struct Asg_Assignments *Asgs,
    Frm_SetAnchorStr (Asgs->Asg.AsgCod,&Anchor);
 
    /***** Write first row of data of this assignment *****/
-   switch (ViewType)
+   if (ViewType == Vie_VIEW && OneOrMultiple == OneSev_SEVERAL)
+      HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+   else
+      HTM_TR_Begin (NULL);
+
+   /* Forms to remove/edit this assignment */
+   if (OneOrMultiple == OneSev_SEVERAL)
      {
-      case Vie_VIEW:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-	 break;
-      case Vie_PRINT:
-	 HTM_TR_Begin (NULL);
-	 break;
-      default:
-	 Err_WrongTypeExit ();
-	 break;
+      HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
+	 Asg_PutIconsToRemEditOneAsg (Asgs,Anchor);
+      HTM_TD_End ();
      }
 
-      /* Forms to remove/edit this assignment */
-      if (OneOrMultiple == OneSev_SEVERAL)
-	{
-	 HTM_TD_Begin ("rowspan=\"2\" class=\"CONTEXT_COL\"");
-	    Asg_PutIconsToRemEditOneAsg (Asgs,Anchor);
-         HTM_TD_End ();
-	}
+   /* Start/end date/time */
+   UniqueId++;
 
-      /* Start/end date/time */
-      UniqueId++;
-
-      for (StartEndTime  = (Dat_StartEndTime_t) 0;
-	   StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
-	   StartEndTime++)
-	{
-	 if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
-	    Err_NotEnoughMemoryExit ();
-	 HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
-		       Id,
-		       CloOpe_Class[Asgs->Asg.ClosedOrOpen][Asgs->Asg.Hidden],
-		       The_GetSuffix ());
-	    Dat_WriteLocalDateHMSFromUTC (Id,Asgs->Asg.TimeUTC[StartEndTime],
-					  Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
-					  Dat_WRITE_TODAY |
-					  Dat_WRITE_DATE_ON_SAME_DAY |
-					  Dat_WRITE_WEEK_DAY |
-					  Dat_WRITE_HOUR |
-					  Dat_WRITE_MINUTE |
-					  Dat_WRITE_SECOND);
-	 HTM_TD_End ();
-	 free (Id);
-	}
-
-      /* Assignment title */
-      HTM_TD_Begin ("class=\"LT\"");
-	 HTM_ARTICLE_Begin (Anchor);
-	    Frm_BeginForm (ActSeeOneAsg);
-	       Asg_PutPars (Asgs);
-	       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneAsg),NULL,
-					"class=\"LT BT_LINK %s_%s\"",
-					HidVis_TitleClass[Asgs->Asg.Hidden],
-					The_GetSuffix ());
-		  HTM_Txt (Asgs->Asg.Title);
-	       HTM_BUTTON_End ();
-	    Frm_EndForm ();
-	 HTM_ARTICLE_End ();
+   for (StartEndTime  = (Dat_StartEndTime_t) 0;
+	StartEndTime <= (Dat_StartEndTime_t) (Dat_NUM_START_END_TIME - 1);
+	StartEndTime++)
+     {
+      if (asprintf (&Id,"asg_date_%u_%u",(unsigned) StartEndTime,UniqueId) < 0)
+	 Err_NotEnoughMemoryExit ();
+      HTM_TD_Begin ("id=\"%s\" class=\"LT %s_%s\"",
+		    Id,
+		    CloOpe_Class[Asgs->Asg.ClosedOrOpen][Asgs->Asg.Hidden],
+		    The_GetSuffix ());
+	 Dat_WriteLocalDateHMSFromUTC (Id,Asgs->Asg.TimeUTC[StartEndTime],
+				       Gbl.Prefs.DateFormat,Dat_SEPARATOR_BREAK,
+				       Dat_WRITE_TODAY |
+				       Dat_WRITE_DATE_ON_SAME_DAY |
+				       Dat_WRITE_WEEK_DAY |
+				       Dat_WRITE_HOUR |
+				       Dat_WRITE_MINUTE |
+				       Dat_WRITE_SECOND);
       HTM_TD_End ();
+      free (Id);
+     }
 
-      /* Assignment folder */
-      HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
-	 if (Asgs->Asg.SendWork == Asg_SEND_WORK)
-	    Asg_WriteAssignmentFolder (&Asgs->Asg,ViewType);
-      HTM_TD_End ();
+   /* Assignment title */
+   HTM_TD_Begin ("class=\"LT\"");
+      HTM_ARTICLE_Begin (Anchor);
+	 Frm_BeginForm (ActSeeOneAsg);
+	    Asg_PutPars (Asgs);
+	    HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneAsg),NULL,
+				     "class=\"LT BT_LINK %s_%s\"",
+				     HidVis_TitleClass[Asgs->Asg.Hidden],
+				     The_GetSuffix ());
+	       HTM_Txt (Asgs->Asg.Title);
+	    HTM_BUTTON_End ();
+	 Frm_EndForm ();
+      HTM_ARTICLE_End ();
+   HTM_TD_End ();
+
+   /* Assignment folder */
+   HTM_TD_Begin ("class=\"LT DAT_%s\"",The_GetSuffix ());
+      if (Asgs->Asg.SendWork == Asg_SEND_WORK)
+	 Asg_WriteAssignmentFolder (&Asgs->Asg,ViewType);
+   HTM_TD_End ();
 
    HTM_TR_End ();
 
    /***** Write second row of data of this assignment *****/
-   switch (ViewType)
-     {
-      case Vie_VIEW:
-	 HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-	 break;
-      case Vie_PRINT:
-	 HTM_TR_Begin (NULL);
-	 break;
-      default:
-	 Err_WrongTypeExit ();
-	 break;
-     }
+   if (ViewType == Vie_VIEW && OneOrMultiple == OneSev_SEVERAL)
+      HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+   else
+      HTM_TR_Begin (NULL);
 
-      /* Author of the assignment */
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	 Asg_WriteAsgAuthor (&Asgs->Asg);
-      HTM_TD_End ();
+   /* Author of the assignment */
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      Asg_WriteAsgAuthor (&Asgs->Asg);
+   HTM_TD_End ();
 
-      /* Text of the assignment */
-      Asg_DB_GetAssignmentTxt (Asgs->Asg.AsgCod,Txt);
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-			Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
-      ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-      HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
-	 if (Gbl.Crs.Grps.NumGrps)
-	    Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asgs->Asg);
+   /* Text of the assignment */
+   Asg_DB_GetAssignmentTxt (Asgs->Asg.AsgCod,Txt);
+   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+		     Txt,Cns_MAX_BYTES_TEXT,Str_DONT_REMOVE_SPACES);
+   ALn_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
+   HTM_TD_Begin ("colspan=\"2\" class=\"LT\"");
+      if (Gbl.Crs.Grps.NumGrps)
+	 Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asgs->Asg);
 
-	 HTM_DIV_Begin ("class=\"PAR %s_%s\"",
-			HidVis_DataClass[Asgs->Asg.Hidden],
-			The_GetSuffix ());
-	    HTM_Txt (Txt);
-	 HTM_DIV_End ();
-      HTM_TD_End ();
+      HTM_DIV_Begin ("class=\"PAR %s_%s\"",
+		     HidVis_DataClass[Asgs->Asg.Hidden],
+		     The_GetSuffix ());
+	 HTM_Txt (Txt);
+      HTM_DIV_End ();
+   HTM_TD_End ();
 
    HTM_TR_End ();
 
@@ -1065,7 +1048,6 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get data of the assignment from database *****/
    Asg_GetAssignmentDataByCod (&Asgs.Asg);
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Show question and button to remove the assignment *****/
    Ale_ShowAlertRemove (ActRemAsg,NULL,Asg_PutPars,&Asgs,
@@ -1098,7 +1080,6 @@ void Asg_RemoveAssignment (void)
 
    /***** Get data of the assignment from database *****/
    Asg_GetAssignmentDataByCod (&Asgs.Asg);	// Inside this function, the course is checked to be the current one
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Remove all folders associated to this assignment *****/
    if (Asgs.Asg.FolderName[0])
@@ -1151,7 +1132,6 @@ static void Asg_HideUnhideAssignment (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the assignment from database *****/
    Asg_GetAssignmentDataByCod (&Asgs.Asg);
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
    /***** Unhide assignment *****/
    Asg_DB_HideOrUnhideAssignment (Asgs.Asg.AsgCod,HiddenOrVisible);
@@ -1182,7 +1162,7 @@ void Asg_ReqCreatOrEditAsg (void)
    OldNewAsg = (Asgs.Asg.AsgCod = ParCod_GetPar (ParCod_Asg)) > 0 ? OldNew_OLD :
 								    OldNew_NEW;
 
-   /***** Get from the database the data of the assignment *****/
+   /***** Get the data of the assignment from the database *****/
    switch (OldNewAsg)
      {
       case OldNew_OLD:
@@ -1205,8 +1185,8 @@ void Asg_ReqCreatOrEditAsg (void)
 	 Description[0] = '\0';
 	 break;
      }
-   Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
+   /***** Put form to edit assignment *****/
    Asg_PutFormCreatOrEditAsg (&Asgs,Description);
 
    /***** Show current assignments, if any *****/
@@ -1241,7 +1221,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Asgs,
       [Dat_END_TIME] = Dat_HMS_TO_235959
      };
    OldNew_OldNew_t OldNewAsg = Asgs->Asg.AsgCod > 0 ? OldNew_OLD :
-							     OldNew_NEW;
+						      OldNew_NEW;
 
    /***** Begin form *****/
    Frm_BeginForm (Actions[OldNewAsg]);
@@ -1249,7 +1229,7 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Asgs,
 
       /***** Begin box and table *****/
       Box_BoxTableShadowBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
-							   Txt_Assignment,
+						    Txt_Assignment,
 			       NULL,NULL,Hlp_ASSESSMENT_Assignments_edit_assignment,
 			       Lay_HIGHLIGHT,2);
 
@@ -1547,7 +1527,6 @@ void Asg_ReceiveAssignment (void)
 	       Asg_CreateAssignment (&Asgs.Asg,Description);	// Add new assignment to database
 	       break;
 	   }
-	 Asgs.SelectedAsgCod = Asgs.Asg.AsgCod;
 
 	 /* Free memory for list of selected groups */
 	 Grp_FreeListCodSelectedGrps ();
