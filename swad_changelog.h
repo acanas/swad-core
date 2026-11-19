@@ -642,10 +642,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 TODO: Cuando se elimina una asignatura, ¡no mostrar mensaje para ir a esa asignatura!
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.42.3 (2026-11-19)"
+#define Chl_PLATFORM_VERSION	"SWAD 26.42.4 (2026-11-20)"
 #define Chl_CSS_FILE		"swad26.42.3.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.42.4:  Nov 20, 2026	Changes in agenda. (348839 lines)
 	Version 26.42.3:  Nov 19, 2026	Changes in assignments. (348834 lines)
 	Version 26.42.2:  Nov 19, 2026	Changes in games. (348860 lines)
 	Version 26.42.1:  Nov 19, 2026	Changes in exams and surveys. (348860 lines)
