@@ -361,9 +361,16 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    unsigned NumMatch;
    unsigned UniqueId;
    struct Mch_Match Match;
+   long SelectedMchCod = Games->MchCod;
    Lay_Highlight_t HighlightRow;
    char *Anchor;
    Usr_Can_t ICanEditMatches = Mch_CheckIfICanEditMatches ();
+   Frm_PutForm_t PutFormToEditMch = ICanEditMatches == Usr_CAN &&
+				    PutFormMatch == Frm_PUT_FORM ? Frm_PUT_FORM :
+								   Frm_DONT_PUT_FORM;
+   Frm_PutForm_t PutFormToCreateNewMch = PutFormToEditMch == Frm_PUT_FORM &&
+					 SelectedMchCod <= 0 ? Frm_PUT_FORM :
+							       Frm_DONT_PUT_FORM;
 
    /***** Reset match *****/
    Mch_ResetMatch (&Match);
@@ -371,79 +378,80 @@ static void Mch_ListOneOrMoreMatches (struct Gam_Games *Games,
    /***** Begin table *****/
    HTM_TABLE_Begin ("TBL_SCROLL");
 
-      /***** Write the heading *****/
       if (NumMatches)
+        {
+         /***** Write the heading *****/
 	 Mch_ListOneOrMoreMatchesHeading (ICanEditMatches);
 
-      /***** Write rows *****/
-      for (NumMatch = 0, UniqueId = 1, The_ResetRowColor ();
-	   NumMatch < NumMatches;
-	   NumMatch++, UniqueId++, The_ChangeRowColor ())
-	{
-	 /***** Get match data from row *****/
-	 Mch_GetMatchDataFromRow (mysql_res,&Match);
-
-	 if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
+	 /***** Write rows *****/
+	 for (NumMatch = 0, UniqueId = 1, The_ResetRowColor ();
+	      NumMatch < NumMatches;
+	      NumMatch++, UniqueId++, The_ChangeRowColor ())
 	   {
-	    HighlightRow = Match.MchCod == Games->MchCod.Sel ? Lay_HIGHLIGHT :
+	    /***** Get match data from row *****/
+	    Mch_GetMatchDataFromRow (mysql_res,&Match);
+
+	    if (Mch_CheckIfICanPlayThisMatchBasedOnGrps (&Match) == Usr_CAN)
+	      {
+	       /* Initialize context */
+	       Games->MchCod = Match.MchCod;
+	       HighlightRow = Match.MchCod == SelectedMchCod ? Lay_HIGHLIGHT :
 							       Lay_DONT_HIGHLIGHT;
 
-	    /***** Build anchor string *****/
-	    if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
-	       Err_NotEnoughMemoryExit ();
+	       /* Build anchor string */
+	       if (asprintf (&Anchor,"mch_%ld",Match.MchCod) < 0)
+		  Err_NotEnoughMemoryExit ();
 
-	    /***** First row for this match with match data ****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+	       /***** First row for this match with match data ****/
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 
-	       /* Icons */
-	       if (ICanEditMatches == Usr_CAN)
-		  Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
+		  /* Icons */
+		  if (ICanEditMatches == Usr_CAN)
+		     Mch_ListOneOrMoreMatchesIcons (Games,&Match,Anchor);
 
-	       /* Start/end date/time */
-	       Mch_ListOneOrMoreMatchesTimes (Games,&Match,UniqueId);
+		  /* Start/end date/time */
+		  Mch_ListOneOrMoreMatchesTimes (Games,&Match,UniqueId);
 
-	       /* Title and groups */
-	       Mch_ListOneOrMoreMatchesTitleGrps (Games,&Match,Anchor);
+		  /* Title and groups */
+		  Mch_ListOneOrMoreMatchesTitleGrps (Games,&Match,Anchor);
 
-	       /* Number of players who have played the match */
-	       Mch_ListOneOrMoreMatchesNumPlayers (Games,&Match);
+		  /* Number of players who have played the match */
+		  Mch_ListOneOrMoreMatchesNumPlayers (Games,&Match);
 
-	       /* Match status */
-	       Mch_ListOneOrMoreMatchesStatus (Games,&Match,Games->Game.NumQsts);
+		  /* Match status */
+		  Mch_ListOneOrMoreMatchesStatus (Games,&Match,Games->Game.NumQsts);
 
-	       /* Match result visible? */
-	       Mch_ListOneOrMoreMatchesResult (Games,&Match);
+		  /* Match result visible? */
+		  Mch_ListOneOrMoreMatchesResult (Games,&Match);
 
-	    HTM_TR_End ();
+	       HTM_TR_End ();
 
-	    /***** Second row: match author ****/
-	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-	       Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
-	    HTM_TR_End ();
+	       /***** Second row: match author ****/
+	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+		  Mch_ListOneOrMoreMatchesAuthor (Games,&Match);
+	       HTM_TR_End ();
 
-	    /***** Third row for this match used for edition ****/
-	    if (ICanEditMatches == Usr_CAN &&
-		PutFormMatch == Frm_PUT_FORM &&		// Editing...
-		Match.MchCod == Games->MchCod.Sel)	// ...this match
-	       /***** Check if I can edit this match *****/
-	       if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
-		 {
-	          HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
-		     HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
-			Mch_PutFormMatch (&Match);	// Form to edit this match
-		     HTM_TD_End ();
-		  HTM_TR_End ();
-		 }
+	       /***** Third row for this match used for edition ****/
+	       if (PutFormToEditMch &&			// Editing...
+		   Match.MchCod == SelectedMchCod)	// ...this match
+		  /***** Check if I can edit this match *****/
+		  if (Mch_CheckIfICanEditThisMatch (&Match) == Usr_CAN)
+		    {
+		     HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
+			HTM_TD_Begin ("colspan=\"7\" class=\"LT\"");
+			   Mch_PutFormMatch (&Match);	// Form to edit this match
+			HTM_TD_End ();
+		     HTM_TR_End ();
+		    }
 
-	    /***** Free anchor string *****/
-	    free (Anchor);
+	       /***** Free anchor string *****/
+	       free (Anchor);
+	      }
 	   }
 	}
 
-      /***** Put button to play a new match in this game *****/
-      if (ICanEditMatches == Usr_CAN &&
-	  PutFormMatch == Frm_PUT_FORM &&
-	  Games->MchCod.Sel <= 0)
+      /***** Put button to create a new match in this game *****/
+      if (PutFormToCreateNewMch)
 	{
 	 /* Reset match */
          Mch_ResetMatch (&Match);
@@ -559,8 +567,6 @@ static void Mch_ListOneOrMoreMatchesIcons (struct Gam_Games *Games,
       switch (Mch_CheckIfICanEditThisMatch (Match))
 	{
 	 case Usr_CAN:
-	    Games->MchCod.Par = Match->MchCod;
-
 	    /***** Put icon to remove the match *****/
 	    Ico_PutContextualIconToRemove (ActReqRemMch,NULL,Mch_PutParsEdit,Games);
 
@@ -815,8 +821,6 @@ static void Mch_ListOneOrMoreMatchesResult (struct Gam_Games *Games,
 static void Mch_ListOneOrMoreMatchesResultStd (struct Gam_Games *Games,
                                                const struct Mch_Match *Match)
   {
-   Games->MchCod.Par = Match->MchCod;
-
    /***** Is match result visible or hidden? *****/
    switch (Match->Status.Show.UsrResults)
      {
@@ -860,8 +864,6 @@ static void Mch_ListOneOrMoreMatchesResultTch (struct Gam_Games *Games,
          .Title = &Txt_Visible_results
         },
      };
-
-   Games->MchCod.Par = Match->MchCod;
 
    /***** Show match results *****/
    if (Mch_CheckIfICanEditThisMatch (Match) == Usr_CAN)
@@ -1171,7 +1173,7 @@ void Mch_PutParsEdit (const void *Games)
    if (Games)
      {
       Gam_PutParsOneGame (Games);
-      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod.Par);
+      ParCod_PutPar (ParCod_Mch,((struct Gam_Games *) Games)->MchCod);
      }
   }
 
@@ -1202,8 +1204,7 @@ void Mch_GetAndCheckPars (struct Gam_Games *Games,
 
    /***** Initialize context *****/
    Games->SelectedGamCod = Games->Game.GamCod;
-   Games->MchCod.Sel =
-   Games->MchCod.Par = Match->MchCod;
+   Games->MchCod = Match->MchCod;
   }
 
 /*****************************************************************************/

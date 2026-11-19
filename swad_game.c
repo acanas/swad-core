@@ -181,8 +181,7 @@ void Gam_ResetGames (struct Gam_Games *Games)
    Games->GamCodsSelected	= NULL;	// String with selected game codes separated by separator multiple
    Games->Game.GamCod		=	// Current game code
    Games->SelectedGamCod	= -1L;	// Selected game code
-   Games->MchCod.Sel		=
-   Games->MchCod.Par		= -1L;	// Selected/parameter match code
+   Games->MchCod		= -1L;	// Selected/current match code
    Games->QstInd		= 0;	// Current question index
   }
 
@@ -1679,7 +1678,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
    unsigned NumQst;
    MYSQL_ROW row;
    struct Qst_Question Qst;
-   unsigned QstInd;
+   unsigned SelectedQstInd = Games->QstInd;
    unsigned MaxQstInd;
    char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
    Exi_Exist_t QstExists;
@@ -1722,18 +1721,15 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 	    Qst.QstCod = Str_ConvertStrCodToLongCod (row[0]);
 
 	    /* Get question index (row[1]) */
-	    QstInd = Str_ConvertStrToUnsigned (row[1]);
-	    snprintf (StrQstInd,sizeof (StrQstInd),"%u",QstInd);
-
-	    /* Initialize context */
-	    Games->QstInd = QstInd;
+	    Games->QstInd = Str_ConvertStrToUnsigned (row[1]);
+	    snprintf (StrQstInd,sizeof (StrQstInd),"%u",Games->QstInd);
 
 	    /***** Build anchor string *****/
 	    Frm_SetAnchorStr (Qst.QstCod,&Anchor);
 
 	    /***** Is this the question selected? *****/
-	    HighlightRow = Games->QstInd == Games->SelectedQstInd ? Lay_HIGHLIGHT :
-							            Lay_DONT_HIGHLIGHT;
+	    HighlightRow = Games->QstInd == SelectedQstInd ? Lay_HIGHLIGHT :
+							     Lay_DONT_HIGHLIGHT;
 
 	    /***** Begin row *****/
 	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
@@ -1755,7 +1751,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 		    }
 
 		  /* Put icon to move up the question */
-		  if (ICanEditQuestions == Usr_CAN && QstInd > 1)
+		  if (ICanEditQuestions == Usr_CAN && Games->QstInd > 1)
 		     Lay_PutContextualLinkOnlyIcon (ActUp_GamQst,Anchor,
 						    Gam_PutParsOneQst,Games,
 						    "arrow-up.svg",Ico_BLACK);
@@ -1764,7 +1760,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 				     Txt_Movement_not_allowed);
 
 		  /* Put icon to move down the question */
-		  if (ICanEditQuestions == Usr_CAN && QstInd < MaxQstInd)
+		  if (ICanEditQuestions == Usr_CAN && Games->QstInd < MaxQstInd)
 		     Lay_PutContextualLinkOnlyIcon (ActDwnGamQst,Anchor,
 						    Gam_PutParsOneQst,Games,
 						    "arrow-down.svg",Ico_BLACK);
@@ -1781,7 +1777,7 @@ static void Gam_ListOneOrMoreQuestionsForEdition (struct Gam_Games *Games,
 
 	       /***** Question *****/
 	       QstExists = Qst_GetQstDataByCod (&Qst);
-	       Gam_ListQuestionForEdition (&Qst,QstInd,QstExists,Anchor);
+	       Gam_ListQuestionForEdition (&Qst,Games->QstInd,QstExists,Anchor);
 
 	    /***** End row *****/
 	    HTM_TR_End ();
@@ -1947,6 +1943,9 @@ void Gam_AddQstsToGame (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -1984,7 +1983,6 @@ void Gam_ReqRemQstFromGame (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    struct Gam_Games Games;
-   unsigned QstInd;
    char StrQstInd[Cns_MAX_DIGITS_UINT + 1];
 
    /***** Reset games context *****/
@@ -2003,11 +2001,10 @@ void Gam_ReqRemQstFromGame (void)
       Err_NoPermissionExit ();
 
    /***** Get question index *****/
-   Games.SelectedQstInd = QstInd = Gam_GetParQstInd ();
+   Games.QstInd = Gam_GetParQstInd ();
 
    /***** Show question and button to remove question *****/
-   Games.QstInd = QstInd;
-   sprintf (StrQstInd,"%u",QstInd);
+   sprintf (StrQstInd,"%u",Games.QstInd);
    Ale_ShowAlertRemove (ActRemGamQst,NULL,
 			Gam_PutParsOneQst,&Games,
 			Txt_Do_you_really_want_to_remove_the_question_X,
@@ -2017,6 +2014,9 @@ void Gam_ReqRemQstFromGame (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -2065,6 +2065,9 @@ void Gam_RemoveQstFromGame (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -2100,7 +2103,7 @@ void Gam_MoveUpQst (void)
    if (QstIndBottom > 1)	// 2, 3, 4...
      {
       /* Indexes of questions to be exchanged */
-      Games.SelectedQstInd = QstIndTop =
+      Games.QstInd = QstIndTop =
       Gam_DB_GetPrevQuestionIndexInGame (Games.Game.GamCod,QstIndBottom);
       if (QstIndTop == 0)
 	 Err_WrongQuestionIndexExit ();
@@ -2115,6 +2118,9 @@ void Gam_MoveUpQst (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/
@@ -2154,7 +2160,7 @@ void Gam_MoveDownQst (void)
    if (QstIndTop < MaxQstInd)
      {
       /* Indexes of questions to be exchanged */
-      Games.SelectedQstInd = QstIndBottom =
+      Games.QstInd = QstIndBottom =
       Gam_DB_GetNextQuestionIndexInGame (Games.Game.GamCod,QstIndTop);
       if (QstIndBottom == Gam_AFTER_LAST_QUESTION)
 	 Err_WrongQuestionIndexExit ();
@@ -2169,6 +2175,9 @@ void Gam_MoveDownQst (void)
    Gam_ShowOnlyOneGame (&Games,
                         Lay_SHOW,		// Show game questions
 	                Frm_DONT_PUT_FORM);	// Do not put form to start new match
+
+   /***** Show games again *****/
+   Gam_ListAllGames (&Games);
   }
 
 /*****************************************************************************/

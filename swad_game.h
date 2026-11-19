@@ -93,15 +93,10 @@ struct Gam_Games
    unsigned ThisPage;
    char *ListQuestions;
    char *GamCodsSelected;	// String with selected game codes separated by separator multiple
-   struct Gam_Game Game;	// Current game
+   struct Gam_Game Game;	// Selected/current game
    long SelectedGamCod;		// Selected game code
-   struct
-     {
-      long Sel;			// Selected match
-      long Par;			// Parameter to be used in forms
-     } MchCod;			// Match code
-   unsigned SelectedQstInd;	// Selected question index
-   unsigned QstInd;		// Current question index
+   long MchCod;			// Selected/current match code
+   unsigned QstInd;		// Selected/current question index
   };
 
 /*****************************************************************************/

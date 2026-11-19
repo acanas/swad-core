@@ -1674,7 +1674,7 @@ void Svy_ReqCreatOrEditSvy (void)
 	 Svy_PutPars (&Svys);
 
          /***** Begin table *****/
-	 HTM_TABLE_BeginPadding (2);
+	 HTM_TABLE_BeginCenterPadding (2);
 
 	    /***** Scope of the survey *****/
 	    HTM_TR_Begin (NULL);

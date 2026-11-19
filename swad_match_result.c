@@ -784,8 +784,7 @@ static void MchRes_ShowMchResults (struct Gam_Games *Games,
 	      {
 	       case Usr_CAN:
 		  Games->Game.GamCod = Match.GamCod;
-		  Games->MchCod.Sel  =
-		  Games->MchCod.Par  = Match.MchCod;
+		  Games->MchCod      = Match.MchCod;
 		  switch (MeOrOther)
 		    {
 		     case Usr_ME:

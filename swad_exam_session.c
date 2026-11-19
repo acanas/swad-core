@@ -327,6 +327,9 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 	       free (Anchor);
 	      }
 	   }
+
+	 /***** Restore selected session code, clobbered in sessions loop *****/
+	 Exams->SesCod = SelectedSesCod;
 	}
 
       /***** Put form to create a new exam session in this exam *****/
@@ -350,9 +353,6 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 
    /***** End table with sessions *****/
    HTM_TABLE_End ();
-
-   /***** Restore selected session code, clobbered in sessions loop *****/
-   Exams->SesCod = SelectedSesCod;
   }
 
 /*****************************************************************************/

@@ -2116,7 +2116,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	}
 .CONTEXT_COL
 	{
-	max-width: 32px;
+	width: 32px;
 	text-align: center;
 	vertical-align: top;
 	}
@@ -2303,16 +2303,12 @@ a:hover img.CENTER_PHOTO_SHOW
 .FRAME_TITLE_DARK	{color: #d0d0d0;}
 
 /* Apply only to the first level of th and td */
-table.CELLS_PAD_1	{margin:0 auto;}
 table.CELLS_PAD_1	> tbody > tr > th {padding: 1px;}
 table.CELLS_PAD_1	> tbody > tr > td {padding: 1px;}
-table.CELLS_PAD_2	{margin:0 auto;}
 table.CELLS_PAD_2	> tbody > tr > th {padding: 2px;}
 table.CELLS_PAD_2	> tbody > tr > td {padding: 2px;}
-table.CELLS_PAD_5	{margin:0 auto;}
 table.CELLS_PAD_5	> tbody > tr > th {padding: 5px;}
 table.CELLS_PAD_5	> tbody > tr > td {padding: 5px;}
-table.CELLS_PAD_10	{margin:0 auto;}
 table.CELLS_PAD_10	> tbody > tr > th {padding: 10px;}
 table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 
