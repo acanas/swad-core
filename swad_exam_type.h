@@ -101,16 +101,11 @@ struct Exa_Exams
    char *ListQuestions;
    char *ExaCodsSelected;	// String with selected exam codes separated by separator multiple
    struct Exa_Exam Exam;	// Current exam
-   long SelectedExaCod;		// Selected exam code
    long SetCod;			// Current set code
    long SelectedSetCod;		// Selected set code
    unsigned SetInd;		// Current set index
-   long QstCod;			// Current question code
-   struct
-     {
-      long Sel;			// Selected session
-      long Par;			// Parameter to be used in forms
-     } SesCod;			// Session code
+   long QstCod;			// Selected/current question code
+   long SesCod;			// Selected/current session code
   };
 
 /*                                                       Student 1

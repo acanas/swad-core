@@ -125,7 +125,7 @@ static void Svy_ShowTableWithQstsHeading (Usr_Can_t ICanEditQsts);
 static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
                                    struct Svy_Question *SvyQst,
                                    char Stem[Cns_MAX_BYTES_TEXT + 1]);
-static void Svy_PutParsToEditQuestion (const void *Svys);
+static void Svy_PutParsToEditQst (const void *Svys);
 static void Svy_PutIconToAddNewQuestion (const void *Svys);
 static void Svy_WriteQstStem (const char *Stem);
 static void Svy_WriteAnswersOfAQst (struct Svy_Survey *Svy,
@@ -135,9 +135,6 @@ static void Svy_WriteCommentsOfAQst (struct Svy_Survey *Svy,
                                      struct Svy_Question *SvyQst,
                                      Frm_PutForm_t PutFormAnswerSurvey);
 static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs);
-
-// static void Svy_PutIconToRemoveOneQst (const void *Svys);
-static void Svy_PutParsRemoveOneQst (const void *Svys);
 
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod);
 
@@ -153,9 +150,8 @@ void Svy_ResetSvys (struct Svy_Surveys *Svys)
    Svys->LstSvyCods	= NULL;		// List of survey codes
    Svys->SelectedOrder	= Svy_ORDER_DEFAULT;
    Svys->ThisPage	= 0;
-   Svys->Svy.SvyCod	= -1L;		// Current survey code
-   Svys->QstCod.Sel	=
-   Svys->QstCod.Par	= -1L;		// Question code
+   Svys->Svy.SvyCod	= -1L;		// Selected/current survey code
+   Svys->QstCod		= -1L;		// Selected/current question code
   }
 
 /*****************************************************************************/
@@ -175,14 +171,14 @@ void Svy_SeeAllSvys (void)
    Svys.ThisPage	= Pag_GetParPagNum (Pag_SURVEYS);
 
    /***** Show all surveys *****/
-   Svy_ListAllSvys (&Svys,-1L);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
 /***************************** Show all surveys ******************************/
 /*****************************************************************************/
 
-void Svy_ListAllSvys (struct Svy_Surveys *Svys,long SelectedSvyCod)
+void Svy_ListAllSvys (struct Svy_Surveys *Svys)
   {
    extern const char *Hlp_ANALYTICS_Surveys;
    extern const char *Txt_Surveys;
@@ -191,6 +187,7 @@ void Svy_ListAllSvys (struct Svy_Surveys *Svys,long SelectedSvyCod)
    extern const char *Txt_Survey;
    extern const char *Txt_Status;
    extern const char *Txt_No_surveys;
+   long SelectedSvyCod = Svys->Svy.SvyCod;
    Dat_StartEndTime_t Order;
    Grp_MyAllGrps_t MyAllGrps;
    struct Pag_Pagination Pagination;
@@ -219,8 +216,7 @@ void Svy_ListAllSvys (struct Svy_Surveys *Svys,long SelectedSvyCod)
 	}
 
       /***** Write links to pages *****/
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,
-				     Svys,-1L);
+      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,&Pagination,Svys,-1L);
 
       if (Svys->Num)
 	{
@@ -394,7 +390,7 @@ void Svy_SeeOneSvy (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1404,7 +1400,7 @@ void Svy_ReqRemSvy (void)
 			Svys.Svy.Title);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1455,7 +1451,7 @@ void Svy_RemoveSvy (void)
    Ale_ShowAlert (Ale_SUCCESS,Txt_Survey_X_removed,Svys.Svy.Title);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1494,7 +1490,7 @@ void Svy_AskResetSvy (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1538,7 +1534,7 @@ void Svy_ResetSvy (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1579,7 +1575,7 @@ static void Svy_HideUnhideSvy (HidVis_HiddenOrVisible_t HiddenOrVisible)
    Svy_DB_HideOrUnhideSurvey (Svys.Svy.SvyCod,HiddenOrVisible);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1771,7 +1767,7 @@ void Svy_ReqCreatOrEditSvy (void)
    Box_BoxEnd ();
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -1988,7 +1984,7 @@ void Svy_ReceiveSvy (void)
 							 NumUsrsToNotifByEMail);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -2132,8 +2128,7 @@ void Svy_ReqCreatOrEditQst (void)
    Svys.SelectedOrder	= Svy_GetParSvyOrder ();
    Svys.MyAllGrps	= Grp_GetParMyAllGrps ();
    Svys.ThisPage	= Pag_GetParPagNum (Pag_SURVEYS);
-   Svys.QstCod.Sel	=
-   Svys.QstCod.Par	= ParCod_GetPar (ParCod_Qst);
+   Svys.QstCod		= ParCod_GetPar (ParCod_Qst);
 
    /***** Get survey data *****/
    Svy_GetSvyDataByCod (&Svys.Svy);
@@ -2142,7 +2137,7 @@ void Svy_ReqCreatOrEditQst (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_PUT_FORM);	// Put form for question
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -2220,37 +2215,14 @@ static void Svy_ShowFormEditOneQst (struct Svy_Surveys *Svys,
 	 DB_FreeMySQLResult (&mysql_res);
         }
 
-   /***** Begin box *****/
-   /*
-   switch (OldNewQst)
-     {
-      case OldNew_OLD:
-	 * Parameters for contextual icon *
-	 Svys->SelectedQstCod = Svys->QstCod = SvyQst->QstCod;
-
-	 if (asprintf (&Title,"%s %u",Txt_Question,SvyQst->QstInd + 1) < 0)	// Question index may be 0, 1, 2, 3,...
-	    Err_NotEnoughMemoryExit ();
-	 Box_BoxBegin (Title,Svy_PutIconToRemoveOneQst,Svys,
-		       NULL,Box_NOT_CLOSABLE);
-	 free (Title);
-	 break;
-      case OldNew_NEW:
-      default:
-	 Box_BoxBegin (Txt_Question,NULL,NULL,
-		       Hlp_ANALYTICS_Surveys_questions,Box_NOT_CLOSABLE);
-	 break;
-     }
-   */
-
    /***** Begin section for survey question *****/
    HTM_SECTION_Begin (Svy_EDIT_QST_SECTION_ID);
 
       /***** Begin form to create/edit *****/
-      Svys->QstCod.Sel =
-      Svys->QstCod.Par = SvyQst->QstCod;
+      Svys->QstCod = SvyQst->QstCod;
       Frm_BeginFormTable (Forms[OldNewQst].Action,
 			  Svy_EDIT_QST_SECTION_ID,
-			  Svy_PutParsToEditQuestion,Svys,
+			  Svy_PutParsToEditQst,Svys,
 			  "TBL_WIDE");
 
 	 /***** Stem *****/
@@ -2544,12 +2516,11 @@ void Svy_ReceiveQst (void)
    Svy_GetSvyDataByCod (&Svys.Svy);
 
    /***** Show current survey *****/
-   Svys.QstCod.Sel =
-   Svys.QstCod.Par = SvyQst.QstCod;
+   Svys.QstCod = SvyQst.QstCod;
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -2646,6 +2617,7 @@ static void Svy_ShowTableWithQsts (struct Svy_Surveys *Svys,
   {
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_This_survey_has_no_questions;
+   long SelectedQstCod = Svys->QstCod;
    unsigned NumQst;
    struct Svy_Question SvyQst;
    char Stem[Cns_MAX_BYTES_TEXT + 1];
@@ -2658,8 +2630,8 @@ static void Svy_ShowTableWithQsts (struct Svy_Surveys *Svys,
 				    PutFormQst == Frm_PUT_FORM ? Frm_PUT_FORM :
 								 Frm_DONT_PUT_FORM;
    Frm_PutForm_t PutFormToCreateNewQst = PutFormToEditQst == Frm_PUT_FORM &&
-					 Svys->QstCod.Sel <= 0 ? Frm_PUT_FORM :
-								 Frm_DONT_PUT_FORM;
+					 SelectedQstCod <= 0 ? Frm_PUT_FORM :
+							       Frm_DONT_PUT_FORM;
 
    /***** Begin table with questions *****/
    HTM_TABLE_Begin ("TBL_SCROLL");
@@ -2681,9 +2653,9 @@ static void Svy_ShowTableWithQsts (struct Svy_Surveys *Svys,
 	    Svy_GetQstDataFromRow (mysql_res,&SvyQst,Stem);
 
 	    /* Initialize context */
-	    Svys->QstCod.Par = SvyQst.QstCod;
-	    HighlightRow = SvyQst.QstCod == Svys->QstCod.Sel ? Lay_HIGHLIGHT :
-							       Lay_DONT_HIGHLIGHT;
+	    Svys->QstCod = SvyQst.QstCod;
+	    HighlightRow = SvyQst.QstCod == SelectedQstCod ? Lay_HIGHLIGHT :
+							     Lay_DONT_HIGHLIGHT;
 
 	    /***** First row for this question ****/
 	    HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
@@ -2694,11 +2666,11 @@ static void Svy_ShowTableWithQsts (struct Svy_Surveys *Svys,
 
 		     /* Write icon to remove the question */
 		     Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
-						    Svy_PutParsToEditQuestion,Svys);
+						    Svy_PutParsToEditQst,Svys);
 
 		     /* Write icon to edit the question */
 		     Ico_PutContextualIconToEdit (ActEdiOneSvyQst,Svy_EDIT_QST_SECTION_ID,
-						  Svy_PutParsToEditQuestion,Svys);
+						  Svy_PutParsToEditQst,Svys);
 
 		  HTM_TD_End ();
 		 }
@@ -2721,15 +2693,13 @@ static void Svy_ShowTableWithQsts (struct Svy_Surveys *Svys,
 		  if (SvyQst.AllowCommentsByStds == DenAll_ALLOW)
 		     Svy_WriteCommentsOfAQst (&Svys->Svy,&SvyQst,
 					      PutFormAnswerSurvey);
-
 	       HTM_TD_End ();
 
 	    HTM_TR_End ();
 
 	    /***** Second row: form to edit this session ****/
-	    if (Editing &&
-		PutFormQst == Frm_PUT_FORM &&		// Editing...
-		SvyQst.QstCod == Svys->QstCod.Sel)	// ...this session
+	    if (PutFormToEditQst == Frm_PUT_FORM &&	// Editing...
+		SvyQst.QstCod == SelectedQstCod)	// ...this question
 	      {
 	       HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 		  HTM_TD_Begin ("colspan=\"4\" class=\"LT\"");
@@ -2814,12 +2784,12 @@ static void Svy_GetQstDataFromRow (MYSQL_RES *mysql_res,
 /******************** Put parameters to edit a question **********************/
 /*****************************************************************************/
 
-static void Svy_PutParsToEditQuestion (const void *Svys)
+static void Svy_PutParsToEditQst (const void *Svys)
   {
    if (Svys)
      {
       ParCod_PutPar (ParCod_Svy,((struct Svy_Surveys *) Svys)->Svy.SvyCod);
-      ParCod_PutPar (ParCod_Qst,((struct Svy_Surveys *) Svys)->QstCod.Par);
+      ParCod_PutPar (ParCod_Qst,((struct Svy_Surveys *) Svys)->QstCod);
      }
   }
 
@@ -3096,29 +3066,6 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
   }
 
 /*****************************************************************************/
-/********************* Put icon to remove one question ***********************/
-/*****************************************************************************/
-/*
-static void Svy_PutIconToRemoveOneQst (const void *Svys)
-  {
-   Ico_PutContextualIconToRemove (ActReqRemSvyQst,NULL,
-				  Svy_PutParsRemoveOneQst,Svys);
-  }
-*/
-/*****************************************************************************/
-/****************** Put parameter to remove one question *********************/
-/*****************************************************************************/
-
-static void Svy_PutParsRemoveOneQst (const void *Svys)
-  {
-   if (Svys)
-     {
-      ParCod_PutPar (ParCod_Svy,((struct Svy_Surveys *) Svys)->Svy.SvyCod);
-      ParCod_PutPar (ParCod_Qst,((struct Svy_Surveys *) Svys)->QstCod.Par);
-     }
-  }
-
-/*****************************************************************************/
 /********************** Request the removal of a question ********************/
 /*****************************************************************************/
 
@@ -3146,11 +3093,10 @@ void Svy_ReqRemQst (void)
    SvyQst.QstInd = Svy_DB_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Show question and button to remove question *****/
-   Svys.QstCod.Sel =
-   Svys.QstCod.Par = SvyQst.QstCod;
+   Svys.QstCod = SvyQst.QstCod;
    sprintf (StrQstInd,"%u",SvyQst.QstInd + 1);
    Ale_ShowAlertRemove (ActRemSvyQst,NULL,
-                        Svy_PutParsRemoveOneQst,&Svys,
+                        Svy_PutParsToEditQst,&Svys,
 			Txt_Do_you_really_want_to_remove_the_question_X,
 	                StrQstInd);
 
@@ -3161,7 +3107,7 @@ void Svy_ReqRemQst (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -3211,7 +3157,7 @@ void Svy_RemoveQst (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/
@@ -3254,7 +3200,7 @@ void Svy_ReceiveSvyAnswers (void)
    Svy_ShowOnlyOneSvy (&Svys,Frm_DONT_PUT_FORM);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }
 
 /*****************************************************************************/

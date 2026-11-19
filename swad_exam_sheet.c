@@ -157,8 +157,7 @@ static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
    /***** Get parameters *****/
    /* Get exams context and session */
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
    Exa_GetExamDataByCod (&Exams.Exam);
    ExaSes_GetSessionDataByCod (&Session);
 
@@ -488,8 +487,7 @@ void ExaShe_ReceiveAnswer (void)
    ExaSes_GetSessionDataByCod (&Session);
    if (Session.SesCod <= 0)
       Err_WrongExamExit ();
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod;
+   Exams.SesCod = Session.SesCod;
 
    /***** Get exam data *****/
    Exams.Exam.ExaCod = Session.ExaCod;

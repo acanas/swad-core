@@ -64,5 +64,5 @@ void SvyRsc_GetLinkToSvy (void)
    					Txt_Surveys);
 
    /***** Show surveys again *****/
-   Svy_ListAllSvys (&Svys,Svys.Svy.SvyCod);
+   Svy_ListAllSvys (&Svys);
   }

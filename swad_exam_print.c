@@ -790,8 +790,7 @@ void ExaPrn_ReceiveAnswer (void)
    ExaSes_GetSessionDataByCod (&Session);
    if (Session.SesCod <= 0)
       Err_WrongExamExit ();
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod;
+   Exams.SesCod = Session.SesCod;
 
    /***** Get exam data *****/
    Exams.Exam.ExaCod = Session.ExaCod;

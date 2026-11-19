@@ -84,11 +84,7 @@ struct Svy_Surveys
    Grp_MyAllGrps_t MyAllGrps;
    unsigned ThisPage;
    struct Svy_Survey Svy;	// Current survey
-   struct
-     {
-      long Sel;			// Selected question
-      long Par;			// Parameter to be used in forms
-     } QstCod;			// Question code
+   long QstCod;			// Selected/current question code
   };
 
 #define Svy_NUM_ANS_TYPES	2
@@ -119,7 +115,7 @@ struct Svy_Question	// Must be initialized to 0 before using it
 void Svy_ResetSvys (struct Svy_Surveys *Svys);
 
 void Svy_SeeAllSvys (void);
-void Svy_ListAllSvys (struct Svy_Surveys *Svys,long SelectedSvyCod);
+void Svy_ListAllSvys (struct Svy_Surveys *Svys);
 void Svy_SeeOneSvy (void);
 
 void Svy_ShowOnlyOneSvy (struct Svy_Surveys *Svys,Frm_PutForm_t PutFormQst);

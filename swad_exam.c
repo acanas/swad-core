@@ -116,7 +116,7 @@ extern struct Globals Gbl;
 
 static void Exa_PutIconsListExams (const void *Exams);
 
-static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
+static void Exa_ShowExamMainData (struct Exa_Exams *Exams,long SelectedExaCod,
 			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral);
 
 static void Exa_PutIconsViewingOneExam (const void *Exams);
@@ -172,8 +172,7 @@ void Exa_ResetExams (struct Exa_Exams *Exams)
    Exams->SelectedSetCod	= -1L;	// Selected set code
    Exams->SetInd		= 0;	// Current set index
    Exams->QstCod		= -1L;	// Current question code
-   Exams->SesCod.Sel		=
-   Exams->SesCod.Par		= -1L;	// Selected/parameter session code
+   Exams->SesCod		= -1L;	// Selected/parameter session code
   }
 
 /*****************************************************************************/
@@ -231,6 +230,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
    Exa_Order_t Order;
    struct Pag_Pagination Pagination;
    unsigned NumExam;
+   long SelectedExamCod = Exams->Exam.ExaCod;
 
    /***** Get list of exams *****/
    Exa_GetListExams (Exams,Exams->SelectedOrder);
@@ -294,7 +294,7 @@ void Exa_ListAllExams (struct Exa_Exams *Exams)
 	       Exa_GetExamDataByCod (&Exams->Exam);
 
 	       /* Show exam */
-	       Exa_ShowExamMainData (Exams,Lay_SHOWING_SEVERAL);
+	       Exa_ShowExamMainData (Exams,SelectedExamCod,Lay_SHOWING_SEVERAL);
 	      }
 
 	 /***** End table *****/
@@ -385,7 +385,6 @@ void Exa_ShowOneExam (void)
    Exa_ShowOnlyOneExam (&Exams,Frm_DONT_PUT_FORM);
 
    /***** Show exams again *****/
-   Exams.SelectedExaCod = Exams.Exam.ExaCod;
    Exa_ListAllExams (&Exams);
   }
 
@@ -412,7 +411,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
 		       Hlp_ASSESSMENT_Exams,Lay_HIGHLIGHT);
 
       /***** Show main data of this exam *****/
-      Exa_ShowExamMainData (Exams,Lay_SHOWING_ONLY_ONE);
+      Exa_ShowExamMainData (Exams,-1L,Lay_SHOWING_ONLY_ONE);
 
       /***** List sessions *****/
       ExaSes_ListSessions (Exams,PutFormSession);
@@ -428,7 +427,7 @@ void Exa_ShowOnlyOneExamEnd (void)
 /********** Show a pair of rows with the main data of a given exam ***********/
 /*****************************************************************************/
 
-static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
+static void Exa_ShowExamMainData (struct Exa_Exams *Exams,long SelectedExaCod,
 			          Lay_ShowingOneOrSeveral_t ShowingOneOrSeveral)
   {
    extern const char *CloOpe_Class[CloOpe_NUM_CLOSED_OPEN][HidVis_NUM_HIDDEN_VISIBLE];
@@ -439,8 +438,8 @@ static void Exa_ShowExamMainData (struct Exa_Exams *Exams,
    extern const char *HidVis_TitleClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_GroupClass[HidVis_NUM_HIDDEN_VISIBLE];
    extern const char *HidVis_DataClass[HidVis_NUM_HIDDEN_VISIBLE];
-   Lay_Highlight_t HighlightRow = Exams->Exam.ExaCod == Exams->SelectedExaCod ? Lay_HIGHLIGHT :
-										Lay_DONT_HIGHLIGHT;
+   Lay_Highlight_t HighlightRow = Exams->Exam.ExaCod == SelectedExaCod ? Lay_HIGHLIGHT :
+									 Lay_DONT_HIGHLIGHT;
    char *Anchor;
    static unsigned UniqueId = 0;
    char *Id;
@@ -712,7 +711,7 @@ void Exa_PutParsOneExam (const void *Exams)
       MyAllGrps = Grp_GetParMyAllGrps ();
       Grp_PutParMyAllGrps (&MyAllGrps);
       Pag_PutParPagNum (Pag_EXAMS,((struct Exa_Exams *) Exams)->ThisPage);
-      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod.Par);
+      ParCod_PutPar (ParCod_Ses,((struct Exa_Exams *) Exams)->SesCod);
      }
   }
 
@@ -989,7 +988,6 @@ void Exa_ReqRemExam (void)
 
    /***** Get data of the exam from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Show question and button to remove exam *****/
    Ale_ShowAlertRemove (ActRemExa,NULL,
@@ -1202,7 +1200,6 @@ static void Exa_HideUnhideExam (HidVis_HiddenOrVisible_t HiddenOrVisible)
 
    /***** Get data of the exam from database *****/
    Exa_GetExamDataByCod (&Exams.Exam);
-   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Unhide exam *****/
    Exa_DB_HideOrUnhideExam (Exams.Exam.ExaCod,HiddenOrVisible);
@@ -1236,7 +1233,6 @@ void Exa_ReqCreatOrEditExam (void)
    /***** Get exam data from database *****/
    if (OldNewExam == OldNew_OLD)
       Exa_GetExamDataByCod (&Exams.Exam);
-   Exams.SelectedExaCod = Exams.Exam.ExaCod;
 
    /***** Put form to create/edit an exam and show sets *****/
    Exa_PutFormsOneExam (&Exams,OldNewExam);

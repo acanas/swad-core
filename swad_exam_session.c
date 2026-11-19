@@ -235,6 +235,7 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 				          unsigned NumSessions,
                                           MYSQL_RES *mysql_res)
   {
+   long SelectedSesCod = Exams->SesCod;
    unsigned NumSession;
    unsigned UniqueId;
    struct ExaSes_Session Session;
@@ -247,8 +248,8 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 					PutFormSession == Frm_PUT_FORM ? Frm_PUT_FORM :
 									 Frm_DONT_PUT_FORM;
    Frm_PutForm_t PutFormToCreateNewSession = PutFormToEditSession == Frm_PUT_FORM &&
-					     Exams->SesCod.Sel <= 0 ? Frm_PUT_FORM :
-								      Frm_DONT_PUT_FORM;
+					     SelectedSesCod <= 0 ? Frm_PUT_FORM :
+								   Frm_DONT_PUT_FORM;
 
    /***** Begin table with sessions *****/
    HTM_TABLE_Begin ("TBL_SCROLL");
@@ -266,12 +267,12 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 	   {
 	    /***** Get exam session data from row *****/
 	    ExaSes_GetSessionDataFromRow (mysql_res,&Session);
-	    Exams->SesCod.Par = Session.SesCod;	// To be used as hidden parameter in forms
+	    Exams->SesCod = Session.SesCod;	// To be used as hidden parameter in forms
 
 	    if (ExaSes_CheckIfICanListThisSessionBasedOnGrps (Session.SesCod) == Usr_CAN)
 	      {
-	       HighlightRow = Session.SesCod == Exams->SesCod.Sel ? Lay_HIGHLIGHT :
-								    Lay_DONT_HIGHLIGHT;
+	       HighlightRow = Session.SesCod == SelectedSesCod ? Lay_HIGHLIGHT :
+								 Lay_DONT_HIGHLIGHT;
 
 	       /***** Build anchor string *****/
 	       if (asprintf (&Anchor,"evt_%lu_%lu",
@@ -313,7 +314,7 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 
 	       /***** Third row: form to edit this session ****/
 	       if (PutFormToEditSession == Frm_PUT_FORM &&	// Editing...
-		   Session.SesCod == Exams->SesCod.Sel)		// ...this session
+		   Session.SesCod == SelectedSesCod)		// ...this session
 		 {
 		  HTM_TR_Begin ("class=\"%s\"",The_GetColorRowsHighlight (HighlightRow));
 		     HTM_TD_Begin ("colspan=\"6\" class=\"LT\"");
@@ -349,6 +350,9 @@ static void ExaSes_ShowTableWithSessions (struct Exa_Exams *Exams,
 
    /***** End table with sessions *****/
    HTM_TABLE_End ();
+
+   /***** Restore selected session code, clobbered in sessions loop *****/
+   Exams->SesCod = SelectedSesCod;
   }
 
 /*****************************************************************************/
@@ -397,8 +401,7 @@ void ExaSes_ShowOneSession (void)
 
    /***** Get parameters *****/
    Exa_GetPars (&Exams,Exa_CHECK_EXA_COD);
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
+   Exams.SesCod = Session.SesCod = ParCod_GetAndCheckPar (ParCod_Ses);
 
    /***** Get exam data and session *****/
    Exa_GetExamDataByCod (&Exams.Exam);
@@ -449,7 +452,6 @@ void ExaSes_ListUsersForSelection (Act_Action_t NextAction,
       free (Title);
 
 	 /***** Form to select groups *****/
-         Exams->SesCod.Par = Exams->SesCod.Sel;	// To be used as parameter
 	 Grp_ShowFormToSelectSeveralGroups (NextAction,Exa_PutParsOneExam,Exams,NULL);
 
 	 /***** Begin section with user list *****/
@@ -729,7 +731,7 @@ static void ExaSes_WriteRowUsrInSession (struct Exa_Exams *Exams,
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
    NumResults = Exa_DB_GetResults (&mysql_res,Usr_OTHER,UsrDat,
-				   Exams->SesCod.Sel,-1L,NULL);
+				   Exams->SesCod,-1L,NULL);
 
    /***** Begin table row *****/
    HTM_TR_Begin ("class=\"%s\"",The_GetColorRows ());
@@ -1182,7 +1184,7 @@ static void ExaSes_PutLinkSession (struct Exa_Exams *Exams,
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActSeeOneExaSes,ExaSes_SESSION_BOX_ID);
       Exa_PutParsOneExam (Exams);
-      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod.Par);
+      Grp_PutParsCodGrpsAssociated (Grp_EXAM_SESSION,Exams->SesCod);
 
       /***** Link to view attendance event *****/
       HTM_BUTTON_Submit_Begin (Act_GetActTxt (ActSeeOneExaSes),NULL,
@@ -1310,7 +1312,7 @@ static void ExaSes_ListOneOrMoreSessionsResultStd (struct Exa_Exams *Exams,
       case Lay_SHOW:
 	 /* Result is visible by me */
 	 Exams->Exam.ExaCod = Session->ExaCod;
-	 Exams->SesCod.Par  = Session->SesCod;
+	 Exams->SesCod = Session->SesCod;
 	 Lay_PutContextualLinkOnlyIcon (ActSeeMyExaResSes,ExaRes_RESULTS_BOX_ID,
 					Exa_PutParsOneExam,Exams,
 					"trophy.svg",Ico_BLACK);
@@ -1352,7 +1354,7 @@ static void ExaSes_ListOneOrMoreSessionsResultTch (struct Exa_Exams *Exams,
 
 
    Exams->Exam.ExaCod = Session->ExaCod;
-   Exams->SesCod.Par  = Session->SesCod;
+   Exams->SesCod = Session->SesCod;
 
    /***** Show exam session results *****/
    if (ExaSes_CheckIfICanEditThisSession (Session->UsrCod) == Usr_CAN)
@@ -1519,8 +1521,7 @@ void ExaSes_ReqRemSes (void)
 
    /***** Show question and button to remove question *****/
    Exams.Exam.ExaCod = Session.ExaCod;
-   Exams.SesCod.Sel  =
-   Exams.SesCod.Par  = Session.SesCod;
+   Exams.SesCod = Session.SesCod;
    Ale_ShowAlertRemove (ActRemExaSes,NULL,
 			Exa_PutParsOneExam,&Exams,
 			Txt_Do_you_really_want_to_remove_the_session_X,
@@ -1638,8 +1639,7 @@ void ExaSes_GetAndCheckPars (struct Exa_Exams *Exams,
    ExaSes_GetSessionDataByCod (Session);
    if (Session->ExaCod != Exams->Exam.ExaCod)
       Err_WrongSetExit ();
-   Exams->SesCod.Sel =
-   Exams->SesCod.Par = Session->SesCod;
+   Exams->SesCod = Session->SesCod;
   }
 
 /*****************************************************************************/
@@ -1864,8 +1864,7 @@ void ExaSes_ReqCreatOrEditSes (void)
 	 Err_WrongActionExit ();
 	 break;
      }
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod;
+   Exams.SesCod = Session.SesCod;
 
    /***** Show exam *****/
    Exa_ShowOnlyOneExam (&Exams,Frm_PUT_FORM);	// Put form for session
@@ -1920,8 +1919,7 @@ void ExaSes_ReceiveSession (void)
 	 ICanChangeModality = Usr_CAN;
 	 break;
      }
-   Exams.SesCod.Sel =
-   Exams.SesCod.Par = Session.SesCod;
+   Exams.SesCod = Session.SesCod;
 
    /***** Get parameters from form *****/
    /* Get session title */
