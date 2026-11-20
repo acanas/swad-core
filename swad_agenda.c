@@ -1545,6 +1545,7 @@ void Agd_ReceiveEvent (void)
 	       break;
 	    case OldNew_NEW:
 	    default:
+	       Agenda.AgdCod   =
 	       AgdEvent.AgdCod = Agd_DB_CreateEvent (&AgdEvent,EventTxt);	// Add new event to database
 	       break;
 	   }

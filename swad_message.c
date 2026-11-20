@@ -2027,11 +2027,6 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       [CloOpe_CLOSED] = "MSG_TIT_NEW",
       [CloOpe_OPEN  ] = "MSG_TIT",
      };
-   static const char *ClassBg[CloOpe_NUM_CLOSED_OPEN] =
-     {
-      [CloOpe_CLOSED] = "MSG_BG_NEW",
-      [CloOpe_OPEN  ] = "MSG_BG",
-     };
    struct Usr_Data UsrDat;
    __attribute__((unused)) Exi_Exist_t UsrExists;
    time_t CreatTimeUTC;		// Creation time of a message
@@ -2065,8 +2060,9 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 	 break;
      }
 
-   /***** Put an icon with message status *****/
-   HTM_TR_Begin (NULL);
+   /***** 1st row *****/
+   HTM_TR_Begin ("class=\"%s_%s\"",
+	         Msg_Class[Status.ClosedOrOpen].Background,The_GetSuffix ());
 
       /***** Icons *****/
       HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
@@ -2091,9 +2087,8 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
       Msg_WriteMsgNumber (MsgNum,Status.ClosedOrOpen);
 
       /***** Author *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                    ClassAuthor[Status.ClosedOrOpen],The_GetSuffix (),
-                    ClassBg[Status.ClosedOrOpen],The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+                    ClassAuthor[Status.ClosedOrOpen],The_GetSuffix ());
 	 UsrExists = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							      Usr_DONT_GET_PREFS,
 							      Usr_DONT_GET_ROLE_IN_CRS);
@@ -2108,6 +2103,7 @@ static void Msg_ShowASentOrReceivedMessage (struct Msg_Messages *Messages,
 
    HTM_TR_End ();
 
+   /***** 2nd row *****/
    if (Status.ContractedOrExpanded == ConExp_EXPANDED)
      {
       HTM_TR_Begin (NULL);
@@ -2242,9 +2238,8 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,CloOpe_ClosedOrOpen_t ClosedOrOpen)
   {
-   HTM_TD_Begin ("class=\"CT %s_%s %s_%s\" style=\"width:45px;\"",
-		 Msg_Class[ClosedOrOpen].Title     ,The_GetSuffix (),
-		 Msg_Class[ClosedOrOpen].Background,The_GetSuffix ());
+   HTM_TD_Begin ("class=\"CT %s_%s\" style=\"width:45px;\"",
+		 Msg_Class[ClosedOrOpen].Title,The_GetSuffix ());
       HTM_UnsignedLong (MsgNum); HTM_Colon ();
    HTM_TD_End ();
   }
@@ -2263,22 +2258,21 @@ static void Msg_WriteSentOrReceivedMsgSubject (struct Msg_Messages *Messages,
    static Act_Action_t Action[Msg_NUM_TYPES_OF_MSGS][ConExp_NUM_CONTRACTED_EXPANDED] =
      {
       [Msg_WRITING ][ConExp_CONTRTED] = ActUnk,
-      [Msg_WRITING ][ConExp_EXPANDED  ] = ActUnk,
+      [Msg_WRITING ][ConExp_EXPANDED] = ActUnk,
       [Msg_RECEIVED][ConExp_CONTRTED] = ActExpRcvMsg,
-      [Msg_RECEIVED][ConExp_EXPANDED  ] = ActConRcvMsg,
+      [Msg_RECEIVED][ConExp_EXPANDED] = ActConRcvMsg,
       [Msg_SENT    ][ConExp_CONTRTED] = ActExpSntMsg,
-      [Msg_SENT    ][ConExp_EXPANDED  ] = ActConSntMsg,
+      [Msg_SENT    ][ConExp_EXPANDED] = ActConSntMsg,
      };
    static const char **Title[ConExp_NUM_CONTRACTED_EXPANDED] =
      {
       [ConExp_CONTRTED] = &Txt_See_message,
-      [ConExp_EXPANDED  ] = &Txt_Hide_message,
+      [ConExp_EXPANDED] = &Txt_Hide_message,
      };
 
    /***** Begin cell *****/
-   HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-                 Msg_Class[Status->ClosedOrOpen].Title     ,The_GetSuffix (),
-                 Msg_Class[Status->ClosedOrOpen].Background,The_GetSuffix ());
+   HTM_TD_Begin ("class=\"LT %s_%s\"",
+                 Msg_Class[Status->ClosedOrOpen].Title,The_GetSuffix ());
 
       /***** Begin form to expand/contract the message *****/
       Frm_BeginForm (Action[Messages->TypeOfMsgs][Status->ContractedOrExpanded]);

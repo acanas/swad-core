@@ -974,11 +974,12 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
       /* Return this subject as last subject */
       Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
 
-   HTM_TR_Begin (NULL);
+   /***** 1st row *****/
+   HTM_TR_Begin ("class=\"%s_%s\"",
+	         Msg_Class[ClosedOrOpenPst].Background,The_GetSuffix ());
 
       /***** Put an icon with post status *****/
-      HTM_TD_Begin ("class=\"CONTEXT_COL %s_%s\"",
-	            Msg_Class[ClosedOrOpenPst].Background,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"CONTEXT_COL\"");
 	 Ico_PutIcon (StatusIcons[ClosedOrOpenPst].Icon,Ico_BLACK,
 		      *StatusIcons[ClosedOrOpenPst].Title,"ICO16x16");
       HTM_TD_End ();
@@ -988,10 +989,10 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
 
       /***** Write date *****/
       Msg_WriteMsgDate (CreatTimeUTC,Msg_Class[ClosedOrOpenPst].Title);
+
       /***** Write subject *****/
-      HTM_TD_Begin ("class=\"LT %s_%s %s_%s\"",
-		    Msg_Class[ClosedOrOpenPst].Title,The_GetSuffix (),
-                    Msg_Class[ClosedOrOpenPst].Background,The_GetSuffix ());
+      HTM_TD_Begin ("class=\"LT %s_%s\"",
+		    Msg_Class[ClosedOrOpenPst].Title,The_GetSuffix ());
          switch (Disabled)
            {
             case For_DISABLED:
@@ -1012,8 +1013,10 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                break;
            }
       HTM_TD_End ();
+
    HTM_TR_End ();
 
+   /***** 2nd row *****/
    HTM_TR_Begin (NULL);
 
       /***** Form to ban/unban post *****/
@@ -1078,6 +1081,7 @@ static void For_ShowAForumPost (struct For_Forums *Forums,
                break;
            }
       HTM_TD_End ();
+
    HTM_TR_End ();
 
    /***** Free image *****/

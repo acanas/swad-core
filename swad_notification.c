@@ -606,13 +606,14 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Write row for this notification *****/
-   /* Write event icon */
    HTM_TR_Begin ("class=\"%s_%s\"",Class.Bg,The_GetSuffix ());
 
+      /* Write event icon */
       HTM_TD_Begin ("class=\"LT\" style=\"width:25px;\"");
 	 if (PutForm == Frm_PUT_FORM)
 	   {
-	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
+	    Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,
+					      UsrDat,Cod,&Forums);
 	    PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 	   }
 	 switch (PutForm)
@@ -634,7 +635,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	 switch (PutForm)
 	   {
 	    case Frm_PUT_FORM:
-	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,
+						 UsrDat,Cod,&Forums);
 	       PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 		  HTM_BUTTON_Submit_Begin (Txt_NOTIFY_EVENTS_SINGULAR[NotifyEvent],NULL,
 					   "class=\"Ntf_TYPE LT %s_%s\"",
@@ -664,7 +666,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    if (PutForm == Frm_PUT_FORM)
 	      {
-	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,
+						 UsrDat,Cod,&Forums);
 	       PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 	      }
 
@@ -703,7 +706,8 @@ static void Ntf_WriteNotif (Ntf_NotifyEvent_t NotifyEvent,
 	   {
 	    if (PutForm == Frm_PUT_FORM)
 	      {
-	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,UsrDat,Cod,&Forums);
+	       Action = Ntf_StartFormGoToAction (NotifyEvent,Hie[Hie_CRS].HieCod,
+						 UsrDat,Cod,&Forums);
 	       PutForm = PutFormIfInside[Frm_CheckIfInside ()];
 	      }
 
