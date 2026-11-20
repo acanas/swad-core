@@ -145,6 +145,7 @@ struct Sta_Stats
    unsigned long FirstRow;
    unsigned long LastRow;
    unsigned RowsPerPage;
+   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1];
   };
 
 /*****************************************************************************/
@@ -153,13 +154,11 @@ struct Sta_Stats
 
 void Sta_ResetStats (struct Sta_Stats *Stats);
 
-void Sta_ReqCrsHits (void);
-void Sta_AskShowGblHits (void);
-void Sta_PutLinkToCourseHits (void);
-void Sta_PutLinkToGlobalHits (void);
+void Sta_ShowGblHits (void);
+void Sta_ShowCrsHits (void);
 
-void Sta_SeeGblAccesses (void);
-void Sta_SeeCrsAccesses (void);
+void Sta_PutLinkToGblHits (void);
+void Sta_PutLinkToCrsHits (void);
 
 void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
                                  unsigned NumHits,

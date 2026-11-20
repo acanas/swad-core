@@ -164,7 +164,7 @@ struct Mnu_Menu Mnu_Menu[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 		[ 5] = {ActReqMaiUsr		,"at"			},
 	       },
    [TabAna] =  {
-		[ 0] = {ActReqUseGbl		,"chart-pie"		},
+		[ 0] = {ActSeeUseGbl		,"chart-pie"		},
 		[ 1] = {ActSeePhoDeg		,"graduation-cap"	},
 		[ 2] = {ActReqStaCrs		,"tasks"		},
 		[ 3] = {ActSeeAllSvy		,"poll"			},

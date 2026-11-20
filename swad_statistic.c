@@ -101,14 +101,17 @@ static unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Sta_PutFormCrsHits (struct Sta_Stats *Stats);
 static void Sta_PutFormGblHits (struct Sta_Stats *Stats);
+static void Sta_PutFormCrsHits (struct Sta_Stats *Stats);
 
 static void Sta_WriteSelectorRoles (const struct Sta_Stats *Stats);
 static void Sta_WriteSelectorAction (const struct Sta_Stats *Stats);
 static void Sta_WriteSelectorScope (void);
 static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats);
-static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
+
+static void Sta_GetPars (struct Sta_Stats *Stats,Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
+
+static void Sta_ShowHits (struct Sta_Stats *Stats);
 static void Sta_ShowDetailedAccessesList (const struct Sta_Stats *Stats,
                                           unsigned NumHits,MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
@@ -179,273 +182,127 @@ void Sta_ResetStats (struct Sta_Stats *Stats)
   }
 
 /*****************************************************************************/
-/**************** Show a form to make a query of course hits *****************/
+/*********************** Compute and show global hits ************************/
 /*****************************************************************************/
 
-void Sta_ReqCrsHits (void)
+void Sta_ShowGblHits (void)
   {
+   extern const char *Hlp_ANALYTICS_Visits_global_visits;
+   extern const char *Txt_Statistics_of_all_visits;
    struct Sta_Stats Stats;
 
    /***** Reset stats context *****/
    Sta_ResetStats (&Stats);
 
-   /***** Show form to select global hits *****/
-   Sta_PutFormCrsHits (&Stats);
-  }
-
-static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
-  {
-   extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
-   extern const char *Txt_Statistics_of_visits_to_the_course_X;
-   extern const char *Txt_Users;
-   extern const char *Txt_Show;
-   extern const char *Txt_Graph;
-   extern const char *Txt_distributed_by;
-   extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
-   extern const char *Txt_results_per_page;
-#define NUM_OPTIONS_ROWS_PER_PAGE 12
-   static unsigned RowsPerPage[NUM_OPTIONS_ROWS_PER_PAGE] =
-     {
-      Sta_MIN_ROWS_PER_PAGE * 1,
-      Sta_MIN_ROWS_PER_PAGE * 2,
-      Sta_MIN_ROWS_PER_PAGE * 3,
-      Sta_MIN_ROWS_PER_PAGE * 4,
-      Sta_MIN_ROWS_PER_PAGE * 5,
-      Sta_MIN_ROWS_PER_PAGE * 10,
-      Sta_MIN_ROWS_PER_PAGE * 50,
-      Sta_MIN_ROWS_PER_PAGE * 100,
-      Sta_MIN_ROWS_PER_PAGE * 500,
-      Sta_MIN_ROWS_PER_PAGE * 1000,
-      Sta_MIN_ROWS_PER_PAGE * 5000,
-      Sta_MAX_ROWS_PER_PAGE,
-     };
-   Pho_ShowPhotos_t ShowPhotos;
-   unsigned NumUsrs;
-   char *Title;
-   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
-   Sta_ClicksGroupedBy_t ClicksGroupedBy;
-   unsigned ClicksGroupedByUnsigned;
-   size_t i;
-
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-      Sta_PutLinkToGlobalHits ();	// Global hits
+      Sta_PutLinkToCrsHits ();		// Course hits
       Log_PutLinkToLastClicks ();	// Last clicks in real time
    Mnu_ContextMenuEnd ();
 
-   /***** Get and update type of list,
-          number of columns in class photo
-          and preference about view photos *****/
-   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_Statistics_of_all_visits,NULL,NULL,
+		 Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE);
 
-   /***** Get groups to show ******/
-   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+      /***** Get parameters *****/
+      if (Gbl.Action.Act == ActSeeAccGbl)
+	 Sta_GetPars (&Stats,Sta_SHOW_GLOBAL_ACCESSES);
 
-   /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (Hie_CRS,Rol_STD);
-   Usr_GetListUsrs (Hie_CRS,Rol_NET);
-   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
-   NumUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
-	     Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
-	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+      /***** Show form to select global hits *****/
+      Sta_PutFormGblHits (&Stats);
+
+      /***** Show hits *****/
+      if (Gbl.Action.Act == ActSeeAccGbl)
+	 Sta_ShowHits (&Stats);
+
+   /***** End box *****/
+   Box_BoxEnd ();
+  }
+
+/*****************************************************************************/
+/*********************** Compute and show course hits ************************/
+/*****************************************************************************/
+
+void Sta_ShowCrsHits (void)
+  {
+   extern const char *Hlp_ANALYTICS_Visits_visits_to_course;
+   extern const char *Txt_Statistics_of_visits_to_the_course_X;
+   struct Sta_Stats Stats;
+   char *Title;
+
+   /***** Reset stats context *****/
+   Sta_ResetStats (&Stats);
+
+   /***** Contextual menu *****/
+   Mnu_ContextMenuBegin ();
+      Sta_PutLinkToGblHits ();		// Global hits
+      Log_PutLinkToLastClicks ();	// Last clicks in real time
+   Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
                  Gbl.Hie.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxShadowBegin (Title,NULL,NULL,Hlp_ANALYTICS_Visits_visits_to_course);
+   Box_BoxBegin (Title,NULL,NULL,
+		 Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
    free (Title);
 
-      /***** Show form to select the groups *****/
-      Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,NULL,NULL,NULL);
+      /***** Get parameters *****/
+      if (Gbl.Action.Act == ActSeeAccCrs)
+         Sta_GetPars (&Stats,Sta_SHOW_COURSE_ACCESSES);
 
-      /***** Begin section with user list *****/
-      HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+      /***** Show form to select global hits *****/
+      Sta_PutFormCrsHits (&Stats);
 
-	 if (NumUsrs)
-	   {
-	    /***** Form to select type of list used for select several users *****/
-	    Usr_ShowFormsToSelectUsrListType (NULL,NULL,NULL,ShowPhotos);
-
-	    if (Usr_GetIfShowBigList (NumUsrs,NULL,NULL,NULL) == Lay_SHOW)
-	      {
-	       /***** Put link to register students *****/
-	       Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs ();
-
-	       /***** Begin form *****/
-	       Frm_BeginFormIdAnchor (ActSeeAccCrs,Usr_FORM_TO_SELECT_USRS_ID,
-				      Sta_STAT_RESULTS_SECTION_ID);
-
-		  Grp_PutParsCodGrps ();
-		  Par_PutParLong (NULL,"FirstRow",0);
-		  Par_PutParLong (NULL,"LastRow",0);
-
-		  HTM_TABLE_BeginCenterPadding (2);
-
-		     /***** List of users to select some of them *****/
-		     HTM_TR_Begin (NULL);
-
-			/* Label */
-			Frm_LabelColumn ("Frm_C1 RT","",Txt_Users);
-
-			/* Data */
-			HTM_TD_Begin ("class=\"Frm_C2 LT\"");
-			   Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
-			HTM_TD_End ();
-		     HTM_TR_End ();
-
-		     /***** Initial and final dates of the search *****/
-		     if (Gbl.Action.Act == ActReqAccCrs)
-		       {
-			SetHMS[Dat_STR_TIME] = Dat_HMS_TO_000000;
-			SetHMS[Dat_END_TIME] = Dat_HMS_TO_235959;
-		       }
-		     else
-		       {
-			SetHMS[Dat_STR_TIME] = Dat_HMS_DO_NOT_SET;
-			SetHMS[Dat_END_TIME] = Dat_HMS_DO_NOT_SET;
-		       }
-		     Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
-
-		     /***** Selection of action *****/
-		     Sta_WriteSelectorAction (Stats);
-
-		     /***** Listing of clicks (graphic or detailed) *****/
-		     HTM_TR_Begin (NULL);
-
-			/* Label */
-			Frm_LabelColumn ("Frm_C1 RT","",Txt_Show);
-
-			/* Data */
-			HTM_TD_Begin ("class=\"Frm_C2 LM\"");
-
-			   if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
-				Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
-				Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-			      Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
-
-			   /***** Option a) Graphic of clicks in this course *****/
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
-													HTM_CHECKED,
-					       "value=\"%u\""
-					       " onclick=\"disableDetailedClicks();\"",
-					       (unsigned) Sta_CLICKS_GROUPED);
-			      HTM_Txt (Txt_Graph);
-			   HTM_LABEL_End ();
-
-			   /* Separator */
-			   HTM_BR ();
-
-			   /* Selection of count type (number of pages generated, accesses per user, etc.) */
-			   Sta_WriteSelectorCountType (Stats);
-
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			      HTM_Txt (Txt_distributed_by);
-			      HTM_NBSP ();
-			      HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-						"id=\"GroupedBy\" name=\"GroupedBy\""
-						" class=\"INPUT_%s\"",
-						The_GetSuffix ());
-				 for (ClicksGroupedBy  = Sta_CLICKS_CRS_PER_USR;
-				      ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
-				      ClicksGroupedBy++)
-				   {
-				    ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
-				    HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
-						ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_SELECTED :
-											    HTM_NO_ATTR,
-						"%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
-				   }
-			      HTM_SELECT_End ();
-			   HTM_LABEL_End ();
-
-			   /***** Separator *****/
-			   HTM_BR ();
-
-			   /***** Option b) Listing of detailed clicks to this course *****/
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			      HTM_INPUT_RADIO ("GroupedOrDetailed",
-					       Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_CHECKED :
-													HTM_NO_ATTR,
-					       "value=\"%u\" onclick=\"enableDetailedClicks();\"",
-					       (unsigned) Sta_CLICKS_DETAILED);
-			      HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
-			   HTM_LABEL_End ();
-
-			   /* Separator */
-			   HTM_BR ();
-
-			   /* Number of rows per page */
-			   // To use getElementById in Firefox, it's necessary to have the id attribute
-			   HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			      HTM_CloseParenthesis ();
-				 HTM_Txt (Txt_results_per_page); HTM_Colon (); HTM_NBSP ();
-				 HTM_SELECT_Begin (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
-													    HTM_DISABLED,
-						   NULL,
-						   "id=\"RowsPage\" name=\"RowsPage\"");
-				    for (i = 0;
-					 i < NUM_OPTIONS_ROWS_PER_PAGE;
-					 i++)
-				       HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
-						   RowsPerPage[i] == Stats->RowsPerPage ? HTM_SELECTED :
-											  HTM_NO_ATTR,
-						   "%u",RowsPerPage[i]);
-				 HTM_SELECT_End ();
-			      HTM_CloseParenthesis ();
-			   HTM_LABEL_End ();
-
-			HTM_TD_End ();
-
-		     HTM_TR_End ();
-
-		  HTM_TABLE_End ();
-
-		  /***** Hidden param used to get client time zone *****/
-		  Dat_PutParBrowserTZDiff ();
-
-		  /***** Send button *****/
-		  Btn_PutButton (Btn_SHOW,NULL);
-
-	       /***** End form *****/
-	       Frm_EndForm ();
-	      }
-	   }
-	 else	// NumUsrs == 0
-	    /***** Show warning indicating no users found *****/
-	    Usr_ShowWarningNoUsersFound (Rol_UNK);
-
-      /***** End section with user list *****/
-      HTM_SECTION_End ();
+      /***** Show hits *****/
+      if (Gbl.Action.Act == ActSeeAccCrs)
+         Sta_ShowHits (&Stats);
 
    /***** End box *****/
    Box_BoxEnd ();
-
-   /***** Free memory used by the lists *****/
-   Usr_FreeUsrsList (Rol_TCH);
-   Usr_FreeUsrsList (Rol_NET);
-   Usr_FreeUsrsList (Rol_STD);
-
-   /***** Free memory for list of selected groups *****/
-   Grp_FreeListCodSelectedGrps ();
   }
 
 /*****************************************************************************/
-/********** Show a form to select the type of global stat of clics ***********/
+/*********************** Put a link to show global hits **********************/
 /*****************************************************************************/
 
-void Sta_AskShowGblHits (void)
+void Sta_PutLinkToGblHits (void)
   {
-   struct Sta_Stats Stats;
+   extern const char *Txt_Global_visits;
 
-   /***** Reset stats context *****/
-   Sta_ResetStats (&Stats);
-
-   /***** Show form to select global hits *****/
-   Sta_PutFormGblHits (&Stats);
+   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,
+                                  NULL,NULL,
+				  "chart-line.svg",Ico_BLACK,
+				  Txt_Global_visits,NULL);
   }
+
+/*****************************************************************************/
+/********************** Put a link to show course hits ***********************/
+/*****************************************************************************/
+
+void Sta_PutLinkToCrsHits (void)
+  {
+   extern const char *Txt_Visits_to_course;
+
+   if (Gbl.Hie.Lvl == Hie_CRS)		// Course selected
+      switch (Gbl.Usrs.Me.Role.Logged)
+        {
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,
+	                                   NULL,NULL,
+					   "chart-line.svg",Ico_BLACK,
+					   Txt_Visits_to_course,NULL);
+	    break;
+	 default:
+	    break;
+        }
+  }
+
+/*****************************************************************************/
+/*********************** Put form to get global hits ************************/
+/*****************************************************************************/
 
 static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
   {
@@ -462,18 +319,11 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
    unsigned ClicksGroupedByUnsigned;
 
-   /***** Contextual menu *****/
-   Mnu_ContextMenuBegin ();
-      Sta_PutLinkToCourseHits ();	// Course hits
-      Log_PutLinkToLastClicks ();	// Last clicks in real time
-   Mnu_ContextMenuEnd ();
-
    /***** Begin form *****/
    Frm_BeginFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
-      /***** Begin box and table *****/
-      Box_BoxTableShadowBegin (Txt_Statistics_of_all_visits,NULL,NULL,
-			       Hlp_ANALYTICS_Visits_global_visits,2);
+      /***** Begin table *****/
+      HTM_TABLE_BeginCenterPadding (2);
 
 	 /***** Start and end dates for the search *****/
 	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
@@ -526,55 +376,241 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
 
 	 HTM_TR_End ();
 
-	 /***** End table *****/
-	 HTM_TABLE_End ();
+      /***** End table *****/
+      HTM_TABLE_End ();
 
-	 /***** Hidden param used to get client time zone *****/
-	 Dat_PutParBrowserTZDiff ();
+      /***** Hidden param used to get client time zone *****/
+      Dat_PutParBrowserTZDiff ();
 
-      /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_SHOW);
+      /***** Send button *****/
+      Btn_PutButton (Btn_SHOW,NULL);
 
    /***** End form *****/
    Frm_EndForm ();
   }
 
 /*****************************************************************************/
-/*************** Put a link to show visits to current course *****************/
+/*********************** Put form to get course hits *************************/
 /*****************************************************************************/
 
-void Sta_PutLinkToCourseHits (void)
+static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
   {
-   extern const char *Txt_Visits_to_course;
+   extern const char *Txt_Users;
+   extern const char *Txt_Show;
+   extern const char *Txt_Graph;
+   extern const char *Txt_distributed_by;
+   extern const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY];
+   extern const char *Txt_results_per_page;
+#define NUM_OPTIONS_ROWS_PER_PAGE 12
+   static unsigned RowsPerPage[NUM_OPTIONS_ROWS_PER_PAGE] =
+     {
+      Sta_MIN_ROWS_PER_PAGE * 1,
+      Sta_MIN_ROWS_PER_PAGE * 2,
+      Sta_MIN_ROWS_PER_PAGE * 3,
+      Sta_MIN_ROWS_PER_PAGE * 4,
+      Sta_MIN_ROWS_PER_PAGE * 5,
+      Sta_MIN_ROWS_PER_PAGE * 10,
+      Sta_MIN_ROWS_PER_PAGE * 50,
+      Sta_MIN_ROWS_PER_PAGE * 100,
+      Sta_MIN_ROWS_PER_PAGE * 500,
+      Sta_MIN_ROWS_PER_PAGE * 1000,
+      Sta_MIN_ROWS_PER_PAGE * 5000,
+      Sta_MAX_ROWS_PER_PAGE,
+     };
+   Pho_ShowPhotos_t ShowPhotos;
+   unsigned NumUsrs;
+   Dat_SetHMS SetHMS[Dat_NUM_START_END_TIME];
+   Sta_ClicksGroupedBy_t ClicksGroupedBy;
+   unsigned ClicksGroupedByUnsigned;
+   size_t i;
 
-   if (Gbl.Hie.Lvl == Hie_CRS)		// Course selected
-      switch (Gbl.Usrs.Me.Role.Logged)
-        {
-	 case Rol_NET:
-	 case Rol_TCH:
-	 case Rol_SYS_ADM:
-	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,
-	                                   NULL,NULL,
-					   "chart-line.svg",Ico_BLACK,
-					   Txt_Visits_to_course,NULL);
-	    break;
-	 default:
-	    break;
-        }
-  }
+   /***** Get and update type of list,
+          number of columns in class photo
+          and preference about view photos *****/
+   Set_GetAndUpdatePrefsAboutUsrList (&ShowPhotos);
 
-/*****************************************************************************/
-/********************* Put a link to show global visits **********************/
-/*****************************************************************************/
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-void Sta_PutLinkToGlobalHits (void)
-  {
-   extern const char *Txt_Global_visits;
+   /***** Get and order the lists of users of this course *****/
+   Usr_GetListUsrs (Hie_CRS,Rol_STD);
+   Usr_GetListUsrs (Hie_CRS,Rol_NET);
+   Usr_GetListUsrs (Hie_CRS,Rol_TCH);
+   NumUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	     Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
-   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,
-                                  NULL,NULL,
-				  "chart-line.svg",Ico_BLACK,
-				  Txt_Global_visits,NULL);
+   /***** Show form to select the groups *****/
+   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,NULL,NULL,NULL);
+
+   /***** Begin section with user list *****/
+   HTM_SECTION_Begin (Usr_USER_LIST_SECTION_ID);
+
+      if (NumUsrs)
+	{
+	 /***** Form to select type of list used for select several users *****/
+	 Usr_ShowFormsToSelectUsrListType (NULL,NULL,NULL,ShowPhotos);
+
+	 if (Usr_GetIfShowBigList (NumUsrs,NULL,NULL,NULL) == Lay_SHOW)
+	   {
+	    /***** Put link to register students *****/
+	    Enr_CheckStdsAndPutButtonToEnrolStdsInThisCrs ();
+
+	    /***** Begin form *****/
+	    Frm_BeginFormIdAnchor (ActSeeAccCrs,Usr_FORM_TO_SELECT_USRS_ID,
+				   Sta_STAT_RESULTS_SECTION_ID);
+
+	       Grp_PutParsCodGrps ();
+	       Par_PutParLong (NULL,"FirstRow",0);
+	       Par_PutParLong (NULL,"LastRow",0);
+
+	       HTM_TABLE_BeginCenterPadding (2);
+
+		  /***** List of users to select some of them *****/
+		  HTM_TR_Begin (NULL);
+
+		     /* Label */
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Users);
+
+		     /* Data */
+		     HTM_TD_Begin ("class=\"Frm_C2 LT\"");
+			Usr_ListUsersToSelect (&Gbl.Usrs.Selected,ShowPhotos);
+		     HTM_TD_End ();
+		  HTM_TR_End ();
+
+		  /***** Initial and final dates of the search *****/
+		  if (Gbl.Action.Act == ActReqAccCrs)
+		    {
+		     SetHMS[Dat_STR_TIME] = Dat_HMS_TO_000000;
+		     SetHMS[Dat_END_TIME] = Dat_HMS_TO_235959;
+		    }
+		  else
+		    {
+		     SetHMS[Dat_STR_TIME] = Dat_HMS_DO_NOT_SET;
+		     SetHMS[Dat_END_TIME] = Dat_HMS_DO_NOT_SET;
+		    }
+		  Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);
+
+		  /***** Selection of action *****/
+		  Sta_WriteSelectorAction (Stats);
+
+		  /***** Listing of clicks (graphic or detailed) *****/
+		  HTM_TR_Begin (NULL);
+
+		     /* Label */
+		     Frm_LabelColumn ("Frm_C1 RT","",Txt_Show);
+
+		     /* Data */
+		     HTM_TD_Begin ("class=\"Frm_C2 LM\"");
+
+			if ((Stats->ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
+			     Stats->ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
+			     Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+			   Stats->ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
+
+			/***** Option a) Graphic of clicks in this course *****/
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   HTM_INPUT_RADIO ("GroupedOrDetailed",
+					    Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
+												     HTM_CHECKED,
+					    "value=\"%u\""
+					    " onclick=\"disableDetailedClicks();\"",
+					    (unsigned) Sta_CLICKS_GROUPED);
+			   HTM_Txt (Txt_Graph);
+			HTM_LABEL_End ();
+
+			/* Separator */
+			HTM_BR ();
+
+			/* Selection of count type (number of pages generated, accesses per user, etc.) */
+			Sta_WriteSelectorCountType (Stats);
+
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   HTM_Txt (Txt_distributed_by);
+			   HTM_NBSP ();
+			   HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+					     "id=\"GroupedBy\" name=\"GroupedBy\""
+					     " class=\"INPUT_%s\"",
+					     The_GetSuffix ());
+			      for (ClicksGroupedBy  = Sta_CLICKS_CRS_PER_USR;
+				   ClicksGroupedBy <= Sta_CLICKS_CRS_PER_ACTION;
+				   ClicksGroupedBy++)
+				{
+				 ClicksGroupedByUnsigned = (unsigned) ClicksGroupedBy;
+				 HTM_OPTION (HTM_Type_UNSIGNED,&ClicksGroupedByUnsigned,
+					     ClicksGroupedBy == Stats->ClicksGroupedBy ? HTM_SELECTED :
+											 HTM_NO_ATTR,
+					     "%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
+				}
+			   HTM_SELECT_End ();
+			HTM_LABEL_End ();
+
+			/***** Separator *****/
+			HTM_BR ();
+
+			/***** Option b) Listing of detailed clicks to this course *****/
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   HTM_INPUT_RADIO ("GroupedOrDetailed",
+					    Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_CHECKED :
+												     HTM_NO_ATTR,
+					    "value=\"%u\" onclick=\"enableDetailedClicks();\"",
+					    (unsigned) Sta_CLICKS_DETAILED);
+			   HTM_Txt (Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
+			HTM_LABEL_End ();
+
+			/* Separator */
+			HTM_BR ();
+
+			/* Number of rows per page */
+			// To use getElementById in Firefox, it's necessary to have the id attribute
+			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+			   HTM_CloseParenthesis ();
+			      HTM_Txt (Txt_results_per_page); HTM_Colon (); HTM_NBSP ();
+			      HTM_SELECT_Begin (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
+													 HTM_DISABLED,
+						NULL,
+						"id=\"RowsPage\" name=\"RowsPage\"");
+				 for (i = 0;
+				      i < NUM_OPTIONS_ROWS_PER_PAGE;
+				      i++)
+				    HTM_OPTION (HTM_Type_UNSIGNED,&RowsPerPage[i],
+						RowsPerPage[i] == Stats->RowsPerPage ? HTM_SELECTED :
+										       HTM_NO_ATTR,
+						"%u",RowsPerPage[i]);
+			      HTM_SELECT_End ();
+			   HTM_CloseParenthesis ();
+			HTM_LABEL_End ();
+
+		     HTM_TD_End ();
+
+		  HTM_TR_End ();
+
+	       HTM_TABLE_End ();
+
+	       /***** Hidden param used to get client time zone *****/
+	       Dat_PutParBrowserTZDiff ();
+
+	       /***** Send button *****/
+	       Btn_PutButton (Btn_SHOW,NULL);
+
+	    /***** End form *****/
+	    Frm_EndForm ();
+	   }
+	}
+      else	// NumUsrs == 0
+	 /***** Show warning indicating no users found *****/
+	 Usr_ShowWarningNoUsersFound (Rol_UNK);
+
+   /***** End section with user list *****/
+   HTM_SECTION_End ();
+
+   /***** Free memory used by the lists *****/
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
+   Usr_FreeUsrsList (Rol_STD);
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
   }
 
 /*****************************************************************************/
@@ -728,26 +764,160 @@ static void Sta_WriteSelectorCountType (const struct Sta_Stats *Stats)
   }
 
 /*****************************************************************************/
-/******************** Compute and show access statistics *********************/
+/******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-void Sta_SeeGblAccesses (void)
+static void Sta_GetPars (struct Sta_Stats *Stats,Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
-   /***** Show hits *****/
-   Sta_ShowHits (Sta_SHOW_GLOBAL_ACCESSES);
-  }
+   extern const char *Txt_You_must_select_one_ore_more_users;
+   extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
+   extern const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days;
+   unsigned AllowedLvls;
+   Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
+   struct Usr_ListCods ListCods =
+     {
+      .Lst = NULL,
+      .NumUsrs = 0
+     };
+   unsigned NumDays;
+   Usr_Can_t ICanQueryWholeRange;
 
-void Sta_SeeCrsAccesses (void)
-  {
-   /***** Show hits *****/
-   Sta_ShowHits (Sta_SHOW_COURSE_ACCESSES);
+   /***** Reset stats context *****/
+   Sta_ResetStats (Stats);
+   Stats->GlobalOrCourse = GlobalOrCourse;
+
+   /***** Get initial and ending dates *****/
+   Dat_GetIniEndDatesFromForm ();
+
+   /***** Get client time zone *****/
+   Dat_GetBrowserTimeZone (Stats->BrowserTimeZone);
+
+   /***** Get the type of stat of clicks ******/
+   DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)
+	               Par_GetParUnsignedLong ("GroupedOrDetailed",
+	                                       0,Sta_NUM_CLICKS_DETAILED_OR_GROUPED - 1,
+	                                       (unsigned long) Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT);
+
+   if (DetailedOrGrouped == Sta_CLICKS_DETAILED)
+      Stats->ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
+   else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
+      Stats->ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
+			       Par_GetParUnsignedLong ("GroupedBy",
+						       0,Sta_NUM_CLICKS_GROUPED_BY - 1,
+						       (unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
+
+   /***** Get the type of count of clicks *****/
+   if (Stats->ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
+      Stats->CountType = (Sta_CountType_t)
+			 Par_GetParUnsignedLong ("CountType",
+						 0,Sta_NUM_COUNT_TYPES - 1,
+						 (unsigned long) Sta_COUNT_TYPE_DEFAULT);
+
+   /***** Get action *****/
+   Stats->NumAction = (Act_Action_t)
+		      Par_GetParUnsignedLong ("StatAct",
+					      0,ActLst_NUM_ACTIONS - 1,
+					      (unsigned long) Sta_NUM_ACTION_DEFAULT);
+
+   switch (Stats->GlobalOrCourse)
+     {
+      case Sta_SHOW_COURSE_ACCESSES:
+	 Stats->HieLvl = Hie_CRS;
+	 if (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
+	   {
+	    /****** Get the number of the first row to show ******/
+	    Stats->FirstRow = Par_GetParUnsignedLong ("FirstRow",1,ULONG_MAX,0);
+
+	    /****** Get the number of the last row to show ******/
+	    Stats->LastRow = Par_GetParUnsignedLong ("LastRow",1,ULONG_MAX,0);
+
+	    /****** Get the number of rows per page ******/
+	    Stats->RowsPerPage =
+	    (unsigned) Par_GetParUnsignedLong ("RowsPage",
+	                                       Sta_MIN_ROWS_PER_PAGE,
+	                                       Sta_MAX_ROWS_PER_PAGE,
+	                                       Sta_DEF_ROWS_PER_PAGE);
+	   }
+
+	 /****** Get lists of selected users ******/
+	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
+					        Usr_GET_LIST_ALL_USRS);
+
+	 /***** Count number of valid users in list of encrypted user codes *****/
+	 ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
+
+	 /***** Check users' selection *****/
+	 if (ListCods.NumUsrs)
+	    /* Get list of user codes from encrypted user codes */
+	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
+	 else	// There are no users selected
+	   {
+	    /* Write warning message, clean and abort */
+	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+            Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
+	    return;
+	   }
+	 break;
+      case Sta_SHOW_GLOBAL_ACCESSES:
+      default:
+	 /***** Get the type of user of clicks *****/
+	 Stats->Role = (Sta_Role_t)
+		       Par_GetParUnsignedLong ("Role",0,Sta_NUM_ROLES_STAT - 1,
+					       (unsigned long) Sta_ROLE_DEFAULT);
+
+	 /***** Get users range for access statistics *****/
+	 AllowedLvls = 1 << Hie_SYS |
+		       1 << Hie_CTY |
+		       1 << Hie_INS |
+		       1 << Hie_CTR |
+		       1 << Hie_DEG |
+		       1 << Hie_CRS;
+	 Stats->HieLvl = Sco_GetScope ("ScopeSta",Hie_SYS,AllowedLvls);
+
+	 /***** Check selection *****/
+	 if ((Stats->Role == Sta_ROLE_ALL_USRS ||
+	      Stats->Role == Sta_ROLE_UNKNOWN_USRS) &&
+	     (Stats->CountType == Sta_DISTINCT_USRS ||
+	      Stats->CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
+	   {
+	    /* Write warning message and abort */
+	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
+	    return;
+	   }
+	 break;
+     }
+
+   /***** Check if range of dates is forbidden for me *****/
+   NumDays = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
+                                         Dat_GetRangeDate (Dat_END_TIME));
+   ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats->GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Stats->HieLvl == Hie_CRS)  ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Stats->HieLvl == Hie_DEG   ||
+			                                             Stats->HieLvl == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Stats->HieLvl == Hie_CTR   ||
+			                                             Stats->HieLvl == Hie_DEG   ||
+			                                             Stats->HieLvl == Hie_CRS)) ||
+			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Stats->HieLvl == Hie_INS   ||
+			                                             Stats->HieLvl == Hie_CTR   ||
+			                                             Stats->HieLvl == Hie_DEG   ||
+			                                             Stats->HieLvl == Hie_CRS)) ||
+			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
+								   Usr_CAN_NOT;
+   if (ICanQueryWholeRange == Usr_CAN_NOT && NumDays > Cfg_DAYS_IN_RECENT_LOG)
+     {
+      /* ...write warning message and show the form again */
+      Ale_ShowAlert (Ale_WARNING,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
+	             Cfg_DAYS_IN_RECENT_LOG);
+      HTM_SECTION_End ();
+      return;
+     }
   }
 
 /*****************************************************************************/
 /******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
+static void Sta_ShowHits (struct Sta_Stats *Stats)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
    extern const char *Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed;
@@ -788,204 +958,59 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       [Sta_CLICKS_GBL_PER_DEGREE	] = Sta_ShowNumHitsPerDegree,
       [Sta_CLICKS_GBL_PER_COURSE	] = Sta_ShowNumHitsPerCourse,
      };
-   struct Sta_Stats Stats;
-   unsigned AllowedLvls;
    MYSQL_RES *mysql_res;
    unsigned NumHits;
    const char *LogTable;
-   Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
-   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1];
-   unsigned NumDays;
-   Usr_Can_t ICanQueryWholeRange;
    struct Usr_ListCods ListCods =
      {
       .Lst = NULL,
       .NumUsrs = 0
      };
 
-   /***** Reset stats context *****/
-   Sta_ResetStats (&Stats);
-   Stats.GlobalOrCourse = GlobalOrCourse;
-
-   /***** Get initial and ending dates *****/
-   Dat_GetIniEndDatesFromForm ();
-
-   /***** Get client time zone *****/
-   Dat_GetBrowserTimeZone (BrowserTimeZone);
-
    /***** Set table where to find depending on initial date *****/
    /* If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG,
       then use recent log table, else use historic log table */
    LogTable = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
-                                           Dat_GetCurrentDate ())
+                                          Dat_GetCurrentDate ())
 	      <= Cfg_DAYS_IN_RECENT_LOG ? "log_recent" :
 	                                  "log";
 
-   /***** Get the type of stat of clicks ******/
-   DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)
-	               Par_GetParUnsignedLong ("GroupedOrDetailed",
-	                                       0,Sta_NUM_CLICKS_DETAILED_OR_GROUPED - 1,
-	                                       (unsigned long) Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT);
+   /***** Begin results section *****/
+   HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
 
-   if (DetailedOrGrouped == Sta_CLICKS_DETAILED)
-      Stats.ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
-   else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
-      Stats.ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
-			      Par_GetParUnsignedLong ("GroupedBy",
-						      0,Sta_NUM_CLICKS_GROUPED_BY - 1,
-						      (unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
+      /***** Show hits *****/
+      Box_BoxBegin (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
+									     Txt_STAT_COUNT_TYPE[Stats->CountType],
+		    NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
-   /***** Get the type of count of clicks *****/
-   if (Stats.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-      Stats.CountType = (Sta_CountType_t)
-			Par_GetParUnsignedLong ("CountType",
-						0,Sta_NUM_COUNT_TYPES - 1,
-						(unsigned long) Sta_COUNT_TYPE_DEFAULT);
-
-   /***** Get action *****/
-   Stats.NumAction = (Act_Action_t)
-		     Par_GetParUnsignedLong ("StatAct",
-					     0,ActLst_NUM_ACTIONS - 1,
-					     (unsigned long) Sta_NUM_ACTION_DEFAULT);
-
-   switch (Stats.GlobalOrCourse)
-     {
-      case Sta_SHOW_COURSE_ACCESSES:
-	 Stats.HieLvl = Hie_CRS;
-	 if (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
+	 /***** Make the query *****/
+	 if ((NumHits = Sta_DB_GetHits (&mysql_res,Stats,LogTable,
+					&ListCods)))
 	   {
-	    /****** Get the number of the first row to show ******/
-	    Stats.FirstRow = Par_GetParUnsignedLong ("FirstRow",1,ULONG_MAX,0);
-
-	    /****** Get the number of the last row to show ******/
-	    Stats.LastRow = Par_GetParUnsignedLong ("LastRow",1,ULONG_MAX,0);
-
-	    /****** Get the number of rows per page ******/
-	    Stats.RowsPerPage =
-	    (unsigned) Par_GetParUnsignedLong ("RowsPage",
-	                                       Sta_MIN_ROWS_PER_PAGE,
-	                                       Sta_MAX_ROWS_PER_PAGE,
-	                                       Sta_DEF_ROWS_PER_PAGE);
+	    HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats->ClicksGroupedBy]);
+	       ShowHits[Stats->ClicksGroupedBy] (Stats,NumHits,mysql_res);
+	    HTM_TABLE_End ();
 	   }
+	 else	// No hits retrieved
+	    Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
 
-	 /****** Get lists of selected users ******/
-	 Usr_GetListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected,
-					        Usr_GET_LIST_ALL_USRS);
+      Box_BoxEnd ();
 
-	 /***** Count number of valid users in list of encrypted user codes *****/
-	 ListCods.NumUsrs = Usr_CountNumUsrsInListOfSelectedEncryptedUsrCods (&Gbl.Usrs.Selected);
-
-	 /***** Show the form again *****/
-	 Sta_PutFormCrsHits (&Stats);
-
-	 /***** Begin results section *****/
-	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
-
-	 /***** Check users' selection *****/
-	 if (ListCods.NumUsrs)
-	    /* Get list of user codes from encrypted user codes */
-	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
-	 else	// There are no users selected
-	   {
-	    /* Write warning message, clean and abort */
-	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
-            Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
-	    return;
-	   }
-	 break;
-      case Sta_SHOW_GLOBAL_ACCESSES:
-      default:
-	 /***** Get the type of user of clicks *****/
-	 Stats.Role = (Sta_Role_t)
-		      Par_GetParUnsignedLong ("Role",0,Sta_NUM_ROLES_STAT - 1,
-					      (unsigned long) Sta_ROLE_DEFAULT);
-
-	 /***** Get users range for access statistics *****/
-	 AllowedLvls = 1 << Hie_SYS |
-		       1 << Hie_CTY |
-		       1 << Hie_INS |
-		       1 << Hie_CTR |
-		       1 << Hie_DEG |
-		       1 << Hie_CRS;
-	 Stats.HieLvl = Sco_GetScope ("ScopeSta",Hie_SYS,AllowedLvls);
-
-	 /***** Show form again *****/
-	 Sta_PutFormGblHits (&Stats);
-
-	 /***** Begin results section *****/
-	 HTM_SECTION_Begin (Sta_STAT_RESULTS_SECTION_ID);
-
-	 /***** Check selection *****/
-	 if ((Stats.Role == Sta_ROLE_ALL_USRS ||
-	      Stats.Role == Sta_ROLE_UNKNOWN_USRS) &&
-	     (Stats.CountType == Sta_DISTINCT_USRS ||
-	      Stats.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
-	   {
-	    /* Write warning message and abort */
-	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
-	    return;
-	   }
-	 break;
-     }
-
-   /***** Check if range of dates is forbidden for me *****/
-   NumDays = Dat_GetNumDaysBetweenDates (Dat_GetRangeDate (Dat_STR_TIME),
-                                         Dat_GetRangeDate (Dat_END_TIME));
-   ICanQueryWholeRange = (Gbl.Usrs.Me.Role.Logged >= Rol_TCH && Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_TCH     &&  Stats.HieLvl == Hie_CRS)  ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_DEG_ADM && (Stats.HieLvl == Hie_DEG   ||
-			                                             Stats.HieLvl == Hie_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_CTR_ADM && (Stats.HieLvl == Hie_CTR   ||
-			                                             Stats.HieLvl == Hie_DEG   ||
-			                                             Stats.HieLvl == Hie_CRS)) ||
-			 (Gbl.Usrs.Me.Role.Logged == Rol_INS_ADM && (Stats.HieLvl == Hie_INS   ||
-			                                             Stats.HieLvl == Hie_CTR   ||
-			                                             Stats.HieLvl == Hie_DEG   ||
-			                                             Stats.HieLvl == Hie_CRS)) ||
-			  Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM ? Usr_CAN :
-								   Usr_CAN_NOT;
-   if (ICanQueryWholeRange == Usr_CAN_NOT && NumDays > Cfg_DAYS_IN_RECENT_LOG)
-     {
-      /* ...write warning message and show the form again */
-      Ale_ShowAlert (Ale_WARNING,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
-	             Cfg_DAYS_IN_RECENT_LOG);
-      HTM_SECTION_End ();
-      return;
-     }
-
-   /***** Show hits *****/
-   Box_BoxBegin (Stats.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? Txt_List_of_detailed_clicks :
-									 Txt_STAT_COUNT_TYPE[Stats.CountType],
-		 NULL,NULL,NULL,Box_NOT_CLOSABLE);
-
-      /***** Make the query *****/
-      if ((NumHits = Sta_DB_GetHits (&mysql_res,&Stats,LogTable,BrowserTimeZone,
-				     &ListCods)))
-	{
-	 HTM_TABLE_BeginWidePadding (Sta_CellPadding[Stats.ClicksGroupedBy]);
-	    ShowHits[Stats.ClicksGroupedBy] (&Stats,NumHits,mysql_res);
-	 HTM_TABLE_End ();
-	}
-      else	// No hits retrieved
-	 Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
-
-   Box_BoxEnd ();
+   /***** End results section *****/
+   HTM_SECTION_End ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Free memory used by list of selected users' codes *****/
-   if (Stats.GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES)
+   if (Stats->GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES)
      {
       Usr_FreeListSelectedUsrCods (&ListCods);
       Usr_FreeListsSelectedEncryptedUsrsCods (&Gbl.Usrs.Selected);
      }
 
-   /***** End results section *****/
-   HTM_SECTION_End ();
-
    /***** Write time zone used in the calculation of these statistics *****/
-   switch (Stats.ClicksGroupedBy)
+   switch (Stats->ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_PER_DAY:
       case Sta_CLICKS_GBL_PER_DAY:
@@ -1004,7 +1029,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 HTM_TxtF ("<p class=\"CM DAT_SMALL_%s\">%s: %s</p>",
 	           The_GetSuffix (),
 		   Txt_Time_zone_used_in_the_calculation_of_these_statistics,
-		   BrowserTimeZone);
+		   Stats->BrowserTimeZone);
 	 break;
       default:
 	 break;

@@ -163,8 +163,8 @@ void Log_ShowLastClicks (void)
 
    /***** Contextual menu *****/
    Mnu_ContextMenuBegin ();
-      Sta_PutLinkToGlobalHits ();	// Global hits
-      Sta_PutLinkToCourseHits ();	// Course hits
+      Sta_PutLinkToGblHits ();	// Global hits
+      Sta_PutLinkToCrsHits ();	// Course hits
    Mnu_ContextMenuEnd ();
 
    /***** Begin box *****/

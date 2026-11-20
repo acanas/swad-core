@@ -37345,29 +37345,6 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"See email addresses to send an email"	// Çeviri lazim!
 #endif
 	,
-	[ActReqUseGbl] =
-#if   L==1	// ca
-	"Request seeing use of the platform"	// Necessita traducció
-#elif L==2	// de
-	"Request seeing use of the platform"	// Need Übersetzung
-#elif L==3	// en
-	"Request seeing use of the platform"
-#elif L==4	// es
-	"Solicitar ver uso de la plataforma"
-#elif L==5	// fr
-	"Request seeing use of the platform"	// Besoin de traduction
-#elif L==6	// gn
-	"Solicitar ver uso de la plataforma"	// Okoteve traducción
-#elif L==7	// it
-	"Request seeing use of the platform"	// Bisogno di traduzione
-#elif L==8	// pl
-	"Request seeing use of the platform"	// Potrzebujesz tlumaczenie
-#elif L==9	// pt
-	"Request seeing use of the platform"	// Precisa de tradução
-#elif L==10	// tr
-	"Request seeing use of the platform"	// Çeviri lazim!
-#endif
-	,
 	[ActSeeUseGbl] =
 #if   L==1	// ca
 	"See platform usage statistics"				// Necessita traducció

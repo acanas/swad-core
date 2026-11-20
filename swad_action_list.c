@@ -1942,7 +1942,6 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
 
    // TabAna ******************************************************************
    // Figures
-   [ActReqUseGbl	] = { 761, 0,TabAna,NULL			,Fig_ReqShowFigures		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
    [ActSeeUseGbl	] = {  84, 0,TabAna,NULL			,Fig_ShowFigures		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_1ST},
 
    // Degrees
@@ -1976,10 +1975,10 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemSvyQst	] = { 981, 3,TabAna,NULL			,Svy_RemoveQst			,{{    0,    0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3C0},{0x3C0,0x3E0}},Act_NORM,Act_1ST},
 
    // Visits
-   [ActReqAccGbl	] = { 591, 4,TabAna,Dat_SetDatesToRecWeeks	,Sta_AskShowGblHits		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActSeeAccGbl	] = {  79, 4,TabAna,NULL			,Sta_SeeGblAccesses		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
-   [ActReqAccCrs	] = { 594, 4,TabAna,Dat_SetDatesToRecWeeks	,Sta_ReqCrsHits			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActSeeAccCrs	] = { 119, 4,TabAna,NULL			,Sta_SeeCrsAccesses		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActReqAccGbl	] = { 591, 4,TabAna,Dat_SetDatesToRecWeeks	,Sta_ShowGblHits		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActSeeAccGbl	] = {  79, 4,TabAna,NULL			,Sta_ShowGblHits		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
+   [ActReqAccCrs	] = { 594, 4,TabAna,Dat_SetDatesToRecWeeks	,Sta_ShowCrsHits		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
+   [ActSeeAccCrs	] = { 119, 4,TabAna,NULL			,Sta_ShowCrsHits		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActLstClk		] = { 989, 4,TabAna,NULL			,Log_ShowLastClicks		,{{    0,    0},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3C6},{0x3C6,0x3F8}},Act_NORM,Act_1ST},
    [ActRefLstClk	] = { 994, 4,TabAna,NULL			,Lay_RefreshLastClicks		,{{    0,    0},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3C7},{0x3C7,0x3F8}},Act_NORM,Act_REF},
 
@@ -2830,7 +2829,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActUnk,			// #758 (obsolete action)
 	ActRemIns,		// #759
 	ActUnk,			// #760 (obsolete action)
-	ActReqUseGbl,		// #761
+	ActUnk,			// #761 (obsolete action)
 	ActSeeAllNot,		// #762
 	ActHidNot,		// #763
 	ActUnhNot,		// #764

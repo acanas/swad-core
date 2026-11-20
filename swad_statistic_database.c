@@ -51,7 +51,6 @@ extern struct Globals Gbl;
 unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
                          const struct Sta_Stats *Stats,
                          const char *LogTable,
-                         const char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1],
                          const struct Usr_ListCods *ListCods)
   {
    char SubQueryCountType[256];
@@ -116,7 +115,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
    	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m%%d') AS Day,"
                                        "%s"
                     " FROM %s",
-                   BrowserTimeZone,
+                   Stats->BrowserTimeZone,
                    SubQueryCountType,
                    LogTable);
 	 break;
@@ -127,8 +126,8 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
                                        "DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
                                        "%s"
                     " FROM %s",
-                   BrowserTimeZone,
-                   BrowserTimeZone,
+                   Stats->BrowserTimeZone,
+                   Stats->BrowserTimeZone,
                    SubQueryCountType,
                    LogTable);
 	 break;
@@ -144,7 +143,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
 		   "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%X%%V') AS Week,"// Weeks start on sunday
 		                       "%s"
 		    " FROM %s",
-		   BrowserTimeZone,
+		   Stats->BrowserTimeZone,
 		   SubQueryCountType,
 		   LogTable);
 	 break;
@@ -154,7 +153,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
    	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y%%m') AS Month,"
                                        "%s"
                     " FROM %s",
-                   BrowserTimeZone,
+                   Stats->BrowserTimeZone,
                    SubQueryCountType,
                    LogTable);
 	 break;
@@ -164,7 +163,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
    	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%Y') AS Year,"
                                        "%s"
                     " FROM %s",
-                   BrowserTimeZone,
+                   Stats->BrowserTimeZone,
                    SubQueryCountType,
                    LogTable);
 	 break;
@@ -174,7 +173,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
    	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H') AS Hour,"
                                        "%s"
                    " FROM %s",
-                   BrowserTimeZone,
+                   Stats->BrowserTimeZone,
                    SubQueryCountType,
                    LogTable);
 	 break;
@@ -184,7 +183,7 @@ unsigned Sta_DB_GetHits (MYSQL_RES **mysql_res,
    	           "SELECT SQL_NO_CACHE DATE_FORMAT(CONVERT_TZ(ClickTime,@@session.time_zone,'%s'),'%%H%%i') AS Minute,"
                                        "%s"
                     " FROM %s",
-                   BrowserTimeZone,
+                   Stats->BrowserTimeZone,
                    SubQueryCountType,
                    LogTable);
 	 break;

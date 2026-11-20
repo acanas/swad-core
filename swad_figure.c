@@ -68,16 +68,75 @@ static void Fig_PutParFigScope (Hie_Level_t HieLvl);
 /************************** Show use of the platform *************************/
 /*****************************************************************************/
 
-void Fig_ReqShowFigures (void)
+void Fig_ShowFigures (void)
   {
-   Fig_ReqShowFigure (Fig_FIGURE_TYPE_DEF);
+   extern const char *Hlp_ANALYTICS_Figures;
+   extern const char *Txt_Figures;
+   static void (*Fig_Function[Fig_NUM_FIGURES])(Hie_Level_t HieLvl) =	// Array of pointers to functions
+     {
+      [Fig_UNKNOWN		] = NULL,
+      [Fig_USERS		] = Usr_GetAndShowUsersStats,
+      [Fig_USERS_RANKING	] = Usr_GetAndShowUsersRanking,
+      [Fig_HIERARCHY		] = Hie_GetAndShowHierarchyStats,
+      [Fig_INSTITS		] = Ins_GetAndShowInssStats,
+      [Fig_DEGREE_TYPES		] = DegTyp_GetAndShowDegTypesStats,
+      [Fig_FOLDERS_AND_FILES	] = Brw_GetAndShowFileBrowsersStats,
+      [Fig_OER			] = Brw_GetAndShowOERsStats,
+      [Fig_COURSE_PROGRAMS	] = Prg_GetAndShowCourseProgramStats,
+      [Fig_ASSIGNMENTS		] = Asg_GetAndShowAssignmentsStats,
+      [Fig_PROJECTS		] = Prj_GetAndShowPrjsStats,
+      [Fig_TESTS		] = Tst_GetAndShowTestsStats,
+      [Fig_EXAMS		] = Exa_GetAndShowExamsStats,
+      [Fig_GAMES		] = Gam_GetAndShowGamesStats,
+      [Fig_RUBRICS		] = Rub_GetAndShowRubricsStats,
+      [Fig_TIMELINE		] = Tml_GetAndShowTimelineActivityStats,
+      [Fig_FOLLOW		] = Fol_GetAndShowFollowStats,
+      [Fig_FORUMS		] = For_GetAndShowForumStats,
+      [Fig_NOTIFY_EVENTS	] = Ntf_GetAndShowNumUsrsPerNotifyEvent,
+      [Fig_NOTICES		] = Not_GetAndShowNoticesStats,
+      [Fig_MESSAGES		] = Msg_GetAndShowMsgsStats,
+      [Fig_SURVEYS		] = Svy_GetAndShowSvysStats,
+      [Fig_AGENDAS		] = Agd_GetAndShowAgendasStats,
+      [Fig_SOCIAL_NETWORKS	] = Net_ShowWebAndSocialNetworksStats,
+      [Fig_LANGUAGES		] = Lan_GetAndShowNumUsrsPerLanguage,
+      [Fig_FIRST_DAY_OF_WEEK	] = Cal_GetAndShowNumUsrsPerFirstDayOfWeek,
+      [Fig_DATE_FORMAT		] = Dat_GetAndShowNumUsrsPerDateFormat,
+      [Fig_ICON_SETS		] = Ico_GetAndShowNumUsrsPerIconSet,
+      [Fig_MENUS		] = Mnu_GetAndShowNumUsrsPerMenu,
+      [Fig_THEMES		] = The_GetAndShowNumUsrsPerTheme,
+      [Fig_SIDE_COLUMNS		] = Lay_GetAndShowNumUsrsPerSideColumns,
+      [Fig_PHOTO_SHAPES		] = PhoSha_GetAndShowNumUsrsPerPhotoShape,
+      [Fig_PRIVACY		] = Pri_GetAndShowNumUsrsPerPrivacy,
+      [Fig_COOKIES		] = Coo_GetAndShowNumUsrsPerCookies,
+     };
+   Fig_FigureType_t SelectedFigureType;
+   Hie_Level_t HieLvl;
+
+   /***** Get the type of figure ******/
+   SelectedFigureType = (Fig_FigureType_t)
+		        Par_GetParUnsignedLong ("FigureType",1,Fig_NUM_FIGURES - 1,
+						(unsigned long) Fig_FIGURE_TYPE_DEF);
+
+   /***** Begin box *****/
+   Box_BoxBegin (Txt_Figures,NULL,NULL,Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
+
+      /***** Show the form to select figure *****/
+      HieLvl = Fig_ReqShowFigure (SelectedFigureType);
+
+      /***** Show figure selected by user *****/
+      Fig_Function[SelectedFigureType] (HieLvl);
+
+   /***** End form *****/
+   Frm_EndForm ();
   }
+
+/*****************************************************************************/
+/************************** Show use of the platform *************************/
+/*****************************************************************************/
 
 // Returns scope
 static Hie_Level_t Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
   {
-   extern const char *Hlp_ANALYTICS_Figures;
-   extern const char *Txt_Figures;
    extern const char *Txt_Scope;
    extern const char *Txt_Statistic;
    extern const char *Txt_FIGURE_TYPES[Fig_NUM_FIGURES];
@@ -98,59 +157,52 @@ static Hie_Level_t Fig_ReqShowFigure (Fig_FigureType_t SelectedFigureType)
    /***** Form to show statistic *****/
    Frm_BeginForm (ActSeeUseGbl);
 
-      /***** Begin box *****/
-      Box_BoxBegin (Txt_Figures,NULL,NULL,
-		    Hlp_ANALYTICS_Figures,Box_NOT_CLOSABLE);
+      /***** Begin table *****/
+      HTM_TABLE_BeginCenterPadding (2);
 
-	 /***** Begin table *****/
-	 HTM_TABLE_BeginWidePadding (2);
+	 /***** Compute stats for anywhere, degree or course? *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Compute stats for anywhere, degree or course? *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1 RM","FigScope",Txt_Scope);
 
-	       /* Label */
-	       Frm_LabelColumn ("Frm_C1 RM","FigScope",Txt_Scope);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
+	       Sco_PutSelectorScope ("FigScope",HTM_SUBMIT_ON_CHANGE,
+				     HieLvl,AllowedLvls);
+	    HTM_TD_End ();
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  Sco_PutSelectorScope ("FigScope",HTM_NO_ATTR,
-					HieLvl,AllowedLvls);
-	       HTM_TD_End ();
+	 HTM_TR_End ();
 
-	    HTM_TR_End ();
+	 /***** Type of statistic *****/
+	 HTM_TR_Begin (NULL);
 
-	    /***** Type of statistic *****/
-	    HTM_TR_Begin (NULL);
+	    /* Label */
+	    Frm_LabelColumn ("Frm_C1 RM","FigureType",Txt_Statistic);
 
-	       /* Label */
-	       Frm_LabelColumn ("Frm_C1 RM","FigureType",Txt_Statistic);
+	    /* Data */
+	    HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
+	       HTM_SELECT_Begin (HTM_SUBMIT_ON_CHANGE,NULL,
+				 "name=\"FigureType\""
+				 " class=\"Frm_C2_INPUT INPUT_%s\"",
+				 The_GetSuffix ());
+		  for (FigType  = (Fig_FigureType_t) 1;
+		       FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
+		       FigType++)
+		    {
+		     FigureTypeUnsigned = (unsigned) FigType;
+		     HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
+				 FigType == SelectedFigureType ? HTM_SELECTED :
+								 HTM_NO_ATTR,
+				 "%s",Txt_FIGURE_TYPES[FigType]);
+		    }
+	       HTM_SELECT_End ();
+	    HTM_TD_End ();
 
-	       /* Data */
-	       HTM_TD_Begin ("class=\"Frm_C2 LM DAT_%s\"",The_GetSuffix ());
-		  HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-				    "name=\"FigureType\""
-				    " class=\"Frm_C2_INPUT INPUT_%s\"",
-				    The_GetSuffix ());
-		     for (FigType  = (Fig_FigureType_t) 1;
-			  FigType <= (Fig_FigureType_t) (Fig_NUM_FIGURES - 1);
-			  FigType++)
-		       {
-			FigureTypeUnsigned = (unsigned) FigType;
-			HTM_OPTION (HTM_Type_UNSIGNED,&FigureTypeUnsigned,
-				    FigType == SelectedFigureType ? HTM_SELECTED :
-								    HTM_NO_ATTR,
-				    "%s",Txt_FIGURE_TYPES[FigType]);
-		       }
-		  HTM_SELECT_End ();
-	       HTM_TD_End ();
-
-	    HTM_TR_End ();
+	 HTM_TR_End ();
 
       /***** End table *****/
       HTM_TABLE_End ();
-
-      /***** Send button and end box *****/
-      Box_BoxWithButtonEnd (Btn_SHOW);
 
    /***** End form *****/
    Frm_EndForm ();
@@ -203,63 +255,4 @@ static void Fig_PutParFigureType (Fig_FigureType_t FigureType)
 static void Fig_PutParFigScope (Hie_Level_t HieLvl)
   {
    Sco_PutParScope ("FigScope",HieLvl);
-  }
-
-/*****************************************************************************/
-/************************** Show use of the platform *************************/
-/*****************************************************************************/
-
-void Fig_ShowFigures (void)
-  {
-   static void (*Fig_Function[Fig_NUM_FIGURES])(Hie_Level_t HieLvl) =	// Array of pointers to functions
-     {
-      [Fig_UNKNOWN		] = NULL,
-      [Fig_USERS		] = Usr_GetAndShowUsersStats,
-      [Fig_USERS_RANKING	] = Usr_GetAndShowUsersRanking,
-      [Fig_HIERARCHY		] = Hie_GetAndShowHierarchyStats,
-      [Fig_INSTITS		] = Ins_GetAndShowInssStats,
-      [Fig_DEGREE_TYPES		] = DegTyp_GetAndShowDegTypesStats,
-      [Fig_FOLDERS_AND_FILES	] = Brw_GetAndShowFileBrowsersStats,
-      [Fig_OER			] = Brw_GetAndShowOERsStats,
-      [Fig_COURSE_PROGRAMS	] = Prg_GetAndShowCourseProgramStats,
-      [Fig_ASSIGNMENTS		] = Asg_GetAndShowAssignmentsStats,
-      [Fig_PROJECTS		] = Prj_GetAndShowPrjsStats,
-      [Fig_TESTS		] = Tst_GetAndShowTestsStats,
-      [Fig_EXAMS		] = Exa_GetAndShowExamsStats,
-      [Fig_GAMES		] = Gam_GetAndShowGamesStats,
-      [Fig_RUBRICS		] = Rub_GetAndShowRubricsStats,
-      [Fig_TIMELINE		] = Tml_GetAndShowTimelineActivityStats,
-      [Fig_FOLLOW		] = Fol_GetAndShowFollowStats,
-      [Fig_FORUMS		] = For_GetAndShowForumStats,
-      [Fig_NOTIFY_EVENTS	] = Ntf_GetAndShowNumUsrsPerNotifyEvent,
-      [Fig_NOTICES		] = Not_GetAndShowNoticesStats,
-      [Fig_MESSAGES		] = Msg_GetAndShowMsgsStats,
-      [Fig_SURVEYS		] = Svy_GetAndShowSvysStats,
-      [Fig_AGENDAS		] = Agd_GetAndShowAgendasStats,
-      [Fig_SOCIAL_NETWORKS	] = Net_ShowWebAndSocialNetworksStats,
-      [Fig_LANGUAGES		] = Lan_GetAndShowNumUsrsPerLanguage,
-      [Fig_FIRST_DAY_OF_WEEK	] = Cal_GetAndShowNumUsrsPerFirstDayOfWeek,
-      [Fig_DATE_FORMAT		] = Dat_GetAndShowNumUsrsPerDateFormat,
-      [Fig_ICON_SETS		] = Ico_GetAndShowNumUsrsPerIconSet,
-      [Fig_MENUS		] = Mnu_GetAndShowNumUsrsPerMenu,
-      [Fig_THEMES		] = The_GetAndShowNumUsrsPerTheme,
-      [Fig_SIDE_COLUMNS		] = Lay_GetAndShowNumUsrsPerSideColumns,
-      [Fig_PHOTO_SHAPES		] = PhoSha_GetAndShowNumUsrsPerPhotoShape,
-      [Fig_PRIVACY		] = Pri_GetAndShowNumUsrsPerPrivacy,
-      [Fig_COOKIES		] = Coo_GetAndShowNumUsrsPerCookies,
-     };
-   Fig_FigureType_t SelectedFigureType;
-   Hie_Level_t HieLvl;
-
-   /***** Get the type of figure ******/
-   SelectedFigureType = (Fig_FigureType_t)
-		        Par_GetParUnsignedLong ("FigureType",1,Fig_NUM_FIGURES - 1,
-						(unsigned long) Fig_FIGURE_TYPE_DEF);
-
-   /***** Show again the form to see use of the platform *****/
-   HieLvl = Fig_ReqShowFigure (SelectedFigureType);
-
-   /***** Show the stat of use selected by user *****/
-   HTM_BR ();
-   Fig_Function[SelectedFigureType] (HieLvl);
   }

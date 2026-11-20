@@ -85,9 +85,8 @@ struct Fig_Figures
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Fig_ReqShowFigures (void);
+void Fig_ShowFigures (void);
 void Fig_PutIconToShowFigure (Fig_FigureType_t FigureType);
 void Fig_PutParsFigures (const void *Figures);
-void Fig_ShowFigures (void);
 
 #endif

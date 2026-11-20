@@ -21514,7 +21514,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 [TabAna] =
 	{
-	//  0: ActReqUseGbl
+	//  0: ActSeeUseGbl
 #if   L==1	// ca
 	"Xifres"
 #elif L==2	// de
