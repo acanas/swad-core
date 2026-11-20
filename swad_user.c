@@ -3822,7 +3822,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
-   Box_BoxShadowBegin (Title,NULL,NULL,HelpLink,Lay_HIGHLIGHT);
+   Box_BoxShadowBegin (Title,NULL,NULL,HelpLink);
 
       /***** Show form to select the groups *****/
       Grp_ShowFormToSelectSeveralGroups (NextAction,FuncPars,Args,NULL);

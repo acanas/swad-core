@@ -234,7 +234,7 @@ void Tst_ShowNewTest (void)
 	       Tst_GetQuestionsForNewTest (&Qsts,&Print);
 	       if (Print.NumQsts.All)
 		 {
-		  /***** Increase number of exams generated (answered or not) by me *****/
+		  /***** Increase number of test prints generated (answered or not) by me *****/
 		  Tst_DB_IncreaseNumMyPrints ();
 		  NumPrintsGeneratedByMe = TstPrn_GetNumPrintsGeneratedByMe ();
 

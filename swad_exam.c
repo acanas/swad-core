@@ -408,7 +408,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
    Box_BoxShadowBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
 					      Txt_Exam,
 		       Exa_PutIconsViewingOneExam,Exams,
-		       Hlp_ASSESSMENT_Exams,Lay_HIGHLIGHT);
+		       Hlp_ASSESSMENT_Exams);
 
       /***** Show main data of this exam *****/
       Exa_ShowExamMainData (Exams,-1L,Lay_SHOWING_ONLY_ONE);
@@ -1250,7 +1250,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
    extern const char *Hlp_ASSESSMENT_Exams_edit_exam;
    extern const char *Hlp_ASSESSMENT_Exams_new_exam;
    extern const char *Txt_Exam;
-   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
+   static void (*FunctionToDrawIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
       [OldNew_OLD] = Exa_PutIconsEditingOneExam,
       [OldNew_NEW] = NULL,
@@ -1277,8 +1277,8 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
    /***** Begin box *****/
    Box_BoxShadowBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
 					      Txt_Exam,
-		       FunctionToDrawContextualIcons[OldNewExam],Exams,
-		       *HelpLink[OldNewExam],Lay_HIGHLIGHT);
+		       FunctionToDrawIcons[OldNewExam],Exams,
+		       *HelpLink[OldNewExam]);
 
       /***** Put form to create/edit an exam *****/
       Exa_PutFormEditionExam (Exams,Txt,OldNewExam);

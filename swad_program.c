@@ -48,7 +48,7 @@ void Prg_BeforeTree (Tre_ListingType_t ListingType)
   {
    extern const char *Hlp_COURSE_Program;
    extern const char *Txt_COURSE_program;
-   static void (*FunctionToDrawContextualIcons[Tre_NUM_LISTING_TYPES]) (const void *Args) =
+   static void (*FunctionToDrawIcons[Tre_NUM_LISTING_TYPES]) (const void *Args) =
      {
       [Tre_VIEW		] = Prg_PutIconsWhenViewing,
       [Tre_EDIT_NODES	] = Prg_PutIconsWhenEditing,
@@ -56,7 +56,7 @@ void Prg_BeforeTree (Tre_ListingType_t ListingType)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_COURSE_program,
-		 FunctionToDrawContextualIcons[ListingType],NULL,
+		 FunctionToDrawIcons[ListingType],NULL,
                  Hlp_COURSE_Program,Box_NOT_CLOSABLE);
   }
 

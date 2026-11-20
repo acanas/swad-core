@@ -607,12 +607,12 @@ static void Agd_ShowEventsToday (struct Agd_Agenda *Agenda,long SelectedAgdCod,
       switch (AgendaType)
         {
 	 case Agd_MY_AGENDA_TODAY:
-	    Box_BoxTableShadowBegin (Txt_Today,NULL,NULL,
-				     Hlp_PROFILE_Agenda,Lay_DONT_HIGHLIGHT,2);
+	    Box_BoxTableBegin (Txt_Today,NULL,NULL,
+			       Hlp_PROFILE_Agenda,Box_CLOSABLE,2);
 	    break;
 	 case Agd_ANOTHER_AGENDA_TODAY:
-	    Box_BoxTableShadowBegin (Txt_Today,NULL,NULL,
-			             Hlp_PROFILE_Agenda_public_agenda,Lay_HIGHLIGHT,2);
+	    Box_BoxTableBegin (Txt_Today,NULL,NULL,
+			       Hlp_PROFILE_Agenda_public_agenda,Box_CLOSABLE,2);
             break;
 	 default:
 	    break;
@@ -1401,7 +1401,7 @@ void Agd_ReqCreatOrEditEvent (void)
       Box_BoxTableShadowBegin (AgdEvent.Title[0] ? AgdEvent.Title :
 						   Txt_Event,
 			       NULL,NULL,
-			       Hlp_PROFILE_Agenda_edit_event,Lay_HIGHLIGHT,2);
+			       Hlp_PROFILE_Agenda_edit_event,2);
 
 	 /***** Event *****/
 	 /* Begin table row */

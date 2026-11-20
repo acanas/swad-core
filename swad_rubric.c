@@ -820,7 +820,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
    extern const char *Hlp_ASSESSMENT_Rubrics_new_rubric;
    extern const char *Hlp_ASSESSMENT_Rubrics_edit_rubric;
    extern const char *Txt_Rubric;
-   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
+   static void (*FunctionToDrawIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
       [OldNew_OLD] = Rub_PutIconsEditingOneRubric,
       [OldNew_NEW] = NULL,
@@ -835,7 +835,7 @@ void Rub_PutFormsOneRubric (struct Rub_Rubrics *Rubrics,
    /***** Begin box *****/
    Box_BoxBegin (Rubrics->Rubric.Title[0] ? Rubrics->Rubric.Title :
 					    Txt_Rubric,
-		 FunctionToDrawContextualIcons[OldNewRubric],Rubrics,
+		 FunctionToDrawIcons[OldNewRubric],Rubrics,
 		 *HelpLink[OldNewRubric],Box_NOT_CLOSABLE);
 
       /***** Put form to create/edit a rubric *****/

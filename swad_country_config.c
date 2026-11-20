@@ -103,7 +103,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
    extern const char *Txt_NULL;
    static struct
      {
-      void (*FunctionToDrawContextualIcons) (const void *Args);
+      void (*FunctionToDrawIcons) (const void *Args);
       const char **HelpLink;
      } BoxArgs[Vie_NUM_VIEW_TYPES] =
      {
@@ -127,7 +127,7 @@ static void CtyCfg_Configuration (Vie_ViewType_t ViewType)
 						  Hie_DONT_PUT_LINK;
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,BoxArgs[ViewType].FunctionToDrawContextualIcons,NULL,
+   Box_BoxBegin (NULL,BoxArgs[ViewType].FunctionToDrawIcons,NULL,
 		 *BoxArgs[ViewType].HelpLink,Box_NOT_CLOSABLE);
 
       /***** Title *****/

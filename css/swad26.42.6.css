@@ -1906,7 +1906,7 @@ a:hover img.CENTER_PHOTO_SHOW
 	{
 	padding: 4px;
 	}
-.NOTICE_HIGHLIGHT	{animation:fadeinnotice 4s linear forwards;}
+.NOTICE_HIGHLIGHT	{animation:fadeinnotice 2s linear forwards;}
 @keyframes fadeinnotice
 	{
 	from	{background-color: rgba(166,196,208,0.33);}
@@ -2569,8 +2569,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .HIGHLIGHT_PURPLE,
 .HIGHLIGHT_BLUE,
 .HIGHLIGHT_YELLOW,
-.HIGHLIGHT_PINK	{background-color: #ddecf1; animation: fadetowhite 4s linear forwards;}
-.HIGHLIGHT_DARK	{background-color: #707070; animation: fadetodark 4s linear forwards;}
+.HIGHLIGHT_PINK	{background-color: #ddecf1; animation: fadetowhite 2s linear forwards;}
+.HIGHLIGHT_DARK	{background-color: #707070; animation: fadetodark 2s linear forwards;}
 @keyframes fadetowhite	{to {background-color: white;}}
 @keyframes fadetodark	{to {background-color: #383838;}}
 
@@ -2626,8 +2626,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .HIGHLIGHT0_PURPLE,
 .HIGHLIGHT0_BLUE,
 .HIGHLIGHT0_YELLOW,
-.HIGHLIGHT0_PINK	{background-color: #ddecf1; animation: fadetolight0 4s linear forwards;}
-.HIGHLIGHT0_DARK	{background-color: #707070; animation: fadetodark0 4s linear forwards;}
+.HIGHLIGHT0_PINK	{background-color: #ddecf1; animation: fadetolight0 2s linear forwards;}
+.HIGHLIGHT0_DARK	{background-color: #707070; animation: fadetodark0 2s linear forwards;}
 @keyframes fadetolight0	{to {background-color: #f8f7f2;}}
 @keyframes fadetodark0	{to {background-color: #404040;}}
 
@@ -2636,8 +2636,8 @@ table.CELLS_PAD_10	> tbody > tr > td {padding: 10px;}
 .HIGHLIGHT1_PURPLE,
 .HIGHLIGHT1_BLUE,
 .HIGHLIGHT1_YELLOW,
-.HIGHLIGHT1_PINK	{background-color: #ddecf1; animation: fadetolight1 4s linear forwards;}
-.HIGHLIGHT1_DARK	{background-color: #707070; animation: fadetodark1 4s linear forwards;}
+.HIGHLIGHT1_PINK	{background-color: #ddecf1; animation: fadetolight1 2s linear forwards;}
+.HIGHLIGHT1_DARK	{background-color: #707070; animation: fadetodark1 2s linear forwards;}
 @keyframes fadetolight1	{to {background-color: #fdfcfa;}}
 @keyframes fadetodark1	{to {background-color: #484848;}}
 
@@ -4808,8 +4808,8 @@ legend {font-size: 12pt; font-weight: bold;}
 .Tml_NEW_PUB_PURPLE,
 .Tml_NEW_PUB_BLUE,
 .Tml_NEW_PUB_YELLOW,
-.Tml_NEW_PUB_PINK	{background-color: #ddecf1; animation:fadetowhite 4s linear forwards;}
-.Tml_NEW_PUB_DARK	{background-color: #707070; animation:fadetodark 4s linear forwards;}
+.Tml_NEW_PUB_PINK	{background-color: #ddecf1; animation:fadetowhite 2s linear forwards;}
+.Tml_NEW_PUB_DARK	{background-color: #707070; animation:fadetodark 2s linear forwards;}
 
 @keyframes fadein
 	{

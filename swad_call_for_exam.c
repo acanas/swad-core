@@ -144,18 +144,21 @@ void Cfe_PutFrmEditACallForExam (void)
    /***** Allocate memory for the call for exam *****/
    Cfe_AllocMemCallForExam (&CallsForExams);
 
-   /***** Get the code of the call for exam *****/
-   ExaCod = Cfe_GetParsCallsForExams (&CallsForExams);
+      /***** Get the code of the call for exam *****/
+      ExaCod = Cfe_GetParsCallsForExams (&CallsForExams);
 
-   if (ExaCod > 0)	// -1 indicates that this is a new call for exam
-      /***** Read call for exam from the database *****/
-      Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
+      if (ExaCod > 0)	// -1 indicates that this is a new call for exam
+	 /***** Read call for exam from the database *****/
+	 Cfe_GetCallForExamDataByCod (&CallsForExams,ExaCod);
 
-   /***** Show call for exam *****/
-   Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_EDIT,Lay_DONT_HIGHLIGHT);
+      /***** Show call for exam *****/
+      Cfe_ShowCallForExam (&CallsForExams,ExaCod,Vie_EDIT,Lay_HIGHLIGHT);
 
    /***** Free memory of the call for exam *****/
    Cfe_FreeMemCallForExam (&CallsForExams);
+
+   /***** List all calls for exam *****/
+   Cfe_ListCallsForExamsSee ();
   }
 
 /*****************************************************************************/
@@ -882,7 +885,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    unsigned Hour;
    unsigned Minute;
    char *Anchor = NULL;
-   void (*FunctionToDrawContextualIcons) (const void *Args);
+   void (*FunctionToDrawIcons) (const void *Args);
    const char *HelpLink;
    static struct
      {
@@ -924,7 +927,7 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
    /***** Begin box *****/
    CallsForExams->Anchor = Anchor;	// Used to put contextual icons
    CallsForExams->ExaCod = ExaCod;	// Used to put contextual icons
-   FunctionToDrawContextualIcons = ViewType == Vie_VIEW ? Cfe_PutIconsCallForExam :
+   FunctionToDrawIcons = ViewType == Vie_VIEW ? Cfe_PutIconsCallForExam :
 							  NULL;
    HelpLink = ViewType == Vie_EDIT ? *Forms[OldNewCFE].Help :
 				     NULL;
@@ -935,13 +938,12 @@ static void Cfe_ShowCallForExam (struct Cfe_CallsForExams *CallsForExams,
 	 Ale_ShowAlerts (Anchor);
 
 	 /* Begin highlighted box */
-	 Box_BoxShadowBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
-			     HelpLink,Lay_HIGHLIGHT);
+	 Box_BoxShadowBegin (NULL,FunctionToDrawIcons,CallsForExams,HelpLink);
 	 break;
       case Lay_DONT_HIGHLIGHT:
       default:
 	 /* Begin normal box */
-	 Box_BoxBegin (NULL,FunctionToDrawContextualIcons,CallsForExams,
+	 Box_BoxBegin (NULL,FunctionToDrawIcons,CallsForExams,
 		       HelpLink,Box_NOT_CLOSABLE);
 	 break;
      }

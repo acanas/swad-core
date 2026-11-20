@@ -1905,7 +1905,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct Usr_Data *UsrDat,Rol_Role_t Defaul
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
    UsrDat->Roles.InThisCrs = Gbl.Hie.Lvl == Hie_CRS ? DefaultRole :	// Course selected
-	                                                          Rol_UNK;	// No course selected
+	                                              Rol_UNK;		// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_FORM,UsrDat,NULL);
   }
 

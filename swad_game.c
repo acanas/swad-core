@@ -454,7 +454,7 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    Box_BoxShadowBegin (Games->Game.Title[0] ? Games->Game.Title :
 					      Txt_Game,
 		       Gam_PutIconsViewingOneGame,Games,
-		       Hlp_ASSESSMENT_Games,Lay_HIGHLIGHT);
+		       Hlp_ASSESSMENT_Games);
 
       /***** Show main data of this game *****/
       Gam_ShowGameMainData (Games,Lay_SHOWING_ONLY_ONE);
@@ -1270,7 +1270,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    extern const char *Hlp_ASSESSMENT_Games_edit_game;
    extern const char *Hlp_ASSESSMENT_Games_new_game;
    extern const char *Txt_Game;
-   static void (*FunctionToDrawContextualIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
+   static void (*FunctionToDrawIcons[OldNew_NUM_OLD_NEW]) (const void *Args) =
      {
       [OldNew_OLD] = Gam_PutIconsViewingOneGame,
       [OldNew_NEW] = NULL,
@@ -1297,8 +1297,8 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    /***** Begin box *****/
    Box_BoxShadowBegin (Games->Game.Title[0] ? Games->Game.Title :
 					      Txt_Game,
-		       FunctionToDrawContextualIcons[OldNewGame],Games,
-		       *HelpLink[OldNewGame],Lay_HIGHLIGHT);
+		       FunctionToDrawIcons[OldNewGame],Games,
+		       *HelpLink[OldNewGame]);
 
       /***** Put form to create/edit a game *****/
       Gam_PutFormEditionGame (Games,Txt,OldNewGame);
@@ -1628,7 +1628,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
    MYSQL_RES *mysql_res;
    unsigned NumQsts;
    Usr_Can_t ICanEditQuestions = Gam_CheckIfICanEditGame (&Games->Game);
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_CAN]) (const void *Args) =
+   static void (*FunctionToDrawIcons[Usr_NUM_CAN]) (const void *Args) =
      {
       [Usr_CAN_NOT] = NULL,
       [Usr_CAN    ] = Gam_PutIconToAddNewQuestions,
@@ -1644,7 +1644,7 @@ static void Gam_ListGameQuestions (struct Gam_Games *Games)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Questions,
-		 FunctionToDrawContextualIcons[ICanEditQuestions],
+		 FunctionToDrawIcons[ICanEditQuestions],
 		 Args[ICanEditQuestions],
 		 Hlp_ASSESSMENT_Games_questions,Box_NOT_CLOSABLE);
 

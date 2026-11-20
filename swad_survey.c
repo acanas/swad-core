@@ -404,8 +404,7 @@ void Svy_ShowOnlyOneSvy (struct Svy_Surveys *Svys,Frm_PutForm_t PutFormQst)
    /***** Begin box *****/
    Box_BoxShadowBegin (Svys->Svy.Title[0] ? Svys->Svy.Title :
 					    Txt_Survey,
-		       Svy_PutIconsOneSvy,Svys,
-		       Hlp_ANALYTICS_Surveys,Lay_HIGHLIGHT);
+		       Svy_PutIconsOneSvy,Svys,Hlp_ANALYTICS_Surveys);
 
       /***** Show main data of this exam *****/
       Svy_ShowSvyMainData (Svys,-1L,Lay_SHOWING_ONLY_ONE);
@@ -1665,8 +1664,7 @@ void Svy_ReqCreatOrEditSvy (void)
    /***** Begin box *****/
    Box_BoxShadowBegin (Svys.Svy.Title[0] ? Svys.Svy.Title :
 					   Txt_Survey,
-		       NULL,NULL,
-		       Hlp_ANALYTICS_Surveys_edit_survey,Lay_HIGHLIGHT);
+		       NULL,NULL,Hlp_ANALYTICS_Surveys_edit_survey);
 
       /***** Begin form *****/
       Frm_BeginForm (Actions[OldNewSvy]);

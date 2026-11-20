@@ -138,8 +138,8 @@ void Not_ShowFormNotice (void)
    Frm_BeginForm (ActNewNot);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Txt_Notice,NULL,NULL,
-			 Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE,2);
+      Box_BoxTableShadowBegin (Txt_Notice,NULL,NULL,
+			       Hlp_COMMUNICATION_Notices,2);
 
 	 /***** Message body *****/
 	 Not_PutContent ();

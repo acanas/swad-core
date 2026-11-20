@@ -7819,7 +7819,7 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 										  NULL,
 					    ShowIconToGetLinkToFile == Lay_SHOW ? FileBrowser :
 										  NULL,
-					    NULL,Lay_HIGHLIGHT);
+					    NULL);
 
 			   /***** Begin form to update the metadata of a file *****/
 			   if (ICanEdit == Usr_CAN)	// I can edit file properties

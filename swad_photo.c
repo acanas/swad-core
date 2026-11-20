@@ -324,7 +324,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
       [Rol_INS_ADM] = ActDetOthPho,
       [Rol_SYS_ADM] = ActDetOthPho,
      };
-   static void (*FunctionToDrawContextualIcons[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
+   static void (*FunctionToDrawIcons[Usr_NUM_ME_OR_OTHER]) (const void *Args) =
      {
       [Usr_ME   ] = Pho_PutIconToReqRemMyPhoto,
       [Usr_OTHER] = Pho_PutIconToReqRemOtherUsrPhoto
@@ -332,7 +332,7 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Photo,FunctionToDrawContextualIcons[MeOrOther],NULL,
+   Box_BoxBegin (Txt_Photo,FunctionToDrawIcons[MeOrOther],NULL,
 		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/

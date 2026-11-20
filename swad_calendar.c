@@ -77,7 +77,7 @@ static unsigned Cal_GetParFirstDayOfWeek (void);
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
-                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
+                              void (*FunctionToDrawIcons) (const void *Args),const void *Args,
                               Vie_ViewType_t ViewType);
 static void Cal_PutIconsCalendar (__attribute__((unused)) const void *Args);
 
@@ -243,7 +243,7 @@ void Cal_PrintCalendar (void)
 
 static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
                               Act_Action_t ActionChangeCalendar1stDay,
-                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
+                              void (*FunctionToDrawIcons) (const void *Args),const void *Args,
                               Vie_ViewType_t ViewType)
   {
    extern const char *Hlp_START_Calendar;
@@ -269,7 +269,7 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
      }
 
    /***** Begin box *****/
-   Box_BoxBegin (NULL,FunctionToDrawContextualIcons,Args,
+   Box_BoxBegin (NULL,FunctionToDrawIcons,Args,
 	         ViewType == Vie_VIEW ? Hlp_START_Calendar :
 					NULL,
 	         Box_NOT_CLOSABLE);

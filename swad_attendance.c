@@ -1007,10 +1007,10 @@ void Att_ReqCreatOrEditEvent (void)
       Pag_PutParPagNum (Pag_ATT_EVENTS,Events.ThisPage);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Events.Event.Title[0] ? Events.Event.Title :
-						 Txt_Event,
-			 NULL,NULL,
-			 Hlp_USERS_Attendance_edit_event,Box_NOT_CLOSABLE,2);
+      Box_BoxTableShadowBegin (Events.Event.Title[0] ? Events.Event.Title :
+						       Txt_Event,
+			       NULL,NULL,
+			       Hlp_USERS_Attendance_edit_event,2);
 
 	 /***** Attendance event title *****/
 	 HTM_TR_Begin (NULL);
@@ -2571,7 +2571,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Update_attendance;
-   static void (*FunctionToDrawContextualIcons[Vie_NUM_USRS_VIEW_TYPES]) (const void *Args) =
+   static void (*FunctionToDrawIcons[Vie_NUM_USRS_VIEW_TYPES]) (const void *Args) =
      {
       [Vie_VIEW_ONLY_ME] = Att_PutIconToViewAttEvents,
       [Vie_VIEW_SEL_USR] = Att_PutIconToEditAttEvents,
@@ -2585,7 +2585,7 @@ static void Att_ListEventsToSelect (struct Att_Events *Events,
 			    UsrsViewType == Vie_VIEW_SEL_USR);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Events,FunctionToDrawContextualIcons[UsrsViewType],NULL,
+   Box_BoxBegin (Txt_Events,FunctionToDrawIcons[UsrsViewType],NULL,
 		 NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to update the attendance

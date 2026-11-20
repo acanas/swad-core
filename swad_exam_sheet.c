@@ -138,7 +138,7 @@ static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
   {
    extern const char *Hlp_ASSESSMENT_Exams_sheets;
    extern const char *Txt_List_of_exam_sheets;
-   void (*FunctionToDrawContextualIcons[ExaShe_NUM_BLANK_OR_SOLVED]) (const void *Args) =
+   void (*FunctionToDrawIcons[ExaShe_NUM_BLANK_OR_SOLVED]) (const void *Args) =
      {
       [ExaShe_BLANK ] = ExaShe_PutIconsPrintBlankSheets,
       [ExaShe_SOLVED] = ExaShe_PutIconsPrintSolvedSheets,
@@ -201,7 +201,7 @@ static void ExaShe_ListOrPrintSheets (Act_Action_t NextAction,
       if (ViewType == Vie_VIEW)
 	{
 	 Box_BoxBegin (Txt_List_of_exam_sheets,
-		       FunctionToDrawContextualIcons[BlankOrSolved],&Exams,
+		       FunctionToDrawIcons[BlankOrSolved],&Exams,
 		       Hlp_ASSESSMENT_Exams_sheets,Box_NOT_CLOSABLE);
 
 	    /* Settings */

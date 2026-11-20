@@ -260,7 +260,7 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
    extern const char *Hlp_COURSE_Links;
    extern const char *Hlp_COURSE_Assessment;
    extern const char *Txt_INFO_TITLE[Inf_NUM_TYPES];
-   static void (*FunctionToDrawContextualIcons[Vie_NUM_VIEW_TYPES]) (const void *Args) =
+   static void (*FunctionToDrawIcons[Vie_NUM_VIEW_TYPES]) (const void *Args) =
      {
       [Vie_VIEW		] = Inf_PutIconsWhenViewing,
       [Vie_EDIT		] = Inf_PutIconsWhenEditing,
@@ -293,7 +293,7 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_INFO_TITLE[Info->Type],
-		 FunctionToDrawContextualIcons[ViewType],Info,
+		 FunctionToDrawIcons[ViewType],Info,
 		 *Help[Info->Type],Box_NOT_CLOSABLE);
 
       /***** Form to select syllabus *****/
@@ -308,7 +308,6 @@ static void Inf_BeforeTree (struct Inf_Info *Info,Vie_ViewType_t ViewType,Inf_Sr
 								   // ...I have read this couse info
 	 Mnu_ContextMenuEnd ();
         }
-
   }
 
 static void Inf_AfterTree (void)
@@ -2007,8 +2006,8 @@ void Inf_EditPlainTxtInfo (void)
    Frm_BeginForm (Actions[InfoType].NextAction);
       if (Actions[InfoType].FuncPars)
 	 Actions[InfoType].FuncPars (Actions[InfoType].Args);
-      Box_BoxBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
-		    *HelpEdit[InfoType],Box_NOT_CLOSABLE);
+      Box_BoxShadowBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
+			  *HelpEdit[InfoType]);
 
 	 switch (InfoType)
 	   {
@@ -2090,8 +2089,8 @@ void Inf_EditRichTxtInfo (void)
    Frm_BeginForm (Actions[InfoType].NextAction);
       if (Actions[InfoType].FuncPars)
 	 Actions[InfoType].FuncPars (Actions[InfoType].Args);
-      Box_BoxBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
-		    *HelpEdit[InfoType],Box_NOT_CLOSABLE);
+      Box_BoxShadowBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
+			  *HelpEdit[InfoType]);
 
       switch (InfoType)
 	{

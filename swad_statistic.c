@@ -253,8 +253,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
    if (asprintf (&Title,Txt_Statistics_of_visits_to_the_course_X,
                  Gbl.Hie.Node[Hie_CRS].ShrtName) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxBegin (Title,NULL,NULL,
-                 Hlp_ANALYTICS_Visits_visits_to_course,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Title,NULL,NULL,Hlp_ANALYTICS_Visits_visits_to_course);
    free (Title);
 
       /***** Show form to select the groups *****/
@@ -473,8 +472,8 @@ static void Sta_PutFormGblHits (struct Sta_Stats *Stats)
    Frm_BeginFormAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Txt_Statistics_of_all_visits,NULL,NULL,
-			 Hlp_ANALYTICS_Visits_global_visits,Box_NOT_CLOSABLE,2);
+      Box_BoxTableShadowBegin (Txt_Statistics_of_all_visits,NULL,NULL,
+			       Hlp_ANALYTICS_Visits_global_visits,2);
 
 	 /***** Start and end dates for the search *****/
 	 Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (SetHMS);

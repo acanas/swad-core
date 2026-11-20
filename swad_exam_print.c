@@ -582,8 +582,8 @@ static void ExaPrn_ShowPrintToFill (struct Exa_Exams *Exams,
    extern const char *Hlp_ASSESSMENT_Exams_answer_exam;
 
    /***** Begin box *****/
-   Box_BoxBegin (Exams->Exam.Title,NULL,NULL,
-		 Hlp_ASSESSMENT_Exams_answer_exam,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Exams->Exam.Title,NULL,NULL,
+		       Hlp_ASSESSMENT_Exams_answer_exam);
 
       /***** Heading *****/
       Exa_Header (Exams->Exam.ExaCod,&Gbl.Usrs.Me.UsrDat,Session->ShowPhotos);

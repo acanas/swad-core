@@ -56,7 +56,7 @@ static struct
 /*****************************************************************************/
 
 static void Box_BoxInternalBegin (const char *Title,
-				  void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
+				  void (*FunctionToDrawIcons) (const void *Args),const void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame);
 
@@ -66,27 +66,25 @@ static void Box_BoxInternalBegin (const char *Title,
 // CellPadding must be 0, 1, 2, 4 or 8
 
 void Box_BoxTableBegin (const char *Title,
-                        void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
+                        void (*FunctionToDrawIcons) (const void *Args),const void *Args,
                         const char *HelpLink,Box_Closable_t Closable,
                         unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxBegin (Title,FunctionToDrawContextualIcons,Args,HelpLink,Closable);
+   Box_BoxBegin (Title,FunctionToDrawIcons,Args,HelpLink,Closable);
       HTM_TABLE_BeginCenterPadding (CellPadding);
   }
 
 void Box_BoxTableShadowBegin (const char *Title,
-                              void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
-                              const char *HelpLink,Lay_Highlight_t Highlight,
+                              void (*FunctionToDrawIcons) (const void *Args),const void *Args,
+                              const char *HelpLink,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxShadowBegin (Title,
-                       FunctionToDrawContextualIcons,Args,
-                       HelpLink,Highlight);
+   Box_BoxShadowBegin (Title,FunctionToDrawIcons,Args,HelpLink);
       HTM_TABLE_BeginPadding (CellPadding);
   }
 
 void Box_BoxBegin (const char *Title,
-                   void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
+                   void (*FunctionToDrawIcons) (const void *Args),const void *Args,
                    const char *HelpLink,Box_Closable_t Closable)
   {
    char *ClassFrame;
@@ -94,42 +92,27 @@ void Box_BoxBegin (const char *Title,
    /***** Begin box *****/
    if (asprintf (&ClassFrame,"FRAME FRAME_%s",The_GetSuffix ()) < 0)
       Err_NotEnoughMemoryExit ();
-   Box_BoxInternalBegin (Title,
-			 FunctionToDrawContextualIcons,Args,
-			 HelpLink,Closable,
-			 ClassFrame);
+   Box_BoxInternalBegin (Title,FunctionToDrawIcons,Args,
+			 HelpLink,Closable,ClassFrame);
    free (ClassFrame);
   }
 
 void Box_BoxShadowBegin (const char *Title,
-                         void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
-                         const char *HelpLink,Lay_Highlight_t Highlight)
+                         void (*FunctionToDrawIcons) (const void *Args),const void *Args,
+                         const char *HelpLink)
   {
    char *ClassFrame;
 
-   /***** Begin box *****/
-   switch (Highlight)
-     {
-      case Lay_HIGHLIGHT:
-	 if (asprintf (&ClassFrame,"FRAME_SHADOW HIGHLIGHT_%s",The_GetSuffix ()) < 0)
-	    Err_NotEnoughMemoryExit ();
-         break;
-      case Lay_DONT_HIGHLIGHT:
-      default:
-	 if (asprintf (&ClassFrame,"FRAME_SHADOW") < 0)
-	    Err_NotEnoughMemoryExit ();
-         break;
-     }
-   Box_BoxInternalBegin (Title,
-                         FunctionToDrawContextualIcons,Args,
-			 HelpLink,Box_NOT_CLOSABLE,
-			 ClassFrame);
+   if (asprintf (&ClassFrame,"FRAME_SHADOW HIGHLIGHT_%s",The_GetSuffix ()) < 0)
+      Err_NotEnoughMemoryExit ();
+   Box_BoxInternalBegin (Title,FunctionToDrawIcons,Args,
+			 HelpLink,Box_NOT_CLOSABLE,ClassFrame);
    free (ClassFrame);
   }
 
 // Return pointer to box id string
 static void Box_BoxInternalBegin (const char *Title,
-				  void (*FunctionToDrawContextualIcons) (const void *Args),const void *Args,
+				  void (*FunctionToDrawIcons) (const void *Args),const void *Args,
 				  const char *HelpLink,Box_Closable_t Closable,
 				  const char *ClassFrame)
   {
@@ -165,7 +148,7 @@ static void Box_BoxInternalBegin (const char *Title,
       HTM_DIV_Begin ("class=\"%s\"",ClassFrame);
 
    /***** Row for left and right icons *****/
-   if (FunctionToDrawContextualIcons ||
+   if (FunctionToDrawIcons ||
        HelpLink ||
        Closable == Box_CLOSABLE)
      {
@@ -173,10 +156,10 @@ static void Box_BoxInternalBegin (const char *Title,
       HTM_DIV_Begin ("class=\"FRAME_ICO\"");
 
 	 /* Contextual icons at left */
-	 if (FunctionToDrawContextualIcons)
+	 if (FunctionToDrawIcons)
 	   {
 	    HTM_DIV_Begin ("class=\"FRAME_ICO_LEFT\"");
-	       FunctionToDrawContextualIcons (Args);
+	       FunctionToDrawIcons (Args);
 	    HTM_DIV_End ();
 	   }
 

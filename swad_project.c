@@ -1460,8 +1460,7 @@ void Prj_ShowBoxWithOnePrj (struct Prj_Projects *Prjs,
    /***** Begin box *****/
    Box_BoxShadowBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
 					    Txt_Project,
-		       Prj_PutIconsOnePrj,Prjs,
-		       Hlp_ASSESSMENT_Projects,Lay_HIGHLIGHT);
+		       Prj_PutIconsOnePrj,Prjs,Hlp_ASSESSMENT_Projects);
 
       /***** Show project data *****/
       HTM_FIELDSET_Begin (NULL);
@@ -3861,8 +3860,7 @@ static void Prj_PutFormPrj (struct Prj_Projects *Prjs,
       case Lay_HIGHLIGHT:
 	 Box_BoxShadowBegin (Prjs->Prj.Title[0] ? Prjs->Prj.Title :
 						  Txt_Project,
-			     NULL,NULL,
-			     Hlp_ASSESSMENT_Projects_edit_project,Lay_HIGHLIGHT);
+			     NULL,NULL,Hlp_ASSESSMENT_Projects_edit_project);
 	 break;
       case Lay_DONT_HIGHLIGHT:
       default:

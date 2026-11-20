@@ -317,8 +317,8 @@ void Ann_ShowFormAnnouncement (void)
    Frm_BeginForm (ActNewAnn);
 
       /***** Begin box and table *****/
-      Box_BoxTableBegin (Txt_Announcement,NULL,NULL,
-			 Hlp_COMMUNICATION_Announcements,Box_NOT_CLOSABLE,2);
+      Box_BoxTableShadowBegin (Txt_Announcement,NULL,NULL,
+			       Hlp_COMMUNICATION_Announcements,2);
 
 	 /***** Announcement subject and body *****/
 	 Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);

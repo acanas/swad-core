@@ -224,7 +224,7 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
       [Hie_CTR] = ActRecCtrLog,
       [Hie_DEG] = ActRecDegLog,
      };
-   static void (*FunctionToDrawContextualIcons[Hie_NUM_LEVELS]) (const void *Args) =
+   static void (*FunctionToDrawIcons[Hie_NUM_LEVELS]) (const void *Args) =
      {
       [Hie_INS] = Lgo_PutIconToRemoveLogoIns,
       [Hie_CTR] = Lgo_PutIconToRemoveLogoCtr,
@@ -242,7 +242,7 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
 
    /***** Begin box *****/
    Box_BoxBegin (Txt_Logo,
-	         Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS ? FunctionToDrawContextualIcons[HieLvl] :
+	         Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS ? FunctionToDrawIcons[HieLvl] :
 								  NULL,NULL,
                  NULL,Box_NOT_CLOSABLE);
 
