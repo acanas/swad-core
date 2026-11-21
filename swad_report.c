@@ -135,7 +135,7 @@ void Rep_ReqMyUsageReport (void)
       /***** Begin box *****/
       if (asprintf (&Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME) < 0)
 	 Err_NotEnoughMemoryExit ();
-      Box_BoxShadowBegin (Title,NULL,NULL,Hlp_ANALYTICS_Report);
+      Box_BoxShadowBegin (Title,NULL,NULL,Hlp_ANALYTICS_Report,Box_NOT_CLOSABLE);
       free (Title);
 
 	 /***** Header *****/

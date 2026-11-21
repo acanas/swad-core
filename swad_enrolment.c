@@ -661,7 +661,8 @@ static void Enr_ShowFormEnrRemSeveralUsrs (Rol_Role_t Role)
 
       /***** Begin box *****/
       Box_BoxShadowBegin (*WhatToDo[Role].Title,NULL,NULL,
-			  Hlp_USERS_Administration_administer_multiple_users);
+			  Hlp_USERS_Administration_administer_multiple_users,
+			  Box_NOT_CLOSABLE);
 
 	 /***** Step 1: List of students to be enroled / removed *****/
 	 HTM_FIELDSET_Begin (NULL);
@@ -738,7 +739,8 @@ void Enr_ReqRemOldUsrs (void)
    Frm_BeginForm (ActRemOldUsr);
 
       /***** Begin box *****/
-      Box_BoxShadowBegin (Txt_Eliminate_old_users,NULL,NULL,NULL);
+      Box_BoxShadowBegin (Txt_Eliminate_old_users,NULL,NULL,NULL,
+			  Box_NOT_CLOSABLE);
 
 	 /***** Form to request number of months without clicks *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
@@ -2806,7 +2808,8 @@ static void Enr_ReqAnotherUsrIDToEnrolRemove (Rol_Role_t Role)
 
    /***** Begin box *****/
    Box_BoxShadowBegin (Txt_Administer_one_user,NULL,NULL,
-		       Hlp_USERS_Administration_administer_one_user);
+		       Hlp_USERS_Administration_administer_one_user,
+		       Box_NOT_CLOSABLE);
 
       /***** Write form to request another user's ID *****/
       if (!NextAction[Role])

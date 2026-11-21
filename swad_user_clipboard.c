@@ -249,8 +249,8 @@ static void UsrClp_ShowClipboard (Rol_Role_t Role)
    extern const char *Hlp_USERS_Clipboard;
    extern const char *Txt_Clipboard;
 
-   Box_BoxBegin (Txt_Clipboard,UsrClp_PutIconsClipboard,&Role,
-		 Hlp_USERS_Clipboard,Box_CLOSABLE);
+   Box_BoxShadowBegin (Txt_Clipboard,UsrClp_PutIconsClipboard,&Role,
+		       Hlp_USERS_Clipboard,Box_CLOSABLE);
       UsrClp_ListUsrsInMyClipboard (Frm_DONT_PUT_FORM,
 				    Lay_SHOW);	// Show even if empty
    Box_BoxEnd ();

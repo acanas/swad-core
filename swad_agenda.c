@@ -1401,7 +1401,8 @@ void Agd_ReqCreatOrEditEvent (void)
       Box_BoxTableShadowBegin (AgdEvent.Title[0] ? AgdEvent.Title :
 						   Txt_Event,
 			       NULL,NULL,
-			       Hlp_PROFILE_Agenda_edit_event,2);
+			       Hlp_PROFILE_Agenda_edit_event,
+			       Box_NOT_CLOSABLE,2);
 
 	 /***** Event *****/
 	 /* Begin table row */

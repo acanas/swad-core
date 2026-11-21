@@ -907,7 +907,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
          .ClassData	= "DAT_SMALL",
          .ClassStem	= "Qst_TXT",
          .ClassShuffle	= "ICO16x16",
-         .ClassCorrect	= "CONTEXT_ICO16x16",
+         .ClassCorrect	= "ICO16x16",
         },
       [Exi_EXISTS] =
         {
@@ -917,7 +917,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
          .ClassData	= "DAT_SMALL_LIGHT",
          .ClassStem	= "Qst_TXT_LIGHT",
          .ClassShuffle	= "ICO_HIDDEN ICO16x16",
-         .ClassCorrect	= "ICO_HIDDEN CONTEXT_ICO16x16",
+         .ClassCorrect	= "ICO_HIDDEN ICO16x16",
         },
      };
    const char *Stem = StemElem != NULL ? StemElem->Content :
@@ -941,7 +941,7 @@ static void QstImp_WriteRowImportedQst (struct XMLElement *StemElem,
       HTM_TD_Begin ("class=\"BT\"");
 	 Ico_PutIcon ( Layout[QstExists].Icon,
 		       Layout[QstExists].Color,
-		      *Layout[QstExists].Title,"CONTEXT_ICO16x16");
+		      *Layout[QstExists].Title,"ICO16x16");
       HTM_TD_End ();
 
       /***** Write number of question *****/

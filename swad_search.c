@@ -158,8 +158,8 @@ static Hie_Level_t Sch_PutFormToSearchWithWhatToSearchAndScope (Hie_Level_t Defa
    HTM_DIV_Begin ("class=\"CM\"");
 
       /***** Begin box *****/
-      Box_BoxBegin (Txt_Search,Hie_PutIconToSelectMyHierarchy,NULL,
-		    Hlp_START_Search,Box_NOT_CLOSABLE);
+      Box_BoxShadowBegin (Txt_Search,Hie_PutIconToSelectMyHierarchy,NULL,
+			  Hlp_START_Search,Box_NOT_CLOSABLE);
 
 	 /***** Begin form *****/
 	 Frm_BeginForm (ActSch);

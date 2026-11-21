@@ -408,7 +408,7 @@ void Exa_ShowOnlyOneExamBegin (struct Exa_Exams *Exams,
    Box_BoxShadowBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
 					      Txt_Exam,
 		       Exa_PutIconsViewingOneExam,Exams,
-		       Hlp_ASSESSMENT_Exams);
+		       Hlp_ASSESSMENT_Exams,Box_NOT_CLOSABLE);
 
       /***** Show main data of this exam *****/
       Exa_ShowExamMainData (Exams,-1L,Lay_SHOWING_ONLY_ONE);
@@ -1278,7 +1278,7 @@ void Exa_PutFormsOneExam (struct Exa_Exams *Exams,OldNew_OldNew_t OldNewExam)
    Box_BoxShadowBegin (Exams->Exam.Title[0] ? Exams->Exam.Title :
 					      Txt_Exam,
 		       FunctionToDrawIcons[OldNewExam],Exams,
-		       *HelpLink[OldNewExam]);
+		       *HelpLink[OldNewExam],Box_NOT_CLOSABLE);
 
       /***** Put form to create/edit an exam *****/
       Exa_PutFormEditionExam (Exams,Txt,OldNewExam);

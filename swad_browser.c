@@ -4732,7 +4732,7 @@ static void Brw_PutIconFolderWithoutPlus (__attribute__((unused)) const struct B
 
       /***** Icon *****/
       Ico_PutIcon (CloOpe_Icon[ClosedOrOpen],Ico_UNCHANGED,Txt_Folder,
-		   "CONTEXT_OPT CONTEXT_ICO16x16");
+		   "CONTEXT_OPT ICO16x16");
 
    /***** End container *****/
    HTM_DIV_End ();
@@ -4797,7 +4797,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (const struct Brw_FileBrowser 
 	 /***** Icon depending on the file extension *****/
 	 if (File->Type == Brw_IS_FILE)
 	    Brw_PutIconFile (File->Path.Name,
-			     "CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16",
+			     "CONTEXT_OPT ICO16x16 ICO_HIGHLIGHT",
 			     Frm_PUT_FORM);	// Put link to view metadata
 	 else
 	    Ico_PutIconLink ("up-right-from-square.svg",Ico_BLACK,
@@ -5675,9 +5675,9 @@ static void Brw_DoActionShowMyClipboard (struct Brw_FileBrowser *FileBrowser)
          break;
      }
 
-   Box_BoxBegin (Txt_Clipboard,
-		 Brw_PutIconsClipboard,FileBrowser,
-		 Hlp_FILES_Clipboard,Box_CLOSABLE);
+   Box_BoxShadowBegin (Txt_Clipboard,
+		       Brw_PutIconsClipboard,FileBrowser,
+		       Hlp_FILES_Clipboard,Box_CLOSABLE);
       switch (MyClipboardExists)
         {
          case Exi_EXISTS:
@@ -7819,7 +7819,7 @@ static void Brw_DoActionShowFileMetadata (struct Brw_FileBrowser *FileBrowser)
 										  NULL,
 					    ShowIconToGetLinkToFile == Lay_SHOW ? FileBrowser :
 										  NULL,
-					    NULL);
+					    NULL,Box_NOT_CLOSABLE);
 
 			   /***** Begin form to update the metadata of a file *****/
 			   if (ICanEdit == Usr_CAN)	// I can edit file properties
@@ -9747,16 +9747,16 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	      {
 	       case Brw_IS_FILE:
 		  Brw_PutIconFile (File.Path.Name,
-				   "CONTEXT_ICO16x16",
+				   "ICO16x16",
 				   Frm_DONT_PUT_FORM);	// Don't put link to view metadata
 		  break;
 	       case Brw_IS_FOLDER:
 		  Ico_PutIcon ("folder-closed-yellow.png",Ico_UNCHANGED,
-			       Txt_Folder,"CONTEXT_ICO16x16");
+			       Txt_Folder,"ICO16x16");
 		  break;
 	       case Brw_IS_LINK:
 		  Ico_PutIcon ("up-right-from-square.svg",Ico_BLACK,
-			       Txt_Link,"CONTEXT_ICO16x16");
+			       Txt_Link,"ICO16x16");
 		  break;
 	       default:
 		  break;
@@ -9795,7 +9795,7 @@ static void Brw_DoActionReqRemOldFilesBriefcase (struct Brw_FileBrowser *FileBro
       Brw_PutParWhichFiles (&FileBrowser->WhichFiles);
 
       /***** Begin box *****/
-      Box_BoxBegin (Txt_Remove_old_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
+      Box_BoxShadowBegin (Txt_Remove_old_files,NULL,NULL,NULL,Box_NOT_CLOSABLE);
 
 	 /***** Form to request number of months (to remove files older) *****/
 	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());

@@ -187,8 +187,8 @@ static void PrgRsc_ShowClipboard (void)
    extern const char *Hlp_COURSE_Program_resource_clipboard;
    extern const char *Txt_Clipboard;
 
-   Box_BoxBegin (Txt_Clipboard,PrgRsc_PutIconsClipboard,NULL,
-		 Hlp_COURSE_Program_resource_clipboard,Box_CLOSABLE);
+   Box_BoxShadowBegin (Txt_Clipboard,PrgRsc_PutIconsClipboard,NULL,
+		       Hlp_COURSE_Program_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();
   }

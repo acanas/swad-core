@@ -454,7 +454,7 @@ void Gam_ShowOnlyOneGameBegin (struct Gam_Games *Games,
    Box_BoxShadowBegin (Games->Game.Title[0] ? Games->Game.Title :
 					      Txt_Game,
 		       Gam_PutIconsViewingOneGame,Games,
-		       Hlp_ASSESSMENT_Games);
+		       Hlp_ASSESSMENT_Games,Box_NOT_CLOSABLE);
 
       /***** Show main data of this game *****/
       Gam_ShowGameMainData (Games,Lay_SHOWING_ONLY_ONE);
@@ -1298,7 +1298,7 @@ void Gam_PutFormsOneGame (struct Gam_Games *Games,
    Box_BoxShadowBegin (Games->Game.Title[0] ? Games->Game.Title :
 					      Txt_Game,
 		       FunctionToDrawIcons[OldNewGame],Games,
-		       *HelpLink[OldNewGame]);
+		       *HelpLink[OldNewGame],Box_NOT_CLOSABLE);
 
       /***** Put form to create/edit a game *****/
       Gam_PutFormEditionGame (Games,Txt,OldNewGame);

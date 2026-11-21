@@ -241,7 +241,7 @@ void Net_ShowFormWebsAndSocialNets (struct Usr_Data *UsrDat)
 					 StrName,The_GetSuffix ());
 			   Ico_PutIcon (Net_WebsAndSocialNetworksIcons[NumURL],Ico_BLACK,
 					Net_WebsAndSocialNetworksTitle[NumURL],
-					"CONTEXT_OPT CONTEXT_ICO16x16");
+					"CONTEXT_OPT ICO16x16");
 			   HTM_Txt (Net_WebsAndSocialNetworksTitle[NumURL]);
 			   HTM_Colon ();
 			HTM_LABEL_End ();

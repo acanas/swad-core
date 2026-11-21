@@ -1326,7 +1326,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	    HTM_DIV_Begin ("class=\"Frm_LOGIN\"");
 	       HTM_LABEL_Begin ("for=\"UsrId\"");
 		  Ico_PutIcon ("user.svg",Ico_BLACK,
-		               Txt_User[Usr_SEX_UNKNOWN],"CONTEXT_ICO16x16");
+		               Txt_User[Usr_SEX_UNKNOWN],"ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_TEXT ("UsrId",Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin,
 			       HTM_REQUIRED | HTM_AUTOFOCUS,
@@ -1339,7 +1339,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncPars) (void))
 	    HTM_DIV_Begin ("class=\"Frm_LOGIN\"");
 	       HTM_LABEL_Begin ("for=\"UsrPwd\"");
 		  Ico_PutIcon ("key.svg",Ico_BLACK,
-		               Txt_Password,"CONTEXT_ICO16x16");
+		               Txt_Password,"ICO16x16");
 	       HTM_LABEL_End ();
 	       HTM_INPUT_PASSWORD ("UsrPwd",Txt_password,NULL,
 				   HTM_NO_ATTR,
@@ -3822,7 +3822,7 @@ void Usr_PutFormToSelectUsrsToGoToAct (struct Usr_SelectedUsrs *SelectedUsrs,
 	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Begin box *****/
-   Box_BoxShadowBegin (Title,NULL,NULL,HelpLink);
+   Box_BoxShadowBegin (Title,NULL,NULL,HelpLink,Box_NOT_CLOSABLE);
 
       /***** Show form to select the groups *****/
       Grp_ShowFormToSelectSeveralGroups (NextAction,FuncPars,Args,NULL);

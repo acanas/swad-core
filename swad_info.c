@@ -2007,7 +2007,7 @@ void Inf_EditPlainTxtInfo (void)
       if (Actions[InfoType].FuncPars)
 	 Actions[InfoType].FuncPars (Actions[InfoType].Args);
       Box_BoxShadowBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
-			  *HelpEdit[InfoType]);
+			  *HelpEdit[InfoType],Box_NOT_CLOSABLE);
 
 	 switch (InfoType)
 	   {
@@ -2090,7 +2090,7 @@ void Inf_EditRichTxtInfo (void)
       if (Actions[InfoType].FuncPars)
 	 Actions[InfoType].FuncPars (Actions[InfoType].Args);
       Box_BoxShadowBegin (Txt_INFO_TITLE[InfoType],NULL,NULL,
-			  *HelpEdit[InfoType]);
+			  *HelpEdit[InfoType],Box_NOT_CLOSABLE);
 
       switch (InfoType)
 	{

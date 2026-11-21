@@ -199,8 +199,9 @@ void Prf_ReqUserProfile (void)
    Frm_BeginForm (ActSeeOthPubPrf);
 
       /***** Begin box *****/
-      Box_BoxBegin (Txt_Another_user_s_profile,NULL,NULL,
-		    Hlp_START_Profiles_view_public_profile,Box_NOT_CLOSABLE);
+      Box_BoxShadowBegin (Txt_Another_user_s_profile,NULL,NULL,
+			  Hlp_START_Profiles_view_public_profile,
+			  Box_NOT_CLOSABLE);
 
 	 /***** Form to request user's @nickname *****/
 	 /* By default, the nickname is filled with my nickname
@@ -791,7 +792,7 @@ static void Prf_BeginListItem (const char *Title,const char *Icon)
   {
    HTM_LI_Begin ("title=\"%s\" class=\"PRF_FIG_LI\"",Title);
       HTM_DIV_Begin ("class=\"PRF_FIG_ICO\"");
-	 Ico_PutIcon (Icon,Ico_BLACK,Title,"CONTEXT_ICOx16");
+	 Ico_PutIcon (Icon,Ico_BLACK,Title,"ICOx16");
       HTM_DIV_End ();
   }
 

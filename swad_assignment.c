@@ -465,7 +465,7 @@ void Asg_ShowOneAssignmentInBox (struct Asg_Assignments *Asgs)
    Box_BoxShadowBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
 					    Txt_Assignment,
 		       Asg_PutIconsOneAsg,Asgs,
-		       Hlp_ASSESSMENT_Assignments);
+		       Hlp_ASSESSMENT_Assignments,Box_NOT_CLOSABLE);
 
       /***** Begin table *****/
       HTM_TABLE_Begin ("TBL_SCROLL");
@@ -1231,7 +1231,8 @@ static void Asg_PutFormCreatOrEditAsg (struct Asg_Assignments *Asgs,
       Box_BoxTableShadowBegin (Asgs->Asg.Title[0] ? Asgs->Asg.Title :
 						    Txt_Assignment,
 			       NULL,NULL,
-			       Hlp_ASSESSMENT_Assignments_edit_assignment,2);
+			       Hlp_ASSESSMENT_Assignments_edit_assignment,
+			       Box_NOT_CLOSABLE,2);
 
 	 /***** Assignment title *****/
 	 HTM_TR_Begin (NULL);

@@ -301,7 +301,7 @@ static void Msg_PutFormMsgUsrs (struct Msg_Messages *Messages)
 
    /***** Begin box *****/
    Box_BoxShadowBegin (Txt_Message,Msg_PutIconsListMsgs,Messages,
-		       Hlp_COMMUNICATION_Messages_write);
+		       Hlp_COMMUNICATION_Messages_write,Box_NOT_CLOSABLE);
 
       if (Messages->OnlyOneRecipient)
 	 /***** Form to show several potential recipients *****/

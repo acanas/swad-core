@@ -318,7 +318,8 @@ void Ann_ShowFormAnnouncement (void)
 
       /***** Begin box and table *****/
       Box_BoxTableShadowBegin (Txt_Announcement,NULL,NULL,
-			       Hlp_COMMUNICATION_Announcements,2);
+			       Hlp_COMMUNICATION_Announcements,
+			       Box_NOT_CLOSABLE,2);
 
 	 /***** Announcement subject and body *****/
 	 Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);

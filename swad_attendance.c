@@ -1010,7 +1010,8 @@ void Att_ReqCreatOrEditEvent (void)
       Box_BoxTableShadowBegin (Events.Event.Title[0] ? Events.Event.Title :
 						       Txt_Event,
 			       NULL,NULL,
-			       Hlp_USERS_Attendance_edit_event,2);
+			       Hlp_USERS_Attendance_edit_event,
+			       Box_NOT_CLOSABLE,2);
 
 	 /***** Attendance event title *****/
 	 HTM_TR_Begin (NULL);

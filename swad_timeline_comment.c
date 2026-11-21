@@ -133,7 +133,7 @@ void TmlCom_PutIconToToggleComm (const struct Tml_Timeline *Timeline,
 	 Ico_PutIcon ("comment-regular.svg",Ico_BLACK,
 	              Act_GetActTxt (Timeline->UsrOrGbl == TmlUsr_TIMELINE_GBL ? ActRcvComGblTL :
 	        	                                                             ActRcvComUsrTL),
-	              "CONTEXT_ICO16x16");
+	              "ICO16x16");
 
       /* End anchor */
       HTM_A_End ();

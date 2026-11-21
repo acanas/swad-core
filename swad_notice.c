@@ -139,7 +139,7 @@ void Not_ShowFormNotice (void)
 
       /***** Begin box and table *****/
       Box_BoxTableShadowBegin (Txt_Notice,NULL,NULL,
-			       Hlp_COMMUNICATION_Notices,2);
+			       Hlp_COMMUNICATION_Notices,Box_NOT_CLOSABLE,2);
 
 	 /***** Message body *****/
 	 Not_PutContent ();

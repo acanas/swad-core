@@ -564,7 +564,7 @@ static void Sta_PutFormCrsHits (struct Sta_Stats *Stats)
 			/* Number of rows per page */
 			// To use getElementById in Firefox, it's necessary to have the id attribute
 			HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-			   HTM_CloseParenthesis ();
+			   HTM_OpenParenthesis ();
 			      HTM_Txt (Txt_results_per_page); HTM_Colon (); HTM_NBSP ();
 			      HTM_SELECT_Begin (Stats->ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST ? HTM_NO_ATTR :
 													 HTM_DISABLED,

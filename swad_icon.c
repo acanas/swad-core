@@ -452,7 +452,7 @@ void Ico_PutDivIcon (const char *DivClass,
                      const char *Icon,Ico_Color_t Color,const char *Title)
   {
    HTM_DIV_Begin ("class=\"%s\"",DivClass);
-      Ico_PutIcon (Icon,Color,Title,"CONTEXT_ICO16x16");
+      Ico_PutIcon (Icon,Color,Title,"ICO16x16");
    HTM_DIV_End ();
   }
 
@@ -463,7 +463,7 @@ void Ico_PutDivIcon (const char *DivClass,
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction)
   {
    HTM_INPUT_IMAGE (Cfg_URL_ICON_PUBLIC,Icon,Act_GetActTxt (NextAction),
-		    "class=\"CONTEXT_OPT ICO_HIGHLIGHT CONTEXT_ICO16x16 ICO_%s_%s\"",
+		    "class=\"CONTEXT_OPT ICO16x16 ICO_HIGHLIGHT ICO_%s_%s\"",
 		    Ico_GetPreffix (Color),The_GetSuffix ());
   }
 
@@ -484,7 +484,8 @@ void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
   {
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");
-      Ico_PutIcon (Icon,Color,Text,"CONTEXT_ICOx16");
+      HTM_IMG (Cfg_URL_ICON_PUBLIC,Icon,Text,
+	       "class=\"CONTEXT_ICOx16_%s\"",The_GetSuffix ());
       HTM_Txt (Text);
    HTM_DIV_End ();
   }
@@ -506,12 +507,12 @@ void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Titl
 
 void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO16x16");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT ICO16x16");
   }
 
 void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title)
   {
-   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT CONTEXT_ICO16x16 ICO_HIDDEN");
+   Ico_PutIcon (Icon,Color,Title,"CONTEXT_OPT ICO16x16 ICO_HIDDEN");
   }
 
 /*****************************************************************************/

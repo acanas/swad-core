@@ -420,7 +420,7 @@ void QstCho_WriteCorrAns (struct Qst_Question *Qst,
 	    HTM_TD_Begin ("class=\"BT\"");
 	       if (Qst->Answer.Options[NumOpt].Correct == Qst_CORRECT)
 		  Ico_PutIcon ("check.svg",Ico_BLACK,
-		               Txt_TST_Answer_given_by_the_teachers,"CONTEXT_ICO16x16");
+		               Txt_TST_Answer_given_by_the_teachers,"ICO16x16");
 	    HTM_TD_End ();
 
 	    /* Write the number of option */

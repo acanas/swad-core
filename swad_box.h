@@ -60,10 +60,10 @@ void Box_BoxBegin (const char *Title,
                    const char *HelpLink,Box_Closable_t Closable);
 void Box_BoxShadowBegin (const char *Title,
                          void (*FunctionToDrawIcons) (const void *Args),const void *Args,
-                         const char *HelpLink);
+                         const char *HelpLink,Box_Closable_t Closable);
 void Box_BoxTableShadowBegin (const char *Title,
                               void (*FunctionToDrawIcons) (const void *Args),const void *Args,
-                              const char *HelpLink,
+                              const char *HelpLink,Box_Closable_t Closable,
                               unsigned CellPadding);
 void Box_BoxTableEnd (void);
 void Box_BoxTableWithButtonSaveCreateEnd (OldNew_OldNew_t OldNew);

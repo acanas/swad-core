@@ -76,10 +76,10 @@ void Box_BoxTableBegin (const char *Title,
 
 void Box_BoxTableShadowBegin (const char *Title,
                               void (*FunctionToDrawIcons) (const void *Args),const void *Args,
-                              const char *HelpLink,
+                              const char *HelpLink,Box_Closable_t Closable,
                               unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
-   Box_BoxShadowBegin (Title,FunctionToDrawIcons,Args,HelpLink);
+   Box_BoxShadowBegin (Title,FunctionToDrawIcons,Args,HelpLink,Closable);
       HTM_TABLE_BeginPadding (CellPadding);
   }
 
@@ -99,14 +99,14 @@ void Box_BoxBegin (const char *Title,
 
 void Box_BoxShadowBegin (const char *Title,
                          void (*FunctionToDrawIcons) (const void *Args),const void *Args,
-                         const char *HelpLink)
+                         const char *HelpLink,Box_Closable_t Closable)
   {
    char *ClassFrame;
 
    if (asprintf (&ClassFrame,"FRAME_SHADOW HIGHLIGHT_%s",The_GetSuffix ()) < 0)
       Err_NotEnoughMemoryExit ();
    Box_BoxInternalBegin (Title,FunctionToDrawIcons,Args,
-			 HelpLink,Box_NOT_CLOSABLE,ClassFrame);
+			 HelpLink,Closable,ClassFrame);
    free (ClassFrame);
   }
 
