@@ -278,7 +278,7 @@ static void Ann_DrawAnAnnouncement (struct Ann_Announcement *Announcement,
 		  /***** Put form to mark announcement as seen *****/
 		  Lay_PutContextualLinkIconText (ActAnnSee,NULL,
 						 Ann_PutParAnnCod,&Announcement->AnnCod,
-						 "times.svg",Ico_BLACK,
+						 "times.svg",
 						 Txt_Do_not_show_again,NULL);
 		  break;
 	      }

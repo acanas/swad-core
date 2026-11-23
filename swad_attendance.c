@@ -2738,7 +2738,7 @@ static void Att_ListUsrsAttendanceTable (struct Att_Events *Events,
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							 Usr_DONT_GET_PREFS,
 							 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	       if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
+	       if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&UsrDat) == Usr_CAN)
 		 {
 	          /* Get if student has accepted enrolment in current course */
 		  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
@@ -2977,7 +2977,7 @@ static void Att_ListStdsWithAttEventsDetails (struct Att_Events *Events,
 	       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
 							    Usr_DONT_GET_PREFS,
 							    Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
-		  if (Usr_CheckIfICanViewAtt (&UsrDat) == Usr_CAN)
+		  if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&UsrDat) == Usr_CAN)
 		    {
 	             /* Get if student has accepted enrolment in current course */
 		     UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);

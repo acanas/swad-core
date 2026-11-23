@@ -157,8 +157,7 @@ void Prf_PutLinkMyPublicProfile (void)
 
    Lay_PutContextualLinkIconText (ActSeeOthPubPrf,NULL,
 				  Usr_PutParOtherUsrCodEncrypted,Gbl.Usrs.Me.UsrDat.EnUsrCod,
-				  "circle-user.svg",Ico_BLACK,
-				  Txt_My_public_profile,NULL);
+				  "circle-user.svg",Txt_My_public_profile,NULL);
   }
 
 /*****************************************************************************/
@@ -169,9 +168,8 @@ void Prf_PutLinkReqAnotherUsrProfile (void)
   {
    extern const char *Txt_Another_user_s_profile;
 
-   Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,
-                                  NULL,NULL,
-				  "circle-user.svg",Ico_BLACK,
+   Lay_PutContextualLinkIconText (ActReqOthPubPrf,NULL,NULL,NULL,
+				  "circle-user.svg",
 				  Txt_Another_user_s_profile,NULL);
   }
 

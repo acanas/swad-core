@@ -35,7 +35,7 @@
 
 void RubRsc_GetLinkToRubric (void);
 
-void RubRsc_ViewResourceClipboard (void);
-void RubRsc_RemoveResourceClipboard (void);
+void RubRsc_ViewRscClipboard (void);
+void RubRsc_RemoveRscClipboard (void);
 
 #endif

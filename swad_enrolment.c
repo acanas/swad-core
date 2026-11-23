@@ -260,10 +260,8 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLinkIconText (ActReqSignUp,NULL,
-                                  NULL,NULL,
-				  "hand-point-up.svg",Ico_BLACK,
-				  Txt_Sign_up,NULL);
+   Lay_PutContextualLinkIconText (ActReqSignUp,NULL,NULL,NULL,
+				  "hand-point-up.svg",Txt_Sign_up,NULL);
   }
 
 /*****************************************************************************/
@@ -718,10 +716,8 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,
-                                  NULL,NULL,
-				  "trash.svg",Ico_RED,
-				  Txt_Eliminate_old_users,NULL);
+   Lay_PutContextualLinkIconText (ActReqRemOldUsr,NULL,NULL,NULL,
+				  "trash.svg",Txt_Eliminate_old_users,NULL);
   }
 
 /*****************************************************************************/
@@ -2009,10 +2005,8 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all students in the current course *****/
-   Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,
-                                  NULL,NULL,
-				  "trash.svg",Ico_RED,
-				  Txt_Remove_all_students,NULL);
+   Lay_PutContextualLinkIconText (ActReqRemAllStdCrs,NULL,NULL,NULL,
+				  "trash.svg",Txt_Remove_all_students,NULL);
   }
 
 /*****************************************************************************/
@@ -2702,9 +2696,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
       [Usr_CAN    ] = &Txt_Administer_one_user,
      };
 
-   Lay_PutContextualLinkIconText (NextAction,NULL,
-                                  NULL,NULL,
-				  "user-gear.svg",Ico_BLACK,
+   Lay_PutContextualLinkIconText (NextAction,NULL,NULL,NULL,"user-gear.svg",
 				  *TitleText[Adm_CheckIfICanAdminOtherUsrs ()],NULL);
   }
 
@@ -2738,10 +2730,8 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 
    if (WhatToDo[Role].NextAction == ActUnk)
       Err_WrongRoleExit ();
-   Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,
-                                  NULL,NULL,
-				  "users-gear.svg",Ico_BLACK,
-				  *WhatToDo[Role].Title,NULL);
+   Lay_PutContextualLinkIconText (WhatToDo[Role].NextAction,NULL,NULL,NULL,
+				  "users-gear.svg",*WhatToDo[Role].Title,NULL);
   }
 
 /*****************************************************************************/

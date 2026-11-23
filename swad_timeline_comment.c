@@ -517,7 +517,7 @@ static void TmlCom_PutIconToToggleComms (const char *UniqueId,
                      "class=\"BT_LINK FORM_IN_%s\""
                      " onclick=\"toggleComments('%s');return false;\"",
                      The_GetSuffix (),UniqueId);
-      Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
+      Ico_PutIconTextLink (Icon,Text);
    HTM_BUTTON_End ();
   }
 

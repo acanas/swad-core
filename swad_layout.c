@@ -1213,8 +1213,8 @@ void Lay_PutContextualLinkOnlyIcon (Act_Action_t NextAction,const char *Anchor,
 
 void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 				    void (*FuncPars) (const void *Args),const void *Args,
-				    const char *Icon,Ico_Color_t Color,
-				    const char *Text,const char *OnSubmit)
+				    const char *Icon,const char *Text,
+				    const char *OnSubmit)
   {
    /***** Separator *****/
    HTM_SP ();	// This space is necessary to enable
@@ -1234,7 +1234,7 @@ void Lay_PutContextualLinkIconText (Act_Action_t NextAction,const char *Anchor,
 	    HTM_BUTTON_Submit_Begin (Text,NULL,
 				     "class=\"BT_LINK FORM_OUT_%s BOLD\"",
 				     The_GetSuffix ());
-	 Ico_PutIconTextLink (Icon,Color,Text);
+	 Ico_PutIconTextLink (Icon,Text);
       HTM_BUTTON_End ();
 
    /***** End form *****/

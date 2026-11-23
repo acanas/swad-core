@@ -103,10 +103,8 @@ void Dup_PutLinkToListDupUsrs (void)
    extern const char *Txt_Duplicate_USERS;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLinkIconText (ActLstDupUsr,NULL,
-                                  NULL,NULL,
-				  "user-group.svg",Ico_BLACK,
-				  Txt_Duplicate_USERS,NULL);
+   Lay_PutContextualLinkIconText (ActLstDupUsr,NULL,NULL,NULL,
+				  "user-group.svg",Txt_Duplicate_USERS,NULL);
   }
 
 /*****************************************************************************/

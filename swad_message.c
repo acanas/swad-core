@@ -448,8 +448,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (struct Msg_Messages *Messa
    Mnu_ContextMenuBegin ();
       Lay_PutContextualLinkIconText (ActReqMsgUsr,NULL,
 				     Msg_PutParsShowMorePotentialRecipients,Messages,
-				     "users.svg",Ico_BLACK,
-				     Txt_Show_more_recipients,
+				     "users.svg",Txt_Show_more_recipients,
 				     "CopyMessageToHiddenFields();");
    Mnu_ContextMenuEnd ();
   }
@@ -1578,10 +1577,8 @@ static void Msg_PutLinkToViewBannedUsers(void)
   {
    extern const char *Txt_Banned_users;
 
-   Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,
-                                  NULL,NULL,
-				  "user-lock.svg",Ico_RED,
-				  Txt_Banned_users,NULL);
+   Lay_PutContextualLinkIconText (ActLstBanUsr,NULL,NULL,NULL,
+				  "user-lock.svg",Txt_Banned_users,NULL);
   }
 
 /*****************************************************************************/

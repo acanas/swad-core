@@ -466,7 +466,7 @@ static void ID__PutLinkToConfirmID (const struct Usr_Data *UsrDat,unsigned NumID
       HTM_BUTTON_Submit_Begin (Txt_Confirm,NULL,
                                "class=\"BT_LINK FORM_OUT_%s BOLD\"",
                                The_GetSuffix ());
-	 Ico_PutIconTextLink ("check.svg",Ico_BLACK,Txt_Confirm);
+	 Ico_PutIconTextLink ("check.svg",Txt_Confirm);
       HTM_BUTTON_End ();
 
    /***** End form *****/

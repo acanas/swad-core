@@ -270,10 +270,8 @@ void Sta_PutLinkToGblHits (void)
   {
    extern const char *Txt_Global_visits;
 
-   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,
-                                  NULL,NULL,
-				  "chart-line.svg",Ico_BLACK,
-				  Txt_Global_visits,NULL);
+   Lay_PutContextualLinkIconText (ActReqAccGbl,NULL,NULL,NULL,
+				  "chart-line.svg",Txt_Global_visits,NULL);
   }
 
 /*****************************************************************************/
@@ -290,9 +288,8 @@ void Sta_PutLinkToCrsHits (void)
 	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_SYS_ADM:
-	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,
-	                                   NULL,NULL,
-					   "chart-line.svg",Ico_BLACK,
+	    Lay_PutContextualLinkIconText (ActReqAccCrs,NULL,NULL,NULL,
+					   "chart-line.svg",
 					   Txt_Visits_to_course,NULL);
 	    break;
 	 default:

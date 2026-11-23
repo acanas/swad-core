@@ -86,7 +86,7 @@ void RubRsc_GetLinkToRubric (void)
 /******************** Show clipboard on top of rubrics ***********************/
 /*****************************************************************************/
 
-void RubRsc_ViewResourceClipboard (void)
+void RubRsc_ViewRscClipboard (void)
   {
    /***** View resource clipboard *****/
    RubRsc_ShowClipboard ();
@@ -104,8 +104,8 @@ static void RubRsc_ShowClipboard (void)
    extern const char *Hlp_ASSESSMENT_Rubrics_resource_clipboard;
    extern const char *Txt_Clipboard;
 
-   Box_BoxBegin (Txt_Clipboard,RubRsc_PutIconsClipboard,NULL,
-		 Hlp_ASSESSMENT_Rubrics_resource_clipboard,Box_CLOSABLE);
+   Box_BoxShadowBegin (Txt_Clipboard,RubRsc_PutIconsClipboard,NULL,
+		       Hlp_ASSESSMENT_Rubrics_resource_clipboard,Box_CLOSABLE);
       Rsc_ShowClipboard ();
    Box_BoxEnd ();
   }
@@ -126,7 +126,7 @@ static void RubRsc_PutIconsClipboard (__attribute__((unused)) const void *Args)
 /******************* Remove clipboard and show program ***********************/
 /*****************************************************************************/
 
-void RubRsc_RemoveResourceClipboard (void)
+void RubRsc_RemoveRscClipboard (void)
   {
    extern const char *Txt_Clipboard_removed;
 

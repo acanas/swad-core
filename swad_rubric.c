@@ -37,9 +37,11 @@
 #include "swad_figure.h"
 #include "swad_form.h"
 #include "swad_global.h"
+#include "swad_ID.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
+#include "swad_photo.h"
 #include "swad_resource.h"
 #include "swad_rubric.h"
 #include "swad_rubric_criteria.h"
@@ -52,8 +54,17 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
-/***************************** Private constants *****************************/
+/****************************** Private constants ****************************/
 /*****************************************************************************/
+
+#define Rub_RUBRICS_TABLE_ID		"rub_table"
+
+static unsigned Rub_ColSpan[Pho_NUM_PHOTOS] =
+  {
+   [Pho_PHOTOS_UNKNOWN  ] = 3,
+   [Pho_PHOTOS_DONT_SHOW] = 3,
+   [Pho_PHOTOS_SHOW     ] = 4,
+  };
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
@@ -85,6 +96,15 @@ static Err_SuccessOrError_t Rub_CheckIfRecursiveTree (long RubCod,struct Rub_Nod
 static void Rub_ReqListOrPrintUsrsRubricsCrs (__attribute__((unused)) void *Args);
 static void Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_UsrsViewType_t UsrsViewType);
 static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType);
+static void Rub_ListUsrsRubricsTable (struct Rub_Rubrics *Rubrics,
+	                              const struct Usr_ListCods *ListCods);
+static void Rub_WriteRubricsTableHead (struct Rub_Rubrics *Rubrics,
+				       Pho_ShowPhotos_t ShowPhotos);
+static void Rub_PutLinkRubric (struct Rub_Rubric *Rubric,
+			       const char *Title,const char *Txt);
+static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
+					 unsigned NumUsr,struct Usr_Data *UsrDat,
+					 Pho_ShowPhotos_t ShowPhotos);
 static void Rub_PutIconsUsrsRubrics (__attribute__((unused)) const void *Args);
 static void Rub_PutParsToPrintUsrsRubrics (__attribute__((unused)) const void *Args);
 
@@ -1248,9 +1268,6 @@ static void Rub_ReqListOrPrintUsrsRubricsCrs (__attribute__((unused)) void *Args
    /***** Reset rubrics context *****/
    Rub_ResetRubrics (&Rubrics);
 
-   /***** Get list of attendance events *****/
-   // Att_GetListEvents (&Events,Att_OLDEST_FIRST);
-
    /***** List users to select some of them *****/
    Usr_PutFormToSelectUsrsToGoToAct (&Gbl.Usrs.Selected,
 				     ActSeeLstUsrRub,
@@ -1259,9 +1276,6 @@ static void Rub_ReqListOrPrintUsrsRubricsCrs (__attribute__((unused)) void *Args
 				     Hlp_USERS_Attendance_attendance_list,
 				     Btn_CONTINUE,
 				     Frm_DONT_PUT_FORM);	// Do not put form with date range
-
-   /***** Free list of attendance events *****/
-   // Att_FreeListEvents (&Events);
   }
 
 /*****************************************************************************/
@@ -1289,21 +1303,17 @@ static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics;
    extern const char *Txt_Users;
-   // struct Att_Events Events;
+   struct Rub_Rubrics Rubrics;
    struct Usr_ListCods ListCods;
-   // unsigned NumAttEvent;
 
    switch (*((Vie_UsrsViewType_t *) UsrsViewType))
      {
       case Vie_VIEW_SEL_USR:
       case Vie_PRNT_SEL_USR:
-	 /***** Reset attendance events *****/
-	 // Att_ResetEvents (&Events);
+	 /***** Reset rubrics *****/
+	 Rub_ResetRubrics (&Rubrics);
 
 	 /***** Get parameters *****/
-	 /* Get boolean parameter that indicates if details must be shown */
-	 // Events.ShowDetails = Lay_GetParShow ("ShowDetails");
-
 	 /* Get list of groups selected */
 	 Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
@@ -1315,20 +1325,8 @@ static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
 	    /***** Get list of students selected to show their attendances *****/
 	    Usr_GetListSelectedUsrCods (&Gbl.Usrs.Selected,&ListCods);
 
-	    /***** Get list of attendance events *****/
-	    // Att_GetListEvents (&Events,Att_OLDEST_FIRST);
-
-	    /***** Get number of students in each event *****/
-	    // for (NumAttEvent = 0;
-	    //	 NumAttEvent < Events.Num;
-	    //	 NumAttEvent++)
-	    //   /* Get number of students in this event */
-	    //   Events.Lst[NumAttEvent].NumStdsFromList =
-	    //   Att_GetNumUsrsFromAListWhoAreInEvent (Events.Lst[NumAttEvent].AttCod,
-	    //					     &ListCods);
-
-	    /***** Get list of attendance events selected *****/
-	    // Att_GetListSelectedAttCods (&Events);
+	    /***** Get list of rubrics *****/
+	    Rub_GetListRubrics (&Rubrics);
 
 	    /***** Begin box *****/
 	    switch (*((Vie_UsrsViewType_t *) UsrsViewType))
@@ -1346,25 +1344,11 @@ static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
 		  Err_WrongTypeExit ();
 	      }
 
-	    /***** List events to select *****/
-	    // Att_ListEventsToSelect (&Events,*((Vie_UsrsViewType_t *) UsrsViewType));
-
 	    /***** Show table with attendances for every student in list *****/
-	    // Att_ListUsrsAttendanceTable (&Events,*((Vie_UsrsViewType_t *) UsrsViewType),
-	    //                              &ListCods);
-
-	    /***** Show details or put button to show details *****/
-	    // if (Events.ShowDetails == Lay_SHOW)
-	    //   Att_ListStdsWithAttEventsDetails (&Events,&ListCods);
+	    Rub_ListUsrsRubricsTable (&Rubrics,&ListCods);
 
 	    /***** End box *****/
 	    Box_BoxEnd ();
-
-	    /***** Free memory for list of attendance events selected *****/
-	    // free (Events.StrAttCodsSelected);
-
-	    /***** Free list of attendance events *****/
-	    // Att_FreeListEvents (&Events);
 
 	    /***** Free list of user codes *****/
 	    Usr_FreeListSelectedUsrCods (&ListCods);
@@ -1377,6 +1361,209 @@ static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
 	 Err_WrongTypeExit ();
 	 break;
      }
+  }
+
+/*****************************************************************************/
+/************ Show table with attendances for every user in list *************/
+/*****************************************************************************/
+
+static void Rub_ListUsrsRubricsTable (struct Rub_Rubrics *Rubrics,
+	                              const struct Usr_ListCods *ListCods)
+  {
+   struct Usr_Data UsrDat;
+   unsigned NumUsr;
+   Pho_ShowPhotos_t ShowPhotos;
+
+   /***** Get my preference about photos in users' list for current course *****/
+   ShowPhotos = Pho_GetMyPrefAboutListWithPhotosFromDB ();
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Begin section with attendance table *****/
+   HTM_SECTION_Begin (Rub_RUBRICS_TABLE_ID);
+
+      /***** Begin table *****/
+      HTM_TABLE_Begin ("TBL_SCROLL");
+
+	 /***** Heading row *****/
+	 Rub_WriteRubricsTableHead (Rubrics,ShowPhotos);
+
+	 /***** List the users *****/
+	 for (NumUsr = 0;
+	      NumUsr < ListCods->NumUsrs;
+	      NumUsr++)
+	   {
+	    /* Get student data from database */
+	    UsrDat.UsrCod = ListCods->Lst[NumUsr];
+	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat,
+	 						 Usr_DONT_GET_PREFS,
+	 						 Usr_DONT_GET_ROLE_IN_CRS) == Exi_EXISTS)
+	       if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&UsrDat) == Usr_CAN)
+	 	 {
+	          /* Get if student has accepted enrolment in current course */
+	 	  UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&UsrDat);
+
+	 	  /* Write table row of a table with the student attendance */
+		  Rub_WriteRowUsrTableRubrics (Rubrics,NumUsr,&UsrDat,ShowPhotos);
+	 	 }
+	    }
+
+      /***** End table *****/
+      HTM_TABLE_End ();
+
+   /***** End section with attendance table *****/
+   HTM_SECTION_End ();
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }
+
+/*****************************************************************************/
+/******* Write table heading for listing of students in rubrics table ********/
+/*****************************************************************************/
+
+static void Rub_WriteRubricsTableHead (struct Rub_Rubrics *Rubrics,
+				       Pho_ShowPhotos_t ShowPhotos)
+  {
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumRubric;
+   char StrNumRubric[Cns_MAX_DIGITS_UINT + 1];
+
+   HTM_TR_Begin (NULL);
+
+      HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,
+	           1,Rub_ColSpan[ShowPhotos],NULL);
+
+      /***** Write all rubrics *****/
+      for (NumRubric = 0;
+	   NumRubric < Rubrics->Num;
+	   NumRubric++)
+	{
+	 /***** Allocate memory for rubric *****/
+	 Rub_RubricConstructor (&Rubrics->Rubric);
+
+	    /***** Get rubric data *****/
+	    Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric];
+	    Rub_GetRubricDataByCod (&Rubrics->Rubric);
+
+	    /***** Put link to this rubric *****/
+            HTM_TH_Begin (HTM_HEAD_CENTER);
+	       snprintf (StrNumRubric,sizeof (StrNumRubric),"%u",NumRubric + 1);
+	       Rub_PutLinkRubric (&Rubrics->Rubric,Rubrics->Rubric.Title,StrNumRubric);
+	    HTM_TH_End ();
+
+	 /***** Free memory used for rubric *****/
+	 Rub_RubricDestructor (&Rubrics->Rubric);
+	}
+
+   HTM_TR_End ();
+  }
+
+/*****************************************************************************/
+/***************** Put link to view an attendance event **********************/
+/*****************************************************************************/
+
+static void Rub_PutLinkRubric (struct Rub_Rubric *Rubric,
+			       const char *Title,const char *Txt)
+  {
+   /***** Begin form *****/
+   Frm_BeginForm (ActSeeOneRub);
+      ParCod_PutPar (ParCod_Rub,Rubric->RubCod);
+
+      /***** Link to view rubric *****/
+      HTM_BUTTON_Submit_Begin (Title,NULL,
+			       "class=\"LT BT_LINK ASG_TITLE_%s\"",
+			       The_GetSuffix ());
+	 HTM_Txt (Txt);
+      HTM_BUTTON_End ();
+
+   /***** End form *****/
+   Frm_EndForm ();
+  }
+
+/*****************************************************************************/
+/************ Write a row of a table with the attendance of a user ***********/
+/*****************************************************************************/
+
+static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
+					 unsigned NumUsr,struct Usr_Data *UsrDat,
+					 Pho_ShowPhotos_t ShowPhotos)
+  {
+   extern const char *Usr_ClassNum[Usr_NUM_ACCEPTED];
+   extern const char *Usr_ClassData[Usr_NUM_ACCEPTED];
+   static const char *ClassPhoto[PhoSha_NUM_SHAPES] =
+     {
+      [PhoSha_SHAPE_CIRCLE   ] = "PHOTOC21x28",
+      [PhoSha_SHAPE_ELLIPSE  ] = "PHOTOE21x28",
+      [PhoSha_SHAPE_OVAL     ] = "PHOTOO21x28",
+      [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
+     };
+   unsigned NumRubric;
+   char StrNumRubric[Cns_MAX_DIGITS_UINT + 1];
+
+   /***** Write number of user in the list *****/
+   HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
+
+      HTM_TD_Begin ("class=\"RM %s_%s\"",
+		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix ());
+	 HTM_Unsigned (NumUsr + 1);
+      HTM_TD_End ();
+
+      /***** Show user's photo *****/
+      if (ShowPhotos == Pho_PHOTOS_SHOW)
+	{
+	 HTM_TD_Begin ("class=\"LM\"");
+	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
+	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
+	 HTM_TD_End ();
+	}
+
+      /***** Write user's ID ******/
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
+	 ID__WriteUsrIDs (UsrDat,NULL);
+      HTM_TD_End ();
+
+      /***** Write user's name *****/
+      HTM_TD_Begin ("class=\"LM %s_%s\"",
+		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
+	 HTM_Txt (UsrDat->Surname1);
+	 if (UsrDat->Surname2[0])
+	   {
+	    HTM_SP ();
+	    HTM_Txt (UsrDat->Surname2);
+	   }
+	 HTM_Comma ();
+	 HTM_SP ();
+	 HTM_Txt (UsrDat->FrstName);
+      HTM_TD_End ();
+
+      /***** Write all rubrics *****/
+      for (NumRubric = 0;
+	   NumRubric < Rubrics->Num;
+	   NumRubric++)
+	{
+	 /***** Allocate memory for rubric *****/
+	 Rub_RubricConstructor (&Rubrics->Rubric);
+
+	    /***** Get rubric data *****/
+	    Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric];
+	    Rub_GetRubricDataByCod (&Rubrics->Rubric);
+
+	    /***** Put link to this rubric *****/
+            HTM_TH_Begin (HTM_HEAD_CENTER);
+	       snprintf (StrNumRubric,sizeof (StrNumRubric),"%u",NumRubric + 1);
+	       Rub_PutLinkRubric (&Rubrics->Rubric,Rubrics->Rubric.Title,StrNumRubric);
+	    HTM_TH_End ();
+
+	 /***** Free memory used for rubric *****/
+	 Rub_RubricDestructor (&Rubrics->Rubric);
+	}
+
+   HTM_TR_End ();
+
+   The_ChangeRowColor ();
   }
 
 /*****************************************************************************/

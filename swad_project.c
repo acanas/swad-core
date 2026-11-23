@@ -2560,7 +2560,7 @@ static void Prj_PutIconToTogglePrj (unsigned UniqueId,
    HTM_A_Begin ("href=\"\" title=\"%s\" class=\"FORM_IN_%s\""
                 " onclick=\"toggleProject('%u');return false;\"",
                Text,The_GetSuffix (),UniqueId);
-      Ico_PutIconTextLink (Icon,Ico_BLACK,Text);
+      Ico_PutIconTextLink (Icon,Text);
    HTM_A_End ();
   }
 

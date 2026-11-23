@@ -84,10 +84,8 @@ static void Lan_PutParLanguage (const void *Language);
 
 void Lan_PutLinkToChangeLanguage (void)
   {
-   Lay_PutContextualLinkIconText (ActReqEdiSet,NULL,
-                                  NULL,NULL,
-			          "globe-americas.svg",Ico_BLACK,
-				  "Change language",NULL);
+   Lay_PutContextualLinkIconText (ActReqEdiSet,NULL,NULL,NULL,
+			          "globe-americas.svg","Change language",NULL);
   }
 
 /*****************************************************************************/

@@ -135,7 +135,7 @@ void Ico_PutDivIcon (const char *DivClass,
                      const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction);
 void Ico_PutIconTextUpdate (const char *Text);
-void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text);
+void Ico_PutIconTextLink (const char *Icon,const char *Text);
 void Ico_PutSettingIconLink (const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconOn (const char *Icon,Ico_Color_t Color,const char *Title);
 void Ico_PutIconOff (const char *Icon,Ico_Color_t Color,const char *Title);

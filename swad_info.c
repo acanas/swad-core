@@ -1060,8 +1060,7 @@ static void Inf_ShowPage (const char *URL)
    /***** Link to view in a new window *****/
    HTM_A_Begin ("href=\"%s\" target=\"_blank\" class=\"FORM_OUT_%s BOLD\"",
 		URL,The_GetSuffix ());
-      Ico_PutIconTextLink ("expand-arrows-alt.svg",Ico_BLACK,
-			   Txt_View_in_a_new_window);
+      Ico_PutIconTextLink ("expand-arrows-alt.svg",Txt_View_in_a_new_window);
    HTM_A_End ();
   }
 

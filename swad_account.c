@@ -114,10 +114,8 @@ static void Acc_RemoveUsrBriefcase (struct Usr_Data *UsrDat);
 
 void Acc_PutLinkToCreateAccount (void)
   {
-   Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,
-				  NULL,NULL,
-				  "at.svg",Ico_BLACK,
-				  Act_GetActTxt (ActCreUsrAcc),NULL);
+   Lay_PutContextualLinkIconText (ActFrmMyAcc,NULL,NULL,NULL,
+				  "at.svg",Act_GetActTxt (ActCreUsrAcc),NULL);
   }
 
 /*****************************************************************************/

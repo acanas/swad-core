@@ -1820,10 +1820,8 @@ static void Med_AlertThirdPartyCookies (void)
 
    /* Put form to change cookies preferences */
    if (Frm_CheckIfInside () == Frm_OUTSIDE_FORM)
-      Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,
-                                     NULL,NULL,
-				     "cog.svg",Ico_BLACK,
-				     Txt_Settings,NULL);
+      Lay_PutContextualLinkIconText (ActReqEdiSet,Coo_COOKIES_ID,NULL,NULL,
+				     "cog.svg",Txt_Settings,NULL);
 
    /* End alert */
    Ale_ShowAlertAndButtonEnd (ActUnk,NULL,NULL,NULL,NULL,Btn_NO_BUTTON);

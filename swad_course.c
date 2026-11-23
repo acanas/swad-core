@@ -1863,10 +1863,8 @@ void Crs_PutLinkToRemoveOldCrss (void)
    extern const char *Txt_Eliminate_old_courses;
 
    /***** Put form to remove old courses *****/
-   Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,
-                                  NULL,NULL,
-				  "trash.svg",Ico_RED,
-				  Txt_Eliminate_old_courses,NULL);
+   Lay_PutContextualLinkIconText (ActReqRemOldCrs,NULL,NULL,NULL,
+				  "trash.svg",Txt_Eliminate_old_courses,NULL);
   }
 
 /*****************************************************************************/

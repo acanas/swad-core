@@ -802,10 +802,8 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,
-                                  NULL,NULL,
-				  "pen.svg",Ico_BLACK,
-				  Txt_Edit_record_fields,NULL);
+   Lay_PutContextualLinkIconText (ActEdiRecFie,NULL,NULL,NULL,
+				  "pen.svg",Txt_Edit_record_fields,NULL);
   }
 
 /*****************************************************************************/
@@ -1366,7 +1364,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    HTM_BUTTON_Submit_Begin (Txt_Print,NULL,
                             "class=\"BT_LINK FORM_OUT_%s BOLD\"",
                             The_GetSuffix ());
-      Ico_PutIconTextLink ("print.svg",Ico_BLACK,Txt_Print);
+      Ico_PutIconTextLink ("print.svg",Txt_Print);
    HTM_BUTTON_End ();
   }
 
@@ -2393,17 +2391,19 @@ static void Rec_PutIconsCommands (__attribute__((unused)) const void *Args)
 						 "gamepad.svg",Ico_BLACK);
 		 }
 
-	       /***** Button to view student's assignments and works *****/
-	       if (Usr_CheckIfICanViewAsgWrk (Rec_Record.UsrDat) == Usr_CAN)
+	       /***** Button to view other student's items in this course *****/
+	       if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (Rec_Record.UsrDat) == Usr_CAN)
+	         {
+	          /* Assignments and works */
 		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrk[MeOrOther],NULL,
 						 FuncPutParsAdmAsgWrk[MeOrOther],NULL,
 						 "folder-open.svg",Ico_BLACK);
 
-	       /***** Button to view student's attendance *****/
-	       if (Usr_CheckIfICanViewAtt (Rec_Record.UsrDat) == Usr_CAN)
+	          /* Attendance */
 		  Lay_PutContextualLinkOnlyIcon (ActSeeLstAtt[MeOrOther],NULL,
 						 FuncPutParsSeeLstAtt[MeOrOther],NULL,
 						 "calendar-check.svg",Ico_BLACK);
+		 }
 	      }
 	   }
 

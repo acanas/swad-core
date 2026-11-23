@@ -223,7 +223,7 @@ void QstImp_CreateXML (unsigned NumQsts,MYSQL_RES *mysql_res)
 	        TmpPubDir.Left,
 	        TmpPubDir.Right,
 	        The_GetSuffix ());
-      Ico_PutIconTextLink ("file.svg",Ico_BLACK,Txt_XML_file);
+      Ico_PutIconTextLink ("file.svg",Txt_XML_file);
    HTM_A_End ();
   }
 

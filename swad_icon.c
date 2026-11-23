@@ -473,14 +473,14 @@ void Ico_PutIconLink (const char *Icon,Ico_Color_t Color,Act_Action_t NextAction
 
 void Ico_PutIconTextUpdate (const char *Text)
   {
-   Ico_PutIconTextLink ("recycle.svg",Ico_BLACK,Text);
+   Ico_PutIconTextLink ("recycle.svg",Text);
   }
 
 /*****************************************************************************/
 /******************* Show an icon with a link (with text) ********************/
 /*****************************************************************************/
 
-void Ico_PutIconTextLink (const char *Icon,Ico_Color_t Color,const char *Text)
+void Ico_PutIconTextLink (const char *Icon,const char *Text)
   {
    /***** Print icon and optional text *****/
    HTM_DIV_Begin ("class=\"CONTEXT_OPT ICO_HIGHLIGHT\"");

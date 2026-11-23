@@ -146,10 +146,8 @@ void Log_PutLinkToLastClicks (void)
   {
    extern const char *Txt_Last_clicks;
 
-   Lay_PutContextualLinkIconText (ActLstClk,NULL,
-                                  NULL,NULL,
-				  "mouse-pointer.svg",Ico_BLACK,
-				  Txt_Last_clicks,NULL);
+   Lay_PutContextualLinkIconText (ActLstClk,NULL,NULL,NULL,
+				  "mouse-pointer.svg",Txt_Last_clicks,NULL);
   }
 
 /*****************************************************************************/

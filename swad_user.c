@@ -1145,7 +1145,7 @@ Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
 /********** Check if I can view assigments / works of another user ***********/
 /*****************************************************************************/
 
-Usr_Can_t Usr_CheckIfICanViewAsgWrk (const struct Usr_Data *UsrDat)
+Usr_Can_t Usr_CheckIfICanViewOthUsrItemsInThisCrs (const struct Usr_Data *UsrDat)
   {
    static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
      {
@@ -1285,10 +1285,8 @@ void Usr_PutLinkToLogin (void)
   {
    extern const char *Txt_Log_in;
 
-   Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,
-                                  NULL,NULL,
-				  "sign-in-alt.svg",Ico_GREEN,
-				  Txt_Log_in,NULL);
+   Lay_PutContextualLinkIconText (ActFrmLogIn,NULL,NULL,NULL,
+				  "sign-in-alt.svg",Txt_Log_in,NULL);
   }
 
 /*****************************************************************************/
@@ -5102,9 +5100,8 @@ static void Usr_PutLinkToSeeAdmins (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
-   Lay_PutContextualLinkIconText (ActLstOth,NULL,
-                                  NULL,NULL,
-				  Rol_Icons[Rol_DEG_ADM],Ico_BLACK,
+   Lay_PutContextualLinkIconText (ActLstOth,NULL,NULL,NULL,
+				  Rol_Icons[Rol_DEG_ADM],
 				  Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL);
   }
 
@@ -5117,9 +5114,8 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list guests *****/
-   Lay_PutContextualLinkIconText (ActLstGst,NULL,
-                                  NULL,NULL,
-				  "users.svg",Ico_BLACK,
+   Lay_PutContextualLinkIconText (ActLstGst,NULL,NULL,NULL,
+				  "users.svg",
 				  Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],NULL);
   }
 

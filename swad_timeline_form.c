@@ -301,7 +301,7 @@ void TmlFrm_FormToShowHiddenComms (long NotCod,
 	                             The_GetSuffix ());
 	       if (asprintf (&Text,Txt_See_the_previous_X_COMMENTS,NumInitialComms) < 0)
 		  Err_NotEnoughMemoryExit ();
-	       Ico_PutIconTextLink ("angle-up.svg",Ico_BLACK,Text);
+	       Ico_PutIconTextLink ("angle-up.svg",Text);
 	       free (Text);
 	    HTM_BUTTON_End ();
 

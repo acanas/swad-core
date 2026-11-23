@@ -900,8 +900,7 @@ static void Mai_ListEmails (__attribute__((unused)) void *Args)
 		      StrAddresses,
 		      Txt_Create_email_message,
 		      The_GetSuffix ());
-	    Ico_PutIconTextLink ("marker.svg",Ico_BLACK,
-				 Txt_Create_email_message);
+	    Ico_PutIconTextLink ("marker.svg",Txt_Create_email_message);
 	 HTM_A_End ();
 
       Mnu_ContextMenuEnd ();

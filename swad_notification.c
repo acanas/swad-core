@@ -440,16 +440,13 @@ static void Ntf_PutContextualLinks (Lay_Show_t ShowAllNotifications,
 
       /***** Mark notifications as read *****/
       if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
-	 Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,
-					NULL,NULL,
-					"eye.svg",Ico_BLACK,
+	 Lay_PutContextualLinkIconText (ActMrkNtfSee,NULL,NULL,NULL,
+					"eye.svg",
 					Txt_Mark_all_NOTIFICATIONS_as_read,NULL);
 
       /***** View allowed mail domains *****/
-      Lay_PutContextualLinkIconText (ActSeeMai,NULL,
-				     NULL,NULL,
-				     "envelope.svg",Ico_BLACK,
-				     Txt_Domains,NULL);
+      Lay_PutContextualLinkIconText (ActSeeMai,NULL,NULL,NULL,
+				     "envelope.svg",Txt_Domains,NULL);
 
    Mnu_ContextMenuEnd ();
   }

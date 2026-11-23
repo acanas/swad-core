@@ -2777,7 +2777,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (struct Brw_FileBrowser *FileBrowser)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	    if (Usr_CheckIfICanViewAsgWrk (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+	    if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
 
