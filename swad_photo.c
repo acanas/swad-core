@@ -332,8 +332,8 @@ static void Pho_ReqPhoto (const struct Usr_Data *UsrDat)
    Usr_MeOrOther_t MeOrOther = Usr_ItsMe (UsrDat->UsrCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Photo,FunctionToDrawIcons[MeOrOther],NULL,
-		 Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Txt_Photo,FunctionToDrawIcons[MeOrOther],NULL,
+		       Hlp_PROFILE_Photo,Box_NOT_CLOSABLE);
 
       /***** Begin form *****/
       switch (MeOrOther)

@@ -513,7 +513,7 @@ static Exi_Exist_t Crs_ListCrssOfAYearForSeeing (unsigned Year)
 
 	    /* Institutional code of the course */
 	    HTM_TD_Begin ("class=\"CT %s_%s\"",TxtClassNormal,The_GetSuffix ());
-	       HTM_Txt (Crs->InstitutionalCod);
+	       HTM_Txt (Crs->InstiCod);
 	    HTM_TD_End ();
 
 	    /* Course full name */
@@ -747,7 +747,7 @@ static void Crs_ListCrssOfAYearForEdition (unsigned Year)
 		     Frm_BeginForm (ActChgInsCrsCod);
 			ParCod_PutPar (ParCod_OthHie,Crs->HieCod);
 			HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
-					Crs->InstitutionalCod,
+					Crs->InstiCod,
 					HTM_SUBMIT_ON_CHANGE,
 					"class=\"INPUT_INS_CODE INPUT_%s\"",
 					The_GetSuffix ());
@@ -755,7 +755,7 @@ static void Crs_ListCrssOfAYearForEdition (unsigned Year)
 		     break;
 		  case Usr_CAN_NOT:
 		  default:
-		     HTM_Txt (Crs->InstitutionalCod);
+		     HTM_Txt (Crs->InstiCod);
 		     break;
 		 }
 	    HTM_TD_End ();
@@ -864,8 +864,7 @@ static void Crs_PutFormToCreateCrs (void)
 	 /***** Institutional code of the course *****/
 	 HTM_TD_Begin ("class=\"LM\"");
 	    HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
-			    Crs_EditingCrs->InstitutionalCod,
-			    HTM_NO_ATTR,
+			    Crs_EditingCrs->InstiCod,HTM_NO_ATTR,
 			    "class=\"INPUT_INS_CODE INPUT_%s\"",The_GetSuffix ());
 	 HTM_TD_End ();
 
@@ -1034,7 +1033,7 @@ static void Crs_GetParsNewCrs (struct Hie_Node *Crs)
    Crs->Specific.Year = Deg_ConvStrToYear (YearStr);
 
    /* Get institutional code */
-   Par_GetParText ("InsCrsCod",Crs->InstitutionalCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
+   Par_GetParText ("InsCrsCod",Crs->InstiCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get course short name and full name */
    Names[Nam_SHRT_NAME] = Crs->ShrtName;
@@ -1149,7 +1148,7 @@ static void Crs_GetCrsDataFromRow (MYSQL_RES *mysql_res,struct Hie_Node *Crs)
    Crs->ReqUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get institutional course code (row[3]) *****/
-   Str_Copy (Crs->InstitutionalCod,row[3],sizeof (Crs->InstitutionalCod) - 1);
+   Str_Copy (Crs->InstiCod,row[3],sizeof (Crs->InstiCod) - 1);
 
    /***** Get short name (row[6]) and full name (row[7]) of the course *****/
    Str_Copy (Crs->ShrtName,row[6],sizeof (Crs->ShrtName) - 1);
@@ -1289,7 +1288,7 @@ void Crs_ChangeInsCrsCod (void)
   {
    extern Err_SuccessOrError_t (*Hie_GetDataByCod[Hie_NUM_LEVELS]) (struct Hie_Node *Node);
    __attribute__((unused)) Err_SuccessOrError_t SuccessOrError;
-   char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
+   char NewInstiCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Course constructor *****/
    Crs_EditingCrsConstructor ();
@@ -1299,7 +1298,7 @@ void Crs_ChangeInsCrsCod (void)
    Crs_EditingCrs->HieCod = ParCod_GetAndCheckPar (ParCod_OthHie);
 
    /* Get institutional code */
-   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
+   Par_GetParText ("InsCrsCod",NewInstiCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /* Get data of the course */
    SuccessOrError = Hie_GetDataByCod[Hie_CRS] (Crs_EditingCrs);
@@ -1307,8 +1306,8 @@ void Crs_ChangeInsCrsCod (void)
       Err_NoPermissionExit ();
 
    /***** Change the institutional course code *****/
-   if (strcmp (NewInstitutionalCrsCod,Crs_EditingCrs->InstitutionalCod))
-      Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstitutionalCrsCod);
+   if (strcmp (NewInstiCod,Crs_EditingCrs->InstiCod))
+      Crs_UpdateInstitutionalCrsCod (Crs_EditingCrs,NewInstiCod);
   }
 
 /*****************************************************************************/
@@ -1362,15 +1361,13 @@ void Crs_ChangeCrsYear (void)
 /************* Change the institutional course code of a course **************/
 /*****************************************************************************/
 
-void Crs_UpdateInstitutionalCrsCod (struct Hie_Node *Crs,
-                                    const char *NewInstitutionalCrsCod)
+void Crs_UpdateInstitutionalCrsCod (struct Hie_Node *Crs,const char *NewInstiCod)
   {
    /***** Update institutional course code in table of courses *****/
-   Crs_DB_UpdateInstitutionalCrsCod (Crs->HieCod,NewInstitutionalCrsCod);
+   Crs_DB_UpdateInstitutionalCrsCod (Crs->HieCod,NewInstiCod);
 
    /***** Copy institutional course code *****/
-   Str_Copy (Crs->InstitutionalCod,NewInstitutionalCrsCod,
-             sizeof (Crs->InstitutionalCod) - 1);
+   Str_Copy (Crs->InstiCod,NewInstiCod,sizeof (Crs->InstiCod) - 1);
   }
 
 /*****************************************************************************/
@@ -1883,34 +1880,35 @@ void Crs_AskRemoveOldCrss (void)
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2;
    unsigned MonthsWithoutAccess = Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
-   unsigned i;
+   unsigned Months;
 
    /***** Begin form *****/
    Frm_BeginForm (ActRemOldCrs);
 
       /***** Begin box *****/
-      Box_BoxBegin (Txt_Eliminate_old_courses,NULL,NULL,
-		    Hlp_SYSTEM_Maintenance_eliminate_old_courses,Box_NOT_CLOSABLE);
+      Box_BoxShadowBegin (Txt_Eliminate_old_courses,NULL,NULL,
+			  Hlp_SYSTEM_Maintenance_eliminate_old_courses,
+			  Box_NOT_CLOSABLE);
 
-      /***** Form to request number of months without clicks *****/
-      HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
-	 HTM_Txt (Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-	 HTM_NBSP ();
-	 HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
-			   "name=\"Months\" class=\"INPUT_%s\"",
-			   The_GetSuffix ());
-	    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
-		 i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
-		 i++)
-	       HTM_OPTION (HTM_Type_UNSIGNED,&i,
-			   i == MonthsWithoutAccess ? HTM_SELECTED :
-						      HTM_NO_ATTR,
-			   "%u",i);
-	 HTM_SELECT_End ();
-	 HTM_NBSP ();
-	 HTM_TxtF (Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
-		   Cfg_PLATFORM_SHORT_NAME);
-      HTM_LABEL_End ();
+	 /***** Form to request number of months without clicks *****/
+	 HTM_LABEL_Begin ("class=\"FORM_IN_%s\"",The_GetSuffix ());
+	    HTM_Txt (Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
+	    HTM_NBSP ();
+	    HTM_SELECT_Begin (HTM_NO_ATTR,NULL,
+			      "name=\"Months\" class=\"INPUT_%s\"",
+			      The_GetSuffix ());
+	       for (Months  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
+		    Months <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
+		    Months++)
+		  HTM_OPTION (HTM_Type_UNSIGNED,&Months,
+			      Months == MonthsWithoutAccess ? HTM_SELECTED :
+							      HTM_NO_ATTR,
+			      "%u",Months);
+	    HTM_SELECT_End ();
+	    HTM_NBSP ();
+	    HTM_TxtF (Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
+		      Cfg_PLATFORM_SHORT_NAME);
+	 HTM_LABEL_End ();
 
       /***** Send button and end box *****/
       Box_BoxWithButtonEnd (Btn_ELIMINATE);
@@ -1992,7 +1990,7 @@ static void Crs_EditingCrsConstructor (void)
    Crs_EditingCrs->PrtCod        = -1L;
    Crs_EditingCrs->Specific.Year = 0;
    Crs_EditingCrs->Status        = 0;
-   Crs_EditingCrs->InstitutionalCod[0] = '\0';
+   Crs_EditingCrs->InstiCod[0]   = '\0';
    Crs_EditingCrs->ShrtName[0]   = '\0';
    Crs_EditingCrs->FullName[0]   = '\0';
   }

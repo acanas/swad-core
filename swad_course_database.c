@@ -60,7 +60,7 @@ void Crs_DB_CreateCourse (struct Hie_Node *Crs,Hie_Status_t Status)
 				  "'%s','%s')",
 				Crs->PrtCod,
 				Crs->Specific.Year,
-				Crs->InstitutionalCod,
+				Crs->InstiCod,
 				(unsigned) Status,
 				Gbl.Usrs.Me.UsrDat.UsrCod,
 				Crs->ShrtName,

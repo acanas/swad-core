@@ -67,8 +67,7 @@ void Crs_RemoveCrsCompletely (long HieCod);
 void Crs_ChangeInsCrsCod (void);
 void Crs_ChangeCrsYear (void);
 
-void Crs_UpdateInstitutionalCrsCod (struct Hie_Node *Crs,
-                                    const char *NewInstitutionalCrsCod);
+void Crs_UpdateInstitutionalCrsCod (struct Hie_Node *Crs,const char *NewInstiCod);
 void Crs_UpdateCrsYear (struct Hie_Node *Crs,unsigned NewYear);
 
 void Crs_RenameCrsShrt (void);

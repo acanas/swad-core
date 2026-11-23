@@ -241,10 +241,10 @@ void Lgo_RequestLogo (Hie_Level_t HieLvl)
 		  (unsigned long) HieCod);
 
    /***** Begin box *****/
-   Box_BoxBegin (Txt_Logo,
-	         Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS ? FunctionToDrawIcons[HieLvl] :
-								  NULL,NULL,
-                 NULL,Box_NOT_CLOSABLE);
+   Box_BoxShadowBegin (Txt_Logo,
+		       Fil_CheckIfPathExists (PathLogo) == Exi_EXISTS ? FunctionToDrawIcons[HieLvl] :
+									NULL,NULL,
+		       NULL,Box_NOT_CLOSABLE);
 
       /***** Begin form to upload logo *****/
       Frm_BeginForm (ActionRec[HieLvl]);

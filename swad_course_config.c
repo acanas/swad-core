@@ -355,12 +355,12 @@ static void CrsCfg_InstitutionalCode (Frm_PutForm_t PutForm)
          switch (PutForm)
            {
             case Frm_DONT_PUT_FORM:
-               HTM_Txt (Gbl.Hie.Node[Hie_CRS].InstitutionalCod);
+               HTM_Txt (Gbl.Hie.Node[Hie_CRS].InstiCod);
                break;
             case Frm_PUT_FORM:
 	       Frm_BeginForm (ActChgInsCrsCodCfg);
 		  HTM_INPUT_TEXT ("InsCrsCod",Hie_MAX_CHARS_INSTITUTIONAL_COD,
-				  Gbl.Hie.Node[Hie_CRS].InstitutionalCod,
+				  Gbl.Hie.Node[Hie_CRS].InstiCod,
 				  HTM_SUBMIT_ON_CHANGE,
 				  "id=\"InsCrsCod\" maxlength=\"%u\""
 				  " class=\"Frm_C2_INPUT INPUT_%s\"",
@@ -545,14 +545,14 @@ void CrsCfg_ChangeCrsYear (void)
 
 void CrsCfg_ChangeInsCrsCod (void)
   {
-   char NewInstitutionalCrsCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
+   char NewInstiCod[Hie_MAX_BYTES_INSTITUTIONAL_COD + 1];
 
    /***** Get institutional code from form *****/
-   Par_GetParText ("InsCrsCod",NewInstitutionalCrsCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
+   Par_GetParText ("InsCrsCod",NewInstiCod,Hie_MAX_BYTES_INSTITUTIONAL_COD);
 
    /***** Change the institutional course code *****/
-   if (strcmp (NewInstitutionalCrsCod,Gbl.Hie.Node[Hie_CRS].InstitutionalCod))
-      Crs_UpdateInstitutionalCrsCod (&Gbl.Hie.Node[Hie_CRS],NewInstitutionalCrsCod);
+   if (strcmp (NewInstiCod,Gbl.Hie.Node[Hie_CRS].InstiCod))
+      Crs_UpdateInstitutionalCrsCod (&Gbl.Hie.Node[Hie_CRS],NewInstiCod);
   }
 
 /*****************************************************************************/
