@@ -2374,8 +2374,8 @@ static void Rec_PutIconsCommands (__attribute__((unused)) const void *Args)
 	   {
 	    if (Rec_Record.UsrDat->Roles.InThisCrs == Rol_STD)	// He/she is a student in current course
 	      {
-	       /***** Buttons to view student's test, exam and match results *****/
-	       if (Usr_CheckIfICanViewTstExaMchResult (Rec_Record.UsrDat) == Usr_CAN)
+	       /***** Button to view other student's items in this course *****/
+	       if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (Rec_Record.UsrDat) == Usr_CAN)
 		 {
 		  /* Test results in course */
 		  Lay_PutContextualLinkOnlyIcon (ActSeeTstResCrs[MeOrOther],NULL,
@@ -2389,11 +2389,7 @@ static void Rec_PutIconsCommands (__attribute__((unused)) const void *Args)
 		  Lay_PutContextualLinkOnlyIcon (ActSeeMchResCrs[MeOrOther],NULL,
 						 FuncPutParsResults[MeOrOther],NULL,
 						 "gamepad.svg",Ico_BLACK);
-		 }
 
-	       /***** Button to view other student's items in this course *****/
-	       if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (Rec_Record.UsrDat) == Usr_CAN)
-	         {
 	          /* Assignments and works */
 		  Lay_PutContextualLinkOnlyIcon (ActAdmAsgWrk[MeOrOther],NULL,
 						 FuncPutParsAdmAsgWrk[MeOrOther],NULL,

@@ -646,6 +646,7 @@ TODO: Cuando se elimina una asignatura, ¡no mostrar mensaje para ir a esa asigna
 #define Chl_CSS_FILE		"swad26.45.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.46.1:  Nov 23, 2026	Code refactoring related to user permissions. (348854 lines)
 	Version 26.46:    Nov 23, 2026	Listing of user rubric table. (348935 lines)
 	Version 26.45.1:  Nov 23, 2026	Highlighting in some actions. (348822 lines)
 	Version 26.45:    Nov 21, 2026	Changes in CSS related to contextual icons. (348824 lines)

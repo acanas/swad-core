@@ -310,7 +310,7 @@ static void MchRes_ListAllMchResultsInSelectedGames (struct Gam_Games *Games)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
                                                    Usr_DONT_GET_PREFS,
                                                    Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+	 if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	   {
 	    /***** Show matches results *****/
 	    Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
@@ -405,7 +405,7 @@ static void MchRes_ListAllMchResultsInGam (struct Gam_Games *Games)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+	    if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show matches results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
@@ -477,7 +477,7 @@ static void MchRes_ListAllMchResultsInMch (struct Gam_Games *Games,long MchCod)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 	                                              Usr_DONT_GET_PREFS,
 	                                              Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+	    if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show matches results *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
@@ -1093,7 +1093,7 @@ void MchRes_ShowOneMchResult (void)
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
 	    Err_WrongUserExit ();
-	 if (Usr_CheckIfICanViewTstExaMchResult (UsrDat) == Usr_CAN_NOT)
+	 if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (UsrDat) == Usr_CAN_NOT)
 	    Err_NoPermissionExit ();
 
 	 /* Get if user has accepted enrolment */

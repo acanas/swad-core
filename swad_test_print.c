@@ -748,7 +748,7 @@ static void TstPrn_ShowUsrsPrints (__attribute__((unused)) void *Args)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_EXISTS)
-	    if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
+	    if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN)
 	      {
 	       /***** Show tests *****/
 	       Gbl.Usrs.Other.UsrDat.Accepted = Enr_CheckIfUsrHasAcceptedInThisCrs (&Gbl.Usrs.Other.UsrDat);
@@ -1230,7 +1230,7 @@ void TstPrn_ShowOnePrint (void)
 						      Usr_DONT_GET_PREFS,
 						      Usr_GET_ROLE_IN_CRS) == Exi_DOES_NOT_EXIST)
 	    Err_WrongUserExit ();
-	 if (Usr_CheckIfICanViewTstExaMchResult (&Gbl.Usrs.Other.UsrDat) == Usr_CAN_NOT)
+	 if (Usr_CheckIfICanViewOthUsrItemsInThisCrs (&Gbl.Usrs.Other.UsrDat) == Usr_CAN_NOT)
 	    Err_NoPermissionExit ();
 
 	 /* Get if user has accepted enrolment */

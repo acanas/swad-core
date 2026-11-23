@@ -77,9 +77,7 @@ Usr_Can_t Usr_CheckIfICanEditOtherUsr (const struct Usr_Data *UsrDat);
 
 Usr_Can_t Usr_CheckIfICanViewRecordStd (const struct Usr_Data *UsrDat);
 Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat);
-Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat);
 Usr_Can_t Usr_CheckIfICanViewOthUsrItemsInThisCrs (const struct Usr_Data *UsrDat);
-Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);

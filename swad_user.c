@@ -1084,56 +1084,9 @@ Usr_Can_t Usr_CheckIfICanViewRecordTch (struct Usr_Data *UsrDat)
       return Usr_CAN_NOT;
 
    /***** 4. Fast check: Is he/she a non-editing teacher or a teacher? *****/
-   return UsrDat->Roles.InThisCrs == Rol_NET ||
-          UsrDat->Roles.InThisCrs == Rol_TCH ? Usr_CAN :
-						  Usr_CAN_NOT;
-  }
-
-/*****************************************************************************/
-/********* Check if I can view test/exam/match result of another user ********/
-/*****************************************************************************/
-
-Usr_Can_t Usr_CheckIfICanViewTstExaMchResult (const struct Usr_Data *UsrDat)
-  {
-   static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
-     {
-      [Usr_DONT_SHARE] = Usr_CAN_NOT,
-      [Usr_SHARE     ] = Usr_CAN,
-     };
-
-   /***** 1. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return Usr_CAN_NOT;
-
-   /***** 2. Fast check: Is it a valid user code? *****/
-   if (UsrDat->UsrCod <= 0)
-      return Usr_CAN_NOT;
-
-   /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
-      return Usr_CAN_NOT;
-
-   /***** 4. Fast check: Am I a system admin? *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_CAN;
-
-   /***** 5. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
-      return Usr_CAN_NOT;
-
-   /***** 6. Fast check: It's me? *****/
-   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_CAN;
-
-   /***** 7. Fast check: Does he/she belong to the current course? *****/
-   if (Enr_CheckIfUsrBelongsToThisCrs (UsrDat) == Usr_DONT_BELONG)
-      return Usr_CAN_NOT;
-
-   /***** 8. Fast / slow check depending on roles *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
+   switch (UsrDat->Roles.InThisCrs)
      {
       case Rol_NET:
-	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat)];
       case Rol_TCH:
 	 return Usr_CAN;
       default:
@@ -1183,54 +1136,6 @@ Usr_Can_t Usr_CheckIfICanViewOthUsrItemsInThisCrs (const struct Usr_Data *UsrDat
       return Usr_CAN;
 
    /***** 8. Fast / slow check depending on roles *****/
-   switch (Gbl.Usrs.Me.Role.Logged)
-     {
-      case Rol_NET:
-	 return ICanViewIfShare[Grp_CheckIfUsrSharesAnyOfMyGrpsInThisCrs (UsrDat)];
-      case Rol_TCH:
-	 return Usr_CAN;
-      default:
-	 return Usr_CAN_NOT;
-     }
-  }
-
-/*****************************************************************************/
-/************** Check if I can view attendance of another user ***************/
-/*****************************************************************************/
-
-Usr_Can_t Usr_CheckIfICanViewAtt (const struct Usr_Data *UsrDat)
-  {
-   static Usr_Can_t ICanViewIfShare[Usr_NUM_SHARE] =
-     {
-      [Usr_DONT_SHARE] = Usr_CAN_NOT,
-      [Usr_SHARE     ] = Usr_CAN,
-     };
-
-   /***** 1. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return Usr_CAN_NOT;
-
-   /***** 2. Fast check: Is it a valid user code? *****/
-   if (UsrDat->UsrCod <= 0)
-      return Usr_CAN_NOT;
-
-   /***** 3. Fast check: Is it a course selected? *****/
-   if (Gbl.Hie.Node[Hie_CRS].HieCod <= 0)
-      return Usr_CAN_NOT;
-
-   /***** 4. Fast check: Am I a system admin? *****/
-   if (Gbl.Usrs.Me.Role.Logged == Rol_SYS_ADM)
-      return Usr_CAN;
-
-   /***** 5. Fast check: Do I belong to the current course? *****/
-   if (Gbl.Usrs.Me.IBelongToThis[Hie_CRS] == Usr_DONT_BELONG)
-      return Usr_CAN_NOT;
-
-   /***** 6. Fast check: It's me? *****/
-   if (Usr_ItsMe (UsrDat->UsrCod) == Usr_ME)
-      return Usr_CAN;
-
-   /***** 7. Fast / slow check depending on roles *****/
    switch (Gbl.Usrs.Me.Role.Logged)
      {
       case Rol_NET:
