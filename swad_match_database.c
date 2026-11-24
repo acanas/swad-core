@@ -1143,7 +1143,7 @@ unsigned Mch_DB_GetUsrsWhoHavePlayedGam (MYSQL_RES **mysql_res,long GamCod)
   }
 
 /*****************************************************************************/
-/********* Show the matches results of a user in the current course **********/
+/********* Get the matches results of a user in the current course **********/
 /*****************************************************************************/
 
 unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
@@ -1239,6 +1239,27 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
    free (MchSubQuery);
 
    return NumResults;
+  }
+
+/*****************************************************************************/
+/*************** Get the matches results of a user in a game *****************/
+/*****************************************************************************/
+
+unsigned Mch_DB_GetUsrMchResultsInGame (MYSQL_RES **mysql_res,
+				        long UsrCod,long GamCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get matches results",
+		   "SELECT mch_results.MchCod,"
+			  "mch_results.NumQsts,"
+			  "mch_results.Score"
+		    " FROM mch_results,"
+			  "mch_matches"
+		   " WHERE mch_results.UsrCod=%ld"
+		     " AND mch_results.MchCod=mch_matches.MchCod"
+		     " AND mch_matches.GamCod=%ld",
+		   UsrCod,
+		   GamCod);
   }
 
 /*****************************************************************************/

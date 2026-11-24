@@ -1428,7 +1428,7 @@ static void Rub_WriteRubricsTableHead (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumRubric;
-   char StrNumRubric[Cns_MAX_DIGITS_UINT + 1];
+   // char StrNumRubric[Cns_MAX_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 
@@ -1448,9 +1448,10 @@ static void Rub_WriteRubricsTableHead (struct Rub_Rubrics *Rubrics,
 	    Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
 	    /***** Put link to this rubric *****/
-            HTM_TH_Begin (HTM_HEAD_CENTER);
-	       snprintf (StrNumRubric,sizeof (StrNumRubric),"%u",NumRubric + 1);
-	       Rub_PutLinkRubric (&Rubrics->Rubric,Rubrics->Rubric.Title,StrNumRubric);
+            HTM_TH_Begin (HTM_HEAD_RIGHT);
+	       // snprintf (StrNumRubric,sizeof (StrNumRubric),"%u",NumRubric + 1);
+	       Rub_PutLinkRubric (&Rubrics->Rubric,
+				  Rubrics->Rubric.Title,Rubrics->Rubric.Title);
 	    HTM_TH_End ();
 
 	 /***** Free memory used for rubric *****/
@@ -1500,7 +1501,8 @@ static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
       [PhoSha_SHAPE_RECTANGLE] = "PHOTOR21x28",
      };
    unsigned NumRubric;
-   char StrNumRubric[Cns_MAX_DIGITS_UINT + 1];
+   struct Rub_Node *TOS = NULL;
+   double CriterionScore;
 
    /***** Write number of user in the list *****/
    HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
@@ -1551,11 +1553,20 @@ static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
 	    Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric];
 	    Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
-	    /***** Put link to this rubric *****/
-            HTM_TH_Begin (HTM_HEAD_CENTER);
-	       snprintf (StrNumRubric,sizeof (StrNumRubric),"%u",NumRubric + 1);
-	       Rub_PutLinkRubric (&Rubrics->Rubric,Rubrics->Rubric.Title,StrNumRubric);
-	    HTM_TH_End ();
+	    HTM_TD_Begin ("class=\"RM %s_%s\"",
+			  Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
+	    switch (RubCri_ComputeUsrRubricScore (UsrDat->UsrCod,Rubrics->Rubric.RubCod,
+					          &TOS,&CriterionScore))
+	      {
+	       case Err_SUCCESS:
+		  HTM_Double2Decimals (CriterionScore);
+		  break;
+	       case Err_ERROR:
+	       default:
+		  Err_RecursiveRubric ();
+		  break;
+	      }
+	    HTM_TD_End ();
 
 	 /***** Free memory used for rubric *****/
 	 Rub_RubricDestructor (&Rubrics->Rubric);

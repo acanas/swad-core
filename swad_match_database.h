@@ -127,6 +127,8 @@ unsigned Mch_DB_GetUsrMchResults (MYSQL_RES **mysql_res,
 				  long MchCod,	// <= 0 ==> any
 				  long GamCod,	// <= 0 ==> any
 				  const char *GamesSelectedCommas);
+unsigned Mch_DB_GetUsrMchResultsInGame (MYSQL_RES **mysql_res,
+				        long UsrCod,long GamCod);
 unsigned Mch_DB_GetMaxUsrsPerScore (long MchCod);
 unsigned Mch_DB_GetNumUsrsPerScore (MYSQL_RES **mysql_res,long MchCod);
 

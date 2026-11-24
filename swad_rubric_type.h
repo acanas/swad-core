@@ -51,30 +51,30 @@ typedef enum
 
 struct Rub_Rubric
   {
-   long RubCod;			// Rubric code
-   long HieCod;			// Course code
-   long UsrCod;			// Author code
+   long RubCod;				// Rubric code
+   long HieCod;				// Course code
+   long UsrCod;				// Author code
    char Title[Rub_MAX_BYTES_TITLE + 1];	// Title
-   char *Txt;			// Text (dynamically allocated)
+   char *Txt;				// Text (dynamically allocated)
   };
 
 struct RubCri_Criterion
   {
-   long RubCod;		// Rubric code
-   long CriCod;		// Criterion code
-   unsigned CriInd;	// Criterion index (position in the rubric)
+   long RubCod;				// Rubric code
+   long CriCod;				// Criterion code
+   unsigned CriInd;			// Criterion index (position in the rubric)
    struct Rsc_Link Link;
    double Values[RubCri_NUM_VALUES];
-   double Weight;	// Relative weight (from 0.0 to 1.0)
+   double Weight;			// Relative weight (from 0.0 to 1.0)
    char Title[RubCri_MAX_BYTES_TITLE + 1];	// Title of the criterion
   };
 
 struct Rub_Rubrics
   {
-   Cac_Status_t LstReadStatus;	// Is the list already read from database...
-				// ...or it needs to be read?
-   unsigned Num;		// Total number of rubrics
-   long *Lst;			// List of rubric codes
+   Cac_Status_t LstReadStatus;		// Is the list already read from database...
+					// ...or it needs to be read?
+   unsigned Num;			// Total number of rubrics
+   long *Lst;				// List of rubric codes
    unsigned ThisPage;
    struct Rub_Rubric Rubric;		// Selected/current rubric
    struct RubCri_Criterion Criterion;	// Selected/current criterion

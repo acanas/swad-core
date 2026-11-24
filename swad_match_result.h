@@ -43,6 +43,8 @@ void MchRes_SelUsrsToViewMchResults (void);
 void MchRes_ShowAllMchResultsInGam (void);
 void MchRes_ShowAllMchResultsInMch (void);
 
+double MchRes_GetUsrTotalGradeInGame (long UsrCod,long GamCod);
+
 void MchRes_ShowOneMchResult (void);
 
 #endif

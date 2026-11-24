@@ -85,6 +85,7 @@ void Rub_DB_RemoveCrsRubricCriteria (long HieCod);
 void Rub_DB_UpdateScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod,
                          double Score);
 
-double Rub_DB_GetScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod);
+double Rub_DB_GetScoreOfType (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod);
+double Rub_DB_GetScore (long UsrCod,long CriCod);
 
 #endif

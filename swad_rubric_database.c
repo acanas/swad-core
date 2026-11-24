@@ -848,7 +848,7 @@ void Rub_DB_UpdateScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod,
 /**** Get score of a criterion given an assignment/project code and a user ***/
 /*****************************************************************************/
 
-double Rub_DB_GetScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod)
+double Rub_DB_GetScoreOfType (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod)
   {
    extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
 
@@ -861,6 +861,23 @@ double Rub_DB_GetScore (Rsc_Type_t RscType,long RscCod,long UsrCod,long CriCod)
 				  " AND CriCod=%ld",
 				Rsc_DB_Types[RscType],
 				RscCod,
+				UsrCod,
+				CriCod);
+  }
+
+/*****************************************************************************/
+/******** Get score of a criterion given a criterion code and a user *********/
+/*****************************************************************************/
+
+double Rub_DB_GetScore (long UsrCod,long CriCod)
+  {
+   extern const char *Rsc_DB_Types[Rsc_NUM_TYPES];
+
+   return DB_QuerySELECTDouble ("can not get score",
+				"SELECT Score"
+				 " FROM rub_scores"
+				" WHERE UsrCod=%ld"
+				  " AND CriCod=%ld",
 				UsrCod,
 				CriCod);
   }

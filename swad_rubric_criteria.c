@@ -39,6 +39,7 @@
 #include "swad_form.h"
 #include "swad_game_resource.h"
 #include "swad_global.h"
+#include "swad_match_result.h"
 #include "swad_parameter.h"
 #include "swad_parameter_code.h"
 #include "swad_project_database.h"
@@ -857,7 +858,7 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
 	    switch (Criterion.Link.Type)
 	      {
 	       case Rsc_NONE:
-		  CriterionScore = Rub_DB_GetScore (RscType,RscCod,-1L,Criterion.CriCod);
+		  CriterionScore = Rub_DB_GetScoreOfType (RscType,RscCod,-1L,Criterion.CriCod);
 		  switch (ICanFill)
 		    {
 		     case Usr_CAN:
@@ -929,8 +930,8 @@ static void RubCri_ListOneOrMoreCriteriaToFill (Rsc_Type_t RscType,long RscCod,U
 
       /***** Update totals *****/
       SumOfWeights += Criterion.Weight;
-      SumOfScores += CriterionScore;
-      WeightedSum += WeightedScore;
+      SumOfScores  += CriterionScore;
+      WeightedSum  += WeightedScore;
      }
 
    /***** Write total row *****/
@@ -1095,13 +1096,93 @@ static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long R
 	 switch (Criterion.Link.Type)
 	   {
 	    case Rsc_NONE:
-	       CriterionScore = Rub_DB_GetScore (RscType,RscCod,UsrCod,Criterion.CriCod);
+	       CriterionScore = Rub_DB_GetScoreOfType (RscType,RscCod,UsrCod,Criterion.CriCod);
 	       break;
 	    case Rsc_RUBRIC:
 	       if (RubCri_ComputeRubricScore (RscType,RscCod,UsrCod,
 					      TOS,Criterion.Link.Cod,
 					      &CriterionScore) == Err_ERROR)
 		  RecursiveTree = Err_ERROR;
+	       break;
+	    default:
+	       break;
+	   }
+
+	 /***** Compute score of this criterion in the child rubric *****/
+	 *RubricScore += Criterion.Weight * CriterionScore;	// Update weighted sum
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+
+      /***** Pop rubric code from stack *****/
+      Rub_PopRubCod (TOS);
+     }
+
+   return RecursiveTree;
+  }
+
+/*****************************************************************************/
+/********** Recursive function to compute the score of a criterion ***********/
+/*****************************************************************************/
+// Return Err_ERROR if rubric tree is recursive
+
+Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
+						   struct Rub_Node **TOS,
+						   double *RubricScore)
+  {
+   static Err_SuccessOrError_t SuccessOrError[Exi_NUM_EXIST] =
+     {
+      [Exi_DOES_NOT_EXIST] = Err_SUCCESS,
+      [Exi_EXISTS        ] = Err_ERROR,
+     };
+   Err_SuccessOrError_t RecursiveTree;
+   MYSQL_RES *mysql_res;
+   unsigned NumCriteria;
+   unsigned NumCriterion;
+   struct RubCri_Criterion Criterion;
+   double CriterionScore;
+
+   /***** Initialize rubric score *****/
+   *RubricScore = 0.0;
+
+   /***** Check that rubric is not yet in the stack *****/
+   RecursiveTree = SuccessOrError[Rub_FindRubCodInStack (*TOS,RubCod)];
+
+   if (RecursiveTree == Err_SUCCESS)
+     {
+      /***** Push rubric code in stack *****/
+      Rub_PushRubCod (TOS,RubCod);
+
+      /***** Get data of rubric criteria from database *****/
+      NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
+      // Ale_ShowAlert (Ale_DEBUG,"RubCod = %ld, NumCriteria = %u",RubCod,NumCriteria);
+      for (NumCriterion = 0;
+	   NumCriterion < NumCriteria;
+	   NumCriterion++)
+	{
+	 /***** Get criterion data *****/
+	 RubCri_GetCriterionDataFromRow (mysql_res,&Criterion);
+
+	 /***** Get/compute criterion score *****/
+	 CriterionScore = 0.0;
+	 switch (Criterion.Link.Type)
+	   {
+	    case Rsc_NONE:
+	       CriterionScore = Rub_DB_GetScore (UsrCod,Criterion.CriCod);
+	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_NONE: CriterionScore = %lf",NumCriterion,CriterionScore);
+	       break;
+	    case Rsc_GAME:
+	       CriterionScore = MchRes_GetUsrTotalGradeInGame (UsrCod,
+							       Criterion.Link.Cod);	// Game code
+	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_GAME: CriterionScore = %lf",NumCriterion,CriterionScore);
+	       break;
+	    case Rsc_RUBRIC:
+	       if (RubCri_ComputeUsrRubricScore (UsrCod,
+						 Criterion.Link.Cod, // Rubric code
+					         TOS,&CriterionScore) == Err_ERROR)
+		  RecursiveTree = Err_ERROR;
+	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_RUBRIC: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
 	    default:
 	       break;

@@ -684,6 +684,78 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
 	}
   }
 
+
+/*****************************************************************************/
+/****** Get the total grade of all matches results of a user in a game *******/
+/*****************************************************************************/
+
+double MchRes_GetUsrTotalGradeInGame (long UsrCod,long GamCod)
+  {
+   MYSQL_RES *mysql_res;
+   struct MchRes_ICanView ICanView;
+   unsigned NumResults;
+   unsigned NumResult;
+   MYSQL_ROW row;
+   struct Gam_Game Game;
+   struct Mch_Match Match;
+   unsigned NumQsts;
+   double Score;
+   double TotalGrade = 0.0;
+
+   /***** Make database query *****/
+   NumResults = Mch_DB_GetUsrMchResultsInGame (&mysql_res,UsrCod,GamCod);
+
+   if (NumResults)
+     {
+      /***** Get data of game *****/
+      Game.GamCod = GamCod;
+      Gam_GetGameDataByCod (&Game);
+
+      /***** Get matches results *****/
+      for (NumResult = 0;
+	   NumResult < NumResults;
+	   NumResult++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get match code */
+	 Match.MchCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get number of questions (row[1]) */
+	 if (sscanf (row[1],"%u",&NumQsts) != 1)
+	    NumQsts = 0;
+
+	 /* Get score (row[2]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[2],"%lf",&Score) != 1)
+	    Score = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+
+	 /* Get data of match */
+	 Mch_GetMatchDataByCod (&Match);
+
+	 /* Check if I can view this match result and score */
+	 MchRes_CheckIfICanViewMatchResult (&Game,&Match,UsrCod,&ICanView);
+
+	 /* Compute match grade */
+	 switch (ICanView.Score)
+	   {
+	    case Usr_CAN:
+	       TotalGrade += Qst_ComputeGrade (NumQsts,Score,Game.MaxGrade);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       break;
+	   }
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return TotalGrade;
+  }
+
 /*****************************************************************************/
 /********* Show the matches results of a user in the current course **********/
 /*****************************************************************************/
