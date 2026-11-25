@@ -821,7 +821,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActRemStdPrj	] = {1693, 1,TabAss,NULL			,Prj_RemStd			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActRemTutPrj	] = {1694, 1,TabAss,NULL			,Prj_RemTut			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
    [ActRemEvlPrj	] = {1695, 1,TabAss,NULL			,Prj_RemEvl			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x230}},Act_NORM,Act_1ST},
-   [ActChgPrjSco	] = {1974, 1,TabAss,NULL			,Prj_ChangeCriterionScore	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgScoPrj	] = {1974, 1,TabAss,NULL			,Prj_ChangeCriterionScore	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActReqLnkPrj	] = {1948, 1,TabAss,NULL			,PrjRsc_GetLinkToProject	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    [ActReqRemFilDocPrj	] = {1698, 1,TabAss,NULL			,Brw_ReqRemFile			,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x238}},Act_NORM,Act_1ST},
@@ -1047,6 +1047,7 @@ const struct Act_Actions ActLst_Actions[ActLst_NUM_ACTIONS] =
    [ActChgMinRubCri	] = {1965, 7,TabAss,NULL			,RubCri_ChangeMinValue		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgMaxRubCri	] = {1966, 7,TabAss,NULL			,RubCri_ChangeMaxValue		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
    [ActChgWeiRubCri	] = {1967, 7,TabAss,NULL			,RubCri_ChangeWeight		,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
+   [ActChgScoRubCri	] = {2264, 7,TabAss,NULL			,RubCri_ChangeCriterionScore	,{{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{    0,    0},{0x200,0x220}},Act_NORM,Act_1ST},
 
    // TabFil ******************************************************************
    // Documents of institution
@@ -4042,7 +4043,7 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemRscCliPrg,	// #1971
 	ActSeeRscCliRub,	// #1972
 	ActRemRscCliRub,	// #1973
-	ActChgPrjSco,		// #1974
+	ActChgScoPrj,		// #1974
 	ActChgTstQst,		// #1975
 	ActChgSvyQst,		// #1976
 	ActChgRubPrj,		// #1977
@@ -4334,4 +4335,6 @@ Act_Action_t ActLst_FromActCodToAction[1 + ActLst_MAX_ACTION_COD] =	// Do not re
 	ActRemCliMrkCrs,	// #2261
 	ActRemCliMrkGrp,	// #2262
 	ActRemCliBrf,		// #2263
+
+	ActChgScoRubCri,	// #2264
   };

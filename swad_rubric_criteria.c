@@ -1175,25 +1175,26 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
 	   {
 	    case Rsc_NONE:
 	       CriterionScore = Rub_DB_GetScore (UsrDat->UsrCod,Criterion.CriCod);
-	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_NONE: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
 	    case Rsc_GAME:
 	       CriterionScore = MchRes_GetUsrTotalGradeInGame (UsrDat->UsrCod,
 							       Criterion.Link.Cod);	// Game code
-	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_GAME: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
 	    case Rsc_RUBRIC:
 	       if (RubCri_ComputeAndShowUsrRubricScore (UsrDat,
 							Criterion.Link.Cod, // Rubric code
 							TOS,&CriterionScore) == Err_ERROR)
 		  RecursiveTree = Err_ERROR;
-	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_RUBRIC: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
 	    default:
 	       break;
 	   }
 
 	 /***** Compute weighted score of this criterion *****/
+	 if (CriterionScore < Criterion.Values[RubCri_MIN])
+	    CriterionScore = Criterion.Values[RubCri_MIN];
+	 else if (CriterionScore > Criterion.Values[RubCri_MAX])
+	    CriterionScore = Criterion.Values[RubCri_MAX];
 	 WeightedScore = Criterion.Weight * CriterionScore;
 	 *RubricScore += WeightedScore;	// Update weighted sum
 
@@ -1210,7 +1211,6 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
 		  HTM_OpenParenthesis ();
 		  HTM_Double (Criterion.Values[RubCri_MIN]);
 		  HTM_Txt ("&le;");
-		  HTM_NBSP ();
 	       HTM_SPAN_End ();
 
 	       switch (Criterion.Link.Type)
@@ -1223,9 +1223,8 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
 			   /***** Build anchor string *****/
 			   Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
 
-			   Frm_BeginFormAnchor (ActChgPrjSco,Anchor);	// TODO: Change!!!!!!
-			      // if (FuncPars)
-			      //	 FuncPars (Args);
+			   Frm_BeginFormAnchor (ActChgScoRubCri,Anchor);
+			      Usr_PutParUsrCodEncrypted (UsrDat->EnUsrCod);
 			      ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
 			      HTM_INPUT_FLOAT ("Score",
 					       Criterion.Values[RubCri_MIN],
@@ -1263,7 +1262,6 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
 
 	       /* Maximum value */
 	       HTM_SPAN_Begin ("class=\"DAT_SMALL_LIGHT_%s\"",The_GetSuffix ());
-		  HTM_NBSP ();
 		  HTM_Txt ("&le;");
 		  HTM_Double (Criterion.Values[RubCri_MAX]);
 		  HTM_CloseParenthesis ();
@@ -1287,6 +1285,56 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
      }
 
    return RecursiveTree;
+  }
+
+/*****************************************************************************/
+/***************** Change the score of a rubric criterion ********************/
+/*****************************************************************************/
+
+void RubCri_ChangeCriterionScore (void)
+  {
+   long CriCod;
+   double Score;
+   // long RubCod;
+   Usr_Can_t ICanFill = Usr_CAN;	// TODO: Check
+
+   /***** Get user's data *****/
+   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+      Usr_GetParOtherUsrCodEncryptedAndGetListIDs ();
+   switch (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat,
+						    Usr_DONT_GET_PREFS,
+						    Usr_DONT_GET_ROLE_IN_CRS))
+     {
+      case Exi_EXISTS:	// Existing user
+	 /***** Get parameters *****/
+	 CriCod = ParCod_GetAndCheckPar (ParCod_Cri);
+	 Score = RubCri_GetParScore ();
+
+	 /***** Get which rubric match this criterion *****/
+	 // if ((RubCod = Rub_DB_GetRubCodFromCriCod (CriCod)) <= 0)
+	 //    Err_WrongRubricExit ();
+
+	 /***** Update review *****/
+	 // switch (Prj_CheckIfICanFillRubric (Prj.PrjCod,WhichRubric))
+	 switch (ICanFill)
+	   {
+	    case Usr_CAN:
+	       Rub_DB_UpdateScore (Rsc_NONE,-1L,Gbl.Usrs.Other.UsrDat.UsrCod,CriCod,Score);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       Err_NoPermission ();
+	       break;
+	   }
+	 break;
+      case Exi_DOES_NOT_EXIST:
+      default:
+	 Ale_ShowAlertUserNotFoundOrYouDoNotHavePermission ();
+	 break;
+     }
+
+   /***** Show again table of users and rubrics *****/
+   Rub_ListUsrsRubrics ();
   }
 
 /*****************************************************************************/

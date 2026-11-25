@@ -744,7 +744,7 @@ typedef enum
 	ActRemStdPrj,
 	ActRemTutPrj,
 	ActRemEvlPrj,
-	ActChgPrjSco,
+	ActChgScoPrj,
 	ActReqLnkPrj,
 
 	ActReqRemFilDocPrj,
@@ -976,6 +976,7 @@ typedef enum
 	ActChgMinRubCri,
 	ActChgMaxRubCri,
 	ActChgWeiRubCri,
+	ActChgScoRubCri,
 
    /****************************** Files tab *********************************/
 
@@ -2049,7 +2050,7 @@ typedef enum
 
 #define ActLst_NUM_ACTIONS		((unsigned) ActChgNtfPrf + 1)
 
-#define ActLst_MAX_ACTION_COD		2263
+#define ActLst_MAX_ACTION_COD		2264
 
 #define ActLst_DEFAULT_ACTION_AFTER_LOGIN ActSeeGblTL
 

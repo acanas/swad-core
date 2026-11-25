@@ -4655,7 +4655,7 @@ static void Prj_ShowRubricsOfType (struct Prj_Projects *Prjs,
 
    /***** Show each rubric *****/
    Rub_ShowRubricsToFill (Rsc_PROJECT,Prjs->Prj.PrjCod,ICanFill,
-                          ActChgPrjSco,Prj_PutCurrentPars,Prjs,
+                          ActChgScoPrj,Prj_PutCurrentPars,Prjs,
 			  NumRubrics,mysql_res);
 
    /***** Free structure that stores the query result *****/

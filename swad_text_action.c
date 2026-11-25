@@ -13448,7 +13448,7 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Remove evaluator from a project"	// Çeviri lazim!
 #endif
 	,
-	[ActChgPrjSco] =
+	[ActChgScoPrj] =
 #if   L==1	// ca
 	"Canviar la puntuaci&oacute; d'un criteri en un projecte"
 #elif L==2	// de
@@ -18322,6 +18322,29 @@ const char *Txt_Actions[ActLst_NUM_ACTIONS] =
 	"Alterar peso do crit&eacute;rio de rubrica"
 #elif L==10	// tr
 	"Puan anahtar&inodot; &ouml;l&ccedil;&uuml;t a&gbreve;&inodot;rl&inodot;&gbreve;&inodot;n&inodot; de&gbreve;i&scedil;tir"
+#endif
+	,
+	[ActChgScoRubCri] =
+#if   L==1	// ca
+	"Canviar la puntuaci&oacute; d'un criteri de r&uacute;brica"
+#elif L==2	// de
+	"&Auml;ndern Sie die Punktzahl eines Rubrikkriteriums"
+#elif L==3	// en
+	"Change the score of a rubric criterion"
+#elif L==4	// es
+	"Cambiar la puntuaci&oacute;n de un criterio de r&uacute;brica"
+#elif L==5	// fr
+	"Modifier le score d'un crit&egrave;re de rubrique"
+#elif L==6	// gn
+	"Omoambue puntuaci&oacute;n pete&icirc; criterio r&uacute;brico rehegua"
+#elif L==7	// it
+	"Modificare il punteggio di un criterio di rubrica"
+#elif L==8	// pl
+	"Zmie&nacute; wynik kryterium rubryki"
+#elif L==9	// pt
+	"Alterar a pontua&ccedil;&atilde;o de um crit&eacute;rio de rubrica"
+#elif L==10	// tr
+	"Bir dereceli puanlama anahtar&inodot; &ouml;l&ccedil;&uuml;t&uuml;n&uuml;n puan&inodot;n&inodot; de&gbreve;i&scedil;tirme"
 #endif
 	,
 	[ActSeeAdmDocIns] =

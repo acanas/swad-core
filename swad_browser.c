@@ -1887,7 +1887,7 @@ static Brw_Zone_t Brw_GetZoneDependingOnAction (long GrpCod)
       case ActZIPAssPrj:
       case ActShoDatAssPrj:	case ActChgDatAssPrj:
       case ActDowAssPrj:
-      case ActChgPrjSco:
+      case ActChgScoPrj:
          return Brw_ADMI_ASS_PRJ;
 
       /***** Marks *****/
