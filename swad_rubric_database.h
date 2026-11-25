@@ -70,6 +70,7 @@ unsigned Rub_DB_GetCriIndFromCriCod (long RubCod,long CriCod);
 unsigned Rub_DB_GetMaxCriterionIndexInRubric (long RubCod);
 unsigned Rub_DB_GetPrevCriterionIndexInRubric (long RubCod,unsigned QstInd);
 unsigned Rub_DB_GetNextCriterionIndexInRubric (long RubCod,unsigned QstInd);
+unsigned Rub_DB_GetCriteriaTitles (MYSQL_RES **mysql_res,long RubCod);
 unsigned Rub_DB_GetCriteria (MYSQL_RES **mysql_res,long RubCod);
 Exi_Exist_t Rub_DB_GetCriterionDataByCod (MYSQL_RES **mysql_res,long CriCod);
 Exi_Exist_t Rub_DB_CheckIfSimilarCriterionExists (const struct RubCri_Criterion *Criterion,

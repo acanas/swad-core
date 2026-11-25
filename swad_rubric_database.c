@@ -612,6 +612,21 @@ unsigned Rub_DB_GetNextCriterionIndexInRubric (long RubCod,unsigned CriInd)
   }
 
 /*****************************************************************************/
+/****************** Get criteria titles in a given rubric ********************/
+/*****************************************************************************/
+
+unsigned Rub_DB_GetCriteriaTitles (MYSQL_RES **mysql_res,long RubCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get criteria",
+		   "SELECT Title"	// row[0]
+		    " FROM rub_criteria"
+		   " WHERE RubCod=%ld"
+		" ORDER BY CriInd",
+		   RubCod);
+  }
+
+/*****************************************************************************/
 /********************* Get criteria in a given rubric ************************/
 /*****************************************************************************/
 

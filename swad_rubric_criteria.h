@@ -49,9 +49,9 @@ void RubCri_ListCriteriaToFill (Rsc_Type_t RscType,long RscCod,Usr_Can_t ICanFil
                                 void (*FuncPars) (const void *Args),const void *Args,
                                 long RubCod);
 
-Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
-						   struct Rub_Node **TOS,
-						   double *RubricScore);
+Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data *UsrDat,long RubCod,
+							  struct Rub_Node **TOS,
+							  double *RubricScore);
 
 double RubCri_GetParScore (void);
 

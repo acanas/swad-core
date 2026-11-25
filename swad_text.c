@@ -39865,6 +39865,29 @@ const char *Txt_Rubric =
 	"De&gbreve;erlendirme";
 #endif
 
+const char *Txt_Rubric_based_grading =
+#if   L==1	// ca
+	"Avaluaci&oacute; basada en r&uacute;briques";
+#elif L==2	// de
+	"Bewertung anhand von Rubriken";
+#elif L==3	// en
+	"Rubric-based grading";
+#elif L==4	// es
+	"Calificaciones basadas en r&uacute;bricas";
+#elif L==5	// fr
+	"&Eacute;valuation par grille de crit&egrave;res";
+#elif L==6	// gn
+	"Calificaciones basadas en r&uacute;bricas";	// Okoteve traducción
+#elif L==7	// it
+	"Valutazione basata su rubriche";
+#elif L==8	// pl
+	"Ocenianie w oparciu o kryteria (rubryki)";
+#elif L==9	// pt
+	"Avalia&ccedil;&atilde;o com base em rubricas";
+#elif L==10	// tr
+	"Dereceli puanlama";
+#endif
+
 const char *Txt_Rubric_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1	// ca
 	"R&uacute;brica <strong>%s</strong> eliminada.";

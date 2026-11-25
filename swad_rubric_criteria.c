@@ -1127,9 +1127,9 @@ static Err_SuccessOrError_t RubCri_ComputeRubricScore (Rsc_Type_t RscType,long R
 /*****************************************************************************/
 // Return Err_ERROR if rubric tree is recursive
 
-Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
-						   struct Rub_Node **TOS,
-						   double *RubricScore)
+Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data *UsrDat,long RubCod,
+							  struct Rub_Node **TOS,
+							  double *RubricScore)
   {
    static Err_SuccessOrError_t SuccessOrError[Exi_NUM_EXIST] =
      {
@@ -1141,7 +1141,12 @@ Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
    unsigned NumCriteria;
    unsigned NumCriterion;
    struct RubCri_Criterion Criterion;
+   char *Anchor;
    double CriterionScore;
+   double WeightedScore;
+   Lay_Show_t ShowCriteriaScore = *TOS == NULL ? Lay_SHOW : 	// Direct call (first level)
+						 Lay_DONT_SHOW;	// Recursive call
+   Usr_Can_t ICanFill = Usr_CAN;	// TODO: Pass as an argument
 
    /***** Initialize rubric score *****/
    *RubricScore = 0.0;
@@ -1156,7 +1161,7 @@ Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
 
       /***** Get data of rubric criteria from database *****/
       NumCriteria = Rub_DB_GetCriteria (&mysql_res,RubCod);
-      // Ale_ShowAlert (Ale_DEBUG,"RubCod = %ld, NumCriteria = %u",RubCod,NumCriteria);
+
       for (NumCriterion = 0;
 	   NumCriterion < NumCriteria;
 	   NumCriterion++)
@@ -1169,18 +1174,18 @@ Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
 	 switch (Criterion.Link.Type)
 	   {
 	    case Rsc_NONE:
-	       CriterionScore = Rub_DB_GetScore (UsrCod,Criterion.CriCod);
+	       CriterionScore = Rub_DB_GetScore (UsrDat->UsrCod,Criterion.CriCod);
 	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_NONE: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
 	    case Rsc_GAME:
-	       CriterionScore = MchRes_GetUsrTotalGradeInGame (UsrCod,
+	       CriterionScore = MchRes_GetUsrTotalGradeInGame (UsrDat->UsrCod,
 							       Criterion.Link.Cod);	// Game code
 	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_GAME: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
 	    case Rsc_RUBRIC:
-	       if (RubCri_ComputeUsrRubricScore (UsrCod,
-						 Criterion.Link.Cod, // Rubric code
-					         TOS,&CriterionScore) == Err_ERROR)
+	       if (RubCri_ComputeAndShowUsrRubricScore (UsrDat,
+							Criterion.Link.Cod, // Rubric code
+							TOS,&CriterionScore) == Err_ERROR)
 		  RecursiveTree = Err_ERROR;
 	       // Ale_ShowAlert (Ale_DEBUG,"NumCriterion: %u, Rsc_RUBRIC: CriterionScore = %lf",NumCriterion,CriterionScore);
 	       break;
@@ -1188,8 +1193,90 @@ Err_SuccessOrError_t RubCri_ComputeUsrRubricScore (long UsrCod,long RubCod,
 	       break;
 	   }
 
-	 /***** Compute score of this criterion in the child rubric *****/
-	 *RubricScore += Criterion.Weight * CriterionScore;	// Update weighted sum
+	 /***** Compute weighted score of this criterion *****/
+	 WeightedScore = Criterion.Weight * CriterionScore;
+	 *RubricScore += WeightedScore;	// Update weighted sum
+
+	 /***** Show table column with this criterion score *****/
+	 if (ShowCriteriaScore == Lay_SHOW)
+	   {
+	    /****** Column with the score ******/
+	    HTM_DIV_Begin ("class=\"RM DAT_SMALL_NOBR_%s\"",The_GetSuffix ());
+
+	       HTM_Txt (Criterion.Title); HTM_Colon (); HTM_SP ();
+
+	       /* Minimum value */
+	       HTM_SPAN_Begin ("class=\"DAT_SMALL_LIGHT_%s\"",The_GetSuffix ());
+		  HTM_OpenParenthesis ();
+		  HTM_Double (Criterion.Values[RubCri_MIN]);
+		  HTM_Txt ("&le;");
+		  HTM_NBSP ();
+	       HTM_SPAN_End ();
+
+	       switch (Criterion.Link.Type)
+		 {
+		  case Rsc_NONE:
+		     switch (ICanFill)
+		       {
+			case Usr_CAN:
+
+			   /***** Build anchor string *****/
+			   Frm_SetAnchorStr (Criterion.CriCod,&Anchor);
+
+			   Frm_BeginFormAnchor (ActChgPrjSco,Anchor);	// TODO: Change!!!!!!
+			      // if (FuncPars)
+			      //	 FuncPars (Args);
+			      ParCod_PutPar (ParCod_Cri,Criterion.CriCod);
+			      HTM_INPUT_FLOAT ("Score",
+					       Criterion.Values[RubCri_MIN],
+					       Criterion.Values[RubCri_MAX],
+					       RubCri_SCORE_STEP,
+					       CriterionScore,
+					       HTM_REQUIRED | HTM_SUBMIT_ON_CHANGE,
+					       " class=\"INPUT_FLOAT_SMALL INPUT_SMALL_%s\"",
+					       The_GetSuffix ());
+			   Frm_EndForm ();
+			   break;
+			case Usr_CAN_NOT:
+			default:
+			   HTM_Double2Decimals (CriterionScore);
+			   break;
+		       }
+		     break;
+		  case Rsc_GAME:
+		  case Rsc_RUBRIC:
+		     switch (RecursiveTree)
+		       {
+			case Err_SUCCESS:
+			   HTM_Double2Decimals (CriterionScore);
+			   break;
+			case Err_ERROR:
+			default:
+			   Err_RecursiveRubric ();
+			   break;
+		       }
+		     break;
+		  default:
+		     Err_WrongType ();
+		     break;
+		 }
+
+	       /* Maximum value */
+	       HTM_SPAN_Begin ("class=\"DAT_SMALL_LIGHT_%s\"",The_GetSuffix ());
+		  HTM_NBSP ();
+		  HTM_Txt ("&le;");
+		  HTM_Double (Criterion.Values[RubCri_MAX]);
+		  HTM_CloseParenthesis ();
+	       HTM_SPAN_End ();
+
+	       /* Wheighted score */
+	       HTM_Txt ("&times;");
+	       HTM_Double (Criterion.Weight);
+	       HTM_Char ('=');
+	       HTM_Double2Decimals (WeightedScore);
+
+	    HTM_DIV_End ();
+	   }
 	}
 
       /***** Free structure that stores the query result *****/

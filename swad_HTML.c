@@ -145,13 +145,26 @@ void HTM_TABLE_BeginCenterPadding (unsigned CellPadding)
   {
    if (CellPadding)
      {
-      HTM_TxtF ("<table class=\"FRAME_TBL_CENTER CELLS_PAD_%u\">",
+      HTM_TxtF ("<table class=\"TBL_CENTER CELLS_PAD_%u\">",
 	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
 
       HTM_TABLE_NestingLevel++;
      }
    else
-      HTM_Txt ("<table class=\"FRAME_TBL_CENTER\">");
+      HTM_Txt ("<table class=\"TBL_CENTER\">");
+  }
+
+void HTM_TABLE_BeginRightPadding (unsigned CellPadding)
+  {
+   if (CellPadding)
+     {
+      HTM_TxtF ("<table class=\"TBL_RIGHT CELLS_PAD_%u\">",
+	        CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+
+      HTM_TABLE_NestingLevel++;
+     }
+   else
+      HTM_Txt ("<table class=\"TBL_RIGHT\">");
   }
 
 void HTM_TABLE_BeginWidePadding (unsigned CellPadding)

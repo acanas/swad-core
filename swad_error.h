@@ -73,6 +73,7 @@ void Err_WrongCopySrcExit (void);
 void Err_WrongNumberOfRowsExit (void);
 void Err_WrongGrpTypExit (void);
 void Err_WrongGroupExit (void);
+void Err_WrongType (void);
 void Err_WrongTypeExit (void);
 void Err_WrongBannerExit (void);
 void Err_WrongLinkExit (void);

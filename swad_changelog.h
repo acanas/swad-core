@@ -642,10 +642,11 @@ TODO: Javier Fernández Baldomero. Contemplar los shorts de Youtube https://youtu
 TODO: José Luis Bernier Villamor: Que al hacer exámenes sólo pueda haber una sesión abierta por usuario.
 TODO: Cuando se elimina una asignatura, ¡no mostrar mensaje para ir a esa asignatura!
 */
-#define Chl_PLATFORM_VERSION	"SWAD 26.47 (2026-11-25)"
-#define Chl_CSS_FILE		"swad26.45.css"
+#define Chl_PLATFORM_VERSION	"SWAD 26.48 (2026-11-25)"
+#define Chl_CSS_FILE		"swad26.48.css"
 #define Chl_JS_FILE		"swad24.75.js"
 /*
+	Version 26.48:    Nov 25, 2026	Changes in user rubric table. (349195 lines)
 	Version 26.47:    Nov 25, 2026	Changes in user rubric table. (349034 lines)
 	Version 26.46.1:  Nov 23, 2026	Code refactoring related to user permissions. (348854 lines)
 	Version 26.46:    Nov 23, 2026	Listing of user rubric table. (348935 lines)

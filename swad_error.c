@@ -261,6 +261,11 @@ void Err_WrongGroupExit (void)
 /************* Write error message and exit when wrong type ******************/
 /*****************************************************************************/
 
+void Err_WrongType (void)
+  {
+   Ale_ShowAlert (Ale_ERROR,"Wrong type.");
+  }
+
 void Err_WrongTypeExit (void)
   {
    Err_ShowErrorAndExit ("Wrong type.");

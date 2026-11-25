@@ -1302,7 +1302,7 @@ static void Rub_GetUsrsAndListOrPrintRubricsCrs (Vie_UsrsViewType_t UsrsViewType
 static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
   {
    extern const char *Hlp_ASSESSMENT_Rubrics;
-   extern const char *Txt_Users;
+   extern const char *Txt_Rubric_based_grading;
    struct Rub_Rubrics Rubrics;
    struct Usr_ListCods ListCods;
 
@@ -1332,12 +1332,12 @@ static void Rub_ListOrPrintUsrsRubricsCrs (void *UsrsViewType)
 	    switch (*((Vie_UsrsViewType_t *) UsrsViewType))
 	      {
 	       case Vie_VIEW_SEL_USR:
-		  Box_BoxBegin (Txt_Users,
+		  Box_BoxBegin (Txt_Rubric_based_grading,
 				Rub_PutIconsUsrsRubrics,NULL,
 				Hlp_ASSESSMENT_Rubrics,Box_NOT_CLOSABLE);
 		  break;
 	       case Vie_PRNT_SEL_USR:
-		  Box_BoxBegin (Txt_Users,NULL,NULL,
+		  Box_BoxBegin (Txt_Rubric_based_grading,NULL,NULL,
 				NULL,Box_NOT_CLOSABLE);
 		  break;
 	       default:
@@ -1428,12 +1428,11 @@ static void Rub_WriteRubricsTableHead (struct Rub_Rubrics *Rubrics,
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumRubric;
-   // char StrNumRubric[Cns_MAX_DIGITS_UINT + 1];
 
    HTM_TR_Begin (NULL);
 
       HTM_TH_Span (Txt_ROLES_SINGUL_Abc[Rol_USR][Usr_SEX_UNKNOWN],HTM_HEAD_LEFT,
-	           1,Rub_ColSpan[ShowPhotos],NULL);
+	           1,Rub_ColSpan[ShowPhotos],"LINE_BOTTOM LINE_RIGHT");
 
       /***** Write all rubrics *****/
       for (NumRubric = 0;
@@ -1448,8 +1447,7 @@ static void Rub_WriteRubricsTableHead (struct Rub_Rubrics *Rubrics,
 	    Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
 	    /***** Put link to this rubric *****/
-            HTM_TH_Begin (HTM_HEAD_RIGHT);
-	       // snprintf (StrNumRubric,sizeof (StrNumRubric),"%u",NumRubric + 1);
+	    HTM_TH_Span_Begin (HTM_HEAD_RIGHT,1,1,"LINE_BOTTOM LINE_RIGHT");
 	       Rub_PutLinkRubric (&Rubrics->Rubric,
 				  Rubrics->Rubric.Title,Rubrics->Rubric.Title);
 	    HTM_TH_End ();
@@ -1474,8 +1472,7 @@ static void Rub_PutLinkRubric (struct Rub_Rubric *Rubric,
 
       /***** Link to view rubric *****/
       HTM_BUTTON_Submit_Begin (Title,NULL,
-			       "class=\"LT BT_LINK ASG_TITLE_%s\"",
-			       The_GetSuffix ());
+			       "class=\"LT BT_LINK\"");
 	 HTM_Txt (Txt);
       HTM_BUTTON_End ();
 
@@ -1502,12 +1499,13 @@ static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
      };
    unsigned NumRubric;
    struct Rub_Node *TOS = NULL;
-   double CriterionScore;
+   double RubricScore;
+   Err_SuccessOrError_t RecursiveTree;
 
    /***** Write number of user in the list *****/
    HTM_TR_Begin ("class=\"CT %s\"",The_GetColorRows ());
 
-      HTM_TD_Begin ("class=\"RM %s_%s\"",
+      HTM_TD_Begin ("class=\"RM %s_%s LINE_BOTTOM\"",
 		    Usr_ClassNum[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Unsigned (NumUsr + 1);
       HTM_TD_End ();
@@ -1515,20 +1513,20 @@ static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
       /***** Show user's photo *****/
       if (ShowPhotos == Pho_PHOTOS_SHOW)
 	{
-	 HTM_TD_Begin ("class=\"LM\"");
+	 HTM_TD_Begin ("class=\"LM LINE_BOTTOM\"");
 	    Pho_ShowUsrPhotoIfAllowed (UsrDat,
 	                               ClassPhoto[Gbl.Prefs.PhotoShape],Pho_ZOOM);
 	 HTM_TD_End ();
 	}
 
       /***** Write user's ID ******/
-      HTM_TD_Begin ("class=\"LM %s_%s\"",
+      HTM_TD_Begin ("class=\"LM %s_%s LINE_BOTTOM\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 ID__WriteUsrIDs (UsrDat,NULL);
       HTM_TD_End ();
 
       /***** Write user's name *****/
-      HTM_TD_Begin ("class=\"LM %s_%s\"",
+      HTM_TD_Begin ("class=\"LM %s_%s LINE_BOTTOM LINE_RIGHT\"",
 		    Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
 	 HTM_Txt (UsrDat->Surname1);
 	 if (UsrDat->Surname2[0])
@@ -1553,19 +1551,29 @@ static void Rub_WriteRowUsrTableRubrics (struct Rub_Rubrics *Rubrics,
 	    Rubrics->Rubric.RubCod = Rubrics->Lst[NumRubric];
 	    Rub_GetRubricDataByCod (&Rubrics->Rubric);
 
-	    HTM_TD_Begin ("class=\"RM %s_%s\"",
-			  Usr_ClassData[UsrDat->Accepted],The_GetSuffix ());
-	    switch (RubCri_ComputeUsrRubricScore (UsrDat->UsrCod,Rubrics->Rubric.RubCod,
-					          &TOS,&CriterionScore))
-	      {
-	       case Err_SUCCESS:
-		  HTM_Double2Decimals (CriterionScore);
-		  break;
-	       case Err_ERROR:
-	       default:
-		  Err_RecursiveRubric ();
-		  break;
-	      }
+	    /***** Show table column with the criteria and the total rubric score *****/
+	    HTM_TD_Begin ("class=\"RB DAT_SMALL_NOBR_%s LINE_BOTTOM LINE_RIGHT\"",
+			  The_GetSuffix ());
+
+	       /* Compute and write the criteria of this rubric */
+	       RecursiveTree = RubCri_ComputeAndShowUsrRubricScore (UsrDat,
+								    Rubrics->Rubric.RubCod,
+								    &TOS,&RubricScore);
+	       /* Total rubric score */
+	       HTM_DIV_Begin ("class=\"DAT_STRONG_%s LINE_TOP\"",
+			      The_GetSuffix ());
+		  switch (RecursiveTree)
+		    {
+		     case Err_SUCCESS:
+			HTM_Double2Decimals (RubricScore);
+			break;
+		     case Err_ERROR:
+		     default:
+			Err_RecursiveRubric ();
+			break;
+		    }
+		HTM_DIV_End ();
+
 	    HTM_TD_End ();
 
 	 /***** Free memory used for rubric *****/

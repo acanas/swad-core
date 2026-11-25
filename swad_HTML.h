@@ -69,6 +69,7 @@ void HTM_TITLE_End (void);
 void HTM_TABLE_Begin (const char *fmt,...);
 void HTM_TABLE_BeginPadding (unsigned CellPadding);
 void HTM_TABLE_BeginCenterPadding (unsigned CellPadding);
+void HTM_TABLE_BeginRightPadding (unsigned CellPadding);
 void HTM_TABLE_BeginWidePadding (unsigned CellPadding);
 void HTM_TABLE_BeginWide (void);
 void HTM_TABLE_BeginWideMarginPadding (unsigned CellPadding);
