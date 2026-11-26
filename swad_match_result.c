@@ -684,7 +684,6 @@ static void MchRes_BuildGamesSelectedCommas (struct Gam_Games *Games,
 	}
   }
 
-
 /*****************************************************************************/
 /****** Get the total grade of all matches results of a user in a game *******/
 /*****************************************************************************/

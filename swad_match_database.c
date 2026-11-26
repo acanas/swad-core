@@ -1250,9 +1250,9 @@ unsigned Mch_DB_GetUsrMchResultsInGame (MYSQL_RES **mysql_res,
   {
    return (unsigned)
    DB_QuerySELECT (mysql_res,"can not get matches results",
-		   "SELECT mch_results.MchCod,"
-			  "mch_results.NumQsts,"
-			  "mch_results.Score"
+		   "SELECT mch_results.MchCod,"		// row[0]
+			  "mch_results.NumQsts,"	// row[1]
+			  "mch_results.Score"		// row[2]
 		    " FROM mch_results,"
 			  "mch_matches"
 		   " WHERE mch_results.UsrCod=%ld"

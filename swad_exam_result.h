@@ -50,6 +50,8 @@ void ExaRes_ShowAllResultsInCrs (void);
 void ExaRes_ShowAllResultsInExa (void);
 void ExaRes_ShowAllResultsInSes (void);
 
+double ExaRes_GetUsrTotalGradeInExam (long UsrCod,long ExaCod);
+
 void ExaRes_ShowExaResultAfterFinish (void);
 void ExaRes_ShowOneExaResult (void);
 void ExaRes_ComputeValidPrintScore (struct ExaPrn_Print *Print);

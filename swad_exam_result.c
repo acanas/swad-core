@@ -730,6 +730,77 @@ static void ExaRes_BuildExamsSelectedCommas (struct Exa_Exams *Exams,
   }
 
 /*****************************************************************************/
+/****** Get the total grade of all session results of a user in an exam ******/
+/*****************************************************************************/
+
+double ExaRes_GetUsrTotalGradeInExam (long UsrCod,long ExaCod)
+  {
+   MYSQL_RES *mysql_res;
+   struct ExaRes_ICanView ICanView;
+   unsigned NumResults;
+   unsigned NumResult;
+   MYSQL_ROW row;
+   struct Exa_Exam Exam;
+   struct ExaSes_Session Session;
+   unsigned NumQsts;
+   double Score;
+   double TotalGrade = 0.0;
+
+   /***** Make database query *****/
+   NumResults = Exa_DB_GetUsrSesResultsInExam (&mysql_res,UsrCod,ExaCod);
+
+   if (NumResults)
+     {
+      /***** Get data of exam *****/
+      Exam.ExaCod = ExaCod;
+      Exa_GetExamDataByCod (&Exam);
+
+      /***** Get session results *****/
+      for (NumResult = 0;
+	   NumResult < NumResults;
+	   NumResult++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get session code */
+	 Session.SesCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get number of questions (row[1]) */
+	 if (sscanf (row[1],"%u",&NumQsts) != 1)
+	    NumQsts = 0;
+
+	 /* Get score (row[2]) */
+	 Str_SetDecimalPointToUS ();	// To get the decimal point as a dot
+	 if (sscanf (row[2],"%lf",&Score) != 1)
+	    Score = 0.0;
+	 Str_SetDecimalPointToLocal ();	// Return to local system
+
+	 /* Get data of session */
+	 ExaSes_GetSessionDataByCod (&Session);
+
+	 /* Check if I can view this session result and score */
+	 ExaRes_CheckIfICanViewResult (&Exam,&Session,UsrCod,&ICanView);
+
+	 /* Compute session grade */
+	 switch (ICanView.Score)
+	   {
+	    case Usr_CAN:
+	       TotalGrade += Qst_ComputeGrade (NumQsts,Score,Exam.MaxGrade);
+	       break;
+	    case Usr_CAN_NOT:
+	    default:
+	       break;
+	   }
+	}
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return TotalGrade;
+  }
+
+/*****************************************************************************/
 /********* Show the sessions results of a user in the current course *********/
 /*****************************************************************************/
 

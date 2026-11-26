@@ -185,5 +185,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
 			    long SesCod,	// <= 0 ==> any
 			    long ExaCod,	// <= 0 ==> any
 			    const char *ExamsSelectedCommas);
+unsigned Exa_DB_GetUsrSesResultsInExam (MYSQL_RES **mysql_res,
+				        long UsrCod,long ExaCod);
 
 #endif

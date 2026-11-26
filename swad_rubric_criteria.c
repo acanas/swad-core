@@ -36,6 +36,7 @@
 #include "swad_database.h"
 #include "swad_error.h"
 #include "swad_exam_resource.h"
+#include "swad_exam_result.h"
 #include "swad_form.h"
 #include "swad_game_resource.h"
 #include "swad_global.h"
@@ -1176,6 +1177,10 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
 	    case Rsc_NONE:
 	       CriterionScore = Rub_DB_GetScore (UsrDat->UsrCod,Criterion.CriCod);
 	       break;
+	    case Rsc_EXAM:
+	       CriterionScore = ExaRes_GetUsrTotalGradeInExam (UsrDat->UsrCod,
+							       Criterion.Link.Cod);	// Exam code
+	       break;
 	    case Rsc_GAME:
 	       CriterionScore = MchRes_GetUsrTotalGradeInGame (UsrDat->UsrCod,
 							       Criterion.Link.Cod);	// Game code
@@ -1242,6 +1247,7 @@ Err_SuccessOrError_t RubCri_ComputeAndShowUsrRubricScore (const struct Usr_Data 
 			   break;
 		       }
 		     break;
+		  case Rsc_EXAM:
 		  case Rsc_GAME:
 		  case Rsc_RUBRIC:
 		     switch (RecursiveTree)

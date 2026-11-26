@@ -2492,7 +2492,7 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
    // Do not filter by groups, because a student who has changed groups
    // must be able to access exams taken in other groups
    NumResults = (unsigned)
-   DB_QuerySELECT (mysql_res,"can not get sessions results",
+   DB_QuerySELECT (mysql_res,"can not get session results",
 		   "SELECT exa_prints.PrnCod"			// row[0]
 		    " FROM exa_prints,"
 		          "exa_sessions,"
@@ -2518,4 +2518,25 @@ unsigned Exa_DB_GetResults (MYSQL_RES **mysql_res,
    free (SesSubQuery);
 
    return NumResults;
+  }
+
+/*****************************************************************************/
+/*************** Get the session results of a user in an exam ****************/
+/*****************************************************************************/
+
+unsigned Exa_DB_GetUsrSesResultsInExam (MYSQL_RES **mysql_res,
+				        long UsrCod,long ExaCod)
+  {
+   return (unsigned)
+   DB_QuerySELECT (mysql_res,"can not get session results",
+		   "SELECT exa_prints.SesCod,"	// row[0]
+			  "exa_prints.NumQsts,"	// row[1]
+			  "exa_prints.Score"	// row[2]
+		    " FROM exa_prints,"
+			  "exa_sessions"
+		   " WHERE exa_prints.UsrCod=%ld"
+		     " AND exa_prints.SesCod=exa_sessions.SesCod"
+		     " AND exa_sessions.ExaCod=%ld",
+		   UsrCod,
+		   ExaCod);
   }
